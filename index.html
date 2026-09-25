@@ -4400,7 +4400,9 @@
   function viewOnlySelectHTML(){var h=location.hash||"",cur_=(/[#&](w=W\d\d|k=[a-z0-9,-]+)/i.exec(h)||["",""])[1];
     var opts=[["","Review: all widgets"]];
     if(typeof CMP_ROWS!=="undefined")CMP_ROWS.forEach(function(r){opts.push(["w="+r[0],r[0]+" "+r[1]+" (Jo vs OC, 3 sizes)"]);});
-    Object.keys(WIDGETS.kinds).forEach(function(k){var row=dashboards[0].widgets.filter(function(x){return x.kind===k;})[0];if(!row)return;opts.push(["k="+k,(row.title||k).replace(/s*([^)]*)s*$/,"")+" (final)"]);});
+    var VIEW_WNUM={budget:"W01",mystatus:"W08",tasks:"W14"}; /* finished widgets: kind -> W number, so they sort with the rest */
+    Object.keys(WIDGETS.kinds).forEach(function(k){var row=dashboards[0].widgets.filter(function(x){return x.kind===k;})[0];if(!row)return;var wn=VIEW_WNUM[k]||"W??";opts.push(["k="+k,wn+" "+(row.title||k).replace(/\s*\([^)]*\)\s*$/,"")+" (final, 3 sizes)"]);});
+    opts=[opts[0]].concat(opts.slice(1).sort(function(x,y){return x[1].localeCompare(y[1]);}));
     return '<select id="viewOnlySel" class="btn outlined sm" aria-label="Review aid: show one widget" style="margin-right:8px;max-width:320px">'+opts.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===cur_?" selected":"")+'>'+o[1]+'</option>';}).join("")+'</select>';}
   document.addEventListener("change",function(e){if(e.target&&e.target.id==="viewOnlySel"){var v=e.target.value;if(!v){currentId="d1";}if(location.hash===(v?"#"+v:"")){render();}else{location.hash=v?"#"+v:"";}}});
   var ICON=function(n){return '<span class="material-symbols-rounded">'+n+'</span>';};
