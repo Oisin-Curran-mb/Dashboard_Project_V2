@@ -6,42 +6,32 @@
     "jo.*: same, against _ref/jo-phase2-8958e49.html. Replace grep regions with exact markers as each",
     "review pack is built. Kinds: W01-W07 Jo live = -mb, ours = -oc; W09-W17 Jo live = plain, ours = -mb.",
     "Drivers anchor on the same banner strings: change a marker here AND in the driver AND in index.html together.",
-    "A decided widget has a single `final` side (in index.html) and a `decided` date; its ours/jo sides are removed."
+    "A decided widget has a single `final` side (in index.html) and a `decided` date; its ours/jo sides are removed.",
+    "`removed`: kinds that left the file when the widget was decided; the cmp driver ignores baseline registry rows of those kinds."
   ],
   "widgets": {
     "W01": {
       "name": "Budget Compared to Actual",
-      "driver": "w01-budget-oc.driver.js",
-      "ours": {
-        "kind": "budget-oc",
+      "driver": "w01-budget.driver.js",
+      "decided": "2026-09-25 OC",
+      "removed": [
+        "budget-mb",
+        "budget-oc"
+      ],
+      "final": {
+        "kind": "budget",
         "prefix": "bgtO",
         "css": {
-          "start": "/* ===== W01 Budget Compared to Actual V2",
-          "end": "/* ===== W02 Pension Plans V2"
+          "start": "/* ===== W01 Budget Compared to Actual V2 CSS ===== */",
+          "end": "/* ===== end W01 Budget Compared to Actual V2 CSS ===== */"
         },
         "js": {
-          "start": "/* ===== W01 Budget Compared to Actual V2",
-          "end": "/* ===== W02 Pension Plans V2"
+          "start": "/* ===== W01 Budget Compared to Actual V2 =====",
+          "end": "/* ===== end W01 Budget Compared to Actual V2 ===== */"
         },
         "registry": {
           "grep": [
-            "kind:\"budget-oc\""
-          ]
-        }
-      },
-      "jo": {
-        "kind": "budget-mb",
-        "prefix": "bgtF",
-        "css": {
-          "grep": [
-            "bgtf-",
-            ".bgt-"
-          ]
-        },
-        "js": {
-          "grep": [
-            "bgtF",
-            "kind:\"budget-mb\""
+            "kind:\"budget\""
           ]
         }
       }

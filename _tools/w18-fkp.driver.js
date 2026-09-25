@@ -55,9 +55,14 @@ if (snap) {
   /* kinds that now plug in through WIDGETS.register() have had their if-chain
      branches removed on purpose (decision D8), so they are excluded here */
   const registered = (raw.match(/WIDGETS\.register\("([a-z0-9-]+)"/g) || []).map(s => /"([a-z0-9-]+)"/.exec(s)[1]);
+  /* kinds deleted when a widget was decided (widget-map.json `removed`) are gone on purpose too */
+  const MAPW = JSON.parse(fs.readFileSync(path.join(__dirname, "widget-map.json"), "utf8")).widgets;
+  Object.keys(MAPW).forEach(k => (MAPW[k].removed || []).forEach(r => registered.push(r)));
   const moved = [...new Set(kinds)].filter(k => {
     const kind = /"([a-z0-9-]+)"/.exec(k)[1];
     if (registered.indexOf(kind) > -1) return false;
+    /* only real widget kinds (ones with a registry row in the baseline); helpers compare other strings with kind=== too */
+    if (snap.indexOf('kind:"' + kind + '"') < 0) return false;
     const re = new RegExp(k.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&"), "g");
     return (raw.match(re) || []).length < (snap.match(re) || []).length;
   });

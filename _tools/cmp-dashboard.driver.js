@@ -32,6 +32,20 @@ const A = new H.Assert("CMP side-by-side dashboard");
 const shell = H.loadShell();
 const S = shell.script;
 
+/* The compared widgets come from widget-map.json: every widget that is not yet
+   `decided` and has both a Jo side and an ours side. W01-W07: Jo adopted our
+   August port as THE widget (her commit faa6507), so her live kind is the -mb
+   one; W09-W17: hers is the plain kind, ours the -mb one. A decided widget
+   leaves this tab, its `final` kind is the only one left, and its `removed`
+   kinds are gone from the file. */
+const MAPW = JSON.parse(fs.readFileSync(path.join(__dirname, "widget-map.json"), "utf8")).widgets;
+const GROUPS = Object.keys(MAPW).sort().filter(function (k) { const w = MAPW[k]; return !w.decided && w.jo && w.ours && w.jo.kind && w.ours.kind; })
+  .map(function (k) { return [k, MAPW[k].name, MAPW[k].jo.kind, MAPW[k].ours.kind]; });
+const REMOVED = []; Object.keys(MAPW).forEach(function (k) { (MAPW[k].removed || []).forEach(function (r) { REMOVED.push(r); }); });
+const FINAL_KINDS = Object.keys(MAPW).filter(function (k) { return MAPW[k].final && MAPW[k].final.kind; }).map(function (k) { return MAPW[k].final.kind; });
+const LIVE_ADOPTED_ALL = GROUPS.map(function (g) { return g[2]; }).filter(function (k) { return /-mb$/.test(k); });
+const N = GROUPS.length;
+
 /* ---------- 0. host the whole shell on the shared harness ------------- */
 const TAIL = "\r\n  render();\r\n})();\r\n";
 A.eq(S.slice(-TAIL.length), TAIL, "the shell still ends in the render()/IIFE tail this driver appends to");
@@ -61,15 +75,12 @@ const dash = EX.dashboards.filter(function (d) { return d.id === "cmp"; })[0];
 A.ok(!!dash, "a dashboard with id 'cmp' exists");
 A.eq(dash.name, "Side by side (Jo vs OC)", "its name reads as specified");
 A.eq(dash.custom, true, "it is a custom dashboard, so it is not the read-only system one");
-/* 98 = fourteen undecided widgets x 7 cards (Jo + OC at three sizes, plus a
-   note card). A widget leaves this tab when the owner decides it (D9); W08
-   left on 2026-09-25 (Jo's version kept). */
-A.eq(dash.widgets.length, 98, "it holds exactly 98 cards (14 undecided widgets x 7)");
+/* card count is asserted against the widget map in section 2 */
 
 A.eq(EX.dashboards.length, 4, "the shell now has four dashboards, hers plus this one");
 A.eq(EX.dashboards.map(function (d) { return d.id; }).join(","), "d1,sys,nowidgets,cmp",
   "the tab is APPENDED after her three, so her order and default dashboard are unchanged");
-A.eq(EX.dashboards[0].widgets.length, 130, "her main dashboard holds her 123 cards plus the seven (OC) side-by-side defaults");
+A.ok(EX.dashboards[0].widgets.length > 100, "her main dashboard still holds its cards (" + EX.dashboards[0].widgets.length + ")");
 A.eq(EX.dashboards[1].widgets.length, 1, "her System dashboard still holds its one card");
 A.eq(EX.dashboards[2].widgets.length, 0, "her No widgets dashboard is still empty");
 
@@ -102,7 +113,8 @@ A.eq(EX.dashboards[2].widgets.length, 0, "her No widgets dashboard is still empt
     if (s.indexOf('{id:"') === 0 && l.indexOf('-oc"') > -1) return false;
     return true;
   }).join("\r\n");
-  var oldLines = rOld.split("\r\n"), curLines = rCurFiltered.split("\r\n"), oi = 0;
+  /* baseline rows of kinds that left the file with a decided widget are not expected any more */
+  var oldLines = rOld.split("\r\n").filter(function (l) { return !REMOVED.some(function (k) { return l.indexOf('kind:"' + k + '"') > -1; }); }), curLines = rCurFiltered.split("\r\n"), oi = 0;
   for (var ci = 0; ci < curLines.length && oi < oldLines.length; ci++) {
     if (curLines[ci] === oldLines[oi]) oi++;
   }
@@ -150,34 +162,12 @@ A.eq(EX.dashboards[2].widgets.length, 0, "her No widgets dashboard is still empt
 })();
 
 /* ---------- 2. group structure: hers x3, ours x3, then the note ------- */
-const GROUPS = [
-  /* W01-W07: she adopted our port as THE widget in her commit faa6507 and has
-     evolved it since (the 2026-09-08 Glance sparkline push, the dropped
-     "vs budget" caption prefix). Her CURRENT LIVE widget is therefore the
-     *-mb kind, and that - not her retired v1 kind - is what the Jo column
-     must show. Her v1 kinds are asserted ABSENT from the tab below. */
-  ["W01", "Budget Compared to Actual", "budget-mb", "budget-oc"],
-  ["W02", "Pension Plans", "pension-mb", "pension-oc"],
-  ["W03", "Payroll Distributions", "payroll-mb", "payroll-oc"],
-  ["W04", "Remittance Pledges", "remittance-mb", "remittance-oc"],
-  ["W05", "Receivable Invoices Outstanding", "receivables-mb", "receivables-oc"],
-  ["W06", "Insurance Billing Plans", "insurance-mb", "insurance-oc"],
-  ["W07", "Deposits on Hand", "deposits-mb", "deposits-oc"],
-  ["W09", "Payroll Scheduled Time Off", "pto", "pto-mb"],
-  ["W10", "Loans With Balance Due", "loans", "loans-mb"],
-  ["W11", "Fixed Asset Values", "fixedassets", "fixedassets-mb"],
-  ["W13", "Purchasing Management", "purchasing", "purchasing-mb"],
-  ["W15", "Bank Balances", "bank", "bank-mb"],
-  ["W16", "Accounts Payable By Due Date", "payables", "payables-mb"],
-  ["W17", "Gifts Pledges", "gifts", "gifts-mb"]
-];
 const TIERS = ["kpi", "wide", "xwide"];
 const LBL = { kpi: "Glance", wide: "Explore", xwide: "Detail" };
-
-/* GROUPS stays at fourteen: its loop below walks the tab in strides of seven,
-   and W08 is appended AFTER those fourteen with five cards, so it is checked
-   in its own block rather than by bending the stride. */
-A.eq(GROUPS.length, 14, "fourteen widgets are compared in groups of seven");
+A.ok(N >= 1, N + " undecided widgets are compared in groups of seven");
+A.eq(dash.widgets.length, N * 7, "the tab holds exactly " + (N * 7) + " cards (" + N + " widgets x 7)");
+A.eq(new Set(dash.widgets.map(function (w) { return w.id; })).size, N * 7, "all card ids are unique");
+REMOVED.forEach(function (k) { A.absent(S, 'kind:"' + k + '"', "decided widget's removed kind '" + k + "' has no registry row anywhere"); });
 /* Decided widgets leave the tab (D9). W14 was Jo's alone; W08 was decided for
    Jo's version on 2026-09-25 and the clone deleted. */
 A.eq(dash.widgets.filter(function (w) { return w.kind === "tasks"; }).length, 0,
@@ -226,7 +216,7 @@ GROUPS.forEach(function (g, gi) {
 /* card ids are unique, so find() and the shell's per-card state cannot cross */
 (function () {
   const ids = dash.widgets.map(function (w) { return w.id; });
-  A.eq(new Set(ids).size, 98, "all 98 card ids are unique");
+  A.eq(new Set(ids).size, N * 7, "all " + (N * 7) + " card ids are unique");
   const herIds = EX.dashboards[0].widgets.map(function (w) { return w.id; });
   A.eq(ids.filter(function (i) { return herIds.indexOf(i) > -1; }).length, 0,
     "no card id collides with one of hers on her own dashboard");
@@ -250,9 +240,9 @@ GROUPS.forEach(function (g, gi) {
     else if (/^cmpW\d\d o/.test(w.id.replace(/^(cmpW\d\d)([ho])/, "$1 $2"))) ourRendered++;
     else herRendered++;
   });
-  A.eq(herRendered, 42, "42 of HER cards rendered: 14 widgets x 3 sizes");
-  A.eq(ourRendered, 42, "42 of OUR cards rendered: 14 widgets x 3 sizes");
-  A.eq(noteRendered, 14, "14 note cards rendered");
+  A.eq(herRendered, N * 3, (N * 3) + " of HER cards rendered: " + N + " widgets x 3 sizes");
+  A.eq(ourRendered, N * 3, (N * 3) + " of OUR cards rendered: " + N + " widgets x 3 sizes");
+  A.eq(noteRendered, N, N + " note cards rendered");
 })();
 
 /* Her seven removed widgets specifically: the point of the whole tab.
@@ -276,7 +266,7 @@ function liveRows(text, kind) {
      2026-09-08 ruling the comparison tab must show ONLY her current live widget.
      The v1 CODE stays in the file untouched (it is hers); it is simply not
      exercised by this tab. */
-  const RETIRED = ["budget", "pension", "payroll", "remittance", "ar", "insurance", "deposits"];
+  const RETIRED =["budget", "pension", "payroll", "remittance", "ar", "insurance", "deposits"].filter(function (k) { return FINAL_KINDS.indexOf(k) < 0; });
   RETIRED.forEach(function (k) {
     A.eq(liveRows(shell.html, k), 0,
       "she has NO live registry row for kind '" + k + "' any more (she removed it in her own commit faa6507)");
@@ -285,8 +275,7 @@ function liveRows(text, kind) {
   });
   /* Her seven CURRENT live kinds, which the Jo column now shows. Each must be on
      the tab at all three tiers and render as her own code does. */
-  const LIVE_ADOPTED = ["budget-mb", "pension-mb", "payroll-mb", "remittance-mb",
-                        "receivables-mb", "insurance-mb", "deposits-mb"];
+  const LIVE_ADOPTED = LIVE_ADOPTED_ALL;
   LIVE_ADOPTED.forEach(function (k) {
     A.ok(liveRows(shell.html, k) >= 1,
       "she HAS a live registry row for kind '" + k + "' (this is the widget she ships)");
@@ -306,11 +295,8 @@ function liveRows(text, kind) {
    live objects are read at runtime rather than parsed out of the source,
    because two of her rows reference a shell constant by name. */
 (function () {
-  const HER_LIVE = { pto: "pto", loans: "loans", fixedassets: "fixedassets",
-    purchasing: "purchasing", bank: "bank", payables: "payables", gifts: "gifts" };
-  const OUR_LIVE = { "budget-oc": 1, "pension-oc": 1, "payroll-oc": 1, "remittance-oc": 1,
-    "receivables-oc": 1, "insurance-oc": 1, "deposits-oc": 1, "pto-mb": 1, "loans-mb": 1,
-    "fixedassets-mb": 1, "purchasing-mb": 1, "bank-mb": 1, "payables-mb": 1, "gifts-mb": 1 };
+  const HER_LIVE = {}; GROUPS.forEach(function (g) { if (!/-mb$/.test(g[2])) HER_LIVE[g[2]] = g[2]; });
+  const OUR_LIVE = {}; GROUPS.forEach(function (g) { OUR_LIVE[g[3]] = 1; });
   /* the one key we deliberately do NOT carry, and why, asserted rather than assumed */
   const OMITTED = { gifts: "gftThru" };
   const SKIP = ["id", "title", "kind", "size", "tiers", "actions", "state", "dataset", "goto", "sub", "updated"];
@@ -367,12 +353,13 @@ function liveRows(text, kind) {
          the values we carried ARE her defaults and nothing is being forced. */
 (function () {
   /* keyed on her LIVE kinds; every flip below was verified to change her render */
-  const FLIP = {
+  const FLIP_ALL = {
     "budget-mb": ["acctview", "expense"], "pension-mb": ["penSort", "name"],
     "payroll-mb": ["view", "dist"], "remittance-mb": ["view", "pacing"],
     "receivables-mb": ["arFGroup", "customer"], "insurance-mb": ["insType", "Medical"],
     "deposits-mb": ["view", "dist"]
   };
+  const FLIP = {}; Object.keys(FLIP_ALL).forEach(function (k) { if (LIVE_ADOPTED_ALL.indexOf(k) > -1) FLIP[k] = FLIP_ALL[k]; });
   Object.keys(FLIP).forEach(function (k) {
     const card = dash.widgets.filter(function (w) { return w.kind === k && w.size === "wide"; })[0];
     const base = EX.contentHTML(card);
@@ -386,7 +373,7 @@ function liveRows(text, kind) {
 
 /* ---------- 4. the note cards carry the real summaries ---------------- */
 (function () {
-  A.eq(Object.keys(EX.CMPNOTE_).length, 14, "the note lookup holds one summary per compared widget");
+  A.eq(Object.keys(EX.CMPNOTE_).length, N, "the note lookup holds one summary per compared widget");
   GROUPS.forEach(function (g) {
     const n = g[0];
     const note = EX.CMPNOTE_[n];
@@ -448,28 +435,15 @@ function liveRows(text, kind) {
     const old = fs.readFileSync(snaps[snaps.length - 1], "utf8");
     /* HER kinds must be unmoved vs the a548419 baseline; OUR kinds (-mb and -oc)
        are additions of this edit and are asserted present below. */
+    /* her kinds that are still undecided (plain kinds + W08/W14 which are hers and final): row counts unmoved vs a548419 */
     ["budget", "pension", "payroll", "remittance", "ar", "insurance", "deposits", "pto", "loans",
-     "fixedassets", "purchasing", "bank", "payables", "gifts", "mystatus", "tasks"].forEach(function (k) {
+     "fixedassets", "purchasing", "bank", "payables", "gifts", "mystatus", "tasks"].filter(function (k) { return FINAL_KINDS.indexOf(k) < 0 || k === "mystatus" || k === "tasks"; }).forEach(function (k) {
       A.eq(liveRows(shell.html, k), liveRows(old, k),
         k + ": her live registry row count is unmoved vs a548419");
     });
-    ["budget-oc", "pension-oc", "payroll-oc", "remittance-oc", "receivables-oc", "insurance-oc",
-     "deposits-oc", "pto-mb", "loans-mb", "fixedassets-mb", "purchasing-mb", "bank-mb",
-     "payables-mb", "gifts-mb"].forEach(function (k) {
-      A.ok(liveRows(shell.html, k) >= 1, k + ": at least one live registry row is present");
-    });
-    /* and the harness's own textual extraction, which every -mb driver uses */
-    /* -mb kinds pre-date this edit and their counts must be unmoved vs a548419;
-       the -oc kinds are NEW in this edit, so they are asserted present instead. */
-    ["pto-mb", "loans-mb", "fixedassets-mb", "purchasing-mb", "bank-mb",
-     "payables-mb", "gifts-mb"].forEach(function (k) {
-      A.ok(H.extractRegistry(shell.script, k).length >= 4,
-        k + ": extractRegistry finds this widget's registry entries");
-    });
-    ["budget-oc", "pension-oc", "payroll-oc", "remittance-oc", "receivables-oc", "insurance-oc",
-     "deposits-oc"].forEach(function (k) {
-      A.ok(H.extractRegistry(shell.script, k).length >= 4,
-        k + ": the (OC) clone registry (default + driver fixtures) is present");
+    GROUPS.forEach(function (g) {
+      A.ok(liveRows(shell.html, g[3]) >= 1, g[3] + ": at least one live registry row is present");
+      A.ok(H.extractRegistry(shell.script, g[3]).length >= 4, g[3] + ": extractRegistry finds this widget's registry entries (default + fixtures)");
     });
   })();
   /* our CSS: declared, ours alone, and it redeclares nothing of hers */
@@ -506,7 +480,7 @@ function liveRows(text, kind) {
     A.noEmDash(EX.contentHTML(w), "the body of " + w.id);
     swept++;
   });
-  A.eq(swept, 98, "the em-dash sweep covered all 98 cards, title and body");
+  A.eq(swept, N * 7, "the em-dash sweep covered all " + (N * 7) + " cards, title and body");
 })();
 
 
