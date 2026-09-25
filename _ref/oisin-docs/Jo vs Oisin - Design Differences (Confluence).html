@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Design Differences — Jo vs Ours</title>
+<style>
+body { font-family: -apple-system, Helvetica, Arial, sans-serif; max-width: 900px; margin: 30px auto; line-height: 1.5; color: #172B4D; }
+h1 { font-size: 24px; }
+h2 { font-size: 19px; border-bottom: 1px solid #DFE1E6; padding-bottom: 6px; margin-top: 32px; }
+h3 { font-size: 16px; margin-top: 20px; }
+table { border-collapse: collapse; width: 100%; margin: 12px 0; }
+th, td { border: 1px solid #DFE1E6; padding: 6px 10px; text-align: left; vertical-align: top; }
+th { background: #F4F5F7; }
+code { background: #F4F5F7; padding: 1px 5px; border-radius: 3px; font-family: 'SFMono-Regular', Consolas, monospace; font-size: 90%; }
+pre { background: #F4F5F7; padding: 12px; border-radius: 4px; overflow-x: auto; }
+pre code { background: none; padding: 0; }
+.status { background: #FFF0B3; display: inline-block; padding: 3px 10px; border-radius: 3px; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<h1>Design Differences — Jo vs Ours</h1>
+<p>This document records, per widget, how <strong>our</strong> finalized version differs from <strong>Jo Lopez's</strong> version in the <code>design-sandbox</code> Widget Container Demo (<code>index.html</code>), and why each difference exists. "Jo" means her original widget block in that file; "Ours" means the finalized version in this repo (the built Final in the mockup, locked in the Step 4 doc, specced in Step 5). Our ported widgets sit alongside Jo's originals in her shell as namespaced "(MB updated)" cards; this doc explains the deltas a reviewer will see between the two.</p>
+<p>Every difference row is grounded in a concrete source using the evidence key below. Where we deliberately kept something identical to Jo, it is listed under "Parity kept" so the scope of change is clear.</p>
+<h2>Evidence key</h2>
+<ul>
+<li><strong>[DESIGN — ...]</strong> a final design decision: an owner-directed change or a locked choice in the widget's Step 4 - Widget Final Design doc.</li>
+<li><strong>[API — ...]</strong> a data-contract or API-shape reason from the widget's Step 5 API spec.</li>
+<li><strong>[CODE — ...]</strong> a backend-logic reason traced in the MBAccounting codebase.</li>
+</ul>
+<hr />
+<h2>W01 — Budget Compared to Actual</h2>
+<p>Our version = Jo's Budget widget with the reusable <strong>Time Window Module</strong> layered on; everything else is kept at parity.</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Jo's design</th>
+<th>Our design</th>
+<th>Why</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Interval grains</td>
+<td>Month / Quarter / Period / Year (M Q P Y)</td>
+<td>Day / Week / Month / Period / Quarter / Year (D W M P Q Y), toggle reads smallest-first with Period before Quarter</td>
+<td>Users asked to slice the comparison finer than month; standardised on the reusable Time Window Module</td>
+<td>[DESIGN — Step 4 Views/Filters, Time Window Module; owner "add day and week"]</td>
+</tr>
+<tr>
+<td>Grain availability</td>
+<td>All grains always offered</td>
+<td>A grain is offered only when it yields 2 to 31 data points for the chosen window; each window defaults to its smallest available grain</td>
+<td>Keeps charts legible (no 1-point or 100-point charts) and gives a sensible default per window</td>
+<td>[DESIGN — Step 4 Time Window Module availability law]</td>
+</tr>
+<tr>
+<td>Time windows</td>
+<td>Spans: this fiscal year, last fiscal year, all time</td>
+<td>This month · This period · This quarter (rolling 3 months) · This year (rolling 12 months) · This fiscal year (YTD)</td>
+<td>Standardised window set from the Time Window Module, shared across widgets</td>
+<td>[DESIGN — Step 4 Time Window Module]</td>
+</tr>
+<tr>
+<td>Weekly grain</td>
+<td>Not offered</td>
+<td>Week grain offered wherever the window's availability law allows it (2 to 31 points), confirmed feasible</td>
+<td>A code review indicates a weekly grain is derivable from the GL data, so Week ships rather than staying gated</td>
+<td>[DESIGN — owner confirmed 2026-08-05; API — Step 5]</td>
+</tr>
+<tr>
+<td>Fiscal year scope</td>
+<td>Fixed fiscal-year handling</td>
+<td>Fiscal year treated as per-organisation (not a global July-June constant); consolidated/master-company rollup must combine child accounts</td>
+<td>The org's fiscal calendar varies, and the modern API currently returns empty for master companies, a regression to fix</td>
+<td>[API — Step 5 spec requirement; CODE — modern API CompanyNumber=0 returns empty]</td>
+</tr>
+<tr>
+<td>Headline</td>
+<td>Unsigned dollar variance + pill; the explain sentence rides the pill</td>
+<td>Signed dollar variance with an up/down arrow, favourability colour, and a quiet % of the window's posted budget; the explain sentence moves to a keyboard-focusable info icon beside the pill</td>
+<td>The single variance headline replaced the v1 four-tile KPI strip; arrow + sign + percent make the direction readable at a glance without colour alone</td>
+<td>[DESIGN — Step 4 Data Contract "Headline" row + Interaction Spec v2]</td>
+</tr>
+<tr>
+<td>Glance (KPI size)</td>
+<td>Static readout: plain scope label and caption</td>
+<td>Interactive: the scope chip opens the scope popover and the "vs. budget, [window]" caption opens the five-window picker; headline carries the same arrow/sign/percent</td>
+<td>Owner delta: "Glance is interactive"</td>
+<td>[DESIGN — Step 4 Interaction Spec v2, Glance]</td>
+</tr>
+<tr>
+<td>Line hover and labels</td>
+<td>Shared crosshair readout; fixed 4-tick x-axis</td>
+<td>Nearest-point hover columns with a dashed vertical guide showing the same Budget/Actual/Variance card as the bars; x-axis labels thin dynamically by plot width so nothing collides at any window or grain</td>
+<td>Owner delta: line hover + dynamic label thinning</td>
+<td>[DESIGN — Step 4 Interaction Spec v2, Line hover; Fine-Tuning]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parity kept (identical to Jo):</strong> the Income / Expense / Special-report account-scope dropdown with the two-part (Report, then Report line) branded searchable picker; two-purple bars (light budget, dark actual) with favourability shown only in the KPI pill and hover popover, never on the bars; the running YTD total; the two-independent-panel Detail (Explore) layout; the "No trend to show" guard for line view with fewer than 2 points; the no-budget empty state; and the header layout (scope chip left, view toggle right, legend + slicer row above every chart, single mid gridline). The bar-scroll threshold stays at 13 groups, sized for Jo's card widths (the mockup Final's 9/11 compensates for its own narrower cards). [DESIGN — parity with Jo]</p>
+<p><em>Section updated 2026-09-07: V2 re-port in place on branch oisin-v2-rebuild (base 71ca056), replacing the August block; registry titles now use the (OC) convention; verified by w01-budget-mb.driver.js, 140/140.</em></p>
+<hr />
+<h2>W02 — Pension Plans</h2>
+<p>Our version = Jo's Pension widget plus a new grouped-bar-by-district view and an all-districts aggregate; the rest is kept at parity.</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Jo's design</th>
+<th>Our design</th>
+<th>Why</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Views</td>
+<td>Plan table as the body, with a bar/pie toggle offered only at her largest size</td>
+<td>Three views under a Table / Pie / By district toggle, Table as the default; Detail shows table (left) and the active chart (right) as two synced panels</td>
+<td>Users compare the plan mix and the district mix, so both a whole-org chart and a per-district chart are first-class, not a largest-size extra</td>
+<td>[DESIGN — Step 4 Views v2; Size behaviour]</td>
+</tr>
+<tr>
+<td>Grouped Bar by District</td>
+<td>Not offered</td>
+<td>New view: district groups on the x-axis, one bar per plan (same fixed amethyst plan ramp as the table dots and pie), a group total per district, and each bar drills to that plan and that district</td>
+<td>Surfaces a second real dimension already in the data (plan spend by district) that a single donut cannot show</td>
+<td>[DESIGN — Step 4 View 2; API — Step 5 grouped-bar matrix]</td>
+</tr>
+<tr>
+<td>District scope</td>
+<td>District filter narrows the snapshot</td>
+<td>Same, plus an explicit All Districts aggregate that sums every district (48,252.43); a specific district narrows to its own total (District 1 = 22,873.84 / 4 appointees)</td>
+<td>The all-districts rollup is the headline a finance user opens on; the district list is shown by Name</td>
+<td>[API — Step 5 Example 1; CODE — district = PB_ControlTable ControlTableID shown as Name]</td>
+</tr>
+<tr>
+<td>Districts roster</td>
+<td>Never offered</td>
+<td>Also not offered, deliberately: a v2.1 Districts roster view (expandable district rows listing participants) was added per a Feargal ask and then CUT by owner instruction before it ever reached this port; no roster functions or state key exist, and a stale "dist" view state falls back to Table with Table marked pressed at both Explore and Detail</td>
+<td>Owner decision 2026-08-30: district stays a filter chip, not a roster view</td>
+<td>[DESIGN — Step 4 v2.2 change 1, superseding v2.1]</td>
+</tr>
+<tr>
+<td>Appointees drill modal layout</td>
+<td>Same 960px modal, but an accidental CSS cascade (a later <code>.modal.modal-wide .modal-b{display:flex}</code> beating <code>.pen-detail-modal .modal-b{display:block}</code> on specificity) squeezes the table to roughly half the modal with its footer stranded beside it</td>
+<td>Same 960px modal with the row made deliberate: the table takes the majority of the width and the count/total summary is a 190px rail pinned right whose divider runs the full body height; scoped to our own <code>penf-detail-modal</code> class so Jo's modal cascade is untouched</td>
+<td>Owner: "the popup needs to be the same size", plus the v2.2a mark-up on the divider</td>
+<td>[DESIGN — Step 4 v2.2 change 2 + v2.2a]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parity kept (identical to Jo):</strong> the two-row header with the district filter chip on the left and the KPI money + appointee badge on the left; the sortable plan table; the donut pie and share bars in the fixed amethyst plan ramp (donut kept at Jo's 200px; the mockup Final's 180px was an fc-card proportion trim, not a design decision); the loading skeleton that fires only on a district change (not on a view toggle or sort); the appointee drill modal's columns, footer, export button and 960px width; the empty state; and values carried as DOM text. [DESIGN — parity with Jo]</p>
+<p><strong>Open items (carried, not invented):</strong> the Pension Billing drill-through still has no target URL [DESIGN — Step 4 open item]; export is a stub toast pending a backend decision [API — Step 5]; the Charge / church-organisation column shows mock org names because the real API returns an empty string today, a pre-existing defect [CODE — pension-plans grid].</p>
+<p><em>Section updated 2026-09-07: V2 re-port in place on branch oisin-v2-rebuild (base 71ca056), replacing the August block; v2.2 stale-dist fallback and deliberate modal flex-row layout applied; registry titles now use the (OC) convention; verified by w02-pension-mb.driver.js, 159/159.</em></p>
+<hr />
+<h2>W03 — Payroll Distributions</h2>
+<p>Our version = Jo's Payroll widget with a standardised period set, two independent filters, a permission-gated nested employee drill, and one view-scoped export; the chrome and chart language are kept at parity. (V2 v2.6; the August port's single scope chip and by-pay-type grouping view are replaced.)</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Jo's design</th>
+<th>Our design</th>
+<th>Why</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Filters</td>
+<td>One period chip + one combined scope chip (All distributions / By pay type / one distribution)</td>
+<td>THREE chips: Period / Distribution / Pay type. prDist and prPT are independent and combine freely; the "By pay type" grouping view is removed outright (its functions, sort keys, badge column and CSS are tombstoned)</td>
+<td>A pay-type filter over the distribution table answers the by-pay-type question better: one comparable row per distribution instead of a long pay-type x distribution list</td>
+<td>[DESIGN — Step 4 v2.3, owner instruction]</td>
+</tr>
+<tr>
+<td>Period presets</td>
+<td>This month / This quarter / All time / This year</td>
+<td>This month (default) / This period / This quarter / This year / All time, smallest-first, Custom From/To row kept FIRST in the popover</td>
+<td>Standardised, ordered period set matching the project's window conventions; adds an explicit fiscal Period option</td>
+<td>[DESIGN — Step 4 Filters v2]</td>
+</tr>
+<tr>
+<td>Rolling window definitions</td>
+<td>Calendar-style</td>
+<td>This quarter = rolling last 3 months, This year = rolling last 12 months; This period is a distinct fiscal-period param</td>
+<td>Matches how finance reads a rolling payroll window rather than a calendar cut</td>
+<td>[DESIGN — Step 4 Filters v2; Time Window Module]</td>
+</tr>
+<tr>
+<td>Drill</td>
+<td>Pick a distribution on the chip to see its pay types; no person-level data anywhere</td>
+<td>Nested in-widget drill in ONE table at every tier: distribution -&gt; the employees paid in it -&gt; that person's own pay types. Employee amounts are allocated in cents from the distribution x pay-type totals and cross-foot to the penny. NO link-out and NO drill modal (the old focus-overlay drill is removed)</td>
+<td>Feargal asked for the full chain to an individual employee's pay breakdown (2026-08-25); the owner reordered it (2026-08-30) so pay types appear once, under the person they were paid to</td>
+<td>[DESIGN — Step 4 v2.1 + v2.2; API — Step 5 v2 employee level]</td>
+</tr>
+<tr>
+<td>Permission</td>
+<td>None</td>
+<td>Row-level PRF_PAYROLL_PERM gate: without payroll permission, distribution rows render inert (no caret, no button role, no handler path), a chosen distribution falls back to pay-type rows, and no employee name can render; totals and their export stay available</td>
+<td>Feargal: access to per-person pay is limited to users with payroll permission; v2.1 supersedes the earlier zero-personal-data rule for permissioned users only, unauthorised viewers still see amounts alone</td>
+<td>[DESIGN — Step 4 v2.1; API — Step 5 v2 permission]</td>
+</tr>
+<tr>
+<td>Sort</td>
+<td>Sortable headers including pay-type and distribution keys on the flat table</td>
+<td>Amount-descending default (<code>prSort:"amt-desc"</code>); header clicks toggle (text columns ascend first, every click flips); only the name and amount keys remain</td>
+<td>The flat table's dist/pt sort keys went with the grouping view</td>
+<td>[DESIGN — Step 4 v2.3]</td>
+</tr>
+<tr>
+<td>Export</td>
+<td>Card-menu exports only (registry actions)</td>
+<td>Card-menu exports kept, PLUS one view-scoped "Export to Excel" button (<code>btn naked sm</code>, <code>data-prf="export-view"</code>) on the caption row, exporting whatever the filters currently resolve to; per-person and per-distribution exports removed; in this shell the button is styled by the GLOBAL .btn family, so the FC build's v2.6 <code>.prf-root .btn</code> fix maps to "already global" here</td>
+<td>One export at the top, not tied to a person or a panel (owner instruction); the caption row routes through every data-bearing state so the export cannot be lost</td>
+<td>[DESIGN — Step 4 v2.3/v2.4/v2.5/v2.6]</td>
+</tr>
+<tr>
+<td>Glance headline</td>
+<td>Period chip + total</td>
+<td>Same: the distribution total for the window (the "N pending approval" headline belongs to W13, not this widget); sr-only text added</td>
+<td>Keeps the two payroll widgets' headlines distinct</td>
+<td>[DESIGN — Step 4; API — Step 5 v2 headline]</td>
+</tr>
+<tr>
+<td>Grain / comparison</td>
+<td>Not present</td>
+<td>Deliberately not added: no grain toggle, no prior-period comparison, and no comparison fields anywhere in the ported block (no total.prior, no diffAmount, no diffPct)</td>
+<td>Sign-off decision F3 rejected comparison features for this widget</td>
+<td>[DESIGN — Step 4 sign-off F3]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parity kept (identical to Jo):</strong> the two-row header with the chips on the left and the view toggle on the right; the Table / Chart toggle (two segments; a stale "emp" view from the removed Employees segment falls back to Table with Table marked pressed); the percent bars with real figures beside them; the blue-ramp donut with legend hover-sync (the chart no longer drills, the drill lives in the table); the Custom From/To date fields on the shell's caret-restore machinery; the clean empty state when the window holds no runs, plus a distinct "Nothing matches these filters" state naming the filter combination, chips kept reachable in both; and the instant client-side recompute (no fetch, no skeleton). [DESIGN — parity with Jo]</p>
+<p><strong>Open items (carried, not invented):</strong> exports remain honest stubs, both the card menu and the view button (no export backend decided) [API — Step 5]; no Department filter, pay-date anchoring, recurrence, or drill-through-to-module link were added (all cut or rejected in Step 4) [DESIGN — Step 4 What Got Cut].</p>
+<p><em>Section updated 2026-09-07: V2 re-port in place on branch oisin-v2-rebuild (base 71ca056), replacing the August block; three filter chips (prDist/prPT, prScope gone), nested permission-gated drill, amt-desc default sort, one view-scoped export, (OC) registry titles; verified by w03-payroll-mb.driver.js, 277/277.</em></p>
+<hr />
+<h2>W04 — Remittance Pledges</h2>
+<p>Our version = Jo's Remittance widget repositioned as the EXCEPTION side of the pledge pair (W17 Gifts and Pledges owns goal progress): a behind-pace shortfall headline, her three pace cards filtering a flat report table, a two-job receipts date range, and a drill screen down to each pledge's own payment schedule. (V2 v3.5a; the August port's single receipts-through cutoff, pace-filter popover and payment-history drill are replaced in place.)</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Jo's design</th>
+<th>Our design</th>
+<th>Why</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Role and headline</td>
+<td>Overall pacing read: paid vs expected with a pace badge and per-activity table</td>
+<td>THE EXCEPTION widget of the pledge pair (W17 owns goal progress): the headline is the behind-pace shortfall in money, summed PER ROW, with an "N of M behind pace" pill; the "% of pledged" goal pill is gone from Glance and the header</td>
+<td>Owner split W04/W17 by role, 2026-08-24: percentages of a goal are W17's language; per-row summing so a pledge running ahead can never mask one running behind</td>
+<td>[DESIGN — Step 4 v3.0, owner 2026-08-24]</td>
+</tr>
+<tr>
+<td>Pace cards</td>
+<td>Her three pace cards (Behind / On track / Ahead, count + outstanding money) filter by DAY BAND, so Behind starts at 30+ days behind</td>
+<td>Her three-card shape kept as the filter over a FLAT table, but Behind = this widget's own shortfall &gt; 0 rule (any money short); only the remainder splits her way into Ahead / On track</td>
+<td>Correctness: her mapping would put two contradicting counts on one screen (a row 10 days behind reading On track under a header counting it behind); the driver asserts card and header agree under every date range</td>
+<td>[DESIGN — Step 4 v3.5, deliberate departure]</td>
+</tr>
+<tr>
+<td>Date range</td>
+<td>Single "Receipts through [date]" cutoff (Today / End of last month presets, date field + Refresh)</td>
+<td>A receipts WINDOW: This year (default) / Last 30 days / Custom From-To (inline reveal, no Refresh; presets apply on click, Custom on field change). END is the only pacing cutoff (all pacing cumulative to it); START bounds which pledges are in scope (term overlap) and a separate window-receipts figure. Never labelled "fiscal"</td>
+<td>SME Edward Eoff 2026-08-10: the pledge dictates which activities display, and the window figure is the second job; window-bounding paid itself would corrupt pacing (cumulative numerator vs windowed one)</td>
+<td>[API — Step 5 v2 rangeStart/rangeEnd, windowPaid, hasPledgeInRange; SME — Eoff 2026-08-10]</td>
+</tr>
+<tr>
+<td>Receipts-only activities</td>
+<td>Not distinguished: an activity with receipts but no pledge reads like a zero-expected pledge</td>
+<td>A footer line under the table (count + money received), never a card, never filtered away, excluded from the behind-pace headline; the drill states why pacing is suppressed</td>
+<td>No commitment means nothing to be behind on; faking zero-expected inflates the exception headline. Backend gap stays open: receipts-only rows need a query path that does not exist today (Sign-off row 7)</td>
+<td>[DESIGN — Step 4 v3.0; API — Step 5 v2, row 7 open]</td>
+</tr>
+<tr>
+<td>Drill</td>
+<td>Per-activity payment-history popup (receipts list)</td>
+<td>A drill SCREEN on her own drill-modal shell (1240px / 96vw, 88vh cap): summary strip, term line, pace note, then the pledge list 8/page, most behind first, reconciling to the activity row to the cent; a THIRD level expands one pledge to its own payment schedule, receipts applied oldest first, the FIRST SKIPPED DATE named; export scoped to the view shown. Pacing Bars rows open a top-5-most-behind popup on the same shell. Her history popup is preserved behind REMF_USE_POPUP (default false)</td>
+<td>v3.1/v3.3/v3.4 owner instructions: which scheduled payment was skipped is the question an exception widget exists to answer; Jo's own shell so the drill reads as hers</td>
+<td>[DESIGN — Step 4 v3.1/v3.3/v3.4; API — Step 5 v2 API 3, Pledge Payment Schedule]</td>
+</tr>
+<tr>
+<td>Pacing calculation</td>
+<td>Calendar-year approximation</td>
+<td>Per pledge term (Expected = total x elapsedDays/termDays over the pledge's own BeginDate/EndDate) with the four-band day-based colour scale; kept from v2, unchanged in V2</td>
+<td>The calendar-year approach mis-paces multi-year and off-cycle pledges; dev-confirmed calculation-only fix</td>
+<td>[API — Step 5 formula; CODE — RM_Pledge.BeginDate/EndDate already queried]</td>
+</tr>
+<tr>
+<td>Total row</td>
+<td>Totals over what the table shows</td>
+<td>The Total row covers EVERY activity in scope, including rows a pace-card filter hides and the receipts-only rows, and the caption says so while a filter is active</td>
+<td>A filtered table above an unfiltered total would otherwise read as an error; totals maths untouched by the card filter</td>
+<td>[DESIGN — Step 4 v3.5]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parity kept (identical to Jo):</strong> her shell primitives (two-row dep-hd header, filter chip, view toggle, modal shell and backdrop, pbar anatomy with the navy expected tick); the two-view Table / Pacing bars toggle; the ~800ms skeleton on a range change only (sort, view, cards and drill are instant client re-renders); Escape/backdrop close; export and open-in-Remittance stubs; and her pace-card look, colour on the icon only with count and money always as text. [DESIGN — parity with Jo]</p>
+<p><strong>Rule 11 / open items (carried, not invented):</strong> pledge sets and payment schedules are DERIVED, deterministic mock data that reconciles to the activity rows to the cent; individual dates are illustrative pending API support. Receipts-only rows still lack a backend query path (Sign-off Readiness row 7, open; waived by the owner for the build only). The once-academic linear-vs-stepped expected question is now load-bearing for the schedule drill. [API — Step 5 v2]</p>
+<p><em>Section updated 2026-09-07: V2 re-port (v3.5a) in place on branch oisin-v2-rebuild (base 71ca056), replacing the August block; driver w04-remittance-mb.driver.js 329/329; W01—W03 drivers re-verified after the edit.</em></p>
+<hr />
+<h2>W05 — Receivable Invoices Outstanding</h2>
+<p>Our version = Jo's AR widget corrected and extended by three owner rounds (build v2.1-v2.3, 2026-08-30): six aging bands, an honest overdue headline, a paged and sortable customer rollup, the legacy pie restored as a third view, plus the select-and-confirm "move to unposted" action in the drill modal.</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Jo's design</th>
+<th>Our design</th>
+<th>Why</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aging bands</td>
+<td>Five bands with Current = anything up to 30 days past due (<code>hi:30</code>)</td>
+<td>SIX bands: Current (not yet due, <code>hi:0</code>) / 1-30 / 31-60 / 61-90 / 91-120 / 121+, with a six-step amethyst ramp led by <code>--am-100</code></td>
+<td>A real bug, visible in the owner's screenshot: an invoice 21 days past due was bucketed AND labelled "Current / not yet overdue". Owner ruled six bands; the genuinely missing band was 1-30, not 91-120 as flag C1 was written up</td>
+<td>[DESIGN — Step 4 Data Contract, age bucket row; v2.1 changelog; owner screenshots (INV-3002)]</td>
+</tr>
+<tr>
+<td>Overdue headline</td>
+<td>Overdue counts only <code>days &gt; 30</code>, so 1-30-day money was excluded from the pill while also reading as "Current"</td>
+<td>Overdue is <code>days &gt; 0</code></td>
+<td>The other half of the same bug: money genuinely past due must reach the headline figure</td>
+<td>[DESIGN — Step 4 v2.1; owner ruling]</td>
+</tr>
+<tr>
+<td>Zero bands</td>
+<td>Empty buckets suppressed from the ladder and collapsed into one "No balance in ..." note</td>
+<td>Every band renders as a row even at zero; a zero row is inert (no fill, no click, no hover card, sr-only explains it)</td>
+<td>The collapse is exactly what made a real band (91-120) look absent to the owner; an inert row shows the band exists and holds nothing, without shipping a dead control</td>
+<td>[DESIGN — Step 4 v2.1]</td>
+</tr>
+<tr>
+<td>Top overdue customers</td>
+<td>A fixed top 6/7 slice, biggest amount only</td>
+<td>Paged (7 per page, Prev/Next, "x to y of n") and sortable two ways: Biggest amount (default) and Oldest balance (each customer's most-overdue invoice); ties fall back to the other key; the page index is clamped on render and any filter or sort change resets to page 1</td>
+<td>23 customers make a fixed slice lossy; the pager can never point past the end of a shortened list</td>
+<td>[DESIGN — Step 4 v2.1, Views]</td>
+</tr>
+<tr>
+<td>Pie view</td>
+<td>No chart view</td>
+<td>Third toggle segment: the aging bands as a donut with amounts and shares in the legend; zero bands are listed but draw no arc; non-zero legend rows drill like the bars; sized per tier (300px Explore / 210px Detail) and centred in its space</td>
+<td>The legacy widget shipped a side-by-side table and pie; restored on the house pie primitives</td>
+<td>[DESIGN — Step 4 Views v2.1; Step 1 legacy research; v2.2/v2.3 geometry]</td>
+</tr>
+<tr>
+<td>View toggle at Detail</td>
+<td>Hidden at her largest size (both cuts always shown)</td>
+<td>Renders at Detail too: the LEFT panel follows the toggle (aging bars or pie) while Top overdue customers keeps the right panel</td>
+<td>The pie must be reachable at both tiers without the two panels fighting for the same space</td>
+<td>[DESIGN — Step 4 v2.1]</td>
+</tr>
+<tr>
+<td>Drill modal (invoice list)</td>
+<td>Read-only list, Close only</td>
+<td>Row-level checkbox per invoice (no select-all), an always-enabled Confirm beside Close; on Confirm an inline dev-intent note "Move to unposted transactions" with a "(N invoices selected)" count (the note renders only AFTER Confirm; the V2 build drops the old pre-Confirm live count)</td>
+<td>Owner wants to select invoices in a band and act on them; the note is a developer-facing signal, not a wired workflow</td>
+<td>[DESIGN — Step 4 Interaction Spec; API — Step 5 Move to Unposted logic notes]</td>
+</tr>
+<tr>
+<td>Mock dataset</td>
+<td>8 invoices</td>
+<td>23 invoices (amounts and names illustrative, Rule 11) covering all six bands, so no band and no pager page is undemonstrable; the band maths, sort and paging are real</td>
+<td>The original eight covered only four of six bands and made paging meaningless</td>
+<td>[DESIGN — Step 4 v2.1, Rule 11]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parity kept (identical to Jo, one-to-one):</strong> the Revenue Center and Source filter chips as the only two fetches (~800ms skeleton, client re-renders never load); the Details / Attachments / Note / Payments tabs and the collection next-steps in each expanded modal row; the KPI headline + overdue pill and the Glance stacked severity read; the bar hover card; the amethyst-only severity ramp (no red on any chart element); and the empty / single-band demo states. [DESIGN — parity with Jo]</p>
+<p><strong>Open questions carried, not resolved:</strong> (1) the Attachments / Note / Payments tab data sources are unverified and now on the critical path, an open item for Feargal (Step 4 open item 2); the tabs are ported exactly as built. (2) The six-band outcome still needs formal closure of action-list flag C1 with Feargal. (3) The overdue pill tooltip still reads "more than 30 days past due" while the maths is days&gt;0, carried as built in v2.3 and flagged here rather than reworded. (4) Confirm does NOT stage to an entry screen; the move-to-unposted transaction type is an open SME/API item, so the UI keeps only the intent label [API — Step 5 logic notes]. The Bill To blank remains a pre-existing modern-API defect, not a design choice [CODE — BillToDisplay].</p>
+<p><em>Section updated 2026-09-07: V2 re-port (v2.3) in place on branch oisin-v2-rebuild (base 71ca056), replacing the August block; registry titles now use the (OC) convention; verified by w05-receivables-oc.driver.js, 288/288; W01-W04 drivers re-verified after the edit.</em></p>
+<hr />
+<h2>W06 — Insurance Billing Plans</h2>
+<p>Our version = Jo's Insurance widget one-to-one, with an expandable Type-to-Plan table that adds Share-of-total + Cost columns and, since v2.2, the restored legacy pie beside it.</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Jo's design</th>
+<th>Our design</th>
+<th>Why</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Breakdown table</td>
+<td>Flat plan list at Explore; a non-expandable group only at Detail</td>
+<td>Plans nested under their insurance TYPE as an expandable table (types as parents with subtotals, collapsed by default, instant no-fetch toggle) in both Explore and Detail</td>
+<td>Owner wanted the sub-categories shown in table form, plans grouped under their type, expandable, in the view</td>
+<td>[DESIGN — Step 4 owner change, both views]</td>
+</tr>
+<tr>
+<td>Cost</td>
+<td>Enrolled count only</td>
+<td>Adds a Cost column per plan and per type, alongside the enrolled count; the footer row "Total (all types)" carries total enrolled and total cost</td>
+<td>Owner wanted both count and cost per plan and per type</td>
+<td>[DESIGN — Step 4 owner change; API — Step 5 v2 Cost = SUM of enrolment Rate; CODE — IBEmployeePlan.Rate / IBPlanRate]</td>
+</tr>
+<tr>
+<td>Share</td>
+<td>Shown, headed "Share"</td>
+<td>Kept in both Explore and Detail, on both parent (type) and child (plan) rows, same meaning as Jo (row enrolled / grand total in view); relabelled "Share of total" so it reads explicitly against the totals footer</td>
+<td>Owner asked to keep the Share in both views; the 2026-08-25 Feargal call asked the column to say what the percent is a share OF</td>
+<td>[DESIGN — Step 4 owner change + v2.1 Feargal call]</td>
+</tr>
+<tr>
+<td>Chart</td>
+<td><strong>No chart, and deliberately so, not an omission.</strong> Her own code comment beside the share bars says they are in place because &quot;with only a handful of plans it makes uptake instantly scannable (the job a donut did, but table-native)&quot;. So this row is a genuine design disagreement, not a gap we filled</td>
+<td>The legacy pie restored (v2.2): an amethyst donut of enrolment by plan (five-shade ramp --am-600 to --am-200, colour keyed to fixed plan order). Explore shows ONE view at a time behind a Table / Pie segment, Table the default (a stale view state falls back to the table); Detail shows BOTH at once, table left 58 / pie right 42 with a dividing rule; Glance charts nothing</td>
+<td>Step 1 records the original widget as a side-by-side table and pie; the owner directed its restoration; 6 columns cannot hold both legibly at Explore</td>
+<td>[DESIGN — Step 4 v2.2; DOC — Step 1 research]</td>
+</tr>
+<tr>
+<td>Zero-enrolment plans vs the chart</td>
+<td>n/a (no chart)</td>
+<td>Listed in the table but never charted, with a note stating how many plans are uncharted and why; a filter whose plans all have zero enrolment gets a chart-empty state naming the filter ("No plan has an enrolment to chart for [type]")</td>
+<td>Legacy behaviour: zero-enrolment plans were table-only; the note keeps table and chart from silently disagreeing</td>
+<td>[DOC — Step 1 research; DESIGN — Step 4 v2.2]</td>
+</tr>
+<tr>
+<td>Chart hover / drill</td>
+<td>n/a</td>
+<td>Hovering a segment or its legend row shows plan, count and percent via a native title tooltip; legend rows are plain text with cursor:default, no drill anywhere</td>
+<td>Legacy hover honoured; the original widget had no drill-down</td>
+<td>[DOC — Step 1 research]</td>
+</tr>
+<tr>
+<td>Chart sizing</td>
+<td>n/a</td>
+<td>v2.4 measured sizing: legend capped 250px at Explore / 200px at Detail (plan names can never truncate), donut grows via flex-basis 320/240 per tier with min-width:0 / max-width, container-driven flex-wrap stacking, leftover space centred on both axes</td>
+<td>Set from browser measurement (chart-fill-check.js), not reasoning; a viewport media query never fires because a widget's width comes from its card</td>
+<td>[DESIGN — Step 4 v2.4]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parity kept (identical to Jo):</strong> the Glance KPI card (total enrolled + plan-count pill + "employees and dependents" caption); the insurance-type filter chip as the only fetch (800ms skeleton; sort, expand and the view segment instant); the amethyst Share bars; the "No insurance plans yet" empty state; and a zero-enrolment plan shown as a 0 / 0% row. [DESIGN — parity with Jo]</p>
+<p><strong>Accessibility added with the pie:</strong> the donut SVG carries role="img" and an aria-label stating the charted total and plan count; every segment carries a title naming plan, count and percent; each legend row states its count and percent as DOM text, so colour is never the only signal. [DESIGN — Step 4 v2.4 accessibility]</p>
+<p><strong>Resolved (owner + code, 2026-08-05):</strong> Cost is the per-enrolment premium; the Cost column shows the <strong>total premium</strong> (SUM of each enrolment's Rate). The code splits every enrolment into an employer share (Rate minus RateIndividual) and an employee share (RateIndividual), so employer-only or employee-only totals are derivable from the same data later if wanted; EmployerBilled and PreTax are flags on the enrolment [CODE — IBEmployeeRepository; DESIGN — owner default = total premium]. Dependents carry their own premium and are counted.</p>
+<p><strong>Open questions carried, not resolved:</strong> (1) pie-as-default at Explore was never owner-confirmed; Table stays the default and the question is carried open, not flipped here [DESIGN — Step 4]. (2) The coverage-tier (IBTypeElection) third level is intentionally not surfaced (future). (3) The "total cost" definition (total premium vs employer share vs employee share, PreTax handling) remains a product/SME definition choice; the data is derivable either way [DESIGN — Step 4 open items; API — Step 5 v2].</p>
+<p><em>Section updated 2026-09-07: V2 re-port (v2.4) in place on branch oisin-v2-rebuild (base 71ca056), replacing the August block; registry titles now use the (OC) convention; verified by w06-insurance-oc.driver.js, 280/280; W01-W05 drivers re-verified after the edit.</em></p>
+<hr />
+<h2>W07 — Deposits on Hand</h2>
+<p>Our version = Jo's Deposits widget with four owner-directed changes plus one addition that has no counterpart in hers (the account pop-up); everything else is kept at parity. (Jo titles it "Deposits"; the widget was renamed "Deposits on Hand" by management, rename not yet executed project-wide.)</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Jo's design</th>
+<th>Our design</th>
+<th>Why</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Table pagination</td>
+<td>Full list, unpaginated</td>
+<td>50 accounts per page with a pager over a 125-account dataset; the KPI total and all subtotals compute over the full filtered set (pagination is display-only); grand total 106,726,837</td>
+<td>Real orgs run to hundreds of depositor accounts, so the table needs paging while the headline stays a true total</td>
+<td>[DESIGN — Step 4 owner change 1; API — Step 5 Pagination]</td>
+</tr>
+<tr>
+<td>Breakdown toggle</td>
+<td>A breakdown that did not depend on scope</td>
+<td>Scope-dependent: at All Accounts the toggle offers Total / By Account Type only (the standalone all-accounts By Account is removed); with a single account type in scope it offers Total / By Account (that type's own accounts)</td>
+<td>Removes a confusing all-accounts account-level view and makes the breakdown mean the same thing as the current scope</td>
+<td>[DESIGN — Step 4 owner change 2]</td>
+</tr>
+<tr>
+<td>Chart click</td>
+<td>Clicking a chart series expanded / opened a drill-modal</td>
+<td>Clicking an account-TYPE series (donut slice or trend line) re-scopes the top-left filter to that type and switches the breakdown to By Account; clicking an individual ACCOUNT series is inert; the old chart click-to-expand / drill-modal is removed; the table-row detail modal is kept</td>
+<td>Owner wanted charts to drill by re-scoping, not to open a separate focus/modal</td>
+<td>[DESIGN — Step 4 owner change 3]</td>
+</tr>
+<tr>
+<td>Compare To scale</td>
+<td>Did not include a fiscal Period option</td>
+<td>Six options: Previous week / month / period / quarter / fiscal year / calendar year, with the fiscal Period sitting between month and quarter</td>
+<td>Owner added a real intermediate fiscal-period delta between month and quarter</td>
+<td>[DESIGN — Step 4 owner change 4]</td>
+</tr>
+<tr>
+<td>Account pop-up (row click)</td>
+<td><strong>None. She has no account pop-up at all</strong> &mdash; her <code>dep*</code> functions stop at <code>depContent</code>, with no <code>depAcctModalBody</code> and no <code>depOpenAcct</code>, so there is nothing of hers this is derived from</td>
+<td>Clicking a table row opens a per-account pop-up: the type badge, that account's balance with its delta against the current Compare To period, and a Trend / Table segment (a nine-point sparkline with y and x axes, or a one-row table reconciling to the account total). It uses her shared <code>.wt-row</code> / <code>.dt-*</code> / <code>.wt-c2</code> column widths exactly as written, in <strong>our own 560px <code>.depo-acct-modal</code> shell</strong>, a deliberate duplicate of the generic shell her <code>renderModal</code> builds, because her 390px default leaves 354px against 424px of unshrinkable columns</td>
+<td>The whole <code>.acctm*</code> family is ours, invented with this port; the duplicate shell is the same approach <code>remOPledgeModalHTML</code> already takes for the W04 drill, and it costs one appended dispatch line in <code>renderModal</code> rather than any change to her widths or her 390px default</td>
+<td>[DESIGN — Step 4; owner directions 2026-09-17]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parity kept (identical to Jo):</strong> the account-scope chip (All Accounts / a type / an individual account, searchable); the three views Table (default) / Distribution (donut) / Trend (multi-line); the KPI headline with delta pill and scrubbable sparkline; the account/type detail modal (opened from a table row); the empty and loading states; and values carried as DOM text. Jo's fourth size tier (large) is dropped, mapping her four tiers to our three (Glance / Explore / Detail = kpi / wide / xwide). [DESIGN — parity with Jo; Rule 12 sizing]</p>
+<p><strong>Resolved (owner, 2026-08-05):</strong> the out-of-widget drill-through is dropped for v1 (the in-widget row detail modal is enough; there is no jump to a module screen, since none exists) [DESIGN — owner]. Historical period-end balances for Trend and non-current Compare To are computed <strong>on demand</strong> for the first draft, to be optimized (precomputed) later if needed [DESIGN — owner; API — Step 5]. <strong>Still open:</strong> the balance tie-out against the modern DHAccount.CalcBalance is a backend concern not addressed here [CODE — DHAccount].</p>
+<p><strong>Open item carried, not resolved (flagged 2026-09-07):</strong> the Step 4 doc’s Interaction Spec says Compare To also drives "the overlaid line in Trend"; the built V2 Final has NO comparison overlay on the Trend chart (Compare To drives the KPI delta pill and the table’s Trend % column only). The port follows the BUILT behaviour, no overlay; whether the doc or the build should move is an open question for the owner. [DESIGN — Step 4 vs build conflict]</p>
+<p><em>Section updated 2026-09-07: V2 re-port (v2.0) in place on branch oisin-v2-rebuild (base 71ca056), replacing the August block. Deltas from the old port: the table pager is now the built page-N-of-M shape (prev/next + "Showing X to Y of Z accounts"; the old Load-more is gone); the widget renders its OWN empty/loading/error states, the empty state triggering on the account count (zero accounts) per the Step 5 v2 spec; a trend LINE click now drills exactly like the legend (type re-scopes + By Account, account inert; our canvases opt out of the shell’s shared isolate-on-click); the row-detail modal’s table keeps the account-number disambiguator (dossier gap #14); Escape closes the scope/Compare To popover; decorative icons carry aria-hidden; registry titles use the (OC) convention. Verified by w07-deposits-mb.driver.js, 224/224; W01-W06 drivers re-verified after the edit.</em></p>
+
+<hr />
+<h2>W09 — Payroll Scheduled Time Off</h2>
+<p>Our version = Jo's Payroll Scheduled Time Off widget restructured around a per-day approval model, with seven changes, all owner-directed. Built against her <code>index.html</code> at base commit <code>71ca056</code>. Ported as <code>kind:"pto-mb"</code>, prefix <code>pto</code>, entry <code>ptoFContent</code>, alongside her <code>kind:"pto"</code> block, which is byte-unchanged. Note her <code>ptoFindEmp</code>, <code>ptoFindRec</code> and <code>ptoFmtDate</code> also begin with <code>ptoF</code> and are hers, not ours.</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Jo's design</th>
+<th>Our design</th>
+<th>Why</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Approval grain</td>
+<td>One row per REQUEST, with a request approved as a whole</td>
+<td>One line per CALENDAR DAY: a multi-day request is shown, counted and approved day by day</td>
+<td>An approver needs to be able to accept part of a request and to see exactly which days are affected. <code>PR_EmployeeOffSchedule</code> already stores per-<code>OffDate</code> day rows, so this needs no schema change</td>
+<td>[DESIGN — Step 4 v2.7 owner change; CODE — PR_EmployeeOffSchedule stores per-OffDate rows]</td>
+</tr>
+<tr>
+<td>Hierarchy</td>
+<td>Department to Employee to Day, three levels</td>
+<td>Two grouping levels: a group subheading (Department by default, or Pay Group) containing PERSON rows, each person an expander holding that person's day-lines</td>
+<td>The person is the unit an approver works in, so the person is visible rather than buried at a middle level</td>
+<td>[DESIGN — Step 4 2026-08-07 composition; v3.0 expander, owner-directed 2026-08-24]</td>
+</tr>
+<tr>
+<td>Bulk approve</td>
+<td>Employee-level checkbox bulk-approves all of that person's records</td>
+<td><strong>Removed.</strong> Approval is per day only, inside an expanded person. The collapsed person row shows an "N pending" badge or an "All resolved" chip instead</td>
+<td>With the day-lines hidden behind the expander, a bulk button on a closed row would let an approver clear someone's whole month without ever seeing the days, which is the opposite of the intent. <strong>This cuts directly against Jo's dossier</strong>, which asks for bulk approve to be ADDED (section 9, decision 11.1). Unreviewed conflict, no side taken in the spec</td>
+<td>[DESIGN — Step 4 v3.0, owner-directed 2026-08-24; conflicts with Step 6 dossier 9 / 11.1, unreviewed]</td>
+</tr>
+<tr>
+<td>Approval states</td>
+<td>Pending, Approved, Rejected</td>
+<td>Two stored states, Pending and Approved, plus <strong>Outstanding as a DERIVED state</strong>: a day-line still pending and dated strictly before the today anchor. Approving clears it. Rejected removed</td>
+<td>Rejected had no workflow behind it. Outstanding is what an approver actually needs surfaced, and deriving it avoids storing a status that is really a date comparison</td>
+<td>[DESIGN — Step 4 v2.7 Rejected removal, v2.8 Outstanding, both owner-directed 2026-08-08]</td>
+</tr>
+<tr>
+<td>Glance</td>
+<td>A single pending figure</td>
+<td><strong>Two figures side by side</strong>, Pending and Outstanding, mutually exclusive: Pending EXCLUDES outstanding, so the two partition the pending set with no double count</td>
+<td>One number could not distinguish work that is merely waiting from work that is already late. The old "Out this week" secondary was dropped to let the two priority figures read cleanly</td>
+<td>[DESIGN — Step 4 v2.8, owner-directed 2026-08-08]</td>
+</tr>
+<tr>
+<td>Calendar view</td>
+<td>No month calendar</td>
+<td>A real month grid: prev/next navigation, Sunday to Saturday headers tiered by size, adjacent-month days greyed, today a brand pill that does not resize its cell, a uniform cell row floor, markers as person initials coloured by their own status, the day cell taking a priority colour (any Outstanding red, else any Pending yellow, else all-approved green), a "+N" overflow chip, and a day-detail popover listing everyone out that day</td>
+<td>The planning question ("who is out when") is a genuinely different job from the approval question, and the competitor research shows a calendar view as a standard treatment for it. Status uses one visual channel so the cell background stays free for real hover and selected states</td>
+<td>[DESIGN — Step 4 View 2; v3.1 calendar redesign, owner-directed 2026-08-30]</td>
+</tr>
+<tr>
+<td>Calendar filtering</td>
+<td>Not applicable</td>
+<td>A <strong>Department filter</strong> on the Leave Calendar only, All departments by default, options derived from the data with a count of PEOPLE out in the displayed month. It reaches the grid, summary line, legend, empty state and day popover, and closes any open popover on change. <strong>Group by is removed from the calendar</strong> and kept in the queue only</td>
+<td>The department filter answers "show me only my team". Group by was removed because it read as the same control as the queue's while doing an unrelated job: markers colour by status, never by group, so switching it changed only a tooltip's wording and one noun</td>
+<td>[DESIGN — Step 4 v3.2 and v3.3, both owner-directed 2026-08-30]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parity kept (identical to Jo):</strong> her <code>.pto-*</code> component language throughout, including the <code>.pto-abtn</code> action chassis, the status chips pairing colour with an icon and a text label, the <code>.pto-l1</code> / <code>.pto-l2</code> / <code>.pto-l3</code> row levels and the count badges; her two-row <code>.dep-hd</code> header with the KPI on the left; her <code>.filter-chip</code> treatment for both filters and her <code>.pop</code> / <code>.cap</code> / <code>.mi</code> menus; her <code>.modal</code> family for both popovers; her segmented <code>.vtoggle</code> / <code>.vt</code> for the view toggle and the Status filter; and her tiers <code>kpi</code> / <code>wide</code> / <code>xwide</code> mapped to our Glance / Explore / Detail with no fourth tier. Values are carried as DOM text, never hover-only. [DESIGN — parity with Jo; Rule 12 sizing]</p>
+<p><strong>Deliberate departures from our own mockup, made for shell parity rather than design:</strong> the calendar's department control is her <code>.filter-chip</code> and menu, not the native <code>&lt;select&gt;</code> our Final used. The Final's reason for the <code>&lt;select&gt;</code> was file-specific (<code>.filter-chip</code> was declared under nine roots in the mockup and <code>.payf-root</code> was not one of them, so a chip would have rendered unstyled); in Jo's shell <code>.filter-chip</code> is global and her own <code>pto</code> widget uses it for both its filters, so the chip is the right call here. Marker colours moved from inline hex to tokens, and per-widget state moved onto the registry object in place of the mockup's <code>PAYF_STATE</code> singleton, matching her <code>ptoView</code> pattern. [DESIGN — Jo's conventions; API — none, presentation only]</p>
+<p><strong>Open items (carried, not invented).</strong> Three Modern API gaps, all rendered as labelled placeholders and never filled: the <strong>approval-authority filter is not implemented</strong>, so as it stands every supervisor would see every employee's time off, which is a confidentiality gap and not a nicety (legacy filtered to the departments in <code>PREmployeeTimeOffApprovals</code>, and the spec applies authority to reads as well as the write); there is <strong>no inline approval write endpoint</strong>, so the widget's headline action has nothing behind it and <code>PUT /entries/{id}/approval</code> is specced as NEW; and <strong>custom leave-type column names from <code>PRCompany</code> are not implemented</strong>, static labels being returned instead [API — Step 5 v2; CODE — modern handler gaps recorded in Widget_Comparison_Classic]. The per-person Info popover's two aggregations (year totals by leave type, and the same-dates coverage-overlap list) are feasible but are not existing endpoints, and are not yet scoped to authorised departments [API — Step 5 v2]. Also open: the <strong>queue ordering gap</strong>, where the doc specifies Department then Employee then Day but <code>payFQueueOrdered</code> sorts groups only under Group by Department and never sorts people or day-lines, carried as-is rather than silently fixed [DESIGN — Step 4 Data Table Sort, build gap, owner to rule]; the confirm prompt, success feedback and failure handling for approve are unspecified; the pay-group grouping needs an <strong>indirect join</strong> through <code>PREmployeeCompensationDetail.PayGroup</code>, since <code>PREmployeeOffSchedule</code> carries no pay-group field [CODE — PREmployeeCompensationDetail]; and with a one-month window, pending day-lines from earlier months are neither counted nor reachable, so an outstanding line cannot be cleared from this widget, a gap the spec pass raised. No <code>Reconciliation - Payroll Scheduled Time Off.md</code> exists, so every dossier flag is unreviewed.</p>
+<p><strong>A defect in our own Final, carried faithfully rather than patched.</strong> The Explore cap correctly withholds whole PEOPLE (6 shown, the 7th withheld entire), but the "N more in Detail size" note counts the withheld person's DAY-LINES, so it reads "4 more" when exactly one person remains. Cause, identical in the Final and this port: <code>seenP[pk]=(people&lt;cap)</code> stores <code>false</code> for an excluded person, so the guard cannot distinguish "unseen" from "seen and excluded" and the counter re-runs per later unit of that person. Carried and asserted at its real value, consistent with how the sort gap is carried; the owner's call whether to fix. [DESIGN — no decision either way; build defect]</p>
+<p><strong>One thing Jo's shell lacks.</strong> It has no amber or warning colour token: her <code>.pto-pill.warn</code> and <code>.mys-hpill.warn</code> both fall back to neutral <code>--wn-200</code>, and the only semantic colours are the positive greens and negative reds. Approved maps to <code>--pos-10</code> / <code>--green-120</code> and Outstanding to <code>--red-100</code> / <code>--red-10</code>, but Pending's amber (fixed by the Step 4 Fine-Tuning Notes) had to be declared locally as <code>--ptof-st-pend</code>. Flagged rather than invented. [DESIGN — Step 4 Fine-Tuning Notes; shell gap]</p>
+<p><em>Section updated 2026-09-07: transplanted unchanged from the oisin-v2-port build (commit 921392e) onto branch oisin-v2-rebuild (base 71ca056). Verified in place by w09-pto-mb.driver.js, 411 of 413 (the two remaining assertions check coexistence with the W10 block, not yet re-ported on this branch); W01-W07 drivers re-verified after the edit.</em></p>
+
+<hr />
+<h2>W10 — Loans With Balance Due</h2>
+<p>Our version = Jo's Loans widget with six changes, five of them owner-directed and one a latent bug fix. Built against her <code>index.html</code> at base commit <code>a9bc157</code>, transplanted onto <code>oisin-v2-rebuild</code> at base commit <code>71ca056</code>. Ported as <code>kind:"loans-mb"</code>, prefix <code>lon</code>, entry <code>lonFContent</code>, sitting alongside her <code>kind:"loans"</code> block, which is byte-unchanged.</p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Jo's design</th>
+<th>Our design</th>
+<th>Why</th>
+<th>Source</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Aging range ladder</td>
+<td>Four ranges: Current (not yet due) / 1-30 / 31-60 / 90+, the last at <code>hi:Infinity</code></td>
+<td>Five ranges: Current (not yet due) / 1-30 / 31-60 / <strong>61-90</strong> / 90+</td>
+<td>Her <code>loanBucketOf</code> returns the first range where <code>days &lt;= hi</code>, so with no 61-90 range every loan between 61 and 89 days fell through and was labelled "90+ days, most overdue". A 61-90 range closes it. Latent in code rather than visible on screen, because her demo data holds no loan in that window (days are 6, 22, 44, 58, 95, 145)</td>
+<td>[DESIGN — Step 4 v3.0 item C1]</td>
+</tr>
+<tr>
+<td>Right-hand panel at Detail</td>
+<td>"Aging and risk" panel: clickable aging bands, a Portfolio risk read, and a Most overdue borrowers collections list</td>
+<td>Replaced by a "Balance by time range" donut whose legend rows <strong>are</strong> the table filter. Her panel is carried as <code>lonFAgingPanel</code>, defined and uncalled, so a rollback is one line</td>
+<td>Owner directed the aging panel out and a time-range pie in, so the range breakdown is stated once rather than twice</td>
+<td>[DESIGN — Step 4 v3.0, per direct instruction]</td>
+</tr>
+<tr>
+<td>Loans table</td>
+<td>Grouped into aging bands with band group headers and per-band subtotals</td>
+<td>One flat list, no group headers and no subtotals. The ranges are a filter instead: the donut legend at Detail, a chip row at Explore</td>
+<td>Same instruction: the ranges became a filter, so grouping the table by them restated the same breakdown twice</td>
+<td>[DESIGN — Step 4 v3.0, per direct instruction]</td>
+</tr>
+<tr>
+<td>Days past due column</td>
+<td>A sortable "Days past due" column, and it is the default sort (<code>days-desc</code>)</td>
+<td>Column removed. "Last payment" is kept, with its dormancy flag. Default sort moves to <strong>Amount due descending</strong> (<code>amt-desc</code>), and the sort control drops to four columns: Account, Borrower, Last payment, Amount due</td>
+<td>Owner directed the column out. The default had to move with it, because a user can neither see nor reverse a sort on a column that no longer exists. Her <code>loanDaysCell</code> is carried, defined and uncalled</td>
+<td>[DESIGN — Step 4 v3.0, per direct instruction]</td>
+</tr>
+<tr>
+<td>Route to the chart at Explore</td>
+<td>No chart at Explore, and no view toggle anywhere</td>
+<td>A <strong>Table / Pie</strong> segment in the header's existing toggle slot at Explore, Table default. The chip filter rides with the table view; the pie carries its own filter in its legend. Detail keeps no toggle, since it shows both at once</td>
+<td>Explore is six columns, which cannot hold a table and a legible pie side by side (the W06 measurement put a pie at roughly 320px plus a 250px legend), so the two are switched between. v3.0 left Explore with no route to the pie at all, which the owner caught</td>
+<td>[DESIGN — Step 4 v3.1, owner report]</td>
+</tr>
+<tr>
+<td>What the loan-type filter drives</td>
+<td>The filter narrows the table; the aging figures keep reading across all loan types</td>
+<td>The filter drives <strong>everything</strong>: <code>lonFBuckets</code> derives from the filtered set, so the donut, the chip counts, the header total, the past-due pill and the Glance aging bar all re-read against the selected type</td>
+<td>Legacy behaviour was filter-affects-table-only, which is the antipattern Jo's own dossier flags at 11.3 and asks to be fixed consistently across Loans, Deposit Accounts and Accounts Payable. The modern chart endpoint takes no <code>loanTypeId</code>, so this needs the parameter added server-side</td>
+<td>[DESIGN — Step 4 Filters, as built; API — Step 5 v2 Filter architecture; CODE — /api/dashboard/loans-with-balance-due/chart takes no type param]</td>
+</tr>
+<tr>
+<td>Empty range presentation</td>
+<td>Not applicable: her legend and chips list only ranges holding a balance</td>
+<td>The full ladder always renders in order. A range holding no balance is a muted, inert row reading $0.00 and is <strong>not</strong> a filter control. Arcs are drawn only for ranges that hold a balance, since a zero slice has no geometry</td>
+<td>Without it the range added by the C1 fix vanished from the legend and the ladder looked incomplete. An empty range is not made clickable because it could only ever produce an empty table</td>
+<td>[DESIGN — Step 4 v3.1 item 1]</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parity kept (identical to Jo):</strong> the Glance card (total balance due headline, past-due / All current pill, compact amethyst aging bar); the loan-type filter chip as the only fetch, with the skeleton on change and sort/view/range changes instant; the amethyst severity ramp deepening with age, with no red on the bars; the loan-detail drill modal, untouched and still reporting days past due and its Aging row; the "Nothing outstanding" empty state and the Glance "All settled" variant; her <code>.dep-hd</code> two-row header with the KPI number and badge on the left; and values carried as DOM text rather than hover-only. Her tiers <code>kpi</code> / <code>wide</code> / <code>xwide</code> map to our Glance / Explore / Detail with no fourth tier introduced. [DESIGN — parity with Jo; Rule 12 sizing]</p>
+<p><strong>Not ported, a real difference:</strong> her <code>loanScopedEmpty</code> and <code>loanControlsHeader</code> pair renders a scoped "No <type> loans" state. Our Final has no counterpart, so a loan type with nothing outstanding renders our header plus a "No loans match this selection." zeroline instead. Not owner-directed, so it is recorded here rather than justified. [DESIGN — no Step 4 decision either way]</p>
+<p><strong>Open items (carried, not invented).</strong> Two Step 4 sign-off rows were waived for the v3.0 build only and are open and blocking again, both fact gates: the <strong>Status (Active / In Arrears)</strong> concept has no confirmed backing field and is therefore not built and not specced [DESIGN — Step 4 Sign-off row 1]; and the <strong>Modern API does not replicate the legacy oldest-first (LIFO) payment allocation</strong>, it buckets by raw invoice age, so every range figure here depends on backend work that does not exist yet and a raw-age implementation returns different numbers. Step 1 calls this the single most consequential data-accuracy gap in the comparison exercise [API — Step 5 v2 Still needs sign-off; CODE — legacy <code>loanAging[i] -= payment</code> overflow, absent from the modern handler]. A further divergence surfaced while writing the spec: even with LIFO replicated, the donut will not equal the legacy pie, because our build assigns one range per loan where legacy split a loan's balance across ranges per invoice [API — Step 5 v2]. Also open: the <strong>"Open loan"</strong> out-destination and <strong>"Record a contact"</strong> are rendered as labelled placeholders with no invented target [DESIGN — Step 4 Sign-off row 3]; there is no export endpoint for loans [API — Step 5 v2 Not in scope]; the <strong>90-day dormancy threshold</strong> is unapproved; and the 2026-08-25 Feargal item <strong>C2</strong> (that loan start and end dates may not exist, which would remove the date-based and past-due calculation entirely) is a live product question that the owner has confirmed does not block this build [DESIGN — Step 4 banner, owner ruling 2026-09-02]. No <code>Reconciliation - Loans With Balance Due.md</code> exists, so every dossier flag is unreviewed and none has been acted on.</p>
+<p><em>Section updated 2026-09-07: transplanted unchanged from the oisin-v2-port build (commit 921392e) onto branch oisin-v2-rebuild (base 71ca056). Verified in place by w10-loans-mb.driver.js, 228 of 228; the full nine-driver suite is green after the edit, including W09 now at 413 of 413 (its two W10-coexistence guards pass with this block in place).</em></p>
+
+<hr />
+<h2>W11 &mdash; Fixed Asset Values</h2>
+<p>Ported 2026-09-07 against Jo's <code>phase-2</code> @ <code>71ca056</code>. Ours is <code>kind:"fixedassets-mb"</code>, prefix <code>faF</code>/<code>FAF_</code>, entry <code>faFContent</code>, CSS root <code>.faf-*</code>, seven registry entries on the <code>(OC)</code> convention. Jo's own <code>fixedassets</code> widget (<code>faContent</code> and her <code>fa*</code> helpers) is byte-untouched. Verified in place by <code>w11-fixedassets-mb.driver.js</code>, 435 of 435.</p>
+<p>Our version is the <strong>2026-09-03 from-scratch rebuild</strong> (build 3.6). An earlier Jo-derived port of this widget was deleted by owner instruction after six failed restyle attempts, so this is deliberately not a restyle of her block.</p>
+<table>
+<thead>
+<tr><th>#</th><th>Difference</th><th>Jo's design</th><th>Our design</th><th>Source</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>Sortable columns</td><td>No sort control anywhere in her block</td><td>All seven columns sortable, server-side, default <code>tag-asc</code></td><td>Step 4 (v3.6 build), Step 5 v2 API 3 sort whitelist</td></tr>
+<tr><td>2</td><td>Table volume</td><td>Renders her full register (13 assets), no paging or trimming</td><td>Server paging, <code>FAF_PAGE_SIZE</code> 10 per page; totals computed over the whole group and unaffected by paging</td><td>Step 5 v2 API 3 MUST PAGINATE verdict</td></tr>
+<tr><td>3</td><td>Views</td><td>Table only, no view toggle</td><td>Two views behind a toggle: Asset Detail table and Donut. The third Group Bars view was removed 2026-09-03</td><td>Step 4, dated build note</td></tr>
+<tr><td>4</td><td>Detail tier</td><td>n/a</td><td>ONE view full width; the side-by-side pair was retired 2026-09-03</td><td>Step 4, dated build note</td></tr>
+<tr><td>5</td><td>Measure control</td><td><code>fa-measure</code> re-columns her table at any time</td><td>Financial Measure chip is Donut-view-only; legitimate as a client filter because all five measure totals arrive per group</td><td>Step 4, Step 5 v2</td></tr>
+<tr><td>6</td><td>Download</td><td>None</td><td>Icon-only download; recorded in the spec as an unfunded gap, possible sixth API</td><td>Step 5 v2 open items</td></tr>
+<tr><td>7</td><td>Register size</td><td>13 assets</td><td>52 assets across six dimensions</td><td>Step 4 Data Contract</td></tr>
+</tbody>
+</table>
+<p><strong>Open items carried, not resolved.</strong> The 52-asset register is illustrative mock data never verified against Shelby's real fixed-asset tables. Six-dimension, dependent-group and five-measure backend feasibility is UNCONFIRMED, and the three account dimensions deliberately return empty lists. <strong>The default view is contested:</strong> the amended handoff says Donut, the built code treats a null state as Asset Detail; the port follows the BUILT default and the conflict stays flagged (Sign-off row 10). Jo's dossier flags J1 to J7 are all Unreviewed, no reconciliation file exists. The invented Depreciation Method filter was removed earlier and remains absent, asserted by the driver.</p>
+<p><em>Section added 2026-09-07 on branch oisin-v2-rebuild (base 71ca056).</em></p>
+
+<h2>W13 &mdash; Purchasing Management</h2>
+<p>Ported 2026-09-08 against Jo's <code>phase-2</code> @ <code>71ca056</code> on branch <code>oisin-v2-rebuild</code>. <strong>First-ever port of this widget.</strong> Ours is <code>kind:"purchasing-mb"</code>, prefix <code>purF</code>/<code>PURF_</code>, entry <code>purFContent</code>, CSS root <code>.purf-*</code>, actions <code>data-purf</code>, six registry entries on the <code>(OC)</code> convention. Source of truth: our built Final <code>purF</code>, <code>FC_VERSION[13]</code> = 2.6, all rounds dated 2026-08-19.</p>
+<p><strong>Collision note.</strong> Jo's own purchasing widget declares four functions whose names begin with the letters "purF" but which are HERS: <code>purForStatus</code>, <code>purPathsForStatus</code>, <code>purFiltered</code> and <code>purFindOrder</code>. Every one of our names is <code>purF</code> plus a capital letter, so none can shadow one of hers. Verified after the port: each of her four is still defined exactly once and byte-identical, her whole 35,644-byte purchasing block and her 12,468-byte <code>.pur-*</code> CSS cluster are byte-identical, and her <code>.pur-*</code> selectors are neither redeclared nor overridden. Her data-actions stay <code>pur-*</code> and ours are <code>data-purf</code>, so her delegated click listener never sees ours and ours never sees hers.</p>
+<p>Verified in place by <code>w13-purchasing-mb.driver.js</code>, 763 of 763. All ten previously ported drivers re-run green afterwards.</p>
+<table>
+<thead>
+<tr><th>#</th><th>Difference</th><th>Jo's design</th><th>Our design</th><th>Source</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>What the board means</td><td>Four payment-progress lanes (Pending approval, Approved, Approved for payment, Paid / closed), the last three derived from a hash of the order id rather than from data</td><td>Three columns that ARE the approval states on the real record screen's Approvals tab: Pending, Approved, Rejected</td><td>Step 4 v2.2, owner correction 2026-08-19: "this is the approval process, this is how kanban should be"; states confirmed from the owner's live Approvals tab screenshot</td></tr>
+<tr><td>2</td><td>Terminal states</td><td>No terminal column; nothing ever leaves her board</td><td>The split Finish column: Close on top (paid orders only), Void below (unpaid only), each behind a confirm popup with a reason. A confirmed card leaves the board and stays findable in the Table. It appears ONLY when the status filter is "All statuses", because a single-state board is not the whole flow</td><td>Step 4 v2.6 and Views; record statuses Closed (2) and Voided (3) verified live on beta1, 2026-08-19</td></tr>
+<tr><td>3</td><td>How a request is actioned</td><td>Card click opens a focus overlay with Approve and Reject buttons and an optional note</td><td>Every card is draggable; a drop on another column opens the Reason / note popup and only Confirm applies the move. Cancel changes nothing, and a same-column drop is a no-op</td><td>Step 4 v2.2 drag-to-action, owner instruction 2026-08-19, adopting dossier 11.2 in drag form</td></tr>
+<tr><td>4</td><td>Hold</td><td>Not offered</td><td>Hold and remove hold, each recording a reason. A held card turns yellow with a lock and its reason and refuses to be dragged until the hold is removed; the Approvals grid refuses approval changes on it too</td><td>Step 4 v2.4; the real Approvals tab has a Hold checkbox plus Reason per approval row, owner screenshot 2026-08-19</td></tr>
+<tr><td>5</td><td>Card colour</td><td>Colours by lane and by "needs me"</td><td>Card colour carries the payment sub-state and is always paired with a text badge: neutral normal, amber "Payment: not paid" badge on an unpaid approved card, green card for paid, yellow card for on hold. No extra columns</td><td>Step 4 v2.3 badge and v2.4 colour-state model, owner decisions 2026-08-19</td></tr>
+<tr><td>6</td><td>The record popup</td><td>Read-only fact grid, line items and an approval trail, with Approve / Reject / Open full record in the footer</td><td>Record-screen parity: header form (vendor block, Ship To, Email, Type, record Status in its own Unapproved / Approved / Closed / Voided vocabulary, Approval Path editable only while pending and not held, Payment Approval Path, Requisition or Check Request number, Issued To, Agent, Shipping, dates), Detail line grid with account distribution and Tax / Freight / Other / Total, the Approvals tab as the real interactive grid, Attachments with an Add stub, editable Note plus activity log, and the Payment Approval tab. Update and Cancel mirror the real footer</td><td>Step 4 v2.5, owner instruction 2026-08-19; grid verified against the live Requests/Update screen, beta1</td></tr>
+<tr><td>7</td><td>Payment entry</td><td>Not offered; her paid lane is decorative</td><td>The Payment Approval tab reproduces Add Invoice Payment Approval, the invoice grid (Invoice Number / Tax / Freight / Other / Check # / Check Date / Setup Information), the per-invoice account distribution, and the real Submit for Approval control, which marks the request paid and turns its card green. An unpaid approved card opens straight onto this tab</td><td>Step 4 v2.4 and v2.5. <strong>DISPUTED, carried, no side taken:</strong> see the open items below</td></tr>
+<tr><td>8</td><td>Second view</td><td>A top-level Approvals / Encumbrances data selector, then a Table / Kanban sub-toggle inside the queue</td><td>One always-visible Kanban / Table segmented toggle in the widget header at Explore and Detail. The Table's job differs from the board's: it lists everything over time, so its status list adds Closed and Voided and its "All statuses" includes the archive, while the board stays the live approval flow</td><td>Step 4 v2.1 (the way back must never require the 3-dot menu) and v2.6 (the two views have different jobs)</td></tr>
+<tr><td>9</td><td>Encumbrance chart</td><td>Committed-per-accounting-period bar chart, its own table, its own hover card and its own caption</td><td>Cut. There is no chart, no chart table, no bar hover card and no data selector</td><td>Step 4 What Got Cut, owner decision 2026-08-19, over the dossier's "keep both jobs" recommendation, which is recorded as a divergence</td></tr>
+<tr><td>10</td><td>Status filter values</td><td>Her four hardcoded personal-queue stages (Awaiting my approval next, Awaiting my approval, Unapproved, Approved)</td><td>Board: All statuses, Pending, Approved, Rejected. Table: those plus Closed and Voided. A single state hides the other columns AND the Finish column; an archive value left over from the Table falls back to All statuses on the board</td><td>Step 4 Filters table and Fine-Tuning; the four legacy options remain the codebases' status filter but are no longer columns</td></tr>
+<tr><td>11</td><td>Sort</td><td>User-sortable on four columns, defaulting to age descending (newest waiting first)</td><td>Fixed oldest first (Date Issued ascending), in both views and inside every column, with no sort control at all. It is the aging read and it defines what "top" means in every trimmed view</td><td>Step 4 Data Table Sort, settled by owner decision 2026-08-19, Sign-off row 4</td></tr>
+<tr><td>12</td><td>Volume</td><td>Renders her whole filtered queue, unpaged</td><td>Per-tier caps: 2 cards per board column at Explore with a "+N more, view in the PO Table" link, 5 table rows at Explore, 10 at Detail. The totals row always totals the whole filtered set, never the visible page</td><td>Step 4 Size behaviour and the Trimmed-view rule; Step 5 v2, the table is MUST PAGINATE and the board is column-capped</td></tr>
+<tr><td>13</td><td>Headline</td><td>The count of whatever stage is filtered, plus an outstanding-amount pill</td><td>The Pending count, labelled "pending approval", with the pending outstanding total beneath it. It is scoped by the approval path and deliberately NOT by the status filter, because it is the pending read</td><td>Step 4 Headline math, <code>FC_KPI_HEADLINE[13]</code>, checked in code 2026-09-07</td></tr>
+<tr><td>14</td><td>Rejected requests</td><td>Never shown, matching the legacy access rule</td><td>Given their own column, a deliberate departure that needs the API to start serving rejected orders</td><td>Step 4 v2.2, owner-accepted forward design; Step 5 v2 and Sign-off row 9</td></tr>
+<tr><td>15</td><td>Table-only filters</td><td>None</td><td>Department, Year and an Overdue-only toggle, visible at Detail only. All three are unconfirmed fields rendered as if real per Rule 11, and each popover says so on screen</td><td>Step 4 Filters table; Sign-off rows 1 to 3, all still open</td></tr>
+<tr><td>16</td><td>Money</td><td>Shell <code>money()</code>, whole dollars</td><td>Our own <code>purFMoney</code>, two decimals, because real orders in the set are $87.50 and $76.25 and rounding would print a cent value as a dollar one</td><td>Step 4 rounding rule: "amounts render as dollars with two decimals in the build"</td></tr>
+</tbody>
+</table>
+<p><strong>Parity kept (identical to Jo, or her component reused verbatim).</strong> The board rides on her <code>.pur-kanban</code> / <code>.pur-kcol</code> / <code>.pur-kcol-h</code> / <code>.pur-kcard</code> / <code>.pur-kc-*</code> / <code>.pur-kempty</code> components; the record modal's five tabs ride on her <code>.pur-tabs</code> / <code>.pur-tab</code>; the header is her two-row <code>.dep-hd</code> grid with the chips left and the view toggle right and the KPI number on the left; the table is her <code>.wt-row</code> / <code>.wt-head</code> / <code>.lr-main</code> / <code>.wt-c2</code> / <code>.dep-total</code> primitives carrying ARIA table roles so the real table semantics survive; the filters are her <code>.filter-chip</code> with the secondary fill and leading filter glyph, and the approval-path menu is her <code>.dd-search</code> plus <code>.menu-scroll</code> searchable picker rather than a native select; the dialogs are her <code>.modal</code> family; the empty states are her <code>.state</code> block; loading is her <code>.sk</code> skeleton plus <code>.bgt-spin</code>. Behaviourally identical: the Approval Path list re-derives from the selected status, an impossible path selection resets to "All approval paths", the chip is omitted rather than rendered dead when only one path exists, and the purposeful empty-state copy is adapted from her build with attribution on screen. Only a filter change fetches; the view toggle and the modal tabs are local re-renders and never flash a skeleton.</p>
+<p><strong>Open items carried, not resolved.</strong></p>
+<ul>
+<li><strong>The Feargal C3 payment dispute is live and no side is taken.</strong> Claim A: the dashboard should preserve the existing payment functionality and may redirect to the established payment screen (his stated requirement, Step 4 item 3, 2026-08-25). Claim B: payment entry belongs in the record popup (owner-directed 2026-08-19 and verified against the live screen). The Step 5 v2 spec deliberately gates its payment endpoint (API 7) as DISPUTED. This port renders the BUILT behaviour, and the Payment Approval tab says on screen that the question is open and carried. If the redirect ruling lands, the tab is dropped and the unpaid-card selection becomes a navigation.</li>
+<li><strong>Voided-request financial treatment is recorded both sides with no reversal behaviour asserted</strong> (Step 4 item 5, 2026-08-25). Void here changes the record status and records a reason. It claims no reversal, no journal entry and no credit, and the confirm popup says so.</li>
+<li><strong>Dossier finding 11.6 is Unreviewed, and so is the stable-columns half of 11.5.</strong> The built table does use one fixed column set, but the finding has no assigned status, so the column commitment stays provisional. (The aging half of 11.5 is Accepted and built.)</li>
+<li><strong>Department, Year and Overdue are UNVERIFIED Rule 11 fields.</strong> If any turns out not to be real, that filter, and for Overdue the red row highlight and text flag, drop from the Table view. No other view uses them.</li>
+<li><strong>No dashboard API serves or writes any of this yet:</strong> approve and reject with a reason, hold, payment status and payment entry, and the Closed / Voided archive (Sign-off rows 9 to 13). Every action in this port is in-memory for the session and the modal footer says so.</li>
+<li><strong>Feargal's items 1, 2, 4 and 6 (2026-08-25) are documented, not built:</strong> ordered approver sequences with the viewer's own position, permission-aware actions, and filters that separate purchase-order approval from invoice or payment approval. The Approvals tab names the gap on screen rather than implying the sequence is live.</li>
+<li><strong>Drag to action is pointer-only.</strong> No keyboard equivalent for moving a card exists yet; the record modal, reachable by Enter on a table row, is the keyboard route to a request. Flagged in Step 4 Accessibility, not solved here.</li>
+<li><strong>Volume ceilings are TO CONFIRM.</strong> No worst-realistic open purchase order count has a documented basis, so the per-column cap and the page size are unvalidated.</li>
+</ul>
+<p><em>Section added 2026-09-08 on branch oisin-v2-rebuild (base 71ca056).</em></p>
+
+<h2>W15 &mdash; Bank Balances</h2>
+<p>Ported 2026-09-08 against Jo's <code>phase-2</code> @ <code>71ca056</code> on branch <code>oisin-v2-rebuild</code>. <strong>First-ever port of this widget.</strong> Ours is <code>kind:"bank-mb"</code>, prefix <code>bkF</code>/<code>BKF_</code>, entry <code>bkFContent</code>, CSS root <code>.bkf-*</code>, actions <code>data-bkf</code>, seven registry entries on the <code>(OC)</code> convention. Source of truth: our built Final <code>bkF</code>, <strong>rebuilt 2026-09-04</strong> per direct instruction ("change the design to Jo's, dont copy it but take what is in it and try to copy it for Bank Balances W15"). There is no <code>FC_VERSION[15]</code> entry in the build, so the dated comments in the Final's own bkF block are its only version record and are what is cited here. The earlier 2026-08-30 v2.0 port (prefix <code>bankF</code>) was discarded by owner instruction on 2026-09-03 and is deliberately not resurrected.</p>
+<p><strong>Collision note.</strong> Jo's own bank widget is <code>kind:"bank"</code> with twenty-six <code>bank*</code>-prefixed helpers (<code>bankContent</code>, <code>bankAccounts</code>, <code>bankEnding</code>, <code>bankMoney</code>, <code>bankAbbr</code>, <code>bankAllTable</code>, <code>bankAllBars</code>, <code>bankBars</code>, <code>bankSingleTable</code>, <code>bankGlance</code>, <code>bankOdChip</code>, <code>bankShowBpop</code> and the rest) plus <code>BANK_ACCOUNTS</code> and a 107-rule <code>.bank-*</code> CSS cluster. None of her names begin with <code>bkF</code>, and before this port <code>bkF</code>, <code>BKF_</code>, <code>data-bkf</code>, <code>.bkf-</code> and <code>bankf</code> each had <strong>zero</strong> occurrences in her file. Verified after the port: all twenty-six of her functions are still defined exactly once, <code>BANK_ACCOUNTS</code> is declared exactly once, her five <code>kind:"bank"</code> registry rows are byte-identical, her 17,144-byte bank render block and her 1,417-byte hover-popover tail are byte-identical by md5, and all 107 of her <code>.bank-*</code> CSS rules (9,266 bytes) are byte-identical. Her <code>EMPTY_COPY.bank</code> and <code>ERROR_COPY.bank</code> lines are untouched. Her data-actions stay <code>bank-*</code> and ours are <code>data-bkf</code>, so her delegated click listener never sees ours and ours never sees hers.</p>
+<p><strong>This port REUSES her CSS rather than redeclaring it.</strong> 74 of the classes our markup relies on are already declared in her stylesheet, her whole <code>.bank-*</code> cluster included, so our CSS block adds only 51 rules: our own 21 <code>.bkf-*</code> classes plus three groups of forced, <code>.bkf-root</code>-scoped overrides (documented in rows 12 to 14 below). Our block declares <strong>zero</strong> <code>.bank-*</code> selectors. Our Final's stylesheet re-implemented her entire vocabulary only because our own mockup file had none of it to inherit; here it was already present.</p>
+<p>Verified in place by <code>w15-bank-mb.driver.js</code>, 463 of 463. All eleven previously ported drivers re-run green afterwards.</p>
+<table>
+<thead>
+<tr><th>#</th><th>Difference</th><th>Jo's design</th><th>Our design</th><th>Source</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>Presentations offered</td><td>Table and Bars, and at <code>xwide</code> her <code>bankAllFull</code> shows BOTH side by side in a paired two-column layout</td><td>The same two presentations, but ONE at a time at every tier. Detail differs from Explore in the room it has, not in its structure</td><td>Step 4 Views: "Detail does not pair presentations"; the paired requirement was retired after review on W11 (2026-09-03) for not fitting the space</td></tr>
+<tr><td>2</td><td>A third presentation</td><td>n/a</td><td><strong>Account Cards was REMOVED by owner instruction on 2026-09-04.</strong> There are two presentations, not three, and both read the same server response so neither can show an account the other does not</td><td>Step 4 Views, View 3 recorded as removed so the earlier three-view plan is not treated as current</td></tr>
+<tr><td>3</td><td>Paging</td><td>Client-side "Load more" (<code>bank-more</code>), which slices a longer list already held in the browser</td><td>Server paging: Previous page / Next page, <strong>page size 12</strong> over 52 accounts (five pages), stating "1 to 12 of 52 accounts" and "Page 1 of 5". Each move is a round trip, which is why it is a page control rather than Load more: Load more cannot say which page you are on</td><td>Step 4 Paging rule, 2026-09-04 rebuild; Step 5 v2 pagination contract, default pageSize 12</td></tr>
+<tr><td>4</td><td>Ordering, and where it happens</td><td>User-sortable columns (<code>bank-sort</code> / <code>bank-ssort</code> rendering her <code>.wt-sort</code> buttons on both tables), defaulting to <code>bal-desc</code>, sorted in the browser</td><td>Fixed alphabetical by account name, ordered server-side, with a whitelisted <code>sortBy</code> of exactly one member and a unique account-id tiebreaker so paging can neither repeat nor skip an account. <strong>Her sortable column HEADERS are deliberately NOT built</strong></td><td>Step 4 Data Table Sort (fixed alphabetical, not user-changeable) and open item 7, an OWNER decision; the discarded port had sortable columns, contradicting both the Step 4 and Step 3 docs</td></tr>
+<tr><td>5</td><td>Totals and chart scale</td><td>Computed in the browser: <code>bankTotal</code> reduces over her account list, and her bar scale is taken from the rows on screen</td><td>Computed server-side over the <strong>whole filtered set</strong> and never the page. The totals row reads <code>res.totals</code> rather than reducing over the rows it was handed, and the diverging bar scales to <code>totals.maxEnding</code> / <code>totals.minEnding</code>, so <strong>turning the page moves neither the total nor any bar's length</strong></td><td>Step 5 v2, which names a page-sized total as this widget's single most likely defect and gives <code>maxEnding</code>/<code>minEnding</code> exactly this job</td></tr>
+<tr><td>6</td><td>The Overdrawn chip's arithmetic</td><td>Her <code>bankOdChip</code> counts and filters, but count and filter run over the same client-side list</td><td>Same control, hers reused, with the arithmetic split: the <strong>count spans the whole active set</strong> while <code>rows</code>, <code>totalCount</code>, <code>pageCount</code> and <code>totals</code> all follow the <strong>filtered</strong> population. The count therefore does not move when the filter turns on or the page turns, and the header and totals row stop saying "all accounts" while it is on</td><td>Step 4 Filters, chip added 2026-09-04 per direct instruction; Step 5 v2 filter architecture: <code>overdrawnCount</code> alone always spans the whole active set</td></tr>
+<tr><td>7</td><td>Where the Overdrawn chip appears</td><td>On her Glance as a <strong>drill</strong> chip that opens the Detail view in a closable modal overlay</td><td>Absent at Glance entirely, because Glance has no controls, and <strong>cleared</strong> on the switch to Single Account mode, where an overdrawn filter has no meaning. Its two undocumented edges are recorded build choices: it renders only when at least one account is genuinely overdrawn (a red "0 overdrawn" would be a permanent alarm about nothing), and it carries its state as <code>aria-pressed</code>, a label that names what is being shown, and a close glyph, so colour is never the only signal</td><td>Step 4 Filters and Size behaviour ("no controls, no view switch, no overdrawn chip" at Glance)</td></tr>
+<tr><td>8</td><td>Glance</td><td>Interactive: a live account chip, the overdrawn drill chip, and a <code>delta-pill</code> comparing the ending balance to the beginning balance</td><td>One figure, the Total Balance across all bank accounts, <strong>always the all-accounts aggregate regardless of any account selection made at a larger size</strong>, with no controls and no view switch. Refresh comes from her shared card chrome</td><td>Step 4 Size behaviour, Glance row; the always-aggregate rule itself is flagged for owner confirmation as open item 5, the same exception as W05, W10 and W11</td></tr>
+<tr><td>9</td><td>Drill-through</td><td>A per-row and per-bar link (<code>bank-acct-drill</code> on <code>.bank-namecell</code> and <code>.bank-hb-name</code>) into her <code>bankDrillModalHTML</code> overlay</td><td>None. No row, bar or column is clickable, and the widget opens no modal of its own: <strong>Single Account mode already IS this widget's drill-in mechanism</strong></td><td>Step 4 Drill-Through: "No separate page link, Single Account mode already is this widget's drill-in mechanism"; the port's per-account overlay is recorded as having no source</td></tr>
+<tr><td>10</td><td>Per-bar hover detail</td><td><code>bankShowBpop</code>, a hover card on <code>.bank-col[data-bankpop]</code>, driven by her document-level <code>mousemove</code> listener</td><td>Dropped. Our category columns carry no <code>data-bankpop</code> attribute, so her listener never fires on them. Every chart value instead exists as text in the DOM beside its bar and again for screen readers, never hover only, which is what clears the standing F4 accessibility finding against this widget</td><td>Step 4 Interaction Spec and Accessibility; the hover card is unspecified in every source</td></tr>
+<tr><td>11</td><td>Table semantics</td><td>Div-based flex row stacks using her <code>.wt-row</code> / <code>.lr-main</code> / <code>.wt-c2</code> primitives</td><td>Real native <code>&lt;table&gt;</code> elements with <code>&lt;th scope="col"&gt;</code>, <code>&lt;th scope="row"&gt;</code> and an <code>sr-only</code> <code>&lt;caption&gt;</code> that names the filter, the page and what the total covers. This is not a style preference: a <code>&lt;th scope&gt;</code> set through <code>innerHTML</code> inside a <code>&lt;div role="row"&gt;</code> is a parse error and is silently dropped, so the ARIA-role approach cannot meet the requirement</td><td>Step 4 Accessibility: "Table semantics are real (th/scope)"</td></tr>
+<tr><td>12</td><td>The zero axis on the diverging bar</td><td>Her <code>.bank-hb-zero</code> rule reads <code>var(--wn-500)</code>, and <strong><code>--wn-500</code> is declared nowhere in her file</strong>, so the rule resolves to nothing and her diverging bar's zero axis is <strong>invisible in her own build</strong></td><td><code>--wn-750</code>, a Pathway primitive the file does declare. <strong>This is a real defect in her original, reported rather than copied:</strong> her rule is left exactly as it is and only our own axis is re-pointed, scoped to <code>.bkf-root</code></td><td>Verified in her file: zero <code>--wn-500</code> declarations; the driver asserts both the defect and our fix</td></tr>
+<tr><td>13</td><td>Red on the bars</td><td><code>.bank-hb-fill.neg</code> and <code>.bank-col.out .bank-bar</code> are <code>var(--red-100)</code>, and her <code>.bank-xval</code> pairs <code>in</code> with <code>--am-700</code> against a red <code>out</code></td><td>The amethyst ramp: <code>--am-500</code> for in-credit and money-in, <code>--am-700</code> for overdrawn and money-out. Nothing is lost, because the overdrawn reading is carried by the side of the zero axis, a warning glyph, the word Overdrawn and a legend line that states in words which side means what. Red survives in exactly one place, the Overdrawn status chip</td><td>Widget Styling Reference 8.2, which keeps red off bars and arcs; colour is never the only signal</td></tr>
+<tr><td>14</td><td>Native-table box model</td><td>n/a</td><td>Three groups of <code>.bkf-root</code>-scoped overrides, all forced rather than chosen: her row, header, second-column and totals selectors set <code>display:flex</code> and a fixed flex basis, which would collapse a real table row, so her visual treatment is kept and only the box model is re-stated for table semantics</td><td>Required by row 11; her rules are untouched and still drive her own div stacks everywhere else in the file</td></tr>
+<tr><td>15</td><td>The seven-row breakdown</td><td>Present, but with sortable columns, and the ending figure sits in a <code>.dep-total</code> strip <strong>outside</strong> the table, which makes it an eighth row</td><td>Row 7 inside the table with the same weight and rule, and <strong>no totals row at all</strong>, because Ending Balance already is the total and a totals row would double count it. Each boundary row carries a sub-line stating its provenance: whether the beginning balance came from the last reconciliation or, for a never-reconciled account, from its opening balance, and why there is no separate total. The order is structural and is never sortable</td><td>Step 4 Data Table Sort (fixed structural row order) and Data Contract (the two beginning-balance origins)</td></tr>
+<tr><td>16</td><td>Account identification</td><td>Name plus a masked account number (<code>&bull;&bull;4021</code>) with the full number held alongside</td><td>Account name only</td><td>Step 4 Views: "All Accounts views show name + balance only, as specced"</td></tr>
+<tr><td>17</td><td>Download</td><td>Her three <code>kind:"bank"</code> registry entries carry an <code>actions</code> array (CSV, Excel, PDF) driving her export menu</td><td><strong>No download at any size.</strong> None of our seven registry entries carries an <code>actions</code> array</td><td>Step 4, the download control was removed by owner instruction on 2026-09-04</td></tr>
+<tr><td>18</td><td>Search</td><td>She renders a search input over the account table, but it carries <strong>no handler in her own file</strong>, so it is a dead control</td><td>No search box at all, in the widget or in the account picker</td><td>Step 4, recorded as not carried over from the discarded port; no source document specifies a search here</td></tr>
+<tr><td>19</td><td>Money</td><td><code>bankMoney</code>, whole dollars</td><td>Two decimals, en-US, keeping her U+2212 MINUS SIGN glyph for negatives. Ported exactly as built, because Step 4 records "Rounding / currency / locale rules: <em>not yet specified</em>" and Jo's own localisation defect on this widget is Unreviewed (see the open items)</td><td>Ported as built; the rounding rule is an acknowledged gap, not a decision</td></tr>
+<tr><td>20</td><td>Volume in the fixture</td><td>26 accounts, unpaged</td><td>52 accounts, deliberately <strong>not</strong> in name order so that the server ordering code actually runs rather than being masked by pre-sorted input. Seven end overdrawn and three have never been reconciled, so both edge paths render</td><td>SME Ben Lane, 13.07.2026: "Up to 50, sometimes more. 3 is unrealistically low... design for dozens of accounts, not a handful"</td></tr>
+<tr><td>21</td><td>Tier awareness</td><td>Two <code>data-tier</code> occurrences in her whole file</td><td><code>data-tier</code> on our root and on the activity chart, with tier-scoped rules for the bar grid and the chart</td><td>Widget Styling Reference 8.1 makes tier sizing mandatory</td></tr>
+<tr><td>22</td><td>Mode-change announcement</td><td>Silent: her account selection replaces the whole widget with no announcement</td><td>A polite <code>role="status"</code> live region, because the Account control changes the entire widget rather than filtering a list, and a silent whole-widget replacement is not announced to a screen reader</td><td>Step 4 Interaction Spec, "This is a mode switch, not a row filter", plus Accessibility</td></tr>
+</tbody>
+</table>
+<p><strong>Parity kept (identical to Jo, or her component reused verbatim).</strong> The header is her two-row <code>.dep-hd</code> grid with the account chip and overdrawn chip left in her <code>.bank-hd-left</code>, the view toggle right in her <code>.dep-hd-toggle</code>, and the KPI number and its badge on the left in her <code>.bank-numwrap</code> with her <code>.bank-ctx</code> context line beneath. The diverging bar is her <code>.bank-hb</code> family whole (<code>.bank-hb-row</code>, <code>-name</code>, <code>-track</code>, <code>-zero</code>, <code>-fill</code>, <code>-val</code>, <code>-warn</code>) on her exact grid. The four-category activity chart is her <code>.bank-cols</code> column chart whole: her 40px <code>.bank-yax</code>, her <code>.bank-canvas</code> with its bottom rule and dashed <code>.bank-gl</code> mid gridline, her per-column hover band, her 56%-wide bar capped at 46px, and her <code>.bank-xaxrow</code> repeating each label and value as text. The Overdrawn chip is her <code>.bank-odchip</code> with her own pressed <code>.on</code> treatment, not a restyle. The overdrawn balance markers are her <code>.bank-pill warn</code>, <code>.bank-tag-over</code> and <code>.bank-neg</code>/<code>.bank-pos</code>. The beginning-balance row uses her muted <code>.bank-anchor</code>. The account picker is her <code>.mi</code> / <code>.mi-gap</code> / <code>.mi-nm</code> / <code>.cap</code> / <code>.sep</code> / <code>.menu-scroll</code> menu with her <code>.bank-mi-bal</code> trailing balance. The view switch is her <code>.vtoggle</code> / <code>.vt</code> segmented control, offering the same two segments hers does. The account control is her <code>.filter-chip</code> with her <code>.bank-acct-chip</code> width cap and her <code>.fc-label</code> ellipsis. Pagers use her <code>.iconbtn</code>, the pager strip her <code>.bank-pager</code>, tables her <code>.wt-*</code> / <code>.lr-main</code> / <code>.dep-total</code> treatment, Detail her <code>.dep-full</code> / <code>.dep-col</code> / <code>.dep-col-h</code> columns, states her <code>.state</code> block, and Glance her <code>.kpi-row</code> / <code>.kpi-num</code> / <code>.metric-value</code> / <code>.gl-sub</code>. Refresh is her shared card chrome and preserves the account selection, because nothing in our render path writes to the selection.</p>
+<p><strong>Open items carried, not resolved.</strong></p>
+<ul>
+<li><strong>The paged accounts endpoint exists in NO Modern API document.</strong> <code>GET /api/dashboard/bank-balances/accounts?page&amp;pageSize&amp;sortBy&amp;sortDir</code> is modelled here by the <code>bkFServerQuery</code> stand-in and is central NEW backend work: the paging, the full-set aggregation, the extremes that hold the bar scale still, and the overdrawn count that rides the same request. No schema change is needed, but the endpoint does not exist.</li>
+<li><strong>The per-account seven-line activity breakdown is entirely NEW and is the WAIVED Rule 11 ask that blocks Single Account mode.</strong> The Modern API's single-account endpoint returns only a summary balance: there is no seven-row Beginning / Deposits / Voids / Checks / Withdrawals / EFT / Ending breakdown and no activity-category endpoint at all. The owner waived this explicitly as forward design (Step 4 Sign-off row 3, the one row marked as blocking), so the mode is built as if the data were real and the caveat lives here and in the manifest, never on screen. It is this widget's largest gap and it is the backend team's to close.</li>
+<li><strong>Every one of Jo's dossier findings is Unreviewed. No reconciliation file exists for this widget,</strong> so no finding has an owner-assigned status. That includes her <strong>live pound-sign localisation defect</strong> (a pound sign shown for a US org, observed 23 Jul 2026), against which Step 4 records "Rounding / currency / locale rules: not yet specified" while the build formats en-US dollars; and her <strong>available-vs-unrestricted-cash "Do now"</strong> (gap 10.4), for which the nearest recorded item is open item 9 (cash runway) and for which no available-vs-total framing exists in either the doc or the build. Also Unreviewed: her multiple-instances-plus-saved-default-account request (gap 10.5), and labelling the unreconciled-only basis with an optional all-items view.</li>
+<li><strong>The SME attribution conflict stays recorded on both sides.</strong> Jo's dossier names the 13 Jul 2026 SME as "Marvin"; this project's Step 2 records name Ben Lane for the same interview on the same date. Neither is treated as the correction of the other; whoever holds the recording settles it.</li>
+<li><strong>Ben Lane's "top 3 to 5 plus view all" preference versus the built paged full set is an open design question.</strong> He recommended surfacing a handful with a view-all route for orgs with up to 50 accounts; the build instead pages the entire set with no trimming at any size. <strong>This port renders the BUILT behaviour</strong> and flags the divergence. Step 4 open item 2 keeps both the locked size table and the interview finding recorded until someone resolves it, and open item 4 (which 2 to 3 accounts a trimmed view would pick, first alphabetically or largest balance) stays recorded against any future trimmed view.</li>
+<li><strong>Negative balances in the bar chart are undefined.</strong> The legacy pie excluded negative-balance accounts; the equivalent rule for the bar chart was never written. The build shows them on the correct side of the zero axis and names the gap in one muted line, which appears only when the current page actually contains one, so it never becomes a standing footnote. Design settles the rule (open item 6).</li>
+<li><strong>Loading is unspecified and deliberately not invented</strong> (open item 8), which matters more here than on most widgets because paging is now a server round trip. Jo's <code>bankSkeleton</code> and her 850ms <code>bankLoad</code> timer are hers and are left to her widget; ours has no loading treatment at all.</li>
+<li><strong>Last Reconciled visibility is undecided</strong> (open item 1). Balances are a running tally of unreconciled items since each account's last reconciliation, but no visible "Last Reconciled" date or status badge exists in the legacy design or here. If the green / amber / red reconciliation badges are ever confirmed, each must carry a text label, not colour alone. An unreconciled-item count on the account rows is the related open item 10.</li>
+<li><strong>The always-aggregate Glance figure is flagged for confirmation</strong> (open item 5): it ignores any account selection made at a larger size, the same exception as W05, W10 and W11.</li>
+<li><strong>The empty state names its own gap rather than resolving it.</strong> What a zero-account organisation should see is unspecified in every source, and the related known rule is that the "All Bank Accounts" option only appears when more than one active account exists. The state renders cleanly and says the treatment is Design's and the owner's to settle.</li>
+</ul>
+<p><em>Section added 2026-09-08 on branch oisin-v2-rebuild (base 71ca056).</em></p>
+<h2>W16 &mdash; Accounts Payable By Due Date</h2>
+<p>Ported 2026-09-08 against Jo's <code>phase-2</code> @ <code>71ca056</code> on branch <code>oisin-v2-rebuild</code>. <strong>First-ever port of this widget.</strong> Ours is <code>kind:"payables-mb"</code>, prefix <code>apF</code>/<code>APF_</code>, entry <code>apFContent</code>, CSS root <code>.apf-*</code>, actions <code>data-apf</code> with <code>apF-</code> values, six registry entries on the <code>(OC)</code> convention. Source of truth: our built Final <code>apF</code>, <code>FC_VERSION[16]</code> = 2.0, built 2026-08-19 as a 1-to-1 copy of Jo's own v2 <code>ap</code> design (her dossier 7371554882 Part C decisions 11.1 / 11.3 / 11.4 / 11.5) plus <strong>one</strong> owner-approved addition, and re-verified against the build by <code>widget-final-check-audit</code> on 2026-09-07. Because ours starts as her design, the delta below is small and almost every row is either the horizon addition or a consequence of it.</p>
+<p><strong>Collision note, the sharpest on this project so far.</strong> Jo's own payables widget is <code>kind:"payables"</code> with <strong>38</strong> <code>ap*</code>-prefixed helpers, and <strong>four of them begin with the same three letters as our prefix</strong>: <code>apFmtLong</code>, <code>apFmtShort</code>, <code>apFull</code> and, alongside them, <code>apSelLabel</code>. This is the same trap as <code>ptoFindEmp</code> on W09 and <code>purFiltered</code> on W13, and it is worse here because the letters match exactly. The rule that clears it is that every one of our names carries a <strong>doubled F</strong>: ours are <code>apFFmtLong</code>, <code>apFFmtShort</code>, <code>apFFull</code> and <code>apFSelLabel</code>, so no name of ours can shadow one of hers. Before this port <code>APF_</code> and <code>.apf-</code> each had <strong>zero</strong> occurrences in her file. Verified after it: all 38 of her helpers are still defined exactly once, every one of their definition lines is byte-identical to the pre-edit snapshot, the raw occurrence counts of all four lookalikes are unchanged (6 / 2 / 2 / 4), her <code>AP_INVOICES</code>, <code>AP_INVOICES_SINGLE</code>, <code>AP_BANDS</code> and <code>AP_TODAY</code> are each declared exactly once, her six <code>kind:"payables"</code> registry rows are untouched, and her <code>EMPTY_COPY.payables</code> and <code>ERROR_COPY.payables</code> lines are unedited (our empty-state strings are inline in our own block rather than written into her shared copy object). Not one of the 57 top-level names our block defines equals one of hers. Her data-actions stay <code>ap-<em></code> and ours are <code>data-apf="apF-</em>"</code>, so her delegated click listener never sees ours and ours never sees hers.</p>
+<p><strong>This port REUSES her CSS almost entirely.</strong> She already declares the whole <code>.ap-*</code> cluster our markup draws with, the two-line due cell and the tinted band subheader included, plus every shell primitive the widget needs. Our CSS block therefore adds only <strong>nine</strong> rules, all <code>.apf-</code> scoped, and declares <strong>zero</strong> of her selectors. The single rule that mentions one of hers, <code>.apf-root .ap-sum-row[data-apf]:hover</code>, is scoped under our root first and exists only because her own hover rule keys on <code>[data-action]</code>, which our selector rows deliberately do not carry.</p>
+<p>Verified by <code>w16-payables-mb.driver.js</code>, 740 of 740. All twelve previously ported drivers re-run green afterwards.</p>
+<table>
+<thead>
+<tr><th>#</th><th>Difference</th><th>Jo's design</th><th>Our design</th><th>Source</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>Due-date horizon</td><td>No such control. Her working set is always every outstanding invoice</td><td><strong>A second filter chip: All outstanding / Next 7 / 30 / 60 / 90 days</strong>, scoping the working invoice set. This is the one owner-approved addition to her design, and it is deliberately not identical to any other widget's picker</td><td>Step 4 Filters, "Due-date horizon" row, and Fine-Tuning Notes 2026-08-19: "PLUS one owner addition: a due-date horizon picker"</td></tr>
+<tr><td>2</td><td>Overdue under a horizon</td><td>n/a</td><td><strong>Overdue invoices are ALWAYS included, whatever the horizon.</strong> A narrowed horizon can empty the later bands but can never shrink the overdue band, the overdue count or the overdue total. A plain "due within N days" filter would drop them, which is the defect this rule exists to prevent</td><td>Step 4 Filters: "overdue always included"</td></tr>
+<tr><td>3</td><td>The snap rule</td><td>n/a</td><td>If the current due filter is a band the new horizon just emptied, or a specific date that just left the set, <strong>the due filter snaps back to All due dates</strong> rather than rendering an empty table. A still-valid selection is left alone, and re-picking the horizon already selected is a no-op that does not fetch</td><td>Step 4 Filters: "if the current due filter becomes empty or invalid under a new horizon it snaps back to All due dates"</td></tr>
+<tr><td>4</td><td>Scope of a filter</td><td>Table-only in effect: her <code>apTotalDue</code>, <code>apOverdueTotal</code>, <code>apBandData</code>, <code>apVendors</code> and popover amounts all read her full invoice array, so only the table body and its footer respond to a selection</td><td><strong>Widget-wide.</strong> Every aggregate reads one function, <code>apFData(w)</code>, the horizon-scoped set, so the KPI total, the overdue pill, the context line, the band subheaders, the table, the cash panel, the vendor rollup, the popover amounts and the footer cannot disagree with one another. The raw array is reached in exactly four places: the scoper, the two state guards, and its own definition</td><td>Step 4 Filters: "Filtering is widget-wide, not table-only: every figure (KPI total, overdue pill, bands, table, cash panel, popover contents, footer) computes from the horizon-scoped set"</td></tr>
+<tr><td>5</td><td>Glance</td><td>Total payable plus the overdue pill, computed unconditionally across all due dates</td><td>The same shape, still with no filters and no switch, but <strong>the figure is horizon-scoped</strong>, so a Glance card set to a horizon agrees with an Explore card on the same one. The total is also present as <code>sr-only</code> text, never hover-only</td><td>Step 4 Size behaviour, Glance row: "The figure computes from the horizon-scoped set, not unconditionally across all due dates"</td></tr>
+<tr><td>6</td><td>Table columns</td><td><strong>Five:</strong> Vendor, Invoice, Due date, a separate Status column carrying her <code>apDaysShort</code> pill, and Amount</td><td><strong>Four.</strong> The Status column is folded into a two-line Due date cell: the date, then "Overdue by N days" / "Due today" / "Due in N days" with a glyph, red when overdue. Her <code>.ap-c-due</code> rule is already a two-line flex column, so this needed no new CSS</td><td>Step 4 Hero: "Vendor, Invoice, Due date (two-line cell: the date plus Overdue by N days in red with a warning glyph, Due today, or Due in N days), Amount"; Data Table Sort names the same four columns</td></tr>
+<tr><td>7</td><td>Row click</td><td>Every row is a <code>role="button"</code> with <code>tabindex</code> and <code>data-action="ap-open"</code>, opening an invoice-detail modal</td><td><strong>None.</strong> Rows are plain, carry no role, no tabindex and no click affordance, and the block never opens a modal. Drill-through is not built at all</td><td>Step 4 Sign-off Readiness row 1: drill-through is "leaning yes, pending expert/dev confirmation", so "the Final was built without any drill-through element... the question stays open"</td></tr>
+<tr><td>8</td><td>Sort headers</td><td>All five columns sortable, direction shown by a glyph only</td><td>All four sortable, and each header's <strong><code>aria-label</code> announces the current direction</strong> ("Sort by due date, currently ascending"). Default is due date ascending, ties broken by the <strong>larger amount first</strong> rather than vendor-alphabetically. Sorting never fetches</td><td>Step 4 Interaction Spec ("every table column header is a sort button whose aria-label announces the current direction") and Data Table Sort ("date ties broken by larger amount first, not vendor-alphabetical")</td></tr>
+<tr><td>9</td><td>Loading copy</td><td>Her <code>apHeaderBlock</code> <strong>computes</strong> the line "Updating outstanding invoices…" into a local variable and then never renders it, so her own loading state is a bare skeleton with no explanation. <strong>This is a real defect in her file, reported rather than copied: her function is left exactly as it is</strong></td><td>Ours renders the line, in a quiet <code>.apf-ctx</code> under the KPI, with three ASCII dots rather than her U+2026 ellipsis glyph</td><td>verified in her file: <code>ctx</code> is assigned in the loading branch and absent from the return statement; DESIGN - Step 4 Widget States, Loading row, which specifies the copy as visible</td></tr>
+<tr><td>10</td><td>The context line</td><td>None rendered (see row 9)</td><td>One quiet, small, regular-weight line under the KPI, never an eyebrow: the outstanding count, plus, under a horizon, "due within N days plus everything overdue" so the scope and the overdue exception are both stated on screen</td><td>Jo's convention, "context lines are small, regular weight, muted"; the horizon note is required because row 2's rule is otherwise invisible</td></tr>
+<tr><td>11</td><td>Which chip is loading</td><td>One chip, so the question does not arise</td><td>Two chips, so the <code>.bgt-spin</code> spinner sits on <strong>whichever chip started the fetch</strong>, tracked by <code>apFLast</code>. Only one chip ever spins</td><td>a consequence of row 1; her single-chip spinner treatment reused unchanged</td></tr>
+<tr><td>12</td><td>Dead view state</td><td>Her six registry rows carry an <code>apview</code> key that her v2 block <strong>never reads</strong> (<code>w.apview</code> appears zero times), and her <code>ap3</code> row sets it to <code>"timeline"</code>, a view her v2 block does not have. <strong>Left exactly as it is</strong></td><td>No view state key at all, on any entry, and no view-toggle builder in the block. The header's toggle slot renders once and stays deliberately empty</td><td>verified in her file; DESIGN - Step 4 Views: "The Final has no Switch View: one hero presentation per tier, per Jo's v2 (no charts, no donut, no cards)"</td></tr>
+<tr><td>13</td><td>Charts</td><td>None in her v2 either, but her superseded A/B/C-era donut and timeline notes still surround the block</td><td>None, and nothing that could grow one: no <code>&lt;svg&gt;</code> is emitted at any size, and no donut, timeline or card code exists in our block</td><td>Step 4 Interaction Spec: "No donut or chart exists in the Final (Jo's v2 dropped all charts); the old donut hover notes apply only to the superseded A/B/C options"</td></tr>
+<tr><td>14</td><td>Empty state</td><td>Her <code>apContent</code> renders "Nothing outstanding" with the full sub-line at every size, including Glance</td><td>The same positive copy and glyph, but Glance gets the <strong>short variant</strong>, title only, because the sub-line does not fit a KPI card. The empty trigger is a <code>dataset:"none"</code> flag or her <code>state:"empty"</code>, and our dispatch sits before the generic fallback so her Deposits copy can never claim our card</td><td>Step 4 Widget States, Empty row: "a positive Nothing outstanding state, short variant at Glance"</td></tr>
+<tr><td>15</td><td>The empty demo entry</td><td><code>ap4</code> uses <code>state:"empty"</code></td><td><code>apF4</code> uses <code>dataset:"none"</code>, matching the convention every other port on this branch uses for a data-driven empty state, and our guard accepts either</td><td>consistency with W07, W09, W10, W11, W13 and W15 on this branch</td></tr>
+<tr><td>16</td><td>The single-date fixture</td><td>She ships a second dataset, <code>AP_INVOICES_SINGLE</code>, behind <code>dataset:"single"</code> on her <code>ap3</code> row</td><td>Not carried. The same state is reachable from the real fixture by picking any specific due date in the popover, so a second array would be a second thing to keep in sync. Our sixth entry demos a <strong>horizon-scoped Detail card</strong> instead, which nothing else could reach</td><td>our registry entries are taken from the Final's own demo states; the Final has one fixture</td></tr>
+<tr><td>17</td><td>Tooltips</td><td><code>data-tip</code> plus <code>data-tip-plain</code> on the overdue pill, using her delegated tooltip system</td><td>Identical, hers reused. <strong>No native <code>title</code> attribute appears anywhere in our block</strong>, which is a change from our own Final, where the pill used <code>title=</code> because our mockup had no tooltip system to inherit</td><td>reuse her real components; BUILD - the Final's <code>title=</code> was a mockup-only fallback</td></tr>
+<tr><td>18</td><td>Vendor search</td><td>Her <code>apTable</code> renders a search input past 6 rows, placeholder "Search invoices or vendors", relying on the shell's shared <code>.dep-q</code> filter</td><td>Same threshold and the same input, with our own handler scoped to <code>.apf-root</code>: it filters rows inside the one card without re-rendering, and <strong>hides a band subheader when none of its rows match</strong>, so a filtered aging view never shows an empty band header</td><td>Step 4 Filters: "a vendor search input appears above the table past 6 rows (client-side row filter within the card)"</td></tr>
+<tr><td>19</td><td>Dead helpers</td><td><code>apDueWithin</code> and <code>apISO</code> are defined in her block and <strong>never called</strong> (one occurrence each, the definition). <strong>Left exactly as they are</strong></td><td>Neither has a counterpart: our block defines only what it uses</td><td>verified in her file</td></tr>
+<tr><td>20</td><td>Dead CSS</td><td><code>.ap-glance-cap</code>, a glance caption class, is declared in her stylesheet and <strong>used nowhere</strong> in her markup. <strong>Left exactly as it is</strong></td><td>No counterpart; our Glance context is carried by the pill and the <code>sr-only</code> line</td><td>verified in her file</td></tr>
+<tr><td>21</td><td>Wiring style</td><td>Her block hooks the shell's shared plumbing: an <code>ap-</code> branch in the delegated click listener, an <code>apPopContent</code> entry in <code>popContent()</code>, and a <code>triggerSelector</code> branch</td><td>A fully self-contained subsystem behind <code>APF_WIRED</code>, keyed to <code>data-apf</code> inside <code>.apf-root</code>, with body-mounted <code>.apf-root</code> popovers, its own Escape and outside-click handling, and its own search input id. This is style (b), the same as W07, W09, W10, W13 and W15</td><td>the port skill's integration style (b), kept consistent across this branch; it also guarantees rows 4 and 7 of the collision note</td></tr>
+<tr><td>22</td><td>Popover date section heading</td><td>"Specific due date (earliest first)"</td><td>"By specific date, earliest first", to sit as a parallel construction beside her own "By aging" heading in the same list</td><td>Step 4 Filters names the two cuts "By aging" and "By specific date"</td></tr>
+<tr><td>23</td><td>Per-widget state</td><td>Global module state in our own Final (<code>APF_STATE</code>), because the Final Check tab renders one card at a time</td><td>Per-widget state on the registry object, keyed <code>apFDue</code> / <code>apFSort</code> / <code>apFHz</code> / <code>apFLast</code> / <code>apFLoading</code>, so six cards can hold six independent selections, and the popover records which card opened it</td><td>shell conformance, not a design change; her shell renders many cards of one kind at once</td></tr>
+</tbody>
+</table>
+<p><strong>Parity kept (identical to Jo, or her component reused verbatim).</strong> The band maths is hers exactly: overdue is due before today, due this week is 0 to 7 days out, due this month is 8 to 30, due later is 31 or more, and the fourth Due later band is hers too. The 12-invoice fixture and the 23 Jul 2026 anchor are hers, values verbatim, so the two cards sit side by side showing the same band populations. The header is her two-row <code>.dep-hd</code> grid with the filter chips left and the KPI number and pill left below in her <code>.bank-numwrap</code>. Both chips are her <code>.filter-chip</code> secondary fill with her leading filter glyph and trailing chevron. The overdue pill is her <code>.ap-pill</code> with her <code>.warn</code> and <code>.pos</code> variants and her check and warning glyphs. The table is her <code>.wt-row</code> / <code>.wt-head</code> / <code>.wt-sort</code> / <code>.lr-main</code> / <code>.wt-c2</code> treatment with her <code>.ap-c-inv</code> and <code>.ap-c-due</code> columns and her <code>.dep-total</code> footer. The aging-band subheader is her <code>.wt-row.ap-grp</code> with her <code>.ap-grp-nm</code>, <code>.ap-grp-ct</code> and <code>.ap-grp-amt</code>, including their red <code>over</code> variants. The whole Detail panel is hers: <code>.ap-col-cash</code>, <code>.ap-panel</code>, and all eleven <code>.ap-sum-*</code> parts, with her <code>aria-hidden</code> share bars, her darker overdue fill, her disabled "nothing due" row and her top-five vendor rollup with overdue flagged in red. The popovers use her <code>.mi</code> / <code>.mi-gap</code> / <code>.mi-nm</code> / <code>.mi-nm-stack</code> / <code>.mi-acctno</code> / <code>.cap</code> / <code>.dd-search</code> / <code>.menu-scroll</code> menu, her <code>.bank-tag-over</code> Overdue tag and her <code>.ap-mi-amt</code> trailing amount. Loading is her <code>.ap-skel</code> / <code>.ap-sk-row</code> skeleton at her 800ms. States use her <code>.state</code> block, Glance her <code>.kpi-row</code> / <code>.kpi-num</code> / <code>.metric-value</code> / <code>.gl-sub</code> / <code>.scope-chip</code>. The fetch rule is hers: a due-filter change is the only fetch, and sorting never shows loading. Refresh is her shared card chrome and preserves the current selection, because nothing in our render path writes to it. [DESIGN - parity with Jo]</p>
+<p><strong>Open items carried, not resolved.</strong></p>
+<ul>
+<li><strong>THE AGING BASIS WAS NEVER CONFIRMED AGAINST THE REAL API, and it is load-bearing for every one of the four bands.</strong> This widget bands on the invoice <strong>due date</strong>, which is what her <code>apBandOf</code> does and what the Step 1 research describes, but whether the real aging should run from the due date or the <strong>invoice date</strong> has never been checked against the API. If it turns out to be the invoice date, every band boundary, every band subtotal, the overdue count, the overdue pill, the cash-requirements panel and the horizon itself all move. It is this widget's single largest open question and the reason the band maths is confined to one function. The related unresolved detail is Step 4 Sign-off row 2: a mislabeling bug confirmed on W10 ("Over 60" actually meaning 90 or more days) may apply here too and was never confirmed per widget, so any future banded label needs checking before reuse.</li>
+<li><strong>Actionability is DISPUTED and both sides stay recorded.</strong> Jo and the SME (dossier 11.2) want pay and schedule actions on the widget. <strong>Feargal ruled on 2026-08-25</strong> that it stays a focused due-date and aging view and must not become "a container for every payment function", preferring separate action widgets for unposted invoices, payment processing and posting to the general ledger, which are assigned to Aditya and outside this project's queue. <strong>This port is READ-ONLY, per that ruling:</strong> no pay, schedule, approve or write control exists anywhere in the block, and the driver asserts their absence. Neither side is treated as the correction of the other.</li>
+<li><strong>Dossier 11.3 / 11.4 and 11.6 are Unreviewed, and no reconciliation file exists for this widget.</strong> 11.3 and 11.4 concern a date-ordered chart with the table synced to it; <strong>the Final has no chart at all</strong>, and what the build does instead is realise the sync as synced values-as-text, the cash-requirements band rows doubling as the due filter, rather than as an unsynced chart. 11.6, pairing this widget with Bank Balances on the dashboard, is a layout question that nothing here can settle. None of Jo's flags on this widget carries an Accepted, Rejected or Disputed status yet.</li>
+<li><strong>Entitlement is not enforced by the backend.</strong> The Modern API treats this widget's module access as metadata only: any authenticated user can call the endpoint whether or not their organisation holds an Accounts Payable licence. Step 4 records the no-rights state as "not yet specified", so <strong>nothing is simulated here</strong>; it is NEW backend work and must be fixed server-side before release (Sign-off row 3).</li>
+<li><strong>The localisation defect and data freshness are NEW and UNVERIFIED backend work.</strong> The legacy widget hard-codes a pound sign for a US organisation. Our block formats en-US dollars, which is right for this shell's demo org, but Step 4 records "Rounding / currency / locale rules: <em>not yet specified</em>", so the format is a build choice rather than a decision. There is no "data as of" signal in either version and no freshness rule anywhere; refresh is only specified as preserving the current selection.</li>
+<li><strong>Table semantics are ported AS BUILT and flagged, not silently upgraded.</strong> The hero table is <strong>div-based</strong> (<code>.wt-row</code>), with no <code>table</code> or <code>columnheader</code> roles and no <code>th</code>/<code>scope</code>, exactly as she built it. The filter chips and sort buttons do carry <code>aria-label</code>s and focus-visible styles, and both popovers use <code>role="listbox"</code> with <code>role="option"</code>. Whether to require <code>role=table</code> parity, as <strong>W11</strong> built and as <strong>W15</strong> went further and used native <code>&lt;table&gt;</code> elements for, is undecided and is marked <code>[TO CONFIRM - Oisin]</code> in Step 4. It is recorded here precisely because it is the one place this port knowingly ships less accessibility than two of its siblings.</li>
+<li><strong>Drill-through stays an open question, with nothing built.</strong> A link out to the full Accounts Payable module, filtered to the same due date or vendor, is "leaning yes" but has no verified target page or URL pattern and has never been checked <code>[LIVE]</code>. The Final was built without any drill-through element and so is this port (Sign-off row 1).</li>
+<li><strong>The by-vendor donut was considered and deferred, not rejected.</strong> The competitor research (NetSuite, Coefficient) surfaced reorienting the by-date donut to a by-vendor cut. It was not adopted in this lock because it would add a grouping dimension no original concept modelled, and because the Final has no chart to reorient. The Detail panel's Top vendors owed rollup is the by-vendor cut the build does carry. Owner is TBD if the idea is revived.</li>
+<li><strong>The urgency-bucket boundary maths was the one open item that got resolved,</strong> on 2026-08-19 by owner instruction adopting her band maths wholesale. It is noted here only so a future reader does not reopen it: the "Overdue Now / Due This Week / Due This Month" ambiguity in the older documents (calendar week versus rolling 7 days, and whether the month bucket includes the week one) is settled by her <code>apBandOf</code> and its four non-overlapping bands.</li>
+<li><strong>Behaviour of an empty urgency bucket was unspecified and is a recorded build choice.</strong> An emptied band renders as a <strong>disabled row saying "nothing due"</strong> in the cash panel, and is <strong>omitted</strong> from both the due-date popover and the table's band subheaders. Hidden-versus-zero was never decided, so the panel keeps the row visible for a stable layout while the list and the table drop it to avoid offering a selection that would empty the table.</li>
+<li><strong>The related <code>ap-ar-aging</code> Phase 2 widget uses different buckets.</strong> The Modern API defines <code>GET /api/dashboard/ap-ar-aging</code>, combining this widget's AP side with W05's AR side on Current / 1-30 / 31-60 / 61-90 / 91+ boundaries, which are <strong>not</strong> this widget's four due-date bands. Informational only, and not part of this widget's contract, but worth reconciling if the two are ever unified.</li>
+</ul>
+<p><em>Section added 2026-09-08 on branch oisin-v2-rebuild (base 71ca056).</em></p>
+<h2>W17 &mdash; Gifts &amp; Pledges</h2>
+<p>Ported 2026-09-08 against Jo's <code>phase-2</code> @ <code>71ca056</code> on branch <code>oisin-v2-rebuild</code>. <strong>First-ever port of this widget, and the last of the run.</strong> Ours is <code>kind:"gifts-mb"</code>, prefix <code>gpF</code>/<code>GPF_</code>, entry <code>gpFContentRoot</code>, CSS root <code>.gpf-*</code>, actions <code>data-gpf</code>, seven registry entries on the <code>(OC)</code> convention. Source of truth: our built Final <code>gpF</code>, <code>FC_VERSION[17]</code> = 1.3, audit-stamped against the build by <code>widget-final-check-audit</code> on 2026-09-07. W17 owns the <strong>goal-progress</strong> side of the pledge pair; W04 Remittance Pledges owns the <strong>exception</strong> side, and that split is deliberate and not blurred here.</p>
+<p><strong>Collision result.</strong> Jo's own widget is <code>kind:"gifts"</code> with a large <code>gft*</code> helper set, <strong>36 functions</strong>, plus <code>GFT_*</code> data constants and a <code>.gft-*</code> CSS cluster. There is no letter overlap between <code>gft</code> and <code>gpF</code>, so unlike W09 (<code>ptoFindEmp</code>), W13 (<code>purFiltered</code>) or W16 (<code>apFmtLong</code>) there was no lookalike trap to defuse. Before this port <code>GPF_</code>, <code>.gpf-</code>, <code>data-gpf</code> and <code>gifts-mb</code> each had <strong>zero</strong> occurrences in her file; the only two <code>gpF</code> strings present were comments inside our own W04 block referencing this widget's rollback pattern. Verified after the port: <strong>all 36 of her helpers are defined exactly once, every definition line is byte-identical to the pre-edit snapshot, and every one of their raw occurrence counts is unchanged</strong>; her entire gifts render block (36,226 bytes) and her whole gifts CSS cluster (9,096 bytes) are md5-identical; her six <code>kind:"gifts"</code> registry rows, her <code>GFT_*</code> data constants and her <code>EMPTY_COPY.gifts</code> / <code>ERROR_COPY.gifts</code> are untouched (our empty-state strings are inline in our own block, never written into her shared copy objects). Our block leaks no non-namespaced global.</p>
+<p><strong>One real cross-widget catch, fixed rather than excused.</strong> Two of our new comments named one of her helpers verbatim while explaining that our state keys cannot collide with hers, which pushed that identifier's raw count from 26 to 28. That is exactly the hazard W13, W15 and W16 each hit. Both comments were <strong>reworded</strong> to describe her keys in prose instead of quoting them, and the count is back to 26, matching the snapshot exactly.</p>
+<h3>The deliberate decoupling from W04 &mdash; the headline of this port</h3>
+<p>In our mockup the <code>gpF</code> block's root element carried <strong>both</strong> classes, <code>class="remf-root gpf-root"</code>, and leaned on <code>.remf-root .btn</code> to style its export button. W04's <code>remF</code> block is now <strong>live in this same file</strong>, so porting that root verbatim would have silently coupled W17 to W04's stylesheet: an edit to W04 would have changed W17, and deleting W04 would have stripped W17 bare. The audit found the coupling ran much deeper than the button. Our mockup also drew on a long tail of classes that exist <strong>only</strong> inside our own W04 CSS block, every one of them scoped under the W04 root: the whole pledge-table and pager family, the legend family, the pledge panel, the caret, the caption, the behind section, the name text, the popover dates, the spinner and the status chip. <strong>All of it is dropped. Our root is <code>.gpf-root</code> alone</strong>, and the export button now resolves its styling from the shell's <strong>global</strong> <code>.btn</code> family, declared once near the top of the stylesheet (<code>.btn</code> plus <code>.btn.naked</code>, <code>.btn.sm</code>, <code>.btn.primary</code>, <code>.btn.outlined</code>), which is exactly what W03's port relied on for the same reason. The driver asserts this four ways: the root markup is <code>.gpf-root</code> with no <code>remf-</code> string anywhere in our output at any tier, the popover and modal roots are ours alone, <code>.btn</code> / <code>.btn.naked</code> / <code>.btn.sm</code> are each declared <strong>before the first ported block</strong> in the stylesheet (so they are genuinely global, not W04's), and the old <code>.remf-root .gpf-export</code> rule no longer exists in the file.</p>
+<p>The audit also turned up a smaller finding worth recording: <strong>four selectors our mockup relied on were never declared anywhere in Jo's file at all</strong> &mdash; <code>.rem-ctlrow</code>, <code>.rem-empty</code>, <code>.remf-vtoggle</code> and <code>.remf-mb</code>. Our mockup had been shipping unstyled chrome for those. They are replaced with her <code>.gft-ctlrow</code>, her <code>.state</code>, her <code>.vtoggle</code> and her <code>.modal-backdrop</code> respectively.</p>
+<p><strong>This port REUSES her CSS heavily.</strong> Her <code>.gft-*</code> vocabulary turned out to cover almost the whole widget, and three of her grids fit ours exactly: her six-slot <code>.gft-trow</code> table row is precisely our six baseline columns, her eight-slot <code>.gft-drow</code> donor row is precisely our caret plus seven donor columns, and her <code>.gft-prow</code> progress row is our goal bar. Her bars container, track, fill, legend shell, zero line, donor status chips, expanded drawer, gift list, summary cells, detail-modal shell, skeleton, calendar and purpose filter chips and glance read stack are all reused as they are. Our CSS block therefore <strong>declares zero of her selectors as a rule subject</strong>, and every rule in it is <code>.gpf-root</code> scoped. Exactly <strong>three</strong> rules mention one of her classes as a scoped descendant, each because our markup puts something inside her cell that her own markup never does: a two-line campaign name inside her single-line name cell, a third Reference column inside her two-column gift row, and a wrapping legend carrying per-band counts.</p>
+<p>Verified by <code>w17-gifts-mb.driver.js</code>, <strong>734 of 734</strong>, including a 155-combination size &times; campaign &times; view &times; drill &times; loading no-em-dash sweep, three independent proofs that the retired donut is unreachable, and definition-level byte-checks on all 36 of her helpers. All thirteen previously ported drivers re-run green afterwards.</p>
+<table>
+<thead>
+<tr><th>#</th><th>Difference</th><th>Jo's design</th><th>Our design</th><th>Source</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>What the widget is <em>about</em></td><td><strong>Fulfilment against the pledge total.</strong> Her headline is % fulfilled, her bars measure received against Pledge Total, and she carries a behind-schedule follow-up panel listing every purpose that is behind</td><td><strong>Goal progress against a distinct campaign Goal field.</strong> The headline is Received against Goal with a progress percent, bars measure received against <strong>Goal</strong>, and there is <strong>no follow-up panel</strong></td><td>[DESIGN - Step 4 Final Design v3 (2026-08-19, direct owner instruction): "pivoted to the modern campaign Goal model"; the goal/exception split with W04 is the 2026-08-24 direct instruction]</td></tr>
+<tr><td>2</td><td>The Goal field itself</td><td>No Goal. Her "goal" <em>is</em> the pledge total, which is what the legacy data has</td><td><strong>A separate Goal per campaign</strong> (<code>goal</code>, <code>progressPercent</code>, <code>isClosed</code>), rendered per Rule 11 as if real</td><td>[DATA - Step 4 Data Contract "Goal" row: the legacy GF data has no Goal field distinct from Pledge Total; the Phase 2 campaign-giving-tracker API has a real one. Adopting it closes old Sign-off #3]</td></tr>
+<tr><td>3</td><td>Status banding</td><td>Two states driven by pace: behind (saffron) or on track / ahead / funded (emerald)</td><td><strong>Three goal bands: under 75 percent, 75 percent or more, and goal met at 100 percent or more</strong>, each paired with its own label (In progress / Close to goal / Goal Met) and glyph</td><td>[DESIGN - Step 4 Final Design: "status colour (blue under 75 percent, amber 75 percent or more, green goal met)"]</td></tr>
+<tr><td>4</td><td>Pledge Due maths</td><td>A linear read: scheduled instalments dated on or before the chosen date</td><td><strong>Per-pledge installment proration following the legacy pledge-due routine</strong>: the full pledge once past its end date, else the per-installment amount times frequency cycles elapsed plus one, capped at the installment count, with each pledge paced on its <strong>own</strong> begin-to-end term</td><td>[DATA - Step 4 Final Design, "Definitions used": explicitly "NOT the linear day fraction that Remittance Pledges uses". This is the substantive maths difference between the pledge pair]</td></tr>
+<tr><td>5</td><td>The as-of anchor</td><td>Anchored on today</td><td>Anchored on the <strong>selected</strong> range end. The shipped legacy code anchors its cycle count on today, which is a known defect and is <strong>not</strong> reproduced</td><td>[CODE - legacy pledge-due routine; recorded in the block's own comment]</td></tr>
+<tr><td>6</td><td>Date control</td><td>A single "gifts received through" date picker, with Today and End of last month presets plus a custom date</td><td><strong>A date range</strong>: This year (default), Last 30 days, Custom with an inline From/To reveal. The <strong>end</strong> is the as-of cutoff driving Received and pacing; the <strong>start</strong> frames the chip only and windows no figure. No Refresh button. The chip reads "Gifts from X to Y"</td><td>[DESIGN - Step 4 Filters, carried from W04 remF v2.4; Step 5 v2 Filter architecture confirms only <code>rangeEnd</code> is sent and puts start-date windowing explicitly out of scope]</td></tr>
+<tr><td>7</td><td>Campaign filter behaviour</td><td>Her purpose filter narrows too</td><td><strong>Narrows the dataset</strong>, so every view, every subtotal and the totals row recompute. <strong>No highlight treatment exists</strong>; the earlier "highlights the selected campaign across all views" idea was never built and no highlight styling exists in our CSS</td><td>[DESIGN - Step 4 Interaction Spec, "Campaign filter (as built)"; the driver asserts six named highlight classes are absent from markup and stylesheet, and that a filtered bar's markup is byte-identical to its unfiltered self]</td></tr>
+<tr><td>8</td><td>Views offered</td><td>Progress and Table, with the toggle <strong>hidden</strong> at her largest tier (she shows progress and follow-up side by side there instead)</td><td><strong>Goal Progress and Summary Table</strong>, one at a time full width, with the toggle <strong>visible at both</strong> Explore and Detail. Explore and Detail differ by card size alone</td><td>[DESIGN - Step 4 v1.2 (2026-08-24, direct instruction after the owner reviewed the Detail render): "Explore and Detail both show ONE view at a time, full width"]</td></tr>
+<tr><td>9</td><td><strong>The retired donut</strong></td><td>She never had one</td><td><strong>Donut by Campaign is retired, and its code is retained.</strong> <code>gpFDonut</code> stays defined and correct but is <strong>unreachable</strong>: no toggle segment offers it, <code>gpFView</code> maps any stale <code>"donut"</code> state back to <code>"goal"</code>, no registry entry seeds it, and its CSS is kept so restoring the view is a one-line change. Same discipline as <code>REMF_USE_POPUP</code> on W04</td><td>[DESIGN - Step 4: "Donut by Campaign was removed per owner (2026-08-19, v1.1)". Note the Step 4 doc's Views section still <em>lists</em> View 2 as the donut, which is superseded text the audit left in place]</td></tr>
+<tr><td>10</td><td>Table columns</td><td>Six of her own: Purpose, Pledged, Due by date, Received, Remaining, % Fulfilled</td><td><strong>The live product's exact baseline columns</strong>: Purpose (Campaign), Pledge Total, Pledge Due, Received, Due Remaining, Percent Due, with a totals row summing the first four and <strong>Percent Due deliberately not summed</strong></td><td>[DATA - Step 4 Final Design and Data Contract "Totals row" row]</td></tr>
+<tr><td>11</td><td>Table ordering</td><td><strong>User-sortable</strong>: every column is a sort button, defaulting to fulfilled-ascending, with her own asc/desc toggling</td><td><strong>The data's own order, with no sort control at all.</strong> Bars order closest-to-goal-first; the donor drill orders most-behind-first; the table renders in the data's order. <strong>No alphabetical sort exists anywhere</strong></td><td>[BUILD - Step 4 "Data Table Sort", recorded by the 2026-09-07 audit: "No alphabetical sort is implemented in the built Final... None are user-changeable. The fixed alphabetical rule below belonged to the A/B/C design and was never carried into gpF". Step 5 v2 puts user-selectable sort out of scope]</td></tr>
+<tr><td>12</td><td>Drill shape</td><td>Purpose to donors, <strong>in a modal</strong>, with an All donors / Behind only toggle</td><td><strong>Purpose to donor pledges INLINE under the row, paginated 20 per page</strong>, and then each pledge expands again to its <strong>gift transactions</strong> (Gift Date, Amount, Reference), headed "Gifts applied to this pledge" and totalling that pledge's Received</td><td>[DESIGN - Step 4 Final Design "Deep dive": "This is the gift level the owner asked for". Paging is Step 4's 20-per-page rule]</td></tr>
+<tr><td>13</td><td>Pagination</td><td>None. Her donor list is unpaginated</td><td><strong>20 per page</strong>, with the figures above the pager computed over the <strong>whole</strong> donor set, so turning the page moves neither the campaign row nor the totals row nor the donor count. An out-of-range page is clamped on render; a page index below 1 is refused</td><td>[DESIGN - Step 4 Final Design; Step 5 v2 API 3 pagination contract. The driver asserts totals invariance across pages and both clamp directions]</td></tr>
+<tr><td>14</td><td>Bar interaction</td><td>A bar opens her donors modal</td><td><strong>A bar opens the top-5 most-behind donor pledges modal</strong> for that campaign, on her modal shell and her summary-cell primitives, with a note stating how many of how many it is showing</td><td>[DESIGN - Step 4 Interaction Spec: "clicking a Goal Progress bar opens the top-5 most-behind donor pledges modal for that campaign" (the W04 most-behind pattern)]</td></tr>
+<tr><td>15</td><td>Actions on the card</td><td>Three: an Export to Excel in her modal, an <strong>Open donor record</strong> and a <strong>Record a follow-up</strong> in her drawer</td><td><strong>Export only, and deliberately so</strong>, at two scopes: a header export of the active view, and a second export inside an expanded campaign's donor breakdown scoped to that campaign. Both are Rule 11 toast stubs</td><td>[DESIGN - Step 4 v1.3 (2026-08-25, Feargal call): export is this widget's only action, and "additional actions must not be invented without a demonstrated user need" &mdash; a standing constraint, not a temporary state. The driver asserts eleven workflow verbs are absent from every surface]</td></tr>
+<tr><td>16</td><td>Glance</td><td>% fulfilled plus a status badge, a compact goal bar and a follow-up read, using her shared progress-bar helper</td><td><strong>Received as the number, with the goal pill, the progress percent and a goal bar</strong> built on her track and fill at the small size. After v1.2 this is the <strong>only</strong> place the overall goal read appears</td><td>[DESIGN - Step 4 v1.2: "This is now the ONLY place the overall goal read appears"]</td></tr>
+<tr><td>17</td><td>The Detail goal panel</td><td>n/a</td><td><strong>Removed, and retained for rollback.</strong> It duplicated the Glance read, so v1.2 deleted it from the layout; <code>gpFGoalPanel</code> and the trimmed-table path are both intact behind <code>GPF_V12_LAYOUT</code>, and the status counts plus "Remaining to goal overall" that only it used to show <strong>moved into the Goal Progress legend</strong> rather than being lost</td><td>[DESIGN - Step 4 v1.2 and its stated rollback flag]</td></tr>
+<tr><td>18</td><td>Over-received amounts</td><td>Her remaining cell shows an ahead amount with a minus sign</td><td><strong>A negative Due Remaining renders parenthesised and green as favourable</strong>, matching the live product, because a single pledge can be over-received and a campaign's Received can therefore exceed its Pledge Total</td><td>[DATA - Step 4 Final Design and Fine-Tuning Notes; the fixture's Stoke Sell row reproduces the live (655) / -54.58% case exactly]</td></tr>
+<tr><td>19</td><td>Money format</td><td>Her shared <code>money()</code> helper, whole dollars</td><td><strong>Our own <code>gpFMoney</code> at two decimals</strong>, because every verified figure for this widget carries cents (Stoke Sell $1,855.00, Percent Due 90.40%) and her helper would round them away. Same reasoning as W13's <code>purFMoney</code></td><td>[BUILD - the live-screenshot figures Step 4 cites as its numeric proof; Step 4 records rounding, currency and locale as <em>not yet specified</em>, so en-US dollars is a recorded build choice]</td></tr>
+<tr><td>20</td><td>State and wiring</td><td>Global-free, but hooked into the shell's shared plumbing: a <code>gft-</code> branch in the delegated click listener, a <code>popContent()</code> entry, a <code>triggerSelector</code> branch, a <code>renderModal</code> branch and an input-listener line</td><td>The Final's global <code>GPF_STATE</code> singleton becomes <strong>per-widget registry state</strong> (nine <code>gpF</code>-prefixed keys), so several cards coexist; handlers are a <strong>fully self-contained subsystem</strong> behind <code>GPF_WIRED</code> keyed to <code>data-gpf</code> with its own popover and modal roots. Her <code>renderModal</code>, <code>popContent</code> and <code>triggerSelector</code> chains are <strong>not touched</strong> &mdash; the only shared-region edits are the two dispatch lines</td><td>[the port skill's integration style (b), the same as W07, W09, W10, W13, W15 and W16]</td></tr>
+<tr><td>21</td><td>Shell conformance</td><td>n/a</td><td><code>gpFRerender</code> becomes her global <code>render()</code>; <code>showToast</code> becomes her <code>setStatus</code>; our own <code>gpFIcon</code> is dropped in favour of her <code>ICON</code> helper; the fetch timer is keyed in her shared <code>timers</code> object; and the empty-state dispatch sits <strong>before</strong> the generic fallback so our copy renders and not the Deposits copy</td><td>[shell conventions, consistent with every other port on this branch]</td></tr>
+<tr><td>22</td><td>Colour tokens</td><td>Her saffron is a hard-coded hex in her own stylesheet</td><td>Two of our three bands map onto <strong>shell tokens</strong> &mdash; the blue is <code>var(--brand-100)</code>, which <em>is</em> our Final's #4b6ec3 to the byte, and goal-met green is <code>var(--pos-100)</code>. The middle band has <strong>no token anywhere in this shell</strong>, so it stays a hex, exactly as she hard-codes her own saffron. The retired donut's palette was re-pointed to amethyst tokens</td><td>[Jo's colour conventions; the token audit found no amber or saffron token in the file]</td></tr>
+<tr><td>23</td><td>A latent defect in our own Final, fixed</td><td>n/a</td><td>Our mockup's modal mapped its row renderer straight through a <code>map</code> callback, so the array <strong>index</strong> arrived as the widget and the array as the date, and the pledge expand silently could not work in the modal. Every call site now passes all three arguments explicitly and the modal maps with a closure. This is the same class of bug as W04's v3.4 arity fix</td><td>[BUILD defect found during this port; the driver asserts no modal row carries an index or an undefined widget id]</td></tr>
+<tr><td>24</td><td>Two latent gaps in <strong>her</strong> block, reported and NOT fixed</td><td>Her <code>class="state gft-empty"</code> uses <code>.gft-empty</code>, which <strong>her stylesheet never declares</strong>, so her own empty state carries no widget-specific styling. Separately, her <code>.gft-total-row</code> resolves only to a generic shell rule, not to anything in her gifts cluster</td><td>Ours uses <code>.gpf-empty</code>, declared in our own block. Her rules are left exactly as they are</td><td>[her own code; reported for her attention, never edited, in line with the additive rule]</td></tr>
+<tr><td>25</td><td>Registry demo entries</td><td>Six <code>kind:"gifts"</code> entries</td><td><strong>Seven</strong> <code>kind:"gifts-mb"</code> entries covering the two views, all three tiers, a narrowed campaign, a single-campaign instance and the empty state, all on the <code>(OC)</code> convention. <strong>No entry seeds a donut view</strong></td><td>[the port convention of demoing each state; the driver asserts the donut is unreachable from the registry]</td></tr>
+</tbody>
+</table>
+<p><strong>Open items carried, not resolved.</strong> This widget carries the most of any in the run, and the port takes no side on any of them.</p>
+<ul>
+<li><strong>THE RECEIVED BASIS CONFLICT IS THE TOP ITEM, AND IT BLOCKS EVERY SUMMED FIGURE.</strong> Ours counts <strong>pledge-linked gifts only</strong> (pledge-linked gift lines, posted, not voided, on or before the range end), excluding unpledged one-off gifts to the same campaign, per the standing owner decision of 2026-08-19 and mirroring the legacy widget. <strong>The Modern API's existing responses count ALL posted gift detail for the purpose</strong>, and the parallel campaign response's <code>TotalRaised</code> likewise counts all posted gifts, including gifts with no pledge link. The two figures differ whenever unpledged one-off gifts exist. Blocked until it is settled: every <code>received</code>, <code>dueRemaining</code>, <code>percentDue</code>, <code>progressPercent</code> and <code>totals</code> figure, which is to say APIs 1, 3, 4's totals and 5. Deciders are the project owner (product intent) and the backend team (which query ships). The port implements the built basis and confines it to one function so a flip has a single edit site.</li>
+<li><strong>The Step 4 doc contains an internal inconsistency about Percent Due, recorded here and deliberately not collapsed.</strong> Its Data Contract CONFLICT row says the definition is <em>disputed</em> and build-blocking; its Sign-off Readiness note #2 declares it <strong>RESOLVED</strong> with live numeric proof (2020 Pledge 904 &divide; 1000 = 90.40%, Stoke Sell &minus;655 &divide; 1200 = &minus;54.58%); and the build computes Due Remaining &divide; Pledge Due. The port follows the build and the live proof. <strong>Both statements stay on the record</strong>, and the doc must stop disagreeing with itself before sign-off. The owner reconciles the doc.</li>
+<li><strong>The goal-met colour is contested.</strong> The build and Step 4 both treat goal met as the <strong>positive</strong> end of the scale (green, with a Goal Met badge). The <code>Widget_Comparison_New_Widgets</code> doc records the modern <code>ProgressStatus</code> enum's goal-met value as <strong>"red (goal met)"</strong>. Step 5 v2 sidesteps the enum by serving a raw progress percent and banding client-side, which is what this port does, but the backend must still confirm the enum is genuinely presentation-only and safe to ignore, or its semantics get imported by accident.</li>
+<li><strong><code>GF_Campaign</code> versus <code>GF_Purpose</code> keying for Goal is <code>[TO CONFIRM]</code>.</strong> The Goal lives on the modern campaign model while the widget keys everything by purpose. Whether campaign rows map 1:1 to purposes, what happens when they do not, and where <code>isClosed</code> truly lives are all unconfirmed with the backend team. Blocked: <code>goal</code>, <code>progressPercent</code> and <code>isClosed</code> on APIs 1, 2 and 3. The build renders Goal as if real under Rule 11 and this port inherits that posture, <strong>not</strong> a verified source.</li>
+<li><strong>The "Open in Gifts and Pledges" stub sits against the standing export-only constraint, <code>[TO CONFIRM - Oisin]</code>.</strong> The modal footer's navigation stub <strong>predates</strong> the v1.3 export-only ruling and may contradict it. It is carried exactly as built, labelled on screen as a stub, with no API allocated and no navigation backend. Note that the Final's own banned-verb assertion never covered the word "Open", which is how the two survived side by side. The decision only adds or removes a client-side route.</li>
+<li><strong>Every one of Jo's dossier flags on this widget is Unreviewed, and no reconciliation file exists for it.</strong> None carries an Accepted, Rejected or Disputed status. They include: relabelling "% Due" to <strong>"% Fulfilled"</strong> and leading with fulfilment, which the build did <strong>not</strong> do and this port does not apply (her own block <em>does</em> use the % Fulfilled framing, so this difference is live on screen between the two widgets); a <strong>data-as-of timestamp</strong> by the refresh control, not built; the <strong>pound-sign localisation defect</strong>, where the live legacy widget renders a fixed pound sign regardless of organisation locale, so currency and locale rules for the rebuild are unspecified and en-US dollars is a build choice; and entitlement / empty behaviour when the module is not adopted, which is <em>not yet specified</em> and is nothing simulated here.</li>
+<li><strong>Four v1.2 judgement calls still await owner review</strong>, all made 2026-08-24 and all shipped in this port: the <strong>bar cap was lifted</strong> (every campaign gets a bar, scrolling inside the card, rather than a trimmed top-N), the <strong>trimmed table was removed</strong> (every row with totals at both tiers), the <strong>status counts moved into the legend</strong>, and the bars order <strong>closest-to-goal-first</strong>. Lifting the cap and removing the trim together dissolved old Sign-off row 7 rather than answering it, and they removed an internal inconsistency where the bars ranked best-first while the trimmed table ranked worst-first.</li>
+<li><strong>Volume ceilings are <code>[TO CONFIRM - backend team]</code></strong> for campaigns per organisation, pledges per campaign and gifts per pledge, so the bounded verdicts on APIs 1, 2 and 4 are conditional. If campaigns exceed roughly 500 the summary paginates and the view toggle moves server-side. Related: the legacy grid's exact <code>ORDER BY</code> is unconfirmed, which is what the "renders in data order" rule depends on, and the <code>pageSize</code> maximum of 100 on API 3 is a defaulted value rather than an owner decision.</li>
+<li><strong>The pledge term, frequency and installment column names behind the Pledge Due proration are unverified in code.</strong> The formula is fixed by the design; only the column names and their exact semantics are unconfirmed. The maths is confined to two functions so a correction has a single pair of edit sites.</li>
+<li><strong>The remaining older open items</strong> are unchanged: drill-through to the Donors and Gifts module beyond the stub (Sign-off #6), and the <code>campaign-giving-tracker</code> overlap, which was <strong>adopted</strong> rather than left open, since this build aligns W17 to that model as recommended.</li>
+</ul>
+<p><em>Section added 2026-09-08 on branch oisin-v2-rebuild (base 71ca056).</em></p>
+</body>
+</html>

@@ -1,0 +1,9 @@
+# scratch output of the tools
+_tools/.tmp/
+
+# ad hoc safety copies made while editing (the committed baseline lives in _tools/baselines)
+index.BACKUP-*.html
+index.SAFETY-*.html
+
+.DS_Store
+Thumbs.db

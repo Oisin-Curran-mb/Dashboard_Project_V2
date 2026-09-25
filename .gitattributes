@@ -1,0 +1,5 @@
+# Never normalise line endings anywhere in this repo.
+# index.html is CRLF and the _tools drivers compare it byte for byte against
+# the CRLF baseline; the _ref copies are LF and must stay as their authors
+# saved them so diffs against upstream are honest.
+* -text
