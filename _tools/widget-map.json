@@ -38,37 +38,26 @@
     },
     "W02": {
       "name": "Pension Plans",
-      "driver": "w02-pension-oc.driver.js",
-      "ours": {
-        "kind": "pension-oc",
+      "driver": "w02-pension.driver.js",
+      "decided": "2026-09-25 OC",
+      "removed": [
+        "pension-mb",
+        "pension-oc"
+      ],
+      "final": {
+        "kind": "pension",
         "prefix": "penO",
         "css": {
-          "start": "/* ===== W02 Pension Plans V2",
-          "end": "/* ===== W03 Payroll Distributions V2"
+          "start": "/* ===== W02 Pension Plans V2 CSS ===== */",
+          "end": "/* ===== end W02 Pension Plans V2 CSS ===== */"
         },
         "js": {
-          "start": "/* ===== W02 Pension Plans V2",
-          "end": "/* ===== W03 Payroll Distributions V2"
+          "start": "/* ===== W02 Pension Plans V2 ===== */",
+          "end": "/* ===== end W02 Pension Plans V2 ===== */"
         },
         "registry": {
           "grep": [
-            "kind:\"pension-oc\""
-          ]
-        }
-      },
-      "jo": {
-        "kind": "pension-mb",
-        "prefix": "penF",
-        "css": {
-          "grep": [
-            "penf-",
-            ".pen-"
-          ]
-        },
-        "js": {
-          "grep": [
-            "penF",
-            "kind:\"pension-mb\""
+            "kind:\"pension\""
           ]
         }
       }

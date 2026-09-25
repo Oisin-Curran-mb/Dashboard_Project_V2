@@ -1720,97 +1720,7 @@
    ===================================================================== */
 
   /* header context line (row 2): quiet, single statement, no big number */
-  .pen-hd .dep-hd-num{align-self:center;}
-  .pen-numwrap{display:flex;flex-direction:column;gap:4px;min-width:0;}
-  .pen-ctx{font-size:11px;color:var(--txt-subtle);line-height:1.45;max-width:66ch;}
-  .pen-caption{font-size:11px;color:var(--txt-subtle);}
 
-  /* body: table scrolls, total row pins beneath it */
-  .pen-body{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 2px 6px;}
-  .pen-tscroll{flex:1 1 auto;min-height:0;}
-
-  /* table rows */
-  .pen-row{gap:12px;}
-  .pen-plan{display:flex;align-items:center;gap:8px;min-width:0;}
-  .pen-dot{flex:0 0 8px;width:8px;height:8px;border-radius:3px;display:inline-block;}
-  .pen-plan-nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .pen-none{color:var(--txt-subtle);}
-  .pen-c-cnt{flex:0 0 74px;text-align:right;color:var(--txt-secondary);font-variant-numeric:tabular-nums;}
-  .wt-head .pen-c-cnt,.wt-head .pen-c-share-head{color:var(--txt-subtle);}
-  .pen-row .wt-c2{flex:0 0 108px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;}
-  .pen-row:not(.wt-head) .wt-c2{color:var(--txt-primary);}
-  .pen-c-share{flex:0 0 52px;text-align:right;font-size:11.5px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;}
-
-  /* row-tap drill affordance */
-  .pen-clickable{cursor:pointer;}
-  .wt-row.pen-clickable:hover{background:var(--wn-100);}
-  .wt-row.pen-clickable:hover .pen-share-track{background:var(--wn-300);}
-  .wt-row.pen-clickable:hover .pen-share-fill{filter:brightness(.93);}
-  .wt-row.pen-clickable:focus-visible{outline:2px solid var(--am-400);outline-offset:-2px;}
-
-  /* inline share-of-contribution cue (Detail table) */
-  .pen-share{flex:0 0 128px;display:flex;align-items:center;gap:8px;min-width:0;}
-  .pen-share-head{color:var(--txt-subtle);font-size:11px;font-weight:600;}
-  .pen-share-track{flex:1 1 auto;min-width:0;height:6px;border-radius:999px;background:var(--wn-300);overflow:hidden;transition:background var(--dur,.15s);}
-  .pen-share-fill{display:block;height:100%;border-radius:999px;background:var(--am-400);min-width:2px;transition:width var(--dur,.15s) ease,filter var(--dur,.15s);}
-  .pen-share-pct{flex:0 0 30px;text-align:right;font-size:11px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;}
-
-  .pen-total{font-variant-numeric:tabular-nums;}
-
-  /* Explore: table + synced chart side by side */
-  .pen-full{flex:1;min-height:0;display:flex;gap:12px;padding:12px 14px;}
-  .pen-col{flex:1 1 0;min-width:0;display:flex;flex-direction:column;}
-  .pen-col .pen-tscroll{flex:1 1 auto;min-height:0;}
-  .pen-col-chart{flex:0 1 auto;}
-  .pen-chartwrap{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;padding:6px 4px;}
-
-  /* horizontal bar chart (Explore, bar view) */
-  .pen-bars{display:flex;flex-direction:column;gap:12px;padding:4px 4px 2px;}
-  .pen-barrow{display:grid;grid-template-columns:132px 1fr auto;align-items:center;gap:10px;border-radius:8px;padding:5px 6px;}
-  .pen-barrow.pen-clickable:hover{background:var(--wn-100);}
-  .pen-barrow.pen-clickable:hover .pen-bartrack{background:var(--wn-300);}
-  .pen-barrow.pen-clickable:hover .pen-barfill{filter:brightness(.93);}
-  .pen-barrow.pen-clickable:focus-visible{outline:2px solid var(--am-400);outline-offset:-1px;}
-  .pen-barlbl{display:flex;flex-direction:column;min-width:0;}
-  .pen-barlbl-nm{font-size:12px;font-weight:600;color:var(--txt-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .pen-barlbl-sub{font-size:10.5px;color:var(--txt-subtle);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .pen-bartrack{position:relative;height:18px;border-radius:5px;background:var(--wn-200);overflow:hidden;transition:background var(--dur,.15s);}
-  .pen-barfill{height:100%;border-radius:5px;min-width:2px;transition:filter var(--dur,.15s);}
-  .pen-barval{text-align:right;font-variant-numeric:tabular-nums;display:flex;flex-direction:column;line-height:1.2;}
-  .pen-barval-amt{font-size:12.5px;font-weight:600;color:var(--txt-primary);}
-  .pen-barval-cnt{font-size:10.5px;color:var(--txt-subtle);}
-
-  /* pie/donut view (Explore) , reuses shell .donut/.legend/.leg/.pie-wrap */
-  .pen-pie{display:flex;flex-direction:column;justify-content:center;min-width:0;}
-  .pen-leg.pen-clickable:focus-visible{outline:2px solid var(--am-400);outline-offset:-1px;}
-  .pen-leg .dot{flex:0 0 9px;width:9px;height:9px;border-radius:3px;display:inline-block;}
-
-  .pen-chart-empty{display:flex;flex-direction:column;align-items:center;gap:6px;padding:24px 10px;color:var(--txt-subtle);font-size:12px;text-align:center;}
-  .pen-chart-empty .material-symbols-rounded{font-size:26px;color:var(--txt-subtle);}
-
-  /* loading skeleton (data-fetch only) */
-  .pen-skel{padding:8px 0;}
-  .pen-sk-row{display:flex;align-items:center;gap:12px;padding:8px 14px;}
-
-  /* empty state (shared .state; a touch of positive colour on the glyph) */
-  .pen-empty>.material-symbols-rounded{color:var(--am-500);}
-
-  /* drill-to-detail focus overlay */
-  .pen-detail-modal{max-width:960px;}
-  .pen-detail-modal .modal-b{display:block;overflow:auto;padding:0 18px 6px;}
-  .pen-detail-h{align-items:center;}
-  .pen-dsub{font-size:12px;font-weight:600;color:var(--txt-secondary);background:var(--wn-200);border-radius:999px;padding:2px 10px;margin-left:10px;white-space:nowrap;max-width:44ch;overflow:hidden;text-overflow:ellipsis;}
-  .pen-dh-spacer{flex:1;}
-  .pen-detail-scroll{border:1px solid var(--stroke-widget);border-radius:10px;overflow:hidden;}
-  .pen-dhead,.pen-drow{display:flex;align-items:center;gap:12px;}
-  .pen-dc{flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--txt-secondary);}
-  .pen-dhead .pen-dc{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--txt-subtle);}
-  .pen-dc0,.pen-dc1{flex:1.6 1 0;color:var(--txt-primary);font-weight:500;}
-  .pen-dc2{flex:0 0 110px;}
-  .pen-dc-amt{flex:0 0 120px;text-align:right;font-weight:700;color:var(--txt-primary);}
-  .pen-dtotal{border-top:none;margin-top:2px;}
-
-  @media(max-width:620px){.pen-full{flex-direction:column;}.pen-col-chart{flex:1 1 auto;}}
 
 /* =====================================================================
    Remittance Pledges (prefix: rem)  , CSS block
@@ -2316,25 +2226,6 @@
 .gft-detail-b{display:flex;flex-direction:column;min-height:0;padding:0;}
 .gft-detail-scroll{flex:1 1 auto;min-height:0;max-height:70vh;overflow:auto;}
 .gft-dtotal{flex:0 0 auto;}
-  /* ===== Pension Plans (MB updated): ONLY the new grouped-bar-by-district view.
-     Everything else reuses Jo's .pen-* / .dep-hd / .filter-chip / .vtoggle /
-     .bank-pill / .wt-* / .state / .modal classes and Pathway tokens. ===== */
-  .penf-explore-chart{display:flex;flex-direction:column;min-height:0;}
-  .penf-gwrap{flex:1;min-height:0;display:flex;flex-direction:column;padding:2px 8px 4px;}
-  .penf-grow{flex:1;min-height:60px;display:flex;align-items:stretch;gap:20px;padding:4px 8px 0;}
-  .penf-ggroup{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:6px;}
-  .penf-gplot{flex:1;min-height:60px;display:flex;align-items:stretch;justify-content:center;gap:7px;border-bottom:1px solid var(--stroke-widget);padding:2px 4px 0;}
-  .penf-gbar{position:relative;flex:0 1 30px;max-width:30px;min-width:12px;display:flex;align-items:flex-end;background:var(--wn-200);border-radius:5px;overflow:hidden;cursor:pointer;border:none;padding:0;transition:background var(--dur,.15s);}
-  .penf-gfill{display:block;width:100%;border-radius:5px 5px 0 0;min-height:3px;transition:filter var(--dur,.15s);}
-  .penf-gbar:hover{background:var(--wn-300);}
-  .penf-gbar:hover .penf-gfill{filter:brightness(.93);}
-  .penf-gbar:focus-visible{outline:2px solid var(--am-400);outline-offset:1px;}
-  .penf-gx{display:flex;flex-direction:column;align-items:center;gap:1px;flex-shrink:0;}
-  .penf-gx-d{font-size:11px;font-weight:600;color:var(--txt-secondary);white-space:nowrap;}
-  .penf-gx-t{font-size:10.5px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;white-space:nowrap;}
-  .penf-glegend{display:flex;flex-wrap:wrap;gap:2px 10px;justify-content:center;padding:8px 4px 0;flex-shrink:0;}
-  .penf-gleg{cursor:default;}
-  .penf-gleg:hover{background:transparent;}
 
   /* =====================================================================
      Remittance Pledges (MB updated) (prefix: remF), CSS block. ADDITIVE.
@@ -3523,27 +3414,88 @@
   .bgtO-lguide{position:absolute;top:0;bottom:0;width:1px;background:var(--am-600);opacity:0;transform:translateX(-0.5px);transition:opacity .12s;}
   .bgtO-lcol:hover .bgtO-lguide{opacity:.55;}
 /* ===== end W01 Budget Compared to Actual V2 CSS ===== */
-/* ===== W02 Pension Plans V2 ===== */
-  /* ===== Pension Plans (MB updated): ONLY the new grouped-bar-by-district view.
-     Everything else reuses Jo's .pen-* / .dep-hd / .filter-chip / .vtoggle /
-     .bank-pill / .wt-* / .state / .modal classes and Pathway tokens. ===== */
-  .penf-explore-chart{display:flex;flex-direction:column;min-height:0;}
-  .penf-gwrap{flex:1;min-height:0;display:flex;flex-direction:column;padding:2px 8px 4px;}
-  .penf-grow{flex:1;min-height:60px;display:flex;align-items:stretch;gap:20px;padding:4px 8px 0;}
-  .penf-ggroup{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:6px;}
-  .penf-gplot{flex:1;min-height:60px;display:flex;align-items:stretch;justify-content:center;gap:7px;border-bottom:1px solid var(--stroke-widget);padding:2px 4px 0;}
-  .penf-gbar{position:relative;flex:0 1 30px;max-width:30px;min-width:12px;display:flex;align-items:flex-end;background:var(--wn-200);border-radius:5px;overflow:hidden;cursor:pointer;border:none;padding:0;transition:background var(--dur,.15s);}
-  .penf-gfill{display:block;width:100%;border-radius:5px 5px 0 0;min-height:3px;transition:filter var(--dur,.15s);}
-  .penf-gbar:hover{background:var(--wn-300);}
-  .penf-gbar:hover .penf-gfill{filter:brightness(.93);}
-  .penf-gbar:focus-visible{outline:2px solid var(--am-400);outline-offset:1px;}
-  .penf-gx{display:flex;flex-direction:column;align-items:center;gap:1px;flex-shrink:0;}
-  .penf-gx-d{font-size:11px;font-weight:600;color:var(--txt-secondary);white-space:nowrap;}
-  .penf-gx-t{font-size:10.5px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;white-space:nowrap;}
-  .penf-glegend{display:flex;flex-wrap:wrap;gap:2px 10px;justify-content:center;padding:8px 4px 0;flex-shrink:0;}
-  .penf-gleg{cursor:default;}
-  .penf-gleg:hover{background:transparent;}
+/* ===== W02 Pension Plans V2 CSS ===== */
+  /* Stand-alone copies of the pension rules this widget uses (w02- prefix). Classes: pen-body pen-c-cnt pen-c-share pen-c-share-head pen-caption pen-chart-empty pen-chartwrap pen-clickable pen-col pen-col-chart pen-dc pen-dc-amt pen-dc0 pen-dc1 pen-dc2 pen-detail-h pen-detail-modal pen-detail-scroll pen-dh-spacer pen-dhead pen-dot pen-drow pen-dsub pen-dtotal pen-empty pen-full pen-hd pen-leg pen-none pen-numwrap pen-pie pen-plan pen-plan-nm pen-row pen-share pen-share-fill pen-share-head pen-share-pct pen-share-track pen-sk-row pen-skel pen-total pen-tscroll penf-explore-chart penf-gbar penf-gfill penf-ggroup penf-gleg penf-glegend penf-gplot penf-grow penf-gwrap penf-gx penf-gx-d penf-gx-t */
+  .donut/.legend/.leg/.pie-wrap .sr-only.
+   Only pen-* rules are defined here.
+   ===================================================================== */
 
+  
+  .w02-hd .dep-hd-num{align-self:center;}
+  .w02-numwrap{display:flex;flex-direction:column;gap:4px;min-width:0;}
+  .w02-caption{font-size:11px;color:var(--txt-subtle);}
+  .w02-body{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 2px 6px;}
+  .w02-tscroll{flex:1 1 auto;min-height:0;}
+  .w02-row{gap:12px;}
+  .w02-plan{display:flex;align-items:center;gap:8px;min-width:0;}
+  .w02-dot{flex:0 0 8px;width:8px;height:8px;border-radius:3px;display:inline-block;}
+  .w02-plan-nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .w02-none{color:var(--txt-subtle);}
+  .w02-c-cnt{flex:0 0 74px;text-align:right;color:var(--txt-secondary);font-variant-numeric:tabular-nums;}
+  .wt-head .w02-c-cnt,.wt-head .w02-c-share-head{color:var(--txt-subtle);}
+  .w02-row .wt-c2{flex:0 0 108px;text-align:right;font-variant-numeric:tabular-nums;font-weight:600;}
+  .w02-row:not(.wt-head) .wt-c2{color:var(--txt-primary);}
+  .w02-c-share{flex:0 0 52px;text-align:right;font-size:11.5px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;}
+  .w02-clickable{cursor:pointer;}
+  .wt-row.w02-clickable:hover{background:var(--wn-100);}
+  .wt-row.w02-clickable:hover .w02-share-track{background:var(--wn-300);}
+  .wt-row.w02-clickable:hover .w02-share-fill{filter:brightness(.93);}
+  .wt-row.w02-clickable:focus-visible{outline:2px solid var(--am-400);outline-offset:-2px;}
+  .w02-share{flex:0 0 128px;display:flex;align-items:center;gap:8px;min-width:0;}
+  .w02-share-head{color:var(--txt-subtle);font-size:11px;font-weight:600;}
+  .w02-share-track{flex:1 1 auto;min-width:0;height:6px;border-radius:999px;background:var(--wn-300);overflow:hidden;transition:background var(--dur,.15s);}
+  .w02-share-fill{display:block;height:100%;border-radius:999px;background:var(--am-400);min-width:2px;transition:width var(--dur,.15s) ease,filter var(--dur,.15s);}
+  .w02-share-pct{flex:0 0 30px;text-align:right;font-size:11px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;}
+  .w02-total{font-variant-numeric:tabular-nums;}
+  .w02-full{flex:1;min-height:0;display:flex;gap:12px;padding:12px 14px;}
+  .w02-col{flex:1 1 0;min-width:0;display:flex;flex-direction:column;}
+  .w02-col .w02-tscroll{flex:1 1 auto;min-height:0;}
+  .w02-col-chart{flex:0 1 auto;}
+  .w02-chartwrap{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;padding:6px 4px;}
+  .w02-pie{display:flex;flex-direction:column;justify-content:center;min-width:0;}
+  .w02-leg.w02-clickable:focus-visible{outline:2px solid var(--am-400);outline-offset:-1px;}
+  .w02-leg .dot{flex:0 0 9px;width:9px;height:9px;border-radius:3px;display:inline-block;}
+  .w02-chart-empty{display:flex;flex-direction:column;align-items:center;gap:6px;padding:24px 10px;color:var(--txt-subtle);font-size:12px;text-align:center;}
+  .w02-chart-empty .material-symbols-rounded{font-size:26px;color:var(--txt-subtle);}
+  .w02-skel{padding:8px 0;}
+  .w02-sk-row{display:flex;align-items:center;gap:12px;padding:8px 14px;}
+  .w02-empty>.material-symbols-rounded{color:var(--am-500);}
+  .w02-detail-modal{max-width:960px;}
+  .w02-detail-modal .modal-b{display:block;overflow:auto;padding:0 18px 6px;}
+  .w02-detail-h{align-items:center;}
+  .w02-dsub{font-size:12px;font-weight:600;color:var(--txt-secondary);background:var(--wn-200);border-radius:999px;padding:2px 10px;margin-left:10px;white-space:nowrap;max-width:44ch;overflow:hidden;text-overflow:ellipsis;}
+  .w02-dh-spacer{flex:1;}
+  .w02-detail-scroll{border:1px solid var(--stroke-widget);border-radius:10px;overflow:hidden;}
+  .w02-dhead,.w02-drow{display:flex;align-items:center;gap:12px;}
+  .w02-dc{flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-variant-numeric:tabular-nums;color:var(--txt-secondary);}
+  .w02-dhead .w02-dc{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--txt-subtle);}
+  .w02-dc0,.w02-dc1{flex:1.6 1 0;color:var(--txt-primary);font-weight:500;}
+  .w02-dc2{flex:0 0 110px;}
+  .w02-dc-amt{flex:0 0 120px;text-align:right;font-weight:700;color:var(--txt-primary);}
+  .w02-dtotal{border-top:none;margin-top:2px;}
+  @media(max-width:620px){.w02-full{flex-direction:column;}}
+  @media(max-width:620px){.w02-col-chart{flex:1 1 auto;}}
+  .w02-explore-chart{display:flex;flex-direction:column;min-height:0;}
+  .w02-gwrap{flex:1;min-height:0;display:flex;flex-direction:column;padding:2px 8px 4px;}
+  .w02-grow{flex:1;min-height:60px;display:flex;align-items:stretch;gap:20px;padding:4px 8px 0;}
+  .w02-ggroup{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:6px;}
+  .w02-gplot{flex:1;min-height:60px;display:flex;align-items:stretch;justify-content:center;gap:7px;border-bottom:1px solid var(--stroke-widget);padding:2px 4px 0;}
+  .w02-gbar{position:relative;flex:0 1 30px;max-width:30px;min-width:12px;display:flex;align-items:flex-end;background:var(--wn-200);border-radius:5px;overflow:hidden;cursor:pointer;border:none;padding:0;transition:background var(--dur,.15s);}
+  .w02-gfill{display:block;width:100%;border-radius:5px 5px 0 0;min-height:3px;transition:filter var(--dur,.15s);}
+  .w02-gbar:hover{background:var(--wn-300);}
+  .w02-gbar:hover .w02-gfill{filter:brightness(.93);}
+  .w02-gbar:focus-visible{outline:2px solid var(--am-400);outline-offset:1px;}
+  .w02-gx{display:flex;flex-direction:column;align-items:center;gap:1px;flex-shrink:0;}
+  .w02-gx-d{font-size:11px;font-weight:600;color:var(--txt-secondary);white-space:nowrap;}
+  .w02-gx-t{font-size:10.5px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .w02-glegend{display:flex;flex-wrap:wrap;gap:2px 10px;justify-content:center;padding:8px 4px 0;flex-shrink:0;}
+  .w02-gleg{cursor:default;}
+  .w02-gleg:hover{background:transparent;}
+  /* Appointees drill modal: the shell's .modal-wide body is a flex row; the table takes the width, the summary is a narrow side column */
+  .modal.modal-wide.w02-detail-modal .modal-b{display:flex;gap:18px;align-items:flex-start;padding:0 18px 6px;}
+  .w02-detail-scroll{flex:1 1 auto;min-width:0;}
+  .w02-dtotal{flex:0 0 auto;min-width:150px;max-width:220px;display:flex;flex-direction:column;align-items:flex-start;gap:2px;border-top:none;margin-top:2px;padding:8px 0 0 6px;}
+/* ===== end W02 Pension Plans V2 CSS ===== */
 /* ===== W03 Payroll Distributions V2 ===== */
   .pr-fchip{max-width:230px;}
   .pr-fchip .fc-label{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
@@ -4400,7 +4352,7 @@
   function viewOnlySelectHTML(){var h=location.hash||"",cur_=(/[#&](w=W\d\d|k=[a-z0-9,-]+)/i.exec(h)||["",""])[1];
     var opts=[["","Review: all widgets"]];
     if(typeof CMP_ROWS!=="undefined")CMP_ROWS.forEach(function(r){opts.push(["w="+r[0],r[0]+" "+r[1]+" (Jo vs OC, 3 sizes)"]);});
-    var VIEW_WNUM={budget:"W01",mystatus:"W08",tasks:"W14"}; /* finished widgets: kind -> W number, so they sort with the rest */
+    var VIEW_WNUM={budget:"W01",pension:"W02",mystatus:"W08",tasks:"W14"}; /* finished widgets: kind -> W number, so they sort with the rest */
     Object.keys(WIDGETS.kinds).forEach(function(k){var row=dashboards[0].widgets.filter(function(x){return x.kind===k;})[0];if(!row)return;var wn=VIEW_WNUM[k]||"W??";opts.push(["k="+k,wn+" "+(row.title||k).replace(/\s*\([^)]*\)\s*$/,"")+" (final, 3 sizes)"]);});
     opts=[opts[0]].concat(opts.slice(1).sort(function(x,y){return x[1].localeCompare(y[1]);}));
     return '<select id="viewOnlySel" class="btn outlined sm" aria-label="Review aid: show one widget" style="margin-right:8px;max-width:320px">'+opts.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===cur_?" selected":"")+'>'+o[1]+'</option>';}).join("")+'</select>';}
@@ -5156,141 +5108,7 @@ function mysPopContent(){
 /* ===== end W01 Budget Compared to Actual V2 ===== */
 
 
-  /* ===== P2/P3 WIDGET BLOCKS (pension, remittance, gifts, loans) ===== */
-/* =====================================================================
-   Pension Plans  (pen, kind:"pension")  ,  v1 build
-   =====================================================================
-   Self-contained, namespaced widget block for widget-container.html.
-   Relies on shell globals already present:
-     ICON(name), find(id), render(), pop, modal, modalMounted, timers,
-     setTimeout, clearTimeout, setStatus, EMPTY_COPY, ERROR_COPY.
-
-   Grounded in Confluence DR page 7371030531 (Pension Plans), live
-   re-verified on beta1 (1 Saint Michael Church) 23 Jul 2026:
-     - Denominational clergy-pension obligation, by plan type, filterable
-       by church district, drilling into the appointees on each plan.
-     - PRESERVE the two good behaviours the brief calls the reference model
-       (Part C 11.1): table and chart always show the same data and update
-       together; the district filter carries through into the drill.
-     - Bar over pie for the plan-type breakdown, with a bar/pie toggle
-       (11.2). Add a Glance KPI and appointee counts (11.3). Fix the export
-       mismatch so each export matches its view (11.4). Fix the GBP
-       localisation defect: currency follows the org, here $ (10 / 11.5).
-       Values as text; named controls; one purposeful empty state (10).
-
-   FIVE INTEGRATION PIECES (see wiring notes returned with this file):
-     1. RENDER BLOCK ................ everything in DATA + RENDER below
-        (single entry penContent(w))
-     2. contentHTML() dispatch ...... if(w.kind==="pension")return penContent(w);
-     3. click-handler dispatch ...... if(a&&a.indexOf("pen-")===0&&penHandleClick(a,id,t))return;
-     4. popContent() dispatch ....... if(pop.type==="pen-dist")return penPopContent();
-     5. triggerSelector() branch .... if(pop.type==="pen-dist")return '[data-action="pen-dist"][data-id="'+pop.id+'"]';
-        renderModal() branch ........ if(modal.type==="pendetail"){mr.innerHTML=penDetailModalHTML();return;}
-        aboutOf() branch (optional) . if(w.kind==="pension")return {h:w.title,b:PEN_ABOUT};
-        (+ registry entries pen / pen2 / pen3 / pen4 below)
-   ===================================================================== */
-
-// ===== DATA ============================================================
-/* Plan names and the All-Districts annual amounts are the live-verified
-   set (Confluence Part A, beta1 23 Jul 2026): CPP 6,682.56; CRSP-DB-%
-   7,532.56; CRSP-DC 7,037.31; Employee Before Tax-UMPIP 24,000.00;
-   Flat CRSP-DB 3,000.00; total 55,212.43. Appointee-level rows below roll
-   up to exactly those plan totals and split across three districts, so the
-   district filter genuinely changes the plan set and the drill list, and
-   the appointee counts the brief asked for are real sums, not invented
-   toppers. Only ACTIVE appointments are counted (person active, plan
-   started, not yet ended) , the basis stated in Part A.2 and labelled in
-   the header. Currency is $ (org currency; fixes the live GBP defect). */
-var PEN_ABOUT="How much your conference contributes each year across every clergy pension plan, filterable by district. Only active appointments count, that is a clergy member who is active, whose plan has started and not yet ended. Open a plan to see the individual appointees on it and their annual amounts.";
-var PEN_DISTRICTS=["All Districts","District 1","District 2","District 3"];
-/* stable plan order for colour + tie-breaks (amount desc on All Districts) */
-var PEN_PLAN_ORDER=["Employee Before Tax-UMPIP","CRSP-DB-%","CRSP-DC","CPP","Flat CRSP-DB"];
-/* amethyst ramp, largest share darkest; no red (categorical, not variance) */
-var PEN_COLORS=["--am-600","--am-500","--am-400","--am-300","--am-200"];
-var PEN_APPTS=[
-  {name:"Rev. Jonathan Pierce", org:"St. Paul UMC",           dist:"District 1", plan:"Employee Before Tax-UMPIP", amt:12000.00},
-  {name:"Rev. Naomi Adler",     org:"Hope UMC",               dist:"District 2", plan:"Employee Before Tax-UMPIP", amt:6000.00},
-  {name:"Rev. Caleb Monroe",    org:"Riverside UMC",          dist:"District 3", plan:"Employee Before Tax-UMPIP", amt:6000.00},
-  {name:"Rev. Daniel Cho",      org:"Asbury UMC",             dist:"District 1", plan:"CRSP-DB-%",                 amt:4532.56},
-  {name:"Rev. Miriam Okafor",   org:"Grace Fellowship UMC",   dist:"District 3", plan:"CRSP-DB-%",                 amt:3000.00},
-  {name:"Rev. Samuel Reyes",    org:"First UMC Lakeside",     dist:"District 2", plan:"CRSP-DC",                   amt:3518.66},
-  {name:"Rev. Hannah Whitfield",org:"Cornerstone UMC",        dist:"District 3", plan:"CRSP-DC",                   amt:3518.65},
-  {name:"Rev. Thomas Ashford",  org:"Trinity UMC",            dist:"District 1", plan:"CPP",                       amt:3341.28},
-  {name:"Rev. Grace Bellamy",   org:"Wesley Chapel UMC",      dist:"District 2", plan:"CPP",                       amt:3341.28},
-  {name:"Rev. Esther Vaughn",   org:"Emmanuel UMC",           dist:"District 1", plan:"Flat CRSP-DB",              amt:3000.00}
-];
-var PEN_APPTS_EMPTY=[];
-
-// ===== RENDER ==========================================================
-function penEsc(s){return String(s).replace(/"/g,"&quot;");}
-function penMoney(n){return "$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
-function penDataset(w){return (w&&w.dataset==="none")?PEN_APPTS_EMPTY:PEN_APPTS;}
-function penDist(w){return (w&&w.penDist)||"All Districts";}
-function penFiltered(w){var d=penDist(w);return penDataset(w).filter(function(a){return d==="All Districts"||a.dist===d;});}
-function penDistLabel(w){return penDist(w);}
-
-/* roll appointees up into one row per plan: amount + appointee count */
-function penPlanData(w){
-  var m={},order=[];
-  penFiltered(w).forEach(function(a){if(!m[a.plan]){m[a.plan]={plan:a.plan,amt:0,count:0};order.push(a.plan);}m[a.plan].amt+=a.amt;m[a.plan].count++;});
-  return order.map(function(k){return m[k];});
-}
-function penTotal(w){return penFiltered(w).reduce(function(s,a){return s+a.amt;},0);}
-function penApptCount(w){return penFiltered(w).length;}
-function penPlanCount(w){return penPlanData(w).length;}
-/* colour by the plan's rank in the fixed order, so table dot, bar and pie
-   segment always agree for a given plan (chart/table sync, visually too). */
-function penColorOf(plan){var i=PEN_PLAN_ORDER.indexOf(plan);if(i<0)i=0;return PEN_COLORS[i%PEN_COLORS.length];}
-
-/* sorted plan rows; default annual amount high to low */
-function penRows(w){
-  var rows=penPlanData(w).slice(),sk=(w.penSort||"amt-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
-  rows.sort(function(a,b){
-    if(key==="plan")return dir*a.plan.localeCompare(b.plan);
-    if(key==="count"){var c=a.count-b.count;return dir*(c||(a.amt-b.amt));}
-    var d=a.amt-b.amt;return dir*(d||a.plan.localeCompare(b.plan));
-  });
-  return rows;
-}
-function penApptsFor(w,plan){return penFiltered(w).filter(function(a){return a.plan===plan;}).sort(function(a,b){return b.amt-a.amt;});}
-
-/* ---- controls ------------------------------------------------------- */
-/* District filter: secondary-fill chip, leading filter glyph + trailing
-   chevron (shell .filter-chip[data-action]), sized to its content. Sits on
-   the left of the toolbar and doubles as the "what am I looking at" label. */
-function penDistChip(w){
-  var spin=w.penloading?'<span class="bgt-spin" aria-hidden="true"></span>':"";
-  return '<button class="filter-chip pen-chip" data-action="pen-dist" data-id="'+w.id+'" aria-haspopup="listbox" aria-expanded="'+(pop&&pop.type==="pen-dist"&&pop.id===w.id?"true":"false")+'" aria-label="District filter, currently '+penEsc(penDistLabel(w))+'">'+spin+'<span class="fc-label">'+penDistLabel(w)+'</span>'+ICON("expand_more")+'</button>';
-}
-/* Bar / pie toggle (segmented, shell .vtoggle/.vt) , only where a standalone
-   chart lives (Explore). Resolves the pie-vs-bar open question (11.2): bar is
-   the default, precise read; pie stays available for the one-dominant-share
-   look. Plain-language tooltips per segment. */
-function penChartToggle(w){
-  var c=w.penChart||"bar";
-  return '<div class="vtoggle pen-vtoggle" role="group" aria-label="Chart type">'+
-    '<button class="vt'+(c==="bar"?" on":"")+'" data-action="pen-chart" data-id="'+w.id+'" data-v="bar" aria-pressed="'+(c==="bar")+'" data-tip="Compare the annual amount of each plan as horizontal bars." data-tip-plain>'+ICON("bar_chart")+'Bar</button>'+
-    '<button class="vt'+(c==="pie"?" on":"")+'" data-action="pen-chart" data-id="'+w.id+'" data-v="pie" aria-pressed="'+(c==="pie")+'" data-tip="Show each plan as a slice of the total annual contribution." data-tip-plain>'+ICON("donut_small")+'Pie</button>'+
-  '</div>';
-}
-
-/* ---- KPI badge ------------------------------------------------------ */
-function penBadge(w){
-  var na=penApptCount(w),np=penPlanCount(w);
-  return '<span class="bank-pill" data-tip="'+penEsc(na+" active appointee"+(na===1?"":"s")+" across "+np+" pension plan"+(np===1?"":"s")+" in this view.")+'" data-tip-plain>'+ICON("groups")+na+' appointee'+(na===1?"":"s")+'</span>';
-}
-
-/* ---- header (Detail / Explore): two-row .dep-hd -------------------- */
-/* Row 1: district chip (left), chart toggle (right, Explore only). Row 2:
-   total annual contribution + appointee badge on the LEFT, one quiet
-   context line under it (plan-type count, the active-appointments basis,
-   and data-as-of). No redundant total up here , the table owns the Total. */
-/* ===== Shared progress bar (Gifts, Remittance, and anywhere pacing shows) ==
-   ONE component everywhere: an amethyst received-fill on the full pledged
-   track, a light "expected but not yet in" segment up to a labelled pace
-   marker at "expected by now". Values live as text in the row + sr-only; the
-   bar is hoverable for a formatted read. Status is carried by the chip and the
-   visible gap, never by colour alone. o={fill,mark,pop,aria,sm}. */
+  /* ===== Shell: pacing bar (.pbar) with its hover card, shared by W04 Remittance Pledges and W17 Gifts Pledges ===== */
 function pbarHTML(o){
   var fill=Math.max(0,Math.min(100,o.fill||0));
   var mark=(o.mark==null)?null:Math.max(0,Math.min(100,o.mark));
@@ -5319,203 +5137,9 @@ function pbarShow(el,mx,my){
 }
 document.addEventListener("mousemove",function(e){var el=e.target.closest&&e.target.closest(".pbar[data-pbar]");if(!el){pbarHide();return;}pbarShow(el,e.clientX,e.clientY);});
 
-function penHeader(w,mode){
-  var numInner,ctx;
-  if(mode==="loading"){
-    numInner='<div class="dep-hd-kpigrp"><span class="sk" style="width:132px;height:22px;border-radius:6px"></span><span class="sk" style="width:104px;height:20px;border-radius:999px"></span></div>';
-    ctx="Updating the pension breakdown for "+penDistLabel(w)+"…";
-  }else{
-    numInner='<div class="dep-hd-kpigrp"><span class="metric-value">'+penMoney(penTotal(w))+'</span>'+penBadge(w)+'</div>';
-    ctx="";
-  }
-  var toggle=(w.size==="xwide")?penChartToggle(w):"";
-  return '<div class="dep-hd pen-hd"><div class="dep-hd-top">'+penDistChip(w)+'<div class="dep-hd-toggle">'+toggle+'</div></div>'+
-    '<div class="dep-hd-num"><div class="pen-numwrap">'+numInner+'</div></div></div>';
-}
-
-/* ---- table atoms ---------------------------------------------------- */
-/* Inline share-of-contribution cue (Detail only): the annual amount stays
-   the primary text value; the bar is aria-hidden decoration and the % is
-   quiet support. In Explore the share is a text % column instead, because
-   the standalone chart on the right carries the visual (no double bars). */
-function penShareCell(amt,total){
-  var pct=total>0?Math.round(amt/total*100):0,wd=total>0?(amt/total*100):0;
-  return '<span class="pen-share"><span class="pen-share-track" aria-hidden="true"><span class="pen-share-fill" style="width:'+wd.toFixed(1)+'%"></span></span><span class="pen-share-pct">'+pct+'%</span></span>';
-}
-function penHeadRow(w,withShare){
-  var sk=(w.penSort||"amt-desc").split("-"),key=sk[0],dir=sk[1];
-  function sb(k,label){var on=key===k,ic=on?(dir==="asc"?"arrow_upward":"arrow_downward"):"unfold_more";return '<button class="wt-sort'+(on?" on":"")+'" data-action="pen-sort" data-id="'+w.id+'" data-k="'+k+'">'+label+' '+ICON(ic)+'</button>';}
-  var mid=withShare?'<span class="pen-share pen-share-head">Share</span>':'<span class="pen-c-share pen-c-share-head">Share</span>';
-  return '<div class="wt-row wt-head pen-row"><span class="lr-main">'+sb("plan","Pension plan")+'</span>'+mid+'<span class="pen-c-cnt">'+sb("count","Appointees")+'</span><span class="wt-c2">'+sb("amt","Annual amount")+'</span></div>';
-}
-function penPlanRow(p,total,withShare,w){
-  var pct=total>0?Math.round(p.amt/total*100):0;
-  var tip=p.plan+", "+penDistLabel(w)+". "+penMoney(p.amt)+" a year across "+p.count+" appointee"+(p.count===1?"":"s")+" ("+pct+"% of the total shown). Open to see who is on this plan.";
-  var mid=withShare?penShareCell(p.amt,total):'<span class="pen-c-share">'+pct+'%</span>';
-  return '<div class="wt-row pen-row pen-clickable" data-action="pen-open" data-id="'+w.id+'" data-plan="'+penEsc(p.plan)+'" data-acct="'+penEsc(p.plan)+'" role="button" tabindex="0" data-tip="'+penEsc(tip)+'" data-tip-plain aria-label="'+penEsc(p.plan+", "+penMoney(p.amt)+" a year, "+p.count+" appointee"+(p.count===1?"":"s")+", open the appointees on this plan")+'">'+
-    '<span class="lr-main pen-plan"><span class="pen-dot" style="background:var('+penColorOf(p.plan)+')" aria-hidden="true"></span><span class="pen-plan-nm">'+p.plan+'</span></span>'+
-    mid+
-    '<span class="pen-c-cnt">'+p.count+'</span>'+
-    '<span class="wt-c2">'+penMoney(p.amt)+'</span>'+
-    '<span class="sr-only">'+p.plan+': '+penMoney(p.amt)+' a year, '+p.count+' appointee'+(p.count===1?"":"s")+', '+pct+'% of the total shown.</span>'+
-  '</div>';
-}
-function penTotalRow(w){var tot=penTotal(w),na=penApptCount(w);return '<div class="dep-total pen-total"><span>Total annual contribution ('+na+' appointee'+(na===1?"":"s")+')</span><span>'+penMoney(tot)+'</span></div>';}
-function penTable(w,withShare){
-  var rows=penRows(w),tot=penTotal(w);
-  var body=rows.length?rows.map(function(p){return penPlanRow(p,tot,withShare,w);}).join(""):'<div class="wt-row pen-row"><span class="lr-main pen-none">No active pension plans for '+penDistLabel(w)+'.</span></div>';
-  return '<div class="scroll pen-tscroll">'+penHeadRow(w,withShare)+body+'</div>'+penTotalRow(w);
-}
-
-/* ---- the synced chart (Explore right column) -----------------------
-   Bar (default) or pie, controlled by the header toggle. Both read the SAME
-   filtered, sorted plan data the table shows (the sync the brief preserves),
-   both carry the amount + count as text (values as text, accessibility), and
-   both drill on tap (pen-open) with the district filter carried through. */
-function penBarChart(w){
-  var rows=penRows(w),tot=penTotal(w),max=1;rows.forEach(function(r){max=Math.max(max,r.amt);});
-  if(!rows.length)return '<div class="pen-chart-empty">'+ICON("bar_chart")+'<span>Nothing to chart for '+penDistLabel(w)+'.</span></div>';
-  var bars=rows.map(function(r){
-    var pct=max?Math.round(r.amt/max*100):0,share=tot?Math.round(r.amt/tot*100):0;
-    return '<div class="pen-barrow pen-clickable" data-action="pen-open" data-id="'+w.id+'" data-plan="'+penEsc(r.plan)+'" role="button" tabindex="0" aria-label="'+penEsc(r.plan+", "+penMoney(r.amt)+", "+r.count+" appointee"+(r.count===1?"":"s")+", open the appointees on this plan")+'">'+
-      '<div class="pen-barlbl"><span class="pen-barlbl-nm">'+r.plan+'</span><span class="pen-barlbl-sub">'+r.count+' appointee'+(r.count===1?"":"s")+'</span></div>'+
-      '<div class="pen-bartrack"><div class="pen-barfill" style="width:'+Math.max(3,pct)+'%;background:var('+penColorOf(r.plan)+')"></div></div>'+
-      '<div class="pen-barval"><span class="pen-barval-amt">'+penMoney(r.amt)+'</span><span class="pen-barval-cnt">'+share+'%</span></div>'+
-    '</div>';
-  }).join("");
-  return '<div class="pen-bars" role="img" aria-label="Annual contribution by pension plan, largest first">'+bars+'</div>';
-}
-function penPieChart(w){
-  var rows=penRows(w).slice().sort(function(a,b){return b.amt-a.amt;}),tot=rows.reduce(function(s,r){return s+r.amt;},0);
-  if(!rows.length||tot<=0)return '<div class="pen-chart-empty">'+ICON("donut_small")+'<span>Nothing to chart for '+penDistLabel(w)+'.</span></div>';
-  var R=52,C=2*Math.PI*R,off=0,arcs="",legend="";
-  rows.forEach(function(r,i){var frac=r.amt/tot,len=frac*C,c=penColorOf(r.plan);
-    arcs+='<circle class="pen-seg" data-seg="'+i+'" cx="70" cy="70" r="'+R+'" fill="none" stroke="var('+c+')" stroke-width="20" stroke-dasharray="'+Math.min(len+0.9,C).toFixed(2)+' '+Math.max(0,C-len-0.9).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 70 70)"></circle>';off+=len;
-    legend+='<div class="leg pen-leg pen-clickable" data-seg="'+i+'" data-action="pen-open" data-id="'+w.id+'" data-plan="'+penEsc(r.plan)+'" role="button" tabindex="0" aria-label="'+penEsc(r.plan+", "+penMoney(r.amt)+", "+Math.round(frac*100)+"% of the total, open the appointees on this plan")+'"><span class="dot" style="background:var('+c+')"></span><span class="lg-main">'+r.plan+'</span><span class="lg-meta">'+penMoney(r.amt)+' · '+Math.round(frac*100)+'%</span></div>';
-  });
-  return '<div class="pen-pie"><div class="pie-wrap row"><svg class="donut" viewBox="0 0 140 140" width="200" height="200" aria-hidden="true">'+arcs+'<text x="70" y="67" text-anchor="middle" class="donut-c1">'+penMoney(tot)+'</text><text x="70" y="86" text-anchor="middle" class="donut-c2">a year</text></svg>'+
-    '<div class="legend-col"><div class="legend-head"><span class="legend-hd">Annual contribution by plan</span></div><div class="legend" style="max-height:200px">'+legend+'</div></div></div></div>';
-}
-function penChart(w){return (w.penChart==="pie")?penPieChart(w):penBarChart(w);}
-
-/* Explore (xwide): table LEFT (clean, share as text %) + synced chart RIGHT.
-   This is the preserved table+chart pair, side by side with room to breathe. */
-function penFull(w){
-  return '<div class="dep-full pen-full">'+
-    '<div class="dep-col pen-col"><div class="dep-col-h">Annual contribution by plan</div>'+penTable(w,false)+'</div>'+
-    '<div class="dep-col pen-col pen-col-chart"><div class="dep-col-h">'+((w.penChart==="pie")?"Share of total":"Amount by plan")+'</div><div class="pen-chartwrap">'+penChart(w)+'</div></div>'+
-  '</div>';
-}
-
-/* ---- Glance --------------------------------------------------------- */
-function penGlance(w){
-  if(w.state==="empty"||!penFiltered(w).length)return '<div class="kpi-row"><div class="kpi-num"><div class="dep-hd-kpigrp"><span class="metric-value" style="font-size:20px;color:var(--txt-subtle)">No appointments</span></div><div class="gl-sub"><span class="pen-caption">no active pension appointments</span></div></div></div>';
-  var tot=penTotal(w),na=penApptCount(w),np=penPlanCount(w),d=penDist(w),lead=(d==="All Districts")?"all districts":d.toLowerCase();
-  return '<div class="kpi-row"><div class="kpi-num">'+
-    '<div class="dep-hd-kpigrp"><span class="metric-value">'+penMoney(tot)+'</span>'+penBadge(w)+'</div>'+
-    ''+
-    '<span class="sr-only">Annual pension contribution '+penMoney(tot)+' across '+np+' plans and '+na+' active appointees, '+lead+'.</span>'+
-  '</div></div>';
-}
-
-/* ---- states --------------------------------------------------------- */
-function penEmpty(w){
-  if(w.size==="kpi")return '<div class="kpi-row"><div class="kpi-num"><div class="dep-hd-kpigrp"><span class="metric-value" style="font-size:20px;color:var(--txt-subtle)">No appointments</span></div><div class="gl-sub"><span class="pen-caption">no active pension appointments</span></div></div></div>';
-  return '<div class="state pen-empty" data-kind="empty">'+ICON("diversity_3")+'<div class="state-title">No active pension appointments</div><div class="state-sub">Once clergy are appointed to a pension plan in the Pension Billing module, their annual contributions will appear here by plan.</div></div>';
-}
-function penSkeleton(){var rows="";[92,70,54,40,30].forEach(function(wd){rows+='<div class="pen-sk-row"><span class="sk" style="width:150px;height:12px;border-radius:4px"></span><span class="sk" style="flex:1;height:12px;border-radius:4px"></span><span class="sk" style="width:'+wd+'px;height:12px;border-radius:4px"></span></div>';});return '<div class="pen-skel">'+rows+'</div>';}
-
-/* ---- entry point (single penContent) -------------------------------- */
-function penContent(w){
-  if(w.state==="empty")return penEmpty(w);
-  if(w.size==="kpi")return penGlance(w);
-  if(!penFiltered(w).length&&w.dataset==="none")return penEmpty(w);
-  if(w.penloading)return penHeader(w,"loading")+penSkeleton();
-  if(w.size==="xwide")return penHeader(w)+penFull(w);
-  return penHeader(w)+'<div class="pen-body">'+penTable(w,true)+'</div>';
-}
-
-/* ---- drill focus overlay: plan -> appointees ------------------------
-   Report-style list (Appointee, Church / organisation, District, Annual
-   amount) for the appointees on the tapped plan. The district filter is
-   carried through (11.1). Export to Excel here exports THIS appointee
-   detail, so the export matches the view shown (fixes the mismatch, 11.4).
-   Modal.type "pendetail" , mirrors the ar drill overlay pattern. */
-function penDetailModalHTML(){
-  var w=find(modal.id);if(!w)return "";
-  var plan=modal.plan,list=penApptsFor(w,plan),tot=list.reduce(function(s,a){return s+a.amt;},0);
-  var d=penDist(w),sub=plan+(d==="All Districts"?"":" · "+d);
-  var cols=["Appointee","Church / organisation","District","Annual amount"];
-  var head='<div class="wt-row wt-head pen-drow pen-dhead">'+cols.map(function(c,i){return '<span class="pen-dc pen-dc'+i+'">'+c+'</span>';}).join("")+'</div>';
-  var body;
-  if(list.length){
-    body=list.map(function(a){
-      return '<div class="wt-row pen-drow">'+
-        '<span class="pen-dc pen-dc0">'+a.name+'</span>'+
-        '<span class="pen-dc pen-dc1">'+a.org+'</span>'+
-        '<span class="pen-dc pen-dc2">'+a.dist+'</span>'+
-        '<span class="pen-dc pen-dc3 pen-dc-amt">'+penMoney(a.amt)+'</span></div>';
-    }).join("");
-  }else{
-    body='<div class="state" data-kind="empty">'+ICON("diversity_3")+'<div class="state-title">No appointees on this plan</div><div class="state-sub">Nothing matches this plan for '+penDistLabel(w)+'.</div></div>';
-  }
-  var foot=list.length?'<div class="dep-total pen-dtotal"><span>'+list.length+' appointee'+(list.length===1?"":"s")+'</span><span>'+penMoney(tot)+'</span></div>':'';
-  return '<div class="modal-backdrop" data-action="pen-detail-close"><div class="modal modal-wide pen-detail-modal" data-action="stop" role="dialog" aria-modal="true" aria-label="Pension plan appointees, detail">'+
-    '<div class="modal-h pen-detail-h"><span class="modal-title"><span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">diversity_3</span>Pension Plan: Appointees</span><span class="pen-dsub">'+penEsc(sub)+'</span><span class="pen-dh-spacer"></span><button class="btn naked sm" data-action="pen-export" data-id="'+w.id+'" data-plan="'+penEsc(plan)+'">'+ICON("download")+'Export to Excel</button><button class="iconbtn" data-action="pen-detail-close" aria-label="Close">'+ICON("close")+'</button></div>'+
-    '<div class="modal-b pen-detail-b"><div class="pen-detail-scroll">'+head+body+'</div>'+foot+'</div>'+
-    '<div class="modal-f"><button class="btn primary sm" data-action="pen-detail-close">Close</button></div></div></div>';
-}
-
-// ===== HANDLERS (click branches / popContent / renderModal / input / hover)
-/* Loading: only a district change fetches new data (transient penloading +
-   skeleton). Sort, chart toggle, drill are client re-renders, never a load. */
-function penLoad(w){w.penloading=true;clearTimeout(timers["pen-"+w.id]);timers["pen-"+w.id]=setTimeout(function(){w.penloading=false;w.updated="just now";render();},800);}
-
-/* --- click handler branch: paste into the delegated click listener ---
-   if(a&&a.indexOf("pen-")===0&&penHandleClick(a,id,t))return; */
-function penHandleClick(a,id,t){
-  if(a==="pen-dist"){pop=(pop&&pop.type==="pen-dist"&&pop.id===id)?null:{type:"pen-dist",id:id};render();return true;}
-  if(a==="pen-set-dist"){var wd=find(id);if(wd){var nv=t.getAttribute("data-v");if(penDist(wd)!==nv){wd.penDist=nv;penLoad(wd);setStatus("Showing pension plans for "+nv+".");}}pop=null;render();return true;}
-  if(a==="pen-sort"){var ws=find(id);if(ws){var k=t.getAttribute("data-k"),parts=(ws.penSort||"amt-desc").split("-");ws.penSort=(parts[0]===k)?(k+"-"+(parts[1]==="desc"?"asc":"desc")):(k+"-"+(k==="plan"?"asc":"desc"));}pop=null;render();return true;}
-  if(a==="pen-chart"){var wc=find(id);if(wc)wc.penChart=t.getAttribute("data-v");pop=null;render();return true;}
-  if(a==="pen-open"){var wo=find(id);if(!wo)return true;modal={type:"pendetail",id:id,plan:t.getAttribute("data-plan")};modalMounted=false;pop=null;render();return true;}
-  if(a==="pen-detail-close"){modal=null;pop=null;render();return true;}
-  if(a==="pen-export"){pop=null;setStatus("Exporting the appointees on "+t.getAttribute("data-plan")+" to Excel…");return true;}
-  return false;
-}
-
-/* --- popContent() branch: paste into popContent() ---
-   if(pop.type==="pen-dist")return penPopContent(); */
-function penPopContent(){
-  if(pop.type==="pen-dist"){var w=find(pop.id),cur=penDist(w);
-    return '<div class="cap">District</div>'+PEN_DISTRICTS.map(function(o){var on=cur===o;return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-action="pen-set-dist" data-id="'+w.id+'" data-v="'+penEsc(o)+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+o+'</button>';}).join("");}
-  return "";
-}
-
-/* --- triggerSelector() branch: paste into triggerSelector() ---
-   if(pop.type==="pen-dist")return '[data-action="pen-dist"][data-id="'+pop.id+'"]'; */
-function penTriggerSelector(){if(pop.type==="pen-dist")return '[data-action="pen-dist"][data-id="'+pop.id+'"]';return null;}
-
-/* --- renderModal() branch: paste into renderModal() ---
-   if(modal.type==="pendetail"){mr.innerHTML=penDetailModalHTML();return;} */
-
-/* --- input handler: none needed (district list is short, no search box) --- */
-
-// ===== REGISTRY ========================================================
-/* Paste these objects into the dashboards' widgets array. `updated` drives
-   the shell Refresh tooltip and the "Data as of" line. `actions` drives the
-   more-menu summary export (matches the on-screen plan summary); the drill
-   modal's own Export matches the appointee detail , the two exports match
-   their views (11.4). */
-/*
-  {id:"pen",  title:"Pension Plans",                                   kind:"pension", size:"wide",  tiers:["kpi","wide","xwide"], penDist:"All Districts", penSort:"amt-desc", penChart:"bar", updated:"just now", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-  {id:"pen2", title:"Pension Plans (all districts, explore)",          kind:"pension", size:"xwide", tiers:["kpi","wide","xwide"], penDist:"All Districts", penSort:"amt-desc", penChart:"bar", updated:"just now"},
-  {id:"pen3", title:"Pension Plans (District 1)",                      kind:"pension", size:"wide",  tiers:["kpi","wide","xwide"], penDist:"District 1",    penSort:"amt-desc", penChart:"bar", updated:"just now"},
-  {id:"pen4", title:"Pension Plans (no active appointments)",          kind:"pension", size:"wide",  tiers:["kpi","wide","xwide"], state:"empty", dataset:"none", updated:"just now"},
-*/
-
+/* ===== W02 Pension Plans V2 ===== */
 /* =====================================================================
-   Pension Plans (MB updated)  (prefix: penF, kind:"pension-mb")
+   Pension Plans V2  (prefix: penO, kind:"pension")
    =====================================================================
    ADDITIVE + NAMESPACED. Built FROM Jo's pen block above, reusing her exact
    components, classes and Pathway tokens (.dep-hd / .filter-chip / .vtoggle /
@@ -5529,7 +5153,7 @@ function penTriggerSelector(){if(pop.type==="pen-dist")return '[data-action="pen
         Her demo kept the table as the body with a bar/pie chart toggle only at
         her largest size; the Final promotes Pie to a top-level view and adds the
         new Grouped Bar by District view.
-     2. NEW view: Grouped Bar by District (penFGroupedBar). District groups on the
+     2. NEW view: Grouped Bar by District (penOGroupedBar). District groups on the
         x-axis, one bar per plan in each group in the same fixed amethyst plan
         ramp as the table dots and pie segments, a group total under each district;
         every bar drills to that plan AND that district. Built in her bar language
@@ -5546,63 +5170,72 @@ function penTriggerSelector(){if(pop.type==="pen-dist")return '[data-action="pen
    the appointee rows (48,252.43), never a hardcoded figure.
 
    FIVE INTEGRATION PIECES (all appended, none of Jo's lines edited):
-     1. RENDER + DATA + HANDLERS ... this block (single entry penFContent(w))
-     2. contentHTML() dispatch ...... if(w.kind==="pension-mb")return penFContent(w);
-     3. click-handler dispatch ...... if(a&&a.indexOf("penF-")===0&&penFHandleClick(a,id,t))return;
-     4. popContent() branch ......... if(pop.type==="penF-dist")return penFPopContent();
-        triggerSelector() branch .... if(pop.type==="penF-dist")return '[data-action="penF-dist"][data-id="'+pop.id+'"]';
-        renderModal() branch ........ if(modal.type==="penFdetail"){mr.innerHTML=penFDetailModalHTML();return;}
-        aboutOf() branch (optional) . if(w.kind==="pension-mb")return {h:w.title,b:PENF_ABOUT};
+     1. RENDER + DATA + HANDLERS ... this block (single entry penOContent(w))
+        triggerSelector() branch .... if(pop.type==="penO-dist")return '[data-action="penO-dist"][data-id="'+pop.id+'"]';
+        renderModal() branch ........ if(modal.type==="penOdetail"){mr.innerHTML=penODetailModalHTML();return;}
      5. CSS .......................... one .penf-* block at the end of <style>
-     (+ registry entries penF / penF2 / penF3 appended after Jo's pen entries)
+     (+ registry entries penO / penO2 / penO3 appended after Jo's pen entries)
    ===================================================================== */
 
 // ===== DATA (Pension Plans, MB updated) ================================
 /* Same live-shaped dataset as Jo's pen block and the Step 5 spec examples:
    10 active appointees across 3 districts and 5 plans, summing to 48,252.43.
-   Namespaced under PENF_ so this block never depends on Jo's PEN_ constants. */
-var PENF_ABOUT="How much your conference contributes each year across every clergy pension plan, filterable by district. Only active appointments count, that is a clergy member who is active, whose plan has started and not yet ended. Open a plan to see the individual appointees on it and their annual amounts.";
-var PENF_DISTRICTS=["All Districts","District 1","District 2","District 3"];
+   Namespaced under PENO_ so this block never depends on Jo's PEN_ constants. */
+var PENO_ABOUT="How much your conference contributes each year across every clergy pension plan, filterable by district. Only active appointments count, that is a clergy member who is active, whose plan has started and not yet ended. Open a plan to see the individual appointees on it and their annual amounts.";
+var PENO_DISTRICTS=["All Districts","District 1","District 2","District 3"];
 /* stable plan order for colour + tie-breaks (amount desc on All Districts) */
-var PENF_PLAN_ORDER=["Employee Before Tax-UMPIP","CRSP-DB-%","CRSP-DC","CPP","Flat CRSP-DB"];
+var PENO_PLAN_ORDER=["Employee Before Tax-UMPIP","CRSP-DB-%","CRSP-DC","CPP","Flat CRSP-DB"];
 /* amethyst ramp, largest share darkest; no red (categorical, not variance) */
-var PENF_COLORS=["--am-600","--am-500","--am-400","--am-300","--am-200"];
-var PENF_APPTS=[
-  {name:"Rev. Jonathan Pierce", org:"St. Paul UMC",           dist:"District 1", plan:"Employee Before Tax-UMPIP", amt:12000.00},
-  {name:"Rev. Naomi Adler",     org:"Hope UMC",               dist:"District 2", plan:"Employee Before Tax-UMPIP", amt:6000.00},
-  {name:"Rev. Caleb Monroe",    org:"Riverside UMC",          dist:"District 3", plan:"Employee Before Tax-UMPIP", amt:6000.00},
-  {name:"Rev. Daniel Cho",      org:"Asbury UMC",             dist:"District 1", plan:"CRSP-DB-%",                 amt:4532.56},
-  {name:"Rev. Miriam Okafor",   org:"Grace Fellowship UMC",   dist:"District 3", plan:"CRSP-DB-%",                 amt:3000.00},
-  {name:"Rev. Samuel Reyes",    org:"First UMC Lakeside",     dist:"District 2", plan:"CRSP-DC",                   amt:3518.66},
-  {name:"Rev. Hannah Whitfield",org:"Cornerstone UMC",        dist:"District 3", plan:"CRSP-DC",                   amt:3518.65},
-  {name:"Rev. Thomas Ashford",  org:"Trinity UMC",            dist:"District 1", plan:"CPP",                       amt:3341.28},
-  {name:"Rev. Grace Bellamy",   org:"Wesley Chapel UMC",      dist:"District 2", plan:"CPP",                       amt:3341.28},
-  {name:"Rev. Esther Vaughn",   org:"Emmanuel UMC",           dist:"District 1", plan:"Flat CRSP-DB",              amt:3000.00}
+var PENO_COLORS=["--am-600","--am-500","--am-400","--am-300","--am-200"];
+var PENO_APPTS=[
+  {name:"Rev. Jonathan Pierce",    org:"St. Paul UMC",            dist:"District 1", plan:"Employee Before Tax-UMPIP",   amt:12000.00},
+  {name:"Rev. Naomi Adler",        org:"Hope UMC",                dist:"District 2", plan:"Employee Before Tax-UMPIP",   amt:6000.00},
+  {name:"Rev. Caleb Monroe",       org:"Riverside UMC",           dist:"District 3", plan:"Employee Before Tax-UMPIP",   amt:6000.00},
+  {name:"Rev. Priya Natarajan",    org:"Aldersgate UMC",          dist:"District 2", plan:"Employee Before Tax-UMPIP",   amt:9600.00},
+  {name:"Rev. Marcus Ellison",     org:"Bethel UMC",              dist:"District 3", plan:"Employee Before Tax-UMPIP",   amt:4800.00},
+  {name:"Rev. Daniel Cho",         org:"Asbury UMC",              dist:"District 1", plan:"CRSP-DB-%",                   amt:4532.56},
+  {name:"Rev. Miriam Okafor",      org:"Grace Fellowship UMC",    dist:"District 3", plan:"CRSP-DB-%",                   amt:3000.00},
+  {name:"Rev. Lydia Brennan",      org:"Mount Zion UMC",          dist:"District 2", plan:"CRSP-DB-%",                   amt:5210.40},
+  {name:"Rev. Owen Gallagher",     org:"Shiloh UMC",              dist:"District 1", plan:"CRSP-DB-%",                   amt:2875.12},
+  {name:"Rev. Isabel Moreno",      org:"New Life UMC",            dist:"District 2", plan:"CRSP-DB-%",                   amt:3960.00},
+  {name:"Rev. Samuel Reyes",       org:"First UMC Lakeside",      dist:"District 2", plan:"CRSP-DC",                     amt:3518.66},
+  {name:"Rev. Hannah Whitfield",   org:"Cornerstone UMC",         dist:"District 3", plan:"CRSP-DC",                     amt:3518.65},
+  {name:"Rev. Peter Lindqvist",    org:"Christ UMC Northgate",    dist:"District 1", plan:"CRSP-DC",                     amt:4104.20},
+  {name:"Rev. Adaeze Nwosu",       org:"Faith Community UMC",     dist:"District 1", plan:"CRSP-DC",                     amt:2760.00},
+  {name:"Rev. Tomas Herrera",      org:"Calvary UMC",             dist:"District 3", plan:"CRSP-DC",                     amt:3300.00},
+  {name:"Rev. Thomas Ashford",     org:"Trinity UMC",             dist:"District 1", plan:"CPP",                         amt:3341.28},
+  {name:"Rev. Grace Bellamy",      org:"Wesley Chapel UMC",       dist:"District 2", plan:"CPP",                         amt:3341.28},
+  {name:"Rev. Joseph Kimani",      org:"Epworth UMC",             dist:"District 3", plan:"CPP",                         amt:2980.50},
+  {name:"Rev. Rachel Sørensen",    org:"Good Shepherd UMC",       dist:"District 2", plan:"CPP",                         amt:3612.00},
+  {name:"Rev. Benjamin Osei",      org:"Centenary UMC",           dist:"District 1", plan:"CPP",                         amt:2455.75},
+  {name:"Rev. Esther Vaughn",      org:"Emmanuel UMC",            dist:"District 1", plan:"Flat CRSP-DB",                amt:3000.00},
+  {name:"Rev. Micah Delgado",      org:"Harmony UMC",             dist:"District 3", plan:"Flat CRSP-DB",                amt:3000.00},
+  {name:"Rev. Charlotte Ives",     org:"St. Andrew UMC",          dist:"District 2", plan:"Flat CRSP-DB",                amt:3000.00},
+  {name:"Rev. Elijah Baptiste",    org:"Living Water UMC",        dist:"District 3", plan:"Flat CRSP-DB",                amt:3000.00}
 ];
-var PENF_APPTS_EMPTY=[];
+var PENO_APPTS_EMPTY=[];
 
-// ===== RENDER (Jo's pen* logic, renamed penF*) =========================
-function penFEsc(s){return String(s).replace(/"/g,"&quot;");}
-function penFMoney(n){return "$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
-function penFDataset(w){return (w&&w.dataset==="none")?PENF_APPTS_EMPTY:PENF_APPTS;}
-function penFDist(w){return (w&&w.penDist)||"All Districts";}
-function penFFiltered(w){var d=penFDist(w);return penFDataset(w).filter(function(a){return d==="All Districts"||a.dist===d;});}
-function penFDistLabel(w){return penFDist(w);}
+function penOEsc(s){return String(s).replace(/"/g,"&quot;");}
+function penOMoney(n){return "$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
+function penODataset(w){return (w&&w.dataset==="none")?PENO_APPTS_EMPTY:PENO_APPTS;}
+function penODist(w){return (w&&w.penDist)||"All Districts";}
+function penOFiltered(w){var d=penODist(w);return penODataset(w).filter(function(a){return d==="All Districts"||a.dist===d;});}
+function penODistLabel(w){return penODist(w);}
 /* roll appointees up into one row per plan: amount + appointee count */
-function penFPlanData(w){
+function penOPlanData(w){
   var m={},order=[];
-  penFFiltered(w).forEach(function(a){if(!m[a.plan]){m[a.plan]={plan:a.plan,amt:0,count:0};order.push(a.plan);}m[a.plan].amt+=a.amt;m[a.plan].count++;});
+  penOFiltered(w).forEach(function(a){if(!m[a.plan]){m[a.plan]={plan:a.plan,amt:0,count:0};order.push(a.plan);}m[a.plan].amt+=a.amt;m[a.plan].count++;});
   return order.map(function(k){return m[k];});
 }
-function penFTotal(w){return penFFiltered(w).reduce(function(s,a){return s+a.amt;},0);}
-function penFApptCount(w){return penFFiltered(w).length;}
-function penFPlanCount(w){return penFPlanData(w).length;}
+function penOTotal(w){return penOFiltered(w).reduce(function(s,a){return s+a.amt;},0);}
+function penOApptCount(w){return penOFiltered(w).length;}
+function penOPlanCount(w){return penOPlanData(w).length;}
 /* colour by the plan's rank in the fixed order, so table dot, bar and pie
    segment always agree for a given plan (chart/table sync, visually too). */
-function penFColorOf(plan){var i=PENF_PLAN_ORDER.indexOf(plan);if(i<0)i=0;return PENF_COLORS[i%PENF_COLORS.length];}
+function penOColorOf(plan){var i=PENO_PLAN_ORDER.indexOf(plan);if(i<0)i=0;return PENO_COLORS[i%PENO_COLORS.length];}
 /* sorted plan rows; default annual amount high to low */
-function penFRows(w){
-  var rows=penFPlanData(w).slice(),sk=(w.penSort||"amt-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
+function penORows(w){
+  var rows=penOPlanData(w).slice(),sk=(w.penSort||"amt-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
   rows.sort(function(a,b){
     if(key==="plan")return dir*a.plan.localeCompare(b.plan);
     if(key==="count"){var c=a.count-b.count;return dir*(c||(a.amt-b.amt));}
@@ -5613,102 +5246,101 @@ function penFRows(w){
 /* appointees on a plan; optional explicit district (the new grouped bar drills
    plan AND district). Defaults to the widget's own district filter, so the
    district filter carries into the drill exactly as in her build. */
-function penFApptsFor(w,plan,dist){
-  var d=dist||penFDist(w);
-  return penFDataset(w).filter(function(a){return a.plan===plan&&(d==="All Districts"||a.dist===d);}).sort(function(a,b){return b.amt-a.amt;});
+function penOApptsFor(w,plan,dist){
+  var d=dist||penODist(w);
+  return penODataset(w).filter(function(a){return a.plan===plan&&(d==="All Districts"||a.dist===d);}).sort(function(a,b){return b.amt-a.amt;});
 }
 
 /* ---- controls ---- */
 /* District filter chip: THE fetch trigger. Shell .filter-chip[data-action],
    leading filter glyph + trailing chevron; spinner (Jo's .bgt-spin) rides in
    the chip while loading. Left of the toolbar, doubles as the current-scope label. */
-function penFDistChip(w){
+function penODistChip(w){
   var spin=w.penloading?'<span class="bgt-spin" aria-hidden="true"></span>':"";
-  return '<button class="filter-chip pen-chip" data-action="penF-dist" data-id="'+w.id+'" aria-haspopup="listbox" aria-expanded="'+(pop&&pop.type==="penF-dist"&&pop.id===w.id?"true":"false")+'" aria-label="District filter, currently '+penFEsc(penFDistLabel(w))+'">'+spin+'<span class="fc-label">'+penFDistLabel(w)+'</span>'+ICON("expand_more")+'</button>';
+  return '<button class="filter-chip w02-chip" data-action="penO-dist" data-id="'+w.id+'" aria-haspopup="listbox" aria-expanded="'+(pop&&pop.type==="penO-dist"&&pop.id===w.id?"true":"false")+'" aria-label="District filter, currently '+penOEsc(penODistLabel(w))+'">'+spin+'<span class="fc-label">'+penODistLabel(w)+'</span>'+ICON("expand_more")+'</button>';
 }
 /* View toggles (shell .vtoggle/.vt, segmented). Explore (wide): 3-way Table /
    Pie / By district, Table default. Detail (xwide): the table always owns the
    left panel, so the right panel gets a 2-way Pie / By district toggle. Plain
    language data-tip per segment (shell tooltip engine). */
-function penFViewToggleM(w){
+function penOViewToggleM(w){
   var v=w.penViewM||"table";
-  function seg(val,lbl,ic,tip){return '<button class="vt'+(v===val?" on":"")+'" data-action="penF-view" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(v===val)+'" data-tip="'+penFEsc(tip)+'" data-tip-plain>'+ICON(ic)+lbl+'</button>';}
-  return '<div class="vtoggle pen-vtoggle" role="group" aria-label="View">'+
+  function seg(val,lbl,ic,tip){return '<button class="vt'+(v===val?" on":"")+'" data-action="penO-view" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(v===val)+'" data-tip="'+penOEsc(tip)+'" data-tip-plain>'+ICON(ic)+lbl+'</button>';}
+  return '<div class="vtoggle w02-vtoggle" role="group" aria-label="View">'+
     seg("table","Table","table_rows","The plans as a sortable list: appointees and annual amount per plan.")+
     seg("pie","Pie","donut_small","Show each plan as a slice of the total annual contribution.")+
     seg("gbar","By district","bar_chart","Compare each plan's annual amount district by district.")+
   '</div>';
 }
-function penFChartToggleL(w){
+function penOChartToggleL(w){
   var c=w.penChartL||"pie";
-  function seg(val,lbl,ic,tip){return '<button class="vt'+(c===val?" on":"")+'" data-action="penF-chart" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(c===val)+'" data-tip="'+penFEsc(tip)+'" data-tip-plain>'+ICON(ic)+lbl+'</button>';}
-  return '<div class="vtoggle pen-vtoggle" role="group" aria-label="Chart type">'+
+  function seg(val,lbl,ic,tip){return '<button class="vt'+(c===val?" on":"")+'" data-action="penO-chart" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(c===val)+'" data-tip="'+penOEsc(tip)+'" data-tip-plain>'+ICON(ic)+lbl+'</button>';}
+  return '<div class="vtoggle w02-vtoggle" role="group" aria-label="Chart type">'+
     seg("pie","Pie","donut_small","Show each plan as a slice of the total annual contribution.")+
     seg("gbar","By district","bar_chart","Compare each plan's annual amount district by district.")+
   '</div>';
 }
 
 /* ---- KPI badge ---- */
-function penFBadge(w){
-  var na=penFApptCount(w),np=penFPlanCount(w);
-  return '<span class="bank-pill" data-tip="'+penFEsc(na+" active appointee"+(na===1?"":"s")+" across "+np+" pension plan"+(np===1?"":"s")+" in this view.")+'" data-tip-plain>'+ICON("groups")+na+' appointee'+(na===1?"":"s")+'</span>';
+function penOBadge(w){
+  var na=penOApptCount(w),np=penOPlanCount(w);
+  return '<span class="bank-pill" data-tip="'+penOEsc(na+" active appointee"+(na===1?"":"s")+" across "+np+" pension plan"+(np===1?"":"s")+" in this view.")+'" data-tip-plain>'+ICON("groups")+na+' appointee'+(na===1?"":"s")+'</span>';
 }
 
 /* ---- header (Detail / Explore): two-row .dep-hd ---- */
 /* Row 1: district chip (left), view/chart toggle (right). Row 2: total annual
    contribution + appointee badge on the LEFT. */
-function penFHeader(w,mode){
+function penOHeader(w,mode){
   var numInner;
   if(mode==="loading"){
     numInner='<div class="dep-hd-kpigrp"><span class="sk" style="width:132px;height:22px;border-radius:6px"></span><span class="sk" style="width:104px;height:20px;border-radius:999px"></span></div>';
   }else{
-    numInner='<div class="dep-hd-kpigrp"><span class="metric-value">'+penFMoney(penFTotal(w))+'</span>'+penFBadge(w)+'</div>';
+    numInner='<div class="dep-hd-kpigrp"><span class="metric-value">'+penOMoney(penOTotal(w))+'</span>'+penOBadge(w)+'</div>';
   }
-  var toggle=(w.size==="xwide")?penFChartToggleL(w):penFViewToggleM(w);
-  return '<div class="dep-hd pen-hd"><div class="dep-hd-top">'+penFDistChip(w)+'<div class="dep-hd-toggle">'+toggle+'</div></div>'+
-    '<div class="dep-hd-num"><div class="pen-numwrap">'+numInner+'</div></div></div>';
+  var toggle=(w.size==="xwide")?penOChartToggleL(w):penOViewToggleM(w);
+  return '<div class="dep-hd w02-hd"><div class="dep-hd-top">'+penODistChip(w)+'<div class="dep-hd-toggle">'+toggle+'</div></div>'+
+    '<div class="dep-hd-num"><div class="w02-numwrap">'+numInner+'</div></div></div>';
 }
 
-/* ---- table atoms (Jo's, verbatim logic; penF- actions) ---- */
-function penFShareCell(amt,total){
+function penOShareCell(amt,total){
   var pct=total>0?Math.round(amt/total*100):0,wd=total>0?(amt/total*100):0;
-  return '<span class="pen-share"><span class="pen-share-track" aria-hidden="true"><span class="pen-share-fill" style="width:'+wd.toFixed(1)+'%"></span></span><span class="pen-share-pct">'+pct+'%</span></span>';
+  return '<span class="w02-share"><span class="w02-share-track" aria-hidden="true"><span class="w02-share-fill" style="width:'+wd.toFixed(1)+'%"></span></span><span class="w02-share-pct">'+pct+'%</span></span>';
 }
-function penFHeadRow(w,withShare){
+function penOHeadRow(w,withShare){
   var sk=(w.penSort||"amt-desc").split("-"),key=sk[0],dir=sk[1];
-  function sb(k,label){var on=key===k,ic=on?(dir==="asc"?"arrow_upward":"arrow_downward"):"unfold_more";return '<button class="wt-sort'+(on?" on":"")+'" data-action="penF-sort" data-id="'+w.id+'" data-k="'+k+'">'+label+' '+ICON(ic)+'</button>';}
-  var mid=withShare?'<span class="pen-share pen-share-head">Share</span>':'<span class="pen-c-share pen-c-share-head">Share</span>';
-  return '<div class="wt-row wt-head pen-row"><span class="lr-main">'+sb("plan","Pension plan")+'</span>'+mid+'<span class="pen-c-cnt">'+sb("count","Appointees")+'</span><span class="wt-c2">'+sb("amt","Annual amount")+'</span></div>';
+  function sb(k,label){var on=key===k,ic=on?(dir==="asc"?"arrow_upward":"arrow_downward"):"unfold_more";return '<button class="wt-sort'+(on?" on":"")+'" data-action="penO-sort" data-id="'+w.id+'" data-k="'+k+'">'+label+' '+ICON(ic)+'</button>';}
+  var mid=withShare?'<span class="w02-share w02-share-head">Share</span>':'<span class="w02-c-share w02-c-share-head">Share</span>';
+  return '<div class="wt-row wt-head w02-row"><span class="lr-main">'+sb("plan","Pension plan")+'</span>'+mid+'<span class="w02-c-cnt">'+sb("count","Appointees")+'</span><span class="wt-c2">'+sb("amt","Annual amount")+'</span></div>';
 }
-function penFPlanRow(p,total,withShare,w){
+function penOPlanRow(p,total,withShare,w){
   var pct=total>0?Math.round(p.amt/total*100):0;
-  var tip=p.plan+", "+penFDistLabel(w)+". "+penFMoney(p.amt)+" a year across "+p.count+" appointee"+(p.count===1?"":"s")+" ("+pct+"% of the total shown). Open to see who is on this plan.";
-  var mid=withShare?penFShareCell(p.amt,total):'<span class="pen-c-share">'+pct+'%</span>';
-  return '<div class="wt-row pen-row pen-clickable" data-action="penF-open" data-id="'+w.id+'" data-plan="'+penFEsc(p.plan)+'" role="button" tabindex="0" data-tip="'+penFEsc(tip)+'" data-tip-plain aria-label="'+penFEsc(p.plan+", "+penFMoney(p.amt)+" a year, "+p.count+" appointee"+(p.count===1?"":"s")+", open the appointees on this plan")+'">'+
-    '<span class="lr-main pen-plan"><span class="pen-dot" style="background:var('+penFColorOf(p.plan)+')" aria-hidden="true"></span><span class="pen-plan-nm">'+p.plan+'</span></span>'+
+  var tip=p.plan+", "+penODistLabel(w)+". "+penOMoney(p.amt)+" a year across "+p.count+" appointee"+(p.count===1?"":"s")+" ("+pct+"% of the total shown). Open to see who is on this plan.";
+  var mid=withShare?penOShareCell(p.amt,total):'<span class="w02-c-share">'+pct+'%</span>';
+  return '<div class="wt-row w02-row w02-clickable" data-action="penO-open" data-id="'+w.id+'" data-plan="'+penOEsc(p.plan)+'" role="button" tabindex="0" data-tip="'+penOEsc(tip)+'" data-tip-plain aria-label="'+penOEsc(p.plan+", "+penOMoney(p.amt)+" a year, "+p.count+" appointee"+(p.count===1?"":"s")+", open the appointees on this plan")+'">'+
+    '<span class="lr-main w02-plan"><span class="w02-dot" style="background:var('+penOColorOf(p.plan)+')" aria-hidden="true"></span><span class="w02-plan-nm">'+p.plan+'</span></span>'+
     mid+
-    '<span class="pen-c-cnt">'+p.count+'</span>'+
-    '<span class="wt-c2">'+penFMoney(p.amt)+'</span>'+
-    '<span class="sr-only">'+p.plan+': '+penFMoney(p.amt)+' a year, '+p.count+' appointee'+(p.count===1?"":"s")+', '+pct+'% of the total shown.</span>'+
+    '<span class="w02-c-cnt">'+p.count+'</span>'+
+    '<span class="wt-c2">'+penOMoney(p.amt)+'</span>'+
+    '<span class="sr-only">'+p.plan+': '+penOMoney(p.amt)+' a year, '+p.count+' appointee'+(p.count===1?"":"s")+', '+pct+'% of the total shown.</span>'+
   '</div>';
 }
-function penFTotalRow(w){var tot=penFTotal(w),na=penFApptCount(w);return '<div class="dep-total pen-total"><span>Total annual contribution ('+na+' appointee'+(na===1?"":"s")+')</span><span>'+penFMoney(tot)+'</span></div>';}
-function penFTable(w,withShare){
-  var rows=penFRows(w),tot=penFTotal(w);
-  var body=rows.length?rows.map(function(p){return penFPlanRow(p,tot,withShare,w);}).join(""):'<div class="wt-row pen-row"><span class="lr-main pen-none">No active pension plans for '+penFDistLabel(w)+'.</span></div>';
-  return '<div class="scroll pen-tscroll">'+penFHeadRow(w,withShare)+body+'</div>'+penFTotalRow(w);
+function penOTotalRow(w){var tot=penOTotal(w),na=penOApptCount(w);return '<div class="dep-total w02-total"><span>Total annual contribution ('+na+' appointee'+(na===1?"":"s")+')</span><span>'+penOMoney(tot)+'</span></div>';}
+function penOTable(w,withShare){
+  var rows=penORows(w),tot=penOTotal(w);
+  var body=rows.length?rows.map(function(p){return penOPlanRow(p,tot,withShare,w);}).join(""):'<div class="wt-row w02-row"><span class="lr-main w02-none">No active pension plans for '+penODistLabel(w)+'.</span></div>';
+  return '<div class="scroll w02-tscroll">'+penOHeadRow(w,withShare)+body+'</div>'+penOTotalRow(w);
 }
 
 /* ---- pie/donut by plan (Jo's penPieChart, promoted to a top-level view) ---- */
-function penFPieChart(w){
-  var rows=penFRows(w).slice().sort(function(a,b){return b.amt-a.amt;}),tot=rows.reduce(function(s,r){return s+r.amt;},0);
-  if(!rows.length||tot<=0)return '<div class="pen-chart-empty">'+ICON("donut_small")+'<span>Nothing to chart for '+penFDistLabel(w)+'.</span></div>';
+function penOPieChart(w){
+  var rows=penORows(w).slice().sort(function(a,b){return b.amt-a.amt;}),tot=rows.reduce(function(s,r){return s+r.amt;},0);
+  if(!rows.length||tot<=0)return '<div class="w02-chart-empty">'+ICON("donut_small")+'<span>Nothing to chart for '+penODistLabel(w)+'.</span></div>';
   var R=52,C=2*Math.PI*R,off=0,arcs="",legend="";
-  rows.forEach(function(r,i){var frac=r.amt/tot,len=frac*C,c=penFColorOf(r.plan);
-    arcs+='<circle class="pen-seg" data-seg="'+i+'" cx="70" cy="70" r="'+R+'" fill="none" stroke="var('+c+')" stroke-width="20" stroke-dasharray="'+Math.min(len+0.9,C).toFixed(2)+' '+Math.max(0,C-len-0.9).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 70 70)"></circle>';off+=len;
-    legend+='<div class="leg pen-leg pen-clickable" data-seg="'+i+'" data-action="penF-open" data-id="'+w.id+'" data-plan="'+penFEsc(r.plan)+'" role="button" tabindex="0" aria-label="'+penFEsc(r.plan+", "+penFMoney(r.amt)+", "+Math.round(frac*100)+"% of the total, open the appointees on this plan")+'"><span class="dot" style="background:var('+c+')"></span><span class="lg-main">'+r.plan+'</span><span class="lg-meta">'+penFMoney(r.amt)+' · '+Math.round(frac*100)+'%</span></div>';
+  rows.forEach(function(r,i){var frac=r.amt/tot,len=frac*C,c=penOColorOf(r.plan);
+    arcs+='<circle class="w02-seg" data-seg="'+i+'" cx="70" cy="70" r="'+R+'" fill="none" stroke="var('+c+')" stroke-width="20" stroke-dasharray="'+Math.min(len+0.9,C).toFixed(2)+' '+Math.max(0,C-len-0.9).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 70 70)"></circle>';off+=len;
+    legend+='<div class="leg w02-leg w02-clickable" data-seg="'+i+'" data-action="penO-open" data-id="'+w.id+'" data-plan="'+penOEsc(r.plan)+'" role="button" tabindex="0" aria-label="'+penOEsc(r.plan+", "+penOMoney(r.amt)+", "+Math.round(frac*100)+"% of the total, open the appointees on this plan")+'"><span class="dot" style="background:var('+c+')"></span><span class="lg-main">'+r.plan+'</span><span class="lg-meta">'+penOMoney(r.amt)+' · '+Math.round(frac*100)+'%</span></div>';
   });
-  return '<div class="pen-pie"><div class="pie-wrap row"><svg class="donut" viewBox="0 0 140 140" width="200" height="200" aria-hidden="true">'+arcs+'<text x="70" y="67" text-anchor="middle" class="donut-c1">'+penFMoney(tot)+'</text><text x="70" y="86" text-anchor="middle" class="donut-c2">a year</text></svg>'+
+  return '<div class="w02-pie"><div class="pie-wrap row"><svg class="donut" viewBox="0 0 140 140" width="200" height="200" aria-hidden="true">'+arcs+'<text x="70" y="67" text-anchor="middle" class="donut-c1">'+penOMoney(tot)+'</text><text x="70" y="86" text-anchor="middle" class="donut-c2">a year</text></svg>'+
     '<div class="legend-col"><div class="legend-head"><span class="legend-hd">Annual contribution by plan</span></div><div class="legend" style="max-height:200px">'+legend+'</div></div></div></div>';
 }
 
@@ -5718,13 +5350,13 @@ function penFPieChart(w){
    dots and pie segments, a group total under each district. Values live as text
    (sr-only per bar + visible group totals). Every bar drills to that plan AND
    that district. Built in her bar language: warm-neutral tracks, amethyst fills. */
-function penFGroupedBar(w){
-  var d=penFDist(w);
-  var dists=(d==="All Districts")?PENF_DISTRICTS.slice(1):[d];
-  var data=penFFiltered(w);
-  if(!data.length)return '<div class="pen-chart-empty">'+ICON("bar_chart")+'<span>Nothing to chart for '+penFDistLabel(w)+'.</span></div>';
+function penOGroupedBar(w){
+  var d=penODist(w);
+  var dists=(d==="All Districts")?PENO_DISTRICTS.slice(1):[d];
+  var data=penOFiltered(w);
+  if(!data.length)return '<div class="w02-chart-empty">'+ICON("bar_chart")+'<span>Nothing to chart for '+penODistLabel(w)+'.</span></div>';
   var max=1,groups=dists.map(function(dn){
-    var plans=PENF_PLAN_ORDER.map(function(p){
+    var plans=PENO_PLAN_ORDER.map(function(p){
       var amt=0,count=0;
       data.forEach(function(a){if(a.dist===dn&&a.plan===p){amt+=a.amt;count++;}});
       return {plan:p,amt:amt,count:count};
@@ -5738,124 +5370,123 @@ function penFGroupedBar(w){
     var bars=g.plans.map(function(x){
       seen[x.plan]=true;
       var hp=Math.max(4,Math.round(x.amt/max*100));
-      var lbl=x.plan+", "+g.dist+": "+penFMoney(x.amt)+" a year, "+x.count+" appointee"+(x.count===1?"":"s");
-      return '<button class="penf-gbar pen-clickable" data-action="penF-open" data-id="'+w.id+'" data-plan="'+penFEsc(x.plan)+'" data-dist="'+penFEsc(g.dist)+'" data-tip="'+penFEsc(lbl+". Open the appointees on this plan in this district.")+'" data-tip-plain aria-label="'+penFEsc(lbl+", open the appointees on this plan in this district")+'">'+
-        '<span class="penf-gfill" style="height:'+hp+'%;background:var('+penFColorOf(x.plan)+')" aria-hidden="true"></span>'+
+      var lbl=x.plan+", "+g.dist+": "+penOMoney(x.amt)+" a year, "+x.count+" appointee"+(x.count===1?"":"s");
+      return '<button class="w02-gbar w02-clickable" data-action="penO-open" data-id="'+w.id+'" data-plan="'+penOEsc(x.plan)+'" data-dist="'+penOEsc(g.dist)+'" data-tip="'+penOEsc(lbl+". Open the appointees on this plan in this district.")+'" data-tip-plain aria-label="'+penOEsc(lbl+", open the appointees on this plan in this district")+'">'+
+        '<span class="w02-gfill" style="height:'+hp+'%;background:var('+penOColorOf(x.plan)+')" aria-hidden="true"></span>'+
         '<span class="sr-only">'+lbl+'.</span>'+
       '</button>';
     }).join("");
-    return '<div class="penf-ggroup"><div class="penf-gplot">'+bars+'</div><div class="penf-gx"><span class="penf-gx-d">'+g.dist+'</span><span class="penf-gx-t">'+penFMoney(g.tot)+'</span></div></div>';
+    return '<div class="w02-ggroup"><div class="w02-gplot">'+bars+'</div><div class="w02-gx"><span class="w02-gx-d">'+g.dist+'</span><span class="w02-gx-t">'+penOMoney(g.tot)+'</span></div></div>';
   }).join("");
-  PENF_PLAN_ORDER.forEach(function(p){
-    if(seen[p])legend+='<span class="leg penf-gleg"><span class="dot" style="background:var('+penFColorOf(p)+')"></span><span class="lg-main">'+p+'</span></span>';
+  PENO_PLAN_ORDER.forEach(function(p){
+    if(seen[p])legend+='<span class="leg w02-gleg"><span class="dot" style="background:var('+penOColorOf(p)+')"></span><span class="lg-main">'+p+'</span></span>';
   });
-  return '<div class="penf-gwrap"><div class="penf-grow" role="img" aria-label="Annual contribution by district, one bar per plan">'+cols+'</div><div class="penf-glegend" aria-hidden="true">'+legend+'</div></div>';
+  return '<div class="w02-gwrap"><div class="w02-grow" role="img" aria-label="Annual contribution by district, one bar per plan">'+cols+'</div><div class="w02-glegend" aria-hidden="true">'+legend+'</div></div>';
 }
-function penFChart(w,which){return (which==="gbar")?penFGroupedBar(w):penFPieChart(w);}
+function penOChart(w,which){return (which==="gbar")?penOGroupedBar(w):penOPieChart(w);}
 
 /* ---- Detail (xwide): Jo's synced two panels. Table always LEFT, active chart
    RIGHT under the header's 2-way toggle. Both read the SAME filtered, sorted data. */
-function penFFull(w){
+function penOFull(w){
   var c=w.penChartL||"pie";
-  return '<div class="dep-full pen-full">'+
-    '<div class="dep-col pen-col"><div class="dep-col-h">Annual contribution by plan</div>'+penFTable(w,false)+'</div>'+
-    '<div class="dep-col pen-col pen-col-chart"><div class="dep-col-h">'+((c==="gbar")?"By district and plan":"Share of total")+'</div><div class="pen-chartwrap">'+penFChart(w,c)+'</div></div>'+
+  return '<div class="dep-full w02-full">'+
+    '<div class="dep-col w02-col"><div class="dep-col-h">Annual contribution by plan</div>'+penOTable(w,false)+'</div>'+
+    '<div class="dep-col w02-col w02-col-chart"><div class="dep-col-h">'+((c==="gbar")?"By district and plan":"Share of total")+'</div><div class="w02-chartwrap">'+penOChart(w,c)+'</div></div>'+
   '</div>';
 }
 
 /* ---- Glance ---- */
-function penFGlance(w){
-  if(w.state==="empty"||!penFFiltered(w).length)return '<div class="kpi-row"><div class="kpi-num"><div class="dep-hd-kpigrp"><span class="metric-value" style="font-size:20px;color:var(--txt-subtle)">No appointments</span></div><div class="gl-sub"><span class="pen-caption">no active pension appointments</span></div></div></div>';
-  var tot=penFTotal(w),na=penFApptCount(w),np=penFPlanCount(w),d=penFDist(w),lead=(d==="All Districts")?"all districts":d.toLowerCase();
+function penOGlance(w){
+  if(w.state==="empty"||!penOFiltered(w).length)return '<div class="kpi-row"><div class="kpi-num"><div class="dep-hd-kpigrp"><span class="metric-value" style="font-size:20px;color:var(--txt-subtle)">No appointments</span></div><div class="gl-sub"><span class="w02-caption">no active pension appointments</span></div></div></div>';
+  var tot=penOTotal(w),na=penOApptCount(w),np=penOPlanCount(w),d=penODist(w),lead=(d==="All Districts")?"all districts":d.toLowerCase();
   return '<div class="kpi-row"><div class="kpi-num">'+
-    '<div class="dep-hd-kpigrp"><span class="metric-value">'+penFMoney(tot)+'</span>'+penFBadge(w)+'</div>'+
-    ''+
-    '<span class="sr-only">Annual pension contribution '+penFMoney(tot)+' across '+np+' plans and '+na+' active appointees, '+lead+'.</span>'+
+    '<div class="dep-hd-kpigrp"><span class="metric-value">'+penOMoney(tot)+'</span>'+penOBadge(w)+'</div>'+
+    '<div class="gl-sub"><span class="w02-caption">per year across '+np+' plan'+(np===1?"":"s")+', '+lead+'</span></div>'+
+    '<span class="sr-only">Annual pension contribution '+penOMoney(tot)+' across '+np+' plans and '+na+' active appointees, '+lead+'.</span>'+
   '</div></div>';
 }
 
 /* ---- states ---- */
-function penFEmpty(w){
-  if(w.size==="kpi")return '<div class="kpi-row"><div class="kpi-num"><div class="dep-hd-kpigrp"><span class="metric-value" style="font-size:20px;color:var(--txt-subtle)">No appointments</span></div><div class="gl-sub"><span class="pen-caption">no active pension appointments</span></div></div></div>';
-  return '<div class="state pen-empty" data-kind="empty">'+ICON("diversity_3")+'<div class="state-title">No active pension appointments</div><div class="state-sub">Once clergy are appointed to a pension plan in the Pension Billing module, their annual contributions will appear here by plan.</div></div>';
+function penOEmpty(w){
+  if(w.size==="kpi")return '<div class="kpi-row"><div class="kpi-num"><div class="dep-hd-kpigrp"><span class="metric-value" style="font-size:20px;color:var(--txt-subtle)">No appointments</span></div><div class="gl-sub"><span class="w02-caption">no active pension appointments</span></div></div></div>';
+  return '<div class="state w02-empty" data-kind="empty">'+ICON("diversity_3")+'<div class="state-title">No active pension appointments</div><div class="state-sub">Once clergy are appointed to a pension plan in the Pension Billing module, their annual contributions will appear here by plan.</div></div>';
 }
-function penFSkeleton(){var rows="";[92,70,54,40,30].forEach(function(wd){rows+='<div class="pen-sk-row"><span class="sk" style="width:150px;height:12px;border-radius:4px"></span><span class="sk" style="flex:1;height:12px;border-radius:4px"></span><span class="sk" style="width:'+wd+'px;height:12px;border-radius:4px"></span></div>';});return '<div class="pen-skel">'+rows+'</div>';}
+function penOSkeleton(){var rows="";[92,70,54,40,30].forEach(function(wd){rows+='<div class="w02-sk-row"><span class="sk" style="width:150px;height:12px;border-radius:4px"></span><span class="sk" style="flex:1;height:12px;border-radius:4px"></span><span class="sk" style="width:'+wd+'px;height:12px;border-radius:4px"></span></div>';});return '<div class="w02-skel">'+rows+'</div>';}
 
-/* ---- entry point (single penFContent) ----
+/* ---- entry point (single penOContent) ----
    Glance (kpi) = KPI card; Explore (wide) = header + ONE view via the 3-way
    toggle (Table default); Detail (xwide) = header + her synced two panels. */
-function penFContent(w){
-  if(w.state==="empty")return penFEmpty(w);
-  if(w.size==="kpi")return penFGlance(w);
-  if(!penFFiltered(w).length&&w.dataset==="none")return penFEmpty(w);
-  if(w.penloading)return penFHeader(w,"loading")+penFSkeleton();
-  if(w.size==="xwide")return penFHeader(w)+penFFull(w);
+function penOContent(w){
+  if(w.state==="empty")return penOEmpty(w);
+  if(w.size==="kpi")return penOGlance(w);
+  if(!penOFiltered(w).length&&w.dataset==="none")return penOEmpty(w);
+  if(w.penloading)return penOHeader(w,"loading")+penOSkeleton();
+  if(w.size==="xwide")return penOHeader(w)+penOFull(w);
   var v=w.penViewM||"table";
-  if(v==="table")return penFHeader(w)+'<div class="pen-body">'+penFTable(w,true)+'</div>';
-  return penFHeader(w)+'<div class="pen-chartwrap penf-explore-chart">'+penFChart(w,v)+'</div>';
+  if(v==="table")return penOHeader(w)+'<div class="w02-body">'+penOTable(w,true)+'</div>';
+  return penOHeader(w)+'<div class="w02-chartwrap w02-explore-chart">'+penOChart(w,v)+'</div>';
 }
 
 /* ---- drill focus overlay: plan (and optionally plan+district) -> appointees.
    Jo's penDetailModalHTML: report-style list, district filter carried through;
    a grouped-bar drill scopes to that plan AND district. Export here exports THIS
-   appointee detail (her two-export contract). modal.type "penFdetail". */
-function penFDetailModalHTML(){
+   appointee detail (her two-export contract). modal.type "penOdetail". */
+function penODetailModalHTML(){
   var w=find(modal.id);if(!w)return "";
-  var plan=modal.plan,dscope=modal.dist||null,list=penFApptsFor(w,plan,dscope),tot=list.reduce(function(s,a){return s+a.amt;},0);
-  var d=dscope||penFDist(w),sub=plan+(d==="All Districts"?"":" · "+d);
+  var plan=modal.plan,dscope=modal.dist||null,list=penOApptsFor(w,plan,dscope),tot=list.reduce(function(s,a){return s+a.amt;},0);
+  var d=dscope||penODist(w),sub=plan+(d==="All Districts"?"":" · "+d);
   var cols=["Appointee","Church / organisation","District","Annual amount"];
-  var head='<div class="wt-row wt-head pen-drow pen-dhead">'+cols.map(function(c,i){return '<span class="pen-dc pen-dc'+i+'">'+c+'</span>';}).join("")+'</div>';
+  var head='<div class="wt-row wt-head w02-drow w02-dhead">'+cols.map(function(c,i){return '<span class="w02-dc w02-dc'+i+'">'+c+'</span>';}).join("")+'</div>';
   var body;
   if(list.length){
     body=list.map(function(a){
-      return '<div class="wt-row pen-drow">'+
-        '<span class="pen-dc pen-dc0">'+a.name+'</span>'+
-        '<span class="pen-dc pen-dc1">'+a.org+'</span>'+
-        '<span class="pen-dc pen-dc2">'+a.dist+'</span>'+
-        '<span class="pen-dc pen-dc3 pen-dc-amt">'+penFMoney(a.amt)+'</span></div>';
+      return '<div class="wt-row w02-drow">'+
+        '<span class="w02-dc w02-dc0">'+a.name+'</span>'+
+        '<span class="w02-dc w02-dc1">'+a.org+'</span>'+
+        '<span class="w02-dc w02-dc2">'+a.dist+'</span>'+
+        '<span class="w02-dc w02-dc3 w02-dc-amt">'+penOMoney(a.amt)+'</span></div>';
     }).join("");
   }else{
     body='<div class="state" data-kind="empty">'+ICON("diversity_3")+'<div class="state-title">No appointees on this plan</div><div class="state-sub">Nothing matches this plan for '+d+'.</div></div>';
   }
-  var foot=list.length?'<div class="dep-total pen-dtotal"><span>'+list.length+' appointee'+(list.length===1?"":"s")+'</span><span>'+penFMoney(tot)+'</span></div>':'';
-  return '<div class="modal-backdrop" data-action="penF-detail-close"><div class="modal modal-wide pen-detail-modal" data-action="stop" role="dialog" aria-modal="true" aria-label="Pension plan appointees, detail">'+
-    '<div class="modal-h pen-detail-h"><span class="modal-title"><span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">diversity_3</span>Pension Plan: Appointees</span><span class="pen-dsub">'+penFEsc(sub)+'</span><span class="pen-dh-spacer"></span><button class="btn naked sm" data-action="penF-export" data-id="'+w.id+'" data-plan="'+penFEsc(plan)+'">'+ICON("download")+'Export to Excel</button><button class="iconbtn" data-action="penF-detail-close" aria-label="Close">'+ICON("close")+'</button></div>'+
-    '<div class="modal-b pen-detail-b"><div class="pen-detail-scroll">'+head+body+'</div>'+foot+'</div>'+
-    '<div class="modal-f"><button class="btn primary sm" data-action="penF-detail-close">Close</button></div></div></div>';
+  var foot=list.length?'<div class="dep-total w02-dtotal"><span>'+list.length+' appointee'+(list.length===1?"":"s")+'</span><span>'+penOMoney(tot)+'</span></div>':'';
+  return '<div class="modal-backdrop" data-action="penO-detail-close"><div class="modal modal-wide w02-detail-modal" data-action="stop" role="dialog" aria-modal="true" aria-label="Pension plan appointees, detail">'+
+    '<div class="modal-h w02-detail-h"><span class="modal-title"><span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">diversity_3</span>Pension Plan: Appointees</span><span class="w02-dsub">'+penOEsc(sub)+'</span><span class="w02-dh-spacer"></span><button class="btn naked sm" data-action="penO-export" data-id="'+w.id+'" data-plan="'+penOEsc(plan)+'">'+ICON("download")+'Export to Excel</button><button class="iconbtn" data-action="penO-detail-close" aria-label="Close">'+ICON("close")+'</button></div>'+
+    '<div class="modal-b w02-detail-b"><div class="w02-detail-scroll">'+head+body+'</div>'+foot+'</div>'+
+    '<div class="modal-f"><button class="btn primary sm" data-action="penO-detail-close">Close</button></div></div></div>';
 }
 
-// ===== HANDLERS (Jo's penHandleClick / penPopContent, adapted to penF-) =====
 /* Loading: only a district change fetches new data (transient penloading +
    skeleton). Sort, view toggles and drill are client re-renders, never a load. */
-function penFLoad(w){w.penloading=true;clearTimeout(timers["penF-"+w.id]);timers["penF-"+w.id]=setTimeout(function(){w.penloading=false;w.updated="just now";render();},800);}
-/* --- click handler branch: if(a&&a.indexOf("penF-")===0&&penFHandleClick(a,id,t))return; */
-function penFHandleClick(a,id,t){
-  if(a==="penF-dist"){pop=(pop&&pop.type==="penF-dist"&&pop.id===id)?null:{type:"penF-dist",id:id};render();return true;}
-  if(a==="penF-set-dist"){var wd=find(id);if(wd){var nv=t.getAttribute("data-v");if(penFDist(wd)!==nv){wd.penDist=nv;penFLoad(wd);setStatus("Showing pension plans for "+nv+".");}}pop=null;render();return true;}
-  if(a==="penF-sort"){var ws=find(id);if(ws){var k=t.getAttribute("data-k"),parts=(ws.penSort||"amt-desc").split("-");ws.penSort=(parts[0]===k)?(k+"-"+(parts[1]==="desc"?"asc":"desc")):(k+"-"+(k==="plan"?"asc":"desc"));}pop=null;render();return true;}
-  if(a==="penF-view"){var wv=find(id);if(wv)wv.penViewM=t.getAttribute("data-v");pop=null;render();return true;}
-  if(a==="penF-chart"){var wc=find(id);if(wc)wc.penChartL=t.getAttribute("data-v");pop=null;render();return true;}
-  if(a==="penF-open"){var wo=find(id);if(!wo)return true;modal={type:"penFdetail",id:id,plan:t.getAttribute("data-plan"),dist:t.getAttribute("data-dist")||null};modalMounted=false;pop=null;render();return true;}
-  if(a==="penF-detail-close"){modal=null;pop=null;render();return true;}
-  if(a==="penF-export"){pop=null;setStatus("Exporting the appointees on "+t.getAttribute("data-plan")+" to Excel…");return true;}
+function penOLoad(w){w.penloading=true;clearTimeout(timers["penO-"+w.id]);timers["penO-"+w.id]=setTimeout(function(){w.penloading=false;w.updated="just now";render();},800);}
+function penOHandleClick(a,id,t){
+  if(a==="penO-dist"){pop=(pop&&pop.type==="penO-dist"&&pop.id===id)?null:{type:"penO-dist",id:id};render();return true;}
+  if(a==="penO-set-dist"){var wd=find(id);if(wd){var nv=t.getAttribute("data-v");if(penODist(wd)!==nv){wd.penDist=nv;penOLoad(wd);setStatus("Showing pension plans for "+nv+".");}}pop=null;render();return true;}
+  if(a==="penO-sort"){var ws=find(id);if(ws){var k=t.getAttribute("data-k"),parts=(ws.penSort||"amt-desc").split("-");ws.penSort=(parts[0]===k)?(k+"-"+(parts[1]==="desc"?"asc":"desc")):(k+"-"+(k==="plan"?"asc":"desc"));}pop=null;render();return true;}
+  if(a==="penO-view"){var wv=find(id);if(wv)wv.penViewM=t.getAttribute("data-v");pop=null;render();return true;}
+  if(a==="penO-chart"){var wc=find(id);if(wc)wc.penChartL=t.getAttribute("data-v");pop=null;render();return true;}
+  if(a==="penO-open"){var wo=find(id);if(!wo)return true;modal={type:"penOdetail",id:id,plan:t.getAttribute("data-plan"),dist:t.getAttribute("data-dist")||null};modalMounted=false;pop=null;render();return true;}
+  if(a==="penO-detail-close"){modal=null;pop=null;render();return true;}
+  if(a==="penO-export"){pop=null;setStatus("Exporting the appointees on "+t.getAttribute("data-plan")+" to Excel…");return true;}
   return false;
 }
-/* --- popContent() branch: if(pop.type==="penF-dist")return penFPopContent(); */
-function penFPopContent(){
-  if(pop.type==="penF-dist"){var w=find(pop.id),cur=penFDist(w);
-    return '<div class="cap">District</div>'+PENF_DISTRICTS.map(function(o){var on=cur===o;return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-action="penF-set-dist" data-id="'+w.id+'" data-v="'+penFEsc(o)+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+o+'</button>';}).join("");}
+function penOPopContent(){
+  if(pop.type==="penO-dist"){var w=find(pop.id),cur=penODist(w);
+    return '<div class="cap">District</div>'+PENO_DISTRICTS.map(function(o){var on=cur===o;return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-action="penO-set-dist" data-id="'+w.id+'" data-v="'+penOEsc(o)+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+o+'</button>';}).join("");}
   return "";
 }
-/* --- triggerSelector() branch: if(pop.type==="penF-dist")return '[data-action="penF-dist"][data-id="'+pop.id+'"]'; */
-/* --- renderModal() branch: if(modal.type==="penFdetail"){mr.innerHTML=penFDetailModalHTML();return;} */
 
 // ===== REGISTRY (appended after Jo's pen entries in the dashboards array) =====
 /*
-  {id:"penF", title:"Pension Plans (MB updated)",                     kind:"pension-mb", size:"wide",  tiers:["kpi","wide","xwide"], penDist:"All Districts", penSort:"amt-desc", penViewM:"table", penChartL:"pie", updated:"just now", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-  {id:"penF2",title:"Pension Plans (MB updated, Detail view)",        kind:"pension-mb", size:"xwide", tiers:["kpi","wide","xwide"], penDist:"All Districts", penSort:"amt-desc", penViewM:"table", penChartL:"pie", updated:"just now"},
-  {id:"penF3",title:"Pension Plans (MB updated, no active appointments)", kind:"pension-mb", size:"wide", tiers:["kpi","wide","xwide"], state:"empty", dataset:"none", updated:"just now"},
+  {id:"penO", title:"Pension Plans",                     kind:"pension", size:"wide",  tiers:["kpi","wide","xwide"], penDist:"All Districts", penSort:"amt-desc", penViewM:"table", penChartL:"pie", updated:"just now", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
+  {id:"penO2",title:"Pension Plans",        kind:"pension", size:"xwide", tiers:["kpi","wide","xwide"], penDist:"All Districts", penSort:"amt-desc", penViewM:"table", penChartL:"pie", updated:"just now"},
+  {id:"penO3",title:"Pension Plans", kind:"pension", size:"wide", tiers:["kpi","wide","xwide"], state:"empty", dataset:"none", updated:"just now"},
 */
+  WIDGETS.register("pension",{content:penOContent,about:function(w){return {h:w.title,b:PENO_ABOUT};},click:function(a,id,t){return !!(a&&a.indexOf("penO-")===0&&penOHandleClick(a,id,t));},pops:{"penO-dist":{content:penOPopContent,trigger:function(){return '[data-action="penO-dist"][data-id="'+pop.id+'"]';}}},modals:{penOdetail:penODetailModalHTML}});
+/* ===== end W02 Pension Plans V2 ===== */
 
+
+  /* ===== P2/P3 WIDGET BLOCKS (pension, remittance, gifts, loans) ===== */
 /* =====================================================================
    Remittance Pledges  (prefix: rem, kind:"remittance")
    =====================================================================
@@ -7544,7 +7175,6 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
      the pre-edit snapshot.
   ===================================================================== */
   var CMPNOTE_={
-    W02:{h:"Ours is her Pension widget plus a grouped bar by district and an all-districts aggregate.",rows:["Three views under a Table / Pie / By district toggle, Table the default; Detail shows table and chart as synced panels.","New grouped bar by district: district groups on the x-axis, one bar per plan, a group total, and each bar drills.","An explicit All Districts aggregate is added, and a specific district narrows to its own total and appointee count.","A districts ROSTER view was cut by owner instruction, so a stale roster state falls back to Table.","The appointee drill keeps her 960 pixel modal, but the count and total become a 190 pixel rail pinned right.","Parity kept: the district chip, the sortable plan table, the amethyst plan ramp and the skeleton on a district change only."],open:"The Pension Billing drill has no target URL, export is a stub, and the Charge column shows mock names because the API returns an empty string."},
     W03:{h:"Ours is her Payroll widget with a standardised period set, two independent filters and a nested drill.",rows:["Her one combined scope chip becomes THREE: Period, Distribution and Pay type, which combine freely.","The by-pay-type grouping view is removed outright, along with its sort keys and badge column.","Period presets are standardised smallest first, with the Custom from and to row kept first in the popover.","The drill goes nested and in-widget: distribution, then the employees paid in it, then that person's own pay types.","A row-level payroll permission gate makes distribution rows inert for viewers without it; amounts still show.","Default sort moves to amount descending, and the sort control keeps only the name and amount keys.","One view-scoped Export to Excel joins the card menu, exporting whatever the filters currently resolve to."],open:"Every export is an honest stub; no export backend has been decided."},
     W04:{h:"Ours repositions her Remittance widget as the EXCEPTION side of the pledge pair; W17 owns goal progress.",rows:["The headline becomes the behind-pace shortfall in money, summed PER ROW, with an N of M behind pace pill.","Her three pace cards keep their shape but Behind now means any shortfall above zero, not 30 days behind.","The single receipts-through cutoff becomes a window: the end drives all pacing, the start only bounds scope.","Receipts-only activities move to a footer line, never a card, and are excluded from the exception headline.","The drill becomes a screen down to each pledge's own payment schedule, naming the FIRST SKIPPED date.","The total row covers every activity in scope, including rows a pace-card filter hides, and the caption says so.","Parity kept: her header, chip, view toggle, modal shell, pacing bar anatomy and the skeleton on a range change only."],open:"Receipts-only rows still have no backend query path; sign-off row 7 is open and was waived for the build only."},
     W05:{h:"Ours is her AR widget corrected and extended by three owner rounds.",rows:["Five aging bands become SIX, and Current now means not yet due rather than anything up to 30 days past.","Overdue counts days above zero, so money 1 to 30 days past due finally reaches the headline figure.","A zero band renders as an inert row instead of collapsing into a note, so no real band can look absent.","Top overdue customers is paged 7 per page and sortable by biggest amount or oldest balance.","The legacy pie returns as a third view, and the view toggle now renders at Detail too.","The drill modal gains a per-row checkbox and a Confirm that prints a move-to-unposted intent note.","The fixture grows from 8 invoices to 23 so every band and every pager page is demonstrable."],open:"The overdue pill tooltip still reads more than 30 days past due while the maths is days above zero, carried as built."},
@@ -7560,7 +7190,6 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
   };
   /* number, display name, HER kind + her state, OUR kind + our state */
   var CMP_ROWS=[
-    ["W02","Pension Plans","pension-mb",{penDist:"All Districts",penSort:"amt-desc",penViewM:"table",penChartL:"pie"},"pension-oc",{penDist:"All Districts",penSort:"amt-desc",penViewM:"table",penChartL:"pie"}],
     ["W03","Payroll Distributions","payroll-mb",{range:"TM",view:"table",prScope:"all",prSort:"amt-desc"},"payroll-oc",{range:"TM",view:"table",prDist:"all",prPT:"all",prEmpOpen:{},prSort:"amt-desc"}],
     ["W04","Remittance Pledges","remittance-mb",{remSort:"seq",view:"table"},"remittance-oc",{range:"year",view:"table",remSort:"seq",paceF:"all",updated:"just now"}],
     ["W05","Receivable Invoices Outstanding","receivables-mb",{arFRc:"All",arFSource:"All",arFGroup:"aging",arFSort:"total-desc"},"receivables-oc",{arORc:"All",arOSource:"All",arOGroup:"aging",arOSort:"total-desc",arOCustPage:0}],
@@ -7721,15 +7350,12 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
       {id:"insO3",title:"Insurance Billing Plans (OC, no plans set up)",      kind:"insurance-oc", size:"wide",  tiers:["kpi","wide","xwide"], state:"empty", dataset:"none", insType:"All", updated:"just now"},
       {id:"insO4",title:"Insurance Billing Plans (OC, Dental filter, none set up)", kind:"insurance-oc", size:"wide",  tiers:["kpi","wide","xwide"], dataset:"nodental", insType:"Dental", insSort:"count-desc", insView:"table", insExpanded:{}, updated:"just now"},
       */
-      {id:"penF", title:"Pension Plans",                     kind:"pension-mb", size:"wide",  tiers:["kpi","wide","xwide"], penDist:"All Districts", penSort:"amt-desc", penViewM:"table", penChartL:"pie", updated:"just now", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-      {id:"penF_k", title:"Pension Plans (Glance)",                     kind:"pension-mb", size:"kpi",  tiers:["kpi","wide","xwide"], penDist:"All Districts", penSort:"amt-desc", penViewM:"table", penChartL:"pie", updated:"just now", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-      {id:"penF2",title:"Pension Plans (Detail view)",        kind:"pension-mb", size:"xwide", tiers:["kpi","wide","xwide"], penDist:"All Districts", penSort:"amt-desc", penViewM:"table", penChartL:"pie", updated:"just now"},
-      {id:"penF3",title:"Pension Plans (no active appointments)", kind:"pension-mb", size:"wide", tiers:["kpi","wide","xwide"], state:"empty", dataset:"none", updated:"just now"},
-      {id:"penO", title:"Pension Plans (OC)",                     kind:"pension-oc", size:"wide",  tiers:["kpi","wide","xwide"],penDist:"All Districts", penSort:"amt-desc", penViewM:"table", penChartL:"pie", updated:"just now", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-      /* (OC) driver fixtures for penO: state-variant instances read by _port-drivers/w*.driver.js only; NOT rendered as cards.
-      {id:"penO_k", title:"Pension Plans (OC, Glance)",                     kind:"pension-oc", size:"kpi",  tiers:["kpi","wide","xwide"], penDist:"All Districts", penSort:"amt-desc", penViewM:"table", penChartL:"pie", updated:"just now", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-      {id:"penO2",title:"Pension Plans (OC, Detail view)",        kind:"pension-oc", size:"xwide", tiers:["kpi","wide","xwide"], penDist:"All Districts", penSort:"amt-desc", penViewM:"table", penChartL:"pie", updated:"just now"},
-      {id:"penO3",title:"Pension Plans (OC, no active appointments)", kind:"pension-oc", size:"wide", tiers:["kpi","wide","xwide"], state:"empty", dataset:"none", updated:"just now"},
+      /* W02 Pension Plans */
+      {id:"penO", title:"Pension Plans",                     kind:"pension", size:"wide",  tiers:["kpi","wide","xwide"],penDist:"All Districts", penSort:"amt-desc", penViewM:"table", penChartL:"pie", updated:"just now", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
+      {id:"penO_k", title:"Pension Plans",                     kind:"pension", size:"kpi",  tiers:["kpi","wide","xwide"], penDist:"All Districts", penSort:"amt-desc", penViewM:"table", penChartL:"pie", updated:"just now", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
+      {id:"penO2",title:"Pension Plans",        kind:"pension", size:"xwide", tiers:["kpi","wide","xwide"], penDist:"All Districts", penSort:"amt-desc", penViewM:"table", penChartL:"pie", updated:"just now"},
+      /* W02 driver fixture (empty state), not rendered as a card:
+      {id:"penO3",title:"Pension Plans", kind:"pension", size:"wide", tiers:["kpi","wide","xwide"], state:"empty", dataset:"none", updated:"just now"},
       */
       /* Remittance Pledges: our finalized W04, additive. kind "remittance-mb", prefix remF. Default view Table (Version A), Pacing bars behind a toggle, per-pledge-term pacing, day-based colour bands. */
       {id:"remF", title:"Remittance Pledges",                 kind:"remittance-mb", size:"wide",  tiers:["kpi","wide","xwide"], remSort:"seq", view:"table", updated:"just now", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
@@ -7812,7 +7438,7 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
     fund:{h:"Spend by fund",b:"How spending breaks down across your restricted and unrestricted funds."},
     signups:{h:"New sign-ups",b:"People who recently joined a group or ministry. The number is the total for the period you choose; the list shows the most recent sign-ups regardless of period."}
   };
-  function aboutOf(w){var wa=WIDGETS.about(w);if(wa)return wa;if(w.kind==="deposits-mb")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest, shown here as a current balance with a comparison delta and a balance trend over time."};if(w.kind==="deposits-oc")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest, shown here as a current balance with a comparison delta and a balance trend over time."};if(w.kind==="deposits")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest."};if(w.kind==="payroll")return {h:w.title,b:"How payroll spend for the selected pay period splits across compensation categories: salary, hourly, benefits, overtime, and similar."};if(w.kind==="bank")return {h:w.title,b:"The current balance of each active bank account, based on unreconciled activity since the last reconciliation. Select one account to see what has moved (deposits, voids, checks, withdrawals, EFT) since then."};if(w.kind==="purchasing")return {h:w.title,b:PUR_ABOUT_BODY};if(w.kind==="pension")return {h:w.title,b:PEN_ABOUT};if(w.kind==="pension-mb")return {h:w.title,b:PENF_ABOUT};if(w.kind==="pension-oc")return {h:w.title,b:PENO_ABOUT};if(w.kind==="payroll-mb")return {h:w.title,b:PRF_ABOUT};if(w.kind==="payroll-oc")return {h:w.title,b:PRO_ABOUT};if(w.kind==="remittance-mb")return {h:w.title,b:REMF_ABOUT};if(w.kind==="remittance-oc")return {h:w.title,b:REMO_ABOUT};if(w.kind==="receivables-mb")return {h:w.title,b:"How much money is currently owed to the organisation in unpaid invoices, and how long those invoices have been outstanding, so staff can prioritise which outstanding amounts need attention first."};if(w.kind==="receivables-oc")return {h:w.title,b:"How much money is currently owed to the organisation in unpaid invoices, and how long those invoices have been outstanding, so staff can prioritise which outstanding amounts need attention first."};if(w.kind==="insurance-mb")return {h:w.title,b:INSF_ABOUT};if(w.kind==="insurance-oc")return {h:w.title,b:INSO_ABOUT};if(w.kind==="gifts")return {h:w.title,b:GFT_ABOUT_BODY};if(w.kind==="remittance")return {h:w.title,b:"How each remittance activity is pacing against its annual pledge: what has come in so far this year versus what was expected by now, and what is still outstanding."};if(w.kind==="loans")return {h:w.title,b:"Every loan that still has a balance owing, grouped by how overdue it is, so you can see the total still out and which borrowers to follow up with."};if(w.kind==="pto-mb")return {h:w.title,b:PTOF_ABOUT};if(w.kind==="loans-mb")return {h:w.title,b:LONF_ABOUT};if(w.kind==="fixedassets-mb")return {h:w.title,b:FAF_ABOUT};if(w.kind==="purchasing-mb")return {h:w.title,b:PURF_ABOUT};if(w.kind==="bank-mb")return {h:w.title,b:BKF_ABOUT};if(w.kind==="payables-mb")return {h:w.title,b:APF_ABOUT};if(w.kind==="gifts-mb")return {h:w.title,b:GPF_ABOUT};return ABOUT[w.id]||{h:w.title,b:"A short, plain-language description of what this widget shows and where its data comes from."};}
+  function aboutOf(w){var wa=WIDGETS.about(w);if(wa)return wa;if(w.kind==="deposits-mb")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest, shown here as a current balance with a comparison delta and a balance trend over time."};if(w.kind==="deposits-oc")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest, shown here as a current balance with a comparison delta and a balance trend over time."};if(w.kind==="deposits")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest."};if(w.kind==="payroll")return {h:w.title,b:"How payroll spend for the selected pay period splits across compensation categories: salary, hourly, benefits, overtime, and similar."};if(w.kind==="bank")return {h:w.title,b:"The current balance of each active bank account, based on unreconciled activity since the last reconciliation. Select one account to see what has moved (deposits, voids, checks, withdrawals, EFT) since then."};if(w.kind==="purchasing")return {h:w.title,b:PUR_ABOUT_BODY};if(w.kind==="payroll-mb")return {h:w.title,b:PRF_ABOUT};if(w.kind==="payroll-oc")return {h:w.title,b:PRO_ABOUT};if(w.kind==="remittance-mb")return {h:w.title,b:REMF_ABOUT};if(w.kind==="remittance-oc")return {h:w.title,b:REMO_ABOUT};if(w.kind==="receivables-mb")return {h:w.title,b:"How much money is currently owed to the organisation in unpaid invoices, and how long those invoices have been outstanding, so staff can prioritise which outstanding amounts need attention first."};if(w.kind==="receivables-oc")return {h:w.title,b:"How much money is currently owed to the organisation in unpaid invoices, and how long those invoices have been outstanding, so staff can prioritise which outstanding amounts need attention first."};if(w.kind==="insurance-mb")return {h:w.title,b:INSF_ABOUT};if(w.kind==="insurance-oc")return {h:w.title,b:INSO_ABOUT};if(w.kind==="gifts")return {h:w.title,b:GFT_ABOUT_BODY};if(w.kind==="remittance")return {h:w.title,b:"How each remittance activity is pacing against its annual pledge: what has come in so far this year versus what was expected by now, and what is still outstanding."};if(w.kind==="loans")return {h:w.title,b:"Every loan that still has a balance owing, grouped by how overdue it is, so you can see the total still out and which borrowers to follow up with."};if(w.kind==="pto-mb")return {h:w.title,b:PTOF_ABOUT};if(w.kind==="loans-mb")return {h:w.title,b:LONF_ABOUT};if(w.kind==="fixedassets-mb")return {h:w.title,b:FAF_ABOUT};if(w.kind==="purchasing-mb")return {h:w.title,b:PURF_ABOUT};if(w.kind==="bank-mb")return {h:w.title,b:BKF_ABOUT};if(w.kind==="payables-mb")return {h:w.title,b:APF_ABOUT};if(w.kind==="gifts-mb")return {h:w.title,b:GPF_ABOUT};return ABOUT[w.id]||{h:w.title,b:"A short, plain-language description of what this widget shows and where its data comes from."};}
   var EMPTY_COPY={deposits:{title:"No deposit accounts",sub:"There are no deposit accounts to show here yet.",cta:"Add account",action:"add-acct"},payroll:{title:"No payroll runs in this range",sub:"There's no payroll history for the selected period yet."},budget:{title:"No budget set up",sub:"Once a budget is entered for this fiscal year, actuals will be compared against it here.",cta:"Set up budget",action:"add-budget"}};
   var ERROR_COPY={deposits:{title:"Couldn’t load balances",sub:"Something went wrong fetching account data."},payroll:{title:"Couldn’t load payroll data",sub:"Something went wrong fetching payroll history."},budget:{title:"Couldn’t load budget data",sub:"Something went wrong fetching budget and actual figures."}};
 /* --- Bank Balances additive copy --- */
@@ -10550,12 +10176,9 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(w.kind==="payables")return apContent(w);
     if(w.kind==="insurance")return insContent(w);
     if(w.kind==="fixedassets")return faContent(w);
-    if(w.kind==="pension")return penContent(w);
     if(w.kind==="remittance")return remContent(w);
     if(w.kind==="gifts")return gftContent(w);
     if(w.kind==="loans")return loanContent(w);
-    if(w.kind==="pension-mb")return penFContent(w); // MB variants dispatched BEFORE the generic empty fallback so each renders its own empty state, not the Deposits copy
-    if(w.kind==="pension-oc")return penOContent(w); // MB variants dispatched BEFORE the generic empty fallback so each renders its own empty state, not the Deposits copy
     if(w.kind==="payroll-mb")return prFContent(w);
     if(w.kind==="payroll-oc")return prOContent(w);
     if(w.kind==="remittance-mb")return remFContent(w);
@@ -10614,9 +10237,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
   function popContent(){
     if(!pop)return "";
     var wp=WIDGETS.pop();if(wp!==null)return wp;
-    if(pop.type==="pen-dist")return penPopContent();
-    if(pop.type==="penF-dist")return penFPopContent(); // Pension Plans (MB updated), additive
-    if(pop.type==="penO-dist")return penOPopContent(); // Pension Plans (MB updated), additive
     if(pop.type==="remF-thru"||pop.type==="remF-pacef")return remFPopContent(); // Remittance Pledges (MB updated), additive
     if(pop.type==="remO-thru")return remOPopContent(); // Remittance Pledges (MB updated), additive (V2: receipts window date range)
     if(pop.type==="prF-period"||pop.type==="prF-scope")return prFPopContent(); // Payroll Distributions (MB updated), additive
@@ -10693,7 +10313,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(pop.type==="fa-groupby"||pop.type==="fa-group"||pop.type==="fa-measure")return faPopContent();
     return "";
   }
-  function triggerSelector(){if(!pop)return null;var wt=WIDGETS.trigger();if(wt)return wt;if(pop.type==="arO-rc")return '[data-action="arO-rc"][data-id="'+pop.id+'"]';if(pop.type==="arO-source")return '[data-action="arO-source"][data-id="'+pop.id+'"]';if(pop.type==="penO-dist")return '[data-action="penO-dist"][data-id="'+pop.id+'"]';if(pop.type==="prO-period")return '[data-action="prO-period"][data-id="'+pop.id+'"]';if(pop.type==="prO-scope")return '[data-action="prO-scope"][data-id="'+pop.id+'"]';if(pop.type==="prO-pt")return '[data-action="prO-pt"][data-id="'+pop.id+'"]';if(pop.type==="remO-thru")return '[data-action="remO-thru"][data-id="'+pop.id+'"]';if(pop.type==="wmenu")return '[data-action="wmenu"][data-id="'+pop.id+'"]';if(pop.type==="size")return '[data-action="wsize"][data-id="'+pop.id+'"]';if(pop.type==="switcher")return '[data-action="switcher"]';if(pop.type==="save")return '[data-action="savemenu"]';if(pop.type==="depfilter")return '[data-action="depfilter"][data-id="'+pop.id+'"]';if(pop.type==="advfilter")return '[data-action="advfilter"][data-id="'+pop.id+'"]';if(pop.type==="cmenu"||pop.type==="companydd")return '[data-action="cmenu"][data-id="'+pop.id+'"]';if(pop.type==="rangemenu")return '[data-action="rangemenu"][data-id="'+pop.id+'"]';if(pop.type==="prperiod")return '[data-action="prperiod"][data-id="'+pop.id+'"]';if(pop.type==="winfo")return '[data-action="winfo"][data-id="'+pop.id+'"]';if(pop.type==="fa-groupby")return '[data-action="fa-groupby"][data-id="'+pop.id+'"]';if(pop.type==="fa-group")return '[data-action="fa-group"][data-id="'+pop.id+'"]';if(pop.type==="fa-measure")return '[data-action="fa-measure"][data-id="'+pop.id+'"]';if(pop.type==="ins-type")return '[data-action="ins-type"][data-id="'+pop.id+'"]';if(pop.type==="ap-due")return '[data-action="ap-due"][data-id="'+pop.id+'"]';if(pop.type==="pr-scope")return '[data-action="pr-scope"][data-id="'+pop.id+'"]';if(pop.type==="pto-year")return '[data-action="pto-year"][data-id="'+pop.id+'"]';if(pop.type==="pto-view")return '[data-action="pto-view"][data-id="'+pop.id+'"]';if(pop.type==="arF-rc")return '[data-action="arF-rc"][data-id="'+pop.id+'"]';if(pop.type==="arF-source")return '[data-action="arF-source"][data-id="'+pop.id+'"]';if(pop.type==="ar-rc")return '[data-action="ar-rc"][data-id="'+pop.id+'"]';if(pop.type==="ar-source")return '[data-action="ar-source"][data-id="'+pop.id+'"]';if(pop.type==="pur-status")return '[data-action="pur-status"][data-id="'+pop.id+'"]';if(pop.type==="pur-path")return '[data-action="pur-path"][data-id="'+pop.id+'"]';if(pop.type==="bank-acct")return '[data-action="bank-acct"][data-id="'+pop.id+'"]';if(pop.type==="expmenu")return '[data-action="expmenu"][data-id="'+pop.id+'"]';if(pop.type==="pen-dist")return '[data-action="pen-dist"][data-id="'+pop.id+'"]';if(pop.type==="penF-dist")return '[data-action="penF-dist"][data-id="'+pop.id+'"]';if(pop.type==="prF-period")return '[data-action="prF-period"][data-id="'+pop.id+'"]';if(pop.type==="prF-scope")return '[data-action="prF-scope"][data-id="'+pop.id+'"]';if(pop.type==="rem-thru")return '[data-action="rem-thru"][data-id="'+pop.id+'"]';if(pop.type==="remF-thru")return '[data-action="remF-thru"][data-id="'+pop.id+'"]';if(pop.type==="remF-pacef")return '[data-action="remF-pacef"][data-id="'+pop.id+'"]';if(pop.type==="gft-date")return '[data-action="gft-date"][data-id="'+pop.id+'"]';if(pop.type==="gft-purpose")return '[data-action="gft-purpose"][data-id="'+pop.id+'"]';if(pop.type==="loan-type")return '[data-action="loan-type"][data-id="'+pop.id+'"]';if(pop.type==="wfind")return '[data-action="wfind"]';}
+  function triggerSelector(){if(!pop)return null;var wt=WIDGETS.trigger();if(wt)return wt;if(pop.type==="arO-rc")return '[data-action="arO-rc"][data-id="'+pop.id+'"]';if(pop.type==="arO-source")return '[data-action="arO-source"][data-id="'+pop.id+'"]';if(pop.type==="prO-period")return '[data-action="prO-period"][data-id="'+pop.id+'"]';if(pop.type==="prO-scope")return '[data-action="prO-scope"][data-id="'+pop.id+'"]';if(pop.type==="prO-pt")return '[data-action="prO-pt"][data-id="'+pop.id+'"]';if(pop.type==="remO-thru")return '[data-action="remO-thru"][data-id="'+pop.id+'"]';if(pop.type==="wmenu")return '[data-action="wmenu"][data-id="'+pop.id+'"]';if(pop.type==="size")return '[data-action="wsize"][data-id="'+pop.id+'"]';if(pop.type==="switcher")return '[data-action="switcher"]';if(pop.type==="save")return '[data-action="savemenu"]';if(pop.type==="depfilter")return '[data-action="depfilter"][data-id="'+pop.id+'"]';if(pop.type==="advfilter")return '[data-action="advfilter"][data-id="'+pop.id+'"]';if(pop.type==="cmenu"||pop.type==="companydd")return '[data-action="cmenu"][data-id="'+pop.id+'"]';if(pop.type==="rangemenu")return '[data-action="rangemenu"][data-id="'+pop.id+'"]';if(pop.type==="prperiod")return '[data-action="prperiod"][data-id="'+pop.id+'"]';if(pop.type==="winfo")return '[data-action="winfo"][data-id="'+pop.id+'"]';if(pop.type==="fa-groupby")return '[data-action="fa-groupby"][data-id="'+pop.id+'"]';if(pop.type==="fa-group")return '[data-action="fa-group"][data-id="'+pop.id+'"]';if(pop.type==="fa-measure")return '[data-action="fa-measure"][data-id="'+pop.id+'"]';if(pop.type==="ins-type")return '[data-action="ins-type"][data-id="'+pop.id+'"]';if(pop.type==="ap-due")return '[data-action="ap-due"][data-id="'+pop.id+'"]';if(pop.type==="pr-scope")return '[data-action="pr-scope"][data-id="'+pop.id+'"]';if(pop.type==="pto-year")return '[data-action="pto-year"][data-id="'+pop.id+'"]';if(pop.type==="pto-view")return '[data-action="pto-view"][data-id="'+pop.id+'"]';if(pop.type==="arF-rc")return '[data-action="arF-rc"][data-id="'+pop.id+'"]';if(pop.type==="arF-source")return '[data-action="arF-source"][data-id="'+pop.id+'"]';if(pop.type==="ar-rc")return '[data-action="ar-rc"][data-id="'+pop.id+'"]';if(pop.type==="ar-source")return '[data-action="ar-source"][data-id="'+pop.id+'"]';if(pop.type==="pur-status")return '[data-action="pur-status"][data-id="'+pop.id+'"]';if(pop.type==="pur-path")return '[data-action="pur-path"][data-id="'+pop.id+'"]';if(pop.type==="bank-acct")return '[data-action="bank-acct"][data-id="'+pop.id+'"]';if(pop.type==="expmenu")return '[data-action="expmenu"][data-id="'+pop.id+'"]';if(pop.type==="prF-period")return '[data-action="prF-period"][data-id="'+pop.id+'"]';if(pop.type==="prF-scope")return '[data-action="prF-scope"][data-id="'+pop.id+'"]';if(pop.type==="rem-thru")return '[data-action="rem-thru"][data-id="'+pop.id+'"]';if(pop.type==="remF-thru")return '[data-action="remF-thru"][data-id="'+pop.id+'"]';if(pop.type==="remF-pacef")return '[data-action="remF-pacef"][data-id="'+pop.id+'"]';if(pop.type==="gft-date")return '[data-action="gft-date"][data-id="'+pop.id+'"]';if(pop.type==="gft-purpose")return '[data-action="gft-purpose"][data-id="'+pop.id+'"]';if(pop.type==="loan-type")return '[data-action="loan-type"][data-id="'+pop.id+'"]';if(pop.type==="wfind")return '[data-action="wfind"]';}
   function renderOverlay(){var ov=document.getElementById("overlay");if(!pop){ov.innerHTML="";return;}var sel=triggerSelector(),trig=sel&&document.querySelector(sel);if(!trig){ov.innerHTML="";return;}
     ov.innerHTML='<div class="pop'+(pop.type==="size"?" pop-size":"")+(pop.type==="depfilter"?" pop-filter":"")+(pop.type==="prperiod"?" pop-period":"")+'" data-action="stop" style="visibility:hidden;left:0;top:0;">'+popContent()+'</div>';
     var el=ov.firstChild;
@@ -10734,9 +10354,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(modal.type==="artdetail"){mr.innerHTML=arDetailModalHTML();return;}
     if(modal.type==="arFdetail"){var _am=mr.querySelector(".arF-detail-modal");if(modalMounted&&_am){var _sc=mr.querySelector("#arFwlScroll"),_st=_sc?_sc.scrollTop:0;_am.innerHTML=arFDetailModalInner();var _sc2=mr.querySelector("#arFwlScroll");if(_sc2)_sc2.scrollTop=_st;return;}mr.innerHTML=arFDetailModalHTML();modalMounted=true;return;} // Receivable Invoices Outstanding (MB updated): incremental in-place update, no blink
     if(modal.type==="arOdetail"){mr.innerHTML=arODetailModalHTML();return;} // Receivable Invoices Outstanding (MB updated), additive
-    if(modal.type==="pendetail"){mr.innerHTML=penDetailModalHTML();return;}
-    if(modal.type==="penFdetail"){mr.innerHTML=penFDetailModalHTML();return;} // Pension Plans (MB updated), additive
-    if(modal.type==="penOdetail"){mr.innerHTML=penODetailModalHTML();return;} // Pension Plans (MB updated), additive
     if(modal.type==="remFdetail"){mr.innerHTML=remFDetailModalHTML();return;} // Remittance Pledges (MB updated), additive
     if(modal.type==="remOdetail"){if(modalMounted){var _rw=find(modal.id),_rr=_rw?remOFindRow(_rw,modal.seq):null;var _rb=mr.querySelector(".modal.rem-drill-modal .modal-b");if(_rb&&_rr){_rb.innerHTML=remOPledgeModalBody(_rw,_rr);return;}}mr.innerHTML=remOPledgeModalHTML();modalMounted=true;return;} // W04-AL-01: the activity click now opens the PLEDGE pop-up. Body-only refresh while mounted so paging, sorting and expanding a schedule never replay the entry animation
     if(modal.type==="remOdrill"){mr.innerHTML=remODrillModalHTML();return;} // Jo's own band drill from her pace cards, unchanged
@@ -10765,9 +10382,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(faHandleClick(a,id,t))return;
     if(a&&a.indexOf("ins-")===0&&insHandleClick(a,id,t))return;
     if(a&&a.indexOf("ap-")===0&&apHandleClick(a,id,t))return;
-    if(a&&a.indexOf("pen-")===0&&penHandleClick(a,id,t))return;
-    if(a&&a.indexOf("penF-")===0&&penFHandleClick(a,id,t))return; // Pension Plans (MB updated), additive
-    if(a&&a.indexOf("penO-")===0&&penOHandleClick(a,id,t))return; // Pension Plans (MB updated), additive
     if(a&&a.indexOf("prF-")===0&&prFHandleClick(a,id,t))return; // Payroll Distributions (MB updated), additive
     if(a&&a.indexOf("prO-")===0&&prOHandleClick(a,id,t))return; // Payroll Distributions (MB updated), additive
     if(a&&a.indexOf("remF-")===0&&remFHandleClick(a,id,t))return; // Remittance Pledges (MB updated), additive
@@ -15376,346 +14990,6 @@ var GPF_WIRED=false;
   });
 })();
 /* ===== end W17 Gifts Pledges V2 ===== */
-/* ===== W02 Pension Plans V2 ===== */
-/* =====================================================================
-   Pension Plans (MB updated)  (prefix: penO, kind:"pension-oc")
-   =====================================================================
-   ADDITIVE + NAMESPACED. Built FROM Jo's pen block above, reusing her exact
-   components, classes and Pathway tokens (.dep-hd / .filter-chip / .vtoggle /
-   .bank-pill / .wt-* / .pen-* / .state / .modal), and wired through the shell's
-   own globals (pop, modal, modalMounted, render, find, ICON, setStatus, timers)
-   exactly as her pen block is. Nothing of hers is edited.
-
-   Owner deltas applied (Step 4 "W02 - Pension Plans.md" v2, 2026-07-27; grounded
-   in Step 5 "Pension Plans - API Spec.md"):
-     1. Three-view model (Table / Pie / By district). Table is the default view.
-        Her demo kept the table as the body with a bar/pie chart toggle only at
-        her largest size; the Final promotes Pie to a top-level view and adds the
-        new Grouped Bar by District view.
-     2. NEW view: Grouped Bar by District (penOGroupedBar). District groups on the
-        x-axis, one bar per plan in each group in the same fixed amethyst plan
-        ramp as the table dots and pie segments, a group total under each district;
-        every bar drills to that plan AND that district. Built in her bar language
-        (warm-neutral tracks, amethyst fills, values as text + sr-only).
-     3. All-districts aggregate: "All Districts" sums every district's rows (Step 5
-        Example 1); a specific district narrows the snapshot (Example 2). District
-        identity is the API's district list (PB_ControlTable), shown as its Name.
-     4. Explore (wide) shows ONE view under a 3-way toggle (Table default); Detail
-        (xwide) is two synced panels, table always LEFT, active chart RIGHT under a
-        2-way Pie / By district toggle. Glance (kpi) is the KPI card.
-   No time axis (snapshot of appointments active today); the only fetch is a
-   district change (800ms skeleton + spinner in the chip), everything else is a
-   client re-render. Five plans, ten appointees, three districts; totals sum from
-   the appointee rows (48,252.43), never a hardcoded figure.
-
-   FIVE INTEGRATION PIECES (all appended, none of Jo's lines edited):
-     1. RENDER + DATA + HANDLERS ... this block (single entry penOContent(w))
-     2. contentHTML() dispatch ...... if(w.kind==="pension-oc")return penOContent(w);
-     3. click-handler dispatch ...... if(a&&a.indexOf("penO-")===0&&penOHandleClick(a,id,t))return;
-     4. popContent() branch ......... if(pop.type==="penO-dist")return penOPopContent();
-        triggerSelector() branch .... if(pop.type==="penO-dist")return '[data-action="penO-dist"][data-id="'+pop.id+'"]';
-        renderModal() branch ........ if(modal.type==="penOdetail"){mr.innerHTML=penODetailModalHTML();return;}
-        aboutOf() branch (optional) . if(w.kind==="pension-oc")return {h:w.title,b:PENO_ABOUT};
-     5. CSS .......................... one .penf-* block at the end of <style>
-     (+ registry entries penO / penO2 / penO3 appended after Jo's pen entries)
-   ===================================================================== */
-
-// ===== DATA (Pension Plans, MB updated) ================================
-/* Same live-shaped dataset as Jo's pen block and the Step 5 spec examples:
-   10 active appointees across 3 districts and 5 plans, summing to 48,252.43.
-   Namespaced under PENO_ so this block never depends on Jo's PEN_ constants. */
-var PENO_ABOUT="How much your conference contributes each year across every clergy pension plan, filterable by district. Only active appointments count, that is a clergy member who is active, whose plan has started and not yet ended. Open a plan to see the individual appointees on it and their annual amounts.";
-var PENO_DISTRICTS=["All Districts","District 1","District 2","District 3"];
-/* stable plan order for colour + tie-breaks (amount desc on All Districts) */
-var PENO_PLAN_ORDER=["Employee Before Tax-UMPIP","CRSP-DB-%","CRSP-DC","CPP","Flat CRSP-DB"];
-/* amethyst ramp, largest share darkest; no red (categorical, not variance) */
-var PENO_COLORS=["--am-600","--am-500","--am-400","--am-300","--am-200"];
-var PENO_APPTS=[
-  {name:"Rev. Jonathan Pierce", org:"St. Paul UMC",           dist:"District 1", plan:"Employee Before Tax-UMPIP", amt:12000.00},
-  {name:"Rev. Naomi Adler",     org:"Hope UMC",               dist:"District 2", plan:"Employee Before Tax-UMPIP", amt:6000.00},
-  {name:"Rev. Caleb Monroe",    org:"Riverside UMC",          dist:"District 3", plan:"Employee Before Tax-UMPIP", amt:6000.00},
-  {name:"Rev. Daniel Cho",      org:"Asbury UMC",             dist:"District 1", plan:"CRSP-DB-%",                 amt:4532.56},
-  {name:"Rev. Miriam Okafor",   org:"Grace Fellowship UMC",   dist:"District 3", plan:"CRSP-DB-%",                 amt:3000.00},
-  {name:"Rev. Samuel Reyes",    org:"First UMC Lakeside",     dist:"District 2", plan:"CRSP-DC",                   amt:3518.66},
-  {name:"Rev. Hannah Whitfield",org:"Cornerstone UMC",        dist:"District 3", plan:"CRSP-DC",                   amt:3518.65},
-  {name:"Rev. Thomas Ashford",  org:"Trinity UMC",            dist:"District 1", plan:"CPP",                       amt:3341.28},
-  {name:"Rev. Grace Bellamy",   org:"Wesley Chapel UMC",      dist:"District 2", plan:"CPP",                       amt:3341.28},
-  {name:"Rev. Esther Vaughn",   org:"Emmanuel UMC",           dist:"District 1", plan:"Flat CRSP-DB",              amt:3000.00}
-];
-var PENO_APPTS_EMPTY=[];
-
-function penOEsc(s){return String(s).replace(/"/g,"&quot;");}
-function penOMoney(n){return "$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
-function penODataset(w){return (w&&w.dataset==="none")?PENO_APPTS_EMPTY:PENO_APPTS;}
-function penODist(w){return (w&&w.penDist)||"All Districts";}
-function penOFiltered(w){var d=penODist(w);return penODataset(w).filter(function(a){return d==="All Districts"||a.dist===d;});}
-function penODistLabel(w){return penODist(w);}
-/* roll appointees up into one row per plan: amount + appointee count */
-function penOPlanData(w){
-  var m={},order=[];
-  penOFiltered(w).forEach(function(a){if(!m[a.plan]){m[a.plan]={plan:a.plan,amt:0,count:0};order.push(a.plan);}m[a.plan].amt+=a.amt;m[a.plan].count++;});
-  return order.map(function(k){return m[k];});
-}
-function penOTotal(w){return penOFiltered(w).reduce(function(s,a){return s+a.amt;},0);}
-function penOApptCount(w){return penOFiltered(w).length;}
-function penOPlanCount(w){return penOPlanData(w).length;}
-/* colour by the plan's rank in the fixed order, so table dot, bar and pie
-   segment always agree for a given plan (chart/table sync, visually too). */
-function penOColorOf(plan){var i=PENO_PLAN_ORDER.indexOf(plan);if(i<0)i=0;return PENO_COLORS[i%PENO_COLORS.length];}
-/* sorted plan rows; default annual amount high to low */
-function penORows(w){
-  var rows=penOPlanData(w).slice(),sk=(w.penSort||"amt-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
-  rows.sort(function(a,b){
-    if(key==="plan")return dir*a.plan.localeCompare(b.plan);
-    if(key==="count"){var c=a.count-b.count;return dir*(c||(a.amt-b.amt));}
-    var d=a.amt-b.amt;return dir*(d||a.plan.localeCompare(b.plan));
-  });
-  return rows;
-}
-/* appointees on a plan; optional explicit district (the new grouped bar drills
-   plan AND district). Defaults to the widget's own district filter, so the
-   district filter carries into the drill exactly as in her build. */
-function penOApptsFor(w,plan,dist){
-  var d=dist||penODist(w);
-  return penODataset(w).filter(function(a){return a.plan===plan&&(d==="All Districts"||a.dist===d);}).sort(function(a,b){return b.amt-a.amt;});
-}
-
-/* ---- controls ---- */
-/* District filter chip: THE fetch trigger. Shell .filter-chip[data-action],
-   leading filter glyph + trailing chevron; spinner (Jo's .bgt-spin) rides in
-   the chip while loading. Left of the toolbar, doubles as the current-scope label. */
-function penODistChip(w){
-  var spin=w.penloading?'<span class="bgt-spin" aria-hidden="true"></span>':"";
-  return '<button class="filter-chip pen-chip" data-action="penO-dist" data-id="'+w.id+'" aria-haspopup="listbox" aria-expanded="'+(pop&&pop.type==="penO-dist"&&pop.id===w.id?"true":"false")+'" aria-label="District filter, currently '+penOEsc(penODistLabel(w))+'">'+spin+'<span class="fc-label">'+penODistLabel(w)+'</span>'+ICON("expand_more")+'</button>';
-}
-/* View toggles (shell .vtoggle/.vt, segmented). Explore (wide): 3-way Table /
-   Pie / By district, Table default. Detail (xwide): the table always owns the
-   left panel, so the right panel gets a 2-way Pie / By district toggle. Plain
-   language data-tip per segment (shell tooltip engine). */
-function penOViewToggleM(w){
-  var v=w.penViewM||"table";
-  function seg(val,lbl,ic,tip){return '<button class="vt'+(v===val?" on":"")+'" data-action="penO-view" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(v===val)+'" data-tip="'+penOEsc(tip)+'" data-tip-plain>'+ICON(ic)+lbl+'</button>';}
-  return '<div class="vtoggle pen-vtoggle" role="group" aria-label="View">'+
-    seg("table","Table","table_rows","The plans as a sortable list: appointees and annual amount per plan.")+
-    seg("pie","Pie","donut_small","Show each plan as a slice of the total annual contribution.")+
-    seg("gbar","By district","bar_chart","Compare each plan's annual amount district by district.")+
-  '</div>';
-}
-function penOChartToggleL(w){
-  var c=w.penChartL||"pie";
-  function seg(val,lbl,ic,tip){return '<button class="vt'+(c===val?" on":"")+'" data-action="penO-chart" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(c===val)+'" data-tip="'+penOEsc(tip)+'" data-tip-plain>'+ICON(ic)+lbl+'</button>';}
-  return '<div class="vtoggle pen-vtoggle" role="group" aria-label="Chart type">'+
-    seg("pie","Pie","donut_small","Show each plan as a slice of the total annual contribution.")+
-    seg("gbar","By district","bar_chart","Compare each plan's annual amount district by district.")+
-  '</div>';
-}
-
-/* ---- KPI badge ---- */
-function penOBadge(w){
-  var na=penOApptCount(w),np=penOPlanCount(w);
-  return '<span class="bank-pill" data-tip="'+penOEsc(na+" active appointee"+(na===1?"":"s")+" across "+np+" pension plan"+(np===1?"":"s")+" in this view.")+'" data-tip-plain>'+ICON("groups")+na+' appointee'+(na===1?"":"s")+'</span>';
-}
-
-/* ---- header (Detail / Explore): two-row .dep-hd ---- */
-/* Row 1: district chip (left), view/chart toggle (right). Row 2: total annual
-   contribution + appointee badge on the LEFT. */
-function penOHeader(w,mode){
-  var numInner;
-  if(mode==="loading"){
-    numInner='<div class="dep-hd-kpigrp"><span class="sk" style="width:132px;height:22px;border-radius:6px"></span><span class="sk" style="width:104px;height:20px;border-radius:999px"></span></div>';
-  }else{
-    numInner='<div class="dep-hd-kpigrp"><span class="metric-value">'+penOMoney(penOTotal(w))+'</span>'+penOBadge(w)+'</div>';
-  }
-  var toggle=(w.size==="xwide")?penOChartToggleL(w):penOViewToggleM(w);
-  return '<div class="dep-hd pen-hd"><div class="dep-hd-top">'+penODistChip(w)+'<div class="dep-hd-toggle">'+toggle+'</div></div>'+
-    '<div class="dep-hd-num"><div class="pen-numwrap">'+numInner+'</div></div></div>';
-}
-
-function penOShareCell(amt,total){
-  var pct=total>0?Math.round(amt/total*100):0,wd=total>0?(amt/total*100):0;
-  return '<span class="pen-share"><span class="pen-share-track" aria-hidden="true"><span class="pen-share-fill" style="width:'+wd.toFixed(1)+'%"></span></span><span class="pen-share-pct">'+pct+'%</span></span>';
-}
-function penOHeadRow(w,withShare){
-  var sk=(w.penSort||"amt-desc").split("-"),key=sk[0],dir=sk[1];
-  function sb(k,label){var on=key===k,ic=on?(dir==="asc"?"arrow_upward":"arrow_downward"):"unfold_more";return '<button class="wt-sort'+(on?" on":"")+'" data-action="penO-sort" data-id="'+w.id+'" data-k="'+k+'">'+label+' '+ICON(ic)+'</button>';}
-  var mid=withShare?'<span class="pen-share pen-share-head">Share</span>':'<span class="pen-c-share pen-c-share-head">Share</span>';
-  return '<div class="wt-row wt-head pen-row"><span class="lr-main">'+sb("plan","Pension plan")+'</span>'+mid+'<span class="pen-c-cnt">'+sb("count","Appointees")+'</span><span class="wt-c2">'+sb("amt","Annual amount")+'</span></div>';
-}
-function penOPlanRow(p,total,withShare,w){
-  var pct=total>0?Math.round(p.amt/total*100):0;
-  var tip=p.plan+", "+penODistLabel(w)+". "+penOMoney(p.amt)+" a year across "+p.count+" appointee"+(p.count===1?"":"s")+" ("+pct+"% of the total shown). Open to see who is on this plan.";
-  var mid=withShare?penOShareCell(p.amt,total):'<span class="pen-c-share">'+pct+'%</span>';
-  return '<div class="wt-row pen-row pen-clickable" data-action="penO-open" data-id="'+w.id+'" data-plan="'+penOEsc(p.plan)+'" role="button" tabindex="0" data-tip="'+penOEsc(tip)+'" data-tip-plain aria-label="'+penOEsc(p.plan+", "+penOMoney(p.amt)+" a year, "+p.count+" appointee"+(p.count===1?"":"s")+", open the appointees on this plan")+'">'+
-    '<span class="lr-main pen-plan"><span class="pen-dot" style="background:var('+penOColorOf(p.plan)+')" aria-hidden="true"></span><span class="pen-plan-nm">'+p.plan+'</span></span>'+
-    mid+
-    '<span class="pen-c-cnt">'+p.count+'</span>'+
-    '<span class="wt-c2">'+penOMoney(p.amt)+'</span>'+
-    '<span class="sr-only">'+p.plan+': '+penOMoney(p.amt)+' a year, '+p.count+' appointee'+(p.count===1?"":"s")+', '+pct+'% of the total shown.</span>'+
-  '</div>';
-}
-function penOTotalRow(w){var tot=penOTotal(w),na=penOApptCount(w);return '<div class="dep-total pen-total"><span>Total annual contribution ('+na+' appointee'+(na===1?"":"s")+')</span><span>'+penOMoney(tot)+'</span></div>';}
-function penOTable(w,withShare){
-  var rows=penORows(w),tot=penOTotal(w);
-  var body=rows.length?rows.map(function(p){return penOPlanRow(p,tot,withShare,w);}).join(""):'<div class="wt-row pen-row"><span class="lr-main pen-none">No active pension plans for '+penODistLabel(w)+'.</span></div>';
-  return '<div class="scroll pen-tscroll">'+penOHeadRow(w,withShare)+body+'</div>'+penOTotalRow(w);
-}
-
-/* ---- pie/donut by plan (Jo's penPieChart, promoted to a top-level view) ---- */
-function penOPieChart(w){
-  var rows=penORows(w).slice().sort(function(a,b){return b.amt-a.amt;}),tot=rows.reduce(function(s,r){return s+r.amt;},0);
-  if(!rows.length||tot<=0)return '<div class="pen-chart-empty">'+ICON("donut_small")+'<span>Nothing to chart for '+penODistLabel(w)+'.</span></div>';
-  var R=52,C=2*Math.PI*R,off=0,arcs="",legend="";
-  rows.forEach(function(r,i){var frac=r.amt/tot,len=frac*C,c=penOColorOf(r.plan);
-    arcs+='<circle class="pen-seg" data-seg="'+i+'" cx="70" cy="70" r="'+R+'" fill="none" stroke="var('+c+')" stroke-width="20" stroke-dasharray="'+Math.min(len+0.9,C).toFixed(2)+' '+Math.max(0,C-len-0.9).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 70 70)"></circle>';off+=len;
-    legend+='<div class="leg pen-leg pen-clickable" data-seg="'+i+'" data-action="penO-open" data-id="'+w.id+'" data-plan="'+penOEsc(r.plan)+'" role="button" tabindex="0" aria-label="'+penOEsc(r.plan+", "+penOMoney(r.amt)+", "+Math.round(frac*100)+"% of the total, open the appointees on this plan")+'"><span class="dot" style="background:var('+c+')"></span><span class="lg-main">'+r.plan+'</span><span class="lg-meta">'+penOMoney(r.amt)+' · '+Math.round(frac*100)+'%</span></div>';
-  });
-  return '<div class="pen-pie"><div class="pie-wrap row"><svg class="donut" viewBox="0 0 140 140" width="200" height="200" aria-hidden="true">'+arcs+'<text x="70" y="67" text-anchor="middle" class="donut-c1">'+penOMoney(tot)+'</text><text x="70" y="86" text-anchor="middle" class="donut-c2">a year</text></svg>'+
-    '<div class="legend-col"><div class="legend-head"><span class="legend-hd">Annual contribution by plan</span></div><div class="legend" style="max-height:200px">'+legend+'</div></div></div></div>';
-}
-
-/* ---- NEW VIEW: Grouped Bar by District (Step 4 v2 owner delta) ----
-   X-axis = district groups (all districts, or just the one filtered), one bar
-   per plan within each group in the same fixed amethyst plan ramp as the table
-   dots and pie segments, a group total under each district. Values live as text
-   (sr-only per bar + visible group totals). Every bar drills to that plan AND
-   that district. Built in her bar language: warm-neutral tracks, amethyst fills. */
-function penOGroupedBar(w){
-  var d=penODist(w);
-  var dists=(d==="All Districts")?PENO_DISTRICTS.slice(1):[d];
-  var data=penOFiltered(w);
-  if(!data.length)return '<div class="pen-chart-empty">'+ICON("bar_chart")+'<span>Nothing to chart for '+penODistLabel(w)+'.</span></div>';
-  var max=1,groups=dists.map(function(dn){
-    var plans=PENO_PLAN_ORDER.map(function(p){
-      var amt=0,count=0;
-      data.forEach(function(a){if(a.dist===dn&&a.plan===p){amt+=a.amt;count++;}});
-      return {plan:p,amt:amt,count:count};
-    }).filter(function(x){return x.amt>0;});
-    var tot=plans.reduce(function(s,x){return s+x.amt;},0);
-    plans.forEach(function(x){if(x.amt>max)max=x.amt;});
-    return {dist:dn,plans:plans,tot:tot};
-  });
-  var seen={},legend="";
-  var cols=groups.map(function(g){
-    var bars=g.plans.map(function(x){
-      seen[x.plan]=true;
-      var hp=Math.max(4,Math.round(x.amt/max*100));
-      var lbl=x.plan+", "+g.dist+": "+penOMoney(x.amt)+" a year, "+x.count+" appointee"+(x.count===1?"":"s");
-      return '<button class="penf-gbar pen-clickable" data-action="penO-open" data-id="'+w.id+'" data-plan="'+penOEsc(x.plan)+'" data-dist="'+penOEsc(g.dist)+'" data-tip="'+penOEsc(lbl+". Open the appointees on this plan in this district.")+'" data-tip-plain aria-label="'+penOEsc(lbl+", open the appointees on this plan in this district")+'">'+
-        '<span class="penf-gfill" style="height:'+hp+'%;background:var('+penOColorOf(x.plan)+')" aria-hidden="true"></span>'+
-        '<span class="sr-only">'+lbl+'.</span>'+
-      '</button>';
-    }).join("");
-    return '<div class="penf-ggroup"><div class="penf-gplot">'+bars+'</div><div class="penf-gx"><span class="penf-gx-d">'+g.dist+'</span><span class="penf-gx-t">'+penOMoney(g.tot)+'</span></div></div>';
-  }).join("");
-  PENO_PLAN_ORDER.forEach(function(p){
-    if(seen[p])legend+='<span class="leg penf-gleg"><span class="dot" style="background:var('+penOColorOf(p)+')"></span><span class="lg-main">'+p+'</span></span>';
-  });
-  return '<div class="penf-gwrap"><div class="penf-grow" role="img" aria-label="Annual contribution by district, one bar per plan">'+cols+'</div><div class="penf-glegend" aria-hidden="true">'+legend+'</div></div>';
-}
-function penOChart(w,which){return (which==="gbar")?penOGroupedBar(w):penOPieChart(w);}
-
-/* ---- Detail (xwide): Jo's synced two panels. Table always LEFT, active chart
-   RIGHT under the header's 2-way toggle. Both read the SAME filtered, sorted data. */
-function penOFull(w){
-  var c=w.penChartL||"pie";
-  return '<div class="dep-full pen-full">'+
-    '<div class="dep-col pen-col"><div class="dep-col-h">Annual contribution by plan</div>'+penOTable(w,false)+'</div>'+
-    '<div class="dep-col pen-col pen-col-chart"><div class="dep-col-h">'+((c==="gbar")?"By district and plan":"Share of total")+'</div><div class="pen-chartwrap">'+penOChart(w,c)+'</div></div>'+
-  '</div>';
-}
-
-/* ---- Glance ---- */
-function penOGlance(w){
-  if(w.state==="empty"||!penOFiltered(w).length)return '<div class="kpi-row"><div class="kpi-num"><div class="dep-hd-kpigrp"><span class="metric-value" style="font-size:20px;color:var(--txt-subtle)">No appointments</span></div><div class="gl-sub"><span class="pen-caption">no active pension appointments</span></div></div></div>';
-  var tot=penOTotal(w),na=penOApptCount(w),np=penOPlanCount(w),d=penODist(w),lead=(d==="All Districts")?"all districts":d.toLowerCase();
-  return '<div class="kpi-row"><div class="kpi-num">'+
-    '<div class="dep-hd-kpigrp"><span class="metric-value">'+penOMoney(tot)+'</span>'+penOBadge(w)+'</div>'+
-    '<div class="gl-sub"><span class="pen-caption">contributed a year across '+np+' plan'+(np===1?"":"s")+', '+lead+'</span></div>'+
-    '<span class="sr-only">Annual pension contribution '+penOMoney(tot)+' across '+np+' plans and '+na+' active appointees, '+lead+'.</span>'+
-  '</div></div>';
-}
-
-/* ---- states ---- */
-function penOEmpty(w){
-  if(w.size==="kpi")return '<div class="kpi-row"><div class="kpi-num"><div class="dep-hd-kpigrp"><span class="metric-value" style="font-size:20px;color:var(--txt-subtle)">No appointments</span></div><div class="gl-sub"><span class="pen-caption">no active pension appointments</span></div></div></div>';
-  return '<div class="state pen-empty" data-kind="empty">'+ICON("diversity_3")+'<div class="state-title">No active pension appointments</div><div class="state-sub">Once clergy are appointed to a pension plan in the Pension Billing module, their annual contributions will appear here by plan.</div></div>';
-}
-function penOSkeleton(){var rows="";[92,70,54,40,30].forEach(function(wd){rows+='<div class="pen-sk-row"><span class="sk" style="width:150px;height:12px;border-radius:4px"></span><span class="sk" style="flex:1;height:12px;border-radius:4px"></span><span class="sk" style="width:'+wd+'px;height:12px;border-radius:4px"></span></div>';});return '<div class="pen-skel">'+rows+'</div>';}
-
-/* ---- entry point (single penOContent) ----
-   Glance (kpi) = KPI card; Explore (wide) = header + ONE view via the 3-way
-   toggle (Table default); Detail (xwide) = header + her synced two panels. */
-function penOContent(w){
-  if(w.state==="empty")return penOEmpty(w);
-  if(w.size==="kpi")return penOGlance(w);
-  if(!penOFiltered(w).length&&w.dataset==="none")return penOEmpty(w);
-  if(w.penloading)return penOHeader(w,"loading")+penOSkeleton();
-  if(w.size==="xwide")return penOHeader(w)+penOFull(w);
-  var v=w.penViewM||"table";
-  if(v==="table")return penOHeader(w)+'<div class="pen-body">'+penOTable(w,true)+'</div>';
-  return penOHeader(w)+'<div class="pen-chartwrap penf-explore-chart">'+penOChart(w,v)+'</div>';
-}
-
-/* ---- drill focus overlay: plan (and optionally plan+district) -> appointees.
-   Jo's penDetailModalHTML: report-style list, district filter carried through;
-   a grouped-bar drill scopes to that plan AND district. Export here exports THIS
-   appointee detail (her two-export contract). modal.type "penOdetail". */
-function penODetailModalHTML(){
-  var w=find(modal.id);if(!w)return "";
-  var plan=modal.plan,dscope=modal.dist||null,list=penOApptsFor(w,plan,dscope),tot=list.reduce(function(s,a){return s+a.amt;},0);
-  var d=dscope||penODist(w),sub=plan+(d==="All Districts"?"":" · "+d);
-  var cols=["Appointee","Church / organisation","District","Annual amount"];
-  var head='<div class="wt-row wt-head pen-drow pen-dhead">'+cols.map(function(c,i){return '<span class="pen-dc pen-dc'+i+'">'+c+'</span>';}).join("")+'</div>';
-  var body;
-  if(list.length){
-    body=list.map(function(a){
-      return '<div class="wt-row pen-drow">'+
-        '<span class="pen-dc pen-dc0">'+a.name+'</span>'+
-        '<span class="pen-dc pen-dc1">'+a.org+'</span>'+
-        '<span class="pen-dc pen-dc2">'+a.dist+'</span>'+
-        '<span class="pen-dc pen-dc3 pen-dc-amt">'+penOMoney(a.amt)+'</span></div>';
-    }).join("");
-  }else{
-    body='<div class="state" data-kind="empty">'+ICON("diversity_3")+'<div class="state-title">No appointees on this plan</div><div class="state-sub">Nothing matches this plan for '+d+'.</div></div>';
-  }
-  var foot=list.length?'<div class="dep-total pen-dtotal"><span>'+list.length+' appointee'+(list.length===1?"":"s")+'</span><span>'+penOMoney(tot)+'</span></div>':'';
-  return '<div class="modal-backdrop" data-action="penO-detail-close"><div class="modal modal-wide pen-detail-modal" data-action="stop" role="dialog" aria-modal="true" aria-label="Pension plan appointees, detail">'+
-    '<div class="modal-h pen-detail-h"><span class="modal-title"><span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">diversity_3</span>Pension Plan: Appointees</span><span class="pen-dsub">'+penOEsc(sub)+'</span><span class="pen-dh-spacer"></span><button class="btn naked sm" data-action="penO-export" data-id="'+w.id+'" data-plan="'+penOEsc(plan)+'">'+ICON("download")+'Export to Excel</button><button class="iconbtn" data-action="penO-detail-close" aria-label="Close">'+ICON("close")+'</button></div>'+
-    '<div class="modal-b pen-detail-b"><div class="pen-detail-scroll">'+head+body+'</div>'+foot+'</div>'+
-    '<div class="modal-f"><button class="btn primary sm" data-action="penO-detail-close">Close</button></div></div></div>';
-}
-
-/* Loading: only a district change fetches new data (transient penloading +
-   skeleton). Sort, view toggles and drill are client re-renders, never a load. */
-function penOLoad(w){w.penloading=true;clearTimeout(timers["penO-"+w.id]);timers["penO-"+w.id]=setTimeout(function(){w.penloading=false;w.updated="just now";render();},800);}
-/* --- click handler branch: if(a&&a.indexOf("penO-")===0&&penOHandleClick(a,id,t))return; */
-function penOHandleClick(a,id,t){
-  if(a==="penO-dist"){pop=(pop&&pop.type==="penO-dist"&&pop.id===id)?null:{type:"penO-dist",id:id};render();return true;}
-  if(a==="penO-set-dist"){var wd=find(id);if(wd){var nv=t.getAttribute("data-v");if(penODist(wd)!==nv){wd.penDist=nv;penOLoad(wd);setStatus("Showing pension plans for "+nv+".");}}pop=null;render();return true;}
-  if(a==="penO-sort"){var ws=find(id);if(ws){var k=t.getAttribute("data-k"),parts=(ws.penSort||"amt-desc").split("-");ws.penSort=(parts[0]===k)?(k+"-"+(parts[1]==="desc"?"asc":"desc")):(k+"-"+(k==="plan"?"asc":"desc"));}pop=null;render();return true;}
-  if(a==="penO-view"){var wv=find(id);if(wv)wv.penViewM=t.getAttribute("data-v");pop=null;render();return true;}
-  if(a==="penO-chart"){var wc=find(id);if(wc)wc.penChartL=t.getAttribute("data-v");pop=null;render();return true;}
-  if(a==="penO-open"){var wo=find(id);if(!wo)return true;modal={type:"penOdetail",id:id,plan:t.getAttribute("data-plan"),dist:t.getAttribute("data-dist")||null};modalMounted=false;pop=null;render();return true;}
-  if(a==="penO-detail-close"){modal=null;pop=null;render();return true;}
-  if(a==="penO-export"){pop=null;setStatus("Exporting the appointees on "+t.getAttribute("data-plan")+" to Excel…");return true;}
-  return false;
-}
-/* --- popContent() branch: if(pop.type==="penO-dist")return penOPopContent(); */
-function penOPopContent(){
-  if(pop.type==="penO-dist"){var w=find(pop.id),cur=penODist(w);
-    return '<div class="cap">District</div>'+PENO_DISTRICTS.map(function(o){var on=cur===o;return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-action="penO-set-dist" data-id="'+w.id+'" data-v="'+penOEsc(o)+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+o+'</button>';}).join("");}
-  return "";
-}
-/* --- triggerSelector() branch: if(pop.type==="penO-dist")return '[data-action="penO-dist"][data-id="'+pop.id+'"]'; */
-/* --- renderModal() branch: if(modal.type==="penOdetail"){mr.innerHTML=penODetailModalHTML();return;} */
-
-// ===== REGISTRY (appended after Jo's pen entries in the dashboards array) =====
-/*
-  {id:"penO", title:"Pension Plans (MB updated)",                     kind:"pension-oc", size:"wide",  tiers:["kpi","wide","xwide"], penDist:"All Districts", penSort:"amt-desc", penViewM:"table", penChartL:"pie", updated:"just now", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-  {id:"penO2",title:"Pension Plans (MB updated, Detail view)",        kind:"pension-oc", size:"xwide", tiers:["kpi","wide","xwide"], penDist:"All Districts", penSort:"amt-desc", penViewM:"table", penChartL:"pie", updated:"just now"},
-  {id:"penO3",title:"Pension Plans (MB updated, no active appointments)", kind:"pension-oc", size:"wide", tiers:["kpi","wide","xwide"], state:"empty", dataset:"none", updated:"just now"},
-*/
-
 /* ===== W03 Payroll Distributions V2 ===== */
   /* =====================================================================
      Payroll Distributions (MB updated)    (prefix: prO, kind:"payroll-oc")
