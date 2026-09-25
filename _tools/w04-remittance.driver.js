@@ -72,7 +72,11 @@ rows.forEach(function (w) {
   if (w.size === "xwide") { A.eq(labels.join("|"), "Seq.|Activity|Pledges behind|Pledge|Outstanding|Paid|Expected|% Paid", w.id + ": Detail columns"); A.absent(h, "remO-alignL", w.id + ": every amount column right-aligned"); A.eq(info, 3, w.id + ": Detail keeps the card info buttons"); }
   if (w.size === "kpi") A.eq(info, 0, w.id + ": no card info button at Glance");
   if (w.size !== "kpi") A.ok(/<div class="remO-row remO-head wt-head/.test(h), w.id + ": header row carries the shell wt-head class");
+  if (w.size !== "kpi") A.ok(/remO-scroll">[\s\S]*remO-total[\s\S]*<\/div><\/div>$/.test(h.slice(h.indexOf('class="scroll remO-scroll"'))), w.id + ": total row is the sticky last row inside the scroll list");
+  if (w.size === "wide") A.absent(h, " outstanding</span>", w.id + ": Explore card sub-text is the amount only");
 });
+/* owner (25 Sep): every table column left-aligned, headers included */
+[".remO-num{text-align:left;", ".remO-pct{text-align:left;", ".remO-num .wt-sort,.remO-pct .wt-sort{justify-content:flex-start;", ".w04-minirow{display:flex;align-items:center;gap:8px;justify-content:flex-start;", ".remO-total{position:sticky;bottom:0;"].forEach(function (r) { A.ok(shell.css.indexOf(r) > -1, "CSS rule present: " + r); });
 const w = rows.filter(function (x) { return x.size === "wide"; })[0], T = function (a) { return env.shim.mkTarget(a || {}, "button"); };
 const settle = function () { w.loading = false; w.bloading = false; w.remLoading = false; };
 

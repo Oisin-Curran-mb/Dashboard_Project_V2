@@ -106,3 +106,9 @@ fs.writeFileSync(FILE, t, "utf8"); console.log("done: " + t.split(NL).length + "
 // Owner, same day: header labels sat ~14px left of their numbers because the shell hides the sort icon
 // until hover while it still takes space. The header row now carries the shell's wt-head class like the
 // other finished widgets (icon always visible at the column edge); the W04 display:inline override went.
+// Owner, same day (Explore): card sub-text is the amount only below Detail; card label nowrap at 10.5px
+// with 8/18px card padding so it clears the info button; Explore grid "minmax(0,1fr) 88px 60px 68px",
+// gap 6, padding 7px 8px (the "Outstanding" header had been clipped). The total row now renders inside
+// the scroll container as a sticky bottom row, so its columns stay under the body's when the list scrolls.
+// Owner, same day: every table column LEFT-aligned (headers and figures), Outstanding column 96px so its
+// header never clips; the total row mini-bar cell follows the same left alignment.

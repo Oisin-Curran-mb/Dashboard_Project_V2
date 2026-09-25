@@ -3412,7 +3412,7 @@
   .w04-drill-b .dep-hd{padding-top:12px;}
   .w04-bar-slim .ar-bartrack{height:12px;}
   .w04-bar-slim .w04-barmark{height:18px;}
-  .w04-minirow{display:flex;align-items:center;gap:8px;justify-content:flex-end;}
+  .w04-minirow{display:flex;align-items:center;gap:8px;justify-content:flex-start;}
   .w04-mini{position:relative;flex:1;min-width:36px;}
   .w04-mini-track{position:relative;display:block;width:100%;height:8px;border-radius:999px;background:var(--wn-300);overflow:hidden;}
   .w04-mini-fill{position:absolute;left:0;top:0;height:100%;border-radius:999px;}
@@ -3467,14 +3467,14 @@
   .remO-cap-sort:hover{background:var(--wn-200);}
   .remO-cap-sort.on{color:var(--txt-primary);border-color:var(--am-400);}
   .remO-cap-sort .material-symbols-rounded{font-size:14px;}
-  .remO-row{display:grid;grid-template-columns:minmax(0,1fr) 80px 54px 70px;align-items:center;gap:7px;padding:7px 10px;border-bottom:1px solid var(--stroke-widget);font-size:13px;}
+  .remO-row{display:grid;grid-template-columns:minmax(0,1fr) 96px 60px 68px;align-items:center;gap:6px;padding:7px 8px;border-bottom:1px solid var(--stroke-widget);font-size:13px;}
   .remO-row>.remO-name{padding-right:10px;}
   .remO-cards{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:2px 0 0;}
   .remO-card{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:9px 11px;border:1px solid var(--stroke-widget);border-radius:10px;background:var(--surface-widget);cursor:pointer;text-align:left;font-family:inherit;min-width:0;transition:background .12s,border-color .12s;}
   .remO-card-sk{height:58px;border-radius:10px;}
   .remO-card:hover{background:var(--wn-100);}
   .remO-card:focus-visible{outline:2px solid var(--am-400);outline-offset:2px;}
-  .remO-card-top{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;letter-spacing:.02em;text-transform:uppercase;color:var(--txt-subtle);}
+  .remO-card-top{display:inline-flex;align-items:center;gap:4px;white-space:nowrap;font-size:10.5px;font-weight:600;letter-spacing:0;text-transform:uppercase;color:var(--txt-subtle);}
   .remO-card-top .material-symbols-rounded{font-size:15px;font-variation-settings:'FILL' 1;}
   .remO-card-behind .remO-card-top .material-symbols-rounded{color:#7a5300;}
   .remO-card-ontrack .remO-card-top .material-symbols-rounded{color:var(--am-600);}
@@ -3489,22 +3489,21 @@
   .remO-glancewrap{display:flex;flex-direction:column;gap:9px;padding:10px 12px;height:100%;justify-content:center;}
   .remO-glancewrap .scope-chip,.remO-glancewrap .filter-chip{align-self:flex-start;}
   .remO-cell{min-width:0;}
-  .remO-num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .remO-pct{text-align:right;padding-left:18px;}
+  .remO-num{text-align:left;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .remO-pct{text-align:left;}
   .remO-pct-v{font-weight:700;font-variant-numeric:tabular-nums;}
   .remO-nopct{color:var(--txt-subtle);}
   .remO-head{position:sticky;top:0;z-index:1;background:var(--surface-widget);font-size:11px;font-weight:600;color:var(--txt-subtle);}
   .remO-head .remO-cell{white-space:nowrap;overflow:visible;}
   .remO-head .wt-sort{white-space:nowrap;}
-  .remO-num .wt-sort,.remO-pct .wt-sort{justify-content:flex-end;width:100%;}
+  .remO-num .wt-sort,.remO-pct .wt-sort{justify-content:flex-start;width:100%;}
   .remO-name{display:flex;flex-direction:column;gap:3px;min-width:0;}
   .remO-name-nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500;color:var(--txt-primary);}
   .remO-name-sub{font-size:11px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .remO-row[role="button"]{cursor:pointer;}
   .remO-row[role="button"]:hover{background:var(--wn-100);}
   .remO-row[role="button"]:focus-visible{outline:2px solid var(--am-400);outline-offset:-1px;}
-  .remO-scroll .remO-row:last-child{border-bottom:none;}
-  .remO-total{border-top:1px solid var(--stroke-widget);border-bottom:none;font-weight:600;padding:9px 10px;background:var(--surface-widget);}
+  .remO-total{position:sticky;bottom:0;z-index:1;border-top:1px solid var(--stroke-widget);border-bottom:none;font-weight:600;padding-top:9px;padding-bottom:9px;background:var(--surface-widget);}
   .remO-total-lead{font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   /* -- pacing-bars view -- */
   .remO-bars{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:2px 12px 8px;}
@@ -3595,25 +3594,23 @@
   .remo-root .w04-pl-pgbtn .material-symbols-rounded{font-size:16px;}
   /* W04-T12: the wrapper becomes the grid item, so the card must fill it. */
   .remO-cardwrap{position:relative;display:block;min-width:0;}
-  .remO-cardwrap .remO-card{width:100%;height:100%;padding-right:26px;}
+  .remO-cardwrap .remO-card{width:100%;height:100%;padding:9px 18px 9px 8px;}
   .remO-glancewrap .remO-cardwrap .remO-card{padding:8px 9px;}
   .remO-glancewrap .remO-card-top{font-size:10.5px;letter-spacing:0;}
   .remO-glancewrap .remO-card-lbl{white-space:nowrap;}
   .remO-glancewrap .remO-card-n{font-size:20px;}
   .remO-glancewrap .remO-card-sub{font-size:10.5px;white-space:nowrap;}
-  .remO-cardinfo{position:absolute;top:5px;right:5px;border:0;background:transparent;padding:2px;line-height:1;color:var(--txt-subtle);cursor:help;border-radius:5px;}
+  .remO-cardinfo{position:absolute;top:4px;right:2px;border:0;background:transparent;padding:2px;line-height:1;color:var(--txt-subtle);cursor:help;border-radius:5px;}
   .remO-cardinfo:hover{color:var(--txt-primary);background:var(--wn-200);}
   .remO-cardinfo:focus-visible{outline:2px solid var(--am-500);outline-offset:1px;color:var(--txt-primary);}
   .remO-cardinfo .material-symbols-rounded{font-size:15px;display:block;}
-  .remO-row.remO-full{grid-template-columns:40px minmax(0,1fr) 97px 76px 82px 76px 80px 80px;gap:5px;padding-left:8px;padding-right:8px;}
+  .remO-row.remO-full{grid-template-columns:40px minmax(0,1fr) 97px 76px 88px 76px 80px 80px;gap:5px;padding-left:8px;padding-right:8px;}
   .remO-row.remO-full>.remO-name{padding-right:0;}
   .remO-head{align-items:end;}
   .remO-head .remO-cell{white-space:normal;overflow:hidden;line-height:1.25;}
-  /* every money column right-aligned so the figures read as a column of currency */
-  .remO-num{text-align:right;}
   .remO-seq{text-align:left;}
   .remO-seq{font-variant-numeric:tabular-nums;color:var(--txt-subtle);font-size:12px;}
-  .remO-behindn{display:inline-block;min-width:20px;text-align:center;color:#7a2e2e;}
+  .remO-behindn{display:inline-block;color:#7a2e2e;}
   .remO-behind0{color:var(--txt-subtle);}
   /* W04-T4: widen OUR drill modal only. Her global .w04-drill-modal rule is never
      touched - this is a scoped override on the class pair only our modal carries. */
@@ -5965,7 +5962,7 @@ function remOTable(w){
     (full?'<span class="remO-cell remO-num">'+money(tt.expected)+'</span>':'')+
     '<span class="remO-cell remO-pct">'+totMini+'</span>'+
   '</div>';
-  return '<div class="remO-tbl"><div class="scroll remO-scroll">'+remOHead(w)+body+'</div>'+tot+'</div>';
+  return '<div class="remO-tbl"><div class="scroll remO-scroll">'+remOHead(w)+body+tot+'</div></div>';
 }
 /* ---- pacing-bars view (Version B presentation) ---- */
 function remOBars(w){
@@ -6031,7 +6028,7 @@ function remOPaceCards(w,drill){
   var cur=w.remPaceF||"all",st=remOBandStats(w);
   var defs=[["behind","Behind","error"],["ontrack","On track","check_circle"],["ahead","Ahead","trending_up"]];
   return '<div class="remO-cards" role="group" aria-label="'+(drill?"Pledge pace, tap to open":"Filter pledges by pace")+'">'+defs.map(function(d){
-    var b=st[d[0]],top='<span class="remO-card-top">'+ICON(d[2])+'<span class="remO-card-lbl">'+d[1]+'</span></span><span class="remO-card-n">'+b.n+'</span><span class="remO-card-sub">'+money(b.out)+(w.size==="kpi"?'':' outstanding')+'</span>';
+    var b=st[d[0]],top='<span class="remO-card-top">'+ICON(d[2])+'<span class="remO-card-lbl">'+d[1]+'</span></span><span class="remO-card-n">'+b.n+'</span><span class="remO-card-sub">'+money(b.out)+(w.size==="xwide"?' outstanding':'')+'</span>';
     var info=w.size==="kpi"?'':'<button type="button" class="remO-cardinfo" data-tip="'+remOEsc(REMO_CARD_TIPS[d[0]])+'" data-tip-plain aria-label="'+remOEsc("What "+d[1]+" means. "+REMO_CARD_TIPS[d[0]])+'">'+ICON("info")+'</button>';
     if(drill)return '<span class="remO-cardwrap"><button class="remO-card remO-card-'+d[0]+'" data-action="remO-drill" data-id="'+w.id+'" data-band="'+d[0]+'" aria-label="'+d[1]+', '+b.n+' pledge'+(b.n===1?"":"s")+', '+money(b.out)+' outstanding, tap to open">'+top+'</button>'+info+'</span>';
     var on=cur===d[0];
