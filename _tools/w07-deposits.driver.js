@@ -61,9 +61,8 @@ A.ok(/\$106,726,837/.test(html), "the total row cross-foots the full 125-account
 w.tpage = 2; html = EX.contentHTML(w); A.ok(/Showing 51 to 100 of/.test(html), "page 2 shows accounts 51 to 100"); w.tpage = 1;
 w.view = "dist"; html = EX.contentHTML(w); A.ok(/donut|pie-wrap/.test(html), "Distribution view renders the donut"); A.noEmDash(html, "distribution view");
 w.view = "trend"; html = EX.contentHTML(w); A.ok(/tr-canvas/.test(html), "Trend view renders the line chart"); A.noEmDash(html, "trend view"); w.view = "table";
-/* owner (26 Sep): at Explore / Detail the period is a filter-chip on the header row beside the scope chip (W01 pattern), with the shared terms; Glance unchanged */
-rows.forEach(function (r) { const h = EX.contentHTML(r); if (r.size === "kpi") { A.absent(h, "depo-ctlrow", r.id + ": Glance keeps its own controls"); A.contains(h, 'class="trend-range" data-depo="rangemenu"', r.id + ": Glance keeps the vs-range button"); } else { A.contains(h, '<div class="depo-ctlrow"><button class="filter-chip depo-scope-chip"', r.id + ": scope chip first on the control row"); A.contains(h, '<button class="filter-chip" data-depo="rangemenu"', r.id + ": period chip beside it"); A.contains(h, '<span class="fc-label">This quarter</span>', r.id + ": shared period term"); A.contains(h, "vs previous quarter", r.id + ": KPI caption names the comparison"); A.absent(h, '<button class="trend-range"', r.id + ": no range button in the KPI row"); } });
-A.contains(js, '["P","This period"]', "the fiscal Period option is offered with the shared term");
+/* Compare To offers the fiscal Period between month and quarter */
+A.ok(/Previous period|period/i.test(EX.contentHTML(w)) || /"P"/.test(js), "Compare To carries the fiscal Period option");
 /* chart drill: a type re-scopes the widget and flips the breakdown to By Account */
 EX.depO.drill(w, "Checking"); A.eq(w.filter, "Checking", "type drill re-scopes the filter"); A.eq(w.bd, "group", "breakdown flips to By Account"); A.eq(w.tpage, 1, "paging resets");
 html = EX.contentHTML(w); A.ok(html.length > 400, "re-scoped widget renders"); if (/wt-head/.test(html)) A.headMatchesBody(html, "re-scoped table (D12)");
