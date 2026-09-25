@@ -116,37 +116,26 @@
     },
     "W05": {
       "name": "Receivable Invoices Outstanding",
-      "driver": "w05-receivables-oc.driver.js",
-      "ours": {
-        "kind": "receivables-oc",
+      "driver": "w05-receivables.driver.js",
+      "decided": "2026-09-25 OC",
+      "removed": [
+        "receivables-mb",
+        "receivables-oc"
+      ],
+      "final": {
+        "kind": "receivables",
         "prefix": "arO",
         "css": {
-          "start": "/* ===== W05 Receivable Invoices Outstanding V2",
-          "end": "/* ===== W06 Insurance Billing Plans V2"
+          "start": "/* ===== W05 Receivable Invoices Outstanding V2 CSS ===== */",
+          "end": "/* ===== end W05 Receivable Invoices Outstanding V2 CSS ===== */"
         },
         "js": {
-          "start": "/* ===== W05 Receivable Invoices Outstanding V2",
-          "end": "/* ===== W06 Insurance Billing Plans V2"
+          "start": "/* ===== W05 Receivable Invoices Outstanding V2 ===== */",
+          "end": "/* ===== end W05 Receivable Invoices Outstanding V2 ===== */"
         },
         "registry": {
           "grep": [
-            "kind:\"receivables-oc\""
-          ]
-        }
-      },
-      "jo": {
-        "kind": "receivables-mb",
-        "prefix": "arF",
-        "css": {
-          "grep": [
-            ".arf-",
-            ".ar-"
-          ]
-        },
-        "js": {
-          "grep": [
-            "arF",
-            "kind:\"receivables-mb\""
+            "kind:\"receivables\""
           ]
         }
       }

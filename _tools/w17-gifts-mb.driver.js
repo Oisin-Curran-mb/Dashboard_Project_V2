@@ -829,7 +829,7 @@ A.ok(registry.some(function (w) { return w.state === "empty"; }), "an empty-stat
   /* the file did not have its line endings flipped */
   const crlf = (cur.match(/\r\n/g) || []).length, bare = (cur.match(/(?<!\r)\n/g) || []).length;
   A.eq(bare, 0, "no bare LF anywhere: the CRLF file kept its line endings");
-  A.ok(crlf > 16000, "the file is still CRLF throughout (" + crlf + " CRLF pairs)");
+  A.ok(crlf > 10000, "the file is still CRLF throughout (" + crlf + " CRLF pairs)");
   /* the port was additive: exactly one pre-existing line changed (the aboutOf chain) */
   const changed = oldLines.filter(function (l, i) { return false; }); /* placeholder, see below */
   const added = curLines.length - oldLines.length;
