@@ -56,8 +56,10 @@ Plus `docs/review/00 - Review Index.md`: G1-G12 with our stance, per-widget stat
 
 W01 first as a pilot for format approval, then W02-W07, W09-W17, then W08 / W14 / W18 as Unreviewed packs, then G1-G12 as a batch.
 
-### Phase 0b: prep for the per-widget process (25 Sep)
-Comment diet on our code (D10); shell labelling pass from a real call graph; registration plumbing (D8) added to the shell with existing widgets untouched; pilot W14 then W08 (D11).
+### Phase 0b: prep for the per-widget process (25 Sep, done)
+Comment diet on our code (D10): -1,880 lines. Registration plumbing (D8): `WIDGETS` at the top of the shell IIFE, six dispatch points hook it. Pilot (D11): W14 and W08 are self-contained registered blocks, the W08 clone is deleted, both have decision records and drivers. File 18,770 lines; 18 drivers, 8,274 assertions green. Shell labelling pass (shared helpers marked with their users) still to do; it is folded into each widget's finalisation.
+
+Placement rules learned: `WIDGETS` inside the IIFE; finished blocks before `var dashboards=` (registry rows read widget data at load); registry rows stay in the shell's array, labelled.
 
 ### Phase 2: review + finalise, one widget at a time (D9)
 Owner rules per item. Claude applies, runs lint (auto-fixing defects), runs `verify.js`, records in `docs/decisions/Wnn.md`. Where Jo's version of a widget wins, her latest block is ported from `_ref/jo-phase2-8958e49.html` over the 08 Sep copy already in the file (converted to CRLF), per widget, per commit. Her shell-wide changes (size step-down, container/sheet styling, Add-widget dialog, finder, title-tap swap) are reviewed as their own batch under G1-G12.

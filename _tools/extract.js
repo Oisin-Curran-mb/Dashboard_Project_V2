@@ -33,7 +33,7 @@ if (!id || (!MAP.widgets[id] && id !== "SHELL")) {
   process.exit(1);
 }
 
-const FILES = { ours: "index.html", jo: "_ref/jo-phase2-8958e49.html", aditya: "_ref/aditya/Demo V2.html" };
+const FILES = { ours: "index.html", final: "index.html", jo: "_ref/jo-phase2-8958e49.html", aditya: "_ref/aditya/Demo V2.html" };
 
 function parts(html) {
   const s = /<script>([\s\S]*)<\/script>/.exec(html);

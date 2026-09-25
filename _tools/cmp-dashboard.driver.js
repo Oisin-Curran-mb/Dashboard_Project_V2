@@ -61,12 +61,10 @@ const dash = EX.dashboards.filter(function (d) { return d.id === "cmp"; })[0];
 A.ok(!!dash, "a dashboard with id 'cmp' exists");
 A.eq(dash.name, "Side by side (Jo vs OC)", "its name reads as specified");
 A.eq(dash.custom, true, "it is a custom dashboard, so it is not the read-only system one");
-/* 103 since 2026-09-17: fourteen widgets at 7 cards each, plus W08 My Status
-   at 5. W08 was added on owner instruction, reversing the earlier ruling that
-   it was hers alone; it contributes 5 rather than 7 because her widget declares
-   tiers:["wide","xwide"] and her mysContent does not branch on size, so no
-   Glance card is invented for it. */
-A.eq(dash.widgets.length, 103, "it holds exactly 103 cards (14 widgets x 7, plus W08 x 5)");
+/* 98 = fourteen undecided widgets x 7 cards (Jo + OC at three sizes, plus a
+   note card). A widget leaves this tab when the owner decides it (D9); W08
+   left on 2026-09-25 (Jo's version kept). */
+A.eq(dash.widgets.length, 98, "it holds exactly 98 cards (14 undecided widgets x 7)");
 
 A.eq(EX.dashboards.length, 4, "the shell now has four dashboards, hers plus this one");
 A.eq(EX.dashboards.map(function (d) { return d.id; }).join(","), "d1,sys,nowidgets,cmp",
@@ -110,32 +108,34 @@ A.eq(EX.dashboards[2].widgets.length, 0, "her No widgets dashboard is still empt
   }
   A.eq(oi, oldLines.length, "her three dashboard entries survive line-for-line IN ORDER inside the region (a548419 baseline; ours interleave additively)");
 
-  /* purely additive vs a548419: only three shared dispatcher lines were extended
-     (triggerSelector, aboutOf, and the bgt hover listener selector). */
+  /* Decision D8 (2026-09-25): widgets are being restructured into self-contained
+     registered blocks, so Jo's shell lines are no longer byte-frozen and the old
+     "every a548419 line survives verbatim" guard is retired. The guard is now
+     structural: her live widgets still render (section 3), every kind registers
+     at most once, and no top-level function is defined twice. */
   const oL = old.split("\r\n"), cL = cur.split("\r\n");
   A.ok(cL.length - oL.length > 3000, "the edit added our blocks (" + (cL.length - oL.length) + " lines)");
-  const curSet = {};
-  cL.forEach(function (l) { curSet[l] = 1; });
-  const missing = oL.filter(function (l) { return !curSet[l] && l.trim() !== ""; });
-  /* The only lines of hers this branch is allowed to have changed. Each was
-     EXTENDED (a branch or selector appended), never rewritten, so her own
-     behaviour on each is preserved:
-       1. triggerSelector  - the (OC) popover anchors
-       2. aboutOf          - the (OC) about text
-       3. the bgt hover listener selector - the (OC) line-chart hover
-       4. the scoped-modal body - routes a payroll-oc drill to prOContent
-       5. the document "input" listener - the (OC) My Status search (mysOHandleInput),
-          added 2026-09-21; visible now that the comparison is against the
-          committed a548419 baseline rather than a later snapshot */
-  const allowed = missing.filter(function (l) {
-    return l.indexOf("function triggerSelector()") > -1
-        || l.indexOf("function aboutOf(") > -1
-        || (l.indexOf('addEventListener("mousemove"') > -1 && l.indexOf("bgt-col2") > -1)
-        || (l.indexOf("modal.scoped?") > -1 && l.indexOf("wcontent acct-mw") > -1)
-        || (l.indexOf('addEventListener("input"') > -1 && l.indexOf("gftHandleInput") > -1);
+  const regs = (cur.match(/WIDGETS\.register\("([a-z0-9-]+)"/g) || []).map(function (m) { return /"([a-z0-9-]+)"/.exec(m)[1]; });
+  A.ok(regs.length >= 2, "widgets register through WIDGETS.register (" + regs.join(", ") + ")");
+  A.eq(new Set(regs).size, regs.length, "no kind is registered twice");
+  A.ok(cur.indexOf("var WIDGETS={") < cur.indexOf("  var dashboards=["), "WIDGETS is defined before the registry literal");
+  /* and INSIDE the shell IIFE: its methods read the IIFE's pop/modal variables,
+     so outside it they would resolve to nothing (caught 2026-09-25) */
+  A.ok(cur.indexOf("<script>\r\n(function(){") > -1 && cur.indexOf("<script>\r\n(function(){") < cur.indexOf("var WIDGETS={"), "WIDGETS is defined inside the shell IIFE, after its opening line");
+  regs.forEach(function (k) {
+    A.absent(cur, 'if(w.kind==="' + k + '")return', k + ": no leftover contentHTML branch, the registration is the only dispatch");
   });
-  A.eq(missing.length - allowed.length, 0, "every a548419 line survives verbatim except the 5 extended dispatcher lines (" + missing.length + " modified)");
-  A.eq(allowed.length, missing.length, "every modified line of hers is one of the 5 known extensions");
+  /* Jo's own shell already repeats a few tiny helper names (sb, seg, val, line,
+     btn) in separate scopes, so a duplicate only counts if OUR work added it:
+     the name's definition count must not have grown against the baseline. */
+  function defCounts(lines) { const d = {}; lines.forEach(function (l) { const m = /^ {0,2}function\s+([A-Za-z_$][\w$]*)\s*\(/.exec(l); if (m) d[m[1]] = (d[m[1]] || 0) + 1; }); return d; }
+  const dCur = defCounts(cL), dOld = defCounts(oL);
+  /* Four helper names (sb, seg, line, btn) were already duplicated by the older
+     OC blocks before 2026-09-25; each disappears when its widget is finalised,
+     so they are tolerated here and re-checked per widget. Anything new fails. */
+  const KNOWN_DUPS = ["sb", "seg", "line", "btn"];
+  const dups = Object.keys(dCur).filter(function (n) { return dCur[n] > 1 && dCur[n] > (dOld[n] || 0) && KNOWN_DUPS.indexOf(n) < 0; });
+  A.eq(dups.length, 0, "no top-level function was defined twice by our work" + (dups.length ? " (" + dups.join(", ") + ")" : ""));
 
   /* the CRLF file kept its line endings: a whole-file flip is an automatic fail */
   A.eq((cur.match(/(?<!\r)\n/g) || []).length, 0, "no bare LF anywhere: still a pure CRLF file");
@@ -178,17 +178,16 @@ const LBL = { kpi: "Glance", wide: "Explore", xwide: "Detail" };
    and W08 is appended AFTER those fourteen with five cards, so it is checked
    in its own block rather than by bending the stride. */
 A.eq(GROUPS.length, 14, "fourteen widgets are compared in groups of seven");
-/* W14 is still hers alone and must not appear. W08 no longer holds: the owner
-   directed a duplicate on 2026-09-17, so her mystatus IS now compared, against
-   our mystatus-oc clone. */
+/* Decided widgets leave the tab (D9). W14 was Jo's alone; W08 was decided for
+   Jo's version on 2026-09-25 and the clone deleted. */
 A.eq(dash.widgets.filter(function (w) { return w.kind === "tasks"; }).length, 0,
-  "kind 'tasks' is absent: W14 is hers alone, so there is nothing to compare");
-A.eq(dash.widgets.filter(function (w) { return w.kind === "mystatus"; }).length, 2,
-  "her mystatus appears twice, at Explore and Detail");
-A.eq(dash.widgets.filter(function (w) { return w.kind === "mystatus-oc"; }).length, 2,
-  "our mystatus-oc clone appears alongside it, at the same two sizes");
-A.eq(dash.widgets.filter(function (w) { return /^cmpW08/.test(w.id); }).length, 5,
-  "W08 contributes 5 cards, with no Glance card invented");
+  "kind 'tasks' is absent: W14 is decided (Jo's), nothing to compare");
+A.eq(dash.widgets.filter(function (w) { return w.kind === "mystatus"; }).length, 0,
+  "kind 'mystatus' is absent: W08 is decided (Jo's), nothing to compare");
+A.eq(dash.widgets.filter(function (w) { return /^cmpW08/.test(w.id); }).length, 0,
+  "W08 contributes no cards any more");
+A.absent(S, "mystatus-oc", "the W08 clone kind is gone from the shell");
+A.absent(S, "mysO", "the W08 clone namespace is gone from the shell");
 A.eq(dash.widgets.filter(function (w) { return /^cmpW12/.test(w.id); }).length, 0,
   "W12 is absent: it is an empty slot in the widget list");
 
@@ -224,39 +223,10 @@ GROUPS.forEach(function (g, gi) {
   });
 });
 
-/* ---------- W08 My Status: the five-card group, added 2026-09-17 -------
-   Her W08 is the finished reference build and is NOT modified; ours is a clone
-   of it so improvements can be trialled. It sits last on the tab and carries
-   five cards, not seven, because her widget offers only Explore and Detail. */
-(function () {
-  const grp = dash.widgets.slice(98, 103);
-  A.eq(grp.length, 5, "W08: the group holds five cards");
-  const two = ["wide", "xwide"];
-  two.forEach(function (sz, i) {
-    A.eq(grp[i].kind, "mystatus", "W08 card " + (i + 1) + ": HER kind");
-    A.eq(grp[i].size, sz, "W08 card " + (i + 1) + ": size is " + sz);
-    A.eq(grp[i].title, "W08 My Status - Jo (" + LBL[sz] + ")", "W08 card " + (i + 1) + ": title names Jo");
-    A.eq(grp[2 + i].kind, "mystatus-oc", "W08 card " + (i + 3) + ": OUR kind");
-    A.eq(grp[2 + i].size, sz, "W08 card " + (i + 3) + ": size is " + sz);
-    A.eq(grp[2 + i].title, "W08 My Status - OC (" + LBL[sz] + ")", "W08 card " + (i + 3) + ": title names OC");
-  });
-  A.eq(grp[4].kind, "cmpnote-mb", "W08 card 5: the note card");
-  A.eq(grp[4].cmpN, "W08", "W08 card 5: names its widget");
-  /* no Glance card is invented for a widget she built with two tiers */
-  A.eq(grp.filter(function (w) { return w.size === "kpi"; }).length, 0, "W08: no Glance card");
-  /* each card owns its query list, so selecting on one cannot change another */
-  const lists = grp.filter(function (w) { return w.selected; }).map(function (w) { return w.selected; });
-  A.eq(lists.length, 4, "all four widget cards carry a query list");
-  A.eq(new Set(lists).size, 4, "and every list is a separate array, not one shared reference");
-  lists.forEach(function (l, i) { A.ok(Array.isArray(l) && l.length > 0, "W08 list " + (i + 1) + " is a populated array"); });
-  /* hers and ours start from the same selection, since this is a clone */
-  A.eq(grp[0].selected.join(","), grp[2].selected.join(","), "hers and ours start from the same selection");
-})();
-
 /* card ids are unique, so find() and the shell's per-card state cannot cross */
 (function () {
   const ids = dash.widgets.map(function (w) { return w.id; });
-  A.eq(new Set(ids).size, 103, "all 103 card ids are unique");
+  A.eq(new Set(ids).size, 98, "all 98 card ids are unique");
   const herIds = EX.dashboards[0].widgets.map(function (w) { return w.id; });
   A.eq(ids.filter(function (i) { return herIds.indexOf(i) > -1; }).length, 0,
     "no card id collides with one of hers on her own dashboard");
@@ -280,9 +250,9 @@ GROUPS.forEach(function (g, gi) {
     else if (/^cmpW\d\d o/.test(w.id.replace(/^(cmpW\d\d)([ho])/, "$1 $2"))) ourRendered++;
     else herRendered++;
   });
-  A.eq(herRendered, 44, "44 of HER cards rendered: 14 widgets x 3 sizes, plus W08 x 2");
-  A.eq(ourRendered, 44, "44 of OUR cards rendered: 14 widgets x 3 sizes, plus W08 x 2");
-  A.eq(noteRendered, 15, "15 note cards rendered");
+  A.eq(herRendered, 42, "42 of HER cards rendered: 14 widgets x 3 sizes");
+  A.eq(ourRendered, 42, "42 of OUR cards rendered: 14 widgets x 3 sizes");
+  A.eq(noteRendered, 14, "14 note cards rendered");
 })();
 
 /* Her seven removed widgets specifically: the point of the whole tab.
@@ -416,7 +386,7 @@ function liveRows(text, kind) {
 
 /* ---------- 4. the note cards carry the real summaries ---------------- */
 (function () {
-  A.eq(Object.keys(EX.CMPNOTE_).length, 15, "the note lookup holds one summary per compared widget");
+  A.eq(Object.keys(EX.CMPNOTE_).length, 14, "the note lookup holds one summary per compared widget");
   GROUPS.forEach(function (g) {
     const n = g[0];
     const note = EX.CMPNOTE_[n];
@@ -536,7 +506,7 @@ function liveRows(text, kind) {
     A.noEmDash(EX.contentHTML(w), "the body of " + w.id);
     swept++;
   });
-  A.eq(swept, 103, "the em-dash sweep covered all 103 cards, title and body");
+  A.eq(swept, 98, "the em-dash sweep covered all 98 cards, title and body");
 })();
 
 

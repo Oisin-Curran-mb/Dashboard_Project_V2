@@ -51,7 +51,12 @@ if (snap) {
      branches on kinds Jo also tests (rep, pt, distpt, all), so the check is that
      none of her branches was REMOVED, not that counts are identical. */
   const kinds = (snap.match(/kind==="[a-z0-9-]+"/g) || []);
+  /* kinds that now plug in through WIDGETS.register() have had their if-chain
+     branches removed on purpose (decision D8), so they are excluded here */
+  const registered = (raw.match(/WIDGETS\.register\("([a-z0-9-]+)"/g) || []).map(s => /"([a-z0-9-]+)"/.exec(s)[1]);
   const moved = [...new Set(kinds)].filter(k => {
+    const kind = /"([a-z0-9-]+)"/.exec(k)[1];
+    if (registered.indexOf(kind) > -1) return false;
     const re = new RegExp(k.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&"), "g");
     return (raw.match(re) || []).length < (snap.match(re) || []).length;
   });

@@ -687,7 +687,7 @@
   .modal-b{padding:0 18px 16px;font-size:13px;line-height:1.55;color:var(--txt-secondary);}
   .modal-b b{color:var(--txt-primary);}
   .modal-f{display:flex;justify-content:flex-end;gap:8px;padding:0 16px 16px;}
-  /* ===== Main Content Tasks (mct): context-aware launcher ===== */
+  /* ===== W14 Main Content Tasks V2 CSS ===== */
   .mct-head{flex:0 0 auto;display:flex;flex-direction:column;gap:12px;padding:12px 16px 10px;background:var(--surface-widget);border-bottom:1px solid var(--stroke-widget);}
 .mct-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:12px 16px 8px;display:flex;flex-direction:column;gap:16px;}
   .mct-search{display:flex;align-items:center;gap:6px;background:var(--wn-100);border:1px solid var(--wn-300);border-radius:9px;padding:8px 11px;transition:border-color var(--dur),box-shadow var(--dur),background var(--dur);}
@@ -736,7 +736,9 @@
   .mct-itile-badge{font-size:8px;font-weight:600;letter-spacing:.02em;line-height:1;padding:1px 3px;border-radius:3px;background:var(--wn-200);color:var(--txt-secondary);}
   .mct-glance-empty{font-size:12px;color:var(--txt-subtle);padding:6px 2px;}
 
-  /* ===== My Status (mys) ===== */
+  .mct-filterrow{display:flex;}
+/* ===== end W14 Main Content Tasks V2 CSS ===== */
+/* ===== W08 My Status V2 CSS ===== */
   .mys-hd .dep-hd-top{align-items:center;}
   .mys-modewrap{min-width:0;justify-self:start;align-self:center;}
   .mys-hd-actions{display:flex;align-items:center;gap:4px;}
@@ -795,6 +797,7 @@
   .mys-sub{font-size:11.5px;color:var(--txt-subtle);}
   .mys-allclear{display:flex;align-items:center;gap:8px;color:var(--txt-subtle);font-size:13px;padding:14px;}
   .mys-allclear .material-symbols-rounded{font-size:20px;color:var(--pos-100,#36a14f);}
+/* ===== end W08 My Status V2 CSS ===== */
   /* ===== Bank Balances (prefix: bank): CSS ===== */
   .bank-neg{color:var(--red-100);}
   .bank-pill{display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:600;color:var(--txt-secondary);background:var(--wn-200);border-radius:999px;padding:2px 9px 2px 7px;font-variant-numeric:tabular-nums;}
@@ -1702,7 +1705,6 @@
   /* Chips size to their content, never stretch to fill the header */
   .filter-chip,.scope-chip{flex:0 0 auto;width:-moz-fit-content;width:fit-content;max-width:100%;justify-content:flex-start;}
   .dep-hd-top{min-width:0;}
-  .mct-filterrow{display:flex;}
 
 /* ===== P2/P3 widget styles ===== */
 /* =====================================================================
@@ -3920,89 +3922,6 @@
 .depo-acct-modal .acctm-chart .tr-canvas{min-height:0;}
 /* ===== end W07 Deposits on Hand V2 CSS ===== */
 
-  /* ===== W08 My Status V2 CSS ===== */
-  .myso-hd .dep-hd-top{align-items:center;}
-  .myso-modewrap{min-width:0;justify-self:start;align-self:center;}
-  .myso-hd-actions{display:flex;align-items:center;gap:4px;}
-  .myso-cfg-btn{white-space:nowrap;}
-  .myso-modetog .vt .material-symbols-rounded{font-size:15px;margin-right:2px;}
-  .myso-list{padding-bottom:2px;}
-  .myso-headrow{position:sticky;top:0;z-index:1;}
-  .myso-headrow .myso-countcol{text-align:right;}
-  .cap.myso-grp{padding:10px 14px 4px;}
-  .myso-row{gap:10px;}
-  .myso-nmwrap{display:flex;align-items:center;gap:9px;min-width:0;}
-  .myso-nmtext{display:flex;flex-direction:column;gap:1px;min-width:0;}
-  .myso-nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500;color:var(--txt-primary);}
-  .myso-ctx{font-size:11px;color:var(--txt-subtle);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .myso-ctx-urgent{color:var(--red-130);font-weight:600;}
-  .myso-dot{flex:0 0 auto;width:7px;height:7px;border-radius:50%;background:var(--cn-110);}
-  .myso-dot-action{background:var(--red-100);}
-  .myso-dot-info{background:var(--cn-110);}
-  .myso-aff{font-size:16px;color:var(--txt-subtle);flex:0 0 auto;}
-  .myso-clickable:hover .myso-aff{color:var(--brand-400);}
-  .myso-count{color:var(--txt-primary);}
-  .myso-count-zero{color:var(--txt-subtle);font-weight:500;}
-  .myso-count-urgent{color:var(--red-130);}
-  .myso-row.myso-zero{cursor:default;}
-  .myso-row.myso-zero .myso-nm{font-weight:500;color:var(--txt-subtle);}
-  .myso-row.myso-clickable{cursor:pointer;}
-  .myso-row.myso-clickable:hover{background:var(--wn-100);}
-  .myso-row.myso-clickable:hover .myso-count{color:var(--brand-500);}
-  .myso-empty .btn{margin-top:14px;}
-  .myso-cfg-modal{max-width:720px;}
-  .myso-cfg-b{padding:0;}
-  .myso-cfg{display:grid;grid-template-columns:1fr 1fr;gap:0;}
-  .myso-cfg-col{display:flex;flex-direction:column;min-width:0;padding:12px 14px 14px;}
-  .myso-cfg-avail{border-right:1px solid var(--stroke-widget);}
-  .myso-cfg-h{font-size:11px;font-weight:600;letter-spacing:.03em;text-transform:uppercase;color:var(--txt-subtle);padding:2px 2px 8px;display:flex;align-items:center;gap:6px;}
-  .myso-cfg-n{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--wn-200);color:var(--txt-secondary);font-size:11px;}
-  .myso-cfg .dd-search{margin:0 0 6px;padding:7px 4px;}
-  .myso-cfg-scroll{max-height:320px;min-height:220px;}
-  .myso-avail .myso-add-ic,.myso-selrow .myso-rm-ic{margin-left:auto;color:var(--txt-subtle);display:inline-flex;}
-  .myso-avail:hover .myso-add-ic{color:var(--pos-100);}
-  .myso-selrow:hover .myso-rm-ic{color:var(--red-130);}
-  .myso-avail .material-symbols-rounded,.myso-selrow .material-symbols-rounded{font-size:18px;}
-  .myso-empty-col{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;color:var(--txt-subtle);font-size:12px;padding:28px 12px;min-height:180px;}
-  .myso-empty-col .material-symbols-rounded{font-size:26px;color:var(--cn-110);}
-  .myso-detail-modal{max-width:760px;}
-  .myso-detail-tbl{max-height:60vh;}
-  .myso-dhead,.myso-drow{gap:14px;}
-  .myso-dc{flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-variant-numeric:tabular-nums;}
-  .myso-detail-f{display:flex;align-items:center;}
-  .myso-detail-spacer{flex:1;}
-  .myso-asof{font-size:11px;color:var(--txt-subtle);padding:6px 10px 4px;}
-  .myso-hpill{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;}
-  .myso-hpill .material-symbols-rounded{font-size:15px;}
-  .myso-hpill.warn{background:var(--wn-200);color:var(--txt-primary);}
-  .myso-hpill.ok{background:rgba(54,161,79,.12);color:var(--pos-100,#36a14f);}
-  .myso-sub{font-size:11.5px;color:var(--txt-subtle);}
-  .myso-allclear{display:flex;align-items:center;gap:8px;color:var(--txt-subtle);font-size:13px;padding:14px;}
-  .myso-allclear .material-symbols-rounded{font-size:20px;color:var(--pos-100,#36a14f);}
-
-  .modal.myso-cfg-modal>.modal-b,
-  .modal.myso-detail-modal>.modal-b{flex:1 1 auto;min-height:0;display:block;overflow:hidden;}
-
-  /* config: the two columns and their lists stretch to the full height */
-  .myso-cfg-modal .myso-cfg{height:100%;min-height:0;}
-  .myso-cfg-modal .myso-cfg-col{min-height:0;}
-  .myso-cfg-modal .myso-cfg-scroll{max-height:none;min-height:0;flex:1 1 auto;overflow-y:auto;}
-
-  /* records: the table fills the dialog instead of stopping at 60vh */
-  .myso-detail-modal .myso-detail-tbl{max-height:none;height:100%;min-height:0;overflow-y:auto;}
-
-  /* IMPROVEMENT 2: the dot legend. Quiet, one line, directly above the
-     available list. Reuses the same .myso-dot swatches the rows use, so the
-     key cannot drift from what it explains. */
-  .myso-legend{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
-    padding:0 2px 8px;font-size:11px;color:var(--txt-subtle);}
-  .myso-legend-k{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;}
-
-  @media (max-width:760px){
-    .myso-cfg-modal .myso-cfg{grid-template-columns:1fr;}
-    .myso-cfg-modal .myso-cfg-avail{border-right:0;border-bottom:1px solid var(--stroke-widget);}
-  }
-
 /* ===== W18 Financial KPI V2 ===== */
 
 .fkp-band,.fkp-pop{
@@ -4344,6 +4263,28 @@
 
 <script>
 (function(){
+  /* ===== Shell: widget registration =====
+     Each widget block registers itself once. The shell's dispatch points
+     (contentHTML, aboutOf, popContent, triggerSelector, renderModal, the
+     click and input listeners) ask WIDGETS first and fall through to the
+     older if-chains only for kinds that have not been registered yet.
+       WIDGETS.register(kind, {
+         content(w)        card body for the widget's current size (required)
+         about(w)          {h,b} for the info popover
+         click(a,id,t,e)   its own data-action values; return true when handled
+         input(e)          its own input events; return true when handled
+         pops:   {type: {content(), trigger()}}   popover types it owns
+         modals: {type: html()}                    modal types it owns
+       }) */
+  var WIDGETS={kinds:{},pops:{},modals:{},clicks:[],inputs:[],
+    register:function(kind,h){this.kinds[kind]=h;var k;for(k in (h.pops||{}))this.pops[k]=h.pops[k];for(k in (h.modals||{}))this.modals[k]=h.modals[k];if(h.click)this.clicks.push(h.click);if(h.input)this.inputs.push(h.input);},
+    content:function(w){var h=this.kinds[w.kind];return h&&h.content?h.content(w):null;},
+    about:function(w){var h=this.kinds[w.kind];return h&&h.about?h.about(w):null;},
+    click:function(a,id,t,e){for(var i=0;i<this.clicks.length;i++)if(this.clicks[i](a,id,t,e))return true;return false;},
+    input:function(e){for(var i=0;i<this.inputs.length;i++)if(this.inputs[i](e))return true;return false;},
+    pop:function(){var p=pop&&this.pops[pop.type];return p&&p.content?p.content():null;},
+    trigger:function(){var p=pop&&this.pops[pop.type];return p&&p.trigger?p.trigger():null;},
+    modal:function(){var m=modal&&this.modals[modal.type];return m?m():null;}};
   var ICON=function(n){return '<span class="material-symbols-rounded">'+n+'</span>';};
   var SIZES=["kpi","wide","xwide"];
   var SIZE_LABEL={kpi:"Glance",wide:"Explore",xwide:"Detail"};
@@ -4376,7 +4317,9 @@
   function depTypes(w){var seen={},out=["All types"];depData(w).forEach(function(a){if(!seen[a.type]){seen[a.type]=1;out.push(a.type);}});return out;}
   function money(n){return "$"+n.toLocaleString();}
 
-/* === MY STATUS (mys) data === */
+/* ===== W08 My Status V2 =====
+   Configurable list of system queries (unposted items, approvals, HR reviews) with counts, a config modal and a records modal. ===== */
+  /* Data: query catalogue, areas, urgency labels and the default selection */
   var MYS_AREA = {GL:"GL and posting", AP:"Accounts Payable", PUR:"Purchasing", HR:"Payroll and HR"};
   var MYS_QUERIES = [
     {id:"q_muje",  area:"GL", urgency:"action", name:"My unposted journal entries",           sys:"My Unposted Journal Entries",                    count:7,   click:"nav", navTo:"GL, Unposted Journals"},
@@ -4423,55 +4366,226 @@
   ];
   var MYS_DEFAULT = ["q_muje","q_prapp","q_apdue","q_crs","q_revnow","q_mubank","q_bdmo"];
   function mysFind(id){for(var i=0;i<MYS_QUERIES.length;i++)if(MYS_QUERIES[i].id===id)return MYS_QUERIES[i];return null;}
+function mysConfigBtn(w){return '<button class="btn outlined sm mys-cfg-btn" data-action="mys-config" data-id="'+w.id+'" aria-haspopup="dialog">'+ICON("checklist")+'Configure</button>';}
+function mysActive(sel){return sel.filter(function(q){return q.count>0;}).slice().sort(function(a,b){return b.count-a.count;});}
+function mysClearList(sel){return sel.filter(function(q){return q.count<=0;});}
+function mysHeaderBlock(w,sel){
+  var active=mysActive(sel),n=active.length,recs=active.reduce(function(s,q){return s+q.count;},0);
+  var badge=n?('<span class="mys-hpill warn">'+ICON("pending_actions")+n+(n===1?" query needs attention":" queries need attention")+'</span>'):('<span class="mys-hpill ok">'+ICON("check_circle")+'All clear</span>');
+  return '<div class="dep-hd mys-hd"><div class="dep-hd-top"><div class="dep-hd-kpigrp"><span class="metric-value">'+recs+'</span>'+badge+'</div><div class="dep-hd-toggle">'+mysConfigBtn(w)+'</div></div><div class="dep-hd-num"><div class="mys-sub">Records waiting across your tracked queries. Select a count to work through it.</div></div></div>';
+}
+function mysRowHTML(w,q){
+  var zero=q.count<=0, clickable=!zero;
+  var aff=(!zero&&q.click==="nav")?'<span class="mys-aff material-symbols-rounded" aria-hidden="true" data-tip="Opens the '+q.navTo+' page (leaves the dashboard)" data-tip-plain>arrow_outward</span>':'';
+  var srClick=clickable?(q.click==="nav"?", opens the "+q.navTo+" page":", opens a record list"):", nothing to action";
+  var nm='<span class="lr-main mys-nm">'+q.name+'</span>';
+  var count='<span class="wt-c2 mys-count'+(zero?" mys-count-zero":"")+'">'+q.count+'<span class="sr-only"> records'+srClick+'</span></span>';
+  var attrs=clickable?' data-action="mys-row" data-id="'+w.id+'" data-q="'+q.id+'" tabindex="0" role="button" aria-label="'+q.name+', '+q.count+' records'+srClick+'"':' aria-disabled="true"';
+  return '<div class="wt-row mys-row'+(zero?" mys-zero":"")+(clickable?" mys-clickable":"")+'"'+attrs+'>'+nm+aff+count+'</div>';
+}
+function mysContent(w){
+  var sel=(w.selected||[]).map(mysFind).filter(Boolean);
+  if(!sel.length)return '<div class="state mys-empty" data-kind="empty">'+ICON("checklist")+'<div class="state-title">No records to display</div><div class="state-sub">Choose the queries you want to keep an eye on. Their live counts show up here.</div><button class="btn outlined" data-action="mys-config" data-id="'+w.id+'">'+ICON("checklist")+'Configure</button></div>';
+  var active=mysActive(sel),clear=mysClearList(sel);
+  var head='<div class="wt-row wt-head mys-headrow"><span class="lr-main">Query</span><span class="wt-c2 mys-countcol">Count</span></div>';
+  var body="";
+  if(active.length)body+=active.map(function(q){return mysRowHTML(w,q);}).join("");
+  else body+='<div class="mys-allclear">'+ICON("task_alt")+'<span>Nothing needs your attention right now.</span></div>';
+  if(clear.length)body+='<div class="cap mys-grp">Up to date</div>'+clear.map(function(q){return mysRowHTML(w,q);}).join("");
+  return mysHeaderBlock(w,sel)+'<div class="scroll mys-list">'+head+body+'</div>';
+}
 
-/* ===== W08 My Status V2 data ===== */
-  var MYSO_AREA = {GL:"GL and posting", AP:"Accounts Payable", PUR:"Purchasing", HR:"Payroll and HR"};
-  var MYSO_QUERIES = [
-    {id:"q_muje",  area:"GL", urgency:"action", name:"My unposted journal entries",           sys:"My Unposted Journal Entries",                    count:7,   click:"nav", navTo:"GL, Unposted Journals"},
-    {id:"q_uje",   area:"GL", urgency:"action", name:"Unposted journal entries (all users)",   sys:"Unposted Journal Entries",                        count:12,  click:"nav", navTo:"GL, Unposted Journals"},
-    {id:"q_mubank",area:"GL", urgency:"action", name:"My unposted bank transactions",          sys:"My Unposted Bank Transactions",                   count:0,   click:"nav", navTo:"Bank Reconciliation, Unposted"},
-    {id:"q_mucc",  area:"GL", urgency:"action", name:"My unposted credit card transactions",   sys:"My Unposted Credit Card Transactions",            count:4,   click:"nav", navTo:"Credit Cards, Unposted"},
-    {id:"q_muap",  area:"GL", urgency:"action", name:"My unposted AP transactions",            sys:"My Unposted AP Transactions",                     count:2,   click:"nav", navTo:"Accounts Payable, Unposted"},
-    {id:"q_mupmc", area:"GL", urgency:"action", name:"My unposted payroll manual checks",      sys:"My Unposted Payroll Manual Checks",               count:1,   click:"nav", navTo:"Payroll, Manual Checks"},
-    {id:"q_glnew", area:"GL", urgency:"info",   name:"GL accounts added in the last 30 days",  sys:"General Ledger Accounts Added Within Last 30 Days",count:6,  click:"detail", records:[
-        {Account:"1055 Operating Checking 2", Type:"Asset", "Added by":"J. Lopez", "Date added":"12 Jul 2026"},
-        {Account:"4120 Youth Camp Income",   Type:"Income","Added by":"A. Reid",   "Date added":"09 Jul 2026"}]},
-    {id:"q_crs",   area:"GL", urgency:"info",   name:"Check register summary",                 sys:"Check Register Summary",                          count:42,  click:"detail", records:[
-        {Date:"18 Jul 2026", "Check #":"10432", Payee:"City Utilities",       Amount:"$1,204.50", Status:"Cleared"},
-        {Date:"17 Jul 2026", "Check #":"10431", Payee:"Grace Media Supplies", Amount:"$389.00",   Status:"Outstanding"},
-        {Date:"15 Jul 2026", "Check #":"10430", Payee:"Faithful Cleaning Co", Amount:"$640.00",   Status:"Cleared"}]},
-    {id:"q_crd",   area:"GL", urgency:"info",   name:"Check register detail",                  sys:"Check Register Detail",                           count:128, click:"detail", records:[
-        {Date:"18 Jul 2026", "Check #":"10432", Account:"6200 Utilities", Amount:"$1,204.50", Memo:"July electric"},
-        {Date:"17 Jul 2026", "Check #":"10431", Account:"6410 Supplies",  Amount:"$389.00",   Memo:"AV cables"}]},
-    {id:"q_apdue", area:"AP", urgency:"action", name:"Unpaid accounts payable by due date",    sys:"Unpaid Accounts Payable by Due Date",             count:5, click:"detail", ctx:"2 overdue, oldest 12 days", records:[
-        {Vendor:"City Utilities",       Invoice:"INV-88213", "Due date":"11 Jul 2026", Amount:"$1,204.50", Status:"Overdue"},
-        {Vendor:"Faithful Cleaning Co", Invoice:"INV-88190", "Due date":"14 Jul 2026", Amount:"$640.00",   Status:"Overdue"},
-        {Vendor:"Grace Media Supplies", Invoice:"INV-88301", "Due date":"28 Jul 2026", Amount:"$389.00",   Status:"Open"}]},
-    {id:"q_aprec", area:"AP", urgency:"action", name:"AP recurring dollars by due date",       sys:"AP Recurring Dollars By Due Date",                count:3, click:"detail", ctx:"$4,120 due", records:[
-        {Vendor:"Insurance Partners", "Due date":"25 Jul 2026", Amount:"$2,500.00", Frequency:"Monthly"},
-        {Vendor:"Landscaping Plus",   "Due date":"30 Jul 2026", Amount:"$820.00",   Frequency:"Monthly"}]},
-    {id:"q_prapp", area:"PUR",urgency:"action", name:"Purchasing requests needing my approval",     sys:"Purchasing Requests Needing My Approval",      count:3, click:"nav", navTo:"Purchasing, My Approvals"},
-    {id:"q_prnext",area:"PUR",urgency:"action", name:"Purchasing requests needing my approval next",sys:"Purchasing Requests Needing My Approval Next", count:2, click:"nav", navTo:"Purchasing, Upcoming Approvals"},
-    {id:"q_revnow",area:"HR", urgency:"action", name:"Employees needing review now",           sys:"Employees Needing Review Now",                    count:2, click:"detail", records:[
-        {Employee:"Dana Whitfield", Role:"Ministry Assistant", "Review due":"20 Jul 2026"},
-        {Employee:"Marcus Lee",     Role:"Facilities",         "Review due":"22 Jul 2026"}]},
-    {id:"q_revmo", area:"HR", urgency:"info",   name:"Employees needing review within next month", sys:"Employees Needing Review Within Next Month",   count:5, click:"detail", records:[
-        {Employee:"Priya Nair", Role:"Accounting Clerk", "Review due":"09 Aug 2026"}]},
-    {id:"q_clock", area:"HR", urgency:"info",   name:"Active employee time clock info",        sys:"Active Employee Time Clock Info",                 count:9, click:"detail", records:[
-        {Employee:"Sam Ortiz", "Clocked in":"08:02", Department:"Childcare"}]},
-    {id:"q_ot",    area:"HR", urgency:"info",   name:"Employee overtime hours last payroll",   sys:"Employee Overtime Hours Last Payroll",            count:4, click:"detail", records:[
-        {Employee:"Marcus Lee", "OT hours":"6.5", "Pay period":"01 to 15 Jul"}]},
-    {id:"q_pto",   area:"HR", urgency:"info",   name:"Scheduled time off",                     sys:"Scheduled Time Off",                              count:3, click:"detail", records:[
-        {Employee:"Dana Whitfield", "From":"28 Jul 2026", "To":"01 Aug 2026", Type:"Vacation"}]},
-    {id:"q_bdmo",  area:"HR", urgency:"info",   name:"Employee birthdays this month",          sys:"Employee Birthdays This Month",                   count:0, click:"detail", records:[]},
-    {id:"q_bdnext",area:"HR", urgency:"info",   name:"Employee birthdays next month",          sys:"Employee Birthdays Next Month",                   count:8, click:"detail", records:[
-        {Employee:"Priya Nair", "Birthday":"03 Aug"}]},
-    {id:"q_bdwk",  area:"HR", urgency:"info",   name:"Employee birthdays next week",           sys:"Employee Birthdays Next Week",                    count:1, click:"detail", records:[
-        {Employee:"Sam Ortiz", "Birthday":"29 Jul"}]}
+function mysConfigModalHTML(){
+  var w=find(modal.id);if(!w)return "";
+  var draft=modal.draft||[],q=(modal.q||"").toLowerCase();
+  var avail=MYS_QUERIES.filter(function(x){return draft.indexOf(x.id)<0;});
+  var availM=avail.filter(function(x){return !q||x.name.toLowerCase().indexOf(q)>-1||x.sys.toLowerCase().indexOf(q)>-1||MYS_AREA[x.area].toLowerCase().indexOf(q)>-1;});
+  var availHTML="";
+  ["GL","AP","PUR","HR"].forEach(function(ar){var items=availM.filter(function(x){return x.area===ar;});if(!items.length)return;
+    availHTML+='<div class="cap">'+MYS_AREA[ar]+'</div>'+items.map(function(x){
+      return '<button class="mi mys-avail" data-action="mys-add" data-q="'+x.id+'" data-id="'+w.id+'"><span class="mys-dot mys-dot-'+x.urgency+'" aria-hidden="true"></span><span class="mi-nm">'+x.name+'</span><span class="mys-add-ic" aria-hidden="true">'+ICON("add")+'</span></button>';}).join("");});
+  if(!availM.length)availHTML='<div class="mi-note" style="color:var(--txt-subtle)">'+(q?('No queries match "'+(modal.q||"").replace(/"/g,"&quot;")+'"'):'All available queries are already showing.')+'</div>';
+  var selHTML=draft.length?draft.map(function(qid){var x=mysFind(qid);if(!x)return "";
+      return '<button class="mi mys-selrow" data-action="mys-remove" data-q="'+x.id+'" data-id="'+w.id+'"><span class="mys-dot mys-dot-'+x.urgency+'" aria-hidden="true"></span><span class="mi-nm">'+x.name+'</span><span class="mys-rm-ic" aria-hidden="true" title="Remove">'+ICON("close")+'</span></button>';}).join("")
+    :'<div class="mys-empty-col">'+ICON("checklist")+'<span>Nothing selected yet. Add queries from the left.</span></div>';
+  var body='<div class="mys-cfg">'+
+      '<div class="mys-cfg-col mys-cfg-avail"><div class="mys-cfg-h">Available queries</div>'+
+        '<div class="dd-search">'+ICON("search")+'<input class="dd-input" id="mysConfigQ" placeholder="Search queries or areas" value="'+(modal.q||"").replace(/"/g,"&quot;")+'" autocomplete="off"></div>'+
+        '<div class="menu-scroll mys-cfg-scroll" role="listbox">'+availHTML+'</div></div>'+
+      '<div class="mys-cfg-col mys-cfg-sel"><div class="mys-cfg-h">Showing on my dashboard <span class="mys-cfg-n">'+draft.length+'</span></div>'+
+        '<div class="menu-scroll mys-cfg-scroll">'+selHTML+'</div></div></div>';
+  return '<div class="modal-backdrop" data-action="mys-config-cancel"><div class="modal modal-wide mys-cfg-modal" data-action="stop" role="dialog" aria-modal="true" aria-label="Configure My Status">'+
+    '<div class="modal-h"><span class="modal-title"><span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">tune</span>Configure My Status</span><button class="iconbtn" data-action="mys-config-cancel" aria-label="Close">'+ICON("close")+'</button></div>'+
+    '<div class="modal-b mys-cfg-b">'+body+'</div>'+
+    '<div class="modal-f"><button class="btn naked sm" data-action="mys-config-cancel">Cancel</button><button class="btn primary sm" data-action="mys-config-done" data-id="'+w.id+'">Done</button></div></div></div>';}
+function mysDetailModalHTML(){
+  var q=mysFind(modal.q);if(!q)return "";
+  var recs=q.records||[],cols=recs.length?Object.keys(recs[0]):[];
+  var table;
+  if(recs.length){
+    var head='<div class="wt-row wt-head mys-dhead">'+cols.map(function(c){return '<span class="mys-dc">'+c+'</span>';}).join("")+'</div>';
+    var rows=recs.map(function(r){return '<div class="wt-row mys-drow">'+cols.map(function(c){var v=String(r[c]);var urgent=(c==="Status"&&v==="Overdue");return '<span class="mys-dc'+(urgent?" mys-ctx-urgent":"")+'">'+v+'</span>';}).join("")+'</div>';}).join("");
+    table='<div class="scroll mys-detail-tbl">'+head+rows+'</div>';
+  } else {
+    table='<div class="state" data-kind="empty">'+ICON("inbox")+'<div class="state-title">No records to display</div></div>';
+  }
+  return '<div class="modal-backdrop" data-action="mys-detail-close"><div class="modal modal-wide mys-detail-modal" data-action="stop" role="dialog" aria-modal="true" aria-label="'+q.name.replace(/"/g,"&quot;")+'">'+
+    '<div class="modal-h"><span class="modal-title"><span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">list_alt</span>'+q.name+'</span><button class="iconbtn" data-action="mys-detail-close" aria-label="Close">'+ICON("close")+'</button></div>'+
+    '<div class="modal-b">'+table+'</div>'+
+    '<div class="modal-f mys-detail-f"><button class="btn naked sm" data-action="mys-detail-export" data-q="'+q.id+'">'+ICON("download")+'Export to Excel</button><span class="mys-detail-spacer"></span><button class="btn primary sm" data-action="mys-detail-close">Close</button></div></div></div>';}
+function mysPopContent(){
+  if(pop.type==="mys-opts"){var wo=find(pop.id),hz=!!wo.hideZero;
+    return '<div class="cap">Display</div><button class="mi'+(hz?" check":"")+'" data-action="mys-hidezero" data-id="'+wo.id+'">'+ICON(hz?"check_box":"check_box_outline_blank")+'Hide zero-count rows</button><div class="sep"></div><div class="mys-asof">Counts as of '+(wo.updated||"just now")+'</div>';}
+  return "";}
+
+  /* Click actions: mys-config, mys-add, mys-remove, mys-config-done, mys-config-cancel, mys-row, mys-detail-close, mys-detail-export, mys-mode, mys-opts, mys-hidezero */
+  function mysHandleClick(a,id,t){
+    if(a==="mys-config"){var wc0=find(id);modal={type:"mysconfig",id:id,q:"",draft:(wc0.selected||[]).slice()};modalMounted=false;pop=null;render();return true;}
+    if(a==="mys-add"){var wa2=find(modal.id);var qid=t.getAttribute("data-q");if(wa2&&modal.draft.indexOf(qid)<0)modal.draft.push(qid);renderModal();return true;}
+    if(a==="mys-remove"){var qidr=t.getAttribute("data-q");if(modal)modal.draft=modal.draft.filter(function(x){return x!==qidr;});renderModal();return true;}
+    if(a==="mys-config-done"){var wcd=find(modal.id);var chg=JSON.stringify(wcd.selected)!==JSON.stringify(modal.draft);wcd.selected=modal.draft.slice();modal=null;pop=null;if(chg){wcd.state="loading";render();clearTimeout(timers[wcd.id]);timers[wcd.id]=setTimeout(function(){wcd.state="ready";wcd.updated="just now";render();},700);}else render();return true;}
+    if(a==="mys-config-cancel"){modal=null;pop=null;render();return true;}
+    if(a==="mys-row"){var qq=t.getAttribute("data-q"),mq=mysFind(qq);if(mq&&mq.count>0){if(mq.click==="detail"){modal={type:"mysdetail",id:id,q:qq};modalMounted=false;pop=null;render();}else{showModal("Opens the "+mq.navTo+" page","This count links out of the dashboard to <b>"+mq.navTo+"</b>, where you can work through these "+mq.count+" records. Use the browser back button to return to the dashboard.");}}return true;}
+    if(a==="mys-detail-close"){modal=null;pop=null;render();return true;}
+    if(a==="mys-detail-export"){var qe=mysFind(t.getAttribute("data-q"));showModal("Export to Excel","This would export the "+(qe?qe.count:0)+" records in <b>"+(qe?qe.name:"")+"</b> as an Excel file.");return true;}
+    if(a==="mys-mode"){var wmm2=find(id);if(wmm2)wmm2.mode=t.getAttribute("data-m");pop=null;render();return true;}
+    if(a==="mys-opts"){pop=(pop&&pop.type==="mys-opts"&&pop.id===id)?null:{type:"mys-opts",id:id};render();return true;}
+    if(a==="mys-hidezero"){var wmh=find(id);if(wmh)wmh.hideZero=!wmh.hideZero;pop=null;render();return true;}
+    return false;
+  }
+  /* The config modal's search box (input id "mysConfigQ") */
+  function mysHandleInput(e){if(e.target.id==="mysConfigQ"){if(modal)modal.q=e.target.value;var pmq=e.target.selectionStart;renderModal();var mqi=document.getElementById("mysConfigQ");if(mqi){mqi.focus();try{mqi.setSelectionRange(pmq,pmq);}catch(_mq){}}return true;}return false;}
+  WIDGETS.register("mystatus",{content:mysContent,click:mysHandleClick,input:mysHandleInput,pops:{"mys-opts":{content:mysPopContent,trigger:function(){return '[data-action="mys-opts"][data-id="'+pop.id+'"]';}}},modals:{mysconfig:mysConfigModalHTML,mysdetail:mysDetailModalHTML}});
+/* ===== end W08 My Status V2 ===== */
+
+  /* ===== W14 Main Content Tasks V2 =====
+   Context-aware quick-action launcher: recent, saved and standard tasks per accounting application, with search. ===== */
+  var MCT_APPS=[
+    {id:"ap",           code:"AP",  name:"Accounts Payable"},
+    {id:"ar",           code:"AR",  name:"Accounts Receivable"},
+    {id:"gl",           code:"GL",  name:"General Ledger"},
+    {id:"payroll",      code:"PR",  name:"Payroll"},
+    {id:"purchasing",   code:"PUR", name:"Purchasing"},
+    {id:"bank",         code:"BNK", name:"Bank"},
+    {id:"contributions",code:"CON", name:"Contributions"},
+    {id:"assets",       code:"FA",  name:"Fixed Assets"}
   ];
-  var MYSO_URGENCY = {action:"Needs action", info:"For information"};
-  var MYSO_DEFAULT = ["q_muje","q_prapp","q_apdue","q_crs","q_revnow","q_mubank","q_bdmo"];
-  function mysOFind(id){for(var i=0;i<MYSO_QUERIES.length;i++)if(MYSO_QUERIES[i].id===id)return MYSO_QUERIES[i];return null;}
+  var MCT_TASKS=[
+    {app:"ap",  id:"ap-check",    label:"Write AP Check",         dest:"Accounts Payable, Checks, Write Check",             icon:"payments",           std:true, dflt:true,  keywords:["pay","payment","invoice","bill","check","cheque","vendor","disbursement","ap"]},
+    {app:"ap",  id:"ap-invoice",  label:"Enter AP Invoice",       dest:"Accounts Payable, Invoices, Enter Invoice",         icon:"receipt_long",       std:true, dflt:true,  keywords:["enter","invoice","bill","vendor","payable","record","ap"]},
+    {app:"ap",  id:"ap-paybills", label:"Pay AP Bills",           dest:"Accounts Payable, Payments, Pay Bills",             icon:"request_quote",      std:true, dflt:true,  keywords:["pay","payment","invoice","bill","bills","vendor","disbursement","ap"]},
+    {app:"ap",  id:"ap-void",     label:"Void AP Check",          dest:"Accounts Payable, Checks, Void Check",              icon:"money_off",          std:true, dflt:false, keywords:["void","cancel","check","payment","reverse","ap"]},
+    {app:"ap",  id:"ap-vendor",   label:"Add AP Vendor",          dest:"Accounts Payable, Vendors, New Vendor",             icon:"storefront",         std:true, dflt:false, keywords:["vendor","supplier","payee","add","new","ap"]},
+    {app:"ap",  id:"ap-aged",     label:"Aged Payables Report",   dest:"Accounts Payable, Reports, Aged Payables",          icon:"summarize",          std:false,dflt:false, saved:true, keywords:["aged","payables","report","outstanding","owe","ap"]},
+
+    {app:"ar",  id:"ar-invoice",  label:"Create AR Invoice",      dest:"Accounts Receivable, Invoices, New Invoice",        icon:"request_page",       std:true, dflt:true,  keywords:["create","invoice","charge","customer","receivable","bill","ar"]},
+    {app:"ar",  id:"ar-payment",  label:"Record Customer Payment",dest:"Accounts Receivable, Payments, Receive Payment",    icon:"attach_money",       std:true, dflt:true,  keywords:["receive","payment","customer","cash","collect","receivable","ar"]},
+    {app:"ar",  id:"ar-customer", label:"Add AR Customer",        dest:"Accounts Receivable, Customers, New Customer",      icon:"person_add",         std:true, dflt:false, keywords:["customer","account","add","new","ar"]},
+    {app:"ar",  id:"ar-statement",label:"Customer Statements",    dest:"Accounts Receivable, Reports, Statements",          icon:"summarize",          std:false,dflt:false, saved:true, keywords:["statement","customer","balance","report","ar"]},
+
+    {app:"gl",  id:"gl-je",       label:"New GL Journal Entry",   dest:"General Ledger, Journal Entries, New Entry",        icon:"menu_book",          std:true, dflt:true,  keywords:["journal","entry","je","post","adjust","ledger","debit","credit","gl"]},
+    {app:"gl",  id:"gl-recur",    label:"Recurring Journal Entry",dest:"General Ledger, Journal Entries, Recurring",        icon:"repeat",             std:true, dflt:false, keywords:["recurring","journal","entry","schedule","ledger","gl"]},
+    {app:"gl",  id:"gl-account",  label:"Add GL Account",         dest:"General Ledger, Chart of Accounts, New Account",    icon:"account_tree",       std:true, dflt:false, keywords:["account","chart","coa","ledger","add","gl"]},
+    {app:"gl",  id:"gl-tb",       label:"Trial Balance",          dest:"General Ledger, Reports, Trial Balance",            icon:"summarize",          std:false,dflt:false, saved:true, keywords:["trial","balance","ledger","report","gl"]},
+
+    {app:"payroll", id:"pr-run",      label:"Run Payroll",         dest:"Payroll, Pay Runs, Run Payroll",                icon:"badge",       std:true, dflt:true,  keywords:["run","payroll","pay","wages","salary","paycheck","employees","pr"]},
+    {app:"payroll", id:"pr-emp",      label:"Add Payroll Employee",dest:"Payroll, Employees, New Employee",              icon:"person_add",  std:true, dflt:false, keywords:["employee","hire","staff","add","new","payroll","pr"]},
+    {app:"payroll", id:"pr-time",     label:"Enter Timecards",     dest:"Payroll, Time, Enter Timecards",                icon:"schedule",    std:true, dflt:false, keywords:["time","timecard","hours","attendance","payroll","pr"]},
+    {app:"payroll", id:"pr-register", label:"Payroll Register",    dest:"Payroll, Reports, Payroll Register",            icon:"summarize",   std:false,dflt:false, saved:true, keywords:["payroll","register","wages","report","pr"]},
+
+    {app:"purchasing", id:"pur-po",      label:"New Purchase Order", dest:"Purchasing, Purchase Orders, New PO",         icon:"shopping_cart", std:true, dflt:true,  keywords:["purchase","order","po","buy","requisition","vendor","pur"]},
+    {app:"purchasing", id:"pur-receive", label:"Receive Purchase Order",dest:"Purchasing, Receiving, Receive PO",       icon:"inventory",     std:true, dflt:false, keywords:["receive","receiving","purchase","order","po","goods","pur"]},
+    {app:"purchasing", id:"pur-req",     label:"Create Requisition", dest:"Purchasing, Requisitions, New Requisition",   icon:"assignment",    std:true, dflt:false, keywords:["requisition","request","purchase","order","pur"]},
+
+    {app:"bank", id:"bank-rec",     label:"Reconcile Bank Account",dest:"Bank, Reconciliation, Reconcile Account",      icon:"account_balance", std:true, dflt:true,  keywords:["reconcile","reconciliation","bank","statement","match","balance","bnk"]},
+    {app:"bank", id:"bank-dep",     label:"Record Bank Deposit",   dest:"Bank, Deposits, Record Deposit",               icon:"savings",         std:true, dflt:true,  keywords:["deposit","bank","cash","record","lodge","bnk"]},
+    {app:"bank", id:"bank-transfer",label:"Bank Transfer",         dest:"Bank, Transfers, New Transfer",                icon:"swap_horiz",      std:true, dflt:false, keywords:["transfer","bank","move","funds","between","bnk"]},
+
+    {app:"contributions", id:"con-enter",   label:"Enter Contribution",      dest:"Contributions, Enter Contributions",          icon:"volunteer_activism", std:true, dflt:true,  keywords:["contribution","giving","donation","gift","tithe","offering","enter","con"]},
+    {app:"contributions", id:"con-batch",   label:"Post Contribution Batch", dest:"Contributions, Batches, Post Batch",          icon:"inventory_2",        std:true, dflt:false, keywords:["batch","contribution","giving","post","donations","con"]},
+    {app:"contributions", id:"con-donor",   label:"Add Contributor",         dest:"Contributions, Contributors, New Contributor",icon:"group_add",          std:true, dflt:false, keywords:["contributor","donor","giver","member","add","new","con"]},
+    {app:"contributions", id:"con-stmt",    label:"Giving Statements",       dest:"Contributions, Reports, Giving Statements",   icon:"summarize",          std:false,dflt:false, saved:true, keywords:["giving","statement","contribution","donor","tax","report","con"]}
+  ];
+  var MCT_RECENT=["bank-rec","ap-check","con-enter","gl-je","ar-payment"];
+  var MCT_STOP={a:1,an:1,the:1,to:1,my:1,of:1,for:1,in:1,on:1,and:1,or:1,me:1};
+  var MCT_SYN={send:["pay","payment","remit","submit","transfer","issue","process","cut"],pay:["pay","payment","check","disburse","remit","send","cut"],create:["create","new","add","enter","start","make"],"new":["new","create","add","start"],add:["add","new","create","enter"],enter:["enter","record","add","input","post"],record:["record","enter","post"],receive:["receive","collect","take","deposit"],deposit:["deposit","lodge","bank"],reconcile:["reconcile","match","clear","balance"],invoice:["invoice","bill","payable"],bill:["bill","invoice","payable"],report:["report","statement","summary","register"],giving:["giving","contribution","donation","gift","tithe","offering"],donation:["donation","contribution","giving","gift"],check:["check","cheque","payment","pay"],transfer:["transfer","move","send"],run:["run","process","start"],vendor:["vendor","supplier","payee"],customer:["customer","client","member"],journal:["journal","entry","je","ledger"]};
+  function mctApp(id){for(var i=0;i<MCT_APPS.length;i++)if(MCT_APPS[i].id===id)return MCT_APPS[i];return null;}
+  function mctTask(id){for(var i=0;i<MCT_TASKS.length;i++)if(MCT_TASKS[i].id===id)return MCT_TASKS[i];return null;}
+  function mctAppHasTasks(id){for(var i=0;i<MCT_TASKS.length;i++)if(MCT_TASKS[i].app===id)return true;return false;}
+  function mctCtx(w){return w.appContext||"home";}
+  function mctInCtx(t,ctx){return ctx==="home"?true:t.app===ctx;}
+  function mctFilter(w){return w.mctFilter||"all";}
+  function mctCtxTasks(w){var ctx=mctCtx(w);return MCT_TASKS.filter(function(t){return mctInCtx(t,ctx);});}
+  function mctCtxName(w){var ctx=mctCtx(w);if(ctx==="home")return "Accounting Home";var a=mctApp(ctx);return a?a.name:"this application";}
+  function mctDefaultSaved(w){var ctx=mctCtx(w),out=[];MCT_TASKS.forEach(function(t){if(!mctInCtx(t,ctx))return;if(t.dflt||t.saved)out.push(t.id);});return out;}
+  function mctSavedIds(w){if(!w.mctSaved)w.mctSaved=mctDefaultSaved(w);return w.mctSaved;}
+  function mctIsSaved(w,t){return mctSavedIds(w).indexOf(t.id)>-1;}
+  function mctMyTasks(w){var ids=mctSavedIds(w),ctx=mctCtx(w);
+    var list=MCT_TASKS.filter(function(t){return mctInCtx(t,ctx)&&ids.indexOf(t.id)>-1&&mctPassFilter(w,t);});
+    list.sort(function(a,b){var ad=a.dflt?0:1,bd=b.dflt?0:1;if(ad!==bd)return ad-bd;return MCT_TASKS.indexOf(a)-MCT_TASKS.indexOf(b);});
+    return list;}
+  function mctStandardTasks(w){var ids=mctSavedIds(w),ctx=mctCtx(w),isHome=ctx==="home",f=mctFilter(w);
+    return MCT_TASKS.filter(function(t){
+      if(!t.std)return false;
+      if(ids.indexOf(t.id)>-1)return false;
+      if(isHome){if(f!=="all"&&t.app!==f)return false;}else{if(t.app!==ctx)return false;}
+      return true;});}
+  function mctRecentIds(w){return w.mctRecent||MCT_RECENT;}
+  function mctPassFilter(w,t){if(mctCtx(w)!=="home")return true;var f=mctFilter(w);return f==="all"||t.app===f;}
+  function mctRecentTasks(w){var ctx=mctCtx(w);return mctRecentIds(w).map(mctTask).filter(function(t){return t&&mctInCtx(t,ctx)&&mctPassFilter(w,t);});}
+  function mctTokens(q){return q.toLowerCase().split(/[^a-z0-9]+/).filter(function(x){return x&&!MCT_STOP[x];});}
+  function mctSearchList(w){
+    var toks=mctTokens((w.mctQ||"").trim());if(!toks.length)return [];
+    var ctx=mctCtx(w),f=mctFilter(w),out=[];
+    MCT_TASKS.forEach(function(t){
+      if(!mctInCtx(t,ctx))return;
+      if(f!=="all"&&t.app!==f)return;
+      var a=mctApp(t.app),lbl=t.label.toLowerCase(),kw=(t.keywords||[]).join(" ").toLowerCase(),an=a.name.toLowerCase(),ac=a.code.toLowerCase();
+      var score=0,matched=0;
+      toks.forEach(function(tk){var terms=[tk].concat(MCT_SYN[tk]||[]),hit=false;
+        terms.forEach(function(term){
+          if(lbl.indexOf(term)>-1){score+=3;hit=true;}
+          if(kw.indexOf(term)>-1){score+=2;hit=true;}
+          if(an.indexOf(term)>-1||ac===term){score+=1;hit=true;}
+        });
+        if(hit)matched++;});
+      if(matched>0){if(t.dflt)score+=0.5;out.push({t:t,score:score,matched:matched});}
+    });
+    out.sort(function(x,y){if(y.matched!==x.matched)return y.matched-x.matched;if(y.score!==x.score)return y.score-x.score;return x.t.label.localeCompare(y.t.label);});
+    return out;}
+  function mctBadge(appId){var a=mctApp(appId);if(!a)return "";return '<span class="mct-badge" data-app="'+a.id+'" title="'+a.name+'" data-tip="'+a.name+'" data-tip-plain aria-label="'+a.name+'">'+a.code+'</span>';}
+  function mctStarBtn(w,t){var saved=mctIsSaved(w,t),act=saved?"mct-unsave":"mct-save";var lbl=(saved?"Remove "+t.label+" from My tasks":"Add "+t.label+" to My tasks");return '<button class="mct-star'+(saved?" on":"")+'" data-action="'+act+'" data-id="'+w.id+'" data-t="'+t.id+'" aria-pressed="'+saved+'" aria-label="'+lbl+'" data-tip="'+(saved?"In My tasks (remove)":"Add to My tasks")+'" data-tip-plain>'+ICON(saved?"star":"star_border")+'</button>';}
+  function mctRow(w,t,force){var a=mctApp(t.app);var badge=(force||mctCtx(w)==="home")?mctBadge(t.app):"";var aria=(t.label+", "+a.name+", opens "+t.dest).replace(/"/g,"&quot;");return '<div class="mct-row"><button class="mct-row-main" data-action="mct-open" data-id="'+w.id+'" data-t="'+t.id+'" aria-label="'+aria+'"><span class="mct-row-ic">'+ICON(t.icon)+'</span><span class="mct-row-tx"><span class="mct-row-lbl">'+t.label+'</span><span class="mct-row-dest">'+t.dest+'</span></span>'+badge+'</button></div>';}
+  function mctItile(w,t){var a=mctApp(t.app);var badge=(mctCtx(w)==="home")?'<span class="mct-itile-badge" data-app="'+a.id+'" aria-hidden="true">'+a.code+'</span>':"";var aria=(t.label+", "+a.name+", opens "+t.dest).replace(/"/g,"&quot;");return '<button class="mct-itile" data-action="mct-open" data-id="'+w.id+'" data-t="'+t.id+'" aria-label="'+aria+'" data-tip="'+(t.label+" ("+a.name+")").replace(/"/g,"&quot;")+'" data-tip-plain>'+ICON(t.icon)+badge+'<span class="sr-only">'+t.label+", "+a.name+'</span></button>';}
+  function mctSearch(w){var q=w.mctQ||"";var clr=q?'<button class="mct-q-clear" data-action="mct-clearq" data-id="'+w.id+'" aria-label="Clear search">'+ICON("close")+'</button>':'';return '<div class="mct-search"><input class="mct-q" id="mctq-'+w.id+'" placeholder="Search tasks" value="'+q.replace(/"/g,"&quot;")+'" aria-label="Search tasks across all applications" autocomplete="off">'+clr+'</div>';}
+  function mctFilterChip(w){var f=mctFilter(w),lbl=f==="all"?"All applications":(mctApp(f)?mctApp(f).name:"All applications");return '<button class="filter-chip mct-filter" data-action="mct-appfilter" data-id="'+w.id+'" aria-haspopup="listbox" aria-label="Filter tasks by application, currently '+lbl+'"><span class="fc-label">'+lbl+'</span>'+ICON("expand_more")+'</button>';}
+  function mctRecentSection(w){var list=mctRecentTasks(w);if(!list.length)return "";return '<div class="mct-sec"><div class="mct-sec-h">Recent Tasks</div><div class="mct-list">'+list.map(function(t){return mctRow(w,t);}).join("")+'</div></div>';}
+  function mctMySection(w){var list=mctMyTasks(w);if(!list.length)return "";return '<div class="mct-sec"><div class="mct-sec-h">My Tasks</div><div class="mct-list">'+list.map(function(t){return mctRow(w,t);}).join("")+'</div></div>';}
+  function mctStandardSection(w){var list=mctStandardTasks(w);if(!list.length){var msg=(mctCtx(w)==="home"&&mctFilter(w)!=="all")?("No more "+mctApp(mctFilter(w)).name+" content tasks to add."):"All content tasks are already in My Tasks.";return '<div class="mct-sec"><div class="mct-sec-h">Content Tasks</div><div class="mct-sec-empty">'+msg+'</div></div>';}return '<div class="mct-sec"><div class="mct-sec-h">Content Tasks</div><div class="mct-list">'+list.map(function(t){return mctRow(w,t);}).join("")+'</div></div>';}
+  function mctResults(w){var res=mctSearchList(w),q=(w.mctQ||"").trim();if(!res.length)return '<div class="mct-sec"><div class="mct-noresult">No tasks match "'+q.replace(/"/g,"&quot;")+'". Try another word, like "check" or "deposit".</div></div>';return '<div class="mct-sec"><div class="mct-sec-h">'+res.length+' result'+(res.length>1?"s":"")+' across all applications</div><div class="mct-list">'+res.map(function(r){return mctRow(w,r.t,true);}).join("")+'</div></div>';}
+  function mctGlanceTasks(w){var seen={},out=[];function add(l){l.forEach(function(t){if(t&&!seen[t.id]){seen[t.id]=1;out.push(t);}});}add(mctRecentTasks(w));add(mctMyTasks(w));return out;}
+  function mctGlance(w){var q=(w.mctQ||"").trim(),body;if(q){var res=mctSearchList(w);body=res.length?('<div class="mct-carousel"><div class="mct-irow">'+res.slice(0,12).map(function(r){return mctItile(w,r.t);}).join("")+'</div></div>'):'<div class="mct-glance-empty">No matches</div>';}else{var list=mctGlanceTasks(w);body=list.length?('<div class="mct-carousel"><div class="mct-irow">'+list.map(function(t){return mctItile(w,t);}).join("")+'</div></div>'):'<div class="mct-glance-empty">No recent or saved tasks yet</div>';}return '<div class="mct-glance">'+mctSearch(w)+body+'</div>';}
+  function mctContent(w){if(w.size==="kpi")return mctGlance(w);var q=(w.mctQ||"").trim();var head='<div class="mct-head">'+(mctCtx(w)==="home"?('<div class="mct-filterrow">'+mctFilterChip(w)+'</div>'):"")+mctSearch(w)+'</div>';var body=q?mctResults(w):(mctRecentSection(w)+mctMySection(w)+mctStandardSection(w));return head+'<div class="mct-scroll">'+body+'</div>';}
+
+  /* Popover content for the application filter (pop.type "mct-appfilter") */
+  function mctPopContent(){var wf=find(pop.id),cf=mctFilter(wf);
+      var opts=[{id:"all",name:"All applications"}].concat(MCT_APPS.filter(function(a){return mctAppHasTasks(a.id)&&a.id!=="assets";}));
+      return '<div class="cap">Filter standard tasks by application</div>'+opts.map(function(o){var on=cf===o.id;
+        return '<button class="mi'+(on?" check":"")+'" data-action="mct-set-filter" data-id="'+wf.id+'" data-f="'+o.id+'" role="option" aria-selected="'+on+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+(o.id==="all"?"":mctBadge(o.id)+" ")+o.name+'</button>';}).join("");}
+  /* Click actions: mct-appfilter, mct-set-filter, mct-clearq, mct-open, mct-save, mct-unsave */
+  function mctHandleClick(a,id,t){
+    if(a==="mct-appfilter"){pop=(pop&&pop.type==="mct-appfilter"&&pop.id===id)?null:{type:"mct-appfilter",id:id};render();return true;}
+    if(a==="mct-set-filter"){var wf=find(id);if(wf)wf.mctFilter=t.getAttribute("data-f");pop=null;render();return true;}
+    if(a==="mct-clearq"){var wcq=find(id);if(wcq)wcq.mctQ="";render();return true;}
+    if(a==="mct-open"){var ot=mctTask(t.getAttribute("data-t"));if(ot){var oa=mctApp(ot.app);showModal("Opens "+ot.label,"Tapping this task takes you to <b>"+ot.dest+"</b> in "+oa.name+". Tasks you do not have permission to use are not shown here.");}return true;}
+    if(a==="mct-save"){var wsv=find(id),sid=t.getAttribute("data-t");if(wsv){var arr=mctSavedIds(wsv);if(arr.indexOf(sid)<0)arr.push(sid);}setStatus("Added to My Tasks.");render();return true;}
+    if(a==="mct-unsave"){var wus=find(id),uid=t.getAttribute("data-t");if(wus){var arr2=mctSavedIds(wus);var ui=arr2.indexOf(uid);if(ui>-1)arr2.splice(ui,1);}setStatus("Removed from My Tasks.");render();return true;}
+    return false;
+  }
+  /* The search box (input id "mctq-<widget id>") re-renders with the caret kept in place */
+  function mctHandleInput(e){if(e.target.id&&e.target.id.indexOf("mctq-")===0){var wmq=find(e.target.id.slice(5));if(wmq)wmq.mctQ=e.target.value;var pmc=e.target.selectionStart;render();var mi2=document.getElementById(e.target.id);if(mi2){mi2.focus();try{mi2.setSelectionRange(pmc,pmc);}catch(_mc){}}return true;}return false;}
+  WIDGETS.register("tasks",{content:mctContent,click:mctHandleClick,input:mctHandleInput,pops:{"mct-appfilter":{content:mctPopContent,trigger:function(){return '[data-action="mct-appfilter"][data-id="'+pop.id+'"]';}}}});
+/* ===== end W14 Main Content Tasks V2 ===== */
 
   /* ===== P2/P3 WIDGET BLOCKS (pension, remittance, gifts, loans) ===== */
 /* =====================================================================
@@ -6875,15 +6989,6 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
     W15:{h:"Ours is her Bank widget rebuilt to her design, reusing her CSS rather than redeclaring it.",rows:["Both presentations stay, but ONE shows at a time at every tier; her paired Detail layout is retired.","Client-side Load more becomes SERVER paging: 12 per page over 52 accounts, stating the page and the range.","Ordering is fixed alphabetical server-side with a unique tiebreaker; her sortable column headers are not built.","Totals and the bar scale come from the whole filtered set, so turning the page moves neither the total nor a bar.","Drill-through is dropped: Single Account mode already IS this widget's drill-in mechanism.","Her div row stacks become real tables with header cells and scope, because a scoped header cell cannot survive a div row.","Red leaves the bars for the amethyst ramp and survives only on the Overdrawn status chip."],open:"The paged accounts endpoint exists in no API document, and the seven-line per-account activity breakdown is entirely new backend work."},
     W16:{h:"Ours is a one-to-one copy of her v2 Payables design plus exactly one owner-approved addition.",rows:["A second chip is added: a due-date horizon of all outstanding, or the next 7, 30, 60 or 90 days.","Overdue invoices are ALWAYS included whatever the horizon, so a narrowed horizon can never shrink the overdue band.","A due filter that a new horizon just emptied SNAPS back to All due dates rather than rendering an empty table.","A filter goes widget-wide: every aggregate reads one horizon-scoped function, so nothing on the card can disagree.","Five table columns become four, folding her Status pill into a two-line Due date cell.","Row click and the invoice detail modal are not built at all; drill-through stays an open question.","Her loading line, computed but never rendered in her own block, is now actually shown under the KPI."],open:"The aging basis, due date versus invoice date, was never confirmed against the API, and it moves every band, subtotal and the horizon itself."},
     W17:{h:"Ours pivots her Gifts widget to GOAL progress; W04 keeps the exception job.",rows:["The subject changes from percent fulfilled against the pledge total to progress against a distinct campaign Goal.","Two pace states become three goal bands: under 75 percent, 75 percent or more, and goal met.","Pledge Due uses per-pledge installment proration, explicitly NOT the linear day fraction Remittance uses.","The as-of anchor follows the SELECTED range end; the legacy routine anchors on today, a defect not reproduced.","A single received-through date becomes a range with an inline custom reveal and no Refresh button.","The drill goes INLINE under the row, paged 20 at a time, and each pledge expands again to its gift transactions.","The sort control is removed entirely, and export is the only action on the card."],open:"The received basis conflict blocks every summed figure: ours counts pledge-linked gifts only while the API counts all posted gifts for the purpose."}
-  ,
-    W08:{h:"Ours is a straight DUPLICATE of her My Status, cloned so small improvements can be trialled without touching hers. There are no design changes yet, by intent.",
-      rows:["Her build is the reference: finished, signed off and the best of the pair.",
-            "Every function, string, class and handler in ours is hers, mechanically renamed to the mysO namespace.",
-            "Nothing is shared: mysO / MYSO_ / .myso- / myso- / mysOconfig / mysOdetail / mysOConfigQ were all zero occurrences before the clone.",
-            "Her prefix cannot collide with ours, because the hyphen separates them: mys- never prefix-matches myso-.",
-            "It reaches her pop, modal and render plumbing through one delegating line each, the insHandleClick idiom, so none of her code is rewritten.",
-            "Both cards show Explore and Detail only. Her widget declares two tiers and her content function does not branch on size, so no Glance card is invented."],
-      open:"Awaiting the owner's list of small improvements; until then any diff against hers is a bug in the clone, not a design decision."}
   };
   /* number, display name, HER kind + her state, OUR kind + our state */
   var CMP_ROWS=[
@@ -6901,7 +7006,6 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
     ["W15","Bank Balances","bank",{bkacct:null,bkview:"table",bksort:"bal-desc"},"bank-mb",{bkFAcct:null,bkFView:"table",bkFPage:0,bkFOver:false,bkFSort:"nm-asc"}],
     ["W16","Accounts Payable By Due Date","payables",{apview:"table",apDue:"total",apsort:"due-asc",updated:"just now"},"payables-mb",{apFDue:"total",apFSort:"due-asc",apFHz:"all",updated:"just now"}],
     ["W17","Gifts Pledges","gifts",{gftView:"progress",gftSort:"fulfilled-asc",gftPurpose:"All purposes"},"gifts-mb",{gpFView:"goal",gpFCamp:"All Campaigns",gpFRange:"year",gpFExp:{},gpFPage:{},gpFPlExp:{},updated:"just now"}],
-    ["W08","My Status","mystatus",{selected:MYS_DEFAULT.slice(),mode:"urgency",hideZero:false},"mystatus-oc",{selected:MYSO_DEFAULT.slice(),mode:"urgency",hideZero:false},["wide","xwide"]]
   ];
   var CMP_TIERS=["kpi","wide","xwide"],CMP_TIERLBL={kpi:"Glance",wide:"Explore",xwide:"Detail"};
   function cmpCards(){
@@ -6973,6 +7077,7 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
       {id:"prO3", title:"Payroll Distributions (OC, one distribution)", kind:"payroll-oc",size:"wide", tiers:["kpi","wide","xwide"],range:"TM",view:"table",prDist:"admin",prPT:"all",prSort:"amt-desc",prDistOpen:{},prEmpOpen:{}},
       {id:"prO4", title:"Payroll Distributions (OC, no history)",       kind:"payroll-oc",size:"wide", tiers:["kpi","wide","xwide"],range:"TM",view:"table",prDist:"all",  prPT:"all",prSort:"amt-desc",prDistOpen:{},prEmpOpen:{},state:"empty"},
       */
+      /* W14 Main Content Tasks */
       {id:"mct", title:"Main Content Tasks", kind:"tasks", size:"wide",  tiers:["kpi","wide","xwide"], appContext:"home", goto:false},
       {id:"mct2",title:"Main Content Tasks (Detail view)", kind:"tasks", size:"xwide", tiers:["kpi","wide","xwide"], appContext:"home", goto:false},
       {id:"mct3",title:"Main Content Tasks (new user — content tasks only)", kind:"tasks", size:"wide", tiers:["kpi","wide","xwide"], appContext:"home", mctSaved:[], mctRecent:[], goto:false},
@@ -7021,6 +7126,7 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
       {id:"ptoF_x",title:"Payroll Scheduled Time Off (OC, Detail)",           kind:"pto-mb",size:"xwide",tiers:["kpi","wide","xwide"],ptofView:"queue",   ptofStatus:"pending",ptofQueueGroup:"dept",ptofCalDept:"all",ptofOpen:{},ptofAppr:{}},
       {id:"ptoF2", title:"Payroll Scheduled Time Off (OC, Leave Calendar)",   kind:"pto-mb",size:"wide", tiers:["kpi","wide","xwide"],ptofView:"calendar",ptofStatus:"pending",ptofQueueGroup:"dept",ptofCalDept:"all",ptofOpen:{},ptofAppr:{}},
       {id:"ptoF3", title:"Payroll Scheduled Time Off (OC, no records)",       kind:"pto-mb",size:"wide", tiers:["kpi","wide","xwide"],state:"empty",ptofView:"queue",ptofStatus:"pending",ptofQueueGroup:"dept",ptofCalDept:"all",ptofOpen:{},ptofAppr:{}},
+      /* W08 My Status */
       {id:"mys",title:"My Status",kind:"mystatus",size:"wide",tiers:["wide","xwide"],selected:MYS_DEFAULT.slice(),mode:"urgency",hideZero:false,goto:false},
       {id:"mys_x",title:"My Status (Detail)",kind:"mystatus",size:"xwide",tiers:["wide","xwide"],selected:MYS_DEFAULT.slice(),mode:"urgency",hideZero:false,goto:false},
       {id:"ap",title:"Accounts Payable By Due Date",kind:"payables",size:"wide",tiers:["kpi","wide","xwide"],apview:"table",apDue:"total",apsort:"due-asc",updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
@@ -7143,7 +7249,7 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
     fund:{h:"Spend by fund",b:"How spending breaks down across your restricted and unrestricted funds."},
     signups:{h:"New sign-ups",b:"People who recently joined a group or ministry. The number is the total for the period you choose; the list shows the most recent sign-ups regardless of period."}
   };
-  function aboutOf(w){if(w.kind==="deposits-mb")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest, shown here as a current balance with a comparison delta and a balance trend over time."};if(w.kind==="deposits-oc")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest, shown here as a current balance with a comparison delta and a balance trend over time."};if(w.kind==="deposits")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest."};if(w.kind==="payroll")return {h:w.title,b:"How payroll spend for the selected pay period splits across compensation categories: salary, hourly, benefits, overtime, and similar."};if(w.kind==="budget")return {h:w.title,b:"How actual income or spending compares to your original budget, per period and year‑to‑date. Mid‑year budget revisions are not included."};if(w.kind==="budget-mb")return {h:w.title,b:"How actual income or spending compares to your original budget, per period and year to date. Mid-year budget revisions are not included."};if(w.kind==="budget-oc")return {h:w.title,b:"How actual income or spending compares to your original budget, per period and year to date. Mid-year budget revisions are not included."};if(w.kind==="bank")return {h:w.title,b:"The current balance of each active bank account, based on unreconciled activity since the last reconciliation. Select one account to see what has moved (deposits, voids, checks, withdrawals, EFT) since then."};if(w.kind==="purchasing")return {h:w.title,b:PUR_ABOUT_BODY};if(w.kind==="pension")return {h:w.title,b:PEN_ABOUT};if(w.kind==="pension-mb")return {h:w.title,b:PENF_ABOUT};if(w.kind==="pension-oc")return {h:w.title,b:PENO_ABOUT};if(w.kind==="payroll-mb")return {h:w.title,b:PRF_ABOUT};if(w.kind==="payroll-oc")return {h:w.title,b:PRO_ABOUT};if(w.kind==="remittance-mb")return {h:w.title,b:REMF_ABOUT};if(w.kind==="remittance-oc")return {h:w.title,b:REMO_ABOUT};if(w.kind==="receivables-mb")return {h:w.title,b:"How much money is currently owed to the organisation in unpaid invoices, and how long those invoices have been outstanding, so staff can prioritise which outstanding amounts need attention first."};if(w.kind==="receivables-oc")return {h:w.title,b:"How much money is currently owed to the organisation in unpaid invoices, and how long those invoices have been outstanding, so staff can prioritise which outstanding amounts need attention first."};if(w.kind==="insurance-mb")return {h:w.title,b:INSF_ABOUT};if(w.kind==="insurance-oc")return {h:w.title,b:INSO_ABOUT};if(w.kind==="gifts")return {h:w.title,b:GFT_ABOUT_BODY};if(w.kind==="remittance")return {h:w.title,b:"How each remittance activity is pacing against its annual pledge: what has come in so far this year versus what was expected by now, and what is still outstanding."};if(w.kind==="loans")return {h:w.title,b:"Every loan that still has a balance owing, grouped by how overdue it is, so you can see the total still out and which borrowers to follow up with."};if(w.kind==="pto-mb")return {h:w.title,b:PTOF_ABOUT};if(w.kind==="loans-mb")return {h:w.title,b:LONF_ABOUT};if(w.kind==="fixedassets-mb")return {h:w.title,b:FAF_ABOUT};if(w.kind==="purchasing-mb")return {h:w.title,b:PURF_ABOUT};if(w.kind==="bank-mb")return {h:w.title,b:BKF_ABOUT};if(w.kind==="payables-mb")return {h:w.title,b:APF_ABOUT};if(w.kind==="gifts-mb")return {h:w.title,b:GPF_ABOUT};return ABOUT[w.id]||{h:w.title,b:"A short, plain-language description of what this widget shows and where its data comes from."};}
+  function aboutOf(w){var wa=WIDGETS.about(w);if(wa)return wa;if(w.kind==="deposits-mb")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest, shown here as a current balance with a comparison delta and a balance trend over time."};if(w.kind==="deposits-oc")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest, shown here as a current balance with a comparison delta and a balance trend over time."};if(w.kind==="deposits")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest."};if(w.kind==="payroll")return {h:w.title,b:"How payroll spend for the selected pay period splits across compensation categories: salary, hourly, benefits, overtime, and similar."};if(w.kind==="budget")return {h:w.title,b:"How actual income or spending compares to your original budget, per period and year‑to‑date. Mid‑year budget revisions are not included."};if(w.kind==="budget-mb")return {h:w.title,b:"How actual income or spending compares to your original budget, per period and year to date. Mid-year budget revisions are not included."};if(w.kind==="budget-oc")return {h:w.title,b:"How actual income or spending compares to your original budget, per period and year to date. Mid-year budget revisions are not included."};if(w.kind==="bank")return {h:w.title,b:"The current balance of each active bank account, based on unreconciled activity since the last reconciliation. Select one account to see what has moved (deposits, voids, checks, withdrawals, EFT) since then."};if(w.kind==="purchasing")return {h:w.title,b:PUR_ABOUT_BODY};if(w.kind==="pension")return {h:w.title,b:PEN_ABOUT};if(w.kind==="pension-mb")return {h:w.title,b:PENF_ABOUT};if(w.kind==="pension-oc")return {h:w.title,b:PENO_ABOUT};if(w.kind==="payroll-mb")return {h:w.title,b:PRF_ABOUT};if(w.kind==="payroll-oc")return {h:w.title,b:PRO_ABOUT};if(w.kind==="remittance-mb")return {h:w.title,b:REMF_ABOUT};if(w.kind==="remittance-oc")return {h:w.title,b:REMO_ABOUT};if(w.kind==="receivables-mb")return {h:w.title,b:"How much money is currently owed to the organisation in unpaid invoices, and how long those invoices have been outstanding, so staff can prioritise which outstanding amounts need attention first."};if(w.kind==="receivables-oc")return {h:w.title,b:"How much money is currently owed to the organisation in unpaid invoices, and how long those invoices have been outstanding, so staff can prioritise which outstanding amounts need attention first."};if(w.kind==="insurance-mb")return {h:w.title,b:INSF_ABOUT};if(w.kind==="insurance-oc")return {h:w.title,b:INSO_ABOUT};if(w.kind==="gifts")return {h:w.title,b:GFT_ABOUT_BODY};if(w.kind==="remittance")return {h:w.title,b:"How each remittance activity is pacing against its annual pledge: what has come in so far this year versus what was expected by now, and what is still outstanding."};if(w.kind==="loans")return {h:w.title,b:"Every loan that still has a balance owing, grouped by how overdue it is, so you can see the total still out and which borrowers to follow up with."};if(w.kind==="pto-mb")return {h:w.title,b:PTOF_ABOUT};if(w.kind==="loans-mb")return {h:w.title,b:LONF_ABOUT};if(w.kind==="fixedassets-mb")return {h:w.title,b:FAF_ABOUT};if(w.kind==="purchasing-mb")return {h:w.title,b:PURF_ABOUT};if(w.kind==="bank-mb")return {h:w.title,b:BKF_ABOUT};if(w.kind==="payables-mb")return {h:w.title,b:APF_ABOUT};if(w.kind==="gifts-mb")return {h:w.title,b:GPF_ABOUT};return ABOUT[w.id]||{h:w.title,b:"A short, plain-language description of what this widget shows and where its data comes from."};}
   var EMPTY_COPY={deposits:{title:"No deposit accounts",sub:"There are no deposit accounts to show here yet.",cta:"Add account",action:"add-acct"},payroll:{title:"No payroll runs in this range",sub:"There's no payroll history for the selected period yet."},budget:{title:"No budget set up",sub:"Once a budget is entered for this fiscal year, actuals will be compared against it here.",cta:"Set up budget",action:"add-budget"}};
   var ERROR_COPY={deposits:{title:"Couldn’t load balances",sub:"Something went wrong fetching account data."},payroll:{title:"Couldn’t load payroll data",sub:"Something went wrong fetching payroll history."},budget:{title:"Couldn’t load budget data",sub:"Something went wrong fetching budget and actual figures."}};
 /* --- Bank Balances additive copy --- */
@@ -8324,187 +8430,6 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
       '<div class="pr-pop-dates"><label>From<input type="date" id="'+bId+'" class="pr-date-input" data-id="'+wp.id+'" data-which="begin" value="'+curB.begin+'"></label><label>To<input type="date" id="'+eId+'" class="pr-date-input" data-id="'+wp.id+'" data-which="end" value="'+curB.end+'"></label></div>';
     var presetRows=PRF_PRESETS.map(function(o){var on=rp===o[0];return '<button class="mi'+(on?" check":"")+'" data-action="prF-range-set" data-id="'+wp.id+'" data-r="'+o[0]+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+o[1]+'</button>';}).join("");
     return customRow+'<div class="sep"></div>'+presetRows;}
-
-  /* ===== Main Content Tasks (mct): context-aware quick-action launcher ===== */
-  var MCT_APPS=[
-    {id:"ap",           code:"AP",  name:"Accounts Payable"},
-    {id:"ar",           code:"AR",  name:"Accounts Receivable"},
-    {id:"gl",           code:"GL",  name:"General Ledger"},
-    {id:"payroll",      code:"PR",  name:"Payroll"},
-    {id:"purchasing",   code:"PUR", name:"Purchasing"},
-    {id:"bank",         code:"BNK", name:"Bank"},
-    {id:"contributions",code:"CON", name:"Contributions"},
-    {id:"assets",       code:"FA",  name:"Fixed Assets"}
-  ];
-  var MCT_TASKS=[
-    {app:"ap",  id:"ap-check",    label:"Write AP Check",         dest:"Accounts Payable, Checks, Write Check",             icon:"payments",           std:true, dflt:true,  keywords:["pay","payment","invoice","bill","check","cheque","vendor","disbursement","ap"]},
-    {app:"ap",  id:"ap-invoice",  label:"Enter AP Invoice",       dest:"Accounts Payable, Invoices, Enter Invoice",         icon:"receipt_long",       std:true, dflt:true,  keywords:["enter","invoice","bill","vendor","payable","record","ap"]},
-    {app:"ap",  id:"ap-paybills", label:"Pay AP Bills",           dest:"Accounts Payable, Payments, Pay Bills",             icon:"request_quote",      std:true, dflt:true,  keywords:["pay","payment","invoice","bill","bills","vendor","disbursement","ap"]},
-    {app:"ap",  id:"ap-void",     label:"Void AP Check",          dest:"Accounts Payable, Checks, Void Check",              icon:"money_off",          std:true, dflt:false, keywords:["void","cancel","check","payment","reverse","ap"]},
-    {app:"ap",  id:"ap-vendor",   label:"Add AP Vendor",          dest:"Accounts Payable, Vendors, New Vendor",             icon:"storefront",         std:true, dflt:false, keywords:["vendor","supplier","payee","add","new","ap"]},
-    {app:"ap",  id:"ap-aged",     label:"Aged Payables Report",   dest:"Accounts Payable, Reports, Aged Payables",          icon:"summarize",          std:false,dflt:false, saved:true, keywords:["aged","payables","report","outstanding","owe","ap"]},
-
-    {app:"ar",  id:"ar-invoice",  label:"Create AR Invoice",      dest:"Accounts Receivable, Invoices, New Invoice",        icon:"request_page",       std:true, dflt:true,  keywords:["create","invoice","charge","customer","receivable","bill","ar"]},
-    {app:"ar",  id:"ar-payment",  label:"Record Customer Payment",dest:"Accounts Receivable, Payments, Receive Payment",    icon:"attach_money",       std:true, dflt:true,  keywords:["receive","payment","customer","cash","collect","receivable","ar"]},
-    {app:"ar",  id:"ar-customer", label:"Add AR Customer",        dest:"Accounts Receivable, Customers, New Customer",      icon:"person_add",         std:true, dflt:false, keywords:["customer","account","add","new","ar"]},
-    {app:"ar",  id:"ar-statement",label:"Customer Statements",    dest:"Accounts Receivable, Reports, Statements",          icon:"summarize",          std:false,dflt:false, saved:true, keywords:["statement","customer","balance","report","ar"]},
-
-    {app:"gl",  id:"gl-je",       label:"New GL Journal Entry",   dest:"General Ledger, Journal Entries, New Entry",        icon:"menu_book",          std:true, dflt:true,  keywords:["journal","entry","je","post","adjust","ledger","debit","credit","gl"]},
-    {app:"gl",  id:"gl-recur",    label:"Recurring Journal Entry",dest:"General Ledger, Journal Entries, Recurring",        icon:"repeat",             std:true, dflt:false, keywords:["recurring","journal","entry","schedule","ledger","gl"]},
-    {app:"gl",  id:"gl-account",  label:"Add GL Account",         dest:"General Ledger, Chart of Accounts, New Account",    icon:"account_tree",       std:true, dflt:false, keywords:["account","chart","coa","ledger","add","gl"]},
-    {app:"gl",  id:"gl-tb",       label:"Trial Balance",          dest:"General Ledger, Reports, Trial Balance",            icon:"summarize",          std:false,dflt:false, saved:true, keywords:["trial","balance","ledger","report","gl"]},
-
-    {app:"payroll", id:"pr-run",      label:"Run Payroll",         dest:"Payroll, Pay Runs, Run Payroll",                icon:"badge",       std:true, dflt:true,  keywords:["run","payroll","pay","wages","salary","paycheck","employees","pr"]},
-    {app:"payroll", id:"pr-emp",      label:"Add Payroll Employee",dest:"Payroll, Employees, New Employee",              icon:"person_add",  std:true, dflt:false, keywords:["employee","hire","staff","add","new","payroll","pr"]},
-    {app:"payroll", id:"pr-time",     label:"Enter Timecards",     dest:"Payroll, Time, Enter Timecards",                icon:"schedule",    std:true, dflt:false, keywords:["time","timecard","hours","attendance","payroll","pr"]},
-    {app:"payroll", id:"pr-register", label:"Payroll Register",    dest:"Payroll, Reports, Payroll Register",            icon:"summarize",   std:false,dflt:false, saved:true, keywords:["payroll","register","wages","report","pr"]},
-
-    {app:"purchasing", id:"pur-po",      label:"New Purchase Order", dest:"Purchasing, Purchase Orders, New PO",         icon:"shopping_cart", std:true, dflt:true,  keywords:["purchase","order","po","buy","requisition","vendor","pur"]},
-    {app:"purchasing", id:"pur-receive", label:"Receive Purchase Order",dest:"Purchasing, Receiving, Receive PO",       icon:"inventory",     std:true, dflt:false, keywords:["receive","receiving","purchase","order","po","goods","pur"]},
-    {app:"purchasing", id:"pur-req",     label:"Create Requisition", dest:"Purchasing, Requisitions, New Requisition",   icon:"assignment",    std:true, dflt:false, keywords:["requisition","request","purchase","order","pur"]},
-
-    {app:"bank", id:"bank-rec",     label:"Reconcile Bank Account",dest:"Bank, Reconciliation, Reconcile Account",      icon:"account_balance", std:true, dflt:true,  keywords:["reconcile","reconciliation","bank","statement","match","balance","bnk"]},
-    {app:"bank", id:"bank-dep",     label:"Record Bank Deposit",   dest:"Bank, Deposits, Record Deposit",               icon:"savings",         std:true, dflt:true,  keywords:["deposit","bank","cash","record","lodge","bnk"]},
-    {app:"bank", id:"bank-transfer",label:"Bank Transfer",         dest:"Bank, Transfers, New Transfer",                icon:"swap_horiz",      std:true, dflt:false, keywords:["transfer","bank","move","funds","between","bnk"]},
-
-    {app:"contributions", id:"con-enter",   label:"Enter Contribution",      dest:"Contributions, Enter Contributions",          icon:"volunteer_activism", std:true, dflt:true,  keywords:["contribution","giving","donation","gift","tithe","offering","enter","con"]},
-    {app:"contributions", id:"con-batch",   label:"Post Contribution Batch", dest:"Contributions, Batches, Post Batch",          icon:"inventory_2",        std:true, dflt:false, keywords:["batch","contribution","giving","post","donations","con"]},
-    {app:"contributions", id:"con-donor",   label:"Add Contributor",         dest:"Contributions, Contributors, New Contributor",icon:"group_add",          std:true, dflt:false, keywords:["contributor","donor","giver","member","add","new","con"]},
-    {app:"contributions", id:"con-stmt",    label:"Giving Statements",       dest:"Contributions, Reports, Giving Statements",   icon:"summarize",          std:false,dflt:false, saved:true, keywords:["giving","statement","contribution","donor","tax","report","con"]}
-  ];
-  var MCT_RECENT=["bank-rec","ap-check","con-enter","gl-je","ar-payment"];
-  var MCT_STOP={a:1,an:1,the:1,to:1,my:1,of:1,for:1,in:1,on:1,and:1,or:1,me:1};
-  var MCT_SYN={send:["pay","payment","remit","submit","transfer","issue","process","cut"],pay:["pay","payment","check","disburse","remit","send","cut"],create:["create","new","add","enter","start","make"],"new":["new","create","add","start"],add:["add","new","create","enter"],enter:["enter","record","add","input","post"],record:["record","enter","post"],receive:["receive","collect","take","deposit"],deposit:["deposit","lodge","bank"],reconcile:["reconcile","match","clear","balance"],invoice:["invoice","bill","payable"],bill:["bill","invoice","payable"],report:["report","statement","summary","register"],giving:["giving","contribution","donation","gift","tithe","offering"],donation:["donation","contribution","giving","gift"],check:["check","cheque","payment","pay"],transfer:["transfer","move","send"],run:["run","process","start"],vendor:["vendor","supplier","payee"],customer:["customer","client","member"],journal:["journal","entry","je","ledger"]};
-  function mctApp(id){for(var i=0;i<MCT_APPS.length;i++)if(MCT_APPS[i].id===id)return MCT_APPS[i];return null;}
-  function mctTask(id){for(var i=0;i<MCT_TASKS.length;i++)if(MCT_TASKS[i].id===id)return MCT_TASKS[i];return null;}
-  function mctAppHasTasks(id){for(var i=0;i<MCT_TASKS.length;i++)if(MCT_TASKS[i].app===id)return true;return false;}
-  function mctCtx(w){return w.appContext||"home";}
-  function mctInCtx(t,ctx){return ctx==="home"?true:t.app===ctx;}
-  function mctFilter(w){return w.mctFilter||"all";}
-  function mctCtxTasks(w){var ctx=mctCtx(w);return MCT_TASKS.filter(function(t){return mctInCtx(t,ctx);});}
-  function mctCtxName(w){var ctx=mctCtx(w);if(ctx==="home")return "Accounting Home";var a=mctApp(ctx);return a?a.name:"this application";}
-  function mctDefaultSaved(w){var ctx=mctCtx(w),out=[];MCT_TASKS.forEach(function(t){if(!mctInCtx(t,ctx))return;if(t.dflt||t.saved)out.push(t.id);});return out;}
-  function mctSavedIds(w){if(!w.mctSaved)w.mctSaved=mctDefaultSaved(w);return w.mctSaved;}
-  function mctIsSaved(w,t){return mctSavedIds(w).indexOf(t.id)>-1;}
-  function mctMyTasks(w){var ids=mctSavedIds(w),ctx=mctCtx(w);
-    var list=MCT_TASKS.filter(function(t){return mctInCtx(t,ctx)&&ids.indexOf(t.id)>-1&&mctPassFilter(w,t);});
-    list.sort(function(a,b){var ad=a.dflt?0:1,bd=b.dflt?0:1;if(ad!==bd)return ad-bd;return MCT_TASKS.indexOf(a)-MCT_TASKS.indexOf(b);});
-    return list;}
-  function mctStandardTasks(w){var ids=mctSavedIds(w),ctx=mctCtx(w),isHome=ctx==="home",f=mctFilter(w);
-    return MCT_TASKS.filter(function(t){
-      if(!t.std)return false;
-      if(ids.indexOf(t.id)>-1)return false;
-      if(isHome){if(f!=="all"&&t.app!==f)return false;}else{if(t.app!==ctx)return false;}
-      return true;});}
-  function mctRecentIds(w){return w.mctRecent||MCT_RECENT;}
-  function mctPassFilter(w,t){if(mctCtx(w)!=="home")return true;var f=mctFilter(w);return f==="all"||t.app===f;}
-  function mctRecentTasks(w){var ctx=mctCtx(w);return mctRecentIds(w).map(mctTask).filter(function(t){return t&&mctInCtx(t,ctx)&&mctPassFilter(w,t);});}
-  function mctTokens(q){return q.toLowerCase().split(/[^a-z0-9]+/).filter(function(x){return x&&!MCT_STOP[x];});}
-  function mctSearchList(w){
-    var toks=mctTokens((w.mctQ||"").trim());if(!toks.length)return [];
-    var ctx=mctCtx(w),f=mctFilter(w),out=[];
-    MCT_TASKS.forEach(function(t){
-      if(!mctInCtx(t,ctx))return;
-      if(f!=="all"&&t.app!==f)return;
-      var a=mctApp(t.app),lbl=t.label.toLowerCase(),kw=(t.keywords||[]).join(" ").toLowerCase(),an=a.name.toLowerCase(),ac=a.code.toLowerCase();
-      var score=0,matched=0;
-      toks.forEach(function(tk){var terms=[tk].concat(MCT_SYN[tk]||[]),hit=false;
-        terms.forEach(function(term){
-          if(lbl.indexOf(term)>-1){score+=3;hit=true;}
-          if(kw.indexOf(term)>-1){score+=2;hit=true;}
-          if(an.indexOf(term)>-1||ac===term){score+=1;hit=true;}
-        });
-        if(hit)matched++;});
-      if(matched>0){if(t.dflt)score+=0.5;out.push({t:t,score:score,matched:matched});}
-    });
-    out.sort(function(x,y){if(y.matched!==x.matched)return y.matched-x.matched;if(y.score!==x.score)return y.score-x.score;return x.t.label.localeCompare(y.t.label);});
-    return out;}
-  function mctBadge(appId){var a=mctApp(appId);if(!a)return "";return '<span class="mct-badge" data-app="'+a.id+'" title="'+a.name+'" data-tip="'+a.name+'" data-tip-plain aria-label="'+a.name+'">'+a.code+'</span>';}
-  function mctStarBtn(w,t){var saved=mctIsSaved(w,t),act=saved?"mct-unsave":"mct-save";var lbl=(saved?"Remove "+t.label+" from My tasks":"Add "+t.label+" to My tasks");return '<button class="mct-star'+(saved?" on":"")+'" data-action="'+act+'" data-id="'+w.id+'" data-t="'+t.id+'" aria-pressed="'+saved+'" aria-label="'+lbl+'" data-tip="'+(saved?"In My tasks (remove)":"Add to My tasks")+'" data-tip-plain>'+ICON(saved?"star":"star_border")+'</button>';}
-  function mctRow(w,t,force){var a=mctApp(t.app);var badge=(force||mctCtx(w)==="home")?mctBadge(t.app):"";var aria=(t.label+", "+a.name+", opens "+t.dest).replace(/"/g,"&quot;");return '<div class="mct-row"><button class="mct-row-main" data-action="mct-open" data-id="'+w.id+'" data-t="'+t.id+'" aria-label="'+aria+'"><span class="mct-row-ic">'+ICON(t.icon)+'</span><span class="mct-row-tx"><span class="mct-row-lbl">'+t.label+'</span><span class="mct-row-dest">'+t.dest+'</span></span>'+badge+'</button></div>';}
-  function mctItile(w,t){var a=mctApp(t.app);var badge=(mctCtx(w)==="home")?'<span class="mct-itile-badge" data-app="'+a.id+'" aria-hidden="true">'+a.code+'</span>':"";var aria=(t.label+", "+a.name+", opens "+t.dest).replace(/"/g,"&quot;");return '<button class="mct-itile" data-action="mct-open" data-id="'+w.id+'" data-t="'+t.id+'" aria-label="'+aria+'" data-tip="'+(t.label+" ("+a.name+")").replace(/"/g,"&quot;")+'" data-tip-plain>'+ICON(t.icon)+badge+'<span class="sr-only">'+t.label+", "+a.name+'</span></button>';}
-  function mctSearch(w){var q=w.mctQ||"";var clr=q?'<button class="mct-q-clear" data-action="mct-clearq" data-id="'+w.id+'" aria-label="Clear search">'+ICON("close")+'</button>':'';return '<div class="mct-search"><input class="mct-q" id="mctq-'+w.id+'" placeholder="Search tasks" value="'+q.replace(/"/g,"&quot;")+'" aria-label="Search tasks across all applications" autocomplete="off">'+clr+'</div>';}
-  function mctFilterChip(w){var f=mctFilter(w),lbl=f==="all"?"All applications":(mctApp(f)?mctApp(f).name:"All applications");return '<button class="filter-chip mct-filter" data-action="mct-appfilter" data-id="'+w.id+'" aria-haspopup="listbox" aria-label="Filter tasks by application, currently '+lbl+'"><span class="fc-label">'+lbl+'</span>'+ICON("expand_more")+'</button>';}
-  function mctRecentSection(w){var list=mctRecentTasks(w);if(!list.length)return "";return '<div class="mct-sec"><div class="mct-sec-h">Recent Tasks</div><div class="mct-list">'+list.map(function(t){return mctRow(w,t);}).join("")+'</div></div>';}
-  function mctMySection(w){var list=mctMyTasks(w);if(!list.length)return "";return '<div class="mct-sec"><div class="mct-sec-h">My Tasks</div><div class="mct-list">'+list.map(function(t){return mctRow(w,t);}).join("")+'</div></div>';}
-  function mctStandardSection(w){var list=mctStandardTasks(w);if(!list.length){var msg=(mctCtx(w)==="home"&&mctFilter(w)!=="all")?("No more "+mctApp(mctFilter(w)).name+" content tasks to add."):"All content tasks are already in My Tasks.";return '<div class="mct-sec"><div class="mct-sec-h">Content Tasks</div><div class="mct-sec-empty">'+msg+'</div></div>';}return '<div class="mct-sec"><div class="mct-sec-h">Content Tasks</div><div class="mct-list">'+list.map(function(t){return mctRow(w,t);}).join("")+'</div></div>';}
-  function mctResults(w){var res=mctSearchList(w),q=(w.mctQ||"").trim();if(!res.length)return '<div class="mct-sec"><div class="mct-noresult">No tasks match "'+q.replace(/"/g,"&quot;")+'". Try another word, like "check" or "deposit".</div></div>';return '<div class="mct-sec"><div class="mct-sec-h">'+res.length+' result'+(res.length>1?"s":"")+' across all applications</div><div class="mct-list">'+res.map(function(r){return mctRow(w,r.t,true);}).join("")+'</div></div>';}
-  function mctGlanceTasks(w){var seen={},out=[];function add(l){l.forEach(function(t){if(t&&!seen[t.id]){seen[t.id]=1;out.push(t);}});}add(mctRecentTasks(w));add(mctMyTasks(w));return out;}
-  function mctGlance(w){var q=(w.mctQ||"").trim(),body;if(q){var res=mctSearchList(w);body=res.length?('<div class="mct-carousel"><div class="mct-irow">'+res.slice(0,12).map(function(r){return mctItile(w,r.t);}).join("")+'</div></div>'):'<div class="mct-glance-empty">No matches</div>';}else{var list=mctGlanceTasks(w);body=list.length?('<div class="mct-carousel"><div class="mct-irow">'+list.map(function(t){return mctItile(w,t);}).join("")+'</div></div>'):'<div class="mct-glance-empty">No recent or saved tasks yet</div>';}return '<div class="mct-glance">'+mctSearch(w)+body+'</div>';}
-  function mctContent(w){if(w.size==="kpi")return mctGlance(w);var q=(w.mctQ||"").trim();var head='<div class="mct-head">'+(mctCtx(w)==="home"?('<div class="mct-filterrow">'+mctFilterChip(w)+'</div>'):"")+mctSearch(w)+'</div>';var body=q?mctResults(w):(mctRecentSection(w)+mctMySection(w)+mctStandardSection(w));return head+'<div class="mct-scroll">'+body+'</div>';}
-
-  /* === MY STATUS (mys) render === */
-function mysConfigBtn(w){return '<button class="btn outlined sm mys-cfg-btn" data-action="mys-config" data-id="'+w.id+'" aria-haspopup="dialog">'+ICON("checklist")+'Configure</button>';}
-function mysActive(sel){return sel.filter(function(q){return q.count>0;}).slice().sort(function(a,b){return b.count-a.count;});}
-function mysClearList(sel){return sel.filter(function(q){return q.count<=0;});}
-function mysHeaderBlock(w,sel){
-  var active=mysActive(sel),n=active.length,recs=active.reduce(function(s,q){return s+q.count;},0);
-  var badge=n?('<span class="mys-hpill warn">'+ICON("pending_actions")+n+(n===1?" query needs attention":" queries need attention")+'</span>'):('<span class="mys-hpill ok">'+ICON("check_circle")+'All clear</span>');
-  return '<div class="dep-hd mys-hd"><div class="dep-hd-top"><div class="dep-hd-kpigrp"><span class="metric-value">'+recs+'</span>'+badge+'</div><div class="dep-hd-toggle">'+mysConfigBtn(w)+'</div></div><div class="dep-hd-num"><div class="mys-sub">Records waiting across your tracked queries. Select a count to work through it.</div></div></div>';
-}
-function mysRowHTML(w,q){
-  var zero=q.count<=0, clickable=!zero;
-  var aff=(!zero&&q.click==="nav")?'<span class="mys-aff material-symbols-rounded" aria-hidden="true" data-tip="Opens the '+q.navTo+' page (leaves the dashboard)" data-tip-plain>arrow_outward</span>':'';
-  var srClick=clickable?(q.click==="nav"?", opens the "+q.navTo+" page":", opens a record list"):", nothing to action";
-  var nm='<span class="lr-main mys-nm">'+q.name+'</span>';
-  var count='<span class="wt-c2 mys-count'+(zero?" mys-count-zero":"")+'">'+q.count+'<span class="sr-only"> records'+srClick+'</span></span>';
-  var attrs=clickable?' data-action="mys-row" data-id="'+w.id+'" data-q="'+q.id+'" tabindex="0" role="button" aria-label="'+q.name+', '+q.count+' records'+srClick+'"':' aria-disabled="true"';
-  return '<div class="wt-row mys-row'+(zero?" mys-zero":"")+(clickable?" mys-clickable":"")+'"'+attrs+'>'+nm+aff+count+'</div>';
-}
-function mysContent(w){
-  var sel=(w.selected||[]).map(mysFind).filter(Boolean);
-  if(!sel.length)return '<div class="state mys-empty" data-kind="empty">'+ICON("checklist")+'<div class="state-title">No records to display</div><div class="state-sub">Choose the queries you want to keep an eye on. Their live counts show up here.</div><button class="btn outlined" data-action="mys-config" data-id="'+w.id+'">'+ICON("checklist")+'Configure</button></div>';
-  var active=mysActive(sel),clear=mysClearList(sel);
-  var head='<div class="wt-row wt-head mys-headrow"><span class="lr-main">Query</span><span class="wt-c2 mys-countcol">Count</span></div>';
-  var body="";
-  if(active.length)body+=active.map(function(q){return mysRowHTML(w,q);}).join("");
-  else body+='<div class="mys-allclear">'+ICON("task_alt")+'<span>Nothing needs your attention right now.</span></div>';
-  if(clear.length)body+='<div class="cap mys-grp">Up to date</div>'+clear.map(function(q){return mysRowHTML(w,q);}).join("");
-  return mysHeaderBlock(w,sel)+'<div class="scroll mys-list">'+head+body+'</div>';
-}
-
-function mysConfigModalHTML(){
-  var w=find(modal.id);if(!w)return "";
-  var draft=modal.draft||[],q=(modal.q||"").toLowerCase();
-  var avail=MYS_QUERIES.filter(function(x){return draft.indexOf(x.id)<0;});
-  var availM=avail.filter(function(x){return !q||x.name.toLowerCase().indexOf(q)>-1||x.sys.toLowerCase().indexOf(q)>-1||MYS_AREA[x.area].toLowerCase().indexOf(q)>-1;});
-  var availHTML="";
-  ["GL","AP","PUR","HR"].forEach(function(ar){var items=availM.filter(function(x){return x.area===ar;});if(!items.length)return;
-    availHTML+='<div class="cap">'+MYS_AREA[ar]+'</div>'+items.map(function(x){
-      return '<button class="mi mys-avail" data-action="mys-add" data-q="'+x.id+'" data-id="'+w.id+'"><span class="mys-dot mys-dot-'+x.urgency+'" aria-hidden="true"></span><span class="mi-nm">'+x.name+'</span><span class="mys-add-ic" aria-hidden="true">'+ICON("add")+'</span></button>';}).join("");});
-  if(!availM.length)availHTML='<div class="mi-note" style="color:var(--txt-subtle)">'+(q?('No queries match "'+(modal.q||"").replace(/"/g,"&quot;")+'"'):'All available queries are already showing.')+'</div>';
-  var selHTML=draft.length?draft.map(function(qid){var x=mysFind(qid);if(!x)return "";
-      return '<button class="mi mys-selrow" data-action="mys-remove" data-q="'+x.id+'" data-id="'+w.id+'"><span class="mys-dot mys-dot-'+x.urgency+'" aria-hidden="true"></span><span class="mi-nm">'+x.name+'</span><span class="mys-rm-ic" aria-hidden="true" title="Remove">'+ICON("close")+'</span></button>';}).join("")
-    :'<div class="mys-empty-col">'+ICON("checklist")+'<span>Nothing selected yet. Add queries from the left.</span></div>';
-  var body='<div class="mys-cfg">'+
-      '<div class="mys-cfg-col mys-cfg-avail"><div class="mys-cfg-h">Available queries</div>'+
-        '<div class="dd-search">'+ICON("search")+'<input class="dd-input" id="mysConfigQ" placeholder="Search queries or areas" value="'+(modal.q||"").replace(/"/g,"&quot;")+'" autocomplete="off"></div>'+
-        '<div class="menu-scroll mys-cfg-scroll" role="listbox">'+availHTML+'</div></div>'+
-      '<div class="mys-cfg-col mys-cfg-sel"><div class="mys-cfg-h">Showing on my dashboard <span class="mys-cfg-n">'+draft.length+'</span></div>'+
-        '<div class="menu-scroll mys-cfg-scroll">'+selHTML+'</div></div></div>';
-  return '<div class="modal-backdrop" data-action="mys-config-cancel"><div class="modal modal-wide mys-cfg-modal" data-action="stop" role="dialog" aria-modal="true" aria-label="Configure My Status">'+
-    '<div class="modal-h"><span class="modal-title"><span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">tune</span>Configure My Status</span><button class="iconbtn" data-action="mys-config-cancel" aria-label="Close">'+ICON("close")+'</button></div>'+
-    '<div class="modal-b mys-cfg-b">'+body+'</div>'+
-    '<div class="modal-f"><button class="btn naked sm" data-action="mys-config-cancel">Cancel</button><button class="btn primary sm" data-action="mys-config-done" data-id="'+w.id+'">Done</button></div></div></div>';}
-function mysDetailModalHTML(){
-  var q=mysFind(modal.q);if(!q)return "";
-  var recs=q.records||[],cols=recs.length?Object.keys(recs[0]):[];
-  var table;
-  if(recs.length){
-    var head='<div class="wt-row wt-head mys-dhead">'+cols.map(function(c){return '<span class="mys-dc">'+c+'</span>';}).join("")+'</div>';
-    var rows=recs.map(function(r){return '<div class="wt-row mys-drow">'+cols.map(function(c){var v=String(r[c]);var urgent=(c==="Status"&&v==="Overdue");return '<span class="mys-dc'+(urgent?" mys-ctx-urgent":"")+'">'+v+'</span>';}).join("")+'</div>';}).join("");
-    table='<div class="scroll mys-detail-tbl">'+head+rows+'</div>';
-  } else {
-    table='<div class="state" data-kind="empty">'+ICON("inbox")+'<div class="state-title">No records to display</div></div>';
-  }
-  return '<div class="modal-backdrop" data-action="mys-detail-close"><div class="modal modal-wide mys-detail-modal" data-action="stop" role="dialog" aria-modal="true" aria-label="'+q.name.replace(/"/g,"&quot;")+'">'+
-    '<div class="modal-h"><span class="modal-title"><span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">list_alt</span>'+q.name+'</span><button class="iconbtn" data-action="mys-detail-close" aria-label="Close">'+ICON("close")+'</button></div>'+
-    '<div class="modal-b">'+table+'</div>'+
-    '<div class="modal-f mys-detail-f"><button class="btn naked sm" data-action="mys-detail-export" data-q="'+q.id+'">'+ICON("download")+'Export to Excel</button><span class="mys-detail-spacer"></span><button class="btn primary sm" data-action="mys-detail-close">Close</button></div></div></div>';}
-function mysPopContent(){
-  if(pop.type==="mys-opts"){var wo=find(pop.id),hz=!!wo.hideZero;
-    return '<div class="cap">Display</div><button class="mi'+(hz?" check":"")+'" data-action="mys-hidezero" data-id="'+wo.id+'">'+ICON(hz?"check_box":"check_box_outline_blank")+'Hide zero-count rows</button><div class="sep"></div><div class="mys-asof">Counts as of '+(wo.updated||"just now")+'</div>';}
-  return "";}
 
 /* ===== Bank Balances (prefix: bank), RENDER ===== */
   function bankAccounts(w){return BANK_ACCOUNTS;}
@@ -10675,8 +10600,8 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
   function contentHTML(w){
     if(w.state==="loading")return '<div class="skeleton" aria-busy="true"><div class="sk" style="width:55%"></div><div class="sk" style="flex:1"></div></div>';
     if(w.state==="error"){var xc=ERROR_COPY[w.kind]||ERROR_COPY.deposits;return '<div class="state" data-kind="error">'+ICON("error")+'<div class="state-title">'+xc.title+'</div><div class="state-sub">'+xc.sub+'</div><button class="btn sm outlined" data-action="retry" data-id="'+w.id+'">Retry</button></div>';}
+    var wreg=WIDGETS.content(w);if(wreg!==null)return wreg;
     if(w.kind==="payroll")return prContent(w); // prContent renders its own toolbar even when state==="empty" — the toolbar never disappears just because the chosen period has no data
-    if(w.kind==="tasks")return mctContent(w);
     if(w.kind==="purchasing")return purContent(w);
     if(w.kind==="ar")return arContent(w);
     if(w.kind==="pto")return ptoContent(w);
@@ -10706,7 +10631,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(w.kind==="gifts-mb")return gpFContentRoot(w); // Gifts Pledges (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its no-campaigns variant renders gpFEmpty and not the Deposits copy
     if(w.kind==="deposits-oc")return depOContent(w); // (OC) clone of Deposits on Hand, V2
     if(w.state==="empty"){var ec=EMPTY_COPY[w.kind]||EMPTY_COPY.deposits;return '<div class="state" data-kind="empty">'+ICON("inbox")+'<div class="state-title">'+ec.title+'</div><div class="state-sub">'+ec.sub+'</div>'+(ec.showZero?'<div class="dep-total" style="margin-top:4px"><span>Total</span><span>'+money(0)+'</span></div>':'')+(ec.cta?'<button class="btn outlined" data-action="'+ec.action+'" data-id="'+w.id+'">'+ICON("add")+ec.cta+'</button>':'')+'</div>';}
-    if(w.kind==="mystatus")return mysContent(w);
     if(w.kind==="bank")return bankContent(w);
     if(w.kind==="deposits")return depContent(w);
     if(w.kind==="budget")return budgetContent(w);
@@ -10718,7 +10642,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(w.kind==="signups")return signupsContent(w);
     if(w.kind==="status")return statusHTML();
     if(w.kind==="deposits-mb")return depFContent(w); // Deposits on Hand (MB updated); relies on the generic empty fallback (deposits copy is correct for it)
-    if(w.kind==="mystatus-oc")return mysOContent(w); // My Status (OC): duplicate of hers, for trialling improvements
     if(w.kind==="cmpnote-mb")return cmpNoteContent(w); // comparison-tab note card: static text, appended at the END of the chain
     return "";
   }
@@ -10751,6 +10674,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
 
   function popContent(){
     if(!pop)return "";
+    var wp=WIDGETS.pop();if(wp!==null)return wp;
     if(pop.type==="pen-dist")return penPopContent();
     if(pop.type==="penF-dist")return penFPopContent(); // Pension Plans (MB updated), additive
     if(pop.type==="penO-dist")return penOPopContent(); // Pension Plans (MB updated), additive
@@ -10825,8 +10749,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(pop.type==="size"){var w=find(pop.id);return '<div class="depthpick" role="group" aria-label="Depth">'+SIZES.map(function(sz){var ok=(w.tiers||[]).indexOf(sz)>-1;return '<span class="depthcell"><button class="glyph'+(ok?"":" disabled")+'" data-size="'+sz+'"'+(ok?' data-action="pick-size" data-id="'+w.id+'" aria-pressed="'+(w.size===sz)+'"':' aria-disabled="true"')+'>'+(sz==="xwide"?'<span class="gf"></span><span class="gf"></span>':'<span class="gf"></span>')+'</button><span class="depthname">'+DEPTH_LABEL[sz]+'</span></span>';}).join("")+'</div>';}
     if(pop.type==="switcher"){var rows=dashboards.map(function(d){return '<button class="mi'+(d.id===currentId?" check":"")+'" data-action="select-dash" data-did="'+d.id+'">'+(d.id===currentId?ICON("check"):'<span class="mi-gap"></span>')+d.name+(defaultId===d.id?'<span class="k">Default</span>':"")+'</button>';}).join("");return rows+'<div class="sep"></div><button class="mi" data-action="set-default"'+(defaultId===currentId?' aria-disabled="true"':'')+'>'+ICON("push_pin")+'Set current as default</button><button class="mi" data-action="rename-dash">'+ICON("edit")+'Rename current…</button><button class="mi" data-danger data-action="delete-dash"'+(isSystem()?' aria-disabled="true"':'')+'>'+ICON("delete")+'Delete current…</button><div class="sep"></div><button class="mi" data-action="new-dash">'+ICON("add")+'New dashboard</button>';}
     if(pop.type==="save"){var sys=isSystem();return '<button class="mi" '+(sys?'aria-disabled="true" data-action="noop"':'data-action="save-update"')+'>'+ICON("save")+'Update this dashboard<span class="k">⌘S</span></button><button class="mi" data-action="save-new">'+ICON("save_as")+'Save as new dashboard…</button>';}
-    if(pop.type==="mys-opts")return mysPopContent();
-    if(pop.type==="myso-opts")return mysOPopContent(); // My Status (OC)
     if(pop.type==="bank-acct"){var wbd=find(pop.id),q=(bankQuery||"").toLowerCase(),curAcct=wbd.bkacct||null;
       var list=bankAccounts(wbd).filter(function(a){return a.name.toLowerCase().indexOf(q)>-1||a.type.toLowerCase().indexOf(q)>-1;});
       var allSel=!curAcct;
@@ -10835,11 +10757,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
       if(list.length)out+='<div class="cap">Accounts</div>'+list.map(function(a){var sel=curAcct===a.id,end=bankEnding(a),neg=end<0;return '<button class="mi'+(sel?" check":"")+'" role="option" aria-selected="'+sel+'" data-action="bank-set-acct" data-acct="'+a.id+'" data-id="'+wbd.id+'">'+(sel?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-ic material-symbols-rounded">account_balance_wallet</span><span class="mi-nm-stack"><span class="mi-nm">'+a.name+'</span><span class="mi-acctno">'+(a.acctFull||a.acct)+'</span></span><span class="bank-mi-bal'+(neg?" bank-neg":"")+'">'+bankMoney(end)+'</span></button>';}).join("");
       if(!list.length&&(q&&"all bank accounts".indexOf(q)<0))out+='<div class="mi-note" style="color:var(--txt-subtle)">No accounts match "'+(bankQuery||"").replace(/"/g,"&quot;")+'"</div>';
       return out+'</div>';}
-    if(pop.type==="mct-appfilter"){var wf=find(pop.id),cf=mctFilter(wf);
-      var opts=[{id:"all",name:"All applications"}].concat(MCT_APPS.filter(function(a){return mctAppHasTasks(a.id)&&a.id!=="assets";}));
-      return '<div class="cap">Filter standard tasks by application</div>'+opts.map(function(o){var on=cf===o.id;
-        return '<button class="mi'+(on?" check":"")+'" data-action="mct-set-filter" data-id="'+wf.id+'" data-f="'+o.id+'" role="option" aria-selected="'+on+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+(o.id==="all"?"":mctBadge(o.id)+" ")+o.name+'</button>';}).join("");}
-
     if(pop.type==="pur-status"||pop.type==="pur-path")return purPopContent();
     if(pop.type==="arF-rc"||pop.type==="arF-source")return arFPopContent(); // Receivable Invoices Outstanding (MB updated), additive
     if(pop.type==="arO-rc"||pop.type==="arO-source")return arOPopContent(); // Receivable Invoices Outstanding (MB updated), additive
@@ -10856,7 +10773,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(pop.type==="fa-groupby"||pop.type==="fa-group"||pop.type==="fa-measure")return faPopContent();
     return "";
   }
-  function triggerSelector(){if(!pop)return null;if(pop.type==="myso-opts")return '[data-action="myso-opts"][data-id="'+pop.id+'"]';if(pop.type==="bgtO-scope")return '[data-action="bgtO-scope"][data-id="'+pop.id+'"]';if(pop.type==="bgtO-span")return '[data-action="bgtO-span"][data-id="'+pop.id+'"]';if(pop.type==="arO-rc")return '[data-action="arO-rc"][data-id="'+pop.id+'"]';if(pop.type==="arO-source")return '[data-action="arO-source"][data-id="'+pop.id+'"]';if(pop.type==="penO-dist")return '[data-action="penO-dist"][data-id="'+pop.id+'"]';if(pop.type==="prO-period")return '[data-action="prO-period"][data-id="'+pop.id+'"]';if(pop.type==="prO-scope")return '[data-action="prO-scope"][data-id="'+pop.id+'"]';if(pop.type==="prO-pt")return '[data-action="prO-pt"][data-id="'+pop.id+'"]';if(pop.type==="remO-thru")return '[data-action="remO-thru"][data-id="'+pop.id+'"]';if(pop.type==="wmenu")return '[data-action="wmenu"][data-id="'+pop.id+'"]';if(pop.type==="size")return '[data-action="wsize"][data-id="'+pop.id+'"]';if(pop.type==="switcher")return '[data-action="switcher"]';if(pop.type==="save")return '[data-action="savemenu"]';if(pop.type==="depfilter")return '[data-action="depfilter"][data-id="'+pop.id+'"]';if(pop.type==="advfilter")return '[data-action="advfilter"][data-id="'+pop.id+'"]';if(pop.type==="cmenu"||pop.type==="companydd")return '[data-action="cmenu"][data-id="'+pop.id+'"]';if(pop.type==="rangemenu")return '[data-action="rangemenu"][data-id="'+pop.id+'"]';if(pop.type==="prperiod")return '[data-action="prperiod"][data-id="'+pop.id+'"]';if(pop.type==="bgt-scope")return '[data-action="bgt-scope"][data-id="'+pop.id+'"]';if(pop.type==="bgt-span")return '[data-action="bgt-span"][data-id="'+pop.id+'"]';if(pop.type==="bgtF-scope")return '[data-action="bgtF-scope"][data-id="'+pop.id+'"]';if(pop.type==="bgtF-span")return '[data-action="bgtF-span"][data-id="'+pop.id+'"]';if(pop.type==="winfo")return '[data-action="winfo"][data-id="'+pop.id+'"]';if(pop.type==="fa-groupby")return '[data-action="fa-groupby"][data-id="'+pop.id+'"]';if(pop.type==="fa-group")return '[data-action="fa-group"][data-id="'+pop.id+'"]';if(pop.type==="fa-measure")return '[data-action="fa-measure"][data-id="'+pop.id+'"]';if(pop.type==="ins-type")return '[data-action="ins-type"][data-id="'+pop.id+'"]';if(pop.type==="ap-due")return '[data-action="ap-due"][data-id="'+pop.id+'"]';if(pop.type==="pr-scope")return '[data-action="pr-scope"][data-id="'+pop.id+'"]';if(pop.type==="pto-year")return '[data-action="pto-year"][data-id="'+pop.id+'"]';if(pop.type==="pto-view")return '[data-action="pto-view"][data-id="'+pop.id+'"]';if(pop.type==="arF-rc")return '[data-action="arF-rc"][data-id="'+pop.id+'"]';if(pop.type==="arF-source")return '[data-action="arF-source"][data-id="'+pop.id+'"]';if(pop.type==="ar-rc")return '[data-action="ar-rc"][data-id="'+pop.id+'"]';if(pop.type==="ar-source")return '[data-action="ar-source"][data-id="'+pop.id+'"]';if(pop.type==="pur-status")return '[data-action="pur-status"][data-id="'+pop.id+'"]';if(pop.type==="pur-path")return '[data-action="pur-path"][data-id="'+pop.id+'"]';if(pop.type==="mct-appfilter")return '[data-action="mct-appfilter"][data-id="'+pop.id+'"]';if(pop.type==="mys-opts")return '[data-action="mys-opts"][data-id="'+pop.id+'"]';if(pop.type==="bank-acct")return '[data-action="bank-acct"][data-id="'+pop.id+'"]';if(pop.type==="expmenu")return '[data-action="expmenu"][data-id="'+pop.id+'"]';if(pop.type==="pen-dist")return '[data-action="pen-dist"][data-id="'+pop.id+'"]';if(pop.type==="penF-dist")return '[data-action="penF-dist"][data-id="'+pop.id+'"]';if(pop.type==="prF-period")return '[data-action="prF-period"][data-id="'+pop.id+'"]';if(pop.type==="prF-scope")return '[data-action="prF-scope"][data-id="'+pop.id+'"]';if(pop.type==="rem-thru")return '[data-action="rem-thru"][data-id="'+pop.id+'"]';if(pop.type==="remF-thru")return '[data-action="remF-thru"][data-id="'+pop.id+'"]';if(pop.type==="remF-pacef")return '[data-action="remF-pacef"][data-id="'+pop.id+'"]';if(pop.type==="gft-date")return '[data-action="gft-date"][data-id="'+pop.id+'"]';if(pop.type==="gft-purpose")return '[data-action="gft-purpose"][data-id="'+pop.id+'"]';if(pop.type==="loan-type")return '[data-action="loan-type"][data-id="'+pop.id+'"]';if(pop.type==="wfind")return '[data-action="wfind"]';}
+  function triggerSelector(){if(!pop)return null;var wt=WIDGETS.trigger();if(wt)return wt;if(pop.type==="bgtO-scope")return '[data-action="bgtO-scope"][data-id="'+pop.id+'"]';if(pop.type==="bgtO-span")return '[data-action="bgtO-span"][data-id="'+pop.id+'"]';if(pop.type==="arO-rc")return '[data-action="arO-rc"][data-id="'+pop.id+'"]';if(pop.type==="arO-source")return '[data-action="arO-source"][data-id="'+pop.id+'"]';if(pop.type==="penO-dist")return '[data-action="penO-dist"][data-id="'+pop.id+'"]';if(pop.type==="prO-period")return '[data-action="prO-period"][data-id="'+pop.id+'"]';if(pop.type==="prO-scope")return '[data-action="prO-scope"][data-id="'+pop.id+'"]';if(pop.type==="prO-pt")return '[data-action="prO-pt"][data-id="'+pop.id+'"]';if(pop.type==="remO-thru")return '[data-action="remO-thru"][data-id="'+pop.id+'"]';if(pop.type==="wmenu")return '[data-action="wmenu"][data-id="'+pop.id+'"]';if(pop.type==="size")return '[data-action="wsize"][data-id="'+pop.id+'"]';if(pop.type==="switcher")return '[data-action="switcher"]';if(pop.type==="save")return '[data-action="savemenu"]';if(pop.type==="depfilter")return '[data-action="depfilter"][data-id="'+pop.id+'"]';if(pop.type==="advfilter")return '[data-action="advfilter"][data-id="'+pop.id+'"]';if(pop.type==="cmenu"||pop.type==="companydd")return '[data-action="cmenu"][data-id="'+pop.id+'"]';if(pop.type==="rangemenu")return '[data-action="rangemenu"][data-id="'+pop.id+'"]';if(pop.type==="prperiod")return '[data-action="prperiod"][data-id="'+pop.id+'"]';if(pop.type==="bgt-scope")return '[data-action="bgt-scope"][data-id="'+pop.id+'"]';if(pop.type==="bgt-span")return '[data-action="bgt-span"][data-id="'+pop.id+'"]';if(pop.type==="bgtF-scope")return '[data-action="bgtF-scope"][data-id="'+pop.id+'"]';if(pop.type==="bgtF-span")return '[data-action="bgtF-span"][data-id="'+pop.id+'"]';if(pop.type==="winfo")return '[data-action="winfo"][data-id="'+pop.id+'"]';if(pop.type==="fa-groupby")return '[data-action="fa-groupby"][data-id="'+pop.id+'"]';if(pop.type==="fa-group")return '[data-action="fa-group"][data-id="'+pop.id+'"]';if(pop.type==="fa-measure")return '[data-action="fa-measure"][data-id="'+pop.id+'"]';if(pop.type==="ins-type")return '[data-action="ins-type"][data-id="'+pop.id+'"]';if(pop.type==="ap-due")return '[data-action="ap-due"][data-id="'+pop.id+'"]';if(pop.type==="pr-scope")return '[data-action="pr-scope"][data-id="'+pop.id+'"]';if(pop.type==="pto-year")return '[data-action="pto-year"][data-id="'+pop.id+'"]';if(pop.type==="pto-view")return '[data-action="pto-view"][data-id="'+pop.id+'"]';if(pop.type==="arF-rc")return '[data-action="arF-rc"][data-id="'+pop.id+'"]';if(pop.type==="arF-source")return '[data-action="arF-source"][data-id="'+pop.id+'"]';if(pop.type==="ar-rc")return '[data-action="ar-rc"][data-id="'+pop.id+'"]';if(pop.type==="ar-source")return '[data-action="ar-source"][data-id="'+pop.id+'"]';if(pop.type==="pur-status")return '[data-action="pur-status"][data-id="'+pop.id+'"]';if(pop.type==="pur-path")return '[data-action="pur-path"][data-id="'+pop.id+'"]';if(pop.type==="bank-acct")return '[data-action="bank-acct"][data-id="'+pop.id+'"]';if(pop.type==="expmenu")return '[data-action="expmenu"][data-id="'+pop.id+'"]';if(pop.type==="pen-dist")return '[data-action="pen-dist"][data-id="'+pop.id+'"]';if(pop.type==="penF-dist")return '[data-action="penF-dist"][data-id="'+pop.id+'"]';if(pop.type==="prF-period")return '[data-action="prF-period"][data-id="'+pop.id+'"]';if(pop.type==="prF-scope")return '[data-action="prF-scope"][data-id="'+pop.id+'"]';if(pop.type==="rem-thru")return '[data-action="rem-thru"][data-id="'+pop.id+'"]';if(pop.type==="remF-thru")return '[data-action="remF-thru"][data-id="'+pop.id+'"]';if(pop.type==="remF-pacef")return '[data-action="remF-pacef"][data-id="'+pop.id+'"]';if(pop.type==="gft-date")return '[data-action="gft-date"][data-id="'+pop.id+'"]';if(pop.type==="gft-purpose")return '[data-action="gft-purpose"][data-id="'+pop.id+'"]';if(pop.type==="loan-type")return '[data-action="loan-type"][data-id="'+pop.id+'"]';if(pop.type==="wfind")return '[data-action="wfind"]';}
   function renderOverlay(){var ov=document.getElementById("overlay");if(!pop){ov.innerHTML="";return;}var sel=triggerSelector(),trig=sel&&document.querySelector(sel);if(!trig){ov.innerHTML="";return;}
     ov.innerHTML='<div class="pop'+(pop.type==="size"?" pop-size":"")+(pop.type==="depfilter"?" pop-filter":"")+(pop.type==="prperiod"?" pop-period":"")+'" data-action="stop" style="visibility:hidden;left:0;top:0;">'+popContent()+'</div>';
     var el=ov.firstChild;
@@ -10880,7 +10797,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     var atTop=sc.scrollTop<=0,atBottom=sc.scrollTop+sc.clientHeight>=sc.scrollHeight-1;
     if(!canScroll||(e.deltaY<0&&atTop)||(e.deltaY>0&&atBottom)){window.scrollBy(0,e.deltaY);e.preventDefault();}
   },{passive:false});
-  document.addEventListener("input",function(e){if(gftHandleInput(e))return;if(purHandleInput(e))return;if(mysOHandleInput(e))return;if(typeof remHandleInput==="function"&&remHandleInput(e))return;if(e.target.id==="wfindq"){widgetFindQuery=e.target.value;var poswf=e.target.selectionStart;renderOverlay();var wfi=document.getElementById("wfindq");if(wfi){wfi.focus();try{wfi.setSelectionRange(poswf,poswf);}catch(_wf){}}return;}if(e.target.id&&e.target.id.indexOf("mctq-")===0){var wmq=find(e.target.id.slice(5));if(wmq)wmq.mctQ=e.target.value;var pmc=e.target.selectionStart;render();var mi2=document.getElementById(e.target.id);if(mi2){mi2.focus();try{mi2.setSelectionRange(pmc,pmc);}catch(_mc){}}return;}var dq=e.target.closest&&e.target.closest(".dep-q");if(dq){var cont=dq.closest(".wcontent"),val=dq.value.trim().toLowerCase();if(cont){cont.querySelectorAll(".wt-row").forEach(function(r){if(r.classList.contains("wt-head"))return;var nm=(r.getAttribute("data-acct")||"").toLowerCase();r.style.display=(!val||nm.indexOf(val)>-1)?"":"none";});cont.querySelectorAll(".tr-lg-row").forEach(function(r){var nm=(r.getAttribute("data-name")||"").toLowerCase();r.style.display=(!val||nm.indexOf(val)>-1)?"":"none";});cont.querySelectorAll(".pie-wrap .leg").forEach(function(r){var m=r.querySelector(".lg-main"),nm=(m?m.textContent:"").toLowerCase();r.style.display=(!val||nm.indexOf(val)>-1)?"":"none";});}return;}if(e.target.id==="bankq"){bankQuery=e.target.value;var posb=e.target.selectionStart;renderOverlay();var bi=document.getElementById("bankq");if(bi){bi.focus();try{bi.setSelectionRange(posb,posb);}catch(_b){}}return;}if(e.target.id==="apq"){apDueQuery=e.target.value;var posa=e.target.selectionStart;renderOverlay();var ai=document.getElementById("apq");if(ai){ai.focus();try{ai.setSelectionRange(posa,posa);}catch(_a){}}return;}if(e.target.id==="fq"){filterQuery=e.target.value;var posf=e.target.selectionStart;renderOverlay();var fi=document.getElementById("fq");if(fi){fi.focus();try{fi.setSelectionRange(posf,posf);}catch(_f){}}return;}if(e.target.id==="mysConfigQ"){if(modal)modal.q=e.target.value;var pmq=e.target.selectionStart;renderModal();var mqi=document.getElementById("mysConfigQ");if(mqi){mqi.focus();try{mqi.setSelectionRange(pmq,pmq);}catch(_mq){}}return;}if(e.target.id==="bgtRepModalQ"){if(modal)modal.q=e.target.value;var ps2=e.target.selectionStart;renderModal();var si=document.getElementById("bgtRepModalQ");if(si){si.focus();try{si.setSelectionRange(ps2,ps2);}catch(_s){}}return;}if(e.target.id!=="coq")return;companyQuery=e.target.value;var pos=e.target.selectionStart;renderOverlay();var ci=document.getElementById("coq");if(ci){ci.focus();try{ci.setSelectionRange(pos,pos);}catch(_){}}});
+  document.addEventListener("input",function(e){if(gftHandleInput(e))return;if(purHandleInput(e))return;if(WIDGETS.input(e))return;if(typeof remHandleInput==="function"&&remHandleInput(e))return;if(e.target.id==="wfindq"){widgetFindQuery=e.target.value;var poswf=e.target.selectionStart;renderOverlay();var wfi=document.getElementById("wfindq");if(wfi){wfi.focus();try{wfi.setSelectionRange(poswf,poswf);}catch(_wf){}}return;}var dq=e.target.closest&&e.target.closest(".dep-q");if(dq){var cont=dq.closest(".wcontent"),val=dq.value.trim().toLowerCase();if(cont){cont.querySelectorAll(".wt-row").forEach(function(r){if(r.classList.contains("wt-head"))return;var nm=(r.getAttribute("data-acct")||"").toLowerCase();r.style.display=(!val||nm.indexOf(val)>-1)?"":"none";});cont.querySelectorAll(".tr-lg-row").forEach(function(r){var nm=(r.getAttribute("data-name")||"").toLowerCase();r.style.display=(!val||nm.indexOf(val)>-1)?"":"none";});cont.querySelectorAll(".pie-wrap .leg").forEach(function(r){var m=r.querySelector(".lg-main"),nm=(m?m.textContent:"").toLowerCase();r.style.display=(!val||nm.indexOf(val)>-1)?"":"none";});}return;}if(e.target.id==="bankq"){bankQuery=e.target.value;var posb=e.target.selectionStart;renderOverlay();var bi=document.getElementById("bankq");if(bi){bi.focus();try{bi.setSelectionRange(posb,posb);}catch(_b){}}return;}if(e.target.id==="apq"){apDueQuery=e.target.value;var posa=e.target.selectionStart;renderOverlay();var ai=document.getElementById("apq");if(ai){ai.focus();try{ai.setSelectionRange(posa,posa);}catch(_a){}}return;}if(e.target.id==="fq"){filterQuery=e.target.value;var posf=e.target.selectionStart;renderOverlay();var fi=document.getElementById("fq");if(fi){fi.focus();try{fi.setSelectionRange(posf,posf);}catch(_f){}}return;}if(e.target.id==="bgtRepModalQ"){if(modal)modal.q=e.target.value;var ps2=e.target.selectionStart;renderModal();var si=document.getElementById("bgtRepModalQ");if(si){si.focus();try{si.setSelectionRange(ps2,ps2);}catch(_s){}}return;}if(e.target.id!=="coq")return;companyQuery=e.target.value;var pos=e.target.selectionStart;renderOverlay();var ci=document.getElementById("coq");if(ci){ci.focus();try{ci.setSelectionRange(pos,pos);}catch(_){}}});
   var modal=null,modalMounted=false;
   function showModal(t,b){modal={t:t,b:b};modalMounted=false;pop=null;render();}
   /* Special-report picker dialog on a scrim. Exactly two dependent dropdowns: one picks the Report name, one picks the Report line. Changing the report resets the line back to "Select a line". Apply stays disabled until BOTH are chosen. Cancel / close / backdrop all dismiss. The background is frozen while the dialog is open (see renderModal). Rebuilds fully on each interaction so the open/selected state is always correct, and only ONE menu is ever open at a time so nothing overlaps or glitches. */
@@ -10924,16 +10841,13 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
   function bgtLockBg(on){var v=on?"hidden":"";try{document.documentElement.style.overflow=v;}catch(e){}try{document.body.style.overflow=v;}catch(e2){}var am=document.querySelector(".appmain");if(am)am.style.overflow=v;var sn=document.querySelector(".sidenav");if(sn)sn.style.overflow=v;}
   function renderModal(){var mr=document.getElementById("modalRoot");if(!modal){mr.innerHTML="";modalMounted=false;bgtLockBg(false);return;}
     bgtLockBg(true);
+    var wm=WIDGETS.modal();if(wm!==null){mr.innerHTML=wm;modalMounted=true;return;}
     if(modal.type==="bgtreport"){if(modalMounted){var mm=mr.querySelector(".modal.bgt-rm-modal");if(mm){mm.innerHTML=bgtReportModalInner();return;}}mr.innerHTML=bgtReportModalHTML();modalMounted=true;return;}
     if(modal.type==="bgtF-report"){if(modalMounted){var mmF=mr.querySelector(".modal.bgt-rm-modal");if(mmF){mmF.innerHTML=bgtFReportModalInner();return;}}mr.innerHTML=bgtFReportModalHTML();modalMounted=true;return;}
     if(modal.type==="bgtO-report"){if(modalMounted){var mmF=mr.querySelector(".modal.bgt-rm-modal");if(mmF){mmF.innerHTML=bgtOReportModalInner();return;}}mr.innerHTML=bgtOReportModalHTML();modalMounted=true;return;}
-    if(modal.type==="mysconfig"){mr.innerHTML=mysConfigModalHTML();return;}
     if(modal.type==="pur-po"){if(modalMounted){var _pm=mr.querySelector(".modal.pur-po-modal");if(_pm){_pm.innerHTML=purPoModalInner();return;}}mr.innerHTML=purPoModalHTML();modalMounted=true;return;}
     if(modal.type==="pur-drill"){mr.innerHTML=purDrillModalHTML();return;}
     if(modal.type==="pto-confirm"){mr.innerHTML=ptoConfirmModalHTML();modalMounted=true;return;}
-    if(modal.type==="mysdetail"){mr.innerHTML=mysDetailModalHTML();return;}
-    if(modal.type==="mysOconfig"){mr.innerHTML=mysOConfigModalHTML();return;} // My Status (OC)
-    if(modal.type==="mysOdetail"){mr.innerHTML=mysODetailModalHTML();return;} // My Status (OC)
     if(modal.type==="artdetail"){mr.innerHTML=arDetailModalHTML();return;}
     if(modal.type==="arFdetail"){var _am=mr.querySelector(".arF-detail-modal");if(modalMounted&&_am){var _sc=mr.querySelector("#arFwlScroll"),_st=_sc?_sc.scrollTop:0;_am.innerHTML=arFDetailModalInner();var _sc2=mr.querySelector("#arFwlScroll");if(_sc2)_sc2.scrollTop=_st;return;}mr.innerHTML=arFDetailModalHTML();modalMounted=true;return;} // Receivable Invoices Outstanding (MB updated): incremental in-place update, no blink
     if(modal.type==="arOdetail"){mr.innerHTML=arODetailModalHTML();return;} // Receivable Invoices Outstanding (MB updated), additive
@@ -10961,12 +10875,12 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     var t=e.target.closest("[data-action]");
     if(!t){if(pop){pop=null;render();}return;}
     var a=t.getAttribute("data-action"),id=t.getAttribute("data-id");
+    if(WIDGETS.click(a,id,t,e))return;
     if(a==="noop"){pop=null;render();return;}
     if(a==="stop"){return;}
     if(a==="modal-close"){modal=null;pop=null;render();return;}
     if(faHandleClick(a,id,t))return;
     if(a&&a.indexOf("ins-")===0&&insHandleClick(a,id,t))return;
-    if(a&&a.indexOf("myso-")===0&&mysOHandleClick(a,id,t))return; // My Status (OC): her "mys-" prefix cannot match "myso-"
     if(a&&a.indexOf("ap-")===0&&apHandleClick(a,id,t))return;
     if(a&&a.indexOf("pen-")===0&&penHandleClick(a,id,t))return;
     if(a&&a.indexOf("penF-")===0&&penFHandleClick(a,id,t))return; // Pension Plans (MB updated), additive
@@ -11004,23 +10918,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(a==="bank-drill-close"){modal=null;pop=null;render();return;}
     if(a==="bank-drill-back"){if(modal)modal.acct=null;render();return;}
     if(a==="bank-open-app"){setStatus("Opening "+t.getAttribute("data-name")+" in Bank Account Management…");return;}
-    if(a==="mys-config"){var wc0=find(id);modal={type:"mysconfig",id:id,q:"",draft:(wc0.selected||[]).slice()};modalMounted=false;pop=null;render();return;}
-    if(a==="mys-add"){var wa2=find(modal.id);var qid=t.getAttribute("data-q");if(wa2&&modal.draft.indexOf(qid)<0)modal.draft.push(qid);renderModal();return;}
-    if(a==="mys-remove"){var qidr=t.getAttribute("data-q");if(modal)modal.draft=modal.draft.filter(function(x){return x!==qidr;});renderModal();return;}
-    if(a==="mys-config-done"){var wcd=find(modal.id);var chg=JSON.stringify(wcd.selected)!==JSON.stringify(modal.draft);wcd.selected=modal.draft.slice();modal=null;pop=null;if(chg){wcd.state="loading";render();clearTimeout(timers[wcd.id]);timers[wcd.id]=setTimeout(function(){wcd.state="ready";wcd.updated="just now";render();},700);}else render();return;}
-    if(a==="mys-config-cancel"){modal=null;pop=null;render();return;}
-    if(a==="mys-row"){var qq=t.getAttribute("data-q"),mq=mysFind(qq);if(mq&&mq.count>0){if(mq.click==="detail"){modal={type:"mysdetail",id:id,q:qq};modalMounted=false;pop=null;render();}else{showModal("Opens the "+mq.navTo+" page","This count links out of the dashboard to <b>"+mq.navTo+"</b>, where you can work through these "+mq.count+" records. Use the browser back button to return to the dashboard.");}}return;}
-    if(a==="mys-detail-close"){modal=null;pop=null;render();return;}
-    if(a==="mys-detail-export"){var qe=mysFind(t.getAttribute("data-q"));showModal("Export to Excel","This would export the "+(qe?qe.count:0)+" records in <b>"+(qe?qe.name:"")+"</b> as an Excel file.");return;}
-    if(a==="mys-mode"){var wmm2=find(id);if(wmm2)wmm2.mode=t.getAttribute("data-m");pop=null;render();return;}
-    if(a==="mys-opts"){pop=(pop&&pop.type==="mys-opts"&&pop.id===id)?null:{type:"mys-opts",id:id};render();return;}
-    if(a==="mys-hidezero"){var wmh=find(id);if(wmh)wmh.hideZero=!wmh.hideZero;pop=null;render();return;}
-    if(a==="mct-appfilter"){pop=(pop&&pop.type==="mct-appfilter"&&pop.id===id)?null:{type:"mct-appfilter",id:id};render();return;}
-    if(a==="mct-set-filter"){var wf=find(id);if(wf)wf.mctFilter=t.getAttribute("data-f");pop=null;render();return;}
-    if(a==="mct-clearq"){var wcq=find(id);if(wcq)wcq.mctQ="";render();return;}
-    if(a==="mct-open"){var ot=mctTask(t.getAttribute("data-t"));if(ot){var oa=mctApp(ot.app);showModal("Opens "+ot.label,"Tapping this task takes you to <b>"+ot.dest+"</b> in "+oa.name+". Tasks you do not have permission to use are not shown here.");}return;}
-    if(a==="mct-save"){var wsv=find(id),sid=t.getAttribute("data-t");if(wsv){var arr=mctSavedIds(wsv);if(arr.indexOf(sid)<0)arr.push(sid);}setStatus("Added to My Tasks.");render();return;}
-    if(a==="mct-unsave"){var wus=find(id),uid=t.getAttribute("data-t");if(wus){var arr2=mctSavedIds(wus);var ui=arr2.indexOf(uid);if(ui>-1)arr2.splice(ui,1);}setStatus("Removed from My Tasks.");render();return;}
     if(a==="refresh-all"){pop=null;refreshAll();return;}
     if(a==="wfind"){if(pop&&pop.type==="wfind"){pop=null;}else{widgetFindQuery="";pop={type:"wfind"};}render();return;}
     if(a==="wfind-go"){var wtgt=find(id);pop=null;render();var _wt=document.querySelector('.widget[data-id="'+id+'"]');if(_wt){try{_wt.scrollIntoView({behavior:"smooth",block:"center"});}catch(_sc){_wt.scrollIntoView();}_wt.classList.add("widget-flash");setTimeout(function(){if(_wt)_wt.classList.remove("widget-flash");},1400);}setStatus("Jumped to "+((wtgt&&wtgt.title)||"the widget")+".");return;}
@@ -18864,105 +18761,6 @@ function fkpInit(){fkpWire();fkpRender();}
 if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",fkpInit);}else{fkpInit();}
 /* ===== end W18 Financial KPI V2 ===== */
 
-/* ===== W08 My Status V2 JS, kind:"mystatus-oc" ===== */
-
-  /* ===== W08 My Status V2 render ===== */
-function mysOConfigBtn(w){return '<button class="btn outlined sm myso-cfg-btn" data-action="myso-config" data-id="'+w.id+'" aria-haspopup="dialog">'+ICON("checklist")+'Configure</button>';}
-function mysOActive(sel){return sel.filter(function(q){return q.count>0;}).slice().sort(function(a,b){return b.count-a.count;});}
-function mysOClearList(sel){return sel.filter(function(q){return q.count<=0;});}
-function mysOHeaderBlock(w,sel){
-  var active=mysOActive(sel),n=active.length,recs=active.reduce(function(s,q){return s+q.count;},0);
-  var badge=n?('<span class="myso-hpill warn">'+ICON("pending_actions")+n+(n===1?" query needs attention":" queries need attention")+'</span>'):('<span class="myso-hpill ok">'+ICON("check_circle")+'All clear</span>');
-  return '<div class="dep-hd myso-hd"><div class="dep-hd-top"><div class="dep-hd-kpigrp"><span class="metric-value">'+recs+'</span>'+badge+'</div><div class="dep-hd-toggle">'+mysOConfigBtn(w)+'</div></div><div class="dep-hd-num"><div class="myso-sub">Records waiting across your tracked queries. Select a count to work through it.</div></div></div>';
-}
-function mysORowHTML(w,q){
-  var zero=q.count<=0, clickable=!zero;
-  var aff=(!zero&&q.click==="nav")?'<span class="myso-aff material-symbols-rounded" aria-hidden="true" data-tip="Opens the '+q.navTo+' page (leaves the dashboard)" data-tip-plain>arrow_outward</span>':'';
-  var srClick=clickable?(q.click==="nav"?", opens the "+q.navTo+" page":", opens a record list"):", nothing to action";
-  var nm='<span class="lr-main myso-nm">'+q.name+'</span>';
-  var count='<span class="wt-c2 myso-count'+(zero?" myso-count-zero":"")+'">'+q.count+'<span class="sr-only"> records'+srClick+'</span></span>';
-  var attrs=clickable?' data-action="myso-row" data-id="'+w.id+'" data-q="'+q.id+'" tabindex="0" role="button" aria-label="'+q.name+', '+q.count+' records'+srClick+'"':' aria-disabled="true"';
-  return '<div class="wt-row myso-row'+(zero?" myso-zero":"")+(clickable?" myso-clickable":"")+'"'+attrs+'>'+nm+aff+count+'</div>';
-}
-function mysOContent(w){
-  var sel=(w.selected||[]).map(mysOFind).filter(Boolean);
-  if(!sel.length)return '<div class="state myso-empty" data-kind="empty">'+ICON("checklist")+'<div class="state-title">No records to display</div><div class="state-sub">Choose the queries you want to keep an eye on. Their live counts show up here.</div><button class="btn outlined" data-action="myso-config" data-id="'+w.id+'">'+ICON("checklist")+'Configure</button></div>';
-  var active=mysOActive(sel),clear=mysOClearList(sel);
-  var head='<div class="wt-row wt-head myso-headrow"><span class="lr-main">Query</span><span class="wt-c2 myso-countcol">Count</span></div>';
-  var body="";
-  if(active.length)body+=active.map(function(q){return mysORowHTML(w,q);}).join("");
-  else body+='<div class="myso-allclear">'+ICON("task_alt")+'<span>Nothing needs your attention right now.</span></div>';
-  if(clear.length)body+='<div class="cap myso-grp">Up to date</div>'+clear.map(function(q){return mysORowHTML(w,q);}).join("");
-  return mysOHeaderBlock(w,sel)+'<div class="scroll myso-list">'+head+body+'</div>';
-}
-
-function mysOConfigModalHTML(){
-  var w=find(modal.id);if(!w)return "";
-  var draft=modal.draft||[],q=(modal.q||"").toLowerCase();
-  var avail=MYSO_QUERIES.filter(function(x){return draft.indexOf(x.id)<0;});
-  var availM=avail.filter(function(x){return !q||x.name.toLowerCase().indexOf(q)>-1||x.sys.toLowerCase().indexOf(q)>-1||MYSO_AREA[x.area].toLowerCase().indexOf(q)>-1;});
-  var availHTML="";
-  ["GL","AP","PUR","HR"].forEach(function(ar){var items=availM.filter(function(x){return x.area===ar;});if(!items.length)return;
-    availHTML+='<div class="cap">'+MYSO_AREA[ar]+'</div>'+items.map(function(x){
-      return '<button class="mi myso-avail" data-action="myso-add" data-q="'+x.id+'" data-id="'+w.id+'"><span class="myso-dot myso-dot-'+x.urgency+'" aria-hidden="true"></span><span class="sr-only">'+MYSO_URGENCY[x.urgency]+'. </span><span class="mi-nm">'+x.name+'</span><span class="myso-add-ic" aria-hidden="true">'+ICON("add")+'</span></button>';}).join("");});
-  if(!availM.length)availHTML='<div class="mi-note" style="color:var(--txt-subtle)">'+(q?('No queries match "'+(modal.q||"").replace(/"/g,"&quot;")+'"'):'All available queries are already showing.')+'</div>';
-  var selHTML=draft.length?draft.map(function(qid){var x=mysOFind(qid);if(!x)return "";
-      return '<button class="mi myso-selrow" data-action="myso-remove" data-q="'+x.id+'" data-id="'+w.id+'"><span class="myso-dot myso-dot-'+x.urgency+'" aria-hidden="true"></span><span class="sr-only">'+MYSO_URGENCY[x.urgency]+'. </span><span class="mi-nm">'+x.name+'</span><span class="myso-rm-ic" aria-hidden="true" title="Remove">'+ICON("close")+'</span></button>';}).join("")
-    :'<div class="myso-empty-col">'+ICON("checklist")+'<span>Nothing selected yet. Add queries from the left.</span></div>';
-  var body='<div class="myso-cfg">'+
-      '<div class="myso-cfg-col myso-cfg-avail"><div class="myso-cfg-h">Available queries</div>'+
-        '<div class="dd-search">'+ICON("search")+'<input class="dd-input" id="mysOConfigQ" placeholder="Search queries or areas" value="'+(modal.q||"").replace(/"/g,"&quot;")+'" autocomplete="off"></div>'+
-        '<div class="myso-legend">'+'<span class="myso-legend-k"><span class="myso-dot myso-dot-action" aria-hidden="true"></span>'+MYSO_URGENCY.action+'</span>'+'<span class="myso-legend-k"><span class="myso-dot myso-dot-info" aria-hidden="true"></span>'+MYSO_URGENCY.info+'</span>'+'</div>'+'<div class="menu-scroll myso-cfg-scroll" role="listbox">'+availHTML+'</div></div>'+
-      '<div class="myso-cfg-col myso-cfg-sel"><div class="myso-cfg-h">Showing on my dashboard <span class="myso-cfg-n">'+draft.length+'</span></div>'+
-        '<div class="menu-scroll myso-cfg-scroll">'+selHTML+'</div></div></div>';
-  return '<div class="modal-backdrop" data-action="myso-config-cancel"><div class="modal modal-wide myso-cfg-modal" data-action="stop" role="dialog" aria-modal="true" aria-label="Configure My Status">'+
-    '<div class="modal-h"><span class="modal-title"><span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">tune</span>Configure My Status</span><button class="iconbtn" data-action="myso-config-cancel" aria-label="Close">'+ICON("close")+'</button></div>'+
-    '<div class="modal-b myso-cfg-b">'+body+'</div>'+
-    '<div class="modal-f"><button class="btn naked sm" data-action="myso-config-cancel">Cancel</button><button class="btn primary sm" data-action="myso-config-done" data-id="'+w.id+'">Done</button></div></div></div>';}
-function mysODetailModalHTML(){
-  var q=mysOFind(modal.q);if(!q)return "";
-  var recs=q.records||[],cols=recs.length?Object.keys(recs[0]):[];
-  var table;
-  if(recs.length){
-    var head='<div class="wt-row wt-head myso-dhead">'+cols.map(function(c){return '<span class="myso-dc">'+c+'</span>';}).join("")+'</div>';
-    var rows=recs.map(function(r){return '<div class="wt-row myso-drow">'+cols.map(function(c){var v=String(r[c]);var urgent=(c==="Status"&&v==="Overdue");return '<span class="myso-dc'+(urgent?" myso-ctx-urgent":"")+'">'+v+'</span>';}).join("")+'</div>';}).join("");
-    table='<div class="scroll myso-detail-tbl">'+head+rows+'</div>';
-  } else {
-    table='<div class="state" data-kind="empty">'+ICON("inbox")+'<div class="state-title">No records to display</div></div>';
-  }
-  return '<div class="modal-backdrop" data-action="myso-detail-close"><div class="modal modal-wide myso-detail-modal" data-action="stop" role="dialog" aria-modal="true" aria-label="'+q.name.replace(/"/g,"&quot;")+'">'+
-    '<div class="modal-h"><span class="modal-title"><span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">list_alt</span>'+q.name+'</span><button class="iconbtn" data-action="myso-detail-close" aria-label="Close">'+ICON("close")+'</button></div>'+
-    '<div class="modal-b">'+table+'</div>'+
-    '<div class="modal-f myso-detail-f"><button class="btn naked sm" data-action="myso-detail-export" data-q="'+q.id+'">'+ICON("download")+'Export to Excel</button><span class="myso-detail-spacer"></span><button class="btn primary sm" data-action="myso-detail-close">Close</button></div></div></div>';}
-function mysOPopContent(){
-  if(pop.type==="myso-opts"){var wo=find(pop.id),hz=!!wo.hideZero;
-    return '<div class="cap">Display</div><button class="mi'+(hz?" check":"")+'" data-action="myso-hidezero" data-id="'+wo.id+'">'+ICON(hz?"check_box":"check_box_outline_blank")+'Hide zero-count rows</button><div class="sep"></div><div class="myso-asof">Counts as of '+(wo.updated||"just now")+'</div>';}
-  return "";}
-
-  /* Her eleven click branches, verbatim but renamed. Reached by one line in
-   her listener, the insHandleClick idiom. Returns true when it handled the
-   action so her chain stops, false so it carries on. */
-  function mysOHandleClick(a,id,t){
-    if(a==="myso-config"){var wc0=find(id);modal={type:"mysOconfig",id:id,q:"",draft:(wc0.selected||[]).slice()};modalMounted=false;pop=null;render();return true;}
-    if(a==="myso-add"){var wa2=find(modal.id);var qid=t.getAttribute("data-q");if(wa2&&modal.draft.indexOf(qid)<0)modal.draft.push(qid);renderModal();return true;}
-    if(a==="myso-remove"){var qidr=t.getAttribute("data-q");if(modal)modal.draft=modal.draft.filter(function(x){return x!==qidr;});renderModal();return true;}
-    if(a==="myso-config-done"){var wcd=find(modal.id);var chg=JSON.stringify(wcd.selected)!==JSON.stringify(modal.draft);wcd.selected=modal.draft.slice();modal=null;pop=null;if(chg){wcd.state="loading";render();clearTimeout(timers[wcd.id]);timers[wcd.id]=setTimeout(function(){wcd.state="ready";wcd.updated="just now";render();},700);}else render();return true;}
-    if(a==="myso-config-cancel"){modal=null;pop=null;render();return true;}
-    if(a==="myso-row"){var qq=t.getAttribute("data-q"),mq=mysOFind(qq);if(mq&&mq.count>0){if(mq.click==="detail"){modal={type:"mysOdetail",id:id,q:qq};modalMounted=false;pop=null;render();}else{showModal("Opens the "+mq.navTo+" page","This count links out of the dashboard to <b>"+mq.navTo+"</b>, where you can work through these "+mq.count+" records. Use the browser back button to return to the dashboard.");}}return true;}
-    if(a==="myso-detail-close"){modal=null;pop=null;render();return true;}
-    if(a==="myso-detail-export"){var qe=mysOFind(t.getAttribute("data-q"));showModal("Export to Excel","This would export the "+(qe?qe.count:0)+" records in <b>"+(qe?qe.name:"")+"</b> as an Excel file.");return true;}
-    if(a==="myso-mode"){var wmm2=find(id);if(wmm2)wmm2.mode=t.getAttribute("data-m");pop=null;render();return true;}
-    if(a==="myso-opts"){pop=(pop&&pop.type==="myso-opts"&&pop.id===id)?null:{type:"myso-opts",id:id};render();return true;}
-    if(a==="myso-hidezero"){var wmh=find(id);if(wmh)wmh.hideZero=!wmh.hideZero;pop=null;render();return true;}
-    return false;
-  }
-
-  /* Her config-search input hook, same idiom as gftHandleInput. */
-  function mysOHandleInput(e){
-    if(e.target.id==="mysOConfigQ"){if(modal)modal.q=e.target.value;var pmq=e.target.selectionStart;renderModal();var mqi=document.getElementById("mysOConfigQ");if(mqi){mqi.focus();try{mqi.setSelectionRange(pmq,pmq);}catch(_mq){}}return true;}
-    return false;
-  }
-/* ===== end W08 My Status V2 ===== */
 
   render();
 })();

@@ -5,138 +5,651 @@
     "css or script part) or {grep:[tokens]} (line ranges containing any token, +-2 lines context).",
     "jo.*: same, against _ref/jo-phase2-8958e49.html. Replace grep regions with exact markers as each",
     "review pack is built. Kinds: W01-W07 Jo live = -mb, ours = -oc; W09-W17 Jo live = plain, ours = -mb.",
-    "Drivers anchor on the same banner strings: change a marker here AND in the driver AND in index.html together."
+    "Drivers anchor on the same banner strings: change a marker here AND in the driver AND in index.html together.",
+    "A decided widget has a single `final` side (in index.html) and a `decided` date; its ours/jo sides are removed."
   ],
   "widgets": {
-    "W01": { "name": "Budget Compared to Actual", "driver": "w01-budget-oc.driver.js",
-      "ours": { "kind": "budget-oc", "prefix": "bgtO",
-        "css": { "start": "/* ===== W01 Budget Compared to Actual V2", "end": "/* ===== W02 Pension Plans V2" },
-        "js":  { "start": "/* ===== W01 Budget Compared to Actual V2", "end": "/* ===== W02 Pension Plans V2" },
-        "registry": { "grep": ["kind:\"budget-oc\""] } },
-      "jo":   { "kind": "budget-mb", "prefix": "bgtF",
-        "css": { "grep": ["bgtf-", ".bgt-"] }, "js": { "grep": ["bgtF", "kind:\"budget-mb\""] } } },
-    "W02": { "name": "Pension Plans", "driver": "w02-pension-oc.driver.js",
-      "ours": { "kind": "pension-oc", "prefix": "penO",
-        "css": { "start": "/* ===== W02 Pension Plans V2", "end": "/* ===== W03 Payroll Distributions V2" },
-        "js":  { "start": "/* ===== W02 Pension Plans V2", "end": "/* ===== W03 Payroll Distributions V2" },
-        "registry": { "grep": ["kind:\"pension-oc\""] } },
-      "jo":   { "kind": "pension-mb", "prefix": "penF",
-        "css": { "grep": ["penf-", ".pen-"] }, "js": { "grep": ["penF", "kind:\"pension-mb\""] } } },
-    "W03": { "name": "Payroll Distributions", "driver": "w03-payroll-oc.driver.js",
-      "ours": { "kind": "payroll-oc", "prefix": "prO",
-        "css": { "start": "/* ===== W03 Payroll Distributions V2", "end": "/* ===== W04 Remittance Pledges V2" },
-        "js":  { "start": "/* ===== W03 Payroll Distributions V2", "end": "/* ===== W04 Remittance Pledges V2" },
-        "registry": { "grep": ["kind:\"payroll-oc\""] } },
-      "jo":   { "kind": "payroll-mb", "prefix": "prF",
-        "css": { "grep": [".prf-", ".pr-"] }, "js": { "grep": ["prF", "kind:\"payroll-mb\""] } } },
-    "W04": { "name": "Remittance Pledges", "driver": "w04-remittance-oc.driver.js",
-      "ours": { "kind": "remittance-oc", "prefix": "remO",
-        "css": { "start": "/* ===== W04 Remittance Pledges V2", "end": "/* ===== W05 Receivable Invoices Outstanding V2" },
-        "js":  { "start": "/* ===== W04 Remittance Pledges V2", "end": "/* ===== W05 Receivable Invoices Outstanding V2" },
-        "registry": { "grep": ["kind:\"remittance-oc\""] } },
-      "jo":   { "kind": "remittance-mb", "prefix": "remF",
-        "css": { "grep": [".remf-", ".rem-"] }, "js": { "grep": ["remF", "kind:\"remittance-mb\""] } } },
-    "W05": { "name": "Receivable Invoices Outstanding", "driver": "w05-receivables-oc.driver.js",
-      "ours": { "kind": "receivables-oc", "prefix": "arO",
-        "css": { "start": "/* ===== W05 Receivable Invoices Outstanding V2", "end": "/* ===== W06 Insurance Billing Plans V2" },
-        "js":  { "start": "/* ===== W05 Receivable Invoices Outstanding V2", "end": "/* ===== W06 Insurance Billing Plans V2" },
-        "registry": { "grep": ["kind:\"receivables-oc\""] } },
-      "jo":   { "kind": "receivables-mb", "prefix": "arF",
-        "css": { "grep": [".arf-", ".ar-"] }, "js": { "grep": ["arF", "kind:\"receivables-mb\""] } } },
-    "W06": { "name": "Insurance Billing Plans", "driver": "w06-insurance-oc.driver.js",
-      "ours": { "kind": "insurance-oc", "prefix": "insO",
-        "css": { "start": "/* ===== W06 Insurance Billing Plans V2", "end": "/* ===== W07 Deposits on Hand V2" },
-        "js":  { "start": "/* ===== W06 Insurance Billing Plans V2", "end": "/* ===== W07 Deposits on Hand V2" },
-        "registry": { "grep": ["kind:\"insurance-oc\""] } },
-      "jo":   { "kind": "insurance-mb", "prefix": "insF",
-        "css": { "grep": [".insf-", ".ins-"] }, "js": { "grep": ["insF", "kind:\"insurance-mb\""] } } },
-    "W07": { "name": "Deposits on Hand", "driver": "w07-deposits-oc.driver.js",
-      "ours": { "kind": "deposits-oc", "prefix": "depO",
-        "css": { "start": "/* ===== W07 Deposits on Hand V2", "end": "/* ===== end W07 Deposits on Hand V2 CSS ===== */" },
-        "js":  { "start": "/* ===== W07 Deposits on Hand V2", "end": "/* ===== W18 Financial KPI V2 ===" },
-        "registry": { "grep": ["kind:\"deposits-oc\""] } },
-      "jo":   { "kind": "deposits-mb", "prefix": "depF",
-        "css": { "grep": [".depf-", ".dep-"] }, "js": { "grep": ["depF", "kind:\"deposits-mb\""] } } },
-    "W08": { "name": "My Status", "driver": "w08-mystatus-oc.driver.js",
-      "ours": { "kind": "mystatus-oc", "prefix": "mysO",
-        "css": { "start": "/* ===== W08 My Status V2 CSS ===== */", "end": "/* ===== W18 Financial KPI V2 ===" },
-        "data": { "start": "/* ===== W08 My Status V2 data ===== */", "end": "/* ===== P2/P3 WIDGET BLOCKS" },
-        "js":  { "start": "/* ===== W08 My Status V2 render ===== */", "end": "/* ===== end W08 My Status V2 ===== */" },
-        "registry": { "grep": ["kind:\"mystatus-oc\""] } },
-      "jo":   { "kind": "mystatus", "prefix": "mys",
-        "css": { "start": "/* ===== My Status (mys) ===== */", "end": "/* ===== Bank Balances (prefix: bank): CSS ===== */" },
-        "data": { "start": "/* === MY STATUS (mys) data === */", "end": "/* ===== P2/P3 WIDGET BLOCKS" },
-        "js":  { "start": "/* === MY STATUS (mys) render === */", "end": "/* ===== Bank Balances (prefix: bank), RENDER ===== */" } } },
-    "W09": { "name": "Payroll Scheduled Time Off", "driver": "w09-pto-mb.driver.js",
-      "ours": { "kind": "pto-mb", "prefix": "ptoF",
-        "css": { "grep": [".ptof-"] },
-        "js":  { "start": "var PTOF_ME=", "end": "/* ===== end W09 Payroll Scheduled Time Off V2 ===== */" },
-        "registry": { "grep": ["kind:\"pto-mb\""] } },
-      "jo":   { "kind": "pto", "prefix": "pto",
-        "css": { "start": "/* ===== Payroll Scheduled Time Off (pto) ===== */", "end": "/* ===== Fixed Asset Values (fa) ===== */" },
-        "js":  { "start": "/* ===== Payroll Scheduled Time Off (pto) ===== */", "end": "/* ===== Fixed Asset Values (fa, kind:\"fixedassets\") ===== */" } } },
-    "W10": { "name": "Loans With Balance Due", "driver": "w10-loans-mb.driver.js",
-      "ours": { "kind": "loans-mb", "prefix": "lonF",
-        "css": { "grep": [".lonf-"] },
-        "js":  { "start": "var LONF_TODAY=", "end": "/* ===== end W10 Loans With Balance Due V2 ===== */" },
-        "registry": { "grep": ["kind:\"loans-mb\""] } },
-      "jo":   { "kind": "loans", "prefix": "loan",
-        "css": { "grep": [".loan-"] }, "js": { "grep": ["function loan", "LOAN_", "kind:\"loans\""] } } },
-    "W11": { "name": "Fixed Asset Values", "driver": "w11-fixedassets-mb.driver.js",
-      "ours": { "kind": "fixedassets-mb", "prefix": "faF",
-        "css": { "grep": [".faf-"] },
-        "js":  { "start": "var FAF_ASSETS=[", "end": "/* ===== end W11 Fixed Asset Values V2 ===== */" },
-        "registry": { "grep": ["kind:\"fixedassets-mb\""] } },
-      "jo":   { "kind": "fixedassets", "prefix": "fa",
-        "css": { "start": "/* ===== Fixed Asset Values (fa) ===== */", "end": "/* ===== P2/P3 widget styles ===== */" },
-        "js":  { "grep": ["function fa", "FA_", "kind:\"fixedassets\""] } } },
-    "W13": { "name": "Purchasing Management", "driver": "w13-purchasing-mb.driver.js",
-      "ours": { "kind": "purchasing-mb", "prefix": "purF",
-        "css": { "grep": [".purf-"] },
-        "js":  { "start": "var PURF_TODAY=new Date(2026,7,19);", "end": "/* ===== end W13 Purchasing Management V2 ===== */" },
-        "registry": { "grep": ["kind:\"purchasing-mb\""] } },
-      "jo":   { "kind": "purchasing", "prefix": "pur",
-        "css": { "grep": [".pur-", ".po-"] }, "js": { "grep": ["function pur", "PUR_", "kind:\"purchasing\""] } } },
-    "W14": { "name": "Main Content Tasks", "driver": null,
-      "ours": null,
-      "jo":   { "kind": "tasks", "prefix": "mct",
-        "css": { "start": "/* ===== Main Content Tasks (mct): context-aware launcher ===== */", "end": "/* ===== My Status (mys) ===== */" },
-        "js":  { "start": "/* ===== Main Content Tasks (mct): context-aware quick-action launcher ===== */", "end": "/* === MY STATUS (mys) render === */" } } },
-    "W15": { "name": "Bank Balances", "driver": "w15-bank-mb.driver.js",
-      "ours": { "kind": "bank-mb", "prefix": "bkF",
-        "css": { "grep": [".bkf-"] },
-        "js":  { "start": "/* ===== W15 Bank Balances V2 JS , prefix bkF , kind \"bank-mb\" =", "end": "/* ===== end W15 Bank Balances V2 ===== */" },
-        "registry": { "grep": ["kind:\"bank-mb\""] } },
-      "jo":   { "kind": "bank", "prefix": "bank",
-        "css": { "start": "/* ===== Bank Balances (prefix: bank): CSS ===== */", "end": "/* ===== Payroll Distributions (pr): scope dropdown + distribution badges ===== */" },
-        "js":  { "start": "/* ===== Bank Balances (prefix: bank), RENDER ===== */", "end": "/* ===== Payroll Scheduled Time Off (pto) ===== */" } } },
-    "W16": { "name": "Accounts Payable By Due Date", "driver": "w16-payables-mb.driver.js",
-      "ours": { "kind": "payables-mb", "prefix": "apF",
-        "css": { "grep": [".apf-"] },
-        "js":  { "start": "/* ===== W16 Accounts Payable By Due Date V2 JS , prefix apF , kind \"payables-mb\" =", "end": "/* ===== end W16 Accounts Payable By Due Date V2 ===== */" },
-        "registry": { "grep": ["kind:\"payables-mb\""] } },
-      "jo":   { "kind": "payables", "prefix": "ap",
-        "css": { "grep": [".ap-", ".pay-"] }, "js": { "grep": ["function ap", "AP_", "kind:\"payables\""] } } },
-    "W17": { "name": "Gifts Pledges", "driver": "w17-gifts-mb.driver.js",
-      "ours": { "kind": "gifts-mb", "prefix": "gpF",
-        "css": { "grep": [".gpf-"] },
-        "js":  { "start": "var GPF_TODAY=", "end": "/* ===== end W17 Gifts Pledges V2 ===== */" },
-        "registry": { "grep": ["kind:\"gifts-mb\""] } },
-      "jo":   { "kind": "gifts", "prefix": "gft",
-        "css": { "grep": [".gft-"] }, "js": { "grep": ["function gft", "GFT_", "kind:\"gifts\""] } } },
-    "W18": { "name": "Financial KPI", "driver": "w18-fkp.driver.js",
-      "ours": { "kind": null, "prefix": "fkp",
-        "css": { "start": "/* ===== W18 Financial KPI V2 ===", "end": "/* ===== end W18 Financial KPI V2 ===== */" },
-        "js":  { "start": "/* ===== W18 Financial KPI V2 ===", "end": "/* ===== end W18 Financial KPI V2 ===== */" },
-        "html": { "grep": ["id=\"fkpBand\""] } },
+    "W01": {
+      "name": "Budget Compared to Actual",
+      "driver": "w01-budget-oc.driver.js",
+      "ours": {
+        "kind": "budget-oc",
+        "prefix": "bgtO",
+        "css": {
+          "start": "/* ===== W01 Budget Compared to Actual V2",
+          "end": "/* ===== W02 Pension Plans V2"
+        },
+        "js": {
+          "start": "/* ===== W01 Budget Compared to Actual V2",
+          "end": "/* ===== W02 Pension Plans V2"
+        },
+        "registry": {
+          "grep": [
+            "kind:\"budget-oc\""
+          ]
+        }
+      },
+      "jo": {
+        "kind": "budget-mb",
+        "prefix": "bgtF",
+        "css": {
+          "grep": [
+            "bgtf-",
+            ".bgt-"
+          ]
+        },
+        "js": {
+          "grep": [
+            "bgtF",
+            "kind:\"budget-mb\""
+          ]
+        }
+      }
+    },
+    "W02": {
+      "name": "Pension Plans",
+      "driver": "w02-pension-oc.driver.js",
+      "ours": {
+        "kind": "pension-oc",
+        "prefix": "penO",
+        "css": {
+          "start": "/* ===== W02 Pension Plans V2",
+          "end": "/* ===== W03 Payroll Distributions V2"
+        },
+        "js": {
+          "start": "/* ===== W02 Pension Plans V2",
+          "end": "/* ===== W03 Payroll Distributions V2"
+        },
+        "registry": {
+          "grep": [
+            "kind:\"pension-oc\""
+          ]
+        }
+      },
+      "jo": {
+        "kind": "pension-mb",
+        "prefix": "penF",
+        "css": {
+          "grep": [
+            "penf-",
+            ".pen-"
+          ]
+        },
+        "js": {
+          "grep": [
+            "penF",
+            "kind:\"pension-mb\""
+          ]
+        }
+      }
+    },
+    "W03": {
+      "name": "Payroll Distributions",
+      "driver": "w03-payroll-oc.driver.js",
+      "ours": {
+        "kind": "payroll-oc",
+        "prefix": "prO",
+        "css": {
+          "start": "/* ===== W03 Payroll Distributions V2",
+          "end": "/* ===== W04 Remittance Pledges V2"
+        },
+        "js": {
+          "start": "/* ===== W03 Payroll Distributions V2",
+          "end": "/* ===== W04 Remittance Pledges V2"
+        },
+        "registry": {
+          "grep": [
+            "kind:\"payroll-oc\""
+          ]
+        }
+      },
+      "jo": {
+        "kind": "payroll-mb",
+        "prefix": "prF",
+        "css": {
+          "grep": [
+            ".prf-",
+            ".pr-"
+          ]
+        },
+        "js": {
+          "grep": [
+            "prF",
+            "kind:\"payroll-mb\""
+          ]
+        }
+      }
+    },
+    "W04": {
+      "name": "Remittance Pledges",
+      "driver": "w04-remittance-oc.driver.js",
+      "ours": {
+        "kind": "remittance-oc",
+        "prefix": "remO",
+        "css": {
+          "start": "/* ===== W04 Remittance Pledges V2",
+          "end": "/* ===== W05 Receivable Invoices Outstanding V2"
+        },
+        "js": {
+          "start": "/* ===== W04 Remittance Pledges V2",
+          "end": "/* ===== W05 Receivable Invoices Outstanding V2"
+        },
+        "registry": {
+          "grep": [
+            "kind:\"remittance-oc\""
+          ]
+        }
+      },
+      "jo": {
+        "kind": "remittance-mb",
+        "prefix": "remF",
+        "css": {
+          "grep": [
+            ".remf-",
+            ".rem-"
+          ]
+        },
+        "js": {
+          "grep": [
+            "remF",
+            "kind:\"remittance-mb\""
+          ]
+        }
+      }
+    },
+    "W05": {
+      "name": "Receivable Invoices Outstanding",
+      "driver": "w05-receivables-oc.driver.js",
+      "ours": {
+        "kind": "receivables-oc",
+        "prefix": "arO",
+        "css": {
+          "start": "/* ===== W05 Receivable Invoices Outstanding V2",
+          "end": "/* ===== W06 Insurance Billing Plans V2"
+        },
+        "js": {
+          "start": "/* ===== W05 Receivable Invoices Outstanding V2",
+          "end": "/* ===== W06 Insurance Billing Plans V2"
+        },
+        "registry": {
+          "grep": [
+            "kind:\"receivables-oc\""
+          ]
+        }
+      },
+      "jo": {
+        "kind": "receivables-mb",
+        "prefix": "arF",
+        "css": {
+          "grep": [
+            ".arf-",
+            ".ar-"
+          ]
+        },
+        "js": {
+          "grep": [
+            "arF",
+            "kind:\"receivables-mb\""
+          ]
+        }
+      }
+    },
+    "W06": {
+      "name": "Insurance Billing Plans",
+      "driver": "w06-insurance-oc.driver.js",
+      "ours": {
+        "kind": "insurance-oc",
+        "prefix": "insO",
+        "css": {
+          "start": "/* ===== W06 Insurance Billing Plans V2",
+          "end": "/* ===== W07 Deposits on Hand V2"
+        },
+        "js": {
+          "start": "/* ===== W06 Insurance Billing Plans V2",
+          "end": "/* ===== W07 Deposits on Hand V2"
+        },
+        "registry": {
+          "grep": [
+            "kind:\"insurance-oc\""
+          ]
+        }
+      },
+      "jo": {
+        "kind": "insurance-mb",
+        "prefix": "insF",
+        "css": {
+          "grep": [
+            ".insf-",
+            ".ins-"
+          ]
+        },
+        "js": {
+          "grep": [
+            "insF",
+            "kind:\"insurance-mb\""
+          ]
+        }
+      }
+    },
+    "W07": {
+      "name": "Deposits on Hand",
+      "driver": "w07-deposits-oc.driver.js",
+      "ours": {
+        "kind": "deposits-oc",
+        "prefix": "depO",
+        "css": {
+          "start": "/* ===== W07 Deposits on Hand V2",
+          "end": "/* ===== end W07 Deposits on Hand V2 CSS ===== */"
+        },
+        "js": {
+          "start": "/* ===== W07 Deposits on Hand V2",
+          "end": "/* ===== W18 Financial KPI V2 ==="
+        },
+        "registry": {
+          "grep": [
+            "kind:\"deposits-oc\""
+          ]
+        }
+      },
+      "jo": {
+        "kind": "deposits-mb",
+        "prefix": "depF",
+        "css": {
+          "grep": [
+            ".depf-",
+            ".dep-"
+          ]
+        },
+        "js": {
+          "grep": [
+            "depF",
+            "kind:\"deposits-mb\""
+          ]
+        }
+      }
+    },
+    "W08": {
+      "name": "My Status",
+      "driver": "w08-mystatus.driver.js",
+      "decided": "2026-09-25 Jo",
+      "final": {
+        "kind": "mystatus",
+        "prefix": "mys",
+        "css": {
+          "start": "/* ===== W08 My Status V2 CSS ===== */",
+          "end": "/* ===== end W08 My Status V2 CSS ===== */"
+        },
+        "js": {
+          "start": "/* ===== W08 My Status V2 =====",
+          "end": "/* ===== end W08 My Status V2 ===== */"
+        },
+        "registry": {
+          "grep": [
+            "kind:\"mystatus\""
+          ]
+        }
+      }
+    },
+    "W09": {
+      "name": "Payroll Scheduled Time Off",
+      "driver": "w09-pto-mb.driver.js",
+      "ours": {
+        "kind": "pto-mb",
+        "prefix": "ptoF",
+        "css": {
+          "grep": [
+            ".ptof-"
+          ]
+        },
+        "js": {
+          "start": "var PTOF_ME=",
+          "end": "/* ===== end W09 Payroll Scheduled Time Off V2 ===== */"
+        },
+        "registry": {
+          "grep": [
+            "kind:\"pto-mb\""
+          ]
+        }
+      },
+      "jo": {
+        "kind": "pto",
+        "prefix": "pto",
+        "css": {
+          "start": "/* ===== Payroll Scheduled Time Off (pto) ===== */",
+          "end": "/* ===== Fixed Asset Values (fa) ===== */"
+        },
+        "js": {
+          "start": "/* ===== Payroll Scheduled Time Off (pto) ===== */",
+          "end": "/* ===== Fixed Asset Values (fa, kind:\"fixedassets\") ===== */"
+        }
+      }
+    },
+    "W10": {
+      "name": "Loans With Balance Due",
+      "driver": "w10-loans-mb.driver.js",
+      "ours": {
+        "kind": "loans-mb",
+        "prefix": "lonF",
+        "css": {
+          "grep": [
+            ".lonf-"
+          ]
+        },
+        "js": {
+          "start": "var LONF_TODAY=",
+          "end": "/* ===== end W10 Loans With Balance Due V2 ===== */"
+        },
+        "registry": {
+          "grep": [
+            "kind:\"loans-mb\""
+          ]
+        }
+      },
+      "jo": {
+        "kind": "loans",
+        "prefix": "loan",
+        "css": {
+          "grep": [
+            ".loan-"
+          ]
+        },
+        "js": {
+          "grep": [
+            "function loan",
+            "LOAN_",
+            "kind:\"loans\""
+          ]
+        }
+      }
+    },
+    "W11": {
+      "name": "Fixed Asset Values",
+      "driver": "w11-fixedassets-mb.driver.js",
+      "ours": {
+        "kind": "fixedassets-mb",
+        "prefix": "faF",
+        "css": {
+          "grep": [
+            ".faf-"
+          ]
+        },
+        "js": {
+          "start": "var FAF_ASSETS=[",
+          "end": "/* ===== end W11 Fixed Asset Values V2 ===== */"
+        },
+        "registry": {
+          "grep": [
+            "kind:\"fixedassets-mb\""
+          ]
+        }
+      },
+      "jo": {
+        "kind": "fixedassets",
+        "prefix": "fa",
+        "css": {
+          "start": "/* ===== Fixed Asset Values (fa) ===== */",
+          "end": "/* ===== P2/P3 widget styles ===== */"
+        },
+        "js": {
+          "grep": [
+            "function fa",
+            "FA_",
+            "kind:\"fixedassets\""
+          ]
+        }
+      }
+    },
+    "W13": {
+      "name": "Purchasing Management",
+      "driver": "w13-purchasing-mb.driver.js",
+      "ours": {
+        "kind": "purchasing-mb",
+        "prefix": "purF",
+        "css": {
+          "grep": [
+            ".purf-"
+          ]
+        },
+        "js": {
+          "start": "var PURF_TODAY=new Date(2026,7,19);",
+          "end": "/* ===== end W13 Purchasing Management V2 ===== */"
+        },
+        "registry": {
+          "grep": [
+            "kind:\"purchasing-mb\""
+          ]
+        }
+      },
+      "jo": {
+        "kind": "purchasing",
+        "prefix": "pur",
+        "css": {
+          "grep": [
+            ".pur-",
+            ".po-"
+          ]
+        },
+        "js": {
+          "grep": [
+            "function pur",
+            "PUR_",
+            "kind:\"purchasing\""
+          ]
+        }
+      }
+    },
+    "W14": {
+      "name": "Main Content Tasks",
+      "driver": "w14-tasks.driver.js",
+      "decided": "2026-09-25 Jo",
+      "final": {
+        "kind": "tasks",
+        "prefix": "mct",
+        "css": {
+          "start": "/* ===== W14 Main Content Tasks V2 CSS ===== */",
+          "end": "/* ===== end W14 Main Content Tasks V2 CSS ===== */"
+        },
+        "js": {
+          "start": "/* ===== W14 Main Content Tasks V2 =====",
+          "end": "/* ===== end W14 Main Content Tasks V2 ===== */"
+        },
+        "registry": {
+          "grep": [
+            "kind:\"tasks\""
+          ]
+        }
+      }
+    },
+    "W15": {
+      "name": "Bank Balances",
+      "driver": "w15-bank-mb.driver.js",
+      "ours": {
+        "kind": "bank-mb",
+        "prefix": "bkF",
+        "css": {
+          "grep": [
+            ".bkf-"
+          ]
+        },
+        "js": {
+          "start": "/* ===== W15 Bank Balances V2 JS , prefix bkF , kind \"bank-mb\" =",
+          "end": "/* ===== end W15 Bank Balances V2 ===== */"
+        },
+        "registry": {
+          "grep": [
+            "kind:\"bank-mb\""
+          ]
+        }
+      },
+      "jo": {
+        "kind": "bank",
+        "prefix": "bank",
+        "css": {
+          "start": "/* ===== Bank Balances (prefix: bank): CSS ===== */",
+          "end": "/* ===== Payroll Distributions (pr): scope dropdown + distribution badges ===== */"
+        },
+        "js": {
+          "start": "/* ===== Bank Balances (prefix: bank), RENDER ===== */",
+          "end": "/* ===== Payroll Scheduled Time Off (pto) ===== */"
+        }
+      }
+    },
+    "W16": {
+      "name": "Accounts Payable By Due Date",
+      "driver": "w16-payables-mb.driver.js",
+      "ours": {
+        "kind": "payables-mb",
+        "prefix": "apF",
+        "css": {
+          "grep": [
+            ".apf-"
+          ]
+        },
+        "js": {
+          "start": "/* ===== W16 Accounts Payable By Due Date V2 JS , prefix apF , kind \"payables-mb\" =",
+          "end": "/* ===== end W16 Accounts Payable By Due Date V2 ===== */"
+        },
+        "registry": {
+          "grep": [
+            "kind:\"payables-mb\""
+          ]
+        }
+      },
+      "jo": {
+        "kind": "payables",
+        "prefix": "ap",
+        "css": {
+          "grep": [
+            ".ap-",
+            ".pay-"
+          ]
+        },
+        "js": {
+          "grep": [
+            "function ap",
+            "AP_",
+            "kind:\"payables\""
+          ]
+        }
+      }
+    },
+    "W17": {
+      "name": "Gifts Pledges",
+      "driver": "w17-gifts-mb.driver.js",
+      "ours": {
+        "kind": "gifts-mb",
+        "prefix": "gpF",
+        "css": {
+          "grep": [
+            ".gpf-"
+          ]
+        },
+        "js": {
+          "start": "var GPF_TODAY=",
+          "end": "/* ===== end W17 Gifts Pledges V2 ===== */"
+        },
+        "registry": {
+          "grep": [
+            "kind:\"gifts-mb\""
+          ]
+        }
+      },
+      "jo": {
+        "kind": "gifts",
+        "prefix": "gft",
+        "css": {
+          "grep": [
+            ".gft-"
+          ]
+        },
+        "js": {
+          "grep": [
+            "function gft",
+            "GFT_",
+            "kind:\"gifts\""
+          ]
+        }
+      }
+    },
+    "W18": {
+      "name": "Financial KPI",
+      "driver": "w18-fkp.driver.js",
+      "ours": {
+        "kind": null,
+        "prefix": "fkp",
+        "css": {
+          "start": "/* ===== W18 Financial KPI V2 ===",
+          "end": "/* ===== end W18 Financial KPI V2 ===== */"
+        },
+        "js": {
+          "start": "/* ===== W18 Financial KPI V2 ===",
+          "end": "/* ===== end W18 Financial KPI V2 ===== */"
+        },
+        "html": {
+          "grep": [
+            "id=\"fkpBand\""
+          ]
+        }
+      },
       "jo": null,
-      "aditya": { "file": "_ref/aditya/Demo V2.html", "css": { "grep": [".fkp-solo", ".fkp-c-", ".fkp-d-", "#fkpSoloRow", "#fkpCBand", "#fkpDBand"] },
-                  "js": { "grep": ["fkpSolo", "fkpC", "fkpD", "fkpVariantSwitch", "wfind-fkp", "fkpActiveV"] } } }
+      "aditya": {
+        "file": "_ref/aditya/Demo V2.html",
+        "css": {
+          "grep": [
+            ".fkp-solo",
+            ".fkp-c-",
+            ".fkp-d-",
+            "#fkpSoloRow",
+            "#fkpCBand",
+            "#fkpDBand"
+          ]
+        },
+        "js": {
+          "grep": [
+            "fkpSolo",
+            "fkpC",
+            "fkpD",
+            "fkpVariantSwitch",
+            "wfind-fkp",
+            "fkpActiveV"
+          ]
+        }
+      }
+    }
   },
   "shell": {
     "_readme": "Shared plumbing both sides edit. Reviewed as the G1-G12 batch, not per widget.",
-    "ours": { "registry": { "grep": ["{id:\"d1\",name:\"Dashboard\"", "{id:\"cmp\"", "{id:\"sys\"", "{id:\"nowidgets\""] },
-              "dispatch": { "grep": ["function contentHTML(w)", "function aboutOf(", "function triggerSelector()", "function renderModal(", "function popContent("] } },
-    "jo":   { "dispatch": { "grep": ["function contentHTML(w)", "function aboutOf(", "function triggerSelector()", "function renderModal(", "function popContent(", "wfind-box", "@container"] } }
+    "ours": {
+      "registry": {
+        "grep": [
+          "{id:\"d1\",name:\"Dashboard\"",
+          "{id:\"cmp\"",
+          "{id:\"sys\"",
+          "{id:\"nowidgets\""
+        ]
+      },
+      "dispatch": {
+        "grep": [
+          "function contentHTML(w)",
+          "function aboutOf(",
+          "function triggerSelector()",
+          "function renderModal(",
+          "function popContent("
+        ]
+      }
+    },
+    "jo": {
+      "dispatch": {
+        "grep": [
+          "function contentHTML(w)",
+          "function aboutOf(",
+          "function triggerSelector()",
+          "function renderModal(",
+          "function popContent(",
+          "wfind-box",
+          "@container"
+        ]
+      }
+    }
   }
 }
