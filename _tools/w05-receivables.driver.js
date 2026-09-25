@@ -87,11 +87,11 @@ if (open) {
   let mh = EX.modalHTML(); A.ok(mh && mh.length > 800, "drill renders via WIDGETS.modal() (" + (mh || "").length + " bytes)"); A.noEmDash(mh, "drill modal");
   A.headMatchesBody(mh, "drill invoice table (D12)");
   /* owner (25 Sep): the pop-up is information only */
-  ["arO-check", "arO-confirm", "arO-followup", "arO-open-invoice", "Move to unposted", "Confirm</button>"].forEach(function (n) { A.absent(mh, n, "read-only pop-up: no " + n); });
+  ["arO-check", "arO-confirm", "arO-followup", "Move to unposted", "Confirm</button>"].forEach(function (n) { A.absent(mh, n, "read-only pop-up: no " + n); });
   A.contains(mh, '<div class="modal-f"><button class="btn primary sm" data-action="arO-detail-close">Close</button></div>', "footer is Close only");
   const inv = (mh.match(/data-action="arO-exp"[^>]*data-inv="([^"]+)"/) || [])[1];
   A.ok(!!inv, "rows expand to the info drawer");
-  if (inv) { A.eq(EX.WIDGETS.click("arO-exp", w.id, T({ "data-inv": inv }), {}), true, "row expand handled"); mh = EX.modalHTML(); A.ok(/arO-drawer/.test(mh), "drawer rendered"); A.absent(mh, "arO-actions", "drawer has no action buttons"); const tab = (mh.match(/data-action="arO-tab"[^>]*data-tab="([a-z]+)"/) || [])[1]; if (tab) A.eq(EX.WIDGETS.click("arO-tab", w.id, T({ "data-tab": tab }), {}), true, "drawer tab handled"); }
+  if (inv) { A.eq(EX.WIDGETS.click("arO-exp", w.id, T({ "data-inv": inv }), {}), true, "row expand handled"); mh = EX.modalHTML(); A.ok(/arO-drawer/.test(mh), "drawer rendered"); A.contains(mh, 'data-action="arO-open-invoice"', "drawer keeps the Open invoice link (developer hook)"); A.eq(EX.WIDGETS.click("arO-open-invoice", w.id, T({ "data-inv": inv }), {}), true, "Open invoice handled"); A.eq(EX.getModal() && EX.getModal().type, "arOdetail", "modal stays open"); const tab = (mh.match(/data-action="arO-tab"[^>]*data-tab="([a-z]+)"/) || [])[1]; if (tab) A.eq(EX.WIDGETS.click("arO-tab", w.id, T({ "data-tab": tab }), {}), true, "drawer tab handled"); }
   A.eq(EX.WIDGETS.click("arO-detail-close", w.id, T(), {}), true, "drill close handled"); A.eq(EX.getModal(), null, "drill closed");
 }
 /* fixtures */

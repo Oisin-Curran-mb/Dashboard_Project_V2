@@ -42,3 +42,5 @@ const code = t.replace(/\/\*[\s\S]*?\*\//g, "");
 fs.writeFileSync(FILE, t, "utf8"); console.log("done: " + t.split(NL).length + " lines");
 // Same day: cutLines() stopped at the end of the needle's first line, so the closing "}" of
 // arODrawerActions survived; removed by hand straight after.
+// Owner, same day: the "Open invoice" link comes back in the drawer (arOInvoiceLink) as the developer
+// hook to the invoice record; Record a follow-up, the checkbox and Confirm stay removed.

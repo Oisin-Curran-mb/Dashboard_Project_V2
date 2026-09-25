@@ -3462,6 +3462,7 @@
 .arO-dtotal{border-top:none;margin-top:2px;}
 
 @media(max-width:560px){.arO-explore{grid-template-columns:1fr;}}
+.arO-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
 /* ===== end W05 Receivable Invoices Outstanding V2 CSS ===== */
 
 /* ===== W06 Insurance Billing Plans V2 ===== */
@@ -6618,6 +6619,10 @@ function arODetailTabs(x){
   }
   return '<div class="arO-tabbar" role="tablist">'+bar+'</div><div class="arO-tabpanel" role="tabpanel">'+panel+'</div>';
 }
+/* Developer hook: the link to this invoice record in Accounts Receivable. The destination is wired by development; the demo only reports the intent. */
+function arOInvoiceLink(w,x){
+  return '<div class="arO-actions"><button class="btn outlined sm" data-action="arO-open-invoice" data-id="'+w.id+'" data-inv="'+arOEsc(x.inv)+'">'+ICON("open_in_new")+'Open invoice</button></div>';
+}
 function arODetailModalHTML(){
   var w=find(modal.id);if(!w)return "";
   var mode=modal.mode,key=modal.key;
@@ -6637,7 +6642,7 @@ function arODetailModalHTML(){
         '<span class="arO-dc arO-dc3">'+x.inv+'</span>'+
         '<span class="arO-dc arO-dc4">'+dpd+'</span>'+
         '<span class="arO-dc arO-dc5 arO-dc-amt">'+money(x.amount)+'</span></div>';
-      if(open)row+='<div class="arO-drawer">'+arODetailTabs(x)+'</div>';
+      if(open)row+='<div class="arO-drawer">'+arODetailTabs(x)+arOInvoiceLink(w,x)+'</div>';
       return row;
     }).join("");
   } else {
@@ -6674,6 +6679,7 @@ function arOHandleClick(a,id,t){
      note (a developer-facing signal of the intended action, not a finished workflow). */
   if(a==="arO-detail-close"){modal=null;pop=null;render();return true;}
   if(a==="arO-exp"){if(modal){var iv=t.getAttribute("data-inv");modal.exp=(modal.exp===iv)?null:iv;modal.tab="details";}render();return true;}
+  if(a==="arO-open-invoice"){setStatus("Opening invoice "+t.getAttribute("data-inv")+" in Accounts Receivable");return true;}
   if(a==="arO-tab"){if(modal)modal.tab=t.getAttribute("data-tab");render();return true;}
   if(a==="arO-export"){pop=null;setStatus("Exporting the detail list to Excel");render();return true;}
   return false;
