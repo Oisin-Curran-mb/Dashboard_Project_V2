@@ -16,6 +16,8 @@
      T4  console.log / debugger left in the shell script
      T5  class names used in class="..." markup but never declared in CSS
          (only literal, static class tokens are checked)
+     T6  temporary review aids (viewer, cmp tab) still present
+     T7  a stray comment closer in <style> outside a comment (kills the stylesheet from there)
    ===================================================================== */
 "use strict";
 const fs = require("fs");
@@ -99,6 +101,20 @@ function add(rule, msg, items) {
   script.replace(/classList\.(add|toggle|remove)\(\s*["']([A-Za-z0-9_-]+)/g, function (_, __, c) { declared.add(c); return ""; });
   const missing = [...used].filter(function (c) { return !declared.has(c) && !/^material-symbols/.test(c); }).sort();
   if (missing.length) add("T5", "static class names in markup with no CSS declaration (may be JS hooks; check before fixing)", missing);
+})();
+
+/* T7 a "*\/" inside a CSS comment's text closes it early; the browser then drops
+   every rule from there on (blocking: a defect, not a style) */
+(function () {
+  const hits = [];
+  styles.forEach(function (s) {
+    let open = false, j = 0;
+    while (j < s.length) {
+      if (!open) { const o = s.indexOf("/*", j), c = s.indexOf("*/", j); if (c > -1 && (o < 0 || c < o)) { hits.push("line " + (s.slice(0, c).split("\n").length) + " of <style>: " + s.slice(s.lastIndexOf("\n", c) + 1, c + 2).trim().slice(-80)); j = c + 2; continue; } if (o < 0) break; open = true; j = o + 2; }
+      else { const c = s.indexOf("*/", j); if (c < 0) { hits.push("unclosed comment"); break; } open = false; j = c + 2; }
+    }
+  });
+  if (hits.length) add("T7", "stray */ in <style> outside a comment (breaks the stylesheet from this point)", hits);
 })();
 
 /* T6 temporary review aids that must not ship */

@@ -47,5 +47,21 @@ check(raw.charCodeAt(0) !== 0xFEFF, "no BOM");
 check(!!m && m[1].endsWith(TAIL), "shell script ends with the IIFE tail the drivers splice into");
 check((raw.match(/<style>/g) || []).length >= 1, "at least one <style> block");
 
+/* 4. stylesheet integrity: comments close where they should and braces balance.
+      A stray "*" + "/" inside a comment's text, or one "}" short, makes the browser drop
+      or swallow every rule that follows, while the DOM-shim drivers never notice. */
+raw.replace(/<style[^>]*>([\s\S]*?)<\/style>/g, function (_, css) {
+  let open = false, j = 0, stray = 0;
+  while (j < css.length) {
+    if (!open) { const o = css.indexOf("/*", j), c = css.indexOf("*/", j); if (c > -1 && (o < 0 || c < o)) { stray++; j = c + 2; continue; } if (o < 0) break; open = true; j = o + 2; }
+    else { const c = css.indexOf("*/", j); if (c < 0) { stray++; break; } open = false; j = c + 2; }
+  }
+  check(stray === 0, "<style>: comments open and close in pairs (" + stray + " stray)");
+  let depth = 0, under = 0;
+  css.replace(/\/\*[\s\S]*?\*\//g, "").replace(/[{}]/g, function (ch) { if (ch === "{") depth++; else if (--depth < 0) { under++; depth = 0; } return ch; });
+  check(depth === 0 && under === 0, "<style>: braces balance (depth " + depth + " at end, " + under + " extra closers)");
+  return _;
+});
+
 console.log(bad ? "\nSYNTAX CHECK FAILED (" + bad + ")" : "\nSYNTAX OK");
 process.exit(bad ? 1 : 0);

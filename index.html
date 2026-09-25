@@ -1689,7 +1689,7 @@
    .dep-hd-kpigrp .metric-value .bank-pill .filter-chip/.fc-label
    .vtoggle/.vt .wt-row/.wt-head/.lr-main/.wt-c2/.wt-sort .scroll .dep-total
    .dep-full/.dep-col/.dep-col-h .kpi-row/.kpi-num .gl-sub .state .sk
-   .bgt-spin .cap .mi .modal*/.donut/.legend/.leg/.pie-wrap .sr-only.
+   .bgt-spin .cap .mi .modal-* .donut .legend .leg .pie-wrap .sr-only.
    Only pen-* rules are defined here.
    ===================================================================== */
 
@@ -1997,7 +1997,7 @@
 .pbar-lg-swatch{width:10px;height:10px;border-radius:3px;display:inline-block;flex:0 0 auto;}
 .pbar-lg-recv{background:var(--am-500);}
 .pbar-lg-exp{background:var(--am-200);border:1px solid var(--am-300);}
-/* ===== Shell: remittance-derived shared primitives (.rem-row/.rem-cell/.rem-head table grid, .rem-bars/.rem-barrow/.rem-bartrack/.rem-fill-*/.rem-flag-* pacing bars, .rem-st-*/.rem-sw-* status chips and legend). Used by W05 Receivables and W17 Gifts (Jo's blocks). Remove when those are decided and nothing uses it. ===== */
+/* ===== Shell: remittance-derived shared primitives (.rem-row/.rem-cell/.rem-head table grid, .rem-bars .rem-barrow .rem-bartrack .rem-fill-* .rem-flag-* pacing bars, .rem-st-* .rem-sw-* status chips and legend). Used by W05 Receivables and W17 Gifts (Jo's blocks). Remove when those are decided and nothing uses it. ===== */
 /* =====================================================================
    Remittance Pledges (prefix: rem)  , CSS block
    =====================================================================
@@ -2162,6 +2162,7 @@
 
 @media(max-width:560px){
   .rem-sum{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
 
 .rem-glance-cap,.gft-glance-cap{display:flex;align-items:center;flex-wrap:wrap;gap:4px;font-size:11.5px;color:var(--txt-subtle);}
 .rem-glance-cap .pbar-lg-swatch,.gft-glance-cap .pbar-lg-swatch{width:9px;height:9px;border-radius:2px;}
@@ -3215,7 +3216,7 @@
   .w01-pop.bank-pop{z-index:4000;}
   .pur-status-chip .w01-spin{margin-right:2px;}
   .w01-pop.pur-pop{z-index:4000;}
-  /* the visuals this widget adds on top of the copies above */ the owner deltas introduce. Everything else reuses Jo's .bgt-* / .dep-hd / .filter-chip / .scope-chip / .vtoggle / .delta-pill / .wt-* / .state / .modal / .bgt-rm-* / .bgt-pop-* / .tr-* classes and Pathway tokens. ===== */
+  /* the visuals this widget adds on top of the copies above */
   .bgtO-hl{display:inline-flex;align-items:baseline;gap:2px;font-variant-numeric:tabular-nums;}
   .bgtO-hl-ar{font-size:0.72em;margin-right:1px;}
   .bgtO-hl-pos{color:var(--txt-pos);}
@@ -3232,9 +3233,6 @@
 /* ===== end W01 Budget Compared to Actual V2 CSS ===== */
 /* ===== W02 Pension Plans V2 CSS ===== */
   /* Stand-alone copies of the pension rules this widget uses (w02- prefix). Classes: pen-body pen-c-cnt pen-c-share pen-c-share-head pen-caption pen-chart-empty pen-chartwrap pen-clickable pen-col pen-col-chart pen-dc pen-dc-amt pen-dc0 pen-dc1 pen-dc2 pen-detail-h pen-detail-modal pen-detail-scroll pen-dh-spacer pen-dhead pen-dot pen-drow pen-dsub pen-dtotal pen-empty pen-full pen-hd pen-leg pen-none pen-numwrap pen-pie pen-plan pen-plan-nm pen-row pen-share pen-share-fill pen-share-head pen-share-pct pen-share-track pen-sk-row pen-skel pen-total pen-tscroll penf-explore-chart penf-gbar penf-gfill penf-ggroup penf-gleg penf-glegend penf-gplot penf-grow penf-gwrap penf-gx penf-gx-d penf-gx-t */
-  .donut/.legend/.leg/.pie-wrap .sr-only.
-   Only pen-* rules are defined here.
-   ===================================================================== */
 
   
   .w02-hd .dep-hd-num{align-self:center;}
