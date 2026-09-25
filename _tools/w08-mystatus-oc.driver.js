@@ -96,7 +96,7 @@ A.eq("myso-config".indexOf("mys-"), -1, "her \"mys-\" prefix cannot prefix-match
 HER_ACTIONS.forEach(a => A.absent(a.replace("mys-", "myso-"), a, "our " + a.replace("mys-", "myso-") + " does not contain her " + a));
 
 /* our three regions must contain none of her identifiers */
-const ourData = span(raw, "/* === W08 My Status V2 data === */", "/* ===== P2/P3 WIDGET BLOCKS");
+const ourData = span(raw, "/* ===== W08 My Status V2 data ===== */", "/* ===== P2/P3 WIDGET BLOCKS");
 const ourJs = span(raw, '/* ===== W08 My Status V2 JS, kind:"mystatus-oc" ===', "/* ===== end W08 My Status V2 ===== */");
 const ourCss = span(raw, "/* ===== W08 My Status V2 CSS =====", "/* ===== W18 Financial KPI V2 ===");
 [["data", ourData], ["js", ourJs], ["css", ourCss]].forEach(([nm, seg]) => {

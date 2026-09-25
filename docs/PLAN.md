@@ -29,6 +29,10 @@ Manager's agreed task list:
 | D5 | Jo's latest V2 (`phase-2` @ `8958e49`, 25 Sep 12:34) is the comparison reference, frozen in `_ref/`. |
 | D6 | Line endings stay CRLF (deviation from the first draft, which said LF): the 17 drivers are CRLF-bound throughout and we are no longer merging her file. Jo's blocks are converted to CRLF on insert. |
 | D7 | The drivers' snapshot and `git show a548419` dependencies are replaced by the committed `_tools/baselines/index.a548419.html`. |
+| D8 | (25 Sep) Target structure: one self-contained block per widget (CSS, data, render, popups/modals, handlers, registry rows) plus a labelled Shell section. Widgets plug in through a registration object (`WIDGETS.register(kind, {content, about, pop, modal, click, input})`); the shell's if-chains become generic lookups. Nothing unused survives; shared helpers are labelled with the widgets that use them. |
+| D9 | (25 Sep) Widgets are finished one at a time, end to end: review pack -> owner decision -> final self-contained block -> delete the losing version, retired v1 remnants and cmp row -> retarget driver -> verify -> `docs/decisions/Wnn.md` -> commit. No separate collapse phase. The cmp tab keeps rows only for undecided widgets. |
+| D10 | (25 Sep) Code comments: keep what a function/block does, why non-obvious logic exists, and structural markers agents rely on (region banners, `data-<prefix>` conventions, "shared by Wnn" labels). Remove decision history, "what changed", row citations, dates, stash/rebase notes, "Jo's block untouched". History lives in `docs/decisions/`. |
+| D11 | (25 Sep) Pilot: W14 Main Content Tasks and W08 My Status. Owner ruling: keep Jo's version of both; `mystatus-oc` is deleted. |
 
 ## Key facts the plan rests on
 
@@ -52,7 +56,10 @@ Plus `docs/review/00 - Review Index.md`: G1-G12 with our stance, per-widget stat
 
 W01 first as a pilot for format approval, then W02-W07, W09-W17, then W08 / W14 / W18 as Unreviewed packs, then G1-G12 as a batch.
 
-### Phase 2: review
+### Phase 0b: prep for the per-widget process (25 Sep)
+Comment diet on our code (D10); shell labelling pass from a real call graph; registration plumbing (D8) added to the shell with existing widgets untouched; pilot W14 then W08 (D11).
+
+### Phase 2: review + finalise, one widget at a time (D9)
 Owner rules per item. Claude applies, runs lint (auto-fixing defects), runs `verify.js`, records in `docs/decisions/Wnn.md`. Where Jo's version of a widget wins, her latest block is ported from `_ref/jo-phase2-8958e49.html` over the 08 Sep copy already in the file (converted to CRLF), per widget, per commit. Her shell-wide changes (size step-down, container/sheet styling, Add-widget dialog, finder, title-tap swap) are reviewed as their own batch under G1-G12.
 
 ### Phase 3: W18 / Aditya

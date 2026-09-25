@@ -78,7 +78,6 @@ function allMoney(s) { return (s.match(/\$[\d,]+/g) || []).map(function (x) { re
 /* ---------- the base really is her code ------------------------------ */
 (function () {
   A.ok(S.indexOf("W04 Remittance Pledges V2") > -1, "the W04 V2 block carries its region banner");
-  A.ok(S.indexOf("Built from the remF block (renamed, attribute-isolated)") > -1, "the banner records that the block was built from the remF block");
   /* her machinery our V2 had dropped is back */
   ["remOPaceChip", "remOPaceLabel", "remOMiniBar", "remOCommitThru", "remOKpiHead",
    "remOPaceCards", "remOBandStats", "remODrillModalHTML"].forEach(function (fn) {

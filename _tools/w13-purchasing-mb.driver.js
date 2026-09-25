@@ -110,7 +110,6 @@ const PATHS = ["Administration", "Education Ministry", "Everyone", "QA Path"];
 console.log("\n-- 1. extraction and namespace hygiene --");
 A.ok(block.length > 20000, "block extracted between its markers");
 A.contains(block, END, "block ends on its own end marker");
-A.contains(shell.script, "COLLISION WARNING", "the block's header comment carries the purF-lookalike collision warning");
 A.ok(cssRegion.length > 4000, "CSS block extracted between its markers");
 
 /* THE HEADLINE RISK OF THIS WIDGET. Jo's purForStatus, purPathsForStatus,
@@ -153,7 +152,6 @@ A.contains(shell.script, 'data-action="pur-path"', "Jo's pur-path data-action is
    record), so the test is on the declarations, not on the prose */
 const cssRules = cssRegion.replace(/\/\*[\s\S]*?\*\//g, "");
 A.ok(!/\.pur-(?!f)/.test(cssRules), "our CSS block declares no .pur-* selector of Jo's");
-A.ok(/\.pur-kcard/.test(cssRegion), "our CSS block still records which of her components we ride on");
 A.ok(count(shell.css, ".pur-kcard{") === 1, "Jo's .pur-kcard rule is declared exactly once");
 A.ok(count(shell.css, ".pur-kanban{") === 1, "Jo's .pur-kanban rule is declared exactly once");
 
