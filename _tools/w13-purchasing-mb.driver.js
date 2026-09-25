@@ -168,7 +168,7 @@ A.contains(block, "var PURF_WIRED=false;", "listeners are wired once behind PURF
 /* the two dispatch lines, and only those, in Jo's shared regions */
 A.contains(shell.script, 'if(w.kind==="purchasing-mb")return purFContent(w);', "contentHTML dispatches purchasing-mb");
 A.ok(shell.script.indexOf('if(w.kind==="purchasing-mb")return purFContent(w);') <
-  shell.script.indexOf('if(w.state==="empty"){var ec=EMPTY_COPY[w.kind]'),
+  shell.script.indexOf('if(w.state==="empty"){var ec=EMPTY_COPY[w.kind]', shell.script.indexOf("function contentHTML(w){")),
   "our dispatch sits BEFORE the generic empty fallback, so our own empty state renders");
 A.contains(shell.script, 'if(w.kind==="purchasing-mb")return {h:w.title,b:PURF_ABOUT};', "aboutOf dispatches purchasing-mb");
 A.contains(shell.script, 'if(w.kind==="purchasing")return {h:w.title,b:PUR_ABOUT_BODY};', "Jo's own aboutOf branch is untouched");

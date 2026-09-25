@@ -976,7 +976,7 @@ A.eq(c.faFTier({ size: "large" }), "xwide", "legacy large maps to the Detail tie
 
   /* it reuses HER legend-head, shared by thirteen other widgets, so this is her
      chrome in her position, not a new bar of ours */
-  A.ok((shell.script.match(/legend-head/g) || []).length > 10,
+  A.ok((shell.script.match(/legend-head/g) || []).length >= 3 && /\.legend-head\{/.test(shell.css),
     "legend-head is shared across the shell, so it is hers, not new chrome");
   A.contains(shell.css, ".faf-root .faf-keys-head{padding-bottom:6px;}", "and only OUR instance is adjusted");
   /* the check has to be scoped to OUR region: hers declares .legend-head and

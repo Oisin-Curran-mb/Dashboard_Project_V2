@@ -541,7 +541,7 @@ A.eq((S.match(/if\(w\.kind==="bank"\)return bankContent\(w\);/g) || []).length, 
   "her contentHTML dispatch line is intact");
 A.eq((S.match(/if\(w\.kind==="bank-mb"\)return bkFContent\(w\);/g) || []).length, 1,
   "our contentHTML dispatch line is present exactly once");
-A.ok(S.indexOf('w.kind==="bank-mb"') < S.indexOf('if(w.state==="empty"){var ec=EMPTY_COPY'),
+A.ok(S.indexOf('w.kind==="bank-mb"', S.indexOf("function contentHTML(w){")) < S.indexOf('if(w.state==="empty"){var ec=EMPTY_COPY', S.indexOf("function contentHTML(w){")),
   "our dispatch sits BEFORE the generic empty fallback, so our own empty state wins");
 A.eq((S.match(/w\.kind==="bank-mb"/g) || []).length, 2,
   "bank-mb is dispatched in exactly two places: contentHTML and aboutOf");

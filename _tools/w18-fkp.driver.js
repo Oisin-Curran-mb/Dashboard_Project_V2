@@ -61,8 +61,9 @@ if (snap) {
   const moved = [...new Set(kinds)].filter(k => {
     const kind = /"([a-z0-9-]+)"/.exec(k)[1];
     if (registered.indexOf(kind) > -1) return false;
-    /* only real widget kinds (ones with a registry row in the baseline); helpers compare other strings with kind=== too */
-    if (snap.indexOf('kind:"' + kind + '"') < 0) return false;
+    /* only real widget kinds: ones with a registry row inside the baseline's dashboards literal; helpers compare other strings with kind=== too */
+    const regOld = snap.slice(snap.indexOf("  var dashboards=["), snap.indexOf("dashboards.forEach(function(d){"));
+    if (regOld.indexOf('kind:"' + kind + '"') < 0) return false;
     const re = new RegExp(k.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&"), "g");
     return (raw.match(re) || []).length < (snap.match(re) || []).length;
   });

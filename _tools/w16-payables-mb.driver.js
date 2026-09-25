@@ -733,7 +733,7 @@ A.absent(block, "ERROR_COPY", "nor to her error copy object");
    the generic empty fallback so apF4 renders our own empty state. */
 A.eq((S.match(/if\(w\.kind==="payables-mb"\)return apFContent\(w\);/g) || []).length, 1,
   "our contentHTML dispatch line is present exactly once");
-A.ok(S.indexOf('w.kind==="payables-mb"') < S.indexOf('if(w.state==="empty"){var ec=EMPTY_COPY[w.kind]'),
+A.ok(S.indexOf('w.kind==="payables-mb"', S.indexOf("function contentHTML(w){")) < S.indexOf('if(w.state==="empty"){var ec=EMPTY_COPY[w.kind]', S.indexOf("function contentHTML(w){")),
   "our dispatch sits BEFORE the generic empty fallback, so our own empty state wins");
 A.ok(S.indexOf('w.kind==="bank-mb"') < S.indexOf('w.kind==="payables-mb"'),
   "our dispatch is appended at the END of the mb chain, after the newest entry");

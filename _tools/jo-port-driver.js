@@ -309,7 +309,17 @@ class Assert {
     const head = rows.find(function (r) { return /\bwt-head\b/.test(r[1]); });
     const body = rows.find(function (r) { return !/\bwt-head\b/.test(r[1]); });
     if (!head || !body) return this._rec(false, msg + ": header and a body row were found  (head " + !!head + ", body " + !!body + ")");
-    const cells = function (s) { return [...s.matchAll(/<(?:span|button)[^>]*class="([^"]*)"/g)].map(function (m) { return m[1].split(/\s+/).filter(function (c) { return c && !/^(on|wt-sort|lr-link)$/.test(c); }).sort().join(" "); }); };
+    /* top-level cells only: a sort <button> or a badge <span> nested inside a cell is part of that cell */
+    const cells = function (s) {
+      const out = []; let depth = 0; const re = /<(\/?)(span|button|div|a|b|i|em|strong|small)\b([^>]*)>/g; let m;
+      while ((m = re.exec(s))) {
+        if (m[1]) { depth--; continue; }
+        if (/\/>$/.test(m[0])) continue;
+        if (depth === 0) { const cm = /class="([^"]*)"/.exec(m[3]); out.push((cm ? cm[1] : "").split(/\s+/).filter(function (c) { return c && !/^(on|wt-sort|lr-link|wt-rowlink)$/.test(c); }).sort().join(" ")); }
+        depth++;
+      }
+      return out;
+    };
     const h = cells(head[2]), b = cells(body[2]);
     if (h.length !== b.length) return this._rec(false, msg + ": header has " + h.length + " cells, body has " + b.length);
     const bad = h.map(function (c, i) { return c === b[i] ? null : "col " + (i + 1) + " head[" + c + "] body[" + b[i] + "]"; }).filter(Boolean);

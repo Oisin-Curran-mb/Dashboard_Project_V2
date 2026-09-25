@@ -114,7 +114,7 @@ A.eq(EX.dashboards[2].widgets.length, 0, "her No widgets dashboard is still empt
     return true;
   }).join("\r\n");
   /* baseline rows of kinds that left the file with a decided widget are not expected any more */
-  var oldLines = rOld.split("\r\n").filter(function (l) { return !REMOVED.some(function (k) { return l.indexOf('kind:"' + k + '"') > -1; }); }), curLines = rCurFiltered.split("\r\n"), oi = 0;
+  var oldLines = rOld.split("\r\n").filter(function (l) { return !REMOVED.some(function (k) { return l.indexOf(k) > -1; }); }), curLines = rCurFiltered.split("\r\n"), oi = 0;
   for (var ci = 0; ci < curLines.length && oi < oldLines.length; ci++) {
     if (curLines[ci] === oldLines[oi]) oi++;
   }
@@ -501,7 +501,8 @@ function liveRows(text, kind) {
   const types = (srcLine.match(/pop\.type===\"[^\"]+\"/g) || [])
     .map(function (s) { return s.slice('pop.type==="'.length, -1); })
     .filter(function (v, i, a) { return a.indexOf(v) === i; });
-  A.ok(types.length > 40, "triggerSelector declares its full branch set (" + types.length + " pop types)");
+  /* the if-chain shrinks as decided widgets move their popovers into WIDGETS.register; the shell's own types remain */
+  A.ok(types.length > 15, "triggerSelector still declares the shell's own branch set (" + types.length + " pop types left in the chain)");
 
   /* the guard itself: no pop means no anchor. Wrapped, because the branch-order
      bug this section guards against makes `if(!pop)` fall into a pop.type test

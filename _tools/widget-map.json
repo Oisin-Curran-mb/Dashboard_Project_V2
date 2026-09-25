@@ -64,37 +64,26 @@
     },
     "W03": {
       "name": "Payroll Distributions",
-      "driver": "w03-payroll-oc.driver.js",
-      "ours": {
-        "kind": "payroll-oc",
+      "driver": "w03-payroll.driver.js",
+      "decided": "2026-09-25 OC",
+      "removed": [
+        "payroll-mb",
+        "payroll-oc"
+      ],
+      "final": {
+        "kind": "payroll",
         "prefix": "prO",
         "css": {
-          "start": "/* ===== W03 Payroll Distributions V2",
-          "end": "/* ===== W04 Remittance Pledges V2"
+          "start": "/* ===== W03 Payroll Distributions V2 CSS ===== */",
+          "end": "/* ===== end W03 Payroll Distributions V2 CSS ===== */"
         },
         "js": {
-          "start": "/* ===== W03 Payroll Distributions V2",
-          "end": "/* ===== W04 Remittance Pledges V2"
+          "start": "/* ===== W03 Payroll Distributions V2 ===== */",
+          "end": "/* ===== end W03 Payroll Distributions V2 ===== */"
         },
         "registry": {
           "grep": [
-            "kind:\"payroll-oc\""
-          ]
-        }
-      },
-      "jo": {
-        "kind": "payroll-mb",
-        "prefix": "prF",
-        "css": {
-          "grep": [
-            ".prf-",
-            ".pr-"
-          ]
-        },
-        "js": {
-          "grep": [
-            "prF",
-            "kind:\"payroll-mb\""
+            "kind:\"payroll\""
           ]
         }
       }
