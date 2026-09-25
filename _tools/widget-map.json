@@ -142,37 +142,26 @@
     },
     "W06": {
       "name": "Insurance Billing Plans",
-      "driver": "w06-insurance-oc.driver.js",
-      "ours": {
-        "kind": "insurance-oc",
+      "driver": "w06-insurance.driver.js",
+      "decided": "2026-09-25 OC",
+      "removed": [
+        "insurance-mb",
+        "insurance-oc"
+      ],
+      "final": {
+        "kind": "insurance",
         "prefix": "insO",
         "css": {
-          "start": "/* ===== W06 Insurance Billing Plans V2",
-          "end": "/* ===== W07 Deposits on Hand V2"
+          "start": "/* ===== W06 Insurance Billing Plans V2 CSS ===== */",
+          "end": "/* ===== end W06 Insurance Billing Plans V2 CSS ===== */"
         },
         "js": {
-          "start": "/* ===== W06 Insurance Billing Plans V2",
-          "end": "/* ===== W07 Deposits on Hand V2"
+          "start": "/* ===== W06 Insurance Billing Plans V2 ===== */",
+          "end": "/* ===== end W06 Insurance Billing Plans V2 ===== */"
         },
         "registry": {
           "grep": [
-            "kind:\"insurance-oc\""
-          ]
-        }
-      },
-      "jo": {
-        "kind": "insurance-mb",
-        "prefix": "insF",
-        "css": {
-          "grep": [
-            ".insf-",
-            ".ins-"
-          ]
-        },
-        "js": {
-          "grep": [
-            "insF",
-            "kind:\"insurance-mb\""
+            "kind:\"insurance\""
           ]
         }
       }

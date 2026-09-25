@@ -1225,92 +1225,7 @@
 /* ---- loading skeleton (table rows) ---- */
 .ap-skel{padding:6px 0;}
 .ap-sk-row{display:flex;align-items:center;gap:12px;padding:8px 14px;}
-  /* =====================================================================
-   Insurance Billing Plans (ins) , v2 styles
-   Paste into the widget-container.html <style> block, replacing the old
-   "===== Insurance Billing Plans (ins) =====" rules.
-   Reuses shell classes: .dep-hd .dep-hd-top .dep-hd-num .dep-hd-toggle
-   .dep-hd-kpigrp .metric-value .bank-pill .filter-chip .wt-row .wt-head
-   .wt-c2 .lr-main .wt-sort .dep-total .scroll .kpi-row .kpi-num .gl-sub
-   .state .sk .bgt-spin .cap .mi. Only ins-* rules are defined here.
-   ===================================================================== */
 
-  /* header context line (row 2): quiet, single statement, no big number */
-  .ins-hd .dep-hd-num{align-self:center;}
-  .ins-ctx{font-size:11px;color:var(--txt-subtle);line-height:1.45;max-width:64ch;}
-
-  /* body: table scrolls, total row pins beneath it */
-  .ins-body{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 2px 6px;}
-  .ins-tscroll{flex:1 1 auto;min-height:0;}
-
-  /* plan cell: name over a small muted type label */
-  .ins-row{gap:12px;}
-  .ins-plan{display:flex;flex-direction:column;gap:1px;min-width:0;}
-  .ins-plan-nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .ins-plan-ty{font-size:10.5px;color:var(--txt-subtle);line-height:1.3;}
-  .ins-none{color:var(--txt-subtle);}
-
-  /* inline share-of-enrolment cue (replaces the donut) */
-  .ins-share{flex:0 0 132px;display:flex;align-items:center;gap:8px;min-width:0;}
-  .ins-share-head{color:var(--txt-subtle);font-size:11px;font-weight:600;}
-  .ins-share-track{flex:1 1 auto;min-width:0;height:6px;border-radius:999px;background:var(--wn-300);overflow:hidden;}
-  .ins-share-fill{display:block;height:100%;border-radius:999px;background:var(--am-400);min-width:2px;transition:width var(--dur,.15s) ease;}
-  .ins-share-fill.ins-share-zero{min-width:0;background:transparent;}
-  .ins-share-pct{flex:0 0 30px;text-align:right;font-size:11px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;}
-
-  /* zero-enrolment plans: present, but de-emphasised (never clutter) */
-  .wt-row.ins-zero .ins-plan-nm{color:var(--txt-secondary);}
-  .wt-row.ins-zero .wt-c2{color:var(--txt-subtle);font-weight:600;}
-  .ins-zero-tag{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;color:var(--txt-subtle);background:var(--wn-200);border-radius:999px;padding:1px 6px;margin-left:6px;}
-
-  /* Detail: by-type group header rows + indented plans */
-  .wt-row.ins-grp{background:var(--wn-100);position:sticky;}
-  .ins-grp-nm{font-weight:600;color:var(--txt-secondary);}
-  .ins-grp-ct{font-size:10.5px;font-weight:500;color:var(--txt-subtle);margin-left:6px;}
-  .ins-grp .wt-c2{color:var(--txt-primary);}
-  .ins-grp .ins-share-fill{background:var(--am-600);}
-  .ins-grp .ins-share-pct{color:var(--txt-secondary);}
-  .ins-row-in .lr-main{padding-left:14px;}
-
-  /* total strip */
-  .ins-total{font-variant-numeric:tabular-nums;}
-
-  /* glance caption + empty state */
-  .ins-caption{font-size:11px;color:var(--txt-subtle);}
-  .ins-empty .material-symbols-rounded{font-size:26px;}
-
-  /* loading skeleton (data-fetch only) */
-  .ins-skel{flex:1;display:flex;flex-direction:column;gap:14px;padding:16px 14px;}
-  .ins-sk-row{display:flex;align-items:center;justify-content:space-between;gap:16px;}
-
-  /* ===== Insurance Billing Plans (MB updated) v insF, kind "insurance-mb" =====
-     Additive. Reuses Jo's global .ins-* / .mi / .cap rules; only the pieces her
-     `ins` widget lacks are added here, ALL scoped under .insf-scope so nothing
-     leaks onto her `ins` widget: the Cost column, the expandable type-row caret,
-     the child indent, the 4-column total strip, the Explore share-bar trim, and
-     the inline type popover. */
-  .insf-scope{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;}
-  .insf-scope .ins-cost{flex:0 0 96px;text-align:right;font-weight:600;font-variant-numeric:tabular-nums;}
-  .insf-scope .ins-cost-head{font-weight:600;color:var(--txt-subtle);}
-  .insf-scope .ins-typerow{cursor:pointer;}
-  .insf-scope .ins-typerow:hover{background:var(--wn-200);}
-  .insf-scope .ins-typerow:focus-visible{outline:2px solid var(--am-400);outline-offset:-2px;}
-  .insf-scope .ins-typerow .ins-cost{color:var(--txt-primary);}
-  .insf-scope .ins-caret{font-size:18px;color:var(--txt-subtle);vertical-align:-4px;margin-right:2px;}
-  .insf-scope .ins-child .lr-main{padding-left:26px;}
-  .insf-scope .ins-total-detail{display:flex;align-items:center;gap:12px;padding:9px 14px;border-top:1.5px solid var(--stroke-widget);font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;}
-  .insf-scope .ins-total-detail .ins-total-lead{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .insf-scope .ins-total-detail .ins-total-en,.insf-scope .ins-total-detail .ins-total-cost{flex:0 0 96px;text-align:right;}
-  /* Explore (wide) carries 4 columns; trim Jo's 132px share cell to 104px so
-     name | Share | Enrolled | Cost read cleanly at the 592px Explore width.
-     Detail (xwide) keeps her full 132px. Scoped to insF only. */
-  .insf-scope[data-tier="wide"] .ins-share{flex:0 0 104px;}
-  /* Inline insurance-type popover, anchored under the chip. Box mirrors Jo's
-     .pop; items reuse her global .mi / .cap. */
-  .insf-chip-wrap{position:relative;display:inline-flex;align-items:center;justify-self:start;align-self:center;}
-  .insf-menu{position:absolute;top:calc(100% + 6px);left:0;z-index:60;background:var(--surface-widget);border:1px solid var(--stroke-widget);border-radius:10px;box-shadow:0 14px 36px rgba(41,39,36,.24),0 3px 10px rgba(41,39,36,.14);padding:6px;min-width:210px;max-width:280px;}
-
-  /* ===== Fixed Asset Values (fa) ===== */
   .fa-ctlrow{display:flex;gap:8px;flex-wrap:wrap;min-width:0;}
   .fa-numwrap{display:flex;flex-direction:column;gap:3px;min-width:0;}
   .fa-count-badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--txt-secondary);background:var(--wn-200);border:1px solid var(--stroke-widget);border-radius:999px;padding:2px 9px 2px 6px;white-space:nowrap;}
@@ -3465,50 +3380,81 @@
 .arO-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
 /* ===== end W05 Receivable Invoices Outstanding V2 CSS ===== */
 
-/* ===== W06 Insurance Billing Plans V2 ===== */
-  /* ===== W06 Insurance Billing Plans V2 CSS, prefix insO, kind "insurance-oc" ===== */
-  .insf-scope{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;}
-  .insf-scope .ins-cost{flex:0 0 96px;text-align:right;font-weight:600;font-variant-numeric:tabular-nums;}
-  .insf-scope .ins-cost-head{font-weight:600;color:var(--txt-subtle);}
-  .insf-scope .ins-typerow{cursor:pointer;}
-  .insf-scope .ins-typerow:hover{background:var(--wn-200);}
-  .insf-scope .ins-typerow:focus-visible{outline:2px solid var(--am-400);outline-offset:-2px;}
-  .insf-scope .ins-typerow .ins-cost{color:var(--txt-primary);}
-  .insf-scope .ins-caret{font-size:18px;color:var(--txt-subtle);vertical-align:-4px;margin-right:2px;}
-  .insf-scope .ins-child .lr-main{padding-left:26px;}
-  .insf-scope .ins-total-detail{display:flex;align-items:center;gap:12px;padding:9px 14px;border-top:1.5px solid var(--stroke-widget);font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;}
-  .insf-scope .ins-total-detail .ins-total-lead{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .insf-scope .ins-total-detail .ins-total-en,.insf-scope .ins-total-detail .ins-total-cost{flex:0 0 96px;text-align:right;}
+/* ===== W06 Insurance Billing Plans V2 CSS ===== */
+  /* Stand-alone copies of the insurance rules this widget uses (w06- prefix). Classes: ins-body ins-body-split ins-caption ins-caret ins-chart-empty ins-child ins-col ins-col-chart ins-col-tbl ins-cost ins-cost-head ins-ctx ins-empty ins-grp ins-grp-ct ins-grp-nm ins-hd ins-leg ins-none ins-pie ins-pie-note ins-plan ins-plan-nm ins-row ins-row-in ins-share ins-share-fill ins-share-pct ins-share-track ins-share-zero ins-sk-row ins-skel ins-total-cost ins-total-detail ins-total-en ins-total-lead ins-tscroll ins-typerow ins-vtoggle ins-zero ins-zero-tag insf-chip-wrap insf-menu insf-scope */
+  .w06-hd .dep-hd-num{align-self:center;}
+  .w06-ctx{font-size:11px;color:var(--txt-subtle);line-height:1.45;max-width:64ch;}
+  .w06-body{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 2px 6px;}
+  .w06-tscroll{flex:1 1 auto;min-height:0;}
+  .w06-row{gap:10px;}
+  .w06-row .lr-main{min-width:104px;}
+  .w06-row .wt-c2{flex:0 1 96px;min-width:52px;}
+  .w06-plan{display:flex;flex-direction:column;gap:1px;min-width:0;}
+  .w06-plan-nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .w06-none{color:var(--txt-subtle);}
+  .w06-share{flex:0 1 132px;display:flex;align-items:center;gap:8px;min-width:72px;}
+  .w06-share-track{flex:1 1 auto;min-width:0;height:6px;border-radius:999px;background:var(--wn-300);overflow:hidden;}
+  .w06-share-fill{display:block;height:100%;border-radius:999px;background:var(--am-400);min-width:2px;transition:width var(--dur,.15s) ease;}
+  .w06-share-fill.w06-share-zero{min-width:0;background:transparent;}
+  .w06-share-pct{flex:0 0 30px;text-align:right;font-size:11px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;}
+  .wt-row.w06-zero .w06-plan-nm{color:var(--txt-secondary);}
+  .wt-row.w06-zero .wt-c2{color:var(--txt-subtle);font-weight:600;}
+  .w06-zero-tag{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;color:var(--txt-subtle);background:var(--wn-200);border-radius:999px;padding:1px 6px;margin-left:6px;}
+  .wt-row.w06-grp{background:var(--wn-100);position:sticky;}
+  .w06-grp-nm{font-weight:600;color:var(--txt-secondary);}
+  .w06-grp-ct{font-size:10.5px;font-weight:500;color:var(--txt-subtle);margin-left:6px;}
+  .w06-grp .wt-c2{color:var(--txt-primary);}
+  .w06-grp .w06-share-fill{background:var(--am-600);}
+  .w06-grp .w06-share-pct{color:var(--txt-secondary);}
+  .w06-row-in .lr-main{padding-left:14px;}
+  .w06-caption{font-size:11px;color:var(--txt-subtle);}
+  .w06-empty .material-symbols-rounded{font-size:26px;}
+  .w06-skel{flex:1;display:flex;flex-direction:column;gap:14px;padding:16px 14px;}
+  .w06-sk-row{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+  .w06-scope{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;}
+  .w06-scope .w06-cost{flex:0 1 96px;min-width:64px;text-align:right;font-weight:600;font-variant-numeric:tabular-nums;}
+  .w06-scope .w06-typerow{cursor:pointer;}
+  .w06-scope .w06-typerow:hover{background:var(--wn-200);}
+  .w06-scope .w06-typerow:focus-visible{outline:2px solid var(--am-400);outline-offset:-2px;}
+  .w06-scope .w06-typerow .w06-cost{color:var(--txt-primary);}
+  .w06-scope .w06-caret{font-size:18px;color:var(--txt-subtle);vertical-align:-4px;margin-right:2px;}
+  .w06-scope .w06-child .lr-main{padding-left:26px;}
+  .w06-scope .w06-total-detail{display:flex;align-items:center;gap:12px;padding:9px 14px;border-top:1.5px solid var(--stroke-widget);font-size:13px;font-weight:700;font-variant-numeric:tabular-nums;}
+  .w06-scope .w06-total-detail .w06-total-lead{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .w06-scope .w06-total-detail .w06-total-en,.w06-scope .w06-total-detail .w06-total-cost{flex:0 0 96px;text-align:right;}
+  .w06-scope[data-tier="wide"] .w06-share{flex:0 1 104px;}
+  .w06-chip-wrap{position:relative;display:inline-flex;align-items:center;justify-self:start;align-self:center;}
+  .w06-menu{position:absolute;top:calc(100% + 6px);left:0;z-index:60;background:var(--surface-widget);border:1px solid var(--stroke-widget);border-radius:10px;box-shadow:0 14px 36px rgba(41,39,36,.24),0 3px 10px rgba(41,39,36,.14);padding:6px;min-width:210px;max-width:280px;}
+  .wt-head .w06-share{color:var(--txt-subtle);font-size:11px;font-weight:600;}
+  .wt-head .w06-cost{font-weight:600;color:var(--txt-subtle);}
   /* Explore (wide) carries 4 columns; trim Jo's 132px share cell to 104px so
      name | Share of total | Enrolled | Cost read cleanly at the Explore
      width. Detail (xwide) keeps her full 132px. Scoped to insO only. */
-  .insf-scope[data-tier="wide"] .ins-share{flex:0 0 104px;}
   /* Inline insurance-type popover, anchored under the chip. Box mirrors Jo's
      .pop; items reuse her global .mi / .cap. */
-  .insf-chip-wrap{position:relative;display:inline-flex;align-items:center;justify-self:start;align-self:center;}
-  .insf-menu{position:absolute;top:calc(100% + 6px);left:0;z-index:60;background:var(--surface-widget);border:1px solid var(--stroke-widget);border-radius:10px;box-shadow:0 14px 36px rgba(41,39,36,.24),0 3px 10px rgba(41,39,36,.14);padding:6px;min-width:210px;max-width:280px;}
-  .insf-scope .ins-pie{display:flex;flex-direction:column;justify-content:center;min-width:0;flex:1;min-height:0;}
-  .insf-scope .ins-leg{cursor:default;}
-  .insf-scope .ins-pie-note{display:flex;align-items:flex-start;gap:6px;padding:2px 10px 8px;font-size:11px;color:var(--txt-subtle);}
-  .insf-scope .ins-pie-note .material-symbols-rounded{font-size:14px;flex:0 0 auto;}
-  .insf-scope .ins-chart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;flex:1;min-height:120px;font-size:12px;color:var(--txt-subtle);text-align:center;padding:12px;}
-  .insf-scope .ins-chart-empty .material-symbols-rounded{font-size:26px;opacity:.65;}
-  .insf-scope .ins-vtoggle{margin-left:auto;}
+  .w06-scope .w06-pie{display:flex;flex-direction:column;justify-content:center;min-width:0;flex:1;min-height:0;}
+  .w06-scope .w06-leg{cursor:default;}
+  .w06-scope .w06-pie-note{display:flex;align-items:flex-start;gap:6px;padding:2px 10px 8px;font-size:11px;color:var(--txt-subtle);}
+  .w06-scope .w06-pie-note .material-symbols-rounded{font-size:14px;flex:0 0 auto;}
+  .w06-scope .w06-chart-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;flex:1;min-height:120px;font-size:12px;color:var(--txt-subtle);text-align:center;padding:12px;}
+  .w06-scope .w06-chart-empty .material-symbols-rounded{font-size:26px;opacity:.65;}
+  .w06-scope .w06-vtoggle{margin-left:auto;}
   /* Detail (xwide): the original side-by-side reading, table left 58 and pie
      right 42, divided by a rule. */
-  .insf-scope .ins-body-split{flex-direction:row;align-items:stretch;gap:16px;}
-  .insf-scope .ins-col{display:flex;flex-direction:column;min-width:0;min-height:0;}
-  .insf-scope .ins-col-tbl{flex:1 1 58%;}
-  .insf-scope .ins-col-chart{flex:1 1 42%;border-left:1px solid var(--stroke-widget);padding-left:14px;}
-  .insf-scope .donut{flex:0 1 auto;min-width:0;height:auto;aspect-ratio:1/1;max-width:100%;}
-  .insf-scope .pie-wrap.row{flex-wrap:wrap;justify-content:center;align-items:flex-start;align-content:center;}
-  .insf-scope .pie-wrap.row .legend-col{flex:0 1 250px;min-width:150px;max-width:250px;}
-  .insf-scope[data-tier="wide"] .pie-wrap{padding:4px 10px 12px;gap:18px;}
-  .insf-scope[data-tier="wide"] .donut{flex-basis:320px;max-width:min(340px,100%);}
-  .insf-scope[data-tier="wide"] .pie-wrap.row .legend-col{flex-basis:250px;max-width:250px;}
-  .insf-scope[data-tier="xwide"] .pie-wrap{padding:6px 14px 14px;gap:24px;}
-  .insf-scope[data-tier="xwide"] .donut{flex-basis:240px;max-width:min(280px,100%);}
-  .insf-scope[data-tier="xwide"] .pie-wrap.row .legend-col{flex-basis:200px;max-width:200px;}
+  .w06-scope .w06-body-split{flex-direction:row;align-items:stretch;gap:16px;}
+  .w06-scope .w06-col{display:flex;flex-direction:column;min-width:0;min-height:0;}
+  .w06-scope .w06-col-tbl{flex:1 1 58%;}
+  .w06-scope .w06-col-chart{flex:1 1 42%;border-left:1px solid var(--stroke-widget);padding-left:14px;}
+  .w06-scope .donut{flex:0 1 auto;min-width:0;height:auto;aspect-ratio:1/1;max-width:100%;}
+  .w06-scope .pie-wrap.row{flex-wrap:wrap;justify-content:center;align-items:flex-start;align-content:center;}
+  .w06-scope .pie-wrap.row .legend-col{flex:0 1 250px;min-width:150px;max-width:250px;}
+  .w06-scope[data-tier="wide"] .pie-wrap{padding:4px 10px 12px;gap:18px;}
+  .w06-scope[data-tier="wide"] .donut{flex-basis:320px;max-width:min(340px,100%);}
+  .w06-scope[data-tier="wide"] .pie-wrap.row .legend-col{flex-basis:250px;max-width:250px;}
+  .w06-scope[data-tier="xwide"] .pie-wrap{padding:6px 14px 14px;gap:24px;}
+  .w06-scope[data-tier="xwide"] .donut{flex-basis:240px;max-width:min(280px,100%);}
+  .w06-scope[data-tier="xwide"] .pie-wrap.row .legend-col{flex-basis:200px;max-width:200px;}
+/* ===== end W06 Insurance Billing Plans V2 CSS ===== */
 
 /* ===== W07 Deposits on Hand V2 ===== */
   /* ===== Deposits on Hand (MB updated): only the few visuals the owner deltas add. Everything else reuses Jo's .dep-hd / .scope-chip / .vtoggle / .vt / .tr-* / .pie-wrap / .donut / .legend* / .dep-search / .dep-q / .wt-* / .dep-total / .state / .skeleton / .acctm* / .mi / .dd-search / .menu-scroll classes and Pathway tokens. ===== */
@@ -3919,7 +3865,7 @@
   function viewOnlySelectHTML(){var h=location.hash||"",cur_=(/[#&](w=W\d\d|k=[a-z0-9,-]+)/i.exec(h)||["",""])[1];
     var opts=[["","Review: all widgets"]];
     if(typeof CMP_ROWS!=="undefined")CMP_ROWS.forEach(function(r){opts.push(["w="+r[0],r[0]+" "+r[1]+" (Jo vs OC, 3 sizes)"]);});
-    var VIEW_WNUM={budget:"W01",pension:"W02",payroll:"W03",remittance:"W04",receivables:"W05",mystatus:"W08",tasks:"W14"}; /* finished widgets: kind -> W number, so they sort with the rest */
+    var VIEW_WNUM={budget:"W01",pension:"W02",payroll:"W03",remittance:"W04",receivables:"W05",insurance:"W06",mystatus:"W08",tasks:"W14"}; /* finished widgets: kind -> W number, so they sort with the rest */
     Object.keys(WIDGETS.kinds).forEach(function(k){var row=dashboards[0].widgets.filter(function(x){return x.kind===k;})[0];if(!row)return;var wn=VIEW_WNUM[k]||"W??";opts.push(["k="+k,wn+" "+(row.title||k).replace(/\s*\([^)]*\)\s*$/,"")+" (final, 3 sizes)"]);});
     opts=[opts[0]].concat(opts.slice(1).sort(function(x,y){return x[1].localeCompare(y[1]);}));
     return '<select id="viewOnlySel" class="btn outlined sm" aria-label="Review aid: show one widget" style="margin-right:8px;max-width:320px">'+opts.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===cur_?" selected":"")+'>'+o[1]+'</option>';}).join("")+'</select>';}
@@ -6716,6 +6662,242 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
   WIDGETS.register("receivables",{content:arOContent,about:function(w){return {h:w.title,b:ARO_ABOUT};},click:function(a,id,t){return !!(a&&a.indexOf("arO-")===0&&arOHandleClick(a,id,t));},pops:{"arO-rc":{content:arOPopContent,trigger:function(){return '[data-action="arO-rc"][data-id="'+pop.id+'"]';}},"arO-source":{content:arOPopContent,trigger:function(){return '[data-action="arO-source"][data-id="'+pop.id+'"]';}}},modals:{arOdetail:arODetailModalHTML}});
 /* ===== end W05 Receivable Invoices Outstanding V2 ===== */
 
+/* ===== W06 Insurance Billing Plans V2 ===== */
+  /* Insurance Billing Plans: enrolment by insurance type and plan. Expandable type rows with enrolled and cost subtotals, Share and Cost columns, Table / Pie views (Table default at Explore, both at Detail), one fetch on the type filter. */
+
+  /* (1) DATA. enroll = COUNT of enrolled people (employees AND dependents,
+     one bundled number). rate = per-enrollee monthly premium, used only to
+     model Cost; Building is a Property policy, not per-enrollee, so it
+     stays cost 0 and exercises the zero-enrolment path. */
+  var INSO_TYPES=["All","Dental","Medical","Property","Vision"];
+  var INSO_PLANS=[
+    {plan:"Medical Base",   type:"Medical",  enroll:128, rate:450},
+    {plan:"Medical Buy Up", type:"Medical",  enroll:54,  rate:620},
+    {plan:"Delta Dental",   type:"Dental",   enroll:96,  rate:38},
+    {plan:"Vision",         type:"Vision",   enroll:71,  rate:9},
+    {plan:"Building",       type:"Property", enroll:0,   rate:0}
+  ];
+  var INSO_PLANS_EMPTY=[];
+  var INSO_ABOUT="How many people are enrolled in each insurance plan, grouped under their insurance type, counting employees and their dependents. Expand a type to see its plans, each plan's enrolment and its cost, or switch to the pie to see each plan as a slice of total enrolment.";
+  var INSO_COLORS=["--am-600","--am-500","--am-400","--am-300","--am-200"];
+
+  /* (2) HELPERS */
+  function insOEsc(s){return String(s).replace(/"/g,"&quot;");}
+  function insONum(n){return Number(n).toLocaleString();}
+  function insOMoney(n){return "$"+Number(n).toLocaleString();}
+  function insOCost(p){return (p.enroll||0)*(p.rate||0);}
+  function insOCostTotal(w){return insOFiltered(w).reduce(function(s,p){return s+insOCost(p);},0);}
+  var INSO_NODENTAL=INSO_PLANS.filter(function(p){return p.type!=="Dental";});
+  function insODataset(w){if(w.dataset==="none")return INSO_PLANS_EMPTY;if(w.dataset==="nodental")return INSO_NODENTAL;return INSO_PLANS;}
+  function insOFiltered(w){var ty=w.insType||"All";return insODataset(w).filter(function(p){return ty==="All"||p.type===ty;});}
+  function insOTotal(w){return insOFiltered(w).reduce(function(s,p){return s+p.enroll;},0);}
+  function insOPlanCount(w){return insOFiltered(w).length;}
+  function insOTypeLabel(w){var ty=w.insType||"All";return ty==="All"?"All types":ty;}
+  /* Explore view state with a stale-value fallback: anything that is not
+     exactly "pie" renders the table, with Table marked pressed. */
+  function insOView(w){return w.insView==="pie"?"pie":"table";}
+  /* sorted rows; zero-enrolment plans always sink to the bottom, in either
+     direction, so they are present but never clutter the top of the list. */
+  function insORows(w){
+    var rows=insOFiltered(w).slice(),sk=(w.insSort||"count-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
+    rows.sort(function(a,b){
+      if((a.enroll===0)!==(b.enroll===0))return a.enroll===0?1:-1;
+      if(key==="plan")return dir*a.plan.localeCompare(b.plan);
+      return dir*(a.enroll-b.enroll);
+    });
+    return rows;
+  }
+
+  /* (3) POPOVER STATE + loading. INSO_POP holds the open card's id; loading
+     fires ONLY on a data-fetch (insurance-type change), never on sort,
+     expand or the Table / Pie segment. */
+  var INSO_POP=null;
+  function insOLoad(w){w.insloading=true;clearTimeout(timers["insO-"+w.id]);timers["insO-"+w.id]=setTimeout(function(){w.insloading=false;render();},800);}
+  function insOPopContent(w){
+    var curT=w.insType||"All";
+    return '<div class="cap">Insurance type</div>'+INSO_TYPES.map(function(o){var on=curT===o;return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-action="insO-set-type" data-id="'+w.id+'" data-v="'+insOEsc(o)+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+(o==="All"?"All types":o)+'</button>';}).join("");
+  }
+
+  function insOTypeChip(w){
+    var open=!!(INSO_POP&&INSO_POP.id===w.id);
+    var spin=w.insloading?'<span class="bgt-spin" aria-hidden="true"></span>':"";
+    var btn='<button class="filter-chip w06-chip" data-action="insO-type" data-id="'+w.id+'" aria-haspopup="listbox" aria-expanded="'+(open?"true":"false")+'" aria-label="Insurance type filter, currently '+insOEsc(insOTypeLabel(w))+'">'+spin+'<span class="fc-label">'+insOTypeLabel(w)+'</span>'+ICON("expand_more")+'</button>';
+    var menu=open?'<div class="w06-menu" data-action="stop" role="listbox">'+insOPopContent(w)+'</div>':"";
+    return '<span class="w06-chip-wrap">'+btn+menu+'</span>';
+  }
+  /* Explore has no room for both views, so it gets a Table / Pie segment
+     with TABLE as the default. Detail shows them side by side, as the
+     original did, so it carries no segment; Glance carries none either. */
+  function insOViewToggle(w){
+    var v=insOView(w);
+    function seg(val,lbl,ic,tip){return '<button class="vt'+(v===val?" on":"")+'" data-action="insO-view" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(v===val)+'" title="'+insOEsc(tip)+'">'+ICON(ic)+lbl+'</button>';}
+    return '<div class="vtoggle w06-vtoggle" role="group" aria-label="View">'+
+      seg("table","Table","table_rows","Enrolment per plan as a sortable list, grouped by insurance type.")+
+      seg("pie","Pie","donut_small","Each plan as a slice of total enrolment, as in the original widget.")+
+    '</div>';
+  }
+
+  /* (5) TABLE ATOMS. Share of total = row enrolled / grand-total enrolled
+     (this view), an aria-hidden amethyst bar plus a quiet percent; the
+     COUNT stays primary. */
+  function insOShareCell(enroll,total){
+    var pct=total>0?Math.round(enroll/total*100):0,wd=total>0?(enroll/total*100):0;
+    return '<span class="w06-share"><span class="w06-share-track" aria-hidden="true"><span class="w06-share-fill'+(enroll===0?" w06-share-zero":"")+'" style="width:'+wd.toFixed(1)+'%"></span></span><span class="w06-share-pct">'+pct+'%</span></span>';
+  }
+  function insODetailHeadRow(w){
+    var sk=(w.insSort||"count-desc").split("-"),key=sk[0],dir=sk[1];
+    function sb(k,label){var on=key===k,ic=on?(dir==="asc"?"arrow_upward":"arrow_downward"):"unfold_more";return '<button class="wt-sort'+(on?" on":"")+'" data-action="insO-sort" data-id="'+w.id+'" data-k="'+k+'">'+label+' '+ICON(ic)+'</button>';}
+    return '<div class="wt-row wt-head w06-row"><span class="lr-main">'+sb("plan","Insurance type / plan")+'</span><span class="w06-share">Share of total</span><span class="wt-c2">'+sb("count","Enrolled")+'</span><span class="w06-cost">Cost</span></div>';
+  }
+  function insOTypeGroupId(w,ty){return "w06-grp-"+w.id+"-"+String(ty).replace(/[^A-Za-z0-9]/g,"");}
+  function insOPlanRow(p,gEnroll){
+    var zero=p.enroll===0,cost=insOCost(p);
+    var tip=zero?(p.plan+", "+p.type+". No one is enrolled yet, so this plan costs "+insOMoney(0)+"."):(p.plan+", "+p.type+". "+insONum(p.enroll)+" enrolled at "+insOMoney(p.rate)+" per enrollee each month, "+insOMoney(cost)+" in total.");
+    return '<div class="wt-row w06-row w06-row-in w06-child'+(zero?" w06-zero":"")+'" data-tip="'+insOEsc(tip)+'" data-tip-plain>'+
+      '<span class="lr-main w06-plan"><span class="w06-plan-nm">'+p.plan+'</span></span>'+
+      insOShareCell(p.enroll,gEnroll)+
+      '<span class="wt-c2">'+insONum(p.enroll)+(zero?' <span class="w06-zero-tag">none</span>':'')+'</span>'+
+      '<span class="w06-cost">'+insOMoney(cost)+'</span></div>';
+  }
+  function insODetailTotalRow(totEnroll,totCost){
+    return '<div class="w06-total-detail"><span class="w06-total-lead">Total (all types)</span><span class="w06-total-en">'+insONum(totEnroll)+'</span><span class="w06-total-cost">'+insOMoney(totCost)+'</span></div>';
+  }
+  /* Expandable Type -> Plan nested table (Explore Table view AND Detail).
+     Type rows are role="button" parents carrying enrolled + cost subtotals;
+     collapsed by default, an instant client toggle (NO fetch) tracked in
+     w.insExpanded. Columns: Insurance type / plan | Share of total |
+     Enrolled | Cost. Groups ordered by subtotal; plans obey the sort. */
+  function insONestedTable(w){
+    var rows=insOFiltered(w).slice(),gEnroll=insOTotal(w),gCost=insOCostTotal(w);
+    if(!rows.length)return '<div class="scroll w06-tscroll">'+insODetailHeadRow(w)+'<div class="wt-row w06-row"><span class="lr-main w06-none">No plans of this insurance type.</span></div></div>'+insODetailTotalRow(0,0);
+    var groups={},order=[];
+    rows.forEach(function(p){if(!groups[p.type]){groups[p.type]=[];order.push(p.type);}groups[p.type].push(p);});
+    function subEnroll(ty){return groups[ty].reduce(function(s,p){return s+p.enroll;},0);}
+    function subCost(ty){return groups[ty].reduce(function(s,p){return s+insOCost(p);},0);}
+    order.sort(function(a,b){return subEnroll(b)-subEnroll(a);});
+    var sk=(w.insSort||"count-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
+    function sortIn(arr){return arr.slice().sort(function(a,b){if((a.enroll===0)!==(b.enroll===0))return a.enroll===0?1:-1;if(key==="plan")return dir*a.plan.localeCompare(b.plan);return dir*(a.enroll-b.enroll);});}
+    var exp=w.insExpanded||{},html="";
+    order.forEach(function(ty){
+      var list=groups[ty],se=subEnroll(ty),sc=subCost(ty),open=!!exp[ty],gid=insOTypeGroupId(w,ty);
+      html+='<div class="wt-row w06-row w06-grp w06-typerow'+(open?" w06-open":"")+'" role="button" tabindex="0" data-action="insO-toggle-type" data-id="'+w.id+'" data-ty="'+insOEsc(ty)+'" aria-expanded="'+(open?"true":"false")+'" aria-controls="'+gid+'" aria-label="'+insOEsc(ty+", "+se+" enrolled, cost "+insOMoney(sc)+", "+(open?"expanded":"collapsed")+". Activate to "+(open?"collapse":"expand")+" its plans.")+'">'+
+        '<span class="lr-main w06-grp-nm"><span class="w06-caret material-symbols-rounded" aria-hidden="true">'+(open?"expand_more":"chevron_right")+'</span>'+ty+' <span class="w06-grp-ct">'+list.length+' plan'+(list.length===1?"":"s")+'</span></span>'+
+        insOShareCell(se,gEnroll)+
+        '<span class="wt-c2">'+insONum(se)+'</span>'+
+        '<span class="w06-cost">'+insOMoney(sc)+'</span></div>';
+      html+='<div class="w06-grp-body" id="'+gid+'" role="group" aria-label="'+insOEsc(ty+" plans")+'">'+
+        (open?sortIn(list).map(function(p){return insOPlanRow(p,gEnroll);}).join(""):"")+
+        '</div>';
+    });
+    return '<div class="scroll w06-tscroll">'+insODetailHeadRow(w)+html+'</div>'+insODetailTotalRow(gEnroll,gCost);
+  }
+
+  function insOColorOf(plan){
+    var order=INSO_PLANS.map(function(p){return p.plan;});
+    var i=order.indexOf(plan);if(i<0)i=0;
+    return INSO_COLORS[i%INSO_COLORS.length];
+  }
+  function insOPieChart(w){
+    var all=insORows(w);
+    /* legacy rule: zero-enrolment plans are table-only, never charted */
+    var rows=all.filter(function(p){return p.enroll>0;}).slice().sort(function(a,b){return b.enroll-a.enroll;});
+    var zero=all.length-rows.length;
+    var tot=rows.reduce(function(t,p){return t+p.enroll;},0);
+    if(!rows.length||tot<=0){
+      return '<div class="w06-chart-empty">'+ICON("donut_small")+'<span>No plan has an enrolment to chart for '+insOEsc(insOTypeLabel(w))+'.</span></div>';
+    }
+    var DS=({wide:250,xwide:280})[w.size]||190;
+    var R=52,C=2*Math.PI*R,off=0,arcs="",legend="";
+    rows.forEach(function(p,i){
+      var frac=p.enroll/tot,len=frac*C,c=insOColorOf(p.plan);
+      var pct=Math.round(frac*100);
+      var lbl=p.plan+", "+insONum(p.enroll)+" enrolled, "+pct+" percent of the total";
+      arcs+='<circle class="w06-seg" cx="70" cy="70" r="'+R+'" fill="none" stroke="var('+c+')" stroke-width="20" stroke-dasharray="'+Math.min(len+0.9,C).toFixed(2)+' '+Math.max(0,C-len-0.9).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 70 70)"><title>'+insOEsc(lbl)+'</title></circle>';
+      off+=len;
+      legend+='<div class="leg w06-leg" title="'+insOEsc(lbl)+'"><span class="dot" style="background:var('+c+')"></span>'+
+        '<span class="lg-main">'+insOEsc(p.plan)+'</span>'+
+        '<span class="lg-meta">'+insONum(p.enroll)+' &middot; '+pct+'%</span></div>';
+    });
+    var note=zero>0
+      ? '<div class="w06-pie-note">'+ICON("info")+'<span>'+zero+' plan'+(zero===1?'':'s')+' with no enrolment '+(zero===1?'is':'are')+' listed in the table but not charted, as in the original widget.</span></div>'
+      : '';
+    return '<div class="w06-pie"><div class="pie-wrap row">'+
+      '<svg class="donut" viewBox="0 0 140 140" width="'+DS+'" height="'+DS+'" role="img" aria-label="'+insOEsc("Enrolment by plan, "+insONum(tot)+" enrolled across "+rows.length+" plan"+(rows.length===1?"":"s"))+'">'+arcs+
+      '<text x="70" y="67" text-anchor="middle" class="donut-c1">'+insONum(tot)+'</text>'+
+      '<text x="70" y="86" text-anchor="middle" class="donut-c2">enrolled</text></svg>'+
+      '<div class="legend-col"><div class="legend-head"><span class="legend-hd">Enrolment by plan</span></div>'+
+      '<div class="legend" style="max-height:'+DS+'px">'+legend+'</div></div></div>'+note+'</div>';
+  }
+
+  /* (7) HEADER / GLANCE / STATES */
+  function insOHeader(w,mode){
+    var ctx=(mode==="loading")?"Updating the enrolment breakdown...":"Counts include employees and their dependents.";
+    var tog=(w.size==="wide"&&mode!=="loading")?insOViewToggle(w):"";
+    return '<div class="dep-hd w06-hd"><div class="dep-hd-top">'+insOTypeChip(w)+'<div class="dep-hd-toggle">'+tog+'</div></div>'+
+      '<div class="dep-hd-num"><div class="w06-ctx">'+ctx+'</div></div></div>';
+  }
+  function insOGlance(w){
+    var tot=insOTotal(w),n=insOPlanCount(w),lead=(w.insType&&w.insType!=="All")?insOTypeLabel(w).toLowerCase():"all types";
+    return '<div class="kpi-row"><div class="kpi-num">'+
+      '<div class="dep-hd-kpigrp"><span class="metric-value">'+insONum(tot)+'</span><span class="bank-pill">'+ICON("groups")+n+' plan'+(n===1?"":"s")+'</span></div>'+
+      '<div class="gl-sub"><span class="w06-caption">enrolled across '+lead+', employees and dependents</span></div>'+
+    '</div></div>';
+  }
+  function insOEmpty(w){
+    if(w.size==="kpi")return '<div class="kpi-row"><div class="kpi-num"><div class="dep-hd-kpigrp"><span class="metric-value" style="font-size:20px;color:var(--txt-subtle)">No plans</span></div><div class="gl-sub"><span class="w06-caption">no insurance plans set up yet</span></div></div></div>';
+    return '<div class="state w06-empty" data-kind="empty">'+ICON("shield_person")+'<div class="state-title">No insurance plans yet</div><div class="state-sub">Once plans are set up in the Insurance Billing module, enrolment counts (employees and dependents) will appear here.</div></div>';
+  }
+  function insOSkeleton(){var rows="";[92,68,52,34].forEach(function(wd){rows+='<div class="w06-sk-row"><span class="sk" style="width:132px;height:12px;border-radius:4px"></span><span class="sk" style="width:'+wd+'px;height:12px;border-radius:4px"></span></div>';});return '<div class="w06-skel">'+rows+'</div>';}
+  function insOScopedEmpty(w){var ty=w.insType||"All";if(ty==="All")return insOEmpty(w);return '<div class="state" data-kind="empty">'+ICON("shield_person")+'<div class="state-title">No '+insOEsc(ty)+' plans</div><div class="state-sub">There are no '+insOEsc(ty.toLowerCase())+' plans set up right now. Pick another type above to see the rest.</div></div>';}
+
+  /* (8) ENTRY POINT (dispatched by w.kind==="insurance"). Glance = KPI
+     card. Explore renders ONE view at a time behind the Table / Pie segment
+     (Table default). Detail restores the ORIGINAL side-by-side reading,
+     table left and pie right, both reflecting the same filtered data. */
+  function insOContent(w){
+    var inner;
+    if(w.state==="empty")inner=insOEmpty(w);
+    else if(w.size==="kpi")inner=insOGlance(w);
+    else if(w.insloading)inner=insOHeader(w,"loading")+insOSkeleton();
+    else if(!insOFiltered(w).length)inner=insOHeader(w)+'<div class="w06-body">'+insOScopedEmpty(w)+'</div>';
+    else if(w.size==="xwide")inner=insOHeader(w)+'<div class="w06-body w06-body-split">'+
+      '<div class="w06-col w06-col-tbl">'+insONestedTable(w)+'</div>'+
+      '<div class="w06-col w06-col-chart">'+insOPieChart(w)+'</div>'+
+    '</div>';
+    else inner=insOHeader(w)+'<div class="w06-body">'+(insOView(w)==="pie"?insOPieChart(w):insONestedTable(w))+'</div>';
+    return '<div class="w06-scope" data-tier="'+(w.size||"wide")+'">'+inner+'</div>';
+  }
+
+  function insOHandle(a,id,t){
+    var w=find(id);if(!w)return false;
+    if(a==="insO-type"){INSO_POP=(INSO_POP&&INSO_POP.id===id)?null:{id:id};render();return true;}
+    if(a==="insO-set-type"){var nv=t.getAttribute("data-v");if((w.insType||"All")!==nv){w.insType=nv;insOLoad(w);}INSO_POP=null;render();return true;}
+    if(a==="insO-sort"){var k=t.getAttribute("data-k"),parts=(w.insSort||"count-desc").split("-");w.insSort=(parts[0]===k)?(k+"-"+(parts[1]==="desc"?"asc":"desc")):(k+"-"+(k==="plan"?"asc":"desc"));INSO_POP=null;render();return true;}
+    if(a==="insO-toggle-type"){var ty=t.getAttribute("data-ty");if(!w.insExpanded)w.insExpanded={};w.insExpanded[ty]=!w.insExpanded[ty];render();return true;}
+    if(a==="insO-view"){w.insView=(t.getAttribute("data-v")==="pie")?"pie":"table";render();return true;}
+    return false;
+  }
+  var INSO_WIRED=false;
+  (function(){
+    if(INSO_WIRED)return;INSO_WIRED=true;
+    document.addEventListener("click",function(e){
+      var t=e.target.closest?e.target.closest("[data-action]"):null;
+      var a=t?t.getAttribute("data-action"):null;
+      if(a&&a.indexOf("insO-")===0)return;
+      /* outside click: close the inline type popover unless the click is inside it */
+      if(INSO_POP&&!(e.target.closest&&e.target.closest(".w06-menu"))){INSO_POP=null;render();}
+    });
+    document.addEventListener("keydown",function(e){
+      if(e.key==="Escape"&&INSO_POP){INSO_POP=null;render();return;}
+      if(e.key==="Enter"||e.key===" "||e.key==="Spacebar"){
+        var t=e.target&&e.target.closest?e.target.closest('[data-action="insO-toggle-type"]'):null;
+        if(t){if(e.preventDefault)e.preventDefault();insOHandle("insO-toggle-type",t.getAttribute("data-id"),t);}
+      }
+    });
+  })();
+  WIDGETS.register("insurance",{content:insOContent,about:function(w){return {h:w.title,b:INSO_ABOUT};},click:function(a,id,t){return !!(a&&a.indexOf("insO-")===0&&insOHandle(a,id,t));}});
+/* ===== end W06 Insurance Billing Plans V2 ===== */
+
   /* ===== P2/P3 WIDGET BLOCKS (pension, remittance, gifts, loans) ===== */
 /* =======================================================================
    Gifts Pledges  (prefix: gft, kind:"gifts")
@@ -7522,7 +7704,6 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
      the pre-edit snapshot.
   ===================================================================== */
   var CMPNOTE_={
-    W06:{h:"Ours is her Insurance widget one-to-one, plus an expandable type-to-plan table and the restored pie.",rows:["Her flat plan list becomes plans nested under their insurance TYPE, expandable, in both Explore and Detail.","A Cost column is added per plan and per type, beside the enrolled count, with a totals footer.","Share is kept in both views on parent and child rows, relabelled Share of total so it says what it is a share of.","The legacy pie is restored: one view at a time at Explore behind a Table / Pie segment, both at once at Detail.","Zero-enrolment plans stay in the table but are never charted, with a note stating how many and why.","Chart sizing was set from browser measurement rather than reasoning, capping the legend so plan names never truncate."],open:"Pie as the Explore default was never owner-confirmed, and the total cost definition is still a product choice."},
     W07:{h:"Ours is her Deposits widget with four owner-directed changes; everything else is parity.",rows:["The table pages 50 accounts at a time over a 125-account set, while the headline and subtotals stay full-set.","The breakdown toggle becomes scope-dependent, and the confusing all-accounts By Account view is removed.","A chart click now RE-SCOPES the top-left filter instead of opening a drill modal; an account series is inert.","Compare To gains a fiscal Period option, sitting between month and quarter.","Her fourth size tier is dropped, mapping her four tiers onto our three.","Parity kept: the searchable account chip, the three views, the KPI delta pill and sparkline, and the row detail modal."],open:"The Step 4 doc says Compare To also drives a Trend overlay; the build has none, and the port follows the build."},
     W09:{h:"Ours restructures her Time Off widget around a per-day approval model, in seven owner-directed changes.",rows:["Approval grain moves from one row per REQUEST to one line per CALENDAR DAY, so part of a request can be accepted.","Three levels become two: a group subheading holding PERSON rows, each person an expander over their day-lines.","Employee-level bulk approve is removed, because a button on a closed row would clear a month unseen.","Rejected is dropped; Outstanding is DERIVED instead, a pending day-line dated before the today anchor.","Glance shows two mutually exclusive figures, Pending and Outstanding, which partition the pending set.","A real month Leave Calendar is added, with a department filter that reaches the grid, legend and day popover.","Parity kept: her whole component language, her header, her chips, her menus and her segmented toggles."],open:"There is no approval-authority filter and no inline approval write endpoint, so as it stands every supervisor would see every employee."},
     W10:{h:"Ours is her Loans widget with six changes, five owner-directed and one a latent bug fix.",rows:["Four aging ranges become five: a 61 to 90 range closes a latent gap that mislabelled those loans as most overdue.","Her aging and risk panel is replaced by a balance by time range donut whose legend rows ARE the table filter.","The table goes flat: the ranges became a filter, so band group headers and subtotals would restate them twice.","The Days past due column is removed, so the default sort moves to amount descending.","Explore gains a Table / Pie segment, because the first pass left no route to the chart there at all.","The loan-type filter now drives EVERYTHING, not just the table: donut, chip counts, header total and Glance bar.","An empty range renders as a muted, inert zero row rather than vanishing from the ladder."],open:"The modern API does not replicate legacy oldest-first payment allocation, so every range figure depends on backend work that does not exist."},
@@ -7534,7 +7715,6 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
   };
   /* number, display name, HER kind + her state, OUR kind + our state */
   var CMP_ROWS=[
-    ["W06","Insurance Billing Plans","insurance-mb",{insType:"All",insSort:"count-desc",insExpanded:{}},"insurance-oc",{insType:"All",insSort:"count-desc",insView:"table",insExpanded:{},updated:"just now"}],
     ["W07","Deposits on Hand","deposits-mb",{filter:"All types",view:"table",range:"Q",bd:"group",tpage:1,tsort:"net-desc",trIso:null},"deposits-oc",{filter:"All types",view:"table",range:"Q",bd:"group",tpage:1,tsort:"net-desc",trIso:null}],
     ["W09","Payroll Scheduled Time Off","pto",{ptoView:"pending",ptoExpand:{}},"pto-mb",{ptofView:"queue",ptofStatus:"pending",ptofQueueGroup:"dept",ptofCalDept:"all",ptofOpen:{},ptofAppr:{}}],
     ["W10","Loans With Balance Due","loans",{loanType:"All",loanSort:"days-desc",loanBucket:"total",updated:"just now"},"loans-mb",{lonType:"All",lonSort:"amt-desc",lonBucket:"total",lonView:"table",updated:"just now"}],
@@ -7666,18 +7846,13 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
       {id:"fa1_k",kind:"fixedassets",title:"Fixed Asset Values (Glance)",size:"kpi",updated:"just now",goto:false,tiers:["kpi","wide","xwide"],faGroupBy:"cls",faGroup:"__all",faMeasure:"net"},
       {id:"fa2",kind:"fixedassets",title:"Fixed Asset Values (Annex, accumulated depreciation)",size:"xwide",updated:"just now",tiers:["kpi","wide","xwide"],faGroupBy:"bld",faGroup:"Annex",faMeasure:"acc"},
       {id:"fa3",kind:"fixedassets",title:"Fixed Asset Values (nothing set up)",size:"wide",updated:"just now",state:"empty",tiers:["kpi","wide","xwide"]},
-      /* Insurance Billing Plans: our finalized W06, additive. kind "insurance-mb", prefix insF. 1-to-1 with Jo's insurance widget PLUS the expandable Type -> Plan nested table with a Cost column (Explore AND Detail), Jo's Share column kept alongside Cost. No status/COBRA/pending field (none exists in the real IB module). */
-      {id:"insF", title:"Insurance Billing Plans",                     kind:"insurance-mb", size:"wide",  tiers:["kpi","wide","xwide"], insType:"All",      insSort:"count-desc", insExpanded:{}, updated:"just now", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-      {id:"insF_k", title:"Insurance Billing Plans (Glance)",                     kind:"insurance-mb", size:"kpi",  tiers:["kpi","wide","xwide"], insType:"All",      insSort:"count-desc", insExpanded:{}, updated:"just now", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-      {id:"insF2",title:"Insurance Billing Plans (Detail view)",         kind:"insurance-mb", size:"xwide", tiers:["kpi","wide","xwide"], insType:"All",      insSort:"count-desc", insExpanded:{"Medical":true}, updated:"just now"},
-      {id:"insF3",title:"Insurance Billing Plans (no plans set up)",      kind:"insurance-mb", size:"wide",  tiers:["kpi","wide","xwide"], state:"empty", dataset:"none", insType:"All", updated:"just now"},
-      {id:"insF4",title:"Insurance Billing Plans (Dental filter, none set up)", kind:"insurance-mb", size:"wide",  tiers:["kpi","wide","xwide"], dataset:"nodental", insType:"Dental", insSort:"count-desc", insExpanded:{}, updated:"just now"},
-      {id:"insO", title:"Insurance Billing Plans (OC)",                     kind:"insurance-oc", size:"wide",  tiers:["kpi","wide","xwide"], insType:"All",      insSort:"count-desc", insView:"table", insExpanded:{}, updated:"just now", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-      /* (OC) driver fixtures for insO: state-variant instances read by _port-drivers/w*.driver.js only; NOT rendered as cards.
-      {id:"insO_k", title:"Insurance Billing Plans (OC, Glance)",                     kind:"insurance-oc", size:"kpi",  tiers:["kpi","wide","xwide"], insType:"All",      insSort:"count-desc", insView:"table", insExpanded:{}, updated:"just now", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-      {id:"insO2",title:"Insurance Billing Plans (OC, Detail view)",         kind:"insurance-oc", size:"xwide", tiers:["kpi","wide","xwide"], insType:"All",      insSort:"count-desc", insView:"table", insExpanded:{"Medical":true}, updated:"just now"},
-      {id:"insO3",title:"Insurance Billing Plans (OC, no plans set up)",      kind:"insurance-oc", size:"wide",  tiers:["kpi","wide","xwide"], state:"empty", dataset:"none", insType:"All", updated:"just now"},
-      {id:"insO4",title:"Insurance Billing Plans (OC, Dental filter, none set up)", kind:"insurance-oc", size:"wide",  tiers:["kpi","wide","xwide"], dataset:"nodental", insType:"Dental", insSort:"count-desc", insView:"table", insExpanded:{}, updated:"just now"},
+      /* W06 Insurance Billing Plans */
+      {id:"insO", title:"Insurance Billing Plans",                     kind:"insurance", size:"wide",  tiers:["kpi","wide","xwide"], insType:"All",      insSort:"count-desc", insView:"table", insExpanded:{}, updated:"just now", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
+      {id:"insO_k", title:"Insurance Billing Plans",                     kind:"insurance", size:"kpi",  tiers:["kpi","wide","xwide"], insType:"All",      insSort:"count-desc", insView:"table", insExpanded:{}, updated:"just now", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
+      {id:"insO2",title:"Insurance Billing Plans",         kind:"insurance", size:"xwide", tiers:["kpi","wide","xwide"], insType:"All",      insSort:"count-desc", insView:"table", insExpanded:{"Medical":true}, updated:"just now"},
+      /* W06 driver fixtures (state variants), not rendered as cards:
+      {id:"insO3",title:"Insurance Billing Plans",      kind:"insurance", size:"wide",  tiers:["kpi","wide","xwide"], state:"empty", dataset:"none", insType:"All", updated:"just now"},
+      {id:"insO4",title:"Insurance Billing Plans", kind:"insurance", size:"wide",  tiers:["kpi","wide","xwide"], dataset:"nodental", insType:"Dental", insSort:"count-desc", insView:"table", insExpanded:{}, updated:"just now"},
       */
       /* W02 Pension Plans */
       {id:"penO", title:"Pension Plans",                     kind:"pension", size:"wide",  tiers:["kpi","wide","xwide"],penDist:"All Districts", penSort:"amt-desc", penViewM:"table", penChartL:"pie", updated:"just now", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
@@ -7763,7 +7938,7 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
     fund:{h:"Spend by fund",b:"How spending breaks down across your restricted and unrestricted funds."},
     signups:{h:"New sign-ups",b:"People who recently joined a group or ministry. The number is the total for the period you choose; the list shows the most recent sign-ups regardless of period."}
   };
-  function aboutOf(w){var wa=WIDGETS.about(w);if(wa)return wa;if(w.kind==="deposits-mb")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest, shown here as a current balance with a comparison delta and a balance trend over time."};if(w.kind==="deposits-oc")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest, shown here as a current balance with a comparison delta and a balance trend over time."};if(w.kind==="deposits")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest."};if(w.kind==="bank")return {h:w.title,b:"The current balance of each active bank account, based on unreconciled activity since the last reconciliation. Select one account to see what has moved (deposits, voids, checks, withdrawals, EFT) since then."};if(w.kind==="purchasing")return {h:w.title,b:PUR_ABOUT_BODY};if(w.kind==="insurance-mb")return {h:w.title,b:INSF_ABOUT};if(w.kind==="insurance-oc")return {h:w.title,b:INSO_ABOUT};if(w.kind==="gifts")return {h:w.title,b:GFT_ABOUT_BODY};if(w.kind==="loans")return {h:w.title,b:"Every loan that still has a balance owing, grouped by how overdue it is, so you can see the total still out and which borrowers to follow up with."};if(w.kind==="pto-mb")return {h:w.title,b:PTOF_ABOUT};if(w.kind==="loans-mb")return {h:w.title,b:LONF_ABOUT};if(w.kind==="fixedassets-mb")return {h:w.title,b:FAF_ABOUT};if(w.kind==="purchasing-mb")return {h:w.title,b:PURF_ABOUT};if(w.kind==="bank-mb")return {h:w.title,b:BKF_ABOUT};if(w.kind==="payables-mb")return {h:w.title,b:APF_ABOUT};if(w.kind==="gifts-mb")return {h:w.title,b:GPF_ABOUT};return ABOUT[w.id]||{h:w.title,b:"A short, plain-language description of what this widget shows and where its data comes from."};}
+  function aboutOf(w){var wa=WIDGETS.about(w);if(wa)return wa;if(w.kind==="deposits-mb")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest, shown here as a current balance with a comparison delta and a balance trend over time."};if(w.kind==="deposits-oc")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest, shown here as a current balance with a comparison delta and a balance trend over time."};if(w.kind==="deposits")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest."};if(w.kind==="bank")return {h:w.title,b:"The current balance of each active bank account, based on unreconciled activity since the last reconciliation. Select one account to see what has moved (deposits, voids, checks, withdrawals, EFT) since then."};if(w.kind==="purchasing")return {h:w.title,b:PUR_ABOUT_BODY};if(w.kind==="gifts")return {h:w.title,b:GFT_ABOUT_BODY};if(w.kind==="loans")return {h:w.title,b:"Every loan that still has a balance owing, grouped by how overdue it is, so you can see the total still out and which borrowers to follow up with."};if(w.kind==="pto-mb")return {h:w.title,b:PTOF_ABOUT};if(w.kind==="loans-mb")return {h:w.title,b:LONF_ABOUT};if(w.kind==="fixedassets-mb")return {h:w.title,b:FAF_ABOUT};if(w.kind==="purchasing-mb")return {h:w.title,b:PURF_ABOUT};if(w.kind==="bank-mb")return {h:w.title,b:BKF_ABOUT};if(w.kind==="payables-mb")return {h:w.title,b:APF_ABOUT};if(w.kind==="gifts-mb")return {h:w.title,b:GPF_ABOUT};return ABOUT[w.id]||{h:w.title,b:"A short, plain-language description of what this widget shows and where its data comes from."};}
   var EMPTY_COPY={deposits:{title:"No deposit accounts",sub:"There are no deposit accounts to show here yet.",cta:"Add account",action:"add-acct"},payroll:{title:"No payroll runs in this range",sub:"There's no payroll history for the selected period yet."},budget:{title:"No budget set up",sub:"Once a budget is entered for this fiscal year, actuals will be compared against it here.",cta:"Set up budget",action:"add-budget"}};
   var ERROR_COPY={deposits:{title:"Couldn’t load balances",sub:"Something went wrong fetching account data."},payroll:{title:"Couldn’t load payroll data",sub:"Something went wrong fetching payroll history."},budget:{title:"Couldn’t load budget data",sub:"Something went wrong fetching budget and actual figures."}};
 /* --- Bank Balances additive copy --- */
@@ -8956,378 +9131,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     return out+'</div>';
   }
 
-  /* =====================================================================
-   Insurance Billing Plans  (ins, kind:"insurance")  ,  v2 redesign
-   =====================================================================
-   Drop-in replacement for the existing `ins` render block in
-   widget-container.html. Relies on shell globals already present:
-     ICON(name), find(id), render(), pop, timers, setTimeout, clearTimeout
-   No donut. Dense, scannable table hero with an inline share cue.
 
-   FIVE INTEGRATION PIECES (all anchors already exist in the shell today,
-   so this is a straight swap , see the wiring notes returned with this file):
-     1. RENDER BLOCK ................ everything below (single insContent(w))
-     2. contentHTML() dispatch ...... if(w.kind==="insurance")return insContent(w);
-     3. click-handler dispatch ...... if(a&&a.indexOf("ins-")===0&&insHandleClick(a,id,t))return;
-     4. popContent() dispatch ....... if(pop.type==="ins-type")return insPopContent();
-     5. triggerSelector() branch .... if(pop.type==="ins-type")return '[data-action="ins-type"][data-id="'+pop.id+'"]';
-        (+ registry entries ins / ins2 / ins3 / ins4 , unchanged, still valid)
-   ===================================================================== */
-
-  /* ---- 1. DATA ------------------------------------------------------ */
-  /* Insurance types confirmed live on beta1 23 Jul 2026. Plan names are the
-     live-verified set (Confluence Part A) , not invented. `enroll` is a COUNT
-     of enrolled people, employees AND their dependents bundled together (the
-     module gives one number; the split is not available). Building/Property
-     carries zero enrolments to exercise the zero-plan path. */
-  var INS_TYPES=["All","Dental","Medical","Property","Vision"];
-  var INS_PLANS=[
-    {plan:"Medical Base",   type:"Medical",  enroll:128},
-    {plan:"Medical Buy Up", type:"Medical",  enroll:54},
-    {plan:"Delta Dental",   type:"Dental",   enroll:96},
-    {plan:"Vision",         type:"Vision",   enroll:71},
-    {plan:"Building",       type:"Property", enroll:0}
-  ];
-  var INS_PLANS_EMPTY=[];
-
-  /* ---- helpers ------------------------------------------------------ */
-  function insEsc(s){return String(s).replace(/"/g,"&quot;");}
-  function insNum(n){return Number(n).toLocaleString();}
-  function insDataset(w){return (w.dataset==="none")?INS_PLANS_EMPTY:INS_PLANS;}
-  function insFiltered(w){var ty=w.insType||"All";return insDataset(w).filter(function(p){return ty==="All"||p.type===ty;});}
-  function insTotal(w){return insFiltered(w).reduce(function(s,p){return s+p.enroll;},0);}
-  function insPlanCount(w){return insFiltered(w).length;}
-  function insTypeLabel(w){var ty=w.insType||"All";return ty==="All"?"All types":ty;}
-
-  /* sorted rows; zero-enrolment plans always sink to the bottom, in either
-     direction, so they are present but never clutter the top of the list. */
-  function insRows(w){
-    var rows=insFiltered(w).slice(),sk=(w.insSort||"count-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
-    rows.sort(function(a,b){
-      if((a.enroll===0)!==(b.enroll===0))return a.enroll===0?1:-1;
-      if(key==="plan")return dir*a.plan.localeCompare(b.plan);
-      return dir*(a.enroll-b.enroll);
-    });
-    return rows;
-  }
-
-  /* ---- controls ----------------------------------------------------- */
-  /* Type filter: secondary-fill chip, leading filter glyph, trailing chevron,
-     sized to its content (shell .filter-chip rule). Doubles as the heading
-     ("what am I looking at"), so it sits on the left of the toolbar. */
-  function insTypeChip(w){
-    var spin=w.insloading?'<span class="bgt-spin" aria-hidden="true"></span>':"";
-    return '<button class="filter-chip ins-chip" data-action="ins-type" data-id="'+w.id+'" aria-haspopup="listbox" aria-expanded="'+(pop&&pop.type==="ins-type"&&pop.id===w.id?"true":"false")+'" aria-label="Insurance type filter, currently '+insEsc(insTypeLabel(w))+'">'+spin+'<span class="fc-label">'+insTypeLabel(w)+'</span>'+ICON("expand_more")+'</button>';
-  }
-
-  /* ---- table atoms -------------------------------------------------- */
-  /* Inline share-of-enrolment cue. It earns its place: with only a handful of
-     plans it makes uptake instantly scannable (the job a donut did, but
-     table-native and with zero dead space). The COUNT stays the primary text
-     value; the bar is aria-hidden decoration and the % is quiet support. */
-  function insShareCell(enroll,total){
-    var pct=total>0?Math.round(enroll/total*100):0,wd=total>0?(enroll/total*100):0;
-    return '<span class="ins-share"><span class="ins-share-track" aria-hidden="true"><span class="ins-share-fill'+(enroll===0?" ins-share-zero":"")+'" style="width:'+wd.toFixed(1)+'%"></span></span><span class="ins-share-pct">'+pct+'%</span></span>';
-  }
-  function insHeadRow(w){
-    var sk=(w.insSort||"count-desc").split("-"),key=sk[0],dir=sk[1];
-    function sb(k,label){var on=key===k,ic=on?(dir==="asc"?"arrow_upward":"arrow_downward"):"unfold_more";return '<button class="wt-sort'+(on?" on":"")+'" data-action="ins-sort" data-id="'+w.id+'" data-k="'+k+'">'+label+' '+ICON(ic)+'</button>';}
-    return '<div class="wt-row wt-head ins-row"><span class="lr-main">'+sb("plan","Insurance plan")+'</span><span class="ins-share ins-share-head">Share</span><span class="wt-c2">'+sb("count","Number enrolled")+'</span></div>';
-  }
-  function insPlanRow(p,total,grouped){
-    var zero=p.enroll===0,pct=total>0?Math.round(p.enroll/total*100):0;
-    var tip=zero?(p.plan+", "+p.type+". No one is enrolled in this plan yet."):(p.plan+", "+p.type+". "+insNum(p.enroll)+" enrolled, counting employees and their dependents ("+pct+"% of all enrolments in this view).");
-    return '<div class="wt-row ins-row'+(zero?" ins-zero":"")+(grouped?" ins-row-in":"")+'" data-tip="'+insEsc(tip)+'" data-tip-plain>'+
-      '<span class="lr-main ins-plan"><span class="ins-plan-nm">'+p.plan+'</span>'+(grouped?"":'<span class="ins-plan-ty">'+p.type+'</span>')+'</span>'+
-      insShareCell(p.enroll,total)+
-      '<span class="wt-c2">'+insNum(p.enroll)+(zero?' <span class="ins-zero-tag">none</span>':'')+'</span></div>';
-  }
-  function insTotalRow(tot){return '<div class="dep-total ins-total"><span>Total enrolled</span><span>'+insNum(tot)+'</span></div>';}
-
-  /* Explore (wide): one clean, flat, sorted table. */
-  function insFlatTable(w){
-    var rows=insRows(w),tot=insTotal(w);
-    var body=rows.length?rows.map(function(p){return insPlanRow(p,tot,false);}).join(""):'<div class="wt-row ins-row"><span class="lr-main ins-none">No plans of this insurance type.</span></div>';
-    return '<div class="scroll ins-tscroll">'+insHeadRow(w)+body+'</div>'+insTotalRow(tot);
-  }
-
-  /* Detail (xwide): the "room for more" , same table, grouped by insurance
-     type with a per-type subtotal, so a benefits admin can compare uptake
-     within and across types. No second chart; the extra height carries the
-     grouping. Groups ordered by subtotal; plans within a group obey the sort. */
-  function insGroupedTable(w){
-    var rows=insFiltered(w).slice(),tot=insTotal(w);
-    if(!rows.length)return '<div class="scroll ins-tscroll">'+insHeadRow(w)+'<div class="wt-row ins-row"><span class="lr-main ins-none">No plans of this insurance type.</span></div></div>'+insTotalRow(0);
-    var groups={},order=[];
-    rows.forEach(function(p){if(!groups[p.type]){groups[p.type]=[];order.push(p.type);}groups[p.type].push(p);});
-    function sub(ty){return groups[ty].reduce(function(s,p){return s+p.enroll;},0);}
-    order.sort(function(a,b){return sub(b)-sub(a);});
-    var sk=(w.insSort||"count-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
-    function sortIn(arr){return arr.slice().sort(function(a,b){if((a.enroll===0)!==(b.enroll===0))return a.enroll===0?1:-1;if(key==="plan")return dir*a.plan.localeCompare(b.plan);return dir*(a.enroll-b.enroll);});}
-    var html="";
-    order.forEach(function(ty){var list=groups[ty],st=sub(ty);
-      html+='<div class="wt-row ins-row ins-grp"><span class="lr-main ins-grp-nm">'+ty+' <span class="ins-grp-ct">'+list.length+' plan'+(list.length===1?"":"s")+'</span></span>'+insShareCell(st,tot)+'<span class="wt-c2">'+insNum(st)+'</span></div>';
-      html+=sortIn(list).map(function(p){return insPlanRow(p,tot,true);}).join("");
-    });
-    return '<div class="scroll ins-tscroll">'+insHeadRow(w)+html+'</div>'+insTotalRow(tot);
-  }
-
-  /* ---- header (Explore / Detail) ------------------------------------ */
-  /* Two-row .dep-hd for chrome consistency with Deposits/Bank/Payables.
-     Row 1: the type chip (heading + control). Row 2: a single quiet context
-     line , NO big total here (the table's Total row owns it; avoids the
-     redundant-total the old version had). The employees-and-dependents basis
-     is stated exactly once, here. */
-  function insHeader(w,mode){
-    var ctx;
-    if(mode==="loading"){ctx="Updating the enrolment breakdown…";}
-    else{var n=insPlanCount(w),lead=(w.insType&&w.insType!=="All")?insTypeLabel(w):"All insurance types";
-      ctx="Counts include employees and their dependents.";}
-    return '<div class="dep-hd ins-hd"><div class="dep-hd-top">'+insTypeChip(w)+'<div class="dep-hd-toggle"></div></div>'+
-      '<div class="dep-hd-num"><div class="ins-ctx">'+ctx+'</div></div></div>';
-  }
-
-  /* ---- Glance ------------------------------------------------------- */
-  function insGlance(w){
-    var tot=insTotal(w),n=insPlanCount(w),lead=(w.insType&&w.insType!=="All")?insTypeLabel(w).toLowerCase():"all types";
-    return '<div class="kpi-row"><div class="kpi-num">'+
-      '<div class="dep-hd-kpigrp"><span class="metric-value">'+insNum(tot)+'</span><span class="bank-pill">'+ICON("groups")+n+' plan'+(n===1?"":"s")+'</span></div>'+
-      ''+
-    '</div></div>';
-  }
-
-  /* ---- states ------------------------------------------------------- */
-  function insEmpty(w){
-    if(w.size==="kpi")return '<div class="kpi-row"><div class="kpi-num"><div class="dep-hd-kpigrp"><span class="metric-value" style="font-size:20px;color:var(--txt-subtle)">No plans</span></div><div class="gl-sub"><span class="ins-caption">no insurance plans set up yet</span></div></div></div>';
-    return '<div class="state ins-empty" data-kind="empty">'+ICON("shield_person")+'<div class="state-title">No insurance plans yet</div><div class="state-sub">Once plans are set up in the Insurance Billing module, enrolment counts (employees and dependents) will appear here.</div></div>';
-  }
-  function insSkeleton(){var rows="";[92,68,52,34].forEach(function(wd){rows+='<div class="ins-sk-row"><span class="sk" style="width:132px;height:12px;border-radius:4px"></span><span class="sk" style="width:'+wd+'px;height:12px;border-radius:4px"></span></div>';});return '<div class="ins-skel">'+rows+'</div>';}
-
-  /* ---- entry point (single insContent) ------------------------------ */
-  function insContent(w){
-    if(w.state==="empty")return insEmpty(w);
-    if(w.size==="kpi")return insGlance(w);
-    if(w.insloading)return insHeader(w,"loading")+insSkeleton();
-    if(!insFiltered(w).length)return insHeader(w)+'<div class="ins-body">'+insScopedEmpty(w)+'</div>';
-    var table=(w.size==="xwide")?insGroupedTable(w):insFlatTable(w);
-    return insHeader(w)+'<div class="ins-body">'+table+'</div>';
-  }
-  function insScopedEmpty(w){var ty=w.insType||"All";if(ty==="All")return insEmpty(w);return '<div class="state" data-kind="empty">'+ICON("shield_person")+'<div class="state-title">No '+insEsc(ty)+' plans</div><div class="state-sub">There are no '+insEsc(ty.toLowerCase())+' plans set up right now. Pick another type above to see the rest.</div></div>';}
-
-  /* ---- loading: only on a data-fetch (type change), never on sort ---- */
-  function insLoad(w){w.insloading=true;clearTimeout(timers["ins-"+w.id]);timers["ins-"+w.id]=setTimeout(function(){w.insloading=false;render();},800);}
-
-  /* ---- 3. CLICK HANDLER (branch: a starts with "ins-") -------------- */
-  function insHandleClick(a,id,t){
-    if(a==="ins-type"){pop=(pop&&pop.type==="ins-type"&&pop.id===id)?null:{type:"ins-type",id:id};render();return true;}
-    if(a==="ins-set-type"){var wt=find(id);if(wt){var nv=t.getAttribute("data-v");if((wt.insType||"All")!==nv){wt.insType=nv;insLoad(wt);}}pop=null;render();return true;}
-    if(a==="ins-sort"){var ws=find(id);if(ws){var k=t.getAttribute("data-k"),parts=(ws.insSort||"count-desc").split("-");ws.insSort=(parts[0]===k)?(k+"-"+(parts[1]==="desc"?"asc":"desc")):(k+"-"+(k==="plan"?"asc":"desc"));}pop=null;render();return true;}
-    return false;
-  }
-
-  /* ---- 4. POPOVER CONTENT (pop.type==="ins-type") ------------------- */
-  function insPopContent(){
-    if(pop.type==="ins-type"){var w=find(pop.id),curT=w.insType||"All";
-      return '<div class="cap">Insurance type</div>'+INS_TYPES.map(function(o){var on=curT===o;return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-action="ins-set-type" data-id="'+w.id+'" data-v="'+insEsc(o)+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+(o==="All"?"All types":o)+'</button>';}).join("");}
-    return "";
-  }
-
-  /* =====================================================================
-     Insurance Billing Plans (MB updated)  (prefix: insF, kind:"insurance-mb")
-     =====================================================================
-     Our finalized W06, ported ADDITIVELY alongside Jo's `ins` widget, never
-     touching it. A 1-to-1 copy of Jo's insurance design PLUS the owner-directed
-     enhancement (Step 4 doc, 2026-07-30): an expandable Type -> Plan nested
-     table with a Cost column, shown in BOTH Explore and Detail, with Jo's Share
-     column kept alongside Cost on both parent (type) and child (plan) rows.
-     Cost models SUM(IBEmployeePlan.Rate) (Step 5 API spec / codebase trace
-     2026-07-30); mock per-enrollee rates are illustrative (Rule 11). There is NO
-     status / COBRA / pending field: none exists in the real IB module.
-     Built on Jo's own components, classes and Pathway tokens; reuses her global
-     .ins-* / .mi / .cap rules. Per-widget state lives on the registry object
-     (w.insType / w.insSort / w.insExpanded / w.insloading). Self-contained: the
-     ONLY shared-region edits are the contentHTML() dispatch line, an aboutOf()
-     branch, and the appended registry cards. Its own delegated click + keydown
-     listeners (behind INSF_WIRED) and an inline type popover keep it from
-     touching Jo's pop / popContent / triggerSelector / handlers. Cross-foot
-     (sample data): Medical 182/$91,080, Dental 96/$3,648, Vision 71/$639,
-     Property 0/$0; grand total 349 enrolled / $95,367. No em dashes anywhere. */
-
-  /* (1) DATA. enroll = COUNT of enrolled people (employees AND dependents, one
-     bundled number). rate = per-enrollee monthly premium, used only to model
-     Cost; Building is a Property policy, not per-enrollee, so it stays cost 0
-     and exercises the zero-enrolment path. */
-  var INSF_TYPES=["All","Dental","Medical","Property","Vision"];
-  var INSF_PLANS=[
-    {plan:"Medical Base",   type:"Medical",  enroll:128, rate:450},
-    {plan:"Medical Buy Up", type:"Medical",  enroll:54,  rate:620},
-    {plan:"Delta Dental",   type:"Dental",   enroll:96,  rate:38},
-    {plan:"Vision",         type:"Vision",   enroll:71,  rate:9},
-    {plan:"Building",       type:"Property", enroll:0,   rate:0}
-  ];
-  var INSF_PLANS_EMPTY=[];
-  var INSF_ABOUT="How many people are enrolled in each insurance plan, grouped under their insurance type, counting employees and their dependents. Expand a type to see its plans, each plan's enrolment and its cost.";
-
-  /* (2) HELPERS */
-  function insFEsc(s){return String(s).replace(/"/g,"&quot;");}
-  function insFNum(n){return Number(n).toLocaleString();}
-  function insFMoney(n){return "$"+Number(n).toLocaleString();}
-  function insFCost(p){return (p.enroll||0)*(p.rate||0);}
-  function insFCostTotal(w){return insFFiltered(w).reduce(function(s,p){return s+insFCost(p);},0);}
-  var INSF_NODENTAL=INSF_PLANS.filter(function(p){return p.type!=="Dental";});
-  function insFDataset(w){if(w.dataset==="none")return INSF_PLANS_EMPTY;if(w.dataset==="nodental")return INSF_NODENTAL;return INSF_PLANS;}
-  function insFFiltered(w){var ty=w.insType||"All";return insFDataset(w).filter(function(p){return ty==="All"||p.type===ty;});}
-  function insFTotal(w){return insFFiltered(w).reduce(function(s,p){return s+p.enroll;},0);}
-  function insFPlanCount(w){return insFFiltered(w).length;}
-  function insFTypeLabel(w){var ty=w.insType||"All";return ty==="All"?"All types":ty;}
-  /* sorted rows; zero-enrolment plans always sink to the bottom, in either
-     direction, so they are present but never clutter the top of the list. */
-  function insFRows(w){
-    var rows=insFFiltered(w).slice(),sk=(w.insSort||"count-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
-    rows.sort(function(a,b){
-      if((a.enroll===0)!==(b.enroll===0))return a.enroll===0?1:-1;
-      if(key==="plan")return dir*a.plan.localeCompare(b.plan);
-      return dir*(a.enroll-b.enroll);
-    });
-    return rows;
-  }
-
-  /* (3) POPOVER STATE + loading. INSF_POP holds the open card's id; loading fires
-     ONLY on a data-fetch (insurance-type change), never on sort or expand. */
-  var INSF_POP=null;
-  function insFLoad(w){w.insloading=true;clearTimeout(timers["insF-"+w.id]);timers["insF-"+w.id]=setTimeout(function(){w.insloading=false;render();},800);}
-  function insFPopContent(w){
-    var curT=w.insType||"All";
-    return '<div class="cap">Insurance type</div>'+INSF_TYPES.map(function(o){var on=curT===o;return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-action="insF-set-type" data-id="'+w.id+'" data-v="'+insFEsc(o)+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+(o==="All"?"All types":o)+'</button>';}).join("");
-  }
-
-  /* (4) CONTROLS. Type filter: secondary-fill chip (shell .filter-chip), leading
-     glyph + trailing chevron; opens an inline type popover anchored under it. */
-  function insFTypeChip(w){
-    var open=!!(INSF_POP&&INSF_POP.id===w.id);
-    var spin=w.insloading?'<span class="bgt-spin" aria-hidden="true"></span>':"";
-    var btn='<button class="filter-chip ins-chip" data-action="insF-type" data-id="'+w.id+'" aria-haspopup="listbox" aria-expanded="'+(open?"true":"false")+'" aria-label="Insurance type filter, currently '+insFEsc(insFTypeLabel(w))+'">'+spin+'<span class="fc-label">'+insFTypeLabel(w)+'</span>'+ICON("expand_more")+'</button>';
-    var menu=open?'<div class="insf-menu" data-action="stop" role="listbox">'+insFPopContent(w)+'</div>':"";
-    return '<span class="insf-chip-wrap">'+btn+menu+'</span>';
-  }
-
-  /* (5) TABLE ATOMS. Share = row enrolled / grand-total enrolled (this view),
-     an aria-hidden amethyst bar plus a quiet percent; the COUNT stays primary. */
-  function insFShareCell(enroll,total){
-    var pct=total>0?Math.round(enroll/total*100):0,wd=total>0?(enroll/total*100):0;
-    return '<span class="ins-share"><span class="ins-share-track" aria-hidden="true"><span class="ins-share-fill'+(enroll===0?" ins-share-zero":"")+'" style="width:'+wd.toFixed(1)+'%"></span></span><span class="ins-share-pct">'+pct+'%</span></span>';
-  }
-  function insFHeadRow(w){
-    var sk=(w.insSort||"count-desc").split("-"),key=sk[0],dir=sk[1];
-    function sb(k,label){var on=key===k,ic=on?(dir==="asc"?"arrow_upward":"arrow_downward"):"unfold_more";return '<button class="wt-sort'+(on?" on":"")+'" data-action="insF-sort" data-id="'+w.id+'" data-k="'+k+'">'+label+' '+ICON(ic)+'</button>';}
-    return '<div class="wt-row wt-head ins-row"><span class="lr-main">'+sb("plan","Insurance type / plan")+'</span><span class="ins-share ins-share-head">Share</span><span class="wt-c2">'+sb("count","Enrolled")+'</span><span class="ins-cost ins-cost-head">Cost</span></div>';
-  }
-  function insFTypeGroupId(w,ty){return "insf-grp-"+w.id+"-"+String(ty).replace(/[^A-Za-z0-9]/g,"");}
-  /* Child plan row. gEnroll = grand total enrolled (this view); Share is this
-     plan's enrolment as a share of that grand total (Jo's original meaning). */
-  function insFPlanRow(p,gEnroll){
-    var zero=p.enroll===0,cost=insFCost(p);
-    var tip=zero?(p.plan+", "+p.type+". No one is enrolled yet, so this plan costs "+insFMoney(0)+"."):(p.plan+", "+p.type+". "+insFNum(p.enroll)+" enrolled at "+insFMoney(p.rate)+" per enrollee each month, "+insFMoney(cost)+" in total.");
-    return '<div class="wt-row ins-row ins-row-in ins-child'+(zero?" ins-zero":"")+'" data-tip="'+insFEsc(tip)+'" data-tip-plain>'+
-      '<span class="lr-main ins-plan"><span class="ins-plan-nm">'+p.plan+'</span></span>'+
-      insFShareCell(p.enroll,gEnroll)+
-      '<span class="wt-c2">'+insFNum(p.enroll)+(zero?' <span class="ins-zero-tag">none</span>':'')+'</span>'+
-      '<span class="ins-cost">'+insFMoney(cost)+'</span></div>';
-  }
-  function insFTotalRow(totEnroll,totCost){
-    return '<div class="ins-total-detail"><span class="ins-total-lead">Total (all types)</span><span class="ins-total-en">'+insFNum(totEnroll)+'</span><span class="ins-total-cost">'+insFMoney(totCost)+'</span></div>';
-  }
-  /* Expandable Type -> Plan nested table (Explore AND Detail). Type rows are
-     role="button" parents carrying enrolled + cost subtotals; collapsed by
-     default, an instant client toggle (NO fetch) tracked in w.insExpanded.
-     Columns: Insurance type / plan | Share | Enrolled | Cost. */
-  function insFNestedTable(w){
-    var rows=insFFiltered(w).slice(),gEnroll=insFTotal(w),gCost=insFCostTotal(w);
-    if(!rows.length)return '<div class="scroll ins-tscroll">'+insFHeadRow(w)+'<div class="wt-row ins-row"><span class="lr-main ins-none">No plans of this insurance type.</span></div></div>'+insFTotalRow(0,0);
-    var groups={},order=[];
-    rows.forEach(function(p){if(!groups[p.type]){groups[p.type]=[];order.push(p.type);}groups[p.type].push(p);});
-    function subEnroll(ty){return groups[ty].reduce(function(s,p){return s+p.enroll;},0);}
-    function subCost(ty){return groups[ty].reduce(function(s,p){return s+insFCost(p);},0);}
-    order.sort(function(a,b){return subEnroll(b)-subEnroll(a);});
-    var sk=(w.insSort||"count-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
-    function sortIn(arr){return arr.slice().sort(function(a,b){if((a.enroll===0)!==(b.enroll===0))return a.enroll===0?1:-1;if(key==="plan")return dir*a.plan.localeCompare(b.plan);return dir*(a.enroll-b.enroll);});}
-    var exp=w.insExpanded||{},html="";
-    order.forEach(function(ty){
-      var list=groups[ty],se=subEnroll(ty),sc=subCost(ty),open=!!exp[ty],gid=insFTypeGroupId(w,ty);
-      html+='<div class="wt-row ins-row ins-grp ins-typerow'+(open?" ins-open":"")+'" role="button" tabindex="0" data-action="insF-toggle-type" data-id="'+w.id+'" data-ty="'+insFEsc(ty)+'" aria-expanded="'+(open?"true":"false")+'" aria-controls="'+gid+'" aria-label="'+insFEsc(ty+", "+se+" enrolled, cost "+insFMoney(sc)+", "+(open?"expanded":"collapsed")+". Activate to "+(open?"collapse":"expand")+" its plans.")+'">'+
-        '<span class="lr-main ins-grp-nm"><span class="ins-caret material-symbols-rounded" aria-hidden="true">'+(open?"expand_more":"chevron_right")+'</span>'+ty+' <span class="ins-grp-ct">'+list.length+' plan'+(list.length===1?"":"s")+'</span></span>'+
-        insFShareCell(se,gEnroll)+
-        '<span class="wt-c2">'+insFNum(se)+'</span>'+
-        '<span class="ins-cost">'+insFMoney(sc)+'</span></div>';
-      html+='<div class="ins-grp-body" id="'+gid+'" role="group" aria-label="'+insFEsc(ty+" plans")+'">'+
-        (open?sortIn(list).map(function(p){return insFPlanRow(p,gEnroll);}).join(""):"")+
-        '</div>';
-    });
-    return '<div class="scroll ins-tscroll">'+insFHeadRow(w)+html+'</div>'+insFTotalRow(gEnroll,gCost);
-  }
-
-  /* (6) HEADER / GLANCE / STATES */
-  function insFHeader(w,mode){
-    var ctx=(mode==="loading")?"Updating the enrolment breakdown...":"Counts include employees and their dependents.";
-    return '<div class="dep-hd ins-hd"><div class="dep-hd-top">'+insFTypeChip(w)+'<div class="dep-hd-toggle"></div></div>'+
-      '<div class="dep-hd-num"><div class="ins-ctx">'+ctx+'</div></div></div>';
-  }
-  function insFGlance(w){
-    var tot=insFTotal(w),n=insFPlanCount(w),lead=(w.insType&&w.insType!=="All")?insFTypeLabel(w).toLowerCase():"all types";
-    return '<div class="kpi-row"><div class="kpi-num">'+
-      '<div class="dep-hd-kpigrp"><span class="metric-value">'+insFNum(tot)+'</span><span class="bank-pill">'+ICON("groups")+n+' plan'+(n===1?"":"s")+'</span></div>'+
-      ''+
-    '</div></div>';
-  }
-  function insFEmpty(w){
-    if(w.size==="kpi")return '<div class="kpi-row"><div class="kpi-num"><div class="dep-hd-kpigrp"><span class="metric-value" style="font-size:20px;color:var(--txt-subtle)">No plans</span></div><div class="gl-sub"><span class="ins-caption">no insurance plans set up yet</span></div></div></div>';
-    return '<div class="state ins-empty" data-kind="empty">'+ICON("shield_person")+'<div class="state-title">No insurance plans yet</div><div class="state-sub">Once plans are set up in the Insurance Billing module, enrolment counts (employees and dependents) will appear here.</div></div>';
-  }
-  function insFSkeleton(){var rows="";[92,68,52,34].forEach(function(wd){rows+='<div class="ins-sk-row"><span class="sk" style="width:132px;height:12px;border-radius:4px"></span><span class="sk" style="width:'+wd+'px;height:12px;border-radius:4px"></span></div>';});return '<div class="ins-skel">'+rows+'</div>';}
-
-  /* (7) ENTRY POINT (dispatched by w.kind==="insurance-mb"). Glance = KPI card;
-     Explore and Detail both render the nested Type -> Plan table. */
-  function insFContent(w){
-    var inner;
-    if(w.state==="empty")inner=insFEmpty(w);
-    else if(w.size==="kpi")inner=insFGlance(w);
-    else if(w.insloading)inner=insFHeader(w,"loading")+insFSkeleton();
-    else if(!insFFiltered(w).length)inner=insFHeader(w)+'<div class="ins-body">'+insFScopedEmpty(w)+'</div>';
-    else inner=insFHeader(w)+'<div class="ins-body">'+insFNestedTable(w)+'</div>';
-    return '<div class="insf-scope" data-tier="'+(w.size||"wide")+'">'+inner+'</div>';
-  }
-  function insFScopedEmpty(w){var ty=w.insType||"All";if(ty==="All")return insFEmpty(w);return '<div class="state" data-kind="empty">'+ICON("shield_person")+'<div class="state-title">No '+insFEsc(ty)+' plans</div><div class="state-sub">There are no '+insFEsc(ty.toLowerCase())+' plans set up right now. Pick another type above to see the rest.</div></div>';}
-
-  /* (8) DELEGATED HANDLERS (self-contained; data-action="insF-*"). Jo's own
-     click/keydown listeners ignore these: no "insF-" branch of hers matches, and
-     "insF-" does not satisfy her a.indexOf("ins-")===0 guard, so none of her code
-     is touched. Sort and expand are instant; only a type change fetches. */
-  function insFHandle(a,id,t){
-    var w=find(id);if(!w)return false;
-    if(a==="insF-type"){INSF_POP=(INSF_POP&&INSF_POP.id===id)?null:{id:id};render();return true;}
-    if(a==="insF-set-type"){var nv=t.getAttribute("data-v");if((w.insType||"All")!==nv){w.insType=nv;insFLoad(w);}INSF_POP=null;render();return true;}
-    if(a==="insF-sort"){var k=t.getAttribute("data-k"),parts=(w.insSort||"count-desc").split("-");w.insSort=(parts[0]===k)?(k+"-"+(parts[1]==="desc"?"asc":"desc")):(k+"-"+(k==="plan"?"asc":"desc"));INSF_POP=null;render();return true;}
-    if(a==="insF-toggle-type"){var ty=t.getAttribute("data-ty");if(!w.insExpanded)w.insExpanded={};w.insExpanded[ty]=!w.insExpanded[ty];render();return true;}
-    return false;
-  }
-  var INSF_WIRED=false;
-  (function(){
-    if(INSF_WIRED)return;INSF_WIRED=true;
-    document.addEventListener("click",function(e){
-      var t=e.target.closest?e.target.closest("[data-action]"):null;
-      var a=t?t.getAttribute("data-action"):null;
-      if(a&&a.indexOf("insF-")===0){insFHandle(a,t.getAttribute("data-id"),t);return;}
-      /* outside click: close the inline type popover unless the click is inside it */
-      if(INSF_POP&&!(e.target.closest&&e.target.closest(".insf-menu"))){INSF_POP=null;render();}
-    });
-    document.addEventListener("keydown",function(e){
-      if(e.key==="Escape"&&INSF_POP){INSF_POP=null;render();return;}
-      if(e.key==="Enter"||e.key===" "||e.key==="Spacebar"){
-        var t=e.target&&e.target.closest?e.target.closest('[data-action="insF-toggle-type"]'):null;
-        if(t){if(e.preventDefault)e.preventDefault();insFHandle("insF-toggle-type",t.getAttribute("data-id"),t);}
-      }
-    });
-  })();
 
   /* ===== Fixed Asset Values (fa, kind:"fixedassets") ===== */
   var FA_ASSETS=[
@@ -9445,12 +9249,9 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(w.kind==="purchasing")return purContent(w);
     if(w.kind==="pto")return ptoContent(w);
     if(w.kind==="payables")return apContent(w);
-    if(w.kind==="insurance")return insContent(w);
     if(w.kind==="fixedassets")return faContent(w);
     if(w.kind==="gifts")return gftContent(w);
     if(w.kind==="loans")return loanContent(w);
-    if(w.kind==="insurance-mb")return insFContent(w);
-    if(w.kind==="insurance-oc")return insOContent(w);
     if(w.kind==="loans-mb")return lonFContent(w); // Loans With Balance Due (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its "no loans" variant renders lonFEmpty and not the Deposits copy
     if(w.kind==="pto-mb")return ptoFContent(w); // Payroll Scheduled Time Off (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its "no records" variant renders ptoFEmpty and not the Deposits copy
     if(w.kind==="fixedassets-mb")return faFContent(w); // Fixed Asset Values (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its "no fixed assets" variant renders faFNoAssets and not the Deposits copy
@@ -9554,11 +9355,10 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(pop.type==="pto-year"){var wy=find(pop.id),cy=ptoCurYear(wy);return '<div class="cap">Calendar year</div>'+ptoYears(wy).map(function(y){return '<button class="mi'+(cy===y?" check":"")+'" role="option" aria-selected="'+(cy===y)+'" data-action="pto-set-year" data-id="'+wy.id+'" data-y="'+y+'">'+(cy===y?ICON("check"):'<span class="mi-gap"></span>')+y+'</button>';}).join("");}
     if(pop.type==="pto-view"){var wv=find(pop.id),cv=wv.ptoView||"pending";return '<div class="cap">View</div>'+PTO_VIEWS.map(function(o){return '<button class="mi'+(cv===o[0]?" check":"")+'" role="option" aria-selected="'+(cv===o[0])+'" data-action="pto-set-view" data-id="'+wv.id+'" data-v="'+o[0]+'">'+(cv===o[0]?ICON("check"):'<span class="mi-gap"></span>')+o[1]+'</button>';}).join("");}
     if(pop.type==="ap-due")return apPopContent();
-    if(pop.type==="ins-type")return insPopContent();
     if(pop.type==="fa-groupby"||pop.type==="fa-group"||pop.type==="fa-measure")return faPopContent();
     return "";
   }
-  function triggerSelector(){if(!pop)return null;var wt=WIDGETS.trigger();if(wt)return wt;if(pop.type==="wmenu")return '[data-action="wmenu"][data-id="'+pop.id+'"]';if(pop.type==="size")return '[data-action="wsize"][data-id="'+pop.id+'"]';if(pop.type==="switcher")return '[data-action="switcher"]';if(pop.type==="save")return '[data-action="savemenu"]';if(pop.type==="depfilter")return '[data-action="depfilter"][data-id="'+pop.id+'"]';if(pop.type==="advfilter")return '[data-action="advfilter"][data-id="'+pop.id+'"]';if(pop.type==="cmenu"||pop.type==="companydd")return '[data-action="cmenu"][data-id="'+pop.id+'"]';if(pop.type==="rangemenu")return '[data-action="rangemenu"][data-id="'+pop.id+'"]';if(pop.type==="winfo")return '[data-action="winfo"][data-id="'+pop.id+'"]';if(pop.type==="fa-groupby")return '[data-action="fa-groupby"][data-id="'+pop.id+'"]';if(pop.type==="fa-group")return '[data-action="fa-group"][data-id="'+pop.id+'"]';if(pop.type==="fa-measure")return '[data-action="fa-measure"][data-id="'+pop.id+'"]';if(pop.type==="ins-type")return '[data-action="ins-type"][data-id="'+pop.id+'"]';if(pop.type==="ap-due")return '[data-action="ap-due"][data-id="'+pop.id+'"]';if(pop.type==="pto-year")return '[data-action="pto-year"][data-id="'+pop.id+'"]';if(pop.type==="pto-view")return '[data-action="pto-view"][data-id="'+pop.id+'"]';if(pop.type==="pur-status")return '[data-action="pur-status"][data-id="'+pop.id+'"]';if(pop.type==="pur-path")return '[data-action="pur-path"][data-id="'+pop.id+'"]';if(pop.type==="bank-acct")return '[data-action="bank-acct"][data-id="'+pop.id+'"]';if(pop.type==="expmenu")return '[data-action="expmenu"][data-id="'+pop.id+'"]';if(pop.type==="gft-date")return '[data-action="gft-date"][data-id="'+pop.id+'"]';if(pop.type==="gft-purpose")return '[data-action="gft-purpose"][data-id="'+pop.id+'"]';if(pop.type==="loan-type")return '[data-action="loan-type"][data-id="'+pop.id+'"]';if(pop.type==="wfind")return '[data-action="wfind"]';}
+  function triggerSelector(){if(!pop)return null;var wt=WIDGETS.trigger();if(wt)return wt;if(pop.type==="wmenu")return '[data-action="wmenu"][data-id="'+pop.id+'"]';if(pop.type==="size")return '[data-action="wsize"][data-id="'+pop.id+'"]';if(pop.type==="switcher")return '[data-action="switcher"]';if(pop.type==="save")return '[data-action="savemenu"]';if(pop.type==="depfilter")return '[data-action="depfilter"][data-id="'+pop.id+'"]';if(pop.type==="advfilter")return '[data-action="advfilter"][data-id="'+pop.id+'"]';if(pop.type==="cmenu"||pop.type==="companydd")return '[data-action="cmenu"][data-id="'+pop.id+'"]';if(pop.type==="rangemenu")return '[data-action="rangemenu"][data-id="'+pop.id+'"]';if(pop.type==="winfo")return '[data-action="winfo"][data-id="'+pop.id+'"]';if(pop.type==="fa-groupby")return '[data-action="fa-groupby"][data-id="'+pop.id+'"]';if(pop.type==="fa-group")return '[data-action="fa-group"][data-id="'+pop.id+'"]';if(pop.type==="fa-measure")return '[data-action="fa-measure"][data-id="'+pop.id+'"]';if(pop.type==="ap-due")return '[data-action="ap-due"][data-id="'+pop.id+'"]';if(pop.type==="pto-year")return '[data-action="pto-year"][data-id="'+pop.id+'"]';if(pop.type==="pto-view")return '[data-action="pto-view"][data-id="'+pop.id+'"]';if(pop.type==="pur-status")return '[data-action="pur-status"][data-id="'+pop.id+'"]';if(pop.type==="pur-path")return '[data-action="pur-path"][data-id="'+pop.id+'"]';if(pop.type==="bank-acct")return '[data-action="bank-acct"][data-id="'+pop.id+'"]';if(pop.type==="expmenu")return '[data-action="expmenu"][data-id="'+pop.id+'"]';if(pop.type==="gft-date")return '[data-action="gft-date"][data-id="'+pop.id+'"]';if(pop.type==="gft-purpose")return '[data-action="gft-purpose"][data-id="'+pop.id+'"]';if(pop.type==="loan-type")return '[data-action="loan-type"][data-id="'+pop.id+'"]';if(pop.type==="wfind")return '[data-action="wfind"]';}
   function renderOverlay(){var ov=document.getElementById("overlay");if(!pop){ov.innerHTML="";return;}var sel=triggerSelector(),trig=sel&&document.querySelector(sel);if(!trig){ov.innerHTML="";return;}
     ov.innerHTML='<div class="pop'+(pop.type==="size"?" pop-size":"")+(pop.type==="depfilter"?" pop-filter":"")+(pop.type==="prO-period"?" pop-period":"")+'" data-action="stop" style="visibility:hidden;left:0;top:0;">'+popContent()+'</div>';
     var el=ov.firstChild;
@@ -9613,7 +9413,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(a==="stop"){return;}
     if(a==="modal-close"){modal=null;pop=null;render();return;}
     if(faHandleClick(a,id,t))return;
-    if(a&&a.indexOf("ins-")===0&&insHandleClick(a,id,t))return;
     if(a&&a.indexOf("ap-")===0&&apHandleClick(a,id,t))return;
     if(a&&a.indexOf("gft-")===0&&gftHandleClick(a,id,t))return;
     if(a&&a.indexOf("loan-")===0&&loanHandleClick(a,id,t))return;
@@ -14208,280 +14007,6 @@ var GPF_WIRED=false;
   });
 })();
 /* ===== end W17 Gifts Pledges V2 ===== */
-/* ===== W06 Insurance Billing Plans V2 ===== */
-  /* =====================================================================
-     W06 Insurance Billing Plans V2 JS (prefix: insO, kind:"insurance-oc")
-     =====================================================================
-     V2 re-port (2026-09-07) of our finalized W06 (Final Check build v2.4,
-     FC_VERSION[6]='2.4'), replacing the old August port IN PLACE. Ported
-     alongside Jo's `ins` widget, never touching it. Jo's design PLUS the
-     owner-directed enhancements (Step 4 doc, stamped 2026-09-07 against v2.4):
-       - expandable Type -> Plan nested table with a Cost column, in BOTH
-         Explore and Detail; Jo's Share column kept alongside Cost and
-         relabelled "Share of total" (v2.1, 2026-08-25 Feargal call) so it
-         reads explicitly against the Total row at the foot of the table.
-       - the LEGACY PIE restored (v2.2, 2026-08-30): an amethyst donut of
-         enrolment by plan (INSO_COLORS, --am-600 down to --am-200). Explore
-         shows ONE view at a time behind a Table / Pie segment, Table the
-         default (pie-as-default was never owner-confirmed; carried as an
-         open item, not flipped here); a stale insView falls back to the
-         table with Table marked pressed. Detail shows BOTH at once, table
-         left 58 / pie right 42 with a dividing rule. Glance charts nothing.
-         Zero-enrolment plans stay in the table but are NEVER charted, with
-         a note saying how many are uncharted and why; a filter whose plans
-         all have zero enrolment gets a chart-empty state. Legacy hover: a
-         segment or legend row shows plan, count and percent via a native
-         title tooltip. NO drill from a row, a segment or the legend.
-       - v2.4 sizing (2026-08-30, from browser measurement): donut
-         flex-basis 320 at Explore / 240 at Detail, legend capped 250/200
-         per tier, container-driven flex-wrap stacking, leftover space
-         centred on both axes. See the CSS block.
-     Cost models SUM(IBEmployeePlan.Rate) (Step 5 v2 spec / codebase trace
-     2026-07-30); mock per-enrollee rates are illustrative (Rule 11). There
-     is NO status/COBRA/pending field: none exists in the real IB module.
-     Cross-foot (sample data): Medical 182/$91,080, Dental 96/$3,648,
-     Vision 71/$639, Property 0/$0; grand total 349 enrolled / $95,367.
-     Built on Jo's own components, classes and Pathway tokens; reuses her
-     global .ins-* / .mi / .cap / .vtoggle / .vt / donut + legend rules.
-     Per-widget state lives on the registry object (w.insType / w.insSort /
-     w.insView / w.insExpanded / w.insloading). Base commit 71ca056, branch
-     oisin-v2-rebuild. Self-contained: the ONLY shared-region edits are the
-     contentHTML() dispatch line, an aboutOf() branch, and the appended
-     registry cards. Its own delegated click + keydown listeners (behind
-     INSO_WIRED) and an inline type popover keep it off Jo's pop /
-     popContent / triggerSelector / handlers. No em dashes anywhere. */
-
-  /* (1) DATA. enroll = COUNT of enrolled people (employees AND dependents,
-     one bundled number). rate = per-enrollee monthly premium, used only to
-     model Cost; Building is a Property policy, not per-enrollee, so it
-     stays cost 0 and exercises the zero-enrolment path. */
-  var INSO_TYPES=["All","Dental","Medical","Property","Vision"];
-  var INSO_PLANS=[
-    {plan:"Medical Base",   type:"Medical",  enroll:128, rate:450},
-    {plan:"Medical Buy Up", type:"Medical",  enroll:54,  rate:620},
-    {plan:"Delta Dental",   type:"Dental",   enroll:96,  rate:38},
-    {plan:"Vision",         type:"Vision",   enroll:71,  rate:9},
-    {plan:"Building",       type:"Property", enroll:0,   rate:0}
-  ];
-  var INSO_PLANS_EMPTY=[];
-  var INSO_ABOUT="How many people are enrolled in each insurance plan, grouped under their insurance type, counting employees and their dependents. Expand a type to see its plans, each plan's enrolment and its cost, or switch to the pie to see each plan as a slice of total enrolment.";
-  var INSO_COLORS=["--am-600","--am-500","--am-400","--am-300","--am-200"];
-
-  /* (2) HELPERS */
-  function insOEsc(s){return String(s).replace(/"/g,"&quot;");}
-  function insONum(n){return Number(n).toLocaleString();}
-  function insOMoney(n){return "$"+Number(n).toLocaleString();}
-  function insOCost(p){return (p.enroll||0)*(p.rate||0);}
-  function insOCostTotal(w){return insOFiltered(w).reduce(function(s,p){return s+insOCost(p);},0);}
-  var INSO_NODENTAL=INSO_PLANS.filter(function(p){return p.type!=="Dental";});
-  function insODataset(w){if(w.dataset==="none")return INSO_PLANS_EMPTY;if(w.dataset==="nodental")return INSO_NODENTAL;return INSO_PLANS;}
-  function insOFiltered(w){var ty=w.insType||"All";return insODataset(w).filter(function(p){return ty==="All"||p.type===ty;});}
-  function insOTotal(w){return insOFiltered(w).reduce(function(s,p){return s+p.enroll;},0);}
-  function insOPlanCount(w){return insOFiltered(w).length;}
-  function insOTypeLabel(w){var ty=w.insType||"All";return ty==="All"?"All types":ty;}
-  /* Explore view state with a stale-value fallback: anything that is not
-     exactly "pie" renders the table, with Table marked pressed. */
-  function insOView(w){return w.insView==="pie"?"pie":"table";}
-  /* sorted rows; zero-enrolment plans always sink to the bottom, in either
-     direction, so they are present but never clutter the top of the list. */
-  function insORows(w){
-    var rows=insOFiltered(w).slice(),sk=(w.insSort||"count-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
-    rows.sort(function(a,b){
-      if((a.enroll===0)!==(b.enroll===0))return a.enroll===0?1:-1;
-      if(key==="plan")return dir*a.plan.localeCompare(b.plan);
-      return dir*(a.enroll-b.enroll);
-    });
-    return rows;
-  }
-
-  /* (3) POPOVER STATE + loading. INSO_POP holds the open card's id; loading
-     fires ONLY on a data-fetch (insurance-type change), never on sort,
-     expand or the Table / Pie segment. */
-  var INSO_POP=null;
-  function insOLoad(w){w.insloading=true;clearTimeout(timers["insO-"+w.id]);timers["insO-"+w.id]=setTimeout(function(){w.insloading=false;render();},800);}
-  function insOPopContent(w){
-    var curT=w.insType||"All";
-    return '<div class="cap">Insurance type</div>'+INSO_TYPES.map(function(o){var on=curT===o;return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-action="insO-set-type" data-id="'+w.id+'" data-v="'+insOEsc(o)+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+(o==="All"?"All types":o)+'</button>';}).join("");
-  }
-
-  function insOTypeChip(w){
-    var open=!!(INSO_POP&&INSO_POP.id===w.id);
-    var spin=w.insloading?'<span class="bgt-spin" aria-hidden="true"></span>':"";
-    var btn='<button class="filter-chip ins-chip" data-action="insO-type" data-id="'+w.id+'" aria-haspopup="listbox" aria-expanded="'+(open?"true":"false")+'" aria-label="Insurance type filter, currently '+insOEsc(insOTypeLabel(w))+'">'+spin+'<span class="fc-label">'+insOTypeLabel(w)+'</span>'+ICON("expand_more")+'</button>';
-    var menu=open?'<div class="insf-menu" data-action="stop" role="listbox">'+insOPopContent(w)+'</div>':"";
-    return '<span class="insf-chip-wrap">'+btn+menu+'</span>';
-  }
-  /* Explore has no room for both views, so it gets a Table / Pie segment
-     with TABLE as the default. Detail shows them side by side, as the
-     original did, so it carries no segment; Glance carries none either. */
-  function insOViewToggle(w){
-    var v=insOView(w);
-    function seg(val,lbl,ic,tip){return '<button class="vt'+(v===val?" on":"")+'" data-action="insO-view" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(v===val)+'" title="'+insOEsc(tip)+'">'+ICON(ic)+lbl+'</button>';}
-    return '<div class="vtoggle ins-vtoggle" role="group" aria-label="View">'+
-      seg("table","Table","table_rows","Enrolment per plan as a sortable list, grouped by insurance type.")+
-      seg("pie","Pie","donut_small","Each plan as a slice of total enrolment, as in the original widget.")+
-    '</div>';
-  }
-
-  /* (5) TABLE ATOMS. Share of total = row enrolled / grand-total enrolled
-     (this view), an aria-hidden amethyst bar plus a quiet percent; the
-     COUNT stays primary. */
-  function insOShareCell(enroll,total){
-    var pct=total>0?Math.round(enroll/total*100):0,wd=total>0?(enroll/total*100):0;
-    return '<span class="ins-share"><span class="ins-share-track" aria-hidden="true"><span class="ins-share-fill'+(enroll===0?" ins-share-zero":"")+'" style="width:'+wd.toFixed(1)+'%"></span></span><span class="ins-share-pct">'+pct+'%</span></span>';
-  }
-  function insODetailHeadRow(w){
-    var sk=(w.insSort||"count-desc").split("-"),key=sk[0],dir=sk[1];
-    function sb(k,label){var on=key===k,ic=on?(dir==="asc"?"arrow_upward":"arrow_downward"):"unfold_more";return '<button class="wt-sort'+(on?" on":"")+'" data-action="insO-sort" data-id="'+w.id+'" data-k="'+k+'">'+label+' '+ICON(ic)+'</button>';}
-    return '<div class="wt-row wt-head ins-row"><span class="lr-main">'+sb("plan","Insurance type / plan")+'</span><span class="ins-share ins-share-head">Share of total</span><span class="wt-c2">'+sb("count","Enrolled")+'</span><span class="ins-cost ins-cost-head">Cost</span></div>';
-  }
-  function insOTypeGroupId(w,ty){return "insf-grp-"+w.id+"-"+String(ty).replace(/[^A-Za-z0-9]/g,"");}
-  function insOPlanRow(p,gEnroll){
-    var zero=p.enroll===0,cost=insOCost(p);
-    var tip=zero?(p.plan+", "+p.type+". No one is enrolled yet, so this plan costs "+insOMoney(0)+"."):(p.plan+", "+p.type+". "+insONum(p.enroll)+" enrolled at "+insOMoney(p.rate)+" per enrollee each month, "+insOMoney(cost)+" in total.");
-    return '<div class="wt-row ins-row ins-row-in ins-child'+(zero?" ins-zero":"")+'" data-tip="'+insOEsc(tip)+'" data-tip-plain>'+
-      '<span class="lr-main ins-plan"><span class="ins-plan-nm">'+p.plan+'</span></span>'+
-      insOShareCell(p.enroll,gEnroll)+
-      '<span class="wt-c2">'+insONum(p.enroll)+(zero?' <span class="ins-zero-tag">none</span>':'')+'</span>'+
-      '<span class="ins-cost">'+insOMoney(cost)+'</span></div>';
-  }
-  function insODetailTotalRow(totEnroll,totCost){
-    return '<div class="ins-total-detail"><span class="ins-total-lead">Total (all types)</span><span class="ins-total-en">'+insONum(totEnroll)+'</span><span class="ins-total-cost">'+insOMoney(totCost)+'</span></div>';
-  }
-  /* Expandable Type -> Plan nested table (Explore Table view AND Detail).
-     Type rows are role="button" parents carrying enrolled + cost subtotals;
-     collapsed by default, an instant client toggle (NO fetch) tracked in
-     w.insExpanded. Columns: Insurance type / plan | Share of total |
-     Enrolled | Cost. Groups ordered by subtotal; plans obey the sort. */
-  function insONestedTable(w){
-    var rows=insOFiltered(w).slice(),gEnroll=insOTotal(w),gCost=insOCostTotal(w);
-    if(!rows.length)return '<div class="scroll ins-tscroll">'+insODetailHeadRow(w)+'<div class="wt-row ins-row"><span class="lr-main ins-none">No plans of this insurance type.</span></div></div>'+insODetailTotalRow(0,0);
-    var groups={},order=[];
-    rows.forEach(function(p){if(!groups[p.type]){groups[p.type]=[];order.push(p.type);}groups[p.type].push(p);});
-    function subEnroll(ty){return groups[ty].reduce(function(s,p){return s+p.enroll;},0);}
-    function subCost(ty){return groups[ty].reduce(function(s,p){return s+insOCost(p);},0);}
-    order.sort(function(a,b){return subEnroll(b)-subEnroll(a);});
-    var sk=(w.insSort||"count-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
-    function sortIn(arr){return arr.slice().sort(function(a,b){if((a.enroll===0)!==(b.enroll===0))return a.enroll===0?1:-1;if(key==="plan")return dir*a.plan.localeCompare(b.plan);return dir*(a.enroll-b.enroll);});}
-    var exp=w.insExpanded||{},html="";
-    order.forEach(function(ty){
-      var list=groups[ty],se=subEnroll(ty),sc=subCost(ty),open=!!exp[ty],gid=insOTypeGroupId(w,ty);
-      html+='<div class="wt-row ins-row ins-grp ins-typerow'+(open?" ins-open":"")+'" role="button" tabindex="0" data-action="insO-toggle-type" data-id="'+w.id+'" data-ty="'+insOEsc(ty)+'" aria-expanded="'+(open?"true":"false")+'" aria-controls="'+gid+'" aria-label="'+insOEsc(ty+", "+se+" enrolled, cost "+insOMoney(sc)+", "+(open?"expanded":"collapsed")+". Activate to "+(open?"collapse":"expand")+" its plans.")+'">'+
-        '<span class="lr-main ins-grp-nm"><span class="ins-caret material-symbols-rounded" aria-hidden="true">'+(open?"expand_more":"chevron_right")+'</span>'+ty+' <span class="ins-grp-ct">'+list.length+' plan'+(list.length===1?"":"s")+'</span></span>'+
-        insOShareCell(se,gEnroll)+
-        '<span class="wt-c2">'+insONum(se)+'</span>'+
-        '<span class="ins-cost">'+insOMoney(sc)+'</span></div>';
-      html+='<div class="ins-grp-body" id="'+gid+'" role="group" aria-label="'+insOEsc(ty+" plans")+'">'+
-        (open?sortIn(list).map(function(p){return insOPlanRow(p,gEnroll);}).join(""):"")+
-        '</div>';
-    });
-    return '<div class="scroll ins-tscroll">'+insODetailHeadRow(w)+html+'</div>'+insODetailTotalRow(gEnroll,gCost);
-  }
-
-  function insOColorOf(plan){
-    var order=INSO_PLANS.map(function(p){return p.plan;});
-    var i=order.indexOf(plan);if(i<0)i=0;
-    return INSO_COLORS[i%INSO_COLORS.length];
-  }
-  function insOPieChart(w){
-    var all=insORows(w);
-    /* legacy rule: zero-enrolment plans are table-only, never charted */
-    var rows=all.filter(function(p){return p.enroll>0;}).slice().sort(function(a,b){return b.enroll-a.enroll;});
-    var zero=all.length-rows.length;
-    var tot=rows.reduce(function(t,p){return t+p.enroll;},0);
-    if(!rows.length||tot<=0){
-      return '<div class="ins-chart-empty">'+ICON("donut_small")+'<span>No plan has an enrolment to chart for '+insOEsc(insOTypeLabel(w))+'.</span></div>';
-    }
-    var DS=({wide:250,xwide:280})[w.size]||190;
-    var R=52,C=2*Math.PI*R,off=0,arcs="",legend="";
-    rows.forEach(function(p,i){
-      var frac=p.enroll/tot,len=frac*C,c=insOColorOf(p.plan);
-      var pct=Math.round(frac*100);
-      var lbl=p.plan+", "+insONum(p.enroll)+" enrolled, "+pct+" percent of the total";
-      arcs+='<circle class="ins-seg" cx="70" cy="70" r="'+R+'" fill="none" stroke="var('+c+')" stroke-width="20" stroke-dasharray="'+Math.min(len+0.9,C).toFixed(2)+' '+Math.max(0,C-len-0.9).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 70 70)"><title>'+insOEsc(lbl)+'</title></circle>';
-      off+=len;
-      legend+='<div class="leg ins-leg" title="'+insOEsc(lbl)+'"><span class="dot" style="background:var('+c+')"></span>'+
-        '<span class="lg-main">'+insOEsc(p.plan)+'</span>'+
-        '<span class="lg-meta">'+insONum(p.enroll)+' &middot; '+pct+'%</span></div>';
-    });
-    var note=zero>0
-      ? '<div class="ins-pie-note">'+ICON("info")+'<span>'+zero+' plan'+(zero===1?'':'s')+' with no enrolment '+(zero===1?'is':'are')+' listed in the table but not charted, as in the original widget.</span></div>'
-      : '';
-    return '<div class="ins-pie"><div class="pie-wrap row">'+
-      '<svg class="donut" viewBox="0 0 140 140" width="'+DS+'" height="'+DS+'" role="img" aria-label="'+insOEsc("Enrolment by plan, "+insONum(tot)+" enrolled across "+rows.length+" plan"+(rows.length===1?"":"s"))+'">'+arcs+
-      '<text x="70" y="67" text-anchor="middle" class="donut-c1">'+insONum(tot)+'</text>'+
-      '<text x="70" y="86" text-anchor="middle" class="donut-c2">enrolled</text></svg>'+
-      '<div class="legend-col"><div class="legend-head"><span class="legend-hd">Enrolment by plan</span></div>'+
-      '<div class="legend" style="max-height:'+DS+'px">'+legend+'</div></div></div>'+note+'</div>';
-  }
-
-  /* (7) HEADER / GLANCE / STATES */
-  function insOHeader(w,mode){
-    var ctx=(mode==="loading")?"Updating the enrolment breakdown...":"Counts include employees and their dependents.";
-    var tog=(w.size==="wide"&&mode!=="loading")?insOViewToggle(w):"";
-    return '<div class="dep-hd ins-hd"><div class="dep-hd-top">'+insOTypeChip(w)+'<div class="dep-hd-toggle">'+tog+'</div></div>'+
-      '<div class="dep-hd-num"><div class="ins-ctx">'+ctx+'</div></div></div>';
-  }
-  function insOGlance(w){
-    var tot=insOTotal(w),n=insOPlanCount(w),lead=(w.insType&&w.insType!=="All")?insOTypeLabel(w).toLowerCase():"all types";
-    return '<div class="kpi-row"><div class="kpi-num">'+
-      '<div class="dep-hd-kpigrp"><span class="metric-value">'+insONum(tot)+'</span><span class="bank-pill">'+ICON("groups")+n+' plan'+(n===1?"":"s")+'</span></div>'+
-      '<div class="gl-sub"><span class="ins-caption">enrolled across '+lead+', employees and dependents</span></div>'+
-    '</div></div>';
-  }
-  function insOEmpty(w){
-    if(w.size==="kpi")return '<div class="kpi-row"><div class="kpi-num"><div class="dep-hd-kpigrp"><span class="metric-value" style="font-size:20px;color:var(--txt-subtle)">No plans</span></div><div class="gl-sub"><span class="ins-caption">no insurance plans set up yet</span></div></div></div>';
-    return '<div class="state ins-empty" data-kind="empty">'+ICON("shield_person")+'<div class="state-title">No insurance plans yet</div><div class="state-sub">Once plans are set up in the Insurance Billing module, enrolment counts (employees and dependents) will appear here.</div></div>';
-  }
-  function insOSkeleton(){var rows="";[92,68,52,34].forEach(function(wd){rows+='<div class="ins-sk-row"><span class="sk" style="width:132px;height:12px;border-radius:4px"></span><span class="sk" style="width:'+wd+'px;height:12px;border-radius:4px"></span></div>';});return '<div class="ins-skel">'+rows+'</div>';}
-  function insOScopedEmpty(w){var ty=w.insType||"All";if(ty==="All")return insOEmpty(w);return '<div class="state" data-kind="empty">'+ICON("shield_person")+'<div class="state-title">No '+insOEsc(ty)+' plans</div><div class="state-sub">There are no '+insOEsc(ty.toLowerCase())+' plans set up right now. Pick another type above to see the rest.</div></div>';}
-
-  /* (8) ENTRY POINT (dispatched by w.kind==="insurance-oc"). Glance = KPI
-     card. Explore renders ONE view at a time behind the Table / Pie segment
-     (Table default). Detail restores the ORIGINAL side-by-side reading,
-     table left and pie right, both reflecting the same filtered data. */
-  function insOContent(w){
-    var inner;
-    if(w.state==="empty")inner=insOEmpty(w);
-    else if(w.size==="kpi")inner=insOGlance(w);
-    else if(w.insloading)inner=insOHeader(w,"loading")+insOSkeleton();
-    else if(!insOFiltered(w).length)inner=insOHeader(w)+'<div class="ins-body">'+insOScopedEmpty(w)+'</div>';
-    else if(w.size==="xwide")inner=insOHeader(w)+'<div class="ins-body ins-body-split">'+
-      '<div class="ins-col ins-col-tbl">'+insONestedTable(w)+'</div>'+
-      '<div class="ins-col ins-col-chart">'+insOPieChart(w)+'</div>'+
-    '</div>';
-    else inner=insOHeader(w)+'<div class="ins-body">'+(insOView(w)==="pie"?insOPieChart(w):insONestedTable(w))+'</div>';
-    return '<div class="insf-scope" data-tier="'+(w.size||"wide")+'">'+inner+'</div>';
-  }
-
-  function insOHandle(a,id,t){
-    var w=find(id);if(!w)return false;
-    if(a==="insO-type"){INSO_POP=(INSO_POP&&INSO_POP.id===id)?null:{id:id};render();return true;}
-    if(a==="insO-set-type"){var nv=t.getAttribute("data-v");if((w.insType||"All")!==nv){w.insType=nv;insOLoad(w);}INSO_POP=null;render();return true;}
-    if(a==="insO-sort"){var k=t.getAttribute("data-k"),parts=(w.insSort||"count-desc").split("-");w.insSort=(parts[0]===k)?(k+"-"+(parts[1]==="desc"?"asc":"desc")):(k+"-"+(k==="plan"?"asc":"desc"));INSO_POP=null;render();return true;}
-    if(a==="insO-toggle-type"){var ty=t.getAttribute("data-ty");if(!w.insExpanded)w.insExpanded={};w.insExpanded[ty]=!w.insExpanded[ty];render();return true;}
-    if(a==="insO-view"){w.insView=(t.getAttribute("data-v")==="pie")?"pie":"table";render();return true;}
-    return false;
-  }
-  var INSO_WIRED=false;
-  (function(){
-    if(INSO_WIRED)return;INSO_WIRED=true;
-    document.addEventListener("click",function(e){
-      var t=e.target.closest?e.target.closest("[data-action]"):null;
-      var a=t?t.getAttribute("data-action"):null;
-      if(a&&a.indexOf("insO-")===0){insOHandle(a,t.getAttribute("data-id"),t);return;}
-      /* outside click: close the inline type popover unless the click is inside it */
-      if(INSO_POP&&!(e.target.closest&&e.target.closest(".insf-menu"))){INSO_POP=null;render();}
-    });
-    document.addEventListener("keydown",function(e){
-      if(e.key==="Escape"&&INSO_POP){INSO_POP=null;render();return;}
-      if(e.key==="Enter"||e.key===" "||e.key==="Spacebar"){
-        var t=e.target&&e.target.closest?e.target.closest('[data-action="insO-toggle-type"]'):null;
-        if(t){if(e.preventDefault)e.preventDefault();insOHandle("insO-toggle-type",t.getAttribute("data-id"),t);}
-      }
-    });
-  })();
-
 /* ===== W07 Deposits on Hand V2 ===== */
   /* =====================================================================
      W07 Deposits on Hand V2 JS, kind "deposits-oc", prefix depO
