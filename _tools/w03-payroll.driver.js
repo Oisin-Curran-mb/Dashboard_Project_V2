@@ -90,6 +90,12 @@ A.ok(!!dd, "a distribution row offers the drill");
 if (dd) { A.eq(EX.WIDGETS.click("prO-drilldist", w.id, T({ "data-dist": dd }), {}), true, "drill handled"); const md = EX.getModal(); A.ok(md && md.scoped && md.mw && md.mw.kind === "payroll", "drill opens the scoped modal for kind payroll"); if (md && md.mw) { const mh = EX.contentHTML(md.mw); A.ok(mh.length > 300, "scoped modal body renders (" + mh.length + " bytes)"); A.noEmDash(mh, "drill body"); if (/wt-head/.test(mh)) A.headMatchesBody(mh, "drill table (D12)"); } EX.setModal(null); }
 /* Detail */
 const xw = rows.filter(function (x) { return x.size === "xwide"; })[0]; html = EX.contentHTML(xw); A.ok(html.length > 1500, "Detail renders (" + html.length + " bytes)"); if (/wt-head/.test(html)) A.headMatchesBody(html, "Detail table (D12)");
+/* custom date range: the block's own change handler (moved out of the shell 2026-09-25) */
+A.contains(js, 'contains("w03-date-input")', "the block handles its own custom date inputs");
+const chg = env.shim.listeners.change || []; A.ok(chg.length >= 1, "a change listener is registered");
+const di = env.shim.mkNode("", "input"); di.classList = { contains: function (c) { return c === "w03-date-input"; } }; di.setAttribute("data-id", w.id); di.setAttribute("data-which", "begin"); di.value = "2026-02-01";
+chg.forEach(function (f) { f({ target: di }); });
+A.eq(w.begin, "2026-02-01", "the From date lands on the widget"); A.eq(w.range, "CUSTOM", "and the range becomes CUSTOM");
 /* fixtures */
 const fx = H.extractRegistry(S, "payroll"); ["prO2", "prO3", "prO4"].forEach(function (id) { const r = fx.filter(function (x) { return x.id === id; })[0]; A.ok(!!r, "fixture " + id + " readable"); if (r) { const h = EX.contentHTML(r); A.ok(h.length > 200, id + " renders (" + h.length + " bytes)"); } });
 

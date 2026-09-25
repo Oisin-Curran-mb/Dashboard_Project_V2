@@ -90,37 +90,26 @@
     },
     "W04": {
       "name": "Remittance Pledges",
-      "driver": "w04-remittance-oc.driver.js",
-      "ours": {
-        "kind": "remittance-oc",
+      "driver": "w04-remittance.driver.js",
+      "decided": "2026-09-25 OC",
+      "removed": [
+        "remittance-mb",
+        "remittance-oc"
+      ],
+      "final": {
+        "kind": "remittance",
         "prefix": "remO",
         "css": {
-          "start": "/* ===== W04 Remittance Pledges V2",
-          "end": "/* ===== W05 Receivable Invoices Outstanding V2"
+          "start": "/* ===== W04 Remittance Pledges V2 CSS ===== */",
+          "end": "/* ===== end W04 Remittance Pledges V2 CSS ===== */"
         },
         "js": {
-          "start": "/* ===== W04 Remittance Pledges V2",
-          "end": "/* ===== W05 Receivable Invoices Outstanding V2"
+          "start": "/* ===== W04 Remittance Pledges V2 ===== */",
+          "end": "/* ===== end W04 Remittance Pledges V2 ===== */"
         },
         "registry": {
           "grep": [
-            "kind:\"remittance-oc\""
-          ]
-        }
-      },
-      "jo": {
-        "kind": "remittance-mb",
-        "prefix": "remF",
-        "css": {
-          "grep": [
-            ".remf-",
-            ".rem-"
-          ]
-        },
-        "js": {
-          "grep": [
-            "remF",
-            "kind:\"remittance-mb\""
+            "kind:\"remittance\""
           ]
         }
       }
