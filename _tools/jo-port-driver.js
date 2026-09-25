@@ -300,6 +300,21 @@ class Assert {
     });
     return this._rec(missing.length === 0, (msg || "CSS declarations") + " missing: " + missing.join(", "));
   }
+  /* Decision D12 (2026-09-25): in a .wt-row table the header cells must carry
+     exactly the width/alignment classes of their body cells, so headers sit
+     over their columns. Compares the first .wt-head row's cells with the first
+     body row's cells, class set by class set (sort-button state tokens ignored). */
+  headMatchesBody(html, msg) {
+    const rows = [...String(html).matchAll(/<div class="wt-row([^"]*)">([\s\S]*?)<\/div>(?=\s*<div class="wt-row|\s*<\/div>|\s*$)/g)];
+    const head = rows.find(function (r) { return /\bwt-head\b/.test(r[1]); });
+    const body = rows.find(function (r) { return !/\bwt-head\b/.test(r[1]); });
+    if (!head || !body) return this._rec(false, msg + ": header and a body row were found  (head " + !!head + ", body " + !!body + ")");
+    const cells = function (s) { return [...s.matchAll(/<(?:span|button)[^>]*class="([^"]*)"/g)].map(function (m) { return m[1].split(/\s+/).filter(function (c) { return c && !/^(on|wt-sort|lr-link)$/.test(c); }).sort().join(" "); }); };
+    const h = cells(head[2]), b = cells(body[2]);
+    if (h.length !== b.length) return this._rec(false, msg + ": header has " + h.length + " cells, body has " + b.length);
+    const bad = h.map(function (c, i) { return c === b[i] ? null : "col " + (i + 1) + " head[" + c + "] body[" + b[i] + "]"; }).filter(Boolean);
+    return this._rec(bad.length === 0, msg + ": header cells carry their column's classes" + (bad.length ? "  (" + bad.join("; ") + ")" : ""));
+  }
   report() {
     console.log("\n" + this.label + ": " + this.pass + " passed, " + this.fail + " failed, " + (this.pass + this.fail) + " assertions");
     if (this.fail) console.log("FAILURES:\n - " + this.fails.join("\n - "));

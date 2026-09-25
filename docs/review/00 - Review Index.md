@@ -74,7 +74,8 @@ Rulings to make: **136 widget items** across 13 undecided widgets, plus W18.
 4. `(OC)` / `(MB updated)` words in registry *titles* of undecided widgets: renamed at each widget's finalisation.
 5. `_tools/diag2.js` (print utility, not a test): delete at W01.
 6. Lint worklist (auto-fix as defects, per D4): 5 undeclared tokens, 98 duplicate selectors, 50 undeclared static classes.
-7. **Remove the TEMPORARY single-widget viewer** (toolbar dropdown + `#w=` / `#k=` hash filter, added 25 Sep as a review aid) before release. Lint T6 reports it while present.
+7. **Table header rule D12** (header cells carry their column's classes; text left, amounts right, never centred): known breach in both W05 drill modals (`arDetailModalHTML`, `arODetailModalHTML`), fix at W05's build; every later build asserts it with `H.headMatchesBody`.
+8. **Remove the TEMPORARY single-widget viewer** (toolbar dropdown + `#w=` / `#k=` hash filter, added 25 Sep as a review aid) before release. Lint T6 reports it while present.
 
 ## F. Order
 

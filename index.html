@@ -5436,7 +5436,7 @@ function penODetailModalHTML(){
   var plan=modal.plan,dscope=modal.dist||null,list=penOApptsFor(w,plan,dscope),tot=list.reduce(function(s,a){return s+a.amt;},0);
   var d=dscope||penODist(w),sub=plan+(d==="All Districts"?"":" · "+d);
   var cols=["Appointee","Church / organisation","District","Annual amount"];
-  var head='<div class="wt-row wt-head w02-drow w02-dhead">'+cols.map(function(c,i){return '<span class="w02-dc w02-dc'+i+'">'+c+'</span>';}).join("")+'</div>';
+  var head='<div class="wt-row wt-head w02-drow w02-dhead">'+cols.map(function(c,i){return '<span class="w02-dc w02-dc'+i+(i===3?" w02-dc-amt":"")+'">'+c+'</span>';}).join("")+'</div>';
   var body;
   if(list.length){
     body=list.map(function(a){

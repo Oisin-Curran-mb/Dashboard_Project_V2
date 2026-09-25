@@ -132,6 +132,7 @@ A.contains(html, "w02-detail-modal", "modal uses the w02- class the layout rules
 A.contains(html, "w02-detail-scroll", "table container carries the width class");
 A.contains(html, "w02-dtotal", "summary carries the side-column class");
 A.contains(html, "5 appointees", "CRSP-DB-% now lists five appointees (24-row dataset)");
+A.headMatchesBody(html, "appointees modal table (D12)");
 A.noEmDash(html, "appointees modal");
 A.eq(EX.WIDGETS.click("penO-export", w.id, T({ "data-plan": "CRSP-DB-%" }), {}), true, "export handled");
 A.eq(EX.WIDGETS.click("penO-detail-close", w.id, T(), {}), true, "close handled"); A.eq(EX.getModal(), null, "modal closed");

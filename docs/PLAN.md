@@ -33,6 +33,7 @@ Manager's agreed task list:
 | D9 | (25 Sep) Widgets are finished one at a time, end to end: review pack -> owner decision -> final self-contained block -> delete the losing version, retired v1 remnants and cmp row -> retarget driver -> verify -> `docs/decisions/Wnn.md` -> commit. No separate collapse phase. The cmp tab keeps rows only for undecided widgets. |
 | D10 | (25 Sep) Code comments: keep what a function/block does, why non-obvious logic exists, and structural markers agents rely on (region banners, `data-<prefix>` conventions, "shared by Wnn" labels). Remove decision history, "what changed", row citations, dates, stash/rebase notes, "Jo's block untouched". History lives in `docs/decisions/`. |
 | D11 | (25 Sep) Pilot: W14 Main Content Tasks and W08 My Status. Owner ruling: keep Jo's version of both; `mystatus-oc` is deleted. |
+| D12 | (25 Sep) **Table header rule, all widgets and pop-ups:** a header cell carries exactly the same width/alignment classes as the body cells in its column, so headers sit over their data. Text columns left-aligned, amount/count columns right-aligned, nothing centred. Checked per widget at build (driver `H.headMatchesBody`) and fixed as a defect. |
 
 ## Key facts the plan rests on
 
