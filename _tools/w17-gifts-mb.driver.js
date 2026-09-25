@@ -562,7 +562,7 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   A.contains(ex, 'class="btn naked sm gpf-export"', "export uses the global button classes");
   A.contains(ex, "Export", "the export button is labelled");
   /* (c) that family really is declared GLOBALLY, ahead of every ported block */
-  const firstMB = shell.css.indexOf("(MB updated)");
+  const firstMB = shell.css.search(/\/\* ===== W\d\d /); /* first widget CSS region banner (the old "(MB updated)" markers are gone) */
   A.ok(firstMB > 0, "the stylesheet does contain ported blocks to compare against");
   [".btn{", ".btn.naked{", ".btn.sm{"].forEach(function (sel) {
     const at = shell.css.indexOf(sel);

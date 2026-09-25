@@ -1789,22 +1789,6 @@
 .gft-detail-scroll{flex:1 1 auto;min-height:0;max-height:70vh;overflow:auto;}
 .gft-dtotal{flex:0 0 auto;}
 
-  .kpi-row .depf-spark{flex:0 0 40%;max-width:42%;min-width:96px;align-self:stretch;display:block;position:relative;}
-  .kpi-row .depf-spark svg{width:100%;height:100%;display:block;}
-  .depf-spark{position:relative;display:block;height:44px;cursor:crosshair;flex:1;min-width:0;}
-  .depf-spark svg{position:absolute;inset:0;width:100%;height:100%;display:block;}
-  .depf-more-row{display:flex;justify-content:center;padding:10px 14px 4px;}
-  .depf-more{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border:1px solid var(--stroke-widget);border-radius:8px;background:var(--surface-widget);color:var(--txt-secondary);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;}
-  .depf-more:hover{background:var(--wn-200);color:var(--txt-primary);border-color:var(--wn-400);}
-  .depf-more:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
-  .depf-more-n{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 6px;border-radius:999px;background:var(--wn-200);color:var(--txt-subtle);font-size:11px;font-variant-numeric:tabular-nums;}
-  .depf-pager{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 14px 2px;font-size:12px;color:var(--txt-subtle);}
-  .depf-dp-nav{display:flex;align-items:center;gap:8px;}
-  .depf-dp-page{font-variant-numeric:tabular-nums;color:var(--txt-secondary);}
-  .depf-dp-btn{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border:1px solid var(--stroke-widget);border-radius:7px;background:var(--surface-widget);color:var(--txt-secondary);cursor:pointer;}
-  .depf-dp-btn:hover:not([disabled]){background:var(--wn-200);color:var(--txt-primary);}
-  .depf-dp-btn[disabled]{opacity:.4;cursor:default;}
-  .depf-dp-btn .material-symbols-rounded{font-size:18px;}
   #depfPop{position:fixed;z-index:2100;}
   /* ===== W10 Loans With Balance Due V2 CSS ===== */
 
@@ -3378,6 +3362,12 @@
 
 @media(max-width:560px){.arO-explore{grid-template-columns:1fr;}}
 .arO-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
+  /* View all button in the aging list */
+  .w05-more-row{display:flex;justify-content:center;padding:10px 14px 4px;}
+  .w05-more{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border:1px solid var(--stroke-widget);border-radius:8px;background:var(--surface-widget);color:var(--txt-secondary);font-size:13px;font-weight:500;cursor:pointer;font-family:inherit;}
+  .w05-more:hover{background:var(--wn-200);color:var(--txt-primary);border-color:var(--wn-400);}
+  .w05-more:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
+  .w05-more-n{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 6px;border-radius:999px;background:var(--wn-200);color:var(--txt-subtle);font-size:11px;font-variant-numeric:tabular-nums;}
 /* ===== end W05 Receivable Invoices Outstanding V2 CSS ===== */
 
 /* ===== W06 Insurance Billing Plans V2 CSS ===== */
@@ -3456,8 +3446,7 @@
   .w06-scope[data-tier="xwide"] .pie-wrap.row .legend-col{flex-basis:200px;max-width:200px;}
 /* ===== end W06 Insurance Billing Plans V2 CSS ===== */
 
-/* ===== W07 Deposits on Hand V2 ===== */
-  /* ===== Deposits on Hand (MB updated): only the few visuals the owner deltas add. Everything else reuses Jo's .dep-hd / .scope-chip / .vtoggle / .vt / .tr-* / .pie-wrap / .donut / .legend* / .dep-search / .dep-q / .wt-* / .dep-total / .state / .skeleton / .acctm* / .mi / .dd-search / .menu-scroll classes and Pathway tokens. ===== */
+/* ===== W07 Deposits on Hand V2 CSS ===== */
   .kpi-row .depo-spark{flex:0 0 40%;max-width:42%;min-width:96px;align-self:stretch;display:block;position:relative;}
   .kpi-row .depo-spark svg{width:100%;height:100%;display:block;}
   .depo-spark{position:relative;display:block;height:44px;cursor:crosshair;flex:1;min-width:0;}
@@ -3476,7 +3465,7 @@
   .tr-canvas[data-depoclick="1"]{cursor:pointer;}
   #depoPop{position:fixed;z-index:2100;}
 
-/* ===== W07 Deposits on Hand V2 CSS: account modal (2026-09-17) ===== */
+  /* account pop-up: own 560px modal shell so the shared .wt-row column widths fit */
 
 .depo-acct-modal{max-width:560px;}
 
@@ -3865,7 +3854,7 @@
   function viewOnlySelectHTML(){var h=location.hash||"",cur_=(/[#&](w=W\d\d|k=[a-z0-9,-]+)/i.exec(h)||["",""])[1];
     var opts=[["","Review: all widgets"]];
     if(typeof CMP_ROWS!=="undefined")CMP_ROWS.forEach(function(r){opts.push(["w="+r[0],r[0]+" "+r[1]+" (Jo vs OC, 3 sizes)"]);});
-    var VIEW_WNUM={budget:"W01",pension:"W02",payroll:"W03",remittance:"W04",receivables:"W05",insurance:"W06",mystatus:"W08",tasks:"W14"}; /* finished widgets: kind -> W number, so they sort with the rest */
+    var VIEW_WNUM={budget:"W01",pension:"W02",payroll:"W03",remittance:"W04",receivables:"W05",insurance:"W06",deposits:"W07",mystatus:"W08",tasks:"W14"}; /* finished widgets: kind -> W number, so they sort with the rest */
     Object.keys(WIDGETS.kinds).forEach(function(k){var row=dashboards[0].widgets.filter(function(x){return x.kind===k;})[0];if(!row)return;var wn=VIEW_WNUM[k]||"W??";opts.push(["k="+k,wn+" "+(row.title||k).replace(/\s*\([^)]*\)\s*$/,"")+" (final, 3 sizes)"]);});
     opts=[opts[0]].concat(opts.slice(1).sort(function(x,y){return x[1].localeCompare(y[1]);}));
     return '<select id="viewOnlySel" class="btn outlined sm" aria-label="Review aid: show one widget" style="margin-right:8px;max-width:320px">'+opts.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===cur_?" selected":"")+'>'+o[1]+'</option>';}).join("")+'</select>';}
@@ -6508,7 +6497,7 @@ function arOInlineList(w){
   var tot=inv.reduce(function(s,x){return s+x.amount;},0),cap=8,shown=inv.slice(0,cap);
   var rows=shown.map(function(x){var dpd=x.days>0?(x.days+"d past due"):"Not due";
     return '<div class="wt-row arO-ilrow"><span class="lr-main arO-il-cust">'+x.customer+'</span><span class="arO-il-days">'+dpd+'</span><span class="wt-c2 arO-il-amt">'+money(x.amount)+'</span></div>';}).join("");
-  var more=inv.length>cap?'<button class="depf-more" data-action="arO-open" data-id="'+w.id+'" data-mode="all" data-key="all">'+ICON("expand_more")+'<span class="depf-more-n">View all '+inv.length+' invoices</span></button>':'';
+  var more=inv.length>cap?'<button class="w05-more" data-action="arO-open" data-id="'+w.id+'" data-mode="all" data-key="all">'+ICON("expand_more")+'<span class="w05-more-n">View all '+inv.length+' invoices</span></button>':'';
   var foot='<div class="dep-total arO-iltotal"><span>'+inv.length+' invoice'+(inv.length>1?"s":"")+'</span><span>'+money(tot)+'</span></div>';
   return '<div class="arO-illist">'+rows+'</div>'+more+foot;
 }
@@ -6897,6 +6886,231 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
   })();
   WIDGETS.register("insurance",{content:insOContent,about:function(w){return {h:w.title,b:INSO_ABOUT};},click:function(a,id,t){return !!(a&&a.indexOf("insO-")===0&&insOHandle(a,id,t));}});
 /* ===== end W06 Insurance Billing Plans V2 ===== */
+
+/* ===== W07 Deposits on Hand V2 ===== */
+  var DEPO_ABOUT="Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest, shown here as a current balance with a comparison delta and a balance trend over time.";
+  /* Deposits on Hand: balances held for others by account type and account. Scope chip (all / a type / one account, searchable), Table (50 per page, totals over the full set) / Distribution donut / Trend views, Compare To with a fiscal Period option, scope-dependent breakdown, chart click re-scopes to the type, per-account pop-up from a table row. */
+  var DEPO_TARGET_TOTAL=106726837;
+  var DEPO_DEP=(function(){var out=[],seed=7;function r(){seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;}
+    var groups=[{t:"Checking",n:14},{t:"Savings",n:16},{t:"Money Market",n:10},{t:"Certificate of Deposit",n:12},{t:"Restricted Funds",n:22},{t:"Endowment",n:9},{t:"Trust Accounts",n:11},{t:"Grant Funds",n:13},{t:"Operating Reserve",n:8},{t:"Escrow",n:7}]; // 122 generated + 3 edge-case rows = 125
+    var suf=["General","Youth","Missions","Benevolence","Capital","Memorial","Legacy","Outreach","Facilities","Worship","Children","Fellowship","Building","Scholarship","Cemetery","Music","Media","Camp","Housing","Senior"];
+    var inc=["Jan 2011","Jun 2013","Mar 2015","Aug 2017","Feb 2019","Nov 2021","Apr 2023"],trs=["up","up","flat","down"];
+    groups.forEach(function(g){for(var i=0;i<g.n;i++){var s4=1000+Math.floor(r()*8999);out.push({name:suf[i%suf.length]+(i>=suf.length?" "+(Math.floor(i/suf.length)+1):""),type:g.t,incept:inc[Math.floor(r()*inc.length)],acct:"••"+s4,acctFull:"004417"+s4,net:Math.round(30000+Math.pow(r(),1.9)*2100000),trend:trs[Math.floor(r()*4)]});}});
+    /* Deliberate real-world edge cases (Shelby does not enforce name uniqueness, and names can be long): two accounts sharing a name differing only by account number, plus one very long name to exercise truncation. */
+    out.push({name:"General",type:"Checking",incept:"May 2018",acct:"••7734",acctFull:"0044177734",net:512500,trend:"up"});
+    out.push({name:"General",type:"Checking",incept:"Sep 2020",acct:"••2916",acctFull:"0044172916",net:98750,trend:"down"});
+    out.push({name:"Faith Community Endowment for Children's Ministry and Outreach Programs",type:"Endowment",incept:"Feb 2014",acct:"••5502",acctFull:"0044175502",net:365300,trend:"flat"});
+    /* Scale the whole set to the owner-fixed grand total, then absorb the rounding remainder into the largest account so the total is EXACTLY $106,726,837 with every balance positive. */
+    var raw=out.reduce(function(s,a){return s+a.net;},0),scale=DEPO_TARGET_TOTAL/raw;
+    out.forEach(function(a){a.net=Math.max(1000,Math.round(a.net*scale));});
+    var sum2=out.reduce(function(s,a){return s+a.net;},0),bi=0;for(var k=1;k<out.length;k++){if(out[k].net>out[bi].net)bi=k;}out[bi].net+=(DEPO_TARGET_TOTAL-sum2);
+    return out;})();
+  function depOData(w){return (w&&w.dataset==="empty")?[]:DEPO_DEP;}
+  function depOByType(w){var m={},order=[];depOData(w).forEach(function(a){if(m[a.type]===undefined){m[a.type]=0;order.push(a.type);}m[a.type]+=a.net;});return order.map(function(t){return {name:t,net:m[t]};});}
+  function depOAcctByScope(w){return w.acctNo?depOData(w).filter(function(a){return a.acct===w.acctNo;})[0]:depOData(w).filter(function(a){return a.name===w.acct&&(!w.acctType||a.type===w.acctType);})[0];}
+  function depOScope(w){if(w.acct){var mine=depOAcctByScope(w);return mine?[mine]:[];}var f=w.filter||"All types";return depOData(w).filter(function(a){return f.indexOf("All")===0||a.type===f;});}
+  /* Owner change 2: unified scope-dependent breakdown. "total" = one ring/line; "group" = By Account Type at All Accounts, By Account at a selected type. The old all-accounts By-every-account branch is gone. */
+  function depOBd(w){if(w.acct)return "total";return w.bd||"group";}
+  function depODist(w){var N={wide:8,xwide:14}[w.size]||10;var f=w.filter||"All types",allT=f.indexOf("All")===0,bd=depOBd(w);
+    if(w.acct){var mine=depOAcctByScope(w);var tName=mine?mine.type:"";var inT=depOData(w).filter(function(a){return a.type===tName;}).map(function(a){return {name:a.name,net:a.net,type:a.type,acct:a.acct,acctFull:a.acctFull};});return {by:"account",segs:topN(inT,N),total:inT.length,scopeType:tName,legendLabel:"Accounts"};}
+    if(bd==="total"){var scopeTot=depOScope(w).reduce(function(s,a){return s+a.net;},0);return {by:"total",segs:[{name:(allT?"All Accounts":f),net:scopeTot,total:true}],total:1,scopeType:(allT?null:f),legendLabel:"Total"};}
+    if(allT){var ty=depOByType(w);return {by:"type",segs:topN(ty,N),total:ty.length,scopeType:null,legendLabel:"Account Types"};}
+    var ac=depOScope(w).map(function(a){return {name:a.name,net:a.net,type:a.type,acct:a.acct,acctFull:a.acctFull};}).sort(function(a,b){return b.net-a.net;});return {by:"account",segs:ac,total:ac.length,scopeType:f,legendLabel:"Accounts"};}
+  /* Owner change 4: P is a fiscal PERIOD (Time Window Module: per-org fiscal calendar, span between a month and a quarter), distinct from a calendar month, ordered between M and Q. */
+  function depOAcctSeries(a,range){var n={W:8,M:9,P:9,Q:9,F:12,Y:12}[range]||9,slope={up:0.72,flat:0.98,down:1.24}[a.trend||"up"];return walk(a.name+"|"+range,n,a.net,slope,0.17,0.05);}
+  function depORangeMonths(range,n){var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],out=[],i,now=6;
+    if(range==="W"){for(i=0;i<n;i++)out.push(i===n-1?"Today":(n-1-i)+"d ago");return out;}
+    if(range==="M"||range==="P"||range==="Q"){for(i=0;i<n;i++)out.push(i===n-1?"This week":(n-1-i)+"w ago");return out;}
+    if(range==="F"){for(i=0;i<n;i++)out.push("P"+(i+1));return out;}
+    for(i=n-1;i>=0;i--)out.push(M[(((now-i)%12)+12)%12]);
+    return out;}
+  function depOSparkLabels(range,n){var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],out=[],i;
+    if(range==="W"){for(i=0;i<n;i++)out.push(i===n-1?"Today":(n-1-i)+"d ago");}
+    else if(range==="M"){for(i=0;i<n;i++)out.push(i===n-1?"This week":(n-1-i)+"w ago");}
+    else{var now=6;for(i=n-1;i>=0;i--)out.push(M[(((now-i)%12)+12)%12]);}
+    return out;}
+  function depOSeriesN(range,n,end){if(range==="P"){var mS=walk("total|M",n,end,0.95,0.13,0.06),qS=walk("total|Q",n,end,0.9,0.13,0.06);return mS.map(function(v,i){return Math.round((v+qS[i])/2);});}var ratio={W:.98,M:.95,Q:.9,F:.82,Y:.72}[range]||.88;return walk("total|"+range,n,end,ratio,0.13,0.06);}
+  function depOPeriodLbl(w){return {W:"week",M:"month",P:"period",Q:"quarter",F:"fiscal year",Y:"calendar year"}[w.range||"Q"];}
+  function depOTypeLabel(w){if(w.acct){var suf=w.acctNo?w.acctNo.slice(-2):"";return "Account: "+w.acct+(suf?" **"+suf:"");}var f=w.filter||"All types";return f.indexOf("All")===0?"All Accounts":"Account Type: "+f;}
+  function depOScopeChip(w){var lb=depOTypeLabel(w);return '<button class="scope-chip" data-depo="depfilter" data-id="'+w.id+'" aria-haspopup="listbox" aria-label="Scope, tap to change" title="'+lb.replace(/"/g,"&quot;")+'"><span class="sc-nm">'+lb+'</span>'+ICON("expand_more")+'</button>';}
+  function depORangeBtn(w){return '<button class="trend-range" data-depo="rangemenu" data-id="'+w.id+'">vs '+depOPeriodLbl(w)+ICON("expand_more")+'</button>';}
+  function depODelta(p){return '<span class="delta-pill'+(p.neg?" neg":"")+'">'+ICON(p.neg?"south_east":"north_east")+Math.abs(p.dpct).toFixed(1)+'%</span>';}
+  function depOTog(opts,cur,w){return '<div class="vtoggle" role="group" aria-label="View">'+opts.map(function(o){return '<button class="vt'+(cur===o[0]?" on":"")+'" data-depo="dep-view" data-id="'+w.id+'" data-v="'+o[0]+'" aria-pressed="'+(cur===o[0])+'">'+(o[2]?ICON(o[2]):"")+o[1]+'</button>';}).join("")+'</div>';}
+  function depOToggle(w){var v=w.view||"table";if(w.size==="xwide")return depOTog([["balances","Balances","table_rows"],["trend","Trend","show_chart"]],(v==="trend"?"trend":"balances"),w);if(w.acct||w.leaf)return depOTog([["table","Table","table_rows"],["trend","Trend","show_chart"]],(v==="dist"?"trend":v),w);return depOTog([["table","Table","table_rows"],["dist","Distribution","donut_small"],["trend","Trend","show_chart"]],v,w);}
+  /* Owner change 2 (Trend): scope-dependent 2-option breakdown. All Accounts: Total | By Account Type. A selected type: Total | By Account. No standalone all-accounts By Account. */
+  function depOBreakToggle(w){var v=w.view||"table",allT=(w.filter||"All types").indexOf("All")===0;
+    if(v!=="trend")return "";
+    if(w.acct||w.leaf)return "";
+    var bd=depOBd(w),grp=allT?"By Account Type":"By Account";
+    var tb=function(m,l){return '<button class="vt'+(bd===m?" on":"")+'" data-depo="bd" data-id="'+w.id+'" data-b="'+m+'" aria-pressed="'+(bd===m)+'">'+l+'</button>';};
+    return '<div class="vtoggle" role="group" aria-label="Trend breakdown">'+tb("total","Total")+tb("group",grp)+'</div>';}
+  function depOTog2(opts,cur,w){return '<div class="vtoggle" role="group" aria-label="Break down by">'+opts.map(function(o){return '<button class="vt'+(cur===o[0]?" on":"")+'" data-depo="bd" data-id="'+w.id+'" data-b="'+o[0]+'" aria-pressed="'+(cur===o[0])+'">'+(o[2]?'<span class="material-symbols-rounded" aria-hidden="true">'+o[2]+'</span>':'')+o[1]+'</button>';}).join("")+'</div>';}
+  /* Owner change 1: table with display-only pagination (50 rows/page). Sort + filter apply first; the Total row (and the KPI headline) cross-foot over the FULL scoped set, never the visible page. */
+  function depOTable(w,full){var rng=w.range||"Q";
+    function trendPct(a){var s=depOAcctSeries(a,rng);return ((s[s.length-1]-s[0])/(s[0]||1))*100;}
+    var rows=depOScope(w).slice();
+    var sk=(w.tsort||"net-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
+    rows.sort(function(a,b){if(key==="name")return dir*a.name.localeCompare(b.name);if(key==="type")return dir*a.type.localeCompare(b.type);if(key==="trend")return dir*(trendPct(a)-trendPct(b));return dir*(a.net-b.net);});
+    var tot=rows.reduce(function(s,a){return s+a.net;},0);
+    var PER=50,nRows=rows.length,pages=Math.max(1,Math.ceil(nRows/PER)),pg=Math.min(Math.max(1,w.tpage||1),pages);w.tpage=pg;
+    var startI=(pg-1)*PER,endI=Math.min(startI+PER,nRows),pageRows=rows.slice(startI,endI);
+    function sb(k,label){var on=key===k,ic=on?(dir<0?"arrow_downward":"arrow_upward"):"unfold_more";return '<button class="wt-sort'+(on?" on":"")+'" data-depo="tsort" data-id="'+w.id+'" data-k="'+k+'">'+label+' <span class="material-symbols-rounded" aria-hidden="true">'+ic+'</span></button>';}
+    var head='<div class="wt-row wt-head"><span class="lr-main lr-stack">'+sb("name","Name")+'</span><span class="dt-c dt-type">'+sb("type","Type")+'</span><span class="dt-c dt-tr">'+sb("trend","Trend")+'</span><span class="wt-c2">'+sb("net","Balance")+'</span></div>';
+    var leaf=w.leaf;var body=pageRows.map(function(a){var tp=trendPct(a),tn=tp<0,esc=a.type.replace(/"/g,"&quot;"),aesc=a.name.replace(/"/g,"&quot;");
+      var tip=aesc+', Account '+(a.acctFull||a.acct),nmBlock='<span class="lr-tipwrap" data-tip="'+tip+'" data-tip-plain><span class="lr-name">'+a.name+'</span><span class="lr-acctno">'+a.acct+'</span></span>';
+      return '<div class="wt-row'+(leaf?'':' wt-rowh')+'" data-id="'+w.id+'" data-acct="'+a.name+'">'+(leaf?'<span class="lr-main lr-stack">'+nmBlock+'</span>':'<span class="lr-main lr-stack lr-link" data-depo="pick-acct" data-v="'+aesc+'" data-type="'+esc+'" data-acctno="'+a.acct+'" data-id="'+w.id+'">'+nmBlock+'</span>')+'<span class="dt-c dt-type"><span class="type-badge tb-static" title="'+esc+'"><span class="material-symbols-rounded tb-ic" aria-hidden="true">category</span><span class="tb-nm">'+a.type+'</span></span></span><span class="dt-c dt-tr"><span class="rtrend'+(tn?" neg":"")+'"><span class="material-symbols-rounded" aria-hidden="true">'+(tn?"arrow_drop_down":"arrow_drop_up")+'</span>'+Math.abs(tp).toFixed(1)+'%</span></span><span class="wt-c2">'+money(a.net)+'</span></div>';}).join("");
+    var pager=(pages>1)?('<div class="dep-pager"><span class="dp-count">Showing '+(nRows?(startI+1):0)+' to '+endI+' of '+nRows+' accounts</span><span class="dp-nav"><button class="dp-btn" data-depo="tpage" data-id="'+w.id+'" data-p="prev"'+(pg<=1?' disabled':'')+' aria-label="Previous page"><span class="material-symbols-rounded" aria-hidden="true">chevron_left</span></button><span class="dp-page">Page '+pg+' of '+pages+'</span><button class="dp-btn" data-depo="tpage" data-id="'+w.id+'" data-p="next"'+(pg>=pages?' disabled':'')+' aria-label="Next page"><span class="material-symbols-rounded" aria-hidden="true">chevron_right</span></button></span></div>'):'';
+    return '<div class="scroll">'+head+body+'</div><div class="dep-total"><span>Total</span><span>'+money(tot)+'</span></div>'+pager;}
+  function depOTrendSet(w,range,by){
+    if(by==="type"){return depOByType(w).map(function(t){var accts=depOData(w).filter(function(a){return a.type===t.name;}),agg=null;accts.forEach(function(a){var s=depOAcctSeries(a,range);if(!agg)agg=s.slice();else s.forEach(function(v,j){agg[j]+=v;});});return {name:t.name,series:agg||[],net:t.net,down:!!(agg&&agg[agg.length-1]<agg[0])};}).sort(function(a,b){return b.net-a.net;});}
+    return depOScope(w).map(function(a){return {name:a.name,series:depOAcctSeries(a,range),net:a.net,down:a.trend==="down",type:a.type,acct:a.acct,acctFull:a.acctFull};}).sort(function(a,b){return b.net-a.net;});}
+  function depOTrend(w,big){
+    var range=w.range||"Q",f=w.filter||"All types",allT=f.indexOf("All")===0,bd=depOBd(w),mode=(bd==="total")?"total":(allT?"type":"account");
+    var scopeAll=depOScope(w),agg=null;scopeAll.forEach(function(a){var s=depOAcctSeries(a,range);if(!agg)agg=s.slice();else s.forEach(function(v,j){agg[j]+=v;});});agg=agg||[0];
+    var multi=(mode!=="total");
+    var fullSet=multi?depOTrendSet(w,range,mode):[{name:(allT?"All accounts":f),series:agg}];
+    var ramp=blueRamp(Math.max(1,fullSet.length));
+    var isoIdx=(multi&&w.trIso!=null&&w.trIso>=0&&w.trIso<fullSet.length)?w.trIso:null;
+    var plotted=isoIdx!=null?[fullSet[isoIdx]]:fullSet;
+    var n=(fullSet[0]&&fullSet[0].series)?fullSet[0].series.length:0;
+    var lo=Infinity,hi=-Infinity;plotted.forEach(function(x){x.series.forEach(function(v){if(v<lo)lo=v;if(v>hi)hi=v;});});
+    if(!isFinite(lo)){lo=0;hi=1;}var sp=(hi-lo)||Math.abs(hi)||1;lo=Math.max(0,lo-sp*0.18);hi=hi+sp*0.18;var dom=(hi-lo)||1;
+    function px(i){return n>1?(i/(n-1)*100):50;}function py(v){return (1-(v-lo)/dom)*100;}
+    var grid="";[0,50,100].forEach(function(gy){grid+='<line x1="0" y1="'+gy+'" x2="100" y2="'+gy+'" stroke="var(--stroke-widget)" stroke-width="1" vector-effect="non-scaling-stroke"'+(gy===100?'':' stroke-dasharray="2 4" opacity="0.5"')+'/>';});
+    var lines=plotted.map(function(x){var idx=fullSet.indexOf(x),p=x.series.map(function(v,j){return px(j).toFixed(2)+','+py(v).toFixed(2);}).join(" ");return '<polyline class="tl" data-idx="'+idx+'" fill="none" stroke="'+ramp[idx]+'" stroke-width="1.7" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" points="'+p+'"/>';}).join("");
+    var hits=plotted.map(function(x){var idx=fullSet.indexOf(x),p=x.series.map(function(v,j){return px(j).toFixed(2)+','+py(v).toFixed(2);}).join(" ");return '<polyline class="tl-hit" data-idx="'+idx+'" fill="none" stroke="transparent" stroke-width="'+(multi?14:22)+'" vector-effect="non-scaling-stroke" points="'+p+'"/>';}).join("");
+    var area="";if(plotted.length===1){var pa=plotted[0].series.map(function(v,j){return px(j).toFixed(2)+','+py(v).toFixed(2);}).join(" ");area='<polygon fill="url(#depotaf)" points="0,100 '+pa+' 100,100"/>';}
+    var svg='<svg class="ln" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="depotaf" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--chart)" stop-opacity="0.16"/><stop offset="100%" stop-color="var(--chart)" stop-opacity="0"/></linearGradient></defs>'+grid+area+lines+hits+'</svg>';
+    var yl='<span style="top:0%">'+fmtAxis(hi)+'</span><span style="top:50%">'+fmtAxis((hi+lo)/2)+'</span><span style="top:100%">'+fmtAxis(lo)+'</span>';
+    var months=depORangeMonths(range,n),tk=(n<=1)?[0]:(n<=3)?[0,n-1]:[0,Math.round((n-1)/3),Math.round((n-1)*2/3),n-1];tk=tk.filter(function(v,i,a){return a.indexOf(v)===i;});
+    var xl=tk.map(function(i){return '<span style="left:'+px(i)+'%;transform:translateX('+(i===0?"0":(i===n-1?"-100%":"-50%"))+')">'+months[i]+'</span>';}).join("");
+    var legend="";if(multi){var lgTop=isoIdx!=null?('<div class="tr-lg-top"><button class="tr-lg-all" data-depo="tr-iso-clear" data-id="'+w.id+'">'+ICON("arrow_back")+'Show all '+(mode==="type"?"account types":"accounts")+'</button></div>'):'';legend='<div class="tr-legend scroll"><div class="tr-lg-hd">'+(mode==="type"?"Account Types":"Accounts")+'</div>'+lgTop+fullSet.map(function(x,idx){var last=x.series[x.series.length-1],nesc=x.name.replace(/"/g,"&quot;"),nmTip=(mode==="account")?(nesc+', Account '+(x.acctFull||x.acct)):nesc;return '<div class="tr-lg-row'+(isoIdx===idx?" sel":"")+'" data-idx="'+idx+'" data-depo="tr-iso" data-id="'+w.id+'" data-kind="'+mode+'" data-type="'+(x.type||"").replace(/"/g,"&quot;")+'" data-name="'+nesc+'" data-acctno="'+(x.acct||"")+'"><span class="tr-lg-sw" style="background:'+ramp[idx]+'"></span><span class="material-symbols-rounded leg-ic" aria-hidden="true">'+(mode==="type"?"category":"account_balance_wallet")+'</span><span class="tr-lg-nm" data-tip="'+nmTip+'" data-tip-plain>'+x.name+'</span><span class="tr-lg-v">'+fmtAxis(last)+'</span></div>';}).join("")+'</div>';}
+    var blob=plotted.map(function(x){var idx=fullSet.indexOf(x);return x.name+"|"+ramp[idx]+"|"+idx+"|"+x.series.join(",");}).join(";");
+    var plot='<div class="tr-plot'+(multi?" multi":"")+'"><div class="tr-yax">'+yl+'</div><div class="tr-canvas" data-id="'+w.id+'" data-multi="0" data-mode="'+mode+'" data-depoclick="'+(multi?1:0)+'" data-blob="'+blob.replace(/"/g,"&quot;")+'" data-months="'+months.join(",")+'" data-lo="'+lo+'" data-hi="'+hi+'" data-n="'+n+'">'+svg+'<div class="tr-cross"></div></div><div class="tr-xax">'+xl+'</div>'+legend+'</div>';
+    return plot;}
+  function depODonut(w,big){var d=depODist(w),segs=d.segs,tot=segs.reduce(function(s,a){return s+a.net;},0),R=52,C=2*Math.PI*R,off=0,arcs="",legend="",shownReal=segs.filter(function(a){return !a.others;}).length,ramp=blueRamp(shownReal),grouped=(d.total||shownReal)-shownReal;
+    segs.forEach(function(a,i){var frac=tot?a.net/tot:0,len=frac*C,c=a.others?OTHERS_COLOR:ramp[i];var drill=a.others?(' data-depo="others" data-id="'+w.id+'" data-n="'+grouped+'" data-kind="'+d.by+'"'):(a.total?'':(' data-depo="dist-drill" data-id="'+w.id+'" data-by="'+d.by+'" data-val="'+a.name.replace(/"/g,"&quot;")+'"'+(d.by==="account"?' data-type="'+(a.type||d.scopeType||"").replace(/"/g,"&quot;")+'"':'')));arcs+='<circle class="seg" data-seg="'+i+'"'+drill+' cx="70" cy="70" r="'+R+'" fill="none" stroke="'+c+'" stroke-width="20" stroke-dasharray="'+Math.min(len+0.9,C).toFixed(2)+' '+Math.max(0,C-len-0.9).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 70 70)"></circle>';off+=len;var lgTip=(d.by==="account"&&!a.others)?' data-tip="'+a.name.replace(/"/g,"&quot;")+', Account '+(a.acctFull||a.acct)+'" data-tip-plain':'';legend+='<div class="leg" data-seg="'+i+'"'+drill+'><span class="dot" style="background:'+c+'"></span><span class="material-symbols-rounded leg-ic" aria-hidden="true">'+(d.by==="type"?"category":d.by==="total"?"data_usage":"account_balance_wallet")+'</span><span class="lg-main"'+lgTip+'>'+a.name+'</span><span class="lg-meta">'+money(a.net)+' · '+Math.round(frac*100)+'%</span></div>';});
+    var DS=({wide:250,xwide:280})[w.size]||(big?250:190);
+    var f2=(w.filter||"All types"),allT2=f2.indexOf("All")===0,bd2=depOBd(w);
+    var showTog=!w.acct&&!w.leaf;
+    var grpOpt=allT2?["group","By Account Type","category"]:["group","By Account","account_balance_wallet"];
+    var lgHead=showTog?depOTog2([["total","Total","data_usage"],grpOpt],bd2,w):'<div class="legend-hd">'+d.legendLabel+'</div>';
+    return '<div class="dist-wrap"><div class="pie-wrap row"><svg class="donut" viewBox="0 0 140 140" width="'+DS+'" height="'+DS+'" aria-hidden="true">'+arcs+'<text x="70" y="67" text-anchor="middle" class="donut-c1">'+fmtAxis(tot)+'</text><text x="70" y="86" text-anchor="middle" class="donut-c2">total</text></svg><div class="legend-col"><div class="legend-head">'+lgHead+'</div><div class="legend" style="max-height:'+DS+'px">'+legend+'</div></div></div></div>';}
+  function depOFull(w){if(w.acct)return '<div class="dep-full one"><div class="dep-col"><div class="dep-col-h">Balances</div>'+depOTable(w,true)+'</div></div>';return '<div class="dep-full"><div class="dep-col"><div class="dep-col-h">Balances</div>'+depOTable(w,true)+'</div><div class="dep-col dep-col-dist"><div class="dep-col-h">Distribution</div>'+depODonut(w,true)+'</div></div>';}
+  function depOMetricParts(w){var range=w.range||"Q";
+    if(w.view==="trend"&&w.trIso!=null){var allT=(w.filter||"All types").indexOf("All")===0,bd=depOBd(w),mode=(bd==="total")?"total":(allT?"type":"account");if(mode!=="total"){var set=depOTrendSet(w,range,mode),iso=set[w.trIso]||null;if(iso){var si=iso.series,li=si[si.length-1],fi=si[0];return {total:li,s:si,labs:depOSparkLabels(range,si.length),latest:li,first:fi,dpct:((li-fi)/(fi||1))*100,neg:(li-fi)<0,focus:iso.name};}}}
+    var n={W:8,M:9,P:9,Q:9,F:12,Y:12}[range]||9,total=depOScope(w).reduce(function(x,a){return x+a.net;},0),s=depOSeriesN(range,n,total),labs=depOSparkLabels(range,n),latest=s[s.length-1],first=s[0],dpct=((latest-first)/(first||1))*100,neg=dpct<0;return {total:total,s:s,labs:labs,latest:latest,first:first,dpct:dpct,neg:neg};}
+  function depOSparkHTML(p,cls){var s=p.s,W=120,H=44,pad=4,mx=Math.max.apply(null,s),mn=Math.min.apply(null,s),rng=(mx-mn)||1;var xs=s.map(function(v,i){return pad+i*(W-2*pad)/((s.length-1)||1);}),ys=s.map(function(v){return H-pad-((v-mn)/rng)*(H-2*pad);});var line=smoothPath(xs,ys),area=line+" L"+xs[xs.length-1].toFixed(1)+","+H+" L"+xs[0].toFixed(1)+","+H+" Z";var xp=xs.map(function(x){return (x/W*100).toFixed(2);}).join(","),yp=ys.map(function(y){return (y/H*100).toFixed(2);}).join(",");return '<div class="kpi-spark depo-spark'+(cls?" "+cls:"")+'" data-series="'+s.join(',')+'" data-labels="'+p.labs.join("|")+'" data-xp="'+xp+'" data-yp="'+yp+'" tabindex="0" aria-label="Total deposits over the selected window. Hover to read a point"><svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><defs><linearGradient id="depodsg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--chart)" stop-opacity="0.22"/><stop offset="100%" stop-color="var(--chart)" stop-opacity="0"/></linearGradient></defs><path d="'+area+'" fill="url(#depodsg)"/><path d="'+line+'" fill="none" stroke="var(--chart)" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="ds-end" style="left:'+xp.split(",").pop()+'%;top:'+yp.split(",").pop()+'%"></div><div class="ds-hair"></div><div class="ds-dot"></div></div>';}
+  function depOGlance(w){var p=depOMetricParts(w);return '<div class="kpi-row"><div class="kpi-num">'+depOScopeChip(w)+'<div class="metric-value" data-depo-num data-latest="'+money(p.latest)+'">'+money(p.latest)+'</div><div class="gl-sub">'+depODelta(p)+depORangeBtn(w)+'</div></div>'+depOSparkHTML(p)+'</div>';}
+  function depOHeaderBlock(w){var p=depOMetricParts(w);var v=w.view||"table";
+    var numInner='<div class="dep-hd-kpigrp"><span class="metric-value">'+money(p.latest)+'</span><span class="delta-grp">'+depODelta(p)+depORangeBtn(w)+'</span></div>';
+    var showSearch=(v==="table"||v==="dist"||v==="balances");
+    var searchHTML=showSearch?'<div class="dep-search hd-search"><span class="material-symbols-rounded" aria-hidden="true">search</span><input class="dep-q" placeholder="Search accounts" aria-label="Search accounts"></div>':'';
+    return '<div class="dep-hd"><div class="dep-hd-top">'+depOScopeChip(w)+'<div class="dep-hd-toggle">'+depOToggle(w)+'</div></div><div class="dep-hd-num">'+numInner+'<div class="dep-hd-r">'+depOBreakToggle(w)+searchHTML+'</div></div></div>';}
+  /* V2 states, self-owned (previously deferred to the generic shell fallback). Empty triggers on the account COUNT (zero accounts), matching the v2 API spec, or an explicit state flag; loading only ever comes from a data-fetch change. */
+  function depOEmptyState(w){return '<div class="state" data-kind="empty">'+ICON("inbox")+'<div class="state-title">No deposit accounts</div><div class="state-sub">There are no deposit accounts to show here yet.</div><button class="btn outlined" data-depo="add-acct" data-id="'+w.id+'">'+ICON("add")+'Add account</button></div>';}
+  function depOErrorState(w){return '<div class="state" data-kind="error">'+ICON("error")+'<div class="state-title">Could not load balances</div><div class="state-sub">Something went wrong fetching account data.</div><button class="btn sm outlined" data-depo="retry" data-id="'+w.id+'">Retry</button></div>';}
+  function depOSkeleton(){return '<div class="skeleton" aria-busy="true"><div class="sk" style="width:55%"></div><div class="sk" style="flex:1"></div></div>';}
+  function depOContent(w){
+    if(w.state==="loading")return depOSkeleton();
+    if(w.state==="error")return depOErrorState(w);
+    if(w.state==="empty"||!depOData(w).length)return depOEmptyState(w);
+    if(w.size==="kpi")return depOGlance(w);
+    var v=w.view||"table";if((w.acct||w.leaf)&&v==="dist")v="trend";
+    var mh=depOHeaderBlock(w);
+    if(w.size==="wide")return mh+(v==="trend"?depOTrend(w,false):v==="dist"?depODonut(w,false):depOTable(w,false));
+    return mh+(v==="trend"?depOTrend(w,true):depOFull(w));
+  }
+  /* Row-detail modal body (owner change 3 keeps this; only the CHART drill-modal was removed). Reuses Jo's .acctm* classes and her global modal chrome (modal.b path in renderModal). */
+  function depOAcctModalHTML(){
+    if(!modal)return "";
+    return '<div class="modal-backdrop" data-action="modal-close"><div class="modal depo-acct-modal" data-action="stop" role="dialog" aria-modal="true" aria-label="'+modal.t+'">'+
+      '<div class="modal-h"><span class="modal-title">'+(modal.glyph?'<span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">'+modal.glyph+'</span>':'')+modal.t+'</span>'+
+      '<button class="iconbtn" data-action="modal-close" aria-label="Close">'+ICON("close")+'</button></div>'+
+      '<div class="modal-b">'+depOAcctModalBody(modal.depo)+'</div>'+
+      '<div class="modal-f"><button class="btn primary sm" data-action="modal-close">Got it</button></div>'+
+    '</div></div>';
+  }
+  function depOAcctModalBody(m){var a=m.acctNo?DEPO_DEP.filter(function(x){return x.acct===m.acctNo;})[0]:DEPO_DEP.filter(function(x){return x.name===m.aname&&(!m.atype||x.type===m.atype);})[0];if(!a)return "";
+    var range=m.range||"Q",mv=m.mview||"trend",s=depOAcctSeries(a,range),n=s.length,latest=s[n-1],first=s[0],dpct=((latest-first)/(first||1))*100,neg=dpct<0;
+    var toggle='<div class="vtoggle" role="group" aria-label="View"><button class="vt'+(mv==="trend"?" on":"")+'" data-depo="acct-view" data-v="trend" aria-pressed="'+(mv==="trend")+'">'+ICON("show_chart")+'Trend</button><button class="vt'+(mv==="table"?" on":"")+'" data-depo="acct-view" data-v="table" aria-pressed="'+(mv==="table")+'">'+ICON("table_rows")+'Table</button></div>';
+    var head='<div class="acctm-bar"><span class="type-badge tb-static"><span class="tb-ic material-symbols-rounded" aria-hidden="true">category</span><span class="tb-nm">'+a.type+'</span></span>'+toggle+'</div><div class="acctm-kpi"><span class="metric-value">'+money(latest)+'</span><span class="delta-grp">'+depODelta({dpct:dpct,neg:neg})+'<span class="trend-range static">vs '+depOPeriodLbl({range:range})+'</span></span></div>';
+    var content;
+    if(mv==="table"){var tn=neg;
+      content='<div class="acctm-tbl"><div class="wt-row wt-head"><span class="lr-main lr-stack">Name</span><span class="dt-c dt-type">Type</span><span class="dt-c dt-tr">Trend</span><span class="wt-c2">Balance</span></div><div class="wt-row"><span class="lr-main lr-stack"><span class="lr-tipwrap" data-tip="'+a.name.replace(/"/g,"&quot;")+', Account '+(a.acctFull||a.acct)+'" data-tip-plain><span class="lr-name">'+a.name+'</span><span class="lr-acctno">'+a.acct+'</span></span></span><span class="dt-c dt-type"><span class="type-badge"><span class="material-symbols-rounded tb-ic" aria-hidden="true">category</span><span class="tb-nm">'+a.type+'</span></span></span><span class="dt-c dt-tr"><span class="rtrend'+(tn?" neg":"")+'"><span class="material-symbols-rounded" aria-hidden="true">'+(tn?"arrow_drop_down":"arrow_drop_up")+'</span>'+Math.abs(dpct).toFixed(1)+'%</span></span><span class="wt-c2">'+money(a.net)+'</span></div><div class="dep-total"><span>Total</span><span>'+money(a.net)+'</span></div></div>';
+    }else{
+      var lo=Math.min.apply(null,s),hi=Math.max.apply(null,s),sp=(hi-lo)||Math.abs(hi)||1;lo=Math.max(0,lo-sp*0.18);hi=hi+sp*0.18;var dom=(hi-lo)||1;
+      function px(i){return n>1?(i/(n-1)*100):50;}function py(v){return (1-(v-lo)/dom)*100;}
+      var pts=s.map(function(v,i){return px(i).toFixed(2)+','+py(v).toFixed(2);}).join(" ");
+      var grid="";[0,50,100].forEach(function(gy){grid+='<line x1="0" y1="'+gy+'" x2="100" y2="'+gy+'" stroke="var(--stroke-widget)" stroke-width="1" vector-effect="non-scaling-stroke"'+(gy===100?'':' stroke-dasharray="2 4" opacity="0.5"')+'/>';});
+      var svg='<svg class="ln" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="depotafm" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--chart)" stop-opacity="0.16"/><stop offset="100%" stop-color="var(--chart)" stop-opacity="0"/></linearGradient></defs>'+grid+'<polygon fill="url(#depotafm)" points="0,100 '+pts+' 100,100"/><polyline fill="none" stroke="var(--chart)" stroke-width="1.7" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" points="'+pts+'"/></svg>';
+      var yl='<span style="top:0%">'+fmtAxis(hi)+'</span><span style="top:50%">'+fmtAxis((hi+lo)/2)+'</span><span style="top:100%">'+fmtAxis(lo)+'</span>';
+      var months=depORangeMonths(range,n),tk=(n<=1)?[0]:(n<=3)?[0,n-1]:[0,Math.round((n-1)/3),Math.round((n-1)*2/3),n-1];tk=tk.filter(function(v,i,arr){return arr.indexOf(v)===i;});
+      var xl=tk.map(function(i){return '<span style="left:'+px(i)+'%;transform:translateX('+(i===0?"0":(i===n-1?"-100%":"-50%"))+')">'+months[i]+'</span>';}).join("");
+      var blob=a.name+"|var(--chart)|0|"+s.join(",");
+      content='<div class="acctm-chart tr-plot"><div class="tr-yax">'+yl+'</div><div class="tr-canvas" data-multi="0" data-blob="'+blob.replace(/"/g,"&quot;")+'" data-months="'+months.join(",")+'" data-lo="'+lo+'" data-hi="'+hi+'" data-n="'+n+'">'+svg+'<div class="tr-cross"></div></div><div class="tr-xax">'+xl+'</div></div>';
+    }
+    return '<div class="acctm">'+head+content+'</div>';}
+  function depOOpenAcct(w,name,type,acctNo){var a=acctNo?DEPO_DEP.filter(function(x){return x.acct===acctNo;})[0]:DEPO_DEP.filter(function(x){return x.name===name&&(!type||x.type===type);})[0];if(!a)return;var ctx={aname:a.name,atype:a.type,acctNo:a.acct,range:w.range||"Q",mview:"trend"};modal={t:a.name,glyph:"account_balance_wallet",type:"depOacct",depo:ctx,b:depOAcctModalBody(ctx)};modalMounted=false;depOClosePop();pop=null;render();}
+  /* Owner change 3: chart click drills into scope, it does not expand. A type series sets the top-left scope to that type and flips the breakdown to By Account. */
+  function depODrillType(w,typeName){if(!typeName)return;w.filter=typeName;w.acct=null;w.acctType=null;w.acctNo=null;w.bd="group";w.trIso=null;w.tpage=1;}
+  function depOPopContent(){var w=find(DEPO_POP.id);if(!w)return "";
+    if(DEPO_POP.type==="rangemenu"){var r=w.range||"Q";return '<div class="cap">Compare to</div>'+[["W","Previous week"],["M","Previous month"],["P","Previous period"],["Q","Previous quarter"],["F","Previous fiscal year"],["Y","Previous calendar year"]].map(function(o){return '<button class="mi'+(r===o[0]?" check":"")+'" data-depo="range-set" data-id="'+w.id+'" data-r="'+o[0]+'">'+(r===o[0]?ICON("check"):'<span class="mi-gap"></span>')+o[1]+'</button>';}).join("");}
+    var q=(DEPO_FQ||"").toLowerCase();
+    var allSel=(!w.acct)&&(w.filter||"All types").indexOf("All")===0;
+    var types=depOByType(w).map(function(t){return t.name;});
+    var accts=depOData(w);
+    var tM=types.filter(function(t){return t.toLowerCase().indexOf(q)>-1;});
+    var aM=accts.filter(function(a){return a.name.toLowerCase().indexOf(q)>-1||a.type.toLowerCase().indexOf(q)>-1;});
+    var out='<div class="dd-search">'+ICON("search")+'<input class="dd-input" id="depOfq" placeholder="Search account types or accounts" value="'+(DEPO_FQ||"").replace(/"/g,"&quot;")+'" autocomplete="off"></div><div class="menu-scroll" role="listbox">';
+    if(!q||"all accounts".indexOf(q)>-1)out+='<button class="mi'+(allSel?" check":"")+'" data-depo="set-scope" data-id="'+w.id+'" data-mode="all">'+(allSel?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm">All Accounts</span></button>';
+    if(tM.length)out+='<div class="cap">Account Type</div>'+tM.map(function(t){var sel=(!w.acct)&&w.filter===t,esc=t.replace(/"/g,"&quot;");return '<button class="mi'+(sel?" check":"")+'" data-depo="set-scope" data-id="'+w.id+'" data-mode="type" data-v="'+esc+'">'+(sel?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-ic material-symbols-rounded" aria-hidden="true">category</span><span class="mi-nm">'+t+'</span></button>';}).join("");
+    if(aM.length)out+='<div class="cap">Accounts</div>'+aM.map(function(a){var sel=w.acctNo?w.acctNo===a.acct:(w.acct===a.name&&w.acctType===a.type),esc=a.name.replace(/"/g,"&quot;"),tesc=a.type.replace(/"/g,"&quot;");return '<button class="mi'+(sel?" check":"")+'" data-depo="set-scope" data-id="'+w.id+'" data-mode="account" data-v="'+esc+'" data-type="'+tesc+'" data-acctno="'+a.acct+'">'+(sel?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-ic material-symbols-rounded" aria-hidden="true">account_balance_wallet</span><span class="mi-nm-stack" data-tip="'+esc+', Account '+(a.acctFull||a.acct)+'" data-tip-plain><span class="mi-nm">'+a.name+'</span><span class="mi-acctno">'+(a.acctFull||a.acct)+'</span></span><span class="type-badge tb-static mi-tb"><span class="tb-ic material-symbols-rounded" aria-hidden="true">category</span><span class="tb-nm">'+a.type+'</span></span></button>';}).join("");
+    if(!tM.length&&!aM.length&&(q&&"all accounts".indexOf(q)<0))out+='<div class="mi-note" style="color:var(--txt-subtle)">No matches for "'+(DEPO_FQ||"").replace(/"/g,"&quot;")+'"</div>';
+    return out+'</div>';}
+  var DEPO_POP=null,DEPO_FQ="";
+  function depOPositionPop(el,anchor){var rct=anchor.getBoundingClientRect(),M=8;el.style.visibility="hidden";el.style.left="0px";el.style.top="0px";var bw=el.offsetWidth,bh=el.offsetHeight;var left=rct.left;if(left+bw>window.innerWidth-M)left=rct.right-bw;if(left<M)left=M;var top=rct.bottom+7;if(top+bh>window.innerHeight-M){var up=rct.top-bh-7;top=(up>=M)?up:Math.max(M,window.innerHeight-M-bh);}el.style.left=left+"px";el.style.top=top+"px";el.style.visibility="";}
+  function depOOpenPop(anchor,type,id){DEPO_POP={type:type,id:id};if(type==="depfilter")DEPO_FQ="";
+    var el=document.getElementById("depoPop");if(!el){el=document.createElement("div");el.id="depoPop";document.body.appendChild(el);}
+    el.className="pop"+(type==="depfilter"?" pop-filter":"");el.innerHTML=depOPopContent();
+    depOPositionPop(el,anchor);
+    var fi=document.getElementById("depOfq");if(fi){fi.focus();try{fi.setSelectionRange(fi.value.length,fi.value.length);}catch(e){}}}
+  function depORepositionPop(){var el=document.getElementById("depoPop");if(!el||!DEPO_POP)return;var anchor=document.querySelector('[data-depo="'+DEPO_POP.type+'"][data-id="'+DEPO_POP.id+'"]');if(anchor)depOPositionPop(el,anchor);}
+  function depOClosePop(){DEPO_POP=null;var el=document.getElementById("depoPop");if(el)el.remove();}
+  document.addEventListener("click",function(e){
+    var t=e.target.closest&&e.target.closest("[data-depo]");
+    if(!t){if(DEPO_POP&&!(e.target.closest&&e.target.closest("#depoPop")))depOClosePop();return;}
+    var a=t.getAttribute("data-depo"),id=t.getAttribute("data-id");
+    if(a==="acct-view"){if(modal&&modal.depo){modal.depo.mview=t.getAttribute("data-v");modal.b=depOAcctModalBody(modal.depo);render();}return;}
+    var w=id?find(id):null;if(!w)return;
+    if(a==="depfilter"){if(DEPO_POP&&DEPO_POP.type==="depfilter"&&document.getElementById("depoPop")){depOClosePop();}else{depOOpenPop(t,"depfilter",id);}return;}
+    if(a==="rangemenu"){if(DEPO_POP&&DEPO_POP.type==="rangemenu"&&document.getElementById("depoPop")){depOClosePop();}else{depOOpenPop(t,"rangemenu",id);}return;}
+    if(a==="set-scope"){var mode=t.getAttribute("data-mode"),val=t.getAttribute("data-v");if(mode==="account"){w.acct=val;w.acctType=t.getAttribute("data-type");w.acctNo=t.getAttribute("data-acctno");}else{if(mode==="all")w.filter="All types";else if(mode==="type")w.filter=val;w.acct=null;w.acctType=null;w.acctNo=null;}w.trIso=null;w.bd="group";w.tpage=1;depOClosePop();render();return;}
+    if(a==="range-set"){w.range=t.getAttribute("data-r");depOClosePop();render();return;}
+    if(a==="pick-acct"){depOOpenAcct(w,t.getAttribute("data-v"),t.getAttribute("data-type"),t.getAttribute("data-acctno"));return;}
+    if(a==="tr-iso"){if(t.getAttribute("data-kind")==="type"){depODrillType(w,t.getAttribute("data-name"));render();}return;} /* account series: inert */
+    if(a==="tr-iso-clear"){w.trIso=null;render();return;}
+    if(a==="dep-view"){w.view=t.getAttribute("data-v");depOClosePop();render();return;}
+    if(a==="tsort"){var k=t.getAttribute("data-k"),cs=(w.tsort||"net-desc").split("-");w.tsort=(cs[0]===k)?(k+"-"+(cs[1]==="asc"?"desc":"asc")):(k+"-"+((k==="name"||k==="type")?"asc":"desc"));w.tpage=1;render();return;}
+    if(a==="tpage"){var dp=t.getAttribute("data-p"),curp=w.tpage||1;w.tpage=(dp==="prev")?Math.max(1,curp-1):(dp==="next")?curp+1:(parseInt(dp,10)||1);render();return;}
+    if(a==="bd"){w.bd=t.getAttribute("data-b");w.trIso=null;render();return;}
+    if(a==="dist-drill"){if(t.getAttribute("data-by")==="type"){depODrillType(w,t.getAttribute("data-val"));render();}return;} /* account slice: inert */
+    if(a==="others"){return;} /* inert: no chart click opens an overlay */
+    if(a==="add-acct"){showModal("Add a deposit account","Tapping this would take you to the <b>New deposit account</b> form in the Deposits module.");return;}
+    if(a==="retry"){w.state=null;render();return;}
+  });
+  document.addEventListener("input",function(e){if(e.target.id==="depOfq"){DEPO_FQ=e.target.value;var p=e.target.selectionStart;var el=document.getElementById("depoPop");if(el){el.innerHTML=depOPopContent();depORepositionPop();var fi=document.getElementById("depOfq");if(fi){fi.focus();try{fi.setSelectionRange(p,p);}catch(_){}}}return;}});
+  var DEPO_dsTip=null;
+  function depOdsShow(e,label,val){if(!DEPO_dsTip){DEPO_dsTip=document.createElement("div");DEPO_dsTip.className="ds-tip";document.body.appendChild(DEPO_dsTip);}DEPO_dsTip.innerHTML='<span class="dst-l">'+label+'</span><span class="dst-v">'+val+'</span>';var x=e.clientX+12,y=e.clientY-16;if(x+140>window.innerWidth)x=e.clientX-140;DEPO_dsTip.style.left=x+"px";DEPO_dsTip.style.top=y+"px";}
+  function depOdsHide(){if(DEPO_dsTip){DEPO_dsTip.remove();DEPO_dsTip=null;}}
+  function depOdsReset(sp){var row=sp.closest(".kpi-row"),num=row&&row.querySelector("[data-depo-num]");if(num&&num.getAttribute("data-latest"))num.textContent=num.getAttribute("data-latest");var h=sp.querySelector(".ds-hair"),d=sp.querySelector(".ds-dot");if(h)h.style.opacity="0";if(d)d.style.opacity="0";depOdsHide();}
+  document.addEventListener("mousemove",function(e){var sp=e.target.closest&&e.target.closest(".depo-spark");if(!sp){if(DEPO_dsTip)depOdsHide();return;}var r=sp.getBoundingClientRect();var frac=Math.min(1,Math.max(0,(e.clientX-r.left)/(r.width||1)));var s=sp.getAttribute("data-series").split(","),labs=sp.getAttribute("data-labels").split("|"),xp=sp.getAttribute("data-xp").split(","),yp=sp.getAttribute("data-yp").split(",");var idx=Math.round(frac*(s.length-1));var row=sp.closest(".kpi-row"),num=row&&row.querySelector("[data-depo-num]");if(num)num.textContent=money(parseInt(s[idx],10));var hair=sp.querySelector(".ds-hair"),dot=sp.querySelector(".ds-dot");if(hair){hair.style.left=xp[idx]+"%";hair.style.opacity="1";}if(dot){dot.style.left=xp[idx]+"%";dot.style.top=yp[idx]+"%";dot.style.opacity="1";}depOdsShow(e,labs[idx],money(parseInt(s[idx],10)));});
+  document.addEventListener("mouseout",function(e){var sp=e.target.closest&&e.target.closest(".depo-spark");if(!sp)return;if(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest(".depo-spark"))return;depOdsReset(sp);});
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&DEPO_POP)depOClosePop();});
+  document.addEventListener("click",function(e){var cv=e.target.closest&&e.target.closest('.tr-canvas[data-depoclick="1"]');if(!cv)return;if(lnActive==null)return;var wid=cv.getAttribute("data-id"),wc=wid?find(wid):null;if(!wc)return;if(cv.getAttribute("data-mode")==="type"){var parts=cv.getAttribute("data-blob").split(";"),nm=null;for(var bi=0;bi<parts.length;bi++){var pp=parts[bi].split("|");if(+pp[2]===lnActive){nm=pp[0];break;}}if(nm){depODrillType(wc,nm);hideLnTip();render();}}else{hideLnTip();}},true);
+  window.addEventListener("resize",function(){depORepositionPop();});
+  WIDGETS.register("deposits",{content:depOContent,about:function(w){return {h:w.title,b:DEPO_ABOUT};},modals:{depOacct:depOAcctModalHTML}});
+/* ===== end W07 Deposits on Hand V2 ===== */
 
   /* ===== P2/P3 WIDGET BLOCKS (pension, remittance, gifts, loans) ===== */
 /* =======================================================================
@@ -7704,7 +7918,6 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
      the pre-edit snapshot.
   ===================================================================== */
   var CMPNOTE_={
-    W07:{h:"Ours is her Deposits widget with four owner-directed changes; everything else is parity.",rows:["The table pages 50 accounts at a time over a 125-account set, while the headline and subtotals stay full-set.","The breakdown toggle becomes scope-dependent, and the confusing all-accounts By Account view is removed.","A chart click now RE-SCOPES the top-left filter instead of opening a drill modal; an account series is inert.","Compare To gains a fiscal Period option, sitting between month and quarter.","Her fourth size tier is dropped, mapping her four tiers onto our three.","Parity kept: the searchable account chip, the three views, the KPI delta pill and sparkline, and the row detail modal."],open:"The Step 4 doc says Compare To also drives a Trend overlay; the build has none, and the port follows the build."},
     W09:{h:"Ours restructures her Time Off widget around a per-day approval model, in seven owner-directed changes.",rows:["Approval grain moves from one row per REQUEST to one line per CALENDAR DAY, so part of a request can be accepted.","Three levels become two: a group subheading holding PERSON rows, each person an expander over their day-lines.","Employee-level bulk approve is removed, because a button on a closed row would clear a month unseen.","Rejected is dropped; Outstanding is DERIVED instead, a pending day-line dated before the today anchor.","Glance shows two mutually exclusive figures, Pending and Outstanding, which partition the pending set.","A real month Leave Calendar is added, with a department filter that reaches the grid, legend and day popover.","Parity kept: her whole component language, her header, her chips, her menus and her segmented toggles."],open:"There is no approval-authority filter and no inline approval write endpoint, so as it stands every supervisor would see every employee."},
     W10:{h:"Ours is her Loans widget with six changes, five owner-directed and one a latent bug fix.",rows:["Four aging ranges become five: a 61 to 90 range closes a latent gap that mislabelled those loans as most overdue.","Her aging and risk panel is replaced by a balance by time range donut whose legend rows ARE the table filter.","The table goes flat: the ranges became a filter, so band group headers and subtotals would restate them twice.","The Days past due column is removed, so the default sort moves to amount descending.","Explore gains a Table / Pie segment, because the first pass left no route to the chart there at all.","The loan-type filter now drives EVERYTHING, not just the table: donut, chip counts, header total and Glance bar.","An empty range renders as a muted, inert zero row rather than vanishing from the ladder."],open:"The modern API does not replicate legacy oldest-first payment allocation, so every range figure depends on backend work that does not exist."},
     W11:{h:"Ours is a from-scratch rebuild, deliberately not a restyle of her block.",rows:["All seven columns become sortable, server-side, defaulting to asset tag ascending; her block has no sort control.","Server paging at 10 rows per page, with totals computed over the whole group and unaffected by paging.","Two views behind a toggle, Asset Detail table and Donut; the third group-bars view was removed.","Detail shows ONE view full width; the side-by-side pair was retired.","The Financial Measure chip is Donut-only, legitimate as a client filter because all five measures arrive per group.","An icon-only download is added, recorded in the spec as an unfunded gap.","The register grows from 13 assets to 52 across six dimensions."],open:"The default view is contested: the amended handoff says Donut, the built code treats a null state as Asset Detail, and the port follows the build."},
@@ -7715,7 +7928,6 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
   };
   /* number, display name, HER kind + her state, OUR kind + our state */
   var CMP_ROWS=[
-    ["W07","Deposits on Hand","deposits-mb",{filter:"All types",view:"table",range:"Q",bd:"group",tpage:1,tsort:"net-desc",trIso:null},"deposits-oc",{filter:"All types",view:"table",range:"Q",bd:"group",tpage:1,tsort:"net-desc",trIso:null}],
     ["W09","Payroll Scheduled Time Off","pto",{ptoView:"pending",ptoExpand:{}},"pto-mb",{ptofView:"queue",ptofStatus:"pending",ptofQueueGroup:"dept",ptofCalDept:"all",ptofOpen:{},ptofAppr:{}}],
     ["W10","Loans With Balance Due","loans",{loanType:"All",loanSort:"days-desc",loanBucket:"total",updated:"just now"},"loans-mb",{lonType:"All",lonSort:"amt-desc",lonBucket:"total",lonView:"table",updated:"just now"}],
     ["W11","Fixed Asset Values","fixedassets",{faGroupBy:"cls",faGroup:"__all",faMeasure:"net",updated:"just now"},"fixedassets-mb",{faFDim:"cls",faFMeasure:"net",faFSort:"tag-asc",faFPage:0,updated:"just now"}],
@@ -7789,18 +8001,13 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
       {id:"mct2",title:"Main Content Tasks (Detail view)", kind:"tasks", size:"xwide", tiers:["kpi","wide","xwide"], appContext:"home", goto:false},
       {id:"mct3",title:"Main Content Tasks (new user — content tasks only)", kind:"tasks", size:"wide", tiers:["kpi","wide","xwide"], appContext:"home", mctSaved:[], mctRecent:[], goto:false},
       {id:"mct4",title:"Main Content Tasks (Glance)", kind:"tasks", size:"kpi", tiers:["kpi","wide","xwide"], appContext:"home", goto:false},
-      /* Deposits on Hand: our finalized W07, additive. kind "deposits-mb", prefix depF. 1-to-1 with Jo's Deposits on Hand widget PLUS four owner changes: (1) 50/page table pagination over a 125-account mock (grand total $106,726,837), KPI + subtotals over the full set; (2) scope-dependent breakdown (All Accounts: Total / By Account Type; a type: Total / By Account); (3) chart clicks drill (type re-scopes to By Account, account inert), no chart drill-modal, row modal preserved; (4) Compare To gains a fiscal "period" option between month and quarter. Tiers kpi/wide/xwide only (Jo's "large" dropped). */
-      {id:"depF", title:"Deposits on Hand",                          kind:"deposits-mb",size:"wide", tiers:["kpi","wide","xwide"],filter:"All types",view:"table",range:"Q",bd:"group",tpage:1,tsort:"net-desc",trIso:null,actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-      {id:"depF2",title:"Deposits on Hand (Detail view)",             kind:"deposits-mb",size:"xwide",tiers:["kpi","wide","xwide"],filter:"All types",view:"balances",range:"Q",bd:"group",tpage:1,tsort:"net-desc",trIso:null},
-      {id:"depF3",title:"Deposits on Hand (Glance)",                  kind:"deposits-mb",size:"kpi",  tiers:["kpi","wide","xwide"],filter:"All types",view:"table",range:"Q",bd:"group",tpage:1,tsort:"net-desc",trIso:null},
-      {id:"depF4",title:"Deposits on Hand (a single account type)",   kind:"deposits-mb",size:"wide", tiers:["kpi","wide","xwide"],filter:"Restricted Funds",view:"dist",range:"Q",bd:"group",tpage:1,tsort:"net-desc",trIso:null},
-      {id:"depF5",title:"Deposits on Hand (no data)",                 kind:"deposits-mb",size:"wide", tiers:["kpi","wide","xwide"],filter:"All types",view:"table",range:"Q",bd:"group",tpage:1,state:"empty",dataset:"none"},
-      {id:"depO", title:"Deposits on Hand (OC)",                     kind:"deposits-oc",size:"wide", tiers:["kpi","wide","xwide"],filter:"All types",view:"table",range:"Q",bd:"group",tpage:1,tsort:"net-desc",trIso:null,actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-      /* (OC) driver fixtures for depO: state-variant instances read by _port-drivers/w*.driver.js only; NOT rendered as cards.
-      {id:"depO2",title:"Deposits on Hand (OC, Detail view)",             kind:"deposits-oc",size:"xwide",tiers:["kpi","wide","xwide"],filter:"All types",view:"balances",range:"Q",bd:"group",tpage:1,tsort:"net-desc",trIso:null},
-      {id:"depO3",title:"Deposits on Hand (OC, Glance)",                  kind:"deposits-oc",size:"kpi",  tiers:["kpi","wide","xwide"],filter:"All types",view:"table",range:"Q",bd:"group",tpage:1,tsort:"net-desc",trIso:null},
-      {id:"depO4",title:"Deposits on Hand (OC, a single account type)",   kind:"deposits-oc",size:"wide", tiers:["kpi","wide","xwide"],filter:"Restricted Funds",view:"dist",range:"Q",bd:"group",tpage:1,tsort:"net-desc",trIso:null},
-      {id:"depO5",title:"Deposits on Hand (OC, no data)",                 kind:"deposits-oc",size:"wide", tiers:["kpi","wide","xwide"],filter:"All types",view:"table",range:"Q",bd:"group",tpage:1,state:"empty",dataset:"empty"},
+      /* W07 Deposits on Hand */
+      {id:"depO", title:"Deposits on Hand",                     kind:"deposits",size:"wide", tiers:["kpi","wide","xwide"],filter:"All types",view:"table",range:"Q",bd:"group",tpage:1,tsort:"net-desc",trIso:null,actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
+      {id:"depO2",title:"Deposits on Hand",             kind:"deposits",size:"xwide",tiers:["kpi","wide","xwide"],filter:"All types",view:"balances",range:"Q",bd:"group",tpage:1,tsort:"net-desc",trIso:null},
+      {id:"depO3",title:"Deposits on Hand",                  kind:"deposits",size:"kpi",  tiers:["kpi","wide","xwide"],filter:"All types",view:"table",range:"Q",bd:"group",tpage:1,tsort:"net-desc",trIso:null},
+      /* W07 driver fixtures (state variants), not rendered as cards:
+      {id:"depO4",title:"Deposits on Hand",   kind:"deposits",size:"wide", tiers:["kpi","wide","xwide"],filter:"Restricted Funds",view:"dist",range:"Q",bd:"group",tpage:1,tsort:"net-desc",trIso:null},
+      {id:"depO5",title:"Deposits on Hand",                 kind:"deposits",size:"wide", tiers:["kpi","wide","xwide"],filter:"All types",view:"table",range:"Q",bd:"group",tpage:1,state:"empty",dataset:"empty"},
       */
       {id:"pur",title:"Purchasing Management",kind:"purchasing",size:"wide",tiers:["kpi","wide","xwide"],admin:true,pstatus:"mine",ppath:null,purview:"queue",encview:"chart",psort:"age-desc",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
       {id:"pur_k",title:"Purchasing Management (Glance)",kind:"purchasing",size:"kpi",tiers:["kpi","wide","xwide"],admin:true,pstatus:"mine",ppath:null,purview:"queue",encview:"chart",psort:"age-desc",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
@@ -7920,7 +8127,7 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
       ,{id:"gpF5",  title:"Gifts Pledges (OC, no campaigns yet)",        kind:"gifts-mb",size:"wide", tiers:["kpi","wide","xwide"],dataset:"empty",state:"empty",gpFView:"goal",gpFCamp:"All Campaigns",gpFRange:"year",updated:"just now"}
     ]},
     {id:"sys",name:"System dashboard",custom:false,widgets:[
-      {id:"s1",title:"Deposits on Hand",kind:"deposits-mb",size:"wide",tiers:["kpi","wide","xwide"],filter:"All types",view:"table",range:"Q",bd:"group",tpage:1,tsort:"net-desc",trIso:null}
+      {id:"s1",title:"Deposits on Hand",kind:"deposits",size:"wide",tiers:["kpi","wide","xwide"],filter:"All types",view:"table",range:"Q",bd:"group",tpage:1,tsort:"net-desc",trIso:null}
     ]},
     {id:"nowidgets",name:"No widgets dashboard",custom:true,widgets:[]}
     ,{id:"cmp",name:"Side by side (Jo vs OC)",custom:true,widgets:cmpCards()}
@@ -7938,7 +8145,7 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
     fund:{h:"Spend by fund",b:"How spending breaks down across your restricted and unrestricted funds."},
     signups:{h:"New sign-ups",b:"People who recently joined a group or ministry. The number is the total for the period you choose; the list shows the most recent sign-ups regardless of period."}
   };
-  function aboutOf(w){var wa=WIDGETS.about(w);if(wa)return wa;if(w.kind==="deposits-mb")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest, shown here as a current balance with a comparison delta and a balance trend over time."};if(w.kind==="deposits-oc")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest, shown here as a current balance with a comparison delta and a balance trend over time."};if(w.kind==="deposits")return {h:w.title,b:"Money your organization holds on behalf of others, such as congregation or member deposits that may earn interest."};if(w.kind==="bank")return {h:w.title,b:"The current balance of each active bank account, based on unreconciled activity since the last reconciliation. Select one account to see what has moved (deposits, voids, checks, withdrawals, EFT) since then."};if(w.kind==="purchasing")return {h:w.title,b:PUR_ABOUT_BODY};if(w.kind==="gifts")return {h:w.title,b:GFT_ABOUT_BODY};if(w.kind==="loans")return {h:w.title,b:"Every loan that still has a balance owing, grouped by how overdue it is, so you can see the total still out and which borrowers to follow up with."};if(w.kind==="pto-mb")return {h:w.title,b:PTOF_ABOUT};if(w.kind==="loans-mb")return {h:w.title,b:LONF_ABOUT};if(w.kind==="fixedassets-mb")return {h:w.title,b:FAF_ABOUT};if(w.kind==="purchasing-mb")return {h:w.title,b:PURF_ABOUT};if(w.kind==="bank-mb")return {h:w.title,b:BKF_ABOUT};if(w.kind==="payables-mb")return {h:w.title,b:APF_ABOUT};if(w.kind==="gifts-mb")return {h:w.title,b:GPF_ABOUT};return ABOUT[w.id]||{h:w.title,b:"A short, plain-language description of what this widget shows and where its data comes from."};}
+  function aboutOf(w){var wa=WIDGETS.about(w);if(wa)return wa;if(w.kind==="bank")return {h:w.title,b:"The current balance of each active bank account, based on unreconciled activity since the last reconciliation. Select one account to see what has moved (deposits, voids, checks, withdrawals, EFT) since then."};if(w.kind==="purchasing")return {h:w.title,b:PUR_ABOUT_BODY};if(w.kind==="gifts")return {h:w.title,b:GFT_ABOUT_BODY};if(w.kind==="loans")return {h:w.title,b:"Every loan that still has a balance owing, grouped by how overdue it is, so you can see the total still out and which borrowers to follow up with."};if(w.kind==="pto-mb")return {h:w.title,b:PTOF_ABOUT};if(w.kind==="loans-mb")return {h:w.title,b:LONF_ABOUT};if(w.kind==="fixedassets-mb")return {h:w.title,b:FAF_ABOUT};if(w.kind==="purchasing-mb")return {h:w.title,b:PURF_ABOUT};if(w.kind==="bank-mb")return {h:w.title,b:BKF_ABOUT};if(w.kind==="payables-mb")return {h:w.title,b:APF_ABOUT};if(w.kind==="gifts-mb")return {h:w.title,b:GPF_ABOUT};return ABOUT[w.id]||{h:w.title,b:"A short, plain-language description of what this widget shows and where its data comes from."};}
   var EMPTY_COPY={deposits:{title:"No deposit accounts",sub:"There are no deposit accounts to show here yet.",cta:"Add account",action:"add-acct"},payroll:{title:"No payroll runs in this range",sub:"There's no payroll history for the selected period yet."},budget:{title:"No budget set up",sub:"Once a budget is entered for this fiscal year, actuals will be compared against it here.",cta:"Set up budget",action:"add-budget"}};
   var ERROR_COPY={deposits:{title:"Couldn’t load balances",sub:"Something went wrong fetching account data."},payroll:{title:"Couldn’t load payroll data",sub:"Something went wrong fetching payroll history."},budget:{title:"Couldn’t load budget data",sub:"Something went wrong fetching budget and actual figures."}};
 /* --- Bank Balances additive copy --- */
@@ -9259,16 +9466,13 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(w.kind==="bank-mb")return bkFContent(w); // Bank Balances (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its "no accounts" variant renders bkFEmptyState and not the Deposits copy
     if(w.kind==="payables-mb")return apFContent(w); // Accounts Payable By Due Date (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its nothing-outstanding variant renders apFEmptyState and not the Deposits copy
     if(w.kind==="gifts-mb")return gpFContentRoot(w); // Gifts Pledges (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its no-campaigns variant renders gpFEmpty and not the Deposits copy
-    if(w.kind==="deposits-oc")return depOContent(w); // (OC) clone of Deposits on Hand, V2
     if(w.state==="empty"){var ec=EMPTY_COPY[w.kind]||EMPTY_COPY.deposits;return '<div class="state" data-kind="empty">'+ICON("inbox")+'<div class="state-title">'+ec.title+'</div><div class="state-sub">'+ec.sub+'</div>'+(ec.showZero?'<div class="dep-total" style="margin-top:4px"><span>Total</span><span>'+money(0)+'</span></div>':'')+(ec.cta?'<button class="btn outlined" data-action="'+ec.action+'" data-id="'+w.id+'">'+ICON("add")+ec.cta+'</button>':'')+'</div>';}
     if(w.kind==="bank")return bankContent(w);
-    if(w.kind==="deposits")return depContent(w);
     if(w.kind==="metric")return metricHTML(w);
     if(w.kind==="chart")return chartHTML(w);
     if(w.kind==="table")return fundContent(w);
     if(w.kind==="signups")return signupsContent(w);
     if(w.kind==="status")return statusHTML();
-    if(w.kind==="deposits-mb")return depFContent(w); // Deposits on Hand (MB updated); relies on the generic empty fallback (deposits copy is correct for it)
     if(w.kind==="cmpnote-mb")return cmpNoteContent(w); // comparison-tab note card: static text, appended at the END of the chain
     return "";
   }
@@ -9396,7 +9600,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(modal.type==="gftdetail"){mr.innerHTML=gftDetailModalHTML();return;}
     if(modal.type==="loandetail"){mr.innerHTML=loanDetailModalHTML();return;}
     if(modal.type==="fafTable"){mr.innerHTML=faFTableModalHTML();return;} // Fixed Asset Values (MB updated): the full seven-column table
-    if(modal.type==="depOacct"){if(modalMounted){var _dab=mr.querySelector(".modal.depo-acct-modal .modal-b");if(_dab){_dab.innerHTML=depOAcctModalBody(modal.depo);return;}}mr.innerHTML=depOAcctModalHTML();modalMounted=true;return;} // Deposits on Hand (MB updated): own 560px shell so her shared .wt-row column widths fit; body-only refresh while mounted
     var body=(modal.scoped?'<div class="wcontent acct-mw">'+((modal.mw&&modal.mw.kind==="payroll")?prOContent(modal.mw):depContent(modal.mw))+'</div>':modal.b);
     if(modalMounted){var bEl=mr.querySelector(".modal-b");if(bEl){bEl.innerHTML=body;return;}}
     mr.innerHTML='<div class="modal-backdrop" data-action="modal-close"><div class="modal'+(modal.scoped?" modal-wide":"")+'" data-action="stop" role="dialog" aria-modal="true" aria-label="'+modal.t+'"><div class="modal-h"><span class="modal-title">'+(modal.glyph?'<span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">'+modal.glyph+'</span>':'')+modal.t+'</span><button class="iconbtn" data-action="modal-close" aria-label="Close">'+ICON("close")+'</button></div><div class="modal-b">'+body+'</div><div class="modal-f"><button class="btn primary sm" data-action="modal-close">'+(modal.scoped?"Done":"Got it")+'</button></div></div></div>';
@@ -9560,238 +9763,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     bankPopEl.style.left=left+"px";bankPopEl.style.top=top+"px";
   }
   document.addEventListener("mousemove",function(e){var col=e.target.closest&&e.target.closest(".bank-col[data-bankpop]");if(!col){if(bankPopEl)bankHideBpop();return;}bankShowBpop(col,e.clientX,e.clientY);});
-  /* =====================================================================
-     Deposits on Hand (MB updated)  -  kind "deposits-mb", prefix depF
-     ADDITIVE port of Jo's Deposits on Hand (dep) widget. Built from her dep
-     block, reusing her shell classes and Pathway tokens (.dep-hd, .scope-chip,
-     .vtoggle/.vt, .tr-*, .pie-wrap/.donut/.legend*, .dep-search/.dep-q, .wt-*,
-     .dep-total, .state/.skeleton, .acctm*, .mi/.dd-search/.menu-scroll), plus
-     the four owner-directed changes from the W07 Step 4 doc:
-       (1) table pagination, 50/page over a 125-account mock (grand total
-           $106,726,837); the KPI total and the type subtotals cross-foot over
-           the FULL filtered set, pagination is display-only.
-       (2) scope-dependent breakdown: All Accounts offers Total / By Account
-           Type only; a single account type in scope offers Total / By Account.
-       (3) chart click drills, does not expand: clicking an account-TYPE series
-           (donut slice or trend line) re-scopes to that type and switches the
-           breakdown to By Account; clicking an individual ACCOUNT series is
-           inert; the old click-to-expand / drill-modal on charts is removed;
-           the table-row detail modal is preserved.
-       (4) Compare To gains a fiscal "Period" option between month and quarter,
-           so the scale is Previous week / month / period / quarter / fiscal
-           year / calendar year.
-     Self-contained: its own body-level popover (#depfPop) and its own delegated
-     listeners keyed on data-depf, so Jo's pop / popContent / triggerSelector /
-     renderModal / click / input handlers are never edited. The row-detail modal
-     reuses Jo's global `modal` + renderModal (the modal.b path). State lives on
-     the registry widget; re-render is Jo's render(). Shared-region edits are
-     limited to the contentHTML() and aboutOf() dispatch lines.
-     Historical/period-end balances (Trend and non-current Compare To) are a
-     data-layer gate; the mock interpolates. The out-of-widget drill-through
-     target is an open item and is NOT invented here.
-     ===================================================================== */
-  var DEPF_TARGET_TOTAL=106726837;
-  var DEPF_DEP=(function(){var out=[],seed=7;function r(){seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;}
-    var groups=[{t:"Checking",n:14},{t:"Savings",n:16},{t:"Money Market",n:10},{t:"Certificate of Deposit",n:12},{t:"Restricted Funds",n:22},{t:"Endowment",n:9},{t:"Trust Accounts",n:11},{t:"Grant Funds",n:13},{t:"Operating Reserve",n:8},{t:"Escrow",n:7}]; // 122 generated + 3 edge-case rows = 125
-    var suf=["General","Youth","Missions","Benevolence","Capital","Memorial","Legacy","Outreach","Facilities","Worship","Children","Fellowship","Building","Scholarship","Cemetery","Music","Media","Camp","Housing","Senior"];
-    var inc=["Jan 2011","Jun 2013","Mar 2015","Aug 2017","Feb 2019","Nov 2021","Apr 2023"],trs=["up","up","flat","down"];
-    groups.forEach(function(g){for(var i=0;i<g.n;i++){var s4=1000+Math.floor(r()*8999);out.push({name:suf[i%suf.length]+(i>=suf.length?" "+(Math.floor(i/suf.length)+1):""),type:g.t,incept:inc[Math.floor(r()*inc.length)],acct:"••"+s4,acctFull:"004417"+s4,net:Math.round(30000+Math.pow(r(),1.9)*2100000),trend:trs[Math.floor(r()*4)]});}});
-    /* Deliberate real-world edge cases (Shelby does not enforce name uniqueness, and names can be long): two accounts sharing a name differing only by account number, plus one very long name to exercise truncation. */
-    out.push({name:"General",type:"Checking",incept:"May 2018",acct:"••7734",acctFull:"0044177734",net:512500,trend:"up"});
-    out.push({name:"General",type:"Checking",incept:"Sep 2020",acct:"••2916",acctFull:"0044172916",net:98750,trend:"down"});
-    out.push({name:"Faith Community Endowment for Children's Ministry and Outreach Programs",type:"Endowment",incept:"Feb 2014",acct:"••5502",acctFull:"0044175502",net:365300,trend:"flat"});
-    /* Scale the whole set to the owner-fixed grand total, then absorb the rounding remainder into the largest account so the total is EXACTLY $106,726,837 with every balance positive. */
-    var raw=out.reduce(function(s,a){return s+a.net;},0),scale=DEPF_TARGET_TOTAL/raw;
-    out.forEach(function(a){a.net=Math.max(1000,Math.round(a.net*scale));});
-    var sum2=out.reduce(function(s,a){return s+a.net;},0),bi=0;for(var k=1;k<out.length;k++){if(out[k].net>out[bi].net)bi=k;}out[bi].net+=(DEPF_TARGET_TOTAL-sum2);
-    return out;})();
-  function depFData(w){return (w&&(w.state==="empty"||w.dataset==="none"))?[]:DEPF_DEP;}
-  function depFByType(w){var m={},order=[];depFData(w).forEach(function(a){if(m[a.type]===undefined){m[a.type]=0;order.push(a.type);}m[a.type]+=a.net;});return order.map(function(t){return {name:t,net:m[t]};});}
-  function depFAcctByScope(w){return w.acctNo?depFData(w).filter(function(a){return a.acct===w.acctNo;})[0]:depFData(w).filter(function(a){return a.name===w.acct&&(!w.acctType||a.type===w.acctType);})[0];}
-  function depFScope(w){if(w.acct){var mine=depFAcctByScope(w);return mine?[mine]:[];}var f=w.filter||"All types";return depFData(w).filter(function(a){return f.indexOf("All")===0||a.type===f;});}
-  /* Owner change 2: unified scope-dependent breakdown. "total" = one ring/line; "group" = By Account Type at All Accounts, By Account at a selected type. The old all-accounts By-every-account branch is gone. */
-  function depFBd(w){if(w.acct)return "total";return w.bd||"group";}
-  function depFDist(w){var N={wide:8,xwide:14}[w.size]||10;var f=w.filter||"All types",allT=f.indexOf("All")===0,bd=depFBd(w);
-    if(w.acct){var mine=depFAcctByScope(w);var tName=mine?mine.type:"";var inT=depFData(w).filter(function(a){return a.type===tName;}).map(function(a){return {name:a.name,net:a.net,type:a.type,acct:a.acct,acctFull:a.acctFull};});return {by:"account",segs:topN(inT,N),total:inT.length,scopeType:tName,legendLabel:"Accounts"};}
-    if(bd==="total"){var scopeTot=depFScope(w).reduce(function(s,a){return s+a.net;},0);return {by:"total",segs:[{name:(allT?"All Accounts":f),net:scopeTot,total:true}],total:1,scopeType:(allT?null:f),legendLabel:"Total"};}
-    if(allT){var ty=depFByType(w);return {by:"type",segs:topN(ty,N),total:ty.length,scopeType:null,legendLabel:"Account Types"};}
-    var ac=depFScope(w).map(function(a){return {name:a.name,net:a.net,type:a.type,acct:a.acct,acctFull:a.acctFull};}).sort(function(a,b){return b.net-a.net;});return {by:"account",segs:ac,total:ac.length,scopeType:f,legendLabel:"Accounts"};}
-  /* Owner change 4: P is a fiscal PERIOD (Time Window Module: per-org fiscal calendar, span between a month and a quarter), distinct from a calendar month, ordered between M and Q. */
-  function depFAcctSeries(a,range){var n={W:8,M:9,P:9,Q:9,F:12,Y:12}[range]||9,slope={up:0.72,flat:0.98,down:1.24}[a.trend||"up"];return walk(a.name+"|"+range,n,a.net,slope,0.17,0.05);}
-  function depFRangeMonths(range,n){var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],out=[],i,now=6;
-    if(range==="W"){for(i=0;i<n;i++)out.push(i===n-1?"Today":(n-1-i)+"d ago");return out;}
-    if(range==="M"||range==="P"||range==="Q"){for(i=0;i<n;i++)out.push(i===n-1?"This week":(n-1-i)+"w ago");return out;}
-    if(range==="F"){for(i=0;i<n;i++)out.push("P"+(i+1));return out;}
-    for(i=n-1;i>=0;i--)out.push(M[(((now-i)%12)+12)%12]);
-    return out;}
-  function depFSparkLabels(range,n){var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],out=[],i;
-    if(range==="W"){for(i=0;i<n;i++)out.push(i===n-1?"Today":(n-1-i)+"d ago");}
-    else if(range==="M"){for(i=0;i<n;i++)out.push(i===n-1?"This week":(n-1-i)+"w ago");}
-    else{var now=6;for(i=n-1;i>=0;i--)out.push(M[(((now-i)%12)+12)%12]);}
-    return out;}
-  function depFSeriesN(range,n,end){if(range==="P"){var mS=walk("total|M",n,end,0.95,0.13,0.06),qS=walk("total|Q",n,end,0.9,0.13,0.06);return mS.map(function(v,i){return Math.round((v+qS[i])/2);});}var ratio={W:.98,M:.95,Q:.9,F:.82,Y:.72}[range]||.88;return walk("total|"+range,n,end,ratio,0.13,0.06);}
-  function depFPeriodLbl(w){return {W:"week",M:"month",P:"period",Q:"quarter",F:"fiscal year",Y:"calendar year"}[w.range||"Q"];}
-  function depFTypeLabel(w){if(w.acct){var suf=w.acctNo?w.acctNo.slice(-2):"";return "Account: "+w.acct+(suf?" **"+suf:"");}var f=w.filter||"All types";return f.indexOf("All")===0?"All Accounts":"Account Type: "+f;}
-  function depFScopeChip(w){var lb=depFTypeLabel(w);return '<button class="scope-chip" data-depf="depfilter" data-id="'+w.id+'" aria-haspopup="listbox" aria-label="Scope, tap to change" title="'+lb.replace(/"/g,"&quot;")+'"><span class="sc-nm">'+lb+'</span>'+ICON("expand_more")+'</button>';}
-  function depFRangeBtn(w){return '<button class="trend-range" data-depf="rangemenu" data-id="'+w.id+'">vs '+depFPeriodLbl(w)+ICON("expand_more")+'</button>';}
-  function depFDelta(p){return '<span class="delta-pill'+(p.neg?" neg":"")+'">'+ICON(p.neg?"south_east":"north_east")+Math.abs(p.dpct).toFixed(1)+'%</span>';}
-  function depFTog(opts,cur,w){return '<div class="vtoggle" role="group" aria-label="View">'+opts.map(function(o){return '<button class="vt'+(cur===o[0]?" on":"")+'" data-depf="dep-view" data-id="'+w.id+'" data-v="'+o[0]+'" aria-pressed="'+(cur===o[0])+'">'+(o[2]?ICON(o[2]):"")+o[1]+'</button>';}).join("")+'</div>';}
-  function depFToggle(w){var v=w.view||"table";if(w.size==="xwide")return depFTog([["balances","Balances","table_rows"],["trend","Trend","show_chart"]],(v==="trend"?"trend":"balances"),w);if(w.acct||w.leaf)return depFTog([["table","Table","table_rows"],["trend","Trend","show_chart"]],(v==="dist"?"trend":v),w);return depFTog([["table","Table","table_rows"],["dist","Distribution","donut_small"],["trend","Trend","show_chart"]],v,w);}
-  /* Owner change 2 (Trend): scope-dependent 2-option breakdown. All Accounts: Total | By Account Type. A selected type: Total | By Account. No standalone all-accounts By Account. */
-  function depFBreakToggle(w){var v=w.view||"table",allT=(w.filter||"All types").indexOf("All")===0;
-    if(v!=="trend")return "";
-    if(w.acct||w.leaf)return "";
-    var bd=depFBd(w),grp=allT?"By Account Type":"By Account";
-    var tb=function(m,l){return '<button class="vt'+(bd===m?" on":"")+'" data-depf="bd" data-id="'+w.id+'" data-b="'+m+'" aria-pressed="'+(bd===m)+'">'+l+'</button>';};
-    return '<div class="vtoggle" role="group" aria-label="Trend breakdown">'+tb("total","Total")+tb("group",grp)+'</div>';}
-  function depFTog2(opts,cur,w){return '<div class="vtoggle" role="group" aria-label="Break down by">'+opts.map(function(o){return '<button class="vt'+(cur===o[0]?" on":"")+'" data-depf="bd" data-id="'+w.id+'" data-b="'+o[0]+'" aria-pressed="'+(cur===o[0])+'">'+(o[2]?'<span class="material-symbols-rounded">'+o[2]+'</span>':'')+o[1]+'</button>';}).join("")+'</div>';}
-  /* Owner change 1: table with display-only pagination (50 rows/page). Sort + filter apply first; the Total row (and the KPI headline) cross-foot over the FULL scoped set, never the visible page. */
-  function depFTable(w,full){var rng=w.range||"Q";
-    function trendPct(a){var s=depFAcctSeries(a,rng);return ((s[s.length-1]-s[0])/(s[0]||1))*100;}
-    var rows=depFScope(w).slice();
-    var sk=(w.tsort||"net-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
-    rows.sort(function(a,b){if(key==="name")return dir*a.name.localeCompare(b.name);if(key==="type")return dir*a.type.localeCompare(b.type);if(key==="trend")return dir*(trendPct(a)-trendPct(b));return dir*(a.net-b.net);});
-    var tot=rows.reduce(function(s,a){return s+a.net;},0);
-    var PER=50,nRows=rows.length,shown=Math.min(Math.max(PER,w.tshown||PER),nRows);w.tshown=shown;
-    var pageRows=rows.slice(0,shown),remaining=nRows-shown;
-    function sb(k,label){var on=key===k,ic=on?(dir<0?"arrow_downward":"arrow_upward"):"unfold_more";return '<button class="wt-sort'+(on?" on":"")+'" data-depf="tsort" data-id="'+w.id+'" data-k="'+k+'">'+label+' <span class="material-symbols-rounded">'+ic+'</span></button>';}
-    var head='<div class="wt-row wt-head"><span class="lr-main">'+sb("name","Name")+'</span><span class="dt-c dt-type">'+sb("type","Type")+'</span><span class="dt-c dt-tr">'+sb("trend","Trend")+'</span><span class="wt-c2">'+sb("net","Balance")+'</span></div>';
-    var leaf=w.leaf;var body=pageRows.map(function(a){var tp=trendPct(a),tn=tp<0,esc=a.type.replace(/"/g,"&quot;"),aesc=a.name.replace(/"/g,"&quot;");
-      var tip=aesc+', Account '+(a.acctFull||a.acct),nmBlock='<span class="lr-tipwrap" data-tip="'+tip+'" data-tip-plain><span class="lr-name">'+a.name+'</span><span class="lr-acctno">'+a.acct+'</span></span>';
-      return '<div class="wt-row'+(leaf?'':' wt-rowh')+'" data-id="'+w.id+'" data-acct="'+a.name+'">'+(leaf?'<span class="lr-main lr-stack">'+nmBlock+'</span>':'<span class="lr-main lr-stack lr-link" data-depf="pick-acct" data-v="'+aesc+'" data-type="'+esc+'" data-acctno="'+a.acct+'" data-id="'+w.id+'">'+nmBlock+'</span>')+'<span class="dt-c dt-type"><span class="type-badge tb-static" title="'+esc+'"><span class="material-symbols-rounded tb-ic">category</span><span class="tb-nm">'+a.type+'</span></span></span><span class="dt-c dt-tr"><span class="rtrend'+(tn?" neg":"")+'"><span class="material-symbols-rounded">'+(tn?"arrow_drop_down":"arrow_drop_up")+'</span>'+Math.abs(tp).toFixed(1)+'%</span></span><span class="wt-c2">'+money(a.net)+'</span></div>';}).join("");
-    var pager=(remaining>0)?('<div class="depf-more-row"><button class="depf-more" data-depf="tmore" data-id="'+w.id+'" aria-label="Load more accounts, '+remaining+' remaining">Load more<span class="depf-more-n">'+remaining+'</span></button></div>'):'';
-    return '<div class="scroll">'+head+body+'</div><div class="dep-total"><span>Total</span><span>'+money(tot)+'</span></div>'+pager;}
-  function depFTrendSet(w,range,by){
-    if(by==="type"){return depFByType(w).map(function(t){var accts=depFData(w).filter(function(a){return a.type===t.name;}),agg=null;accts.forEach(function(a){var s=depFAcctSeries(a,range);if(!agg)agg=s.slice();else s.forEach(function(v,j){agg[j]+=v;});});return {name:t.name,series:agg||[],net:t.net,down:!!(agg&&agg[agg.length-1]<agg[0])};}).sort(function(a,b){return b.net-a.net;});}
-    return depFScope(w).map(function(a){return {name:a.name,series:depFAcctSeries(a,range),net:a.net,down:a.trend==="down",type:a.type,acct:a.acct,acctFull:a.acctFull};}).sort(function(a,b){return b.net-a.net;});}
-  function depFTrend(w,big){
-    var range=w.range||"Q",f=w.filter||"All types",allT=f.indexOf("All")===0,bd=depFBd(w),mode=(bd==="total")?"total":(allT?"type":"account");
-    var scopeAll=depFScope(w),agg=null;scopeAll.forEach(function(a){var s=depFAcctSeries(a,range);if(!agg)agg=s.slice();else s.forEach(function(v,j){agg[j]+=v;});});agg=agg||[0];
-    var multi=(mode!=="total");
-    var fullSet=multi?depFTrendSet(w,range,mode):[{name:(allT?"All accounts":f),series:agg}];
-    var ramp=blueRamp(Math.max(1,fullSet.length));
-    var isoIdx=(multi&&w.trIso!=null&&w.trIso>=0&&w.trIso<fullSet.length)?w.trIso:null;
-    var plotted=isoIdx!=null?[fullSet[isoIdx]]:fullSet;
-    var n=(fullSet[0]&&fullSet[0].series)?fullSet[0].series.length:0;
-    var lo=Infinity,hi=-Infinity;plotted.forEach(function(x){x.series.forEach(function(v){if(v<lo)lo=v;if(v>hi)hi=v;});});
-    if(!isFinite(lo)){lo=0;hi=1;}var sp=(hi-lo)||Math.abs(hi)||1;lo=Math.max(0,lo-sp*0.18);hi=hi+sp*0.18;var dom=(hi-lo)||1;
-    function px(i){return n>1?(i/(n-1)*100):50;}function py(v){return (1-(v-lo)/dom)*100;}
-    var grid="";[0,50,100].forEach(function(gy){grid+='<line x1="0" y1="'+gy+'" x2="100" y2="'+gy+'" stroke="var(--stroke-widget)" stroke-width="1" vector-effect="non-scaling-stroke"'+(gy===100?'':' stroke-dasharray="2 4" opacity="0.5"')+'/>';});
-    var lines=plotted.map(function(x){var idx=fullSet.indexOf(x),p=x.series.map(function(v,j){return px(j).toFixed(2)+','+py(v).toFixed(2);}).join(" ");return '<polyline class="tl" data-idx="'+idx+'" fill="none" stroke="'+ramp[idx]+'" stroke-width="1.7" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" points="'+p+'"/>';}).join("");
-    var hits=plotted.map(function(x){var idx=fullSet.indexOf(x),p=x.series.map(function(v,j){return px(j).toFixed(2)+','+py(v).toFixed(2);}).join(" ");return '<polyline class="tl-hit" data-idx="'+idx+'" fill="none" stroke="transparent" stroke-width="'+(multi?14:22)+'" vector-effect="non-scaling-stroke" points="'+p+'"/>';}).join("");
-    var area="";if(plotted.length===1){var pa=plotted[0].series.map(function(v,j){return px(j).toFixed(2)+','+py(v).toFixed(2);}).join(" ");area='<polygon fill="url(#depftaf)" points="0,100 '+pa+' 100,100"/>';}
-    var svg='<svg class="ln" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="depftaf" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--chart)" stop-opacity="0.16"/><stop offset="100%" stop-color="var(--chart)" stop-opacity="0"/></linearGradient></defs>'+grid+area+lines+hits+'</svg>';
-    var yl='<span style="top:0%">'+fmtAxis(hi)+'</span><span style="top:50%">'+fmtAxis((hi+lo)/2)+'</span><span style="top:100%">'+fmtAxis(lo)+'</span>';
-    var months=depFRangeMonths(range,n),tk=(n<=1)?[0]:(n<=3)?[0,n-1]:[0,Math.round((n-1)/3),Math.round((n-1)*2/3),n-1];tk=tk.filter(function(v,i,a){return a.indexOf(v)===i;});
-    var xl=tk.map(function(i){return '<span style="left:'+px(i)+'%;transform:translateX('+(i===0?"0":(i===n-1?"-100%":"-50%"))+')">'+months[i]+'</span>';}).join("");
-    var legend="";if(multi){var lgTop=isoIdx!=null?('<div class="tr-lg-top"><button class="tr-lg-all" data-depf="tr-iso-clear" data-id="'+w.id+'">'+ICON("arrow_back")+'Show all '+(mode==="type"?"account types":"accounts")+'</button></div>'):'';legend='<div class="tr-legend scroll"><div class="tr-lg-hd">'+(mode==="type"?"Account Types":"Accounts")+'</div>'+lgTop+fullSet.map(function(x,idx){var last=x.series[x.series.length-1],nesc=x.name.replace(/"/g,"&quot;"),nmTip=(mode==="account")?(nesc+', Account '+(x.acctFull||x.acct)):nesc;return '<div class="tr-lg-row'+(isoIdx===idx?" sel":"")+'" data-idx="'+idx+'" data-depf="tr-iso" data-id="'+w.id+'" data-kind="'+mode+'" data-type="'+(x.type||"").replace(/"/g,"&quot;")+'" data-name="'+nesc+'" data-acctno="'+(x.acct||"")+'"><span class="tr-lg-sw" style="background:'+ramp[idx]+'"></span><span class="material-symbols-rounded leg-ic">'+(mode==="type"?"category":"account_balance_wallet")+'</span><span class="tr-lg-nm" data-tip="'+nmTip+'" data-tip-plain>'+x.name+'</span><span class="tr-lg-v">'+fmtAxis(last)+'</span></div>';}).join("")+'</div>';}
-    var blob=plotted.map(function(x){var idx=fullSet.indexOf(x);return x.name+"|"+ramp[idx]+"|"+idx+"|"+x.series.join(",");}).join(";");
-    var plot='<div class="tr-plot'+(multi?" multi":"")+'"><div class="tr-yax">'+yl+'</div><div class="tr-canvas" data-id="'+w.id+'" data-multi="'+(multi?1:0)+'" data-blob="'+blob.replace(/"/g,"&quot;")+'" data-months="'+months.join(",")+'" data-lo="'+lo+'" data-hi="'+hi+'" data-n="'+n+'">'+svg+'<div class="tr-cross"></div></div><div class="tr-xax">'+xl+'</div>'+legend+'</div>';
-    return plot;}
-  function depFDonut(w,big){var d=depFDist(w),segs=d.segs,tot=segs.reduce(function(s,a){return s+a.net;},0),R=52,C=2*Math.PI*R,off=0,arcs="",legend="",shownReal=segs.filter(function(a){return !a.others;}).length,ramp=blueRamp(shownReal),grouped=(d.total||shownReal)-shownReal;
-    segs.forEach(function(a,i){var frac=tot?a.net/tot:0,len=frac*C,c=a.others?OTHERS_COLOR:ramp[i];var drill=a.others?(' data-depf="others" data-id="'+w.id+'"'):(a.total?'':(' data-depf="dist-drill" data-id="'+w.id+'" data-by="'+d.by+'" data-val="'+a.name.replace(/"/g,"&quot;")+'"'+(d.by==="account"?' data-type="'+(a.type||d.scopeType||"").replace(/"/g,"&quot;")+'"':'')));arcs+='<circle class="seg" data-seg="'+i+'"'+drill+' cx="70" cy="70" r="'+R+'" fill="none" stroke="'+c+'" stroke-width="20" stroke-dasharray="'+Math.min(len+0.9,C).toFixed(2)+' '+Math.max(0,C-len-0.9).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 70 70)"></circle>';off+=len;var lgTip=(d.by==="account"&&!a.others)?' data-tip="'+a.name.replace(/"/g,"&quot;")+', Account '+(a.acctFull||a.acct)+'" data-tip-plain':'';legend+='<div class="leg" data-seg="'+i+'"'+drill+'><span class="dot" style="background:'+c+'"></span><span class="material-symbols-rounded leg-ic">'+(d.by==="type"?"category":d.by==="total"?"data_usage":"account_balance_wallet")+'</span><span class="lg-main"'+lgTip+'>'+a.name+'</span><span class="lg-meta">'+money(a.net)+' · '+Math.round(frac*100)+'%</span></div>';});
-    var DS=({wide:250,xwide:280})[w.size]||(big?250:190);
-    var f2=(w.filter||"All types"),allT2=f2.indexOf("All")===0,bd2=depFBd(w);
-    var showTog=!w.acct&&!w.leaf;
-    var grpOpt=allT2?["group","By Account Type","category"]:["group","By Account","account_balance_wallet"];
-    var lgHead=showTog?depFTog2([["total","Total","data_usage"],grpOpt],bd2,w):'<div class="legend-hd">'+d.legendLabel+'</div>';
-    return '<div class="dist-wrap"><div class="pie-wrap row"><svg class="donut" viewBox="0 0 140 140" width="'+DS+'" height="'+DS+'" aria-hidden="true">'+arcs+'<text x="70" y="67" text-anchor="middle" class="donut-c1">'+fmtAxis(tot)+'</text><text x="70" y="86" text-anchor="middle" class="donut-c2">total</text></svg><div class="legend-col"><div class="legend-head">'+lgHead+'</div><div class="legend" style="max-height:'+DS+'px">'+legend+'</div></div></div></div>';}
-  function depFFull(w){if(w.acct)return '<div class="dep-full one"><div class="dep-col"><div class="dep-col-h">Balances</div>'+depFTable(w,true)+'</div></div>';return '<div class="dep-full"><div class="dep-col"><div class="dep-col-h">Balances</div>'+depFTable(w,true)+'</div><div class="dep-col dep-col-dist"><div class="dep-col-h">Distribution</div>'+depFDonut(w,true)+'</div></div>';}
-  function depFMetricParts(w){var range=w.range||"Q";
-    if(w.view==="trend"&&w.trIso!=null){var allT=(w.filter||"All types").indexOf("All")===0,bd=depFBd(w),mode=(bd==="total")?"total":(allT?"type":"account");if(mode!=="total"){var set=depFTrendSet(w,range,mode),iso=set[w.trIso]||null;if(iso){var si=iso.series,li=si[si.length-1],fi=si[0];return {total:li,s:si,labs:depFSparkLabels(range,si.length),latest:li,first:fi,dpct:((li-fi)/(fi||1))*100,neg:(li-fi)<0,focus:iso.name};}}}
-    var n={W:8,M:9,P:9,Q:9,F:12,Y:12}[range]||9,total=depFScope(w).reduce(function(x,a){return x+a.net;},0),s=depFSeriesN(range,n,total),labs=depFSparkLabels(range,n),latest=s[s.length-1],first=s[0],dpct=((latest-first)/(first||1))*100,neg=dpct<0;return {total:total,s:s,labs:labs,latest:latest,first:first,dpct:dpct,neg:neg};}
-  function depFSparkHTML(p,cls){var s=p.s,W=120,H=44,pad=4,mx=Math.max.apply(null,s),mn=Math.min.apply(null,s),rng=(mx-mn)||1;var xs=s.map(function(v,i){return pad+i*(W-2*pad)/((s.length-1)||1);}),ys=s.map(function(v){return H-pad-((v-mn)/rng)*(H-2*pad);});var line=smoothPath(xs,ys),area=line+" L"+xs[xs.length-1].toFixed(1)+","+H+" L"+xs[0].toFixed(1)+","+H+" Z";var xp=xs.map(function(x){return (x/W*100).toFixed(2);}).join(","),yp=ys.map(function(y){return (y/H*100).toFixed(2);}).join(",");return '<div class="kpi-spark depf-spark'+(cls?" "+cls:"")+'" data-series="'+s.join(',')+'" data-labels="'+p.labs.join("|")+'" data-xp="'+xp+'" data-yp="'+yp+'" tabindex="0" aria-label="Total deposits over the selected window. Hover to read a point"><svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><defs><linearGradient id="depfdsg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--chart)" stop-opacity="0.22"/><stop offset="100%" stop-color="var(--chart)" stop-opacity="0"/></linearGradient></defs><path d="'+area+'" fill="url(#depfdsg)"/><path d="'+line+'" fill="none" stroke="var(--chart)" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="ds-end" style="left:'+xp.split(",").pop()+'%;top:'+yp.split(",").pop()+'%"></div><div class="ds-hair"></div><div class="ds-dot"></div></div>';}
-  function depFGlance(w){var p=depFMetricParts(w);return '<div class="kpi-row"><div class="kpi-num">'+depFScopeChip(w)+'<div class="metric-value" data-depf-num data-latest="'+money(p.latest)+'">'+money(p.latest)+'</div><div class="gl-sub">'+depFDelta(p)+depFRangeBtn(w)+'</div></div>'+depFSparkHTML(p)+'</div>';}
-  function depFHeaderBlock(w){var p=depFMetricParts(w);var v=w.view||"table";
-    var numInner='<div class="dep-hd-kpigrp"><span class="metric-value">'+money(p.latest)+'</span><span class="delta-grp">'+depFDelta(p)+depFRangeBtn(w)+'</span></div>';
-    var showSearch=(v==="table"||v==="dist"||v==="balances");
-    var searchHTML=showSearch?'<div class="dep-search hd-search"><span class="material-symbols-rounded">search</span><input class="dep-q" placeholder="Search accounts" aria-label="Search accounts"></div>':'';
-    return '<div class="dep-hd"><div class="dep-hd-top">'+depFScopeChip(w)+'<div class="dep-hd-toggle">'+depFToggle(w)+'</div></div><div class="dep-hd-num">'+numInner+'<div class="dep-hd-r">'+depFBreakToggle(w)+searchHTML+'</div></div></div>';}
-  function depFContent(w){
-    if(w.size==="kpi")return depFGlance(w);
-    var v=w.view||"table";if((w.acct||w.leaf)&&v==="dist")v="trend";
-    var mh=depFHeaderBlock(w);
-    if(w.size==="wide")return mh+(v==="trend"?depFTrend(w,false):v==="dist"?depFDonut(w,false):depFTable(w,false));
-    return mh+(v==="trend"?depFTrend(w,true):depFFull(w));
-  }
-  /* Row-detail modal body (owner change 3 keeps this; only the CHART drill-modal was removed). Reuses Jo's .acctm* classes and her global modal chrome (modal.b path in renderModal). */
-  function depFAcctModalBody(m){var a=m.acctNo?DEPF_DEP.filter(function(x){return x.acct===m.acctNo;})[0]:DEPF_DEP.filter(function(x){return x.name===m.aname&&(!m.atype||x.type===m.atype);})[0];if(!a)return "";
-    var range=m.range||"Q",mv=m.mview||"trend",s=depFAcctSeries(a,range),n=s.length,latest=s[n-1],first=s[0],dpct=((latest-first)/(first||1))*100,neg=dpct<0;
-    var toggle='<div class="vtoggle" role="group" aria-label="View"><button class="vt'+(mv==="trend"?" on":"")+'" data-depf="acct-view" data-v="trend" aria-pressed="'+(mv==="trend")+'">'+ICON("show_chart")+'Trend</button><button class="vt'+(mv==="table"?" on":"")+'" data-depf="acct-view" data-v="table" aria-pressed="'+(mv==="table")+'">'+ICON("table_rows")+'Table</button></div>';
-    var head='<div class="acctm-bar"><span class="type-badge tb-static"><span class="tb-ic material-symbols-rounded">category</span><span class="tb-nm">'+a.type+'</span></span>'+toggle+'</div><div class="acctm-kpi"><span class="metric-value">'+money(latest)+'</span><span class="delta-grp">'+depFDelta({dpct:dpct,neg:neg})+'<span class="trend-range static">vs '+depFPeriodLbl({range:range})+'</span></span></div>';
-    var content;
-    if(mv==="table"){var tn=neg;
-      content='<div class="acctm-tbl"><div class="wt-row wt-head"><span class="lr-main">Name</span><span class="dt-c dt-type">Type</span><span class="dt-c dt-tr">Trend</span><span class="wt-c2">Balance</span></div><div class="wt-row"><span class="lr-main">'+a.name+'</span><span class="dt-c dt-type"><span class="type-badge"><span class="material-symbols-rounded tb-ic">category</span><span class="tb-nm">'+a.type+'</span></span></span><span class="dt-c dt-tr"><span class="rtrend'+(tn?" neg":"")+'"><span class="material-symbols-rounded">'+(tn?"arrow_drop_down":"arrow_drop_up")+'</span>'+Math.abs(dpct).toFixed(1)+'%</span></span><span class="wt-c2">'+money(a.net)+'</span></div><div class="dep-total"><span>Total</span><span>'+money(a.net)+'</span></div></div>';
-    }else{
-      var lo=Math.min.apply(null,s),hi=Math.max.apply(null,s),sp=(hi-lo)||Math.abs(hi)||1;lo=Math.max(0,lo-sp*0.18);hi=hi+sp*0.18;var dom=(hi-lo)||1;
-      function px(i){return n>1?(i/(n-1)*100):50;}function py(v){return (1-(v-lo)/dom)*100;}
-      var pts=s.map(function(v,i){return px(i).toFixed(2)+','+py(v).toFixed(2);}).join(" ");
-      var grid="";[0,50,100].forEach(function(gy){grid+='<line x1="0" y1="'+gy+'" x2="100" y2="'+gy+'" stroke="var(--stroke-widget)" stroke-width="1" vector-effect="non-scaling-stroke"'+(gy===100?'':' stroke-dasharray="2 4" opacity="0.5"')+'/>';});
-      var svg='<svg class="ln" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="depftafm" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--chart)" stop-opacity="0.16"/><stop offset="100%" stop-color="var(--chart)" stop-opacity="0"/></linearGradient></defs>'+grid+'<polygon fill="url(#depftafm)" points="0,100 '+pts+' 100,100"/><polyline fill="none" stroke="var(--chart)" stroke-width="1.7" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" points="'+pts+'"/></svg>';
-      var yl='<span style="top:0%">'+fmtAxis(hi)+'</span><span style="top:50%">'+fmtAxis((hi+lo)/2)+'</span><span style="top:100%">'+fmtAxis(lo)+'</span>';
-      var months=depFRangeMonths(range,n),tk=(n<=1)?[0]:(n<=3)?[0,n-1]:[0,Math.round((n-1)/3),Math.round((n-1)*2/3),n-1];tk=tk.filter(function(v,i,arr){return arr.indexOf(v)===i;});
-      var xl=tk.map(function(i){return '<span style="left:'+px(i)+'%;transform:translateX('+(i===0?"0":(i===n-1?"-100%":"-50%"))+')">'+months[i]+'</span>';}).join("");
-      var blob=a.name+"|var(--chart)|0|"+s.join(",");
-      content='<div class="acctm-chart tr-plot"><div class="tr-yax">'+yl+'</div><div class="tr-canvas" data-multi="0" data-blob="'+blob.replace(/"/g,"&quot;")+'" data-months="'+months.join(",")+'" data-lo="'+lo+'" data-hi="'+hi+'" data-n="'+n+'">'+svg+'<div class="tr-cross"></div></div><div class="tr-xax">'+xl+'</div></div>';
-    }
-    return '<div class="acctm">'+head+content+'</div>';}
-  function depFOpenAcct(w,name,type,acctNo){var a=acctNo?DEPF_DEP.filter(function(x){return x.acct===acctNo;})[0]:DEPF_DEP.filter(function(x){return x.name===name&&(!type||x.type===type);})[0];if(!a)return;var ctx={aname:a.name,atype:a.type,acctNo:a.acct,range:w.range||"Q",mview:"trend"};modal={t:a.name,glyph:"account_balance_wallet",depf:ctx,b:depFAcctModalBody(ctx)};modalMounted=false;depFClosePop();pop=null;render();}
-  /* Owner change 3: chart click drills into scope, it does not expand. A type series sets the top-left scope to that type and flips the breakdown to By Account. */
-  function depFDrillType(w,typeName){if(!typeName)return;w.filter=typeName;w.acct=null;w.acctType=null;w.acctNo=null;w.bd="group";w.trIso=null;w.tshown=50;}
-  function depFPopContent(){var w=find(DEPF_POP.id);if(!w)return "";
-    if(DEPF_POP.type==="rangemenu"){var r=w.range||"Q";return '<div class="cap">Compare to</div>'+[["W","Previous week"],["M","Previous month"],["P","Previous period"],["Q","Previous quarter"],["F","Previous fiscal year"],["Y","Previous calendar year"]].map(function(o){return '<button class="mi'+(r===o[0]?" check":"")+'" data-depf="range-set" data-id="'+w.id+'" data-r="'+o[0]+'">'+(r===o[0]?ICON("check"):'<span class="mi-gap"></span>')+o[1]+'</button>';}).join("");}
-    var q=(DEPF_FQ||"").toLowerCase();
-    var allSel=(!w.acct)&&(w.filter||"All types").indexOf("All")===0;
-    var types=depFByType(w).map(function(t){return t.name;});
-    var accts=depFData(w);
-    var tM=types.filter(function(t){return t.toLowerCase().indexOf(q)>-1;});
-    var aM=accts.filter(function(a){return a.name.toLowerCase().indexOf(q)>-1||a.type.toLowerCase().indexOf(q)>-1;});
-    var out='<div class="dd-search">'+ICON("search")+'<input class="dd-input" id="depFfq" placeholder="Search account types or accounts" value="'+(DEPF_FQ||"").replace(/"/g,"&quot;")+'" autocomplete="off"></div><div class="menu-scroll" role="listbox">';
-    if(!q||"all accounts".indexOf(q)>-1)out+='<button class="mi'+(allSel?" check":"")+'" data-depf="set-scope" data-id="'+w.id+'" data-mode="all">'+(allSel?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm">All Accounts</span></button>';
-    if(tM.length)out+='<div class="cap">Account Type</div>'+tM.map(function(t){var sel=(!w.acct)&&w.filter===t,esc=t.replace(/"/g,"&quot;");return '<button class="mi'+(sel?" check":"")+'" data-depf="set-scope" data-id="'+w.id+'" data-mode="type" data-v="'+esc+'">'+(sel?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-ic material-symbols-rounded">category</span><span class="mi-nm">'+t+'</span></button>';}).join("");
-    if(aM.length)out+='<div class="cap">Accounts</div>'+aM.map(function(a){var sel=w.acctNo?w.acctNo===a.acct:(w.acct===a.name&&w.acctType===a.type),esc=a.name.replace(/"/g,"&quot;"),tesc=a.type.replace(/"/g,"&quot;");return '<button class="mi'+(sel?" check":"")+'" data-depf="set-scope" data-id="'+w.id+'" data-mode="account" data-v="'+esc+'" data-type="'+tesc+'" data-acctno="'+a.acct+'">'+(sel?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-ic material-symbols-rounded">account_balance_wallet</span><span class="mi-nm-stack" data-tip="'+esc+', Account '+(a.acctFull||a.acct)+'" data-tip-plain><span class="mi-nm">'+a.name+'</span><span class="mi-acctno">'+(a.acctFull||a.acct)+'</span></span><span class="type-badge tb-static mi-tb"><span class="tb-ic material-symbols-rounded">category</span><span class="tb-nm">'+a.type+'</span></span></button>';}).join("");
-    if(!tM.length&&!aM.length&&(q&&"all accounts".indexOf(q)<0))out+='<div class="mi-note" style="color:var(--txt-subtle)">No matches for "'+(DEPF_FQ||"").replace(/"/g,"&quot;")+'"</div>';
-    return out+'</div>';}
-  var DEPF_POP=null,DEPF_FQ="";
-  function depFPositionPop(el,anchor){var rct=anchor.getBoundingClientRect(),M=8;el.style.visibility="hidden";el.style.left="0px";el.style.top="0px";var bw=el.offsetWidth,bh=el.offsetHeight;var left=rct.left;if(left+bw>window.innerWidth-M)left=rct.right-bw;if(left<M)left=M;var top=rct.bottom+7;if(top+bh>window.innerHeight-M){var up=rct.top-bh-7;top=(up>=M)?up:Math.max(M,window.innerHeight-M-bh);}el.style.left=left+"px";el.style.top=top+"px";el.style.visibility="";}
-  function depFOpenPop(anchor,type,id){DEPF_POP={type:type,id:id};if(type==="depfilter")DEPF_FQ="";
-    var el=document.getElementById("depfPop");if(!el){el=document.createElement("div");el.id="depfPop";document.body.appendChild(el);}
-    el.className="pop"+(type==="depfilter"?" pop-filter":"");el.innerHTML=depFPopContent();
-    depFPositionPop(el,anchor);
-    var fi=document.getElementById("depFfq");if(fi){fi.focus();try{fi.setSelectionRange(fi.value.length,fi.value.length);}catch(e){}}}
-  function depFRepositionPop(){var el=document.getElementById("depfPop");if(!el||!DEPF_POP)return;var anchor=document.querySelector('[data-depf="'+DEPF_POP.type+'"][data-id="'+DEPF_POP.id+'"]');if(anchor)depFPositionPop(el,anchor);}
-  function depFClosePop(){DEPF_POP=null;var el=document.getElementById("depfPop");if(el)el.remove();}
-  document.addEventListener("click",function(e){
-    var t=e.target.closest&&e.target.closest("[data-depf]");
-    if(!t){if(DEPF_POP&&!(e.target.closest&&e.target.closest("#depfPop")))depFClosePop();return;}
-    var a=t.getAttribute("data-depf"),id=t.getAttribute("data-id");
-    if(a==="acct-view"){if(modal&&modal.depf){modal.depf.mview=t.getAttribute("data-v");modal.b=depFAcctModalBody(modal.depf);render();}return;}
-    var w=id?find(id):null;if(!w)return;
-    if(a==="depfilter"){if(DEPF_POP&&DEPF_POP.type==="depfilter"&&document.getElementById("depfPop")){depFClosePop();}else{depFOpenPop(t,"depfilter",id);}return;}
-    if(a==="rangemenu"){if(DEPF_POP&&DEPF_POP.type==="rangemenu"&&document.getElementById("depfPop")){depFClosePop();}else{depFOpenPop(t,"rangemenu",id);}return;}
-    if(a==="set-scope"){var mode=t.getAttribute("data-mode"),val=t.getAttribute("data-v");if(mode==="account"){w.acct=val;w.acctType=t.getAttribute("data-type");w.acctNo=t.getAttribute("data-acctno");}else{if(mode==="all")w.filter="All types";else if(mode==="type")w.filter=val;w.acct=null;w.acctType=null;w.acctNo=null;}w.trIso=null;w.bd="group";w.tshown=50;depFClosePop();render();return;}
-    if(a==="range-set"){w.range=t.getAttribute("data-r");depFClosePop();render();return;}
-    if(a==="pick-acct"){depFOpenAcct(w,t.getAttribute("data-v"),t.getAttribute("data-type"),t.getAttribute("data-acctno"));return;}
-    if(a==="tr-iso"){if(t.getAttribute("data-kind")==="type"){depFDrillType(w,t.getAttribute("data-name"));render();}return;} /* account series: inert */
-    if(a==="tr-iso-clear"){w.trIso=null;render();return;}
-    if(a==="dep-view"){w.view=t.getAttribute("data-v");depFClosePop();render();return;}
-    if(a==="tsort"){var k=t.getAttribute("data-k"),cs=(w.tsort||"net-desc").split("-");w.tsort=(cs[0]===k)?(k+"-"+(cs[1]==="asc"?"desc":"asc")):(k+"-"+((k==="name"||k==="type")?"asc":"desc"));w.tshown=50;render();return;}
-    if(a==="tmore"){w.tshown=(w.tshown||50)+50;render();return;}
-    if(a==="bd"){w.bd=t.getAttribute("data-b");w.trIso=null;render();return;}
-    if(a==="dist-drill"){if(t.getAttribute("data-by")==="type"){depFDrillType(w,t.getAttribute("data-val"));render();}return;} /* account slice: inert */
-    if(a==="others"){return;} /* inert: no chart click opens an overlay */
-  });
-  document.addEventListener("input",function(e){if(e.target.id==="depFfq"){DEPF_FQ=e.target.value;var p=e.target.selectionStart;var el=document.getElementById("depfPop");if(el){el.innerHTML=depFPopContent();depFRepositionPop();var fi=document.getElementById("depFfq");if(fi){fi.focus();try{fi.setSelectionRange(p,p);}catch(_){}}}return;}});
-  /* Spark scrub, namespaced to .depf-spark so it never collides with Jo's #depnum-keyed .dep-spark handler; updates this widget's own [data-depf-num]. */
-  var DEPF_dsTip=null;
-  function depFdsShow(e,label,val){if(!DEPF_dsTip){DEPF_dsTip=document.createElement("div");DEPF_dsTip.className="ds-tip";document.body.appendChild(DEPF_dsTip);}DEPF_dsTip.innerHTML='<span class="dst-l">'+label+'</span><span class="dst-v">'+val+'</span>';var x=e.clientX+12,y=e.clientY-16;if(x+140>window.innerWidth)x=e.clientX-140;DEPF_dsTip.style.left=x+"px";DEPF_dsTip.style.top=y+"px";}
-  function depFdsHide(){if(DEPF_dsTip){DEPF_dsTip.remove();DEPF_dsTip=null;}}
-  function depFdsReset(sp){var row=sp.closest(".kpi-row"),num=row&&row.querySelector("[data-depf-num]");if(num&&num.getAttribute("data-latest"))num.textContent=num.getAttribute("data-latest");var h=sp.querySelector(".ds-hair"),d=sp.querySelector(".ds-dot");if(h)h.style.opacity="0";if(d)d.style.opacity="0";depFdsHide();}
-  document.addEventListener("mousemove",function(e){var sp=e.target.closest&&e.target.closest(".depf-spark");if(!sp){if(DEPF_dsTip)depFdsHide();return;}var r=sp.getBoundingClientRect();var frac=Math.min(1,Math.max(0,(e.clientX-r.left)/(r.width||1)));var s=sp.getAttribute("data-series").split(","),labs=sp.getAttribute("data-labels").split("|"),xp=sp.getAttribute("data-xp").split(","),yp=sp.getAttribute("data-yp").split(",");var idx=Math.round(frac*(s.length-1));var row=sp.closest(".kpi-row"),num=row&&row.querySelector("[data-depf-num]");if(num)num.textContent=money(parseInt(s[idx],10));var hair=sp.querySelector(".ds-hair"),dot=sp.querySelector(".ds-dot");if(hair){hair.style.left=xp[idx]+"%";hair.style.opacity="1";}if(dot){dot.style.left=xp[idx]+"%";dot.style.top=yp[idx]+"%";dot.style.opacity="1";}depFdsShow(e,labs[idx],money(parseInt(s[idx],10)));});
-  document.addEventListener("mouseout",function(e){var sp=e.target.closest&&e.target.closest(".depf-spark");if(!sp)return;if(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest(".depf-spark"))return;depFdsReset(sp);});
-  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&DEPF_POP)depFClosePop();});
-  document.addEventListener("click",function(e){var cv=e.target.closest&&e.target.closest('.tr-canvas[data-depfclick="1"]');if(!cv)return;if(lnActive==null)return;var wid=cv.getAttribute("data-id"),wc=wid?find(wid):null;if(!wc)return;if(cv.getAttribute("data-mode")==="type"){var parts=cv.getAttribute("data-blob").split(";"),nm=null;for(var bi=0;bi<parts.length;bi++){var pp=parts[bi].split("|");if(+pp[2]===lnActive){nm=pp[0];break;}}if(nm){depFDrillType(wc,nm);hideLnTip();render();}}else{hideLnTip();}},true);
-  window.addEventListener("resize",function(){depFRepositionPop();});
 
 /* =====================================================================
    Payroll Scheduled Time Off (MB updated) , prefix ptoF , kind "pto-mb"
@@ -14007,267 +13978,6 @@ var GPF_WIRED=false;
   });
 })();
 /* ===== end W17 Gifts Pledges V2 ===== */
-/* ===== W07 Deposits on Hand V2 ===== */
-  /* =====================================================================
-     W07 Deposits on Hand V2 JS, kind "deposits-oc", prefix depO
-     ADDITIVE port of Jo's Deposits on Hand (dep) widget. Built from her dep
-     block, reusing her shell classes and Pathway tokens (.dep-hd, .scope-chip,
-     .vtoggle/.vt, .tr-*, .pie-wrap/.donut/.legend*, .dep-search/.dep-q, .wt-*,
-     .dep-total, .state/.skeleton, .acctm*, .mi/.dd-search/.menu-scroll), plus
-     the four owner-directed changes from the W07 Step 4 doc:
-       (1) table pagination, 50/page with a pager (page N of M, prev/next,
-           a "Showing X to Y of Z accounts" count) over a 125-account mock
-           (grand total
-           $106,726,837); the KPI total and the type subtotals cross-foot over
-           the FULL filtered set, pagination is display-only.
-     V2 re-port 2026-09-07 (base 71ca056): pager replaces the old Load-more,
-     own empty/loading/error states (empty trigger: zero accounts), trend
-     LINE click now drills like the legend (type: re-scope; account: inert;
-     the shared isolate-on-click is opted out via data-multi="0"), donut
-     Others slice carries data-n/data-kind, decorative icons aria-hidden.
-     Known open item carried, not resolved: the Step 4 doc mentions a
-     Compare-To overlay line on Trend; the built V2 has NO overlay, and the
-     port follows the build (flagged in the Design Differences doc).
-       (2) scope-dependent breakdown: All Accounts offers Total / By Account
-           Type only; a single account type in scope offers Total / By Account.
-       (3) chart click drills, does not expand: clicking an account-TYPE series
-           (donut slice or trend line) re-scopes to that type and switches the
-           breakdown to By Account; clicking an individual ACCOUNT series is
-           inert; the old click-to-expand / drill-modal on charts is removed;
-           the table-row detail modal is preserved.
-       (4) Compare To gains a fiscal "Period" option between month and quarter,
-           so the scale is Previous week / month / period / quarter / fiscal
-           year / calendar year.
-     Self-contained: its own body-level popover (#depoPop) and its own delegated
-     listeners keyed on data-depo, so Jo's pop / popContent / triggerSelector /
-     renderModal / click / input handlers are never edited. The row-detail modal
-     reuses Jo's global `modal` + renderModal (the modal.b path). State lives on
-     the registry widget; re-render is Jo's render(). Shared-region edits are
-     limited to the contentHTML() and aboutOf() dispatch lines.
-     Historical/period-end balances (Trend and non-current Compare To) are a
-     data-layer gate; the mock interpolates. The out-of-widget drill-through
-     target is an open item and is NOT invented here.
-     ===================================================================== */
-  var DEPO_TARGET_TOTAL=106726837;
-  var DEPO_DEP=(function(){var out=[],seed=7;function r(){seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;}
-    var groups=[{t:"Checking",n:14},{t:"Savings",n:16},{t:"Money Market",n:10},{t:"Certificate of Deposit",n:12},{t:"Restricted Funds",n:22},{t:"Endowment",n:9},{t:"Trust Accounts",n:11},{t:"Grant Funds",n:13},{t:"Operating Reserve",n:8},{t:"Escrow",n:7}]; // 122 generated + 3 edge-case rows = 125
-    var suf=["General","Youth","Missions","Benevolence","Capital","Memorial","Legacy","Outreach","Facilities","Worship","Children","Fellowship","Building","Scholarship","Cemetery","Music","Media","Camp","Housing","Senior"];
-    var inc=["Jan 2011","Jun 2013","Mar 2015","Aug 2017","Feb 2019","Nov 2021","Apr 2023"],trs=["up","up","flat","down"];
-    groups.forEach(function(g){for(var i=0;i<g.n;i++){var s4=1000+Math.floor(r()*8999);out.push({name:suf[i%suf.length]+(i>=suf.length?" "+(Math.floor(i/suf.length)+1):""),type:g.t,incept:inc[Math.floor(r()*inc.length)],acct:"••"+s4,acctFull:"004417"+s4,net:Math.round(30000+Math.pow(r(),1.9)*2100000),trend:trs[Math.floor(r()*4)]});}});
-    /* Deliberate real-world edge cases (Shelby does not enforce name uniqueness, and names can be long): two accounts sharing a name differing only by account number, plus one very long name to exercise truncation. */
-    out.push({name:"General",type:"Checking",incept:"May 2018",acct:"••7734",acctFull:"0044177734",net:512500,trend:"up"});
-    out.push({name:"General",type:"Checking",incept:"Sep 2020",acct:"••2916",acctFull:"0044172916",net:98750,trend:"down"});
-    out.push({name:"Faith Community Endowment for Children's Ministry and Outreach Programs",type:"Endowment",incept:"Feb 2014",acct:"••5502",acctFull:"0044175502",net:365300,trend:"flat"});
-    /* Scale the whole set to the owner-fixed grand total, then absorb the rounding remainder into the largest account so the total is EXACTLY $106,726,837 with every balance positive. */
-    var raw=out.reduce(function(s,a){return s+a.net;},0),scale=DEPO_TARGET_TOTAL/raw;
-    out.forEach(function(a){a.net=Math.max(1000,Math.round(a.net*scale));});
-    var sum2=out.reduce(function(s,a){return s+a.net;},0),bi=0;for(var k=1;k<out.length;k++){if(out[k].net>out[bi].net)bi=k;}out[bi].net+=(DEPO_TARGET_TOTAL-sum2);
-    return out;})();
-  function depOData(w){return (w&&w.dataset==="empty")?[]:DEPO_DEP;}
-  function depOByType(w){var m={},order=[];depOData(w).forEach(function(a){if(m[a.type]===undefined){m[a.type]=0;order.push(a.type);}m[a.type]+=a.net;});return order.map(function(t){return {name:t,net:m[t]};});}
-  function depOAcctByScope(w){return w.acctNo?depOData(w).filter(function(a){return a.acct===w.acctNo;})[0]:depOData(w).filter(function(a){return a.name===w.acct&&(!w.acctType||a.type===w.acctType);})[0];}
-  function depOScope(w){if(w.acct){var mine=depOAcctByScope(w);return mine?[mine]:[];}var f=w.filter||"All types";return depOData(w).filter(function(a){return f.indexOf("All")===0||a.type===f;});}
-  /* Owner change 2: unified scope-dependent breakdown. "total" = one ring/line; "group" = By Account Type at All Accounts, By Account at a selected type. The old all-accounts By-every-account branch is gone. */
-  function depOBd(w){if(w.acct)return "total";return w.bd||"group";}
-  function depODist(w){var N={wide:8,xwide:14}[w.size]||10;var f=w.filter||"All types",allT=f.indexOf("All")===0,bd=depOBd(w);
-    if(w.acct){var mine=depOAcctByScope(w);var tName=mine?mine.type:"";var inT=depOData(w).filter(function(a){return a.type===tName;}).map(function(a){return {name:a.name,net:a.net,type:a.type,acct:a.acct,acctFull:a.acctFull};});return {by:"account",segs:topN(inT,N),total:inT.length,scopeType:tName,legendLabel:"Accounts"};}
-    if(bd==="total"){var scopeTot=depOScope(w).reduce(function(s,a){return s+a.net;},0);return {by:"total",segs:[{name:(allT?"All Accounts":f),net:scopeTot,total:true}],total:1,scopeType:(allT?null:f),legendLabel:"Total"};}
-    if(allT){var ty=depOByType(w);return {by:"type",segs:topN(ty,N),total:ty.length,scopeType:null,legendLabel:"Account Types"};}
-    var ac=depOScope(w).map(function(a){return {name:a.name,net:a.net,type:a.type,acct:a.acct,acctFull:a.acctFull};}).sort(function(a,b){return b.net-a.net;});return {by:"account",segs:ac,total:ac.length,scopeType:f,legendLabel:"Accounts"};}
-  /* Owner change 4: P is a fiscal PERIOD (Time Window Module: per-org fiscal calendar, span between a month and a quarter), distinct from a calendar month, ordered between M and Q. */
-  function depOAcctSeries(a,range){var n={W:8,M:9,P:9,Q:9,F:12,Y:12}[range]||9,slope={up:0.72,flat:0.98,down:1.24}[a.trend||"up"];return walk(a.name+"|"+range,n,a.net,slope,0.17,0.05);}
-  function depORangeMonths(range,n){var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],out=[],i,now=6;
-    if(range==="W"){for(i=0;i<n;i++)out.push(i===n-1?"Today":(n-1-i)+"d ago");return out;}
-    if(range==="M"||range==="P"||range==="Q"){for(i=0;i<n;i++)out.push(i===n-1?"This week":(n-1-i)+"w ago");return out;}
-    if(range==="F"){for(i=0;i<n;i++)out.push("P"+(i+1));return out;}
-    for(i=n-1;i>=0;i--)out.push(M[(((now-i)%12)+12)%12]);
-    return out;}
-  function depOSparkLabels(range,n){var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],out=[],i;
-    if(range==="W"){for(i=0;i<n;i++)out.push(i===n-1?"Today":(n-1-i)+"d ago");}
-    else if(range==="M"){for(i=0;i<n;i++)out.push(i===n-1?"This week":(n-1-i)+"w ago");}
-    else{var now=6;for(i=n-1;i>=0;i--)out.push(M[(((now-i)%12)+12)%12]);}
-    return out;}
-  function depOSeriesN(range,n,end){if(range==="P"){var mS=walk("total|M",n,end,0.95,0.13,0.06),qS=walk("total|Q",n,end,0.9,0.13,0.06);return mS.map(function(v,i){return Math.round((v+qS[i])/2);});}var ratio={W:.98,M:.95,Q:.9,F:.82,Y:.72}[range]||.88;return walk("total|"+range,n,end,ratio,0.13,0.06);}
-  function depOPeriodLbl(w){return {W:"week",M:"month",P:"period",Q:"quarter",F:"fiscal year",Y:"calendar year"}[w.range||"Q"];}
-  function depOTypeLabel(w){if(w.acct){var suf=w.acctNo?w.acctNo.slice(-2):"";return "Account: "+w.acct+(suf?" **"+suf:"");}var f=w.filter||"All types";return f.indexOf("All")===0?"All Accounts":"Account Type: "+f;}
-  function depOScopeChip(w){var lb=depOTypeLabel(w);return '<button class="scope-chip" data-depo="depfilter" data-id="'+w.id+'" aria-haspopup="listbox" aria-label="Scope, tap to change" title="'+lb.replace(/"/g,"&quot;")+'"><span class="sc-nm">'+lb+'</span>'+ICON("expand_more")+'</button>';}
-  function depORangeBtn(w){return '<button class="trend-range" data-depo="rangemenu" data-id="'+w.id+'">vs '+depOPeriodLbl(w)+ICON("expand_more")+'</button>';}
-  function depODelta(p){return '<span class="delta-pill'+(p.neg?" neg":"")+'">'+ICON(p.neg?"south_east":"north_east")+Math.abs(p.dpct).toFixed(1)+'%</span>';}
-  function depOTog(opts,cur,w){return '<div class="vtoggle" role="group" aria-label="View">'+opts.map(function(o){return '<button class="vt'+(cur===o[0]?" on":"")+'" data-depo="dep-view" data-id="'+w.id+'" data-v="'+o[0]+'" aria-pressed="'+(cur===o[0])+'">'+(o[2]?ICON(o[2]):"")+o[1]+'</button>';}).join("")+'</div>';}
-  function depOToggle(w){var v=w.view||"table";if(w.size==="xwide")return depOTog([["balances","Balances","table_rows"],["trend","Trend","show_chart"]],(v==="trend"?"trend":"balances"),w);if(w.acct||w.leaf)return depOTog([["table","Table","table_rows"],["trend","Trend","show_chart"]],(v==="dist"?"trend":v),w);return depOTog([["table","Table","table_rows"],["dist","Distribution","donut_small"],["trend","Trend","show_chart"]],v,w);}
-  /* Owner change 2 (Trend): scope-dependent 2-option breakdown. All Accounts: Total | By Account Type. A selected type: Total | By Account. No standalone all-accounts By Account. */
-  function depOBreakToggle(w){var v=w.view||"table",allT=(w.filter||"All types").indexOf("All")===0;
-    if(v!=="trend")return "";
-    if(w.acct||w.leaf)return "";
-    var bd=depOBd(w),grp=allT?"By Account Type":"By Account";
-    var tb=function(m,l){return '<button class="vt'+(bd===m?" on":"")+'" data-depo="bd" data-id="'+w.id+'" data-b="'+m+'" aria-pressed="'+(bd===m)+'">'+l+'</button>';};
-    return '<div class="vtoggle" role="group" aria-label="Trend breakdown">'+tb("total","Total")+tb("group",grp)+'</div>';}
-  function depOTog2(opts,cur,w){return '<div class="vtoggle" role="group" aria-label="Break down by">'+opts.map(function(o){return '<button class="vt'+(cur===o[0]?" on":"")+'" data-depo="bd" data-id="'+w.id+'" data-b="'+o[0]+'" aria-pressed="'+(cur===o[0])+'">'+(o[2]?'<span class="material-symbols-rounded" aria-hidden="true">'+o[2]+'</span>':'')+o[1]+'</button>';}).join("")+'</div>';}
-  /* Owner change 1: table with display-only pagination (50 rows/page). Sort + filter apply first; the Total row (and the KPI headline) cross-foot over the FULL scoped set, never the visible page. */
-  function depOTable(w,full){var rng=w.range||"Q";
-    function trendPct(a){var s=depOAcctSeries(a,rng);return ((s[s.length-1]-s[0])/(s[0]||1))*100;}
-    var rows=depOScope(w).slice();
-    var sk=(w.tsort||"net-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
-    rows.sort(function(a,b){if(key==="name")return dir*a.name.localeCompare(b.name);if(key==="type")return dir*a.type.localeCompare(b.type);if(key==="trend")return dir*(trendPct(a)-trendPct(b));return dir*(a.net-b.net);});
-    var tot=rows.reduce(function(s,a){return s+a.net;},0);
-    var PER=50,nRows=rows.length,pages=Math.max(1,Math.ceil(nRows/PER)),pg=Math.min(Math.max(1,w.tpage||1),pages);w.tpage=pg;
-    var startI=(pg-1)*PER,endI=Math.min(startI+PER,nRows),pageRows=rows.slice(startI,endI);
-    function sb(k,label){var on=key===k,ic=on?(dir<0?"arrow_downward":"arrow_upward"):"unfold_more";return '<button class="wt-sort'+(on?" on":"")+'" data-depo="tsort" data-id="'+w.id+'" data-k="'+k+'">'+label+' <span class="material-symbols-rounded" aria-hidden="true">'+ic+'</span></button>';}
-    var head='<div class="wt-row wt-head"><span class="lr-main">'+sb("name","Name")+'</span><span class="dt-c dt-type">'+sb("type","Type")+'</span><span class="dt-c dt-tr">'+sb("trend","Trend")+'</span><span class="wt-c2">'+sb("net","Balance")+'</span></div>';
-    var leaf=w.leaf;var body=pageRows.map(function(a){var tp=trendPct(a),tn=tp<0,esc=a.type.replace(/"/g,"&quot;"),aesc=a.name.replace(/"/g,"&quot;");
-      var tip=aesc+', Account '+(a.acctFull||a.acct),nmBlock='<span class="lr-tipwrap" data-tip="'+tip+'" data-tip-plain><span class="lr-name">'+a.name+'</span><span class="lr-acctno">'+a.acct+'</span></span>';
-      return '<div class="wt-row'+(leaf?'':' wt-rowh')+'" data-id="'+w.id+'" data-acct="'+a.name+'">'+(leaf?'<span class="lr-main lr-stack">'+nmBlock+'</span>':'<span class="lr-main lr-stack lr-link" data-depo="pick-acct" data-v="'+aesc+'" data-type="'+esc+'" data-acctno="'+a.acct+'" data-id="'+w.id+'">'+nmBlock+'</span>')+'<span class="dt-c dt-type"><span class="type-badge tb-static" title="'+esc+'"><span class="material-symbols-rounded tb-ic" aria-hidden="true">category</span><span class="tb-nm">'+a.type+'</span></span></span><span class="dt-c dt-tr"><span class="rtrend'+(tn?" neg":"")+'"><span class="material-symbols-rounded" aria-hidden="true">'+(tn?"arrow_drop_down":"arrow_drop_up")+'</span>'+Math.abs(tp).toFixed(1)+'%</span></span><span class="wt-c2">'+money(a.net)+'</span></div>';}).join("");
-    var pager=(pages>1)?('<div class="dep-pager"><span class="dp-count">Showing '+(nRows?(startI+1):0)+' to '+endI+' of '+nRows+' accounts</span><span class="dp-nav"><button class="dp-btn" data-depo="tpage" data-id="'+w.id+'" data-p="prev"'+(pg<=1?' disabled':'')+' aria-label="Previous page"><span class="material-symbols-rounded" aria-hidden="true">chevron_left</span></button><span class="dp-page">Page '+pg+' of '+pages+'</span><button class="dp-btn" data-depo="tpage" data-id="'+w.id+'" data-p="next"'+(pg>=pages?' disabled':'')+' aria-label="Next page"><span class="material-symbols-rounded" aria-hidden="true">chevron_right</span></button></span></div>'):'';
-    return '<div class="scroll">'+head+body+'</div><div class="dep-total"><span>Total</span><span>'+money(tot)+'</span></div>'+pager;}
-  function depOTrendSet(w,range,by){
-    if(by==="type"){return depOByType(w).map(function(t){var accts=depOData(w).filter(function(a){return a.type===t.name;}),agg=null;accts.forEach(function(a){var s=depOAcctSeries(a,range);if(!agg)agg=s.slice();else s.forEach(function(v,j){agg[j]+=v;});});return {name:t.name,series:agg||[],net:t.net,down:!!(agg&&agg[agg.length-1]<agg[0])};}).sort(function(a,b){return b.net-a.net;});}
-    return depOScope(w).map(function(a){return {name:a.name,series:depOAcctSeries(a,range),net:a.net,down:a.trend==="down",type:a.type,acct:a.acct,acctFull:a.acctFull};}).sort(function(a,b){return b.net-a.net;});}
-  function depOTrend(w,big){
-    var range=w.range||"Q",f=w.filter||"All types",allT=f.indexOf("All")===0,bd=depOBd(w),mode=(bd==="total")?"total":(allT?"type":"account");
-    var scopeAll=depOScope(w),agg=null;scopeAll.forEach(function(a){var s=depOAcctSeries(a,range);if(!agg)agg=s.slice();else s.forEach(function(v,j){agg[j]+=v;});});agg=agg||[0];
-    var multi=(mode!=="total");
-    var fullSet=multi?depOTrendSet(w,range,mode):[{name:(allT?"All accounts":f),series:agg}];
-    var ramp=blueRamp(Math.max(1,fullSet.length));
-    var isoIdx=(multi&&w.trIso!=null&&w.trIso>=0&&w.trIso<fullSet.length)?w.trIso:null;
-    var plotted=isoIdx!=null?[fullSet[isoIdx]]:fullSet;
-    var n=(fullSet[0]&&fullSet[0].series)?fullSet[0].series.length:0;
-    var lo=Infinity,hi=-Infinity;plotted.forEach(function(x){x.series.forEach(function(v){if(v<lo)lo=v;if(v>hi)hi=v;});});
-    if(!isFinite(lo)){lo=0;hi=1;}var sp=(hi-lo)||Math.abs(hi)||1;lo=Math.max(0,lo-sp*0.18);hi=hi+sp*0.18;var dom=(hi-lo)||1;
-    function px(i){return n>1?(i/(n-1)*100):50;}function py(v){return (1-(v-lo)/dom)*100;}
-    var grid="";[0,50,100].forEach(function(gy){grid+='<line x1="0" y1="'+gy+'" x2="100" y2="'+gy+'" stroke="var(--stroke-widget)" stroke-width="1" vector-effect="non-scaling-stroke"'+(gy===100?'':' stroke-dasharray="2 4" opacity="0.5"')+'/>';});
-    var lines=plotted.map(function(x){var idx=fullSet.indexOf(x),p=x.series.map(function(v,j){return px(j).toFixed(2)+','+py(v).toFixed(2);}).join(" ");return '<polyline class="tl" data-idx="'+idx+'" fill="none" stroke="'+ramp[idx]+'" stroke-width="1.7" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" points="'+p+'"/>';}).join("");
-    var hits=plotted.map(function(x){var idx=fullSet.indexOf(x),p=x.series.map(function(v,j){return px(j).toFixed(2)+','+py(v).toFixed(2);}).join(" ");return '<polyline class="tl-hit" data-idx="'+idx+'" fill="none" stroke="transparent" stroke-width="'+(multi?14:22)+'" vector-effect="non-scaling-stroke" points="'+p+'"/>';}).join("");
-    var area="";if(plotted.length===1){var pa=plotted[0].series.map(function(v,j){return px(j).toFixed(2)+','+py(v).toFixed(2);}).join(" ");area='<polygon fill="url(#depotaf)" points="0,100 '+pa+' 100,100"/>';}
-    var svg='<svg class="ln" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="depotaf" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--chart)" stop-opacity="0.16"/><stop offset="100%" stop-color="var(--chart)" stop-opacity="0"/></linearGradient></defs>'+grid+area+lines+hits+'</svg>';
-    var yl='<span style="top:0%">'+fmtAxis(hi)+'</span><span style="top:50%">'+fmtAxis((hi+lo)/2)+'</span><span style="top:100%">'+fmtAxis(lo)+'</span>';
-    var months=depORangeMonths(range,n),tk=(n<=1)?[0]:(n<=3)?[0,n-1]:[0,Math.round((n-1)/3),Math.round((n-1)*2/3),n-1];tk=tk.filter(function(v,i,a){return a.indexOf(v)===i;});
-    var xl=tk.map(function(i){return '<span style="left:'+px(i)+'%;transform:translateX('+(i===0?"0":(i===n-1?"-100%":"-50%"))+')">'+months[i]+'</span>';}).join("");
-    var legend="";if(multi){var lgTop=isoIdx!=null?('<div class="tr-lg-top"><button class="tr-lg-all" data-depo="tr-iso-clear" data-id="'+w.id+'">'+ICON("arrow_back")+'Show all '+(mode==="type"?"account types":"accounts")+'</button></div>'):'';legend='<div class="tr-legend scroll"><div class="tr-lg-hd">'+(mode==="type"?"Account Types":"Accounts")+'</div>'+lgTop+fullSet.map(function(x,idx){var last=x.series[x.series.length-1],nesc=x.name.replace(/"/g,"&quot;"),nmTip=(mode==="account")?(nesc+', Account '+(x.acctFull||x.acct)):nesc;return '<div class="tr-lg-row'+(isoIdx===idx?" sel":"")+'" data-idx="'+idx+'" data-depo="tr-iso" data-id="'+w.id+'" data-kind="'+mode+'" data-type="'+(x.type||"").replace(/"/g,"&quot;")+'" data-name="'+nesc+'" data-acctno="'+(x.acct||"")+'"><span class="tr-lg-sw" style="background:'+ramp[idx]+'"></span><span class="material-symbols-rounded leg-ic" aria-hidden="true">'+(mode==="type"?"category":"account_balance_wallet")+'</span><span class="tr-lg-nm" data-tip="'+nmTip+'" data-tip-plain>'+x.name+'</span><span class="tr-lg-v">'+fmtAxis(last)+'</span></div>';}).join("")+'</div>';}
-    var blob=plotted.map(function(x){var idx=fullSet.indexOf(x);return x.name+"|"+ramp[idx]+"|"+idx+"|"+x.series.join(",");}).join(";");
-    var plot='<div class="tr-plot'+(multi?" multi":"")+'"><div class="tr-yax">'+yl+'</div><div class="tr-canvas" data-id="'+w.id+'" data-multi="0" data-mode="'+mode+'" data-depoclick="'+(multi?1:0)+'" data-blob="'+blob.replace(/"/g,"&quot;")+'" data-months="'+months.join(",")+'" data-lo="'+lo+'" data-hi="'+hi+'" data-n="'+n+'">'+svg+'<div class="tr-cross"></div></div><div class="tr-xax">'+xl+'</div>'+legend+'</div>';
-    return plot;}
-  function depODonut(w,big){var d=depODist(w),segs=d.segs,tot=segs.reduce(function(s,a){return s+a.net;},0),R=52,C=2*Math.PI*R,off=0,arcs="",legend="",shownReal=segs.filter(function(a){return !a.others;}).length,ramp=blueRamp(shownReal),grouped=(d.total||shownReal)-shownReal;
-    segs.forEach(function(a,i){var frac=tot?a.net/tot:0,len=frac*C,c=a.others?OTHERS_COLOR:ramp[i];var drill=a.others?(' data-depo="others" data-id="'+w.id+'" data-n="'+grouped+'" data-kind="'+d.by+'"'):(a.total?'':(' data-depo="dist-drill" data-id="'+w.id+'" data-by="'+d.by+'" data-val="'+a.name.replace(/"/g,"&quot;")+'"'+(d.by==="account"?' data-type="'+(a.type||d.scopeType||"").replace(/"/g,"&quot;")+'"':'')));arcs+='<circle class="seg" data-seg="'+i+'"'+drill+' cx="70" cy="70" r="'+R+'" fill="none" stroke="'+c+'" stroke-width="20" stroke-dasharray="'+Math.min(len+0.9,C).toFixed(2)+' '+Math.max(0,C-len-0.9).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 70 70)"></circle>';off+=len;var lgTip=(d.by==="account"&&!a.others)?' data-tip="'+a.name.replace(/"/g,"&quot;")+', Account '+(a.acctFull||a.acct)+'" data-tip-plain':'';legend+='<div class="leg" data-seg="'+i+'"'+drill+'><span class="dot" style="background:'+c+'"></span><span class="material-symbols-rounded leg-ic" aria-hidden="true">'+(d.by==="type"?"category":d.by==="total"?"data_usage":"account_balance_wallet")+'</span><span class="lg-main"'+lgTip+'>'+a.name+'</span><span class="lg-meta">'+money(a.net)+' · '+Math.round(frac*100)+'%</span></div>';});
-    var DS=({wide:250,xwide:280})[w.size]||(big?250:190);
-    var f2=(w.filter||"All types"),allT2=f2.indexOf("All")===0,bd2=depOBd(w);
-    var showTog=!w.acct&&!w.leaf;
-    var grpOpt=allT2?["group","By Account Type","category"]:["group","By Account","account_balance_wallet"];
-    var lgHead=showTog?depOTog2([["total","Total","data_usage"],grpOpt],bd2,w):'<div class="legend-hd">'+d.legendLabel+'</div>';
-    return '<div class="dist-wrap"><div class="pie-wrap row"><svg class="donut" viewBox="0 0 140 140" width="'+DS+'" height="'+DS+'" aria-hidden="true">'+arcs+'<text x="70" y="67" text-anchor="middle" class="donut-c1">'+fmtAxis(tot)+'</text><text x="70" y="86" text-anchor="middle" class="donut-c2">total</text></svg><div class="legend-col"><div class="legend-head">'+lgHead+'</div><div class="legend" style="max-height:'+DS+'px">'+legend+'</div></div></div></div>';}
-  function depOFull(w){if(w.acct)return '<div class="dep-full one"><div class="dep-col"><div class="dep-col-h">Balances</div>'+depOTable(w,true)+'</div></div>';return '<div class="dep-full"><div class="dep-col"><div class="dep-col-h">Balances</div>'+depOTable(w,true)+'</div><div class="dep-col dep-col-dist"><div class="dep-col-h">Distribution</div>'+depODonut(w,true)+'</div></div>';}
-  function depOMetricParts(w){var range=w.range||"Q";
-    if(w.view==="trend"&&w.trIso!=null){var allT=(w.filter||"All types").indexOf("All")===0,bd=depOBd(w),mode=(bd==="total")?"total":(allT?"type":"account");if(mode!=="total"){var set=depOTrendSet(w,range,mode),iso=set[w.trIso]||null;if(iso){var si=iso.series,li=si[si.length-1],fi=si[0];return {total:li,s:si,labs:depOSparkLabels(range,si.length),latest:li,first:fi,dpct:((li-fi)/(fi||1))*100,neg:(li-fi)<0,focus:iso.name};}}}
-    var n={W:8,M:9,P:9,Q:9,F:12,Y:12}[range]||9,total=depOScope(w).reduce(function(x,a){return x+a.net;},0),s=depOSeriesN(range,n,total),labs=depOSparkLabels(range,n),latest=s[s.length-1],first=s[0],dpct=((latest-first)/(first||1))*100,neg=dpct<0;return {total:total,s:s,labs:labs,latest:latest,first:first,dpct:dpct,neg:neg};}
-  function depOSparkHTML(p,cls){var s=p.s,W=120,H=44,pad=4,mx=Math.max.apply(null,s),mn=Math.min.apply(null,s),rng=(mx-mn)||1;var xs=s.map(function(v,i){return pad+i*(W-2*pad)/((s.length-1)||1);}),ys=s.map(function(v){return H-pad-((v-mn)/rng)*(H-2*pad);});var line=smoothPath(xs,ys),area=line+" L"+xs[xs.length-1].toFixed(1)+","+H+" L"+xs[0].toFixed(1)+","+H+" Z";var xp=xs.map(function(x){return (x/W*100).toFixed(2);}).join(","),yp=ys.map(function(y){return (y/H*100).toFixed(2);}).join(",");return '<div class="kpi-spark depo-spark'+(cls?" "+cls:"")+'" data-series="'+s.join(',')+'" data-labels="'+p.labs.join("|")+'" data-xp="'+xp+'" data-yp="'+yp+'" tabindex="0" aria-label="Total deposits over the selected window. Hover to read a point"><svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><defs><linearGradient id="depodsg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--chart)" stop-opacity="0.22"/><stop offset="100%" stop-color="var(--chart)" stop-opacity="0"/></linearGradient></defs><path d="'+area+'" fill="url(#depodsg)"/><path d="'+line+'" fill="none" stroke="var(--chart)" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="ds-end" style="left:'+xp.split(",").pop()+'%;top:'+yp.split(",").pop()+'%"></div><div class="ds-hair"></div><div class="ds-dot"></div></div>';}
-  function depOGlance(w){var p=depOMetricParts(w);return '<div class="kpi-row"><div class="kpi-num">'+depOScopeChip(w)+'<div class="metric-value" data-depo-num data-latest="'+money(p.latest)+'">'+money(p.latest)+'</div><div class="gl-sub">'+depODelta(p)+depORangeBtn(w)+'</div></div>'+depOSparkHTML(p)+'</div>';}
-  function depOHeaderBlock(w){var p=depOMetricParts(w);var v=w.view||"table";
-    var numInner='<div class="dep-hd-kpigrp"><span class="metric-value">'+money(p.latest)+'</span><span class="delta-grp">'+depODelta(p)+depORangeBtn(w)+'</span></div>';
-    var showSearch=(v==="table"||v==="dist"||v==="balances");
-    var searchHTML=showSearch?'<div class="dep-search hd-search"><span class="material-symbols-rounded" aria-hidden="true">search</span><input class="dep-q" placeholder="Search accounts" aria-label="Search accounts"></div>':'';
-    return '<div class="dep-hd"><div class="dep-hd-top">'+depOScopeChip(w)+'<div class="dep-hd-toggle">'+depOToggle(w)+'</div></div><div class="dep-hd-num">'+numInner+'<div class="dep-hd-r">'+depOBreakToggle(w)+searchHTML+'</div></div></div>';}
-  /* V2 states, self-owned (previously deferred to the generic shell fallback). Empty triggers on the account COUNT (zero accounts), matching the v2 API spec, or an explicit state flag; loading only ever comes from a data-fetch change. */
-  function depOEmptyState(w){return '<div class="state" data-kind="empty">'+ICON("inbox")+'<div class="state-title">No deposit accounts</div><div class="state-sub">There are no deposit accounts to show here yet.</div><button class="btn outlined" data-depo="add-acct" data-id="'+w.id+'">'+ICON("add")+'Add account</button></div>';}
-  function depOErrorState(w){return '<div class="state" data-kind="error">'+ICON("error")+'<div class="state-title">Could not load balances</div><div class="state-sub">Something went wrong fetching account data.</div><button class="btn sm outlined" data-depo="retry" data-id="'+w.id+'">Retry</button></div>';}
-  function depOSkeleton(){return '<div class="skeleton" aria-busy="true"><div class="sk" style="width:55%"></div><div class="sk" style="flex:1"></div></div>';}
-  function depOContent(w){
-    if(w.state==="loading")return depOSkeleton();
-    if(w.state==="error")return depOErrorState(w);
-    if(w.state==="empty"||!depOData(w).length)return depOEmptyState(w);
-    if(w.size==="kpi")return depOGlance(w);
-    var v=w.view||"table";if((w.acct||w.leaf)&&v==="dist")v="trend";
-    var mh=depOHeaderBlock(w);
-    if(w.size==="wide")return mh+(v==="trend"?depOTrend(w,false):v==="dist"?depODonut(w,false):depOTable(w,false));
-    return mh+(v==="trend"?depOTrend(w,true):depOFull(w));
-  }
-  /* Row-detail modal body (owner change 3 keeps this; only the CHART drill-modal was removed). Reuses Jo's .acctm* classes and her global modal chrome (modal.b path in renderModal). */
-  function depOAcctModalHTML(){
-    if(!modal)return "";
-    return '<div class="modal-backdrop" data-action="modal-close"><div class="modal depo-acct-modal" data-action="stop" role="dialog" aria-modal="true" aria-label="'+modal.t+'">'+
-      '<div class="modal-h"><span class="modal-title">'+(modal.glyph?'<span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">'+modal.glyph+'</span>':'')+modal.t+'</span>'+
-      '<button class="iconbtn" data-action="modal-close" aria-label="Close">'+ICON("close")+'</button></div>'+
-      '<div class="modal-b">'+depOAcctModalBody(modal.depo)+'</div>'+
-      '<div class="modal-f"><button class="btn primary sm" data-action="modal-close">Got it</button></div>'+
-    '</div></div>';
-  }
-  function depOAcctModalBody(m){var a=m.acctNo?DEPO_DEP.filter(function(x){return x.acct===m.acctNo;})[0]:DEPO_DEP.filter(function(x){return x.name===m.aname&&(!m.atype||x.type===m.atype);})[0];if(!a)return "";
-    var range=m.range||"Q",mv=m.mview||"trend",s=depOAcctSeries(a,range),n=s.length,latest=s[n-1],first=s[0],dpct=((latest-first)/(first||1))*100,neg=dpct<0;
-    var toggle='<div class="vtoggle" role="group" aria-label="View"><button class="vt'+(mv==="trend"?" on":"")+'" data-depo="acct-view" data-v="trend" aria-pressed="'+(mv==="trend")+'">'+ICON("show_chart")+'Trend</button><button class="vt'+(mv==="table"?" on":"")+'" data-depo="acct-view" data-v="table" aria-pressed="'+(mv==="table")+'">'+ICON("table_rows")+'Table</button></div>';
-    var head='<div class="acctm-bar"><span class="type-badge tb-static"><span class="tb-ic material-symbols-rounded" aria-hidden="true">category</span><span class="tb-nm">'+a.type+'</span></span>'+toggle+'</div><div class="acctm-kpi"><span class="metric-value">'+money(latest)+'</span><span class="delta-grp">'+depODelta({dpct:dpct,neg:neg})+'<span class="trend-range static">vs '+depOPeriodLbl({range:range})+'</span></span></div>';
-    var content;
-    if(mv==="table"){var tn=neg;
-      content='<div class="acctm-tbl"><div class="wt-row wt-head"><span class="lr-main">Name</span><span class="dt-c dt-type">Type</span><span class="dt-c dt-tr">Trend</span><span class="wt-c2">Balance</span></div><div class="wt-row"><span class="lr-main lr-stack"><span class="lr-tipwrap" data-tip="'+a.name.replace(/"/g,"&quot;")+', Account '+(a.acctFull||a.acct)+'" data-tip-plain><span class="lr-name">'+a.name+'</span><span class="lr-acctno">'+a.acct+'</span></span></span><span class="dt-c dt-type"><span class="type-badge"><span class="material-symbols-rounded tb-ic" aria-hidden="true">category</span><span class="tb-nm">'+a.type+'</span></span></span><span class="dt-c dt-tr"><span class="rtrend'+(tn?" neg":"")+'"><span class="material-symbols-rounded" aria-hidden="true">'+(tn?"arrow_drop_down":"arrow_drop_up")+'</span>'+Math.abs(dpct).toFixed(1)+'%</span></span><span class="wt-c2">'+money(a.net)+'</span></div><div class="dep-total"><span>Total</span><span>'+money(a.net)+'</span></div></div>';
-    }else{
-      var lo=Math.min.apply(null,s),hi=Math.max.apply(null,s),sp=(hi-lo)||Math.abs(hi)||1;lo=Math.max(0,lo-sp*0.18);hi=hi+sp*0.18;var dom=(hi-lo)||1;
-      function px(i){return n>1?(i/(n-1)*100):50;}function py(v){return (1-(v-lo)/dom)*100;}
-      var pts=s.map(function(v,i){return px(i).toFixed(2)+','+py(v).toFixed(2);}).join(" ");
-      var grid="";[0,50,100].forEach(function(gy){grid+='<line x1="0" y1="'+gy+'" x2="100" y2="'+gy+'" stroke="var(--stroke-widget)" stroke-width="1" vector-effect="non-scaling-stroke"'+(gy===100?'':' stroke-dasharray="2 4" opacity="0.5"')+'/>';});
-      var svg='<svg class="ln" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="depotafm" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--chart)" stop-opacity="0.16"/><stop offset="100%" stop-color="var(--chart)" stop-opacity="0"/></linearGradient></defs>'+grid+'<polygon fill="url(#depotafm)" points="0,100 '+pts+' 100,100"/><polyline fill="none" stroke="var(--chart)" stroke-width="1.7" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" points="'+pts+'"/></svg>';
-      var yl='<span style="top:0%">'+fmtAxis(hi)+'</span><span style="top:50%">'+fmtAxis((hi+lo)/2)+'</span><span style="top:100%">'+fmtAxis(lo)+'</span>';
-      var months=depORangeMonths(range,n),tk=(n<=1)?[0]:(n<=3)?[0,n-1]:[0,Math.round((n-1)/3),Math.round((n-1)*2/3),n-1];tk=tk.filter(function(v,i,arr){return arr.indexOf(v)===i;});
-      var xl=tk.map(function(i){return '<span style="left:'+px(i)+'%;transform:translateX('+(i===0?"0":(i===n-1?"-100%":"-50%"))+')">'+months[i]+'</span>';}).join("");
-      var blob=a.name+"|var(--chart)|0|"+s.join(",");
-      content='<div class="acctm-chart tr-plot"><div class="tr-yax">'+yl+'</div><div class="tr-canvas" data-multi="0" data-blob="'+blob.replace(/"/g,"&quot;")+'" data-months="'+months.join(",")+'" data-lo="'+lo+'" data-hi="'+hi+'" data-n="'+n+'">'+svg+'<div class="tr-cross"></div></div><div class="tr-xax">'+xl+'</div></div>';
-    }
-    return '<div class="acctm">'+head+content+'</div>';}
-  function depOOpenAcct(w,name,type,acctNo){var a=acctNo?DEPO_DEP.filter(function(x){return x.acct===acctNo;})[0]:DEPO_DEP.filter(function(x){return x.name===name&&(!type||x.type===type);})[0];if(!a)return;var ctx={aname:a.name,atype:a.type,acctNo:a.acct,range:w.range||"Q",mview:"trend"};modal={t:a.name,glyph:"account_balance_wallet",type:"depOacct",depo:ctx,b:depOAcctModalBody(ctx)};modalMounted=false;depOClosePop();pop=null;render();}
-  /* Owner change 3: chart click drills into scope, it does not expand. A type series sets the top-left scope to that type and flips the breakdown to By Account. */
-  function depODrillType(w,typeName){if(!typeName)return;w.filter=typeName;w.acct=null;w.acctType=null;w.acctNo=null;w.bd="group";w.trIso=null;w.tpage=1;}
-  function depOPopContent(){var w=find(DEPO_POP.id);if(!w)return "";
-    if(DEPO_POP.type==="rangemenu"){var r=w.range||"Q";return '<div class="cap">Compare to</div>'+[["W","Previous week"],["M","Previous month"],["P","Previous period"],["Q","Previous quarter"],["F","Previous fiscal year"],["Y","Previous calendar year"]].map(function(o){return '<button class="mi'+(r===o[0]?" check":"")+'" data-depo="range-set" data-id="'+w.id+'" data-r="'+o[0]+'">'+(r===o[0]?ICON("check"):'<span class="mi-gap"></span>')+o[1]+'</button>';}).join("");}
-    var q=(DEPO_FQ||"").toLowerCase();
-    var allSel=(!w.acct)&&(w.filter||"All types").indexOf("All")===0;
-    var types=depOByType(w).map(function(t){return t.name;});
-    var accts=depOData(w);
-    var tM=types.filter(function(t){return t.toLowerCase().indexOf(q)>-1;});
-    var aM=accts.filter(function(a){return a.name.toLowerCase().indexOf(q)>-1||a.type.toLowerCase().indexOf(q)>-1;});
-    var out='<div class="dd-search">'+ICON("search")+'<input class="dd-input" id="depOfq" placeholder="Search account types or accounts" value="'+(DEPO_FQ||"").replace(/"/g,"&quot;")+'" autocomplete="off"></div><div class="menu-scroll" role="listbox">';
-    if(!q||"all accounts".indexOf(q)>-1)out+='<button class="mi'+(allSel?" check":"")+'" data-depo="set-scope" data-id="'+w.id+'" data-mode="all">'+(allSel?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm">All Accounts</span></button>';
-    if(tM.length)out+='<div class="cap">Account Type</div>'+tM.map(function(t){var sel=(!w.acct)&&w.filter===t,esc=t.replace(/"/g,"&quot;");return '<button class="mi'+(sel?" check":"")+'" data-depo="set-scope" data-id="'+w.id+'" data-mode="type" data-v="'+esc+'">'+(sel?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-ic material-symbols-rounded" aria-hidden="true">category</span><span class="mi-nm">'+t+'</span></button>';}).join("");
-    if(aM.length)out+='<div class="cap">Accounts</div>'+aM.map(function(a){var sel=w.acctNo?w.acctNo===a.acct:(w.acct===a.name&&w.acctType===a.type),esc=a.name.replace(/"/g,"&quot;"),tesc=a.type.replace(/"/g,"&quot;");return '<button class="mi'+(sel?" check":"")+'" data-depo="set-scope" data-id="'+w.id+'" data-mode="account" data-v="'+esc+'" data-type="'+tesc+'" data-acctno="'+a.acct+'">'+(sel?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-ic material-symbols-rounded" aria-hidden="true">account_balance_wallet</span><span class="mi-nm-stack" data-tip="'+esc+', Account '+(a.acctFull||a.acct)+'" data-tip-plain><span class="mi-nm">'+a.name+'</span><span class="mi-acctno">'+(a.acctFull||a.acct)+'</span></span><span class="type-badge tb-static mi-tb"><span class="tb-ic material-symbols-rounded" aria-hidden="true">category</span><span class="tb-nm">'+a.type+'</span></span></button>';}).join("");
-    if(!tM.length&&!aM.length&&(q&&"all accounts".indexOf(q)<0))out+='<div class="mi-note" style="color:var(--txt-subtle)">No matches for "'+(DEPO_FQ||"").replace(/"/g,"&quot;")+'"</div>';
-    return out+'</div>';}
-  var DEPO_POP=null,DEPO_FQ="";
-  function depOPositionPop(el,anchor){var rct=anchor.getBoundingClientRect(),M=8;el.style.visibility="hidden";el.style.left="0px";el.style.top="0px";var bw=el.offsetWidth,bh=el.offsetHeight;var left=rct.left;if(left+bw>window.innerWidth-M)left=rct.right-bw;if(left<M)left=M;var top=rct.bottom+7;if(top+bh>window.innerHeight-M){var up=rct.top-bh-7;top=(up>=M)?up:Math.max(M,window.innerHeight-M-bh);}el.style.left=left+"px";el.style.top=top+"px";el.style.visibility="";}
-  function depOOpenPop(anchor,type,id){DEPO_POP={type:type,id:id};if(type==="depfilter")DEPO_FQ="";
-    var el=document.getElementById("depoPop");if(!el){el=document.createElement("div");el.id="depoPop";document.body.appendChild(el);}
-    el.className="pop"+(type==="depfilter"?" pop-filter":"");el.innerHTML=depOPopContent();
-    depOPositionPop(el,anchor);
-    var fi=document.getElementById("depOfq");if(fi){fi.focus();try{fi.setSelectionRange(fi.value.length,fi.value.length);}catch(e){}}}
-  function depORepositionPop(){var el=document.getElementById("depoPop");if(!el||!DEPO_POP)return;var anchor=document.querySelector('[data-depo="'+DEPO_POP.type+'"][data-id="'+DEPO_POP.id+'"]');if(anchor)depOPositionPop(el,anchor);}
-  function depOClosePop(){DEPO_POP=null;var el=document.getElementById("depoPop");if(el)el.remove();}
-  document.addEventListener("click",function(e){
-    var t=e.target.closest&&e.target.closest("[data-depo]");
-    if(!t){if(DEPO_POP&&!(e.target.closest&&e.target.closest("#depoPop")))depOClosePop();return;}
-    var a=t.getAttribute("data-depo"),id=t.getAttribute("data-id");
-    if(a==="acct-view"){if(modal&&modal.depo){modal.depo.mview=t.getAttribute("data-v");modal.b=depOAcctModalBody(modal.depo);render();}return;}
-    var w=id?find(id):null;if(!w)return;
-    if(a==="depfilter"){if(DEPO_POP&&DEPO_POP.type==="depfilter"&&document.getElementById("depoPop")){depOClosePop();}else{depOOpenPop(t,"depfilter",id);}return;}
-    if(a==="rangemenu"){if(DEPO_POP&&DEPO_POP.type==="rangemenu"&&document.getElementById("depoPop")){depOClosePop();}else{depOOpenPop(t,"rangemenu",id);}return;}
-    if(a==="set-scope"){var mode=t.getAttribute("data-mode"),val=t.getAttribute("data-v");if(mode==="account"){w.acct=val;w.acctType=t.getAttribute("data-type");w.acctNo=t.getAttribute("data-acctno");}else{if(mode==="all")w.filter="All types";else if(mode==="type")w.filter=val;w.acct=null;w.acctType=null;w.acctNo=null;}w.trIso=null;w.bd="group";w.tpage=1;depOClosePop();render();return;}
-    if(a==="range-set"){w.range=t.getAttribute("data-r");depOClosePop();render();return;}
-    if(a==="pick-acct"){depOOpenAcct(w,t.getAttribute("data-v"),t.getAttribute("data-type"),t.getAttribute("data-acctno"));return;}
-    if(a==="tr-iso"){if(t.getAttribute("data-kind")==="type"){depODrillType(w,t.getAttribute("data-name"));render();}return;} /* account series: inert */
-    if(a==="tr-iso-clear"){w.trIso=null;render();return;}
-    if(a==="dep-view"){w.view=t.getAttribute("data-v");depOClosePop();render();return;}
-    if(a==="tsort"){var k=t.getAttribute("data-k"),cs=(w.tsort||"net-desc").split("-");w.tsort=(cs[0]===k)?(k+"-"+(cs[1]==="asc"?"desc":"asc")):(k+"-"+((k==="name"||k==="type")?"asc":"desc"));w.tpage=1;render();return;}
-    if(a==="tpage"){var dp=t.getAttribute("data-p"),curp=w.tpage||1;w.tpage=(dp==="prev")?Math.max(1,curp-1):(dp==="next")?curp+1:(parseInt(dp,10)||1);render();return;}
-    if(a==="bd"){w.bd=t.getAttribute("data-b");w.trIso=null;render();return;}
-    if(a==="dist-drill"){if(t.getAttribute("data-by")==="type"){depODrillType(w,t.getAttribute("data-val"));render();}return;} /* account slice: inert */
-    if(a==="others"){return;} /* inert: no chart click opens an overlay */
-    if(a==="add-acct"){showModal("Add a deposit account","Tapping this would take you to the <b>New deposit account</b> form in the Deposits module.");return;}
-    if(a==="retry"){w.state=null;render();return;}
-  });
-  document.addEventListener("input",function(e){if(e.target.id==="depOfq"){DEPO_FQ=e.target.value;var p=e.target.selectionStart;var el=document.getElementById("depoPop");if(el){el.innerHTML=depOPopContent();depORepositionPop();var fi=document.getElementById("depOfq");if(fi){fi.focus();try{fi.setSelectionRange(p,p);}catch(_){}}}return;}});
-  var DEPO_dsTip=null;
-  function depOdsShow(e,label,val){if(!DEPO_dsTip){DEPO_dsTip=document.createElement("div");DEPO_dsTip.className="ds-tip";document.body.appendChild(DEPO_dsTip);}DEPO_dsTip.innerHTML='<span class="dst-l">'+label+'</span><span class="dst-v">'+val+'</span>';var x=e.clientX+12,y=e.clientY-16;if(x+140>window.innerWidth)x=e.clientX-140;DEPO_dsTip.style.left=x+"px";DEPO_dsTip.style.top=y+"px";}
-  function depOdsHide(){if(DEPO_dsTip){DEPO_dsTip.remove();DEPO_dsTip=null;}}
-  function depOdsReset(sp){var row=sp.closest(".kpi-row"),num=row&&row.querySelector("[data-depo-num]");if(num&&num.getAttribute("data-latest"))num.textContent=num.getAttribute("data-latest");var h=sp.querySelector(".ds-hair"),d=sp.querySelector(".ds-dot");if(h)h.style.opacity="0";if(d)d.style.opacity="0";depOdsHide();}
-  document.addEventListener("mousemove",function(e){var sp=e.target.closest&&e.target.closest(".depo-spark");if(!sp){if(DEPO_dsTip)depOdsHide();return;}var r=sp.getBoundingClientRect();var frac=Math.min(1,Math.max(0,(e.clientX-r.left)/(r.width||1)));var s=sp.getAttribute("data-series").split(","),labs=sp.getAttribute("data-labels").split("|"),xp=sp.getAttribute("data-xp").split(","),yp=sp.getAttribute("data-yp").split(",");var idx=Math.round(frac*(s.length-1));var row=sp.closest(".kpi-row"),num=row&&row.querySelector("[data-depo-num]");if(num)num.textContent=money(parseInt(s[idx],10));var hair=sp.querySelector(".ds-hair"),dot=sp.querySelector(".ds-dot");if(hair){hair.style.left=xp[idx]+"%";hair.style.opacity="1";}if(dot){dot.style.left=xp[idx]+"%";dot.style.top=yp[idx]+"%";dot.style.opacity="1";}depOdsShow(e,labs[idx],money(parseInt(s[idx],10)));});
-  document.addEventListener("mouseout",function(e){var sp=e.target.closest&&e.target.closest(".depo-spark");if(!sp)return;if(e.relatedTarget&&e.relatedTarget.closest&&e.relatedTarget.closest(".depo-spark"))return;depOdsReset(sp);});
-  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&DEPO_POP)depOClosePop();});
-  document.addEventListener("click",function(e){var cv=e.target.closest&&e.target.closest('.tr-canvas[data-depoclick="1"]');if(!cv)return;if(lnActive==null)return;var wid=cv.getAttribute("data-id"),wc=wid?find(wid):null;if(!wc)return;if(cv.getAttribute("data-mode")==="type"){var parts=cv.getAttribute("data-blob").split(";"),nm=null;for(var bi=0;bi<parts.length;bi++){var pp=parts[bi].split("|");if(+pp[2]===lnActive){nm=pp[0];break;}}if(nm){depODrillType(wc,nm);hideLnTip();render();}}else{hideLnTip();}},true);
-  window.addEventListener("resize",function(){depORepositionPop();});
-
 /* ===== W18 Financial KPI V2 ===== */
 
 /* (1) DATA -------------------------------------------------------------

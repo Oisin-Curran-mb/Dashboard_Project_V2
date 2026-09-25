@@ -168,37 +168,26 @@
     },
     "W07": {
       "name": "Deposits on Hand",
-      "driver": "w07-deposits-oc.driver.js",
-      "ours": {
-        "kind": "deposits-oc",
+      "driver": "w07-deposits.driver.js",
+      "decided": "2026-09-26 OC",
+      "removed": [
+        "deposits-mb",
+        "deposits-oc"
+      ],
+      "final": {
+        "kind": "deposits",
         "prefix": "depO",
         "css": {
-          "start": "/* ===== W07 Deposits on Hand V2",
+          "start": "/* ===== W07 Deposits on Hand V2 CSS ===== */",
           "end": "/* ===== end W07 Deposits on Hand V2 CSS ===== */"
         },
         "js": {
-          "start": "/* ===== W07 Deposits on Hand V2",
-          "end": "/* ===== W18 Financial KPI V2 ==="
+          "start": "/* ===== W07 Deposits on Hand V2 ===== */",
+          "end": "/* ===== end W07 Deposits on Hand V2 ===== */"
         },
         "registry": {
           "grep": [
-            "kind:\"deposits-oc\""
-          ]
-        }
-      },
-      "jo": {
-        "kind": "deposits-mb",
-        "prefix": "depF",
-        "css": {
-          "grep": [
-            ".depf-",
-            ".dep-"
-          ]
-        },
-        "js": {
-          "grep": [
-            "depF",
-            "kind:\"deposits-mb\""
+            "kind:\"deposits\""
           ]
         }
       }
