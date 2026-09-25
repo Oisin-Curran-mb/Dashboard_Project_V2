@@ -4285,6 +4285,23 @@
     pop:function(){var p=pop&&this.pops[pop.type];return p&&p.content?p.content():null;},
     trigger:function(){var p=pop&&this.pops[pop.type];return p&&p.trigger?p.trigger():null;},
     modal:function(){var m=modal&&this.modals[modal.type];return m?m():null;}};
+  /* ===== Shell: single-widget viewer (review aid) =====
+     index.html#w=W05     the Side by side tab filtered to one widget: both
+                         versions at Glance, Explore and Detail, plus its note
+     index.html#k=mystatus,tasks   the current tab filtered to these kinds
+     Change the hash to move to the next widget; no reload needed. */
+  function viewOnly(ws){var h=location.hash||"";var mw=/[#&]w=(W\d\d)/i.exec(h),mk=/[#&]k=([a-z0-9,-]+)/i.exec(h);
+    if(mw){var W=mw[1].toUpperCase();if(currentId!=="cmp"&&dashboards.some(function(d){return d.id==="cmp";})){currentId="cmp";return viewOnly(cur().widgets);}return ws.filter(function(x){return x.id.indexOf("cmp"+W)===0;});}
+    if(mk){var ks=mk[1].toLowerCase().split(",");return ws.filter(function(x){return ks.indexOf(x.kind)>-1;});}
+    return ws;}
+  window.addEventListener("hashchange",function(){pop=null;modal=null;render();});
+  /* TEMPORARY review aid, remove before release: a toolbar dropdown that drives the #w= / #k= filter above. */
+  function viewOnlySelectHTML(){var h=location.hash||"",cur_=(/[#&](w=W\d\d|k=[a-z0-9,-]+)/i.exec(h)||["",""])[1];
+    var opts=[["","Review: all widgets"]];
+    if(typeof CMP_ROWS!=="undefined")CMP_ROWS.forEach(function(r){opts.push(["w="+r[0],r[0]+" "+r[1]+" (Jo vs OC, 3 sizes)"]);});
+    Object.keys(WIDGETS.kinds).forEach(function(k){var row=dashboards[0].widgets.filter(function(x){return x.kind===k;})[0];if(!row)return;opts.push(["k="+k,(row.title||k).replace(/s*([^)]*)s*$/,"")+" (final)"]);});
+    return '<select id="viewOnlySel" class="btn outlined sm" aria-label="Review aid: show one widget" style="margin-right:8px;max-width:320px">'+opts.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===cur_?" selected":"")+'>'+o[1]+'</option>';}).join("")+'</select>';}
+  document.addEventListener("change",function(e){if(e.target&&e.target.id==="viewOnlySel"){var v=e.target.value;if(!v){currentId="d1";}if(location.hash===(v?"#"+v:"")){render();}else{location.hash=v?"#"+v:"";}}});
   var ICON=function(n){return '<span class="material-symbols-rounded">'+n+'</span>';};
   var SIZES=["kpi","wide","xwide"];
   var SIZE_LABEL={kpi:"Glance",wide:"Explore",xwide:"Detail"};
@@ -10670,7 +10687,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     var fopen=!!(pop&&pop.type==="wfind");
     var wfindBtn='<button class="btn naked sm wfind-btn'+(fopen?" on":"")+'" data-action="wfind" aria-haspopup="dialog" aria-expanded="'+fopen+'" data-tip="Find a widget on this dashboard">'+ICON("search")+'<span class="wfind-lbl">Find a widget</span>'+ICON("expand_more")+'</button>';
     var refreshAll='<button class="btn naked sm" data-action="refresh-all" data-tip="Last updated '+cur().updated+'" aria-label="Refresh all widgets, last updated '+cur().updated+'">'+ICON("refresh")+'Refresh</button>';
-    return wfindBtn+refreshAll+'<button class="btn outlined sm" data-action="manage">'+ICON("dashboard_customize")+'Edit Dashboard</button>';}
+    return viewOnlySelectHTML()+wfindBtn+refreshAll+'<button class="btn outlined sm" data-action="manage">'+ICON("dashboard_customize")+'Edit Dashboard</button>';}
 
   function popContent(){
     if(!pop)return "";
@@ -10782,7 +10799,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     var r=trig.getBoundingClientRect(),M=8,pw=el.offsetWidth,ph=el.offsetHeight;var left=r.left;if(left+pw>innerWidth-M)left=r.right-pw;if(left+pw>innerWidth-M)left=innerWidth-M-pw;if(left<M)left=M;var flipped=false;var top=r.bottom+7;if(top+ph>innerHeight-M){var up=r.top-ph-7;if(up>=M){top=up;flipped=true;}else{top=Math.max(M,innerHeight-M-ph);}}var cx=(r.left+r.width/2)-left;cx=Math.max(14,Math.min(pw-14,cx));var dir=flipped?"down":"up";
     pop._pos={left:left,top:top,cx:cx,dir:dir};
     el.style.setProperty("--caret-x",cx+"px");el.setAttribute("data-dir",dir);el.style.left=left+"px";el.style.top=top+"px";el.style.visibility="visible";}
-  function render(){hideTip();if(typeof hideLnTip==="function")hideLnTip();if(typeof dsHide==="function")dsHide();var _ws=cur().widgets,_grid=_ws.map(widgetHTML).join("");if(_ws.length<=1)_grid+=addWidgetPlaceholderHTML();document.getElementById("dashboard").innerHTML=_grid;document.getElementById("tbLeft").innerHTML=tbLeftHTML();document.getElementById("tbRight").innerHTML=tbRightHTML();if(renaming){var el=document.getElementById("rn-"+renaming);if(el){el.focus();el.select();}}if(focusDash){var di=document.getElementById("dashInput");if(di){di.focus();di.select();}focusDash=false;}renderOverlay();if(pop&&pop.type==="companydd"){var _ci=document.getElementById("coq");if(_ci&&document.activeElement!==_ci){_ci.focus();try{_ci.setSelectionRange(_ci.value.length,_ci.value.length);}catch(_e){}}}if(pop&&pop.type==="wfind"){var _wf=document.getElementById("wfindq");if(_wf&&document.activeElement!==_wf){_wf.focus();try{_wf.setSelectionRange(_wf.value.length,_wf.value.length);}catch(_e6){}}}if(pop&&pop.type==="depfilter"){var _fi=document.getElementById("fq");if(_fi&&document.activeElement!==_fi){_fi.focus();try{_fi.setSelectionRange(_fi.value.length,_fi.value.length);}catch(_e2){}}}if(pop&&pop.type==="bank-acct"){var _bi=document.getElementById("bankq");if(_bi&&document.activeElement!==_bi){_bi.focus();try{_bi.setSelectionRange(_bi.value.length,_bi.value.length);}catch(_e4){}}}if(pop&&pop.type==="ap-due"){var _ai=document.getElementById("apq");if(_ai&&document.activeElement!==_ai){_ai.focus();try{_ai.setSelectionRange(_ai.value.length,_ai.value.length);}catch(_e5){}}}if(prFocusId){var _pf=document.getElementById(prFocusId);if(_pf&&document.activeElement!==_pf){_pf.focus();try{var _vl=_pf.value.length;_pf.setSelectionRange(_vl,_vl);}catch(_e3){}}}renderModal();}
+  function render(){hideTip();if(typeof hideLnTip==="function")hideLnTip();if(typeof dsHide==="function")dsHide();var _ws=viewOnly(cur().widgets),_grid=_ws.map(widgetHTML).join("");if(_ws.length<=1)_grid+=addWidgetPlaceholderHTML();document.getElementById("dashboard").innerHTML=_grid;document.getElementById("tbLeft").innerHTML=tbLeftHTML();document.getElementById("tbRight").innerHTML=tbRightHTML();if(renaming){var el=document.getElementById("rn-"+renaming);if(el){el.focus();el.select();}}if(focusDash){var di=document.getElementById("dashInput");if(di){di.focus();di.select();}focusDash=false;}renderOverlay();if(pop&&pop.type==="companydd"){var _ci=document.getElementById("coq");if(_ci&&document.activeElement!==_ci){_ci.focus();try{_ci.setSelectionRange(_ci.value.length,_ci.value.length);}catch(_e){}}}if(pop&&pop.type==="wfind"){var _wf=document.getElementById("wfindq");if(_wf&&document.activeElement!==_wf){_wf.focus();try{_wf.setSelectionRange(_wf.value.length,_wf.value.length);}catch(_e6){}}}if(pop&&pop.type==="depfilter"){var _fi=document.getElementById("fq");if(_fi&&document.activeElement!==_fi){_fi.focus();try{_fi.setSelectionRange(_fi.value.length,_fi.value.length);}catch(_e2){}}}if(pop&&pop.type==="bank-acct"){var _bi=document.getElementById("bankq");if(_bi&&document.activeElement!==_bi){_bi.focus();try{_bi.setSelectionRange(_bi.value.length,_bi.value.length);}catch(_e4){}}}if(pop&&pop.type==="ap-due"){var _ai=document.getElementById("apq");if(_ai&&document.activeElement!==_ai){_ai.focus();try{_ai.setSelectionRange(_ai.value.length,_ai.value.length);}catch(_e5){}}}if(prFocusId){var _pf=document.getElementById(prFocusId);if(_pf&&document.activeElement!==_pf){_pf.focus();try{var _vl=_pf.value.length;_pf.setSelectionRange(_vl,_vl);}catch(_e3){}}}renderModal();}
   document.addEventListener("focus",function(e){if(e.target.classList&&e.target.classList.contains("pr-date-input"))prFocusId=e.target.id;},true);
   document.addEventListener("focusout",function(e){if(e.target.classList&&e.target.classList.contains("pr-date-input")&&e.target.id===prFocusId)prFocusId=null;},true);
   document.addEventListener("change",function(e){if(typeof remHandleInput==="function"&&remHandleInput(e))return;if(e.target.classList&&e.target.classList.contains("pr-date-input")){var wpc=find(e.target.getAttribute("data-id")),whichc=e.target.getAttribute("data-which");if(wpc&&e.target.value){wpc[whichc]=e.target.value;wpc.range="CUSTOM";render();}}});
@@ -13035,7 +13052,7 @@ function faFHandleClick(e){
   if(a==='stop')return;
   var id=t.getAttribute('data-id'),w=id?find(id):null;
   if(!w)return;
-  if(a==='view'){w.faFView=(t.getAttribute('data-v')==='donut')?'donut':'assets';faFClosePop();render();return;}
+  if(a==='view'){w.faFView=(t.getAttribute('data-v')==='donut')?'donut':'assets';faFClosePop();render();return;}
     /* a slim row opens the full table; the pop-up uses her shared modal
        object, so her own modal-close action closes it and we add no closer */
     if(a==='open-table'){modal={type:'fafTable',id:id,t:'Fixed assets'};modalMounted=false;faFClosePop();render();return;}

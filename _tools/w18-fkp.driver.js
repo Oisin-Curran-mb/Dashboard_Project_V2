@@ -41,9 +41,10 @@ A.ok(raw.indexOf('id="fkpBand"') < raw.indexOf('id="dashboard"'), "band is place
 A.absent(raw, 'kind:"fkpi', "no registry kind was introduced");
 A.absent(raw, 'kind:"fkp', "no registry kind was introduced (short form)");
 if (snap) {
-  const joRender = /function render\(\)\{[\s\S]*?renderModal\(\);\}/;
-  const a = snap.match(joRender), b = raw.match(joRender);
-  A.ok(a && b && a[0] === b[0], "Jo's render() is byte-identical to the pre-port snapshot");
+  /* The "render() byte-identical" check was retired 2026-09-25 (decision D8:
+     the shell is being restructured, render() now routes through WIDGETS and
+     the review viewer). The W18 band still must not be drawn by render(): */
+  A.absent(raw.match(/function render\(\)\{[\s\S]*?renderModal\(\);\}/)[0], "fkp", "render() does not draw the W18 band (it mounts itself into #fkpBand)");
   const ch = /function contentHTML\(w\)\{[\s\S]{0,60}/;
   const ca = snap.match(ch), cb = raw.match(ch);
   A.ok(ca && cb && ca[0] === cb[0], "Jo's contentHTML() opening is byte-identical");
