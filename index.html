@@ -3460,23 +3460,8 @@
 .arO-att-sz{color:var(--txt-subtle);font-size:11.5px;font-variant-numeric:tabular-nums;}
 .arO-note{background:var(--surface-widget);border:1px solid var(--stroke-widget);border-radius:8px;padding:10px 12px;line-height:1.5;color:var(--txt-primary);}
 .arO-dtotal{border-top:none;margin-top:2px;}
-/* Collection next-step actions in the expanded drawer */
-.arO-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;}
 
 @media(max-width:560px){.arO-explore{grid-template-columns:1fr;}}
-  .arO-dhead .arO-check{visibility:hidden;border:0;background:transparent;}
-.arO-check{flex:0 0 20px;width:18px;height:18px;padding:0;display:inline-flex;align-items:center;justify-content:center;border:1.5px solid var(--wn-750);border-radius:5px;background:var(--surface-widget);cursor:pointer;transition:background var(--dur,.15s),border-color var(--dur,.15s);}
-.arO-check:hover{border-color:var(--brand-100);}
-.arO-check.on{background:var(--brand-100);border-color:var(--brand-100);}
-.arO-check .material-symbols-rounded{font-size:14px;color:#fff;}
-.arO-check:focus-visible{outline:2px solid var(--am-400);outline-offset:1px;}
-.arO-modal-f{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
-.arO-f-spacer{flex:1 1 auto;}
-.arO-f-btns{display:inline-flex;gap:8px;flex:0 0 auto;}
-.arO-confirm-note{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1 1 auto;}
-.arO-confirm-primary{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--brand-300);}
-.arO-confirm-primary .material-symbols-rounded{font-size:17px;color:var(--brand-100);}
-.arO-confirm-sub{font-size:11px;color:var(--txt-subtle);}
 /* ===== end W05 Receivable Invoices Outstanding V2 CSS ===== */
 
 /* ===== W06 Insurance Billing Plans V2 ===== */
@@ -6633,28 +6618,18 @@ function arODetailTabs(x){
   }
   return '<div class="arO-tabbar" role="tablist">'+bar+'</div><div class="arO-tabpanel" role="tabpanel">'+panel+'</div>';
 }
-function arODrawerActions(w,x){
-  return '<div class="arO-actions"><button class="btn outlined sm" data-action="arO-open-invoice" data-id="'+w.id+'" data-inv="'+arOEsc(x.inv)+'">'+ICON("open_in_new")+'Open invoice</button>'+
-    '<button class="btn naked sm" data-action="arO-followup" data-id="'+w.id+'" data-inv="'+arOEsc(x.inv)+'">'+ICON("event_note")+'Record a follow-up</button></div>';
-}
 function arODetailModalHTML(){
   var w=find(modal.id);if(!w)return "";
   var mode=modal.mode,key=modal.key;
   var invs=arODetailInvoices(w,mode,key);
   var subj=(mode==="customer")?key:arOBucketLabel(key);
   var cols=["Customer","Bill To","Due Date","Invoice #","Days Past Due","Outstanding"];
-  var head='<div class="wt-row wt-head arO-dhead"><span class="arO-check" aria-hidden="true"></span><span class="arO-dexp"></span>'+cols.map(function(c,i){return '<span class="arO-dc arO-dc'+i+(i===5?" arO-dc-amt":"")+'">'+c+'</span>';}).join("")+'</div>';
+  var head='<div class="wt-row wt-head arO-dhead"><span class="arO-dexp"></span>'+cols.map(function(c,i){return '<span class="arO-dc arO-dc'+i+(i===5?" arO-dc-amt":"")+'">'+c+'</span>';}).join("")+'</div>';
   var body;
   if(invs.length){
     body=invs.map(function(x){
       var open=(modal.exp===x.inv),dpd=x.days>0?(x.days+" days"):"Not due";
-      var checked=!!(modal.sel&&modal.sel[x.inv]);
-      /* ENHANCEMENT (owner-specified, dev-intent signal): per-row select checkbox at the START of each
-         invoice row. It carries its OWN data-action="arO-check", so the delegated listener's
-         closest('[data-action]') resolves to the checkbox itself, never the row's arO-exp; toggling a box
-         therefore neither expands/drills the row nor closes the modal. No select-all header checkbox. */
       var row='<div class="wt-row arO-drow'+(open?" open":"")+'" data-action="arO-exp" data-id="'+w.id+'" data-inv="'+arOEsc(x.inv)+'" role="button" tabindex="0" aria-expanded="'+open+'">'+
-        '<button type="button" class="arO-check'+(checked?" on":"")+'" data-action="arO-check" data-inv="'+arOEsc(x.inv)+'" role="checkbox" aria-checked="'+checked+'" aria-label="Select invoice '+arOEsc(x.inv)+'">'+(checked?ICON("check"):"")+'</button>'+
         '<span class="arO-dexp">'+ICON(open?"expand_more":"chevron_right")+'</span>'+
         '<span class="arO-dc arO-dc0">'+x.customer+'</span>'+
         '<span class="arO-dc arO-dc1">'+x.billTo+'</span>'+
@@ -6662,7 +6637,7 @@ function arODetailModalHTML(){
         '<span class="arO-dc arO-dc3">'+x.inv+'</span>'+
         '<span class="arO-dc arO-dc4">'+dpd+'</span>'+
         '<span class="arO-dc arO-dc5 arO-dc-amt">'+money(x.amount)+'</span></div>';
-      if(open)row+='<div class="arO-drawer">'+arODetailTabs(x)+arODrawerActions(w,x)+'</div>';
+      if(open)row+='<div class="arO-drawer">'+arODetailTabs(x)+'</div>';
       return row;
     }).join("");
   } else {
@@ -6670,22 +6645,10 @@ function arODetailModalHTML(){
   }
   var totalOut=invs.reduce(function(s,x){return s+x.amount;},0);
   var foot=invs.length?'<div class="dep-total arO-dtotal"><span>'+invs.length+' invoice'+(invs.length>1?"s":"")+'</span><span>'+money(totalOut)+'</span></div>':'';
-  /* ENHANCEMENT (owner-specified, dev-intent signal, NOT a finished workflow or final copy): a Confirm
-     button sits beside Close in the footer and is ALWAYS enabled regardless of how many rows are checked.
-     On Confirm the modal shows an INLINE note (below/left of the footer buttons) whose primary line reads
-     exactly "Move to unposted transactions"; a muted sub-line reports the selection for developer clarity.
-     This inline note is a developer-facing signal that the selected invoices are intended to move to
-     unposted transactions to begin processing; it is NOT a wired-up action, toast, or final wording.
-     Selection is modal-scoped (modal.sel), reset on open and close. Export to Excel and the
-     "N invoices / total" footer stay exactly as Jo has them. */
-  var selCount=modal.sel?Object.keys(modal.sel).length:0;
-  var confirmNote=modal.confirmed
-    ?'<div class="arO-confirm-note" role="status"><span class="arO-confirm-primary"><span class="material-symbols-rounded" aria-hidden="true">arrow_forward</span><span class="arO-confirm-txt">Move to unposted transactions</span></span><span class="arO-confirm-sub">('+(selCount>0?selCount+' invoice'+(selCount===1?'':'s')+' selected':'no invoices selected')+')</span></div>'
-    :'<span class="arO-f-spacer"></span>';
   return '<div class="modal-backdrop" data-action="arO-detail-close"><div class="modal modal-wide arO-detail-modal" data-action="stop" role="dialog" aria-modal="true" aria-label="Receivable invoices outstanding, detail">'+
     '<div class="modal-h arO-detail-h"><span class="modal-title"><span class="material-symbols-rounded" aria-hidden="true" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">receipt_long</span>Receivable Invoices Outstanding: Detail</span><span class="arO-dsub">'+subj+'</span><span class="arO-dh-spacer"></span><button class="btn naked sm" data-action="arO-export" data-id="'+w.id+'">'+ICON("download")+'Export to Excel</button><button class="iconbtn" data-action="arO-detail-close" aria-label="Close">'+ICON("close")+'</button></div>'+
     '<div class="modal-b arO-detail-b"><div class="arO-detail-scroll">'+head+body+'</div>'+foot+'</div>'+
-    '<div class="modal-f arO-modal-f">'+confirmNote+'<div class="arO-f-btns"><button class="btn outlined sm" data-action="arO-confirm" data-id="'+w.id+'">Confirm</button><button class="btn primary sm" data-action="arO-detail-close">Close</button></div></div></div></div>';
+    '<div class="modal-f"><button class="btn primary sm" data-action="arO-detail-close">Close</button></div></div></div>';
 }
 
 /* (3) HANDLERS --------------------------------------------------------- */
@@ -6706,19 +6669,13 @@ function arOHandleClick(a,id,t){
       wcp.arOCustPage=(dir==="next")?Math.min(pgs-1,cp+1):Math.max(0,cp-1);}
     pop=null;render();return true;
   }
-  if(a==="arO-open"){var wop=find(id);if(!wop)return true;modal={type:"arOdetail",id:id,mode:t.getAttribute("data-mode"),key:t.getAttribute("data-key"),tab:"details",exp:null,sel:{},confirmed:false};modalMounted=false;pop=null;render();return true;}
-  /* ENHANCEMENT (dev-intent): toggle one row's selection (modal-scoped set on modal.sel). Re-renders
-     in place so the modal never closes and never triggers the row's arO-exp drill. */
-  if(a==="arO-check"){if(modal){var civ=t.getAttribute("data-inv");modal.sel=modal.sel||{};if(modal.sel[civ])delete modal.sel[civ];else modal.sel[civ]=true;}render();return true;}
+  if(a==="arO-open"){var wop=find(id);if(!wop)return true;modal={type:"arOdetail",id:id,mode:t.getAttribute("data-mode"),key:t.getAttribute("data-key"),tab:"details",exp:null};modalMounted=false;pop=null;render();return true;}
   /* ENHANCEMENT (dev-intent): always-enabled Confirm. Surfaces the inline "Move to unposted transactions"
      note (a developer-facing signal of the intended action, not a finished workflow). */
-  if(a==="arO-confirm"){if(modal)modal.confirmed=true;render();return true;}
   if(a==="arO-detail-close"){modal=null;pop=null;render();return true;}
   if(a==="arO-exp"){if(modal){var iv=t.getAttribute("data-inv");modal.exp=(modal.exp===iv)?null:iv;modal.tab="details";}render();return true;}
   if(a==="arO-tab"){if(modal)modal.tab=t.getAttribute("data-tab");render();return true;}
   if(a==="arO-export"){pop=null;setStatus("Exporting the detail list to Excel");render();return true;}
-  if(a==="arO-open-invoice"){setStatus("Opening invoice "+t.getAttribute("data-inv")+" in Accounts Receivable");return true;}
-  if(a==="arO-followup"){setStatus("Follow-up noted for invoice "+t.getAttribute("data-inv")+".");return true;}
   return false;
 }
 /* popContent branches (routed from popContent(): arO-rc / arO-source -> arOPopContent) */
