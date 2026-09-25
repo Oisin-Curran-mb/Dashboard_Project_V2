@@ -67,6 +67,10 @@ Owner rules per item. Claude applies, runs lint (auto-fixing defects), runs `ver
 ### Phase 3: W18 / Aditya
 Owner picks which of Variants A-D ship. Port the chosen B/C/D blocks (CSS, mount divs, `fkpSolo*/fkpC*/fkpD*` JS) from `_ref/aditya/Demo V2.html`; fix `fkpActiveV`; rule on the `wfind-fkp` finder hook (edits Jo's code); resolve Variant D's invented "Current runway"; strip the prototype-only demo chip for release. Update `w18-fkp.driver.js`. `docs/decisions/W18.md`.
 
+### Release gate (before v2.0-rc1)
+- Remove the TEMPORARY review aid: the `viewOnly` filter, the `hashchange` listener, `viewOnlySelectHTML` and its `change` listener, and `viewOnly(` in `render()` (all in the "Shell: single-widget viewer" block). Lint rule T6 reports it while present.
+- Remove the cmp tab, `CMP_ROWS`, `CMPNOTE_`, `cmpCards`, `cmpnote-mb`.
+
 ### Phase 4: collapse to release candidate
 Remove the cmp tab (`CMP_ROWS`, `cmpCards`, `cmpnote-mb`, `CMPNOTE_`), the losing copy of every widget, the retired v1 kinds (`budget`, `pension`, `payroll`, `remittance`, `ar`, `insurance`, `deposits`), commented driver fixtures, `stash@{0}` banners, `(OC)` titles; rename surviving kinds to plain names; fix known CSS leaks (`insO` re-declares `.insf-scope`; `penO` duplicates `.penf-*`). Retarget each driver at the surviving widget. One catch-up diff of Jo's `phase-2` since `8958e49`, presented as a final pack. Full verify green. Tag `v2.0-rc1`.
 

@@ -101,6 +101,14 @@ function add(rule, msg, items) {
   if (missing.length) add("T5", "static class names in markup with no CSS declaration (may be JS hooks; check before fixing)", missing);
 })();
 
+/* T6 temporary review aids that must not ship */
+(function () {
+  const marks = [];
+  if (raw.indexOf("Shell: single-widget viewer") > -1) marks.push("single-widget viewer block (viewOnly / viewOnlySelectHTML / hashchange)");
+  if (raw.indexOf('id:"cmp",name:"Side by side') > -1) marks.push("Side by side (cmp) tab");
+  if (marks.length) add("T6", "TEMPORARY review aids still in the file (remove before release)", marks);
+})();
+
 /* report */
 if (!findings.length) { console.log("LINT: no findings"); process.exit(0); }
 findings.forEach(function (f) {
