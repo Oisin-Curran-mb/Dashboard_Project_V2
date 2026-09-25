@@ -63,6 +63,16 @@ A.ok(/pledge/i.test((EX.aboutOf({ kind: "remittance", title: "Remittance Pledges
 const rows = EX.dashboards[0].widgets.filter(function (w) { return w.kind === "remittance"; });
 A.eq(rows.length, 3, "three live rows"); A.eq(rows.map(function (w) { return w.size; }).sort().join(","), "kpi,wide,xwide", "one per size");
 rows.forEach(function (w) { A.eq(w.title, "Remittance Pledges", w.id + ": plain title"); const h = EX.contentHTML(w); A.ok(h && h.length > 500, w.id + " (" + w.size + ") renders (" + (h || "").length + " bytes)"); A.absent(h, 'class="rem-', w.id + ": no shared rem- class in markup"); A.noEmDash(h, w.id); if (/wt-head/.test(h)) A.headMatchesBody(h, w.id + " table (D12)"); });
+/* table columns by size (owner, 25 Sep): Explore shows four, Detail all eight, Jo's phase-2 headings;
+   the per-card info button exists at Explore/Detail only */
+const headLabels = function (h) { const m = /<div class="remO-row remO-head[^"]*"[^>]*>([\s\S]*?)<\/div>\s*<div class="remO-row/.exec(h); return m ? [...m[1].matchAll(/data-k="[^"]+"[^>]*>([^<]+?)\s*<span/g)].map(function (x) { return x[1].trim(); }) : []; };
+rows.forEach(function (w) {
+  const h = EX.contentHTML(w), labels = headLabels(h), info = (h.match(/remO-cardinfo/g) || []).length;
+  if (w.size === "wide") { A.eq(labels.join("|"), "Activity|Outstanding|Paid|% Paid", w.id + ": Explore columns"); A.eq(info, 3, w.id + ": Explore keeps the card info buttons"); }
+  if (w.size === "xwide") { A.eq(labels.join("|"), "Seq.|Activity|Pledges behind|Pledge|Outstanding|Paid|Expected|% Paid", w.id + ": Detail columns"); A.absent(h, "remO-alignL", w.id + ": every amount column right-aligned"); A.eq(info, 3, w.id + ": Detail keeps the card info buttons"); }
+  if (w.size === "kpi") A.eq(info, 0, w.id + ": no card info button at Glance");
+  if (w.size !== "kpi") A.ok(/<div class="remO-row remO-head wt-head/.test(h), w.id + ": header row carries the shell wt-head class");
+});
 const w = rows.filter(function (x) { return x.size === "wide"; })[0], T = function (a) { return env.shim.mkTarget(a || {}, "button"); };
 const settle = function () { w.loading = false; w.bloading = false; w.remLoading = false; };
 

@@ -3467,10 +3467,9 @@
   .remO-cap-sort:hover{background:var(--wn-200);}
   .remO-cap-sort.on{color:var(--txt-primary);border-color:var(--am-400);}
   .remO-cap-sort .material-symbols-rounded{font-size:14px;}
-  .remO-row{display:grid;grid-template-columns:minmax(150px,2fr) 76px 80px 80px 80px 110px;align-items:center;gap:7px;padding:7px 10px;border-bottom:1px solid var(--stroke-widget);font-size:13px;}
+  .remO-row{display:grid;grid-template-columns:minmax(0,1fr) 80px 54px 70px;align-items:center;gap:7px;padding:7px 10px;border-bottom:1px solid var(--stroke-widget);font-size:13px;}
   .remO-row>.remO-name{padding-right:10px;}
-  .remO-num.remO-alignL{text-align:left;}
-  .remO-cards{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:2px 0 0;}
+  .remO-cards{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:2px 0 0;}
   .remO-card{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:9px 11px;border:1px solid var(--stroke-widget);border-radius:10px;background:var(--surface-widget);cursor:pointer;text-align:left;font-family:inherit;min-width:0;transition:background .12s,border-color .12s;}
   .remO-card-sk{height:58px;border-radius:10px;}
   .remO-card:hover{background:var(--wn-100);}
@@ -3481,7 +3480,8 @@
   .remO-card-ontrack .remO-card-top .material-symbols-rounded{color:var(--am-600);}
   .remO-card-ahead .remO-card-top .material-symbols-rounded{color:#0b6b4c;}
   .remO-card-n{font-size:22px;font-weight:700;line-height:1;color:var(--txt-primary);font-variant-numeric:tabular-nums;}
-  .remO-card-sub{font-size:11px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;}
+  .remO-card-sub{font-size:11px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .w04-hd .dep-hd-top{display:flex;flex-wrap:wrap;align-items:center;gap:8px;}
   .remO-card.on{border-width:2px;padding:8px 10px;}
   .remO-card-behind.on{border-color:#f5b301;background:#fdeeba;}
   .remO-card-ontrack.on{border-color:var(--am-400);background:var(--am-100);}
@@ -3495,6 +3495,7 @@
   .remO-nopct{color:var(--txt-subtle);}
   .remO-head{position:sticky;top:0;z-index:1;background:var(--surface-widget);font-size:11px;font-weight:600;color:var(--txt-subtle);}
   .remO-head .remO-cell{white-space:nowrap;overflow:visible;}
+  .remO-head .wt-sort{white-space:nowrap;}
   .remO-num .wt-sort,.remO-pct .wt-sort{justify-content:flex-end;width:100%;}
   .remO-name{display:flex;flex-direction:column;gap:3px;min-width:0;}
   .remO-name-nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500;color:var(--txt-primary);}
@@ -3529,7 +3530,6 @@
   .remO-eye-behind .material-symbols-rounded{color:#7a5300;}
   .remO-kpi-ochre{color:#7a5300;}
   .remO-kpi-vs{font-size:12px;color:var(--txt-subtle);align-self:flex-end;padding-bottom:3px;}
-  .remO-alignL .wt-sort{justify-content:flex-start;width:100%;}
   .remO-pacebar{display:flex;justify-content:flex-end;padding:8px 12px 12px;}
   .remO-pacefilter{display:inline-flex;align-items:center;gap:6px;}
   .remO-pacelead{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;letter-spacing:.02em;text-transform:uppercase;color:var(--txt-subtle);margin-right:2px;}
@@ -3596,30 +3596,24 @@
   /* W04-T12: the wrapper becomes the grid item, so the card must fill it. */
   .remO-cardwrap{position:relative;display:block;min-width:0;}
   .remO-cardwrap .remO-card{width:100%;height:100%;padding-right:26px;}
-  .remO-glancewrap .remO-cardwrap .remO-card{padding:8px 9px;padding-right:17px;}
+  .remO-glancewrap .remO-cardwrap .remO-card{padding:8px 9px;}
   .remO-glancewrap .remO-card-top{font-size:10.5px;letter-spacing:0;}
   .remO-glancewrap .remO-card-lbl{white-space:nowrap;}
   .remO-glancewrap .remO-card-n{font-size:20px;}
   .remO-glancewrap .remO-card-sub{font-size:10.5px;white-space:nowrap;}
-  .remO-glancewrap .remO-cardinfo{top:3px;right:3px;padding:1px;}
-  .remO-glancewrap .remO-cardinfo .material-symbols-rounded{font-size:13px;}
   .remO-cardinfo{position:absolute;top:5px;right:5px;border:0;background:transparent;padding:2px;line-height:1;color:var(--txt-subtle);cursor:help;border-radius:5px;}
   .remO-cardinfo:hover{color:var(--txt-primary);background:var(--wn-200);}
   .remO-cardinfo:focus-visible{outline:2px solid var(--am-500);outline-offset:1px;color:var(--txt-primary);}
   .remO-cardinfo .material-symbols-rounded{font-size:15px;display:block;}
-  .remO-row{grid-template-columns:34px minmax(108px,1.5fr) 66px 72px 78px 78px 80px 98px;}
+  .remO-row.remO-full{grid-template-columns:40px minmax(0,1fr) 97px 76px 82px 76px 80px 80px;gap:5px;padding-left:8px;padding-right:8px;}
+  .remO-row.remO-full>.remO-name{padding-right:0;}
   .remO-head{align-items:end;}
   .remO-head .remO-cell{white-space:normal;overflow:hidden;line-height:1.25;}
-  .remO-head .wt-sort{display:inline;text-align:inherit;}
-  .remO-head .wt-sort .material-symbols-rounded{font-size:14px;vertical-align:-3px;}
-  /* ALIGNMENT. Jo alternated remO-alignL down the money columns to separate them
-     visually in HER column order; after the W04-T7 reorder that alternation read as
-     random. Every money column is now right-aligned, which is what makes the figures
-     line up as a column of currency. The class stays defined but unused. */
+  /* every money column right-aligned so the figures read as a column of currency */
   .remO-num{text-align:right;}
   .remO-seq{text-align:left;}
   .remO-seq{font-variant-numeric:tabular-nums;color:var(--txt-subtle);font-size:12px;}
-  .remO-behindn{display:inline-block;min-width:20px;text-align:center;font-weight:700;color:#7a2e2e;}
+  .remO-behindn{display:inline-block;min-width:20px;text-align:center;color:#7a2e2e;}
   .remO-behind0{color:var(--txt-subtle);}
   /* W04-T4: widen OUR drill modal only. Her global .w04-drill-modal rule is never
      touched - this is a scoped override on the class pair only our modal carries. */
@@ -5913,17 +5907,19 @@ function remOSortBtn(w,k,label,tip){
   var ic=on?(dir<0?"arrow_downward":"arrow_upward"):"unfold_more";
   return '<button class="wt-sort'+(on?" on":"")+'" data-action="remO-sort" data-id="'+w.id+'" data-k="'+k+'"'+(tip?' data-tip="'+remOEsc(tip)+'" data-tip-plain':'')+'>'+label+' '+ICON(ic)+'</button>';
 }
-/* ---- report table (Version A columns in Jo's style, strictly tabular, no bar):
-   Activity | Pledge | Expected | Paid | Outstanding | % Paid ---- */
+/* ---- activity table. Explore: Activity | Outstanding | Paid | % Paid. Detail adds Seq,
+   Pledges behind (instalment count), Pledge and Expected (term pacing). ---- */
+function remOFull(w){return w.size==="xwide";}
 function remOHead(w){
-  return '<div class="remO-row remO-head">'+
-    '<span class="remO-cell remO-seq">'+remOSortBtn(w,"seq","Seq.")+'</span>'+
+  var full=remOFull(w);
+  return '<div class="remO-row remO-head wt-head'+(full?" remO-full":"")+'">'+
+    (full?'<span class="remO-cell remO-seq">'+remOSortBtn(w,"seq","Seq.")+'</span>':'')+
     '<span class="remO-cell remO-name">'+remOSortBtn(w,"name","Activity")+'</span>'+
-    '<span class="remO-cell remO-num">'+remOSortBtn(w,"behind","Pledges behind","How many pledges behind this activity have at least one payment unpaid for more than "+REMO_GRACE_DAYS+" days. Payments still inside their grace period count as at risk, not behind, and are shown when you open the activity.")+'</span>'+
-    '<span class="remO-cell remO-num">'+remOSortBtn(w,"annual","Annual","Total pledged. Legacy name kept: this is the FULL amount of each pledge over its own term, so a multi-year pledge contributes every year of it, not one year's share.")+'</span>'+
-    '<span class="remO-cell remO-num">'+remOSortBtn(w,"expected","Expected to date","Amount that should have been paid by now, from the share of each pledge's own term (start to end date) elapsed. Not a calendar-year figure.")+'</span>'+
-    '<span class="remO-cell remO-num">'+remOSortBtn(w,"paidamt","Received to date","Every receipt recorded against this activity up to the Receipts through date. Cumulative, with no start date - it is not year-to-date, which is why the label no longer says YTD.")+'</span>'+
+    (full?'<span class="remO-cell remO-num">'+remOSortBtn(w,"behind","Pledges behind","How many pledges behind this activity have at least one payment unpaid for more than "+REMO_GRACE_DAYS+" days. Payments still inside their grace period count as at risk, not behind, and are shown when you open the activity.")+'</span>'+
+          '<span class="remO-cell remO-num">'+remOSortBtn(w,"annual","Pledge","Total pledged over each pledge's own term (start to end date). A multi-year pledge counts in full, not one year's share.")+'</span>':'')+
     '<span class="remO-cell remO-num">'+remOSortBtn(w,"outstanding","Outstanding")+'</span>'+
+    '<span class="remO-cell remO-num">'+remOSortBtn(w,"paidamt","Paid","Every receipt recorded against this activity up to the Receipts through date. Cumulative over the pledge term, not year-to-date.")+'</span>'+
+    (full?'<span class="remO-cell remO-num">'+remOSortBtn(w,"expected","Expected","Amount that should have been paid by now, from the share of each pledge's own term (start to end date) elapsed. Not a calendar-year figure.")+'</span>':'')+
     '<span class="remO-cell remO-pct">'+remOSortBtn(w,"pct","% Paid")+'</span>'+
   '</div>';
 }
@@ -5937,14 +5933,15 @@ function remOBehindCell(w,r){
   return '<span class="remO-behindn" title="'+remOEsc(c.behind+' of '+c.n+' pledges have a payment unpaid for more than '+REMO_GRACE_DAYS+' days')+'">'+c.behind+'</span>';
 }
 function remORow(w,r){
-  return '<div class="remO-row" data-action="remO-open" data-id="'+w.id+'" data-seq="'+r.seq+'" role="button" tabindex="0" aria-label="'+remOEsc(r.name+", "+remORowSr(r)+" "+remOStatusLabel(remOStatus(r))+". Open the member churches behind this fund.")+'">'+
-    '<span class="remO-cell remO-seq">'+r.seq+'</span>'+
+  var full=remOFull(w);
+  return '<div class="remO-row'+(full?" remO-full":"")+'" data-action="remO-open" data-id="'+w.id+'" data-seq="'+r.seq+'" role="button" tabindex="0" aria-label="'+remOEsc(r.name+", "+remORowSr(r)+" "+remOStatusLabel(remOStatus(r))+". Open the member churches behind this fund.")+'">'+
+    (full?'<span class="remO-cell remO-seq">'+r.seq+'</span>':'')+
     '<div class="remO-cell remO-name"><span class="remO-name-nm">'+r.name+'</span></div>'+
-    '<span class="remO-cell remO-num">'+remOBehindCell(w,r)+'</span>'+
-    '<span class="remO-cell remO-num">'+money(r.total)+'</span>'+
-    '<span class="remO-cell remO-num">'+money(r.expected)+'</span>'+
-    '<span class="remO-cell remO-num">'+money(r.paid)+'</span>'+
+    (full?'<span class="remO-cell remO-num">'+remOBehindCell(w,r)+'</span>'+
+          '<span class="remO-cell remO-num">'+money(r.total)+'</span>':'')+
     '<span class="remO-cell remO-num">'+money(r.outstanding)+'</span>'+
+    '<span class="remO-cell remO-num">'+money(r.paid)+'</span>'+
+    (full?'<span class="remO-cell remO-num">'+money(r.expected)+'</span>':'')+
     '<span class="remO-cell remO-pct">'+remOMiniBar(r)+'</span>'+
     '<span class="sr-only">'+remORowSr(r)+' '+remOStatusLabel(remOStatus(r))+'.</span>'+
   '</div>';
@@ -5957,14 +5954,15 @@ function remOTable(w){
   var tBand=(tt.paid<tt.expected)?"behind":(((tt.total-tt.paid)<=0)?"ahead":"ontrack"),totPct=tt.total>0?remOPct(tt.paid/tt.total):"n/a";
   var tPaidPct=tt.total>0?Math.min(100,tt.paid/tt.total*100):0,tExpPct=tt.total>0?Math.min(100,tt.expected/tt.total*100):0;
   var totMini=tt.total>0?('<span class="w04-minirow"><span class="w04-mini"><span class="w04-mini-track"><span class="w04-mini-fill w04-fill-'+tBand+'" style="width:'+tPaidPct.toFixed(1)+'%"></span></span><span class="w04-mini-mark" style="left:'+tExpPct.toFixed(1)+'%"></span></span><span class="w04-mini-pct">'+totPct+'</span></span>'):'<span class="remO-nopct">n/a</span>';
-  var tot='<div class="remO-row remO-total">'+
-    '<span class="remO-cell remO-seq"></span>'+
+  var full=remOFull(w);
+  var tot='<div class="remO-row remO-total'+(full?" remO-full":"")+'">'+
+    (full?'<span class="remO-cell remO-seq"></span>':'')+
     '<span class="remO-cell remO-name remO-total-lead">Total ('+tt.count+' activit'+(tt.count===1?"y":"ies")+')</span>'+
-    '<span class="remO-cell remO-num">'+tt.behind+'</span>'+
-    '<span class="remO-cell remO-num">'+money(tt.total)+'</span>'+
-    '<span class="remO-cell remO-num">'+money(tt.expected)+'</span>'+
-    '<span class="remO-cell remO-num">'+money(tt.paid)+'</span>'+
+    (full?'<span class="remO-cell remO-num">'+tt.behind+'</span>'+
+          '<span class="remO-cell remO-num">'+money(tt.total)+'</span>':'')+
     '<span class="remO-cell remO-num">'+money(tt.out)+'</span>'+
+    '<span class="remO-cell remO-num">'+money(tt.paid)+'</span>'+
+    (full?'<span class="remO-cell remO-num">'+money(tt.expected)+'</span>':'')+
     '<span class="remO-cell remO-pct">'+totMini+'</span>'+
   '</div>';
   return '<div class="remO-tbl"><div class="scroll remO-scroll">'+remOHead(w)+body+'</div>'+tot+'</div>';
@@ -6034,7 +6032,7 @@ function remOPaceCards(w,drill){
   var defs=[["behind","Behind","error"],["ontrack","On track","check_circle"],["ahead","Ahead","trending_up"]];
   return '<div class="remO-cards" role="group" aria-label="'+(drill?"Pledge pace, tap to open":"Filter pledges by pace")+'">'+defs.map(function(d){
     var b=st[d[0]],top='<span class="remO-card-top">'+ICON(d[2])+'<span class="remO-card-lbl">'+d[1]+'</span></span><span class="remO-card-n">'+b.n+'</span><span class="remO-card-sub">'+money(b.out)+(w.size==="kpi"?'':' outstanding')+'</span>';
-    var info='<button type="button" class="remO-cardinfo" data-tip="'+remOEsc(REMO_CARD_TIPS[d[0]])+'" data-tip-plain aria-label="'+remOEsc("What "+d[1]+" means. "+REMO_CARD_TIPS[d[0]])+'">'+ICON("info")+'</button>';
+    var info=w.size==="kpi"?'':'<button type="button" class="remO-cardinfo" data-tip="'+remOEsc(REMO_CARD_TIPS[d[0]])+'" data-tip-plain aria-label="'+remOEsc("What "+d[1]+" means. "+REMO_CARD_TIPS[d[0]])+'">'+ICON("info")+'</button>';
     if(drill)return '<span class="remO-cardwrap"><button class="remO-card remO-card-'+d[0]+'" data-action="remO-drill" data-id="'+w.id+'" data-band="'+d[0]+'" aria-label="'+d[1]+', '+b.n+' pledge'+(b.n===1?"":"s")+', '+money(b.out)+' outstanding, tap to open">'+top+'</button>'+info+'</span>';
     var on=cur===d[0];
     return '<span class="remO-cardwrap"><button class="remO-card remO-card-'+d[0]+(on?" on":"")+'" data-action="remO-set-pacef" data-id="'+w.id+'" data-v="'+(on?"all":d[0])+'" aria-pressed="'+on+'" aria-label="'+d[1]+', '+b.n+' pledge'+(b.n===1?"":"s")+', '+money(b.out)+' outstanding, tap to filter">'+top+'</button>'+info+'</span>';

@@ -300,14 +300,25 @@ class Assert {
     });
     return this._rec(missing.length === 0, (msg || "CSS declarations") + " missing: " + missing.join(", "));
   }
-  /* Decision D12 (2026-09-25): in a .wt-row table the header cells must carry
-     exactly the width/alignment classes of their body cells, so headers sit
-     over their columns. Compares the first .wt-head row's cells with the first
-     body row's cells, class set by class set (sort-button state tokens ignored). */
+  /* Decision D12 (2026-09-25): in a table whose header row carries .wt-head the
+     header cells must carry exactly the width/alignment classes of their body
+     cells, so headers sit over their columns. The row class is whatever the
+     header row's first class is (.wt-row, .remO-row, ...); rows are cut by div
+     depth, so a body row may hold nested divs and attributes. Compares the first
+     header row's cells with the first body row's, class set by class set
+     (sort-button state tokens and screen-reader-only spans ignored). */
   headMatchesBody(html, msg) {
-    const rows = [...String(html).matchAll(/<div class="wt-row([^"]*)">([\s\S]*?)<\/div>(?=\s*<div class="wt-row|\s*<\/div>|\s*$)/g)];
-    const head = rows.find(function (r) { return /\bwt-head\b/.test(r[1]); });
-    const body = rows.find(function (r) { return !/\bwt-head\b/.test(r[1]); });
+    const s = String(html);
+    const first = /<div class="([^"]*)\bwt-head\b/.exec(s);
+    const rowCls = (first && first[1].trim().split(/\s+/)[0]) || "wt-row";
+    const rows = []; const open = new RegExp('<div class="' + rowCls + '(?:\\s[^"]*)?"[^>]*>', "g"); let om;
+    while ((om = open.exec(s))) {
+      const tag = /<(\/?)div\b[^>]*>/g; tag.lastIndex = om.index + om[0].length; let depth = 1, tm;
+      while (depth && (tm = tag.exec(s))) { depth += tm[1] ? -1 : 1; if (!depth) rows.push([/class="([^"]*)"/.exec(om[0])[1], s.slice(om.index + om[0].length, tm.index)]); }
+      if (depth) break;
+    }
+    const head = rows.find(function (r) { return /\bwt-head\b/.test(r[0]); });
+    const body = rows.find(function (r) { return !/\bwt-head\b/.test(r[0]); });
     if (!head || !body) return this._rec(false, msg + ": header and a body row were found  (head " + !!head + ", body " + !!body + ")");
     /* top-level cells only: a sort <button> or a badge <span> nested inside a cell is part of that cell */
     const cells = function (s) {
@@ -315,12 +326,12 @@ class Assert {
       while ((m = re.exec(s))) {
         if (m[1]) { depth--; continue; }
         if (/\/>$/.test(m[0])) continue;
-        if (depth === 0) { const cm = /class="([^"]*)"/.exec(m[3]); out.push((cm ? cm[1] : "").split(/\s+/).filter(function (c) { return c && !/^(on|wt-sort|lr-link|wt-rowlink)$/.test(c); }).sort().join(" ")); }
+        if (depth === 0) { const cm = /class="([^"]*)"/.exec(m[3]); const cl = (cm ? cm[1] : "").split(/\s+/).filter(function (c) { return c && !/^(on|wt-sort|lr-link|wt-rowlink)$/.test(c); }); if (cl.indexOf("sr-only") < 0) out.push(cl.sort().join(" ")); }
         depth++;
       }
       return out;
     };
-    const h = cells(head[2]), b = cells(body[2]);
+    const h = cells(head[1]), b = cells(body[1]);
     if (h.length !== b.length) return this._rec(false, msg + ": header has " + h.length + " cells, body has " + b.length);
     const bad = h.map(function (c, i) { return c === b[i] ? null : "col " + (i + 1) + " head[" + c + "] body[" + b[i] + "]"; }).filter(Boolean);
     return this._rec(bad.length === 0, msg + ": header cells carry their column's classes" + (bad.length ? "  (" + bad.join("; ") + ")" : ""));
