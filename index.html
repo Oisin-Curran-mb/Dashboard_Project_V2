@@ -7099,6 +7099,8 @@ var PTOF_GROUPS=[
   {pg:"Weekly Staff", people:[
     {name:"Dana Whitfield", dept:"Finance", entries:[
       {type:"Vacation", d:12, dEnd:14, hours:24, st:"Pending"},
+      {type:"Sick", d:20, hours:4, st:"Pending"},
+      {type:"Personal", d:20, hours:4, st:"Pending"},
       {type:"Sick", d:3, hours:8, st:"Approved", appBy:"M. Reyes", appDate:"Aug 1"},
       {type:"Vacation", mo:6, d:28, dEnd:31, hours:32, st:"Approved", appBy:"M. Reyes", appDate:"Jul 10"},
       {type:"Vacation", mo:0, d:2, dEnd:3, hours:16, st:"Approved", appBy:"M. Reyes", appDate:"Jan 5"},
@@ -7194,18 +7196,21 @@ function ptoFIsOutstanding(w,fe){return ptoFEff(w,fe)==="Pending"&&ptoFDateBefor
    Pending. */
 function ptoFEffState(w,fe){if(ptoFEff(w,fe)==="Approved")return "Approved";return ptoFDateBeforeToday(fe)?"Outstanding":"Pending";}
 function ptoFStatusMatch(fe,status,w){var eff=ptoFEff(w,fe);if(status==="all")return true;if(status==="pending")return eff==="Pending";return eff==="Approved";}
-function ptoFPendingCount(w){return ptoFWorkFlat(w).filter(function(fe){return ptoFEff(w,fe)==="Pending";}).length;}
+/* A calendar day split between two leave types is ONE day: every count is over distinct person-days, not day-lines. */
+function ptoFDayKey(fe){return fe.personKey+"|"+fe.year+"|"+fe.mo+"|"+fe.d;}
+function ptoFDistinctDays(lines){var s={};lines.forEach(function(fe){s[ptoFDayKey(fe)]=1;});return Object.keys(s).length;}
+function ptoFPendingCount(w){return ptoFDistinctDays(ptoFWorkFlat(w).filter(function(fe){return ptoFEff(w,fe)==="Pending";}));}
 /* Glance figures: Outstanding = pending dated before today; Pending
    EXCLUDES those (pending dated today or later). Together they partition
    the pending set with no double count. The queue's header, group and
    person pending counts (ptoFPendingCount plus the two below) are
    unchanged and still include outstanding, per owner instruction for this
    pass. */
-function ptoFOutstandingCount(w){return ptoFWorkFlat(w).filter(function(fe){return ptoFIsOutstanding(w,fe);}).length;}
-function ptoFPendingNotOutstanding(w){return ptoFWorkFlat(w).filter(function(fe){return ptoFEff(w,fe)==="Pending"&&!ptoFDateBeforeToday(fe);}).length;}
+function ptoFOutstandingCount(w){return ptoFDistinctDays(ptoFWorkFlat(w).filter(function(fe){return ptoFIsOutstanding(w,fe);}));}
+function ptoFPendingNotOutstanding(w){return ptoFDistinctDays(ptoFWorkFlat(w).filter(function(fe){return ptoFEff(w,fe)==="Pending"&&!ptoFDateBeforeToday(fe);}));}
 function ptoFGroupKey(fe,w){return ptoFQueueGroup(w)==="dept"?fe.dept:fe.pg;}
-function ptoFGroupPending(w,key){return ptoFWorkFlat(w).filter(function(fe){return ptoFGroupKey(fe,w)===key&&ptoFEff(w,fe)==="Pending";}).length;}
-function ptoFPersonPending(w,pk){return ptoFWorkFlat(w).filter(function(fe){return fe.personKey===pk&&ptoFEff(w,fe)==="Pending";}).length;}
+function ptoFGroupPending(w,key){return ptoFDistinctDays(ptoFWorkFlat(w).filter(function(fe){return ptoFGroupKey(fe,w)===key&&ptoFEff(w,fe)==="Pending";}));}
+function ptoFPersonPending(w,pk){return ptoFDistinctDays(ptoFWorkFlat(w).filter(function(fe){return fe.personKey===pk&&ptoFEff(w,fe)==="Pending";}));}
 function ptoFOutThisWeek(w){var s={};ptoFWorkFlat(w).forEach(function(fe){if(fe.d<=9&&fe.dEnd>=3)s[fe.personKey]=1;});return Object.keys(s).length;}
 function ptoFDistinctOut(all){var s={};all.forEach(function(fe){s[fe.personKey]=1;});return Object.keys(s).length;}
 function ptoFDates(fe){var mn=PTOF_MONTHS[fe.mo].slice(0,3);return mn+" "+fe.d+((fe.dEnd&&fe.dEnd!==fe.d)?(" to "+fe.dEnd):"");}
@@ -7254,7 +7259,7 @@ function ptoFHeaderBlock(w){
   var ctls=(ptoFView(w)==="queue")
     ?(ptoFGroupToggle(w)+ptoFStatusFilter(w))
     :(ptoFDeptChip(w));
-  var pend=ptoFPendingCount(w),all=ptoFWorkFlat(w).length;
+  var pend=ptoFPendingCount(w),all=ptoFDistinctDays(ptoFWorkFlat(w));
   var badge='<span class="w09-pill '+(pend?"warn":"ok")+'">'+ICON(pend?"pending_actions":"check_circle")+pend+' pending</span>';
   var kpi='<div class="dep-hd-kpigrp"><span class="metric-value">'+pend+'</span>'+badge+'</div>';
   var ctx=pend
@@ -7292,7 +7297,7 @@ function ptoFPersonRow(fe,w){
   var secondary=(ptoFQueueGroup(w)==="dept")?fe.pg:fe.dept;
   var nm=ptoFEsc(fe.person);
   var open=!!ptoFOpenMap(w)[fe.personKey];
-  var info='<button class="w09-abtn ptof-abtn-info" data-pto="pto-info" data-id="'+w.id+'" data-person="'+ptoFEsc(fe.personKey)+'" aria-label="Time off detail for '+nm+', this year by leave type and who else is off during these dates">'+ICON("info")+'Info</button>';
+  var info='<button class="w09-abtn ptof-abtn-info" data-pto="pto-info" data-id="'+w.id+'" data-person="'+ptoFEsc(fe.personKey)+'" aria-label="Time off detail for '+nm+', pending days with department coverage, and time taken this year">'+ICON("info")+'Info</button>';
   var badge=(pend>0)?('<span class="w09-count-badge">'+pend+' pending</span>')
                     :('<span class="w09-appr-chip">'+ICON("check_circle")+'All resolved</span>');
   return '<div class="wt-row w09-l2'+(open?" open":"")+'">'+
@@ -7307,19 +7312,27 @@ function ptoFPersonRow(fe,w){
    a plain text label, no icon. Approve and Undo are her real buttons on
    her .w09-abtn-appr / .w09-undo chassis, and an approved row picks up her
    .w09-l3.appr tint. */
-function ptoFEntryRow(fe,w){
-  var eff=ptoFEff(w,fe);
-  var isOut=ptoFIsOutstanding(w,fe);
-  var appr=(eff!=="Pending");
+/* One queue row per calendar day. A day split between leave types lists both types and the total hours; Approve / Undo act on every line of that day. */
+function ptoFEntryRow(lines,w){
+  if(!Array.isArray(lines))lines=[lines];
+  var fe=lines[0],ids=lines.map(function(l){return l._id;}).join(",");
+  var types=[];lines.forEach(function(l){if(types.indexOf(l.type)<0)types.push(l.type);});
+  var hours=lines.reduce(function(a,l){return a+(l.hours||0);},0);
+  var appr=lines.every(function(l){return ptoFEff(w,l)!=="Pending";});
+  var isOut=lines.some(function(l){return ptoFIsOutstanding(w,l);});
   var action=appr
-    ?('<button class="w09-undo" data-pto="pto-unapprove" data-id="'+w.id+'" data-day="'+ptoFEsc(fe._id)+'" aria-label="Undo approval for '+ptoFDates(fe)+', return this day to pending">'+ICON("undo")+'Undo</button>')
-    :('<button class="w09-abtn w09-abtn-appr" data-pto="pto-approve" data-id="'+w.id+'" data-day="'+ptoFEsc(fe._id)+'" aria-label="Approve time off on '+ptoFDates(fe)+'">'+ICON("check")+'Approve</button>');
+    ?('<button class="w09-undo" data-pto="pto-unapprove" data-id="'+w.id+'" data-day="'+ptoFEsc(ids)+'" aria-label="Undo approval for '+ptoFDates(fe)+', return this day to pending">'+ICON("undo")+'Undo</button>')
+    :('<button class="w09-abtn w09-abtn-appr" data-pto="pto-approve" data-id="'+w.id+'" data-day="'+ptoFEsc(ids)+'" aria-label="Approve time off on '+ptoFDates(fe)+'">'+ICON("check")+'Approve</button>');
   var otag=isOut?('<span class="ptof-otag" title="Past due and still pending">'+ICON("error")+'Outstanding</span>'):"";
+  var status=appr?ptoFStatusCell(w,fe):'<span class="ptof-chip ptof-chip-pend">'+ICON("schedule")+'Pending</span>';
   return '<div class="wt-row w09-l3'+(appr?" appr":"")+(isOut?" ptof-l3-out":"")+'">'+
     '<span class="w09-datecol">'+ptoFDates(fe)+'</span>'+
-    '<span class="ptof-typecol">'+fe.type+otag+'</span>'+
-    '<span class="w09-hrcol">'+fe.hours+' h</span>'+
-    '<span class="w09-actioncol ptof-statuscol">'+ptoFStatusCell(w,fe)+action+'</span></div>';}
+    '<span class="ptof-typecol">'+types.join(", ")+otag+'</span>'+
+    '<span class="w09-hrcol">'+hours+' h</span>'+
+    '<span class="w09-actioncol ptof-statuscol">'+status+action+'</span></div>';}
+/* One marker per person per day; a split day takes its most urgent state (Outstanding, then Pending, then Approved). */
+function ptoFOnePerPerson(w,lines){var rank={Outstanding:3,Pending:2,Approved:1},best={},order=[];lines.forEach(function(fe){var k=fe.personKey,r=rank[ptoFEffState(w,fe)]||0;if(!best[k]){best[k]=fe;order.push(k);}else if(r>(rank[ptoFEffState(w,best[k])]||0))best[k]=fe;});return order.map(function(k){return best[k];});}
+function ptoFEntryRowsMerged(lines,w){var order=[],byDay={};lines.forEach(function(fe){var k=ptoFDayKey(fe);if(!byDay[k]){byDay[k]=[];order.push(k);}byDay[k].push(fe);});return order.map(function(k){return ptoFEntryRow(byDay[k],w);}).join("");}
 function ptoFQueueOrdered(w,flat){var gOrder=[],gPeople={};flat.forEach(function(fe){var k=ptoFGroupKey(fe,w);if(!gPeople[k]){gPeople[k]=[];gOrder.push(k);}if(gPeople[k].indexOf(fe.personKey)<0)gPeople[k].push(fe.personKey);});if(ptoFQueueGroup(w)==="dept")gOrder.sort();var out=[];gOrder.forEach(function(k){gPeople[k].forEach(function(pk){flat.forEach(function(fe){if(ptoFGroupKey(fe,w)===k&&fe.personKey===pk)out.push({k:k,pk:pk,fe:fe});});});});return out;}
 function ptoFQueue(w){
   var all=ptoFWorkFlat(w),flat=all.filter(function(fe){return ptoFStatusMatch(fe,ptoFStatus(w),w);});
@@ -7341,9 +7354,9 @@ function ptoFQueue(w){
       /* Column header only inside an open person, her w09-colhead idiom. */
       if(ptoFOpenMap(w)[u.pk])
         html+='<div class="wt-row w09-colhead"><span class="w09-datecol">Date</span><span class="ptof-typecol">Type</span><span class="w09-hrcol">Hrs</span><span class="w09-actioncol ptof-statuscol">Status</span></div>';
+      /* Day rows render ONLY for an expanded person, one row per calendar day. */
+      if(ptoFOpenMap(w)[u.pk])html+=ptoFEntryRowsMerged(units.filter(function(x){return x.pk===u.pk&&x.k===u.k;}).map(function(x){return x.fe;}),w);
     }
-    /* Day lines render ONLY for an expanded person. */
-    if(ptoFOpenMap(w)[u.pk])html+=ptoFEntryRow(u.fe,w);
   });
   if(truncated>0)html+='<div class="ptof-more-note">'+truncated+' more in Detail size</div>';
   return '<div class="scroll ptof-queue">'+html+'</div>';}
@@ -7406,8 +7419,9 @@ function ptoFCalendar(w){var y=ptoFCalY(w),m=ptoFCalM(w);
       var np=ptoFDistinctOut(hit);
       attrs=' data-pto="pto-day" data-id="'+w.id+'" data-day="'+dd+'" role="button" tabindex="0" aria-label="'+PTOF_MONTHS[m].slice(0,3)+' '+dd+', '+np+(np===1?" person":" people")+' out, '+ptoFDayStatusLabel(dst)+', open detail"';
       marks='<div class="ptof-marks">';
-      hit.slice(0,maxMarks).forEach(function(fe){marks+=ptoFMarker(fe,w,dd);});
-      if(hit.length>maxMarks)marks+='<span class="ptof-more" title="'+(hit.length-maxMarks)+' more out this day">+'+(hit.length-maxMarks)+'</span>';
+      var byP=ptoFOnePerPerson(w,hit);
+      byP.slice(0,maxMarks).forEach(function(fe){marks+=ptoFMarker(fe,w,dd);});
+      if(byP.length>maxMarks)marks+='<span class="ptof-more" title="'+(byP.length-maxMarks)+' more out this day">+'+(byP.length-maxMarks)+'</span>';
       marks+='</div>';
     }
     cells+=ptoFDayCell(cls,dd,marks,attrs);
@@ -7452,13 +7466,13 @@ function ptoFDayDetailHTML(){
    here. ---------------------------------------------------------------- */
 /* Person pop-up: two sections. Pending approval (days by leave type this year, and who else from the same
    department is out during those pending dates) and Taken and approved (days by type). Informational only. */
-function ptoFPersonDaysByState(w,pk,approved){var out={},tot=0;ptoFYearFlat(w).forEach(function(fe){if(fe.personKey!==pk)return;var isA=(ptoFEff(w,fe)==="Approved");if(isA!==approved)return;var n=ptoFEntryDays(fe);out[fe.type]=(out[fe.type]||0)+n;tot+=n;});return {by:out,tot:tot};}
+function ptoFPersonDaysByState(w,pk,approved){var out={},hrs={},lines=[],hours=0;ptoFYearFlat(w).forEach(function(fe){if(fe.personKey!==pk)return;var isA=(ptoFEff(w,fe)==="Approved");if(isA!==approved)return;out[fe.type]=(out[fe.type]||0)+ptoFEntryDays(fe);hrs[fe.type]=(hrs[fe.type]||0)+(fe.hours||0);hours+=(fe.hours||0);lines.push(fe);});return {by:out,hrs:hrs,tot:ptoFDistinctDays(lines),hours:hours};}
 function ptoFSameDeptOut(w,pk,dept,fe){var out=[],seen={};ptoFFlat(w).forEach(function(o){if(o.personKey===pk||o.dept!==dept||!ptoFRangesOverlap(fe,o)||seen[o.personKey])return;seen[o.personKey]=1;out.push({person:o.person,type:o.type,dates:ptoFDates(o),status:ptoFEffState(w,o)});});return out;}
-function ptoFInfoTypes(by){var rows=PTOF_LEAVE_TYPES.filter(function(o){return (by[o.key]||0)>0;});if(!rows.length)return '<div class="ptof-info-empty">None</div>';return rows.map(function(o){var n=by[o.key];return '<div class="ptof-info-typ"><span class="ptof-info-typ-nm">'+o.key+'</span><span class="ptof-info-typ-n">'+n+(n===1?" day":" days")+'</span></div>';}).join("");}
+function ptoFInfoTypes(st){var by=st.by,hrs=st.hrs||{};var rows=PTOF_LEAVE_TYPES.filter(function(o){return (by[o.key]||0)>0;});if(!rows.length)return '<div class="ptof-info-empty">None</div>';return rows.map(function(o){var n=by[o.key],h=hrs[o.key]||0;return '<div class="ptof-info-typ"><span class="ptof-info-typ-nm">'+o.key+'</span><span class="ptof-info-typ-n">'+h+' h &middot; '+n+(n===1?" day":" days")+'</span></div>';}).join("");}
 /* one pending entry: its dates, type and state, then the same-department coverage on those dates (named up to three, otherwise a count) */
 function ptoFInfoPendingRow(w,pk,dept,fe){
   var n=ptoFEntryDays(fe),others=ptoFSameDeptOut(w,pk,dept,fe),st=ptoFEffState(w,fe);
-  var head='<div class="ptof-info-typ ptof-info-pend"><span class="ptof-info-typ-nm"><strong>'+ptoFDates(fe)+'</strong> &middot; '+fe.type+'</span><span class="ptof-info-typ-n">'+n+(n===1?" day":" days")+' &middot; '+st+'</span></div>';
+  var head='<div class="ptof-info-typ ptof-info-pend"><span class="ptof-info-typ-nm"><strong>'+ptoFDates(fe)+'</strong> &middot; '+fe.type+'</span><span class="ptof-info-typ-n">'+(fe.hours||0)+' h &middot; '+st+'</span></div>';
   var conf;
   if(!others.length)conf='<div class="ptof-info-conf ok">'+ICON("check_circle")+'No one else from '+dept+' is out on these dates</div>';
   else if(others.length>3)conf='<div class="ptof-info-conf warn">'+ICON("groups")+others.length+' others from '+dept+' are out on these dates</div>';
@@ -7470,15 +7484,15 @@ function ptoFInfoPanelHTML(){
   var w=find(st.id);if(!w)return "";
   var pk=st.pk;var nm=ptoFPersonName(pk);var meta=ptoFPersonMeta(w,pk);
   var pending=ptoFFlat(w).filter(function(fe){return fe.personKey===pk&&ptoFEff(w,fe)!=="Approved";}).sort(function(a,b){return (a.year-b.year)||(a.mo-b.mo)||(a.d-b.d);});
-  var pendDays=pending.reduce(function(a,fe){return a+ptoFEntryDays(fe);},0);
+  var pendDays=ptoFDistinctDays(pending),pendHours=pending.reduce(function(a,fe){return a+(fe.hours||0);},0);
   var appr=ptoFPersonDaysByState(w,pk,true);
   var days=function(n){return n+(n===1?" day":" days");};
   var pendHtml=pending.length?pending.map(function(fe){return ptoFInfoPendingRow(w,pk,meta.dept,fe);}).join(""):'<div class="ptof-info-empty">Nothing is waiting on approval.</div>';
   return '<div class="modal-backdrop" data-pto="pto-ovl-close"><div class="modal ptof-ovl" data-pto="stop" role="dialog" aria-modal="true" aria-label="Time off detail for '+ptoFEsc(nm+", "+meta.dept+", "+meta.pg)+'">'+
     '<div class="modal-h"><div class="ptof-info-hd-main"><span class="modal-title">'+nm+'</span><span class="ptof-info-hd-sub">'+meta.dept+' &middot; '+meta.pg+'</span></div><button class="iconbtn" data-pto="pto-ovl-close" aria-label="Close detail">'+ICON("close")+'</button></div>'+
     '<div class="modal-b ptof-ovl-b">'+
-      '<div class="ptof-info-cap">Pending approval, '+days(pendDays)+'</div>'+pendHtml+
-      '<div class="ptof-info-cap ptof-info-cap2">Taken and approved, '+days(appr.tot)+' this year ('+PTOF_WORK_Y+')</div>'+ptoFInfoTypes(appr.by)+
+      '<div class="ptof-info-cap">Pending approval, '+days(pendDays)+' ('+pendHours+' h)</div>'+pendHtml+
+      '<div class="ptof-info-cap ptof-info-cap2">Taken and approved, '+days(appr.tot)+' ('+appr.hours+' h) this year, '+PTOF_WORK_Y+'</div>'+ptoFInfoTypes(appr)+
     '</div></div></div>';
 }
 
@@ -7561,8 +7575,8 @@ function ptoFHandleClick(e){
   if(a==="pto-day"){PTOF_INFO=null;PTOF_DAY={id:id,y:ptoFCalY(w),m:ptoFCalM(w),d:+t.getAttribute("data-day"),focusId:null};ptoFRenderOverlay();render();return;}
   if(a==="pto-mark"){PTOF_INFO=null;PTOF_DAY={id:id,y:ptoFCalY(w),m:ptoFCalM(w),d:+t.getAttribute("data-day"),focusId:t.getAttribute("data-eid")};ptoFRenderOverlay();render();return;}
   if(a==="pto-info"){PTOF_DAY=null;PTOF_INFO={id:id,pk:t.getAttribute("data-person")};ptoFRenderOverlay();render();return;}
-  if(a==="pto-approve"){ptoFApprMap(w)[t.getAttribute("data-day")]="Approved";if(PTOF_DAY||PTOF_INFO)ptoFRenderOverlay();render();return;}
-  if(a==="pto-unapprove"){ptoFApprMap(w)[t.getAttribute("data-day")]="Pending";if(PTOF_DAY||PTOF_INFO)ptoFRenderOverlay();render();return;}
+  if(a==="pto-approve"){var am=ptoFApprMap(w);t.getAttribute("data-day").split(",").forEach(function(id){am[id]="Approved";});if(PTOF_DAY||PTOF_INFO)ptoFRenderOverlay();render();return;}
+  if(a==="pto-unapprove"){var um=ptoFApprMap(w);t.getAttribute("data-day").split(",").forEach(function(id){um[id]="Pending";});if(PTOF_DAY||PTOF_INFO)ptoFRenderOverlay();render();return;}
   if(a==="pto-person"){
     var pk=t.getAttribute("data-person"),om=ptoFOpenMap(w);
     if(om[pk])delete om[pk];else om[pk]=true;

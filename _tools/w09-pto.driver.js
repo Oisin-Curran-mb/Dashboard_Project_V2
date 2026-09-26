@@ -86,6 +86,28 @@ if (person) {
   if (day) { const before = (html.match(/data-pto="pto-approve"/g) || []).length; const el = env.shim.mkTarget({ "data-pto": "pto-approve", "data-id": w.id, "data-day": day }, "button"); el.closest = function (sel) { return sel.indexOf("data-pto") > -1 ? el : null; }; EX.pto.click({ target: el }); const after = (EX.contentHTML(w).match(/data-pto="pto-approve"/g) || []).length; A.eq(after, before - 1, "approving one day removes exactly that day's Approve button (" + before + " -> " + after + ")"); }
   delete w.ptofOpen[person];
 }
+/* owner (26 Sep): a day split between two leave types is ONE day (Dana Whitfield, Aug 20: Sick 4h + Personal 4h) */
+(function () {
+  const dana = (EX.contentHTML(w).match(/data-pto="pto-person"[^>]*data-person="([^"]*Dana Whitfield)"/) || [])[1];
+  A.ok(!!dana, "Dana Whitfield is in the queue");
+  if (!dana) return;
+  w.ptofOpen = w.ptofOpen || {}; w.ptofOpen[dana] = true; const h = EX.contentHTML(w);
+  const row = (h.match(/<div class="wt-row w09-l3[^"]*">(?:(?!<\/div>)[\s\S])*?Aug 20<\/span>[\s\S]*?<\/div>/) || [])[0] || "";
+  A.ok(!!row, "Aug 20 renders as one queue row");
+  A.contains(row, "Sick, Personal", "the row lists both leave types"); A.contains(row, ">8 h<", "the Hrs column is the day's total");
+  A.eq((h.match(/>Aug 20<\/span>/g) || []).length, 1, "the split day is not repeated");
+  const ids = (row.match(/data-day="([^"]+)"/) || [])[1] || ""; A.ok(ids.split(",").length === 2, "Approve carries both day-lines");
+  const idList = ids.split(",");
+  const el = env.shim.mkTarget({ "data-pto": "pto-approve", "data-id": w.id, "data-day": ids }, "button"); el.closest = function (sel) { return sel.indexOf("data-pto") > -1 ? el : null; }; EX.pto.click({ target: el });
+  A.ok(idList.every(function (id) { return (w.ptofAppr || {})[id] === "Approved"; }), "approving the day approves both lines");
+  w.ptofStatus = "all"; A.ok(/Aug 20<\/span>[\s\S]{0,400}w09-undo/.test(EX.contentHTML(w)), "the approved split day shows one Undo"); w.ptofStatus = "pending";
+  const el2 = env.shim.mkTarget({ "data-pto": "pto-unapprove", "data-id": w.id, "data-day": ids }, "button"); el2.closest = function (sel) { return sel.indexOf("data-pto") > -1 ? el2 : null; }; EX.pto.click({ target: el2 });
+  A.ok(idList.every(function (id) { return (w.ptofAppr || {})[id] === "Pending"; }), "undoing the day returns both lines to pending");
+  const ih = EX.pto.info(w.id, dana); A.eq((ih.match(/<strong>Aug 20<\/strong>/g) || []).length, 2, "the pop-up shows the split as two rows for Aug 20"); A.contains(ih, "4 h &middot; Pending", "each pending row carries its hours");
+  const pendCap = (ih.match(/Pending approval, (\d+) days? \((\d+) h\)/) || []); A.ok(pendCap.length && +pendCap[1] === 4 && +pendCap[2] === 32, "pop-up header counts distinct days with hours (" + pendCap[0] + ")");
+  w.ptofView = "calendar"; const hc = EX.contentHTML(w); const aug20 = (hc.match(/data-day="20"[\s\S]*?ptof-marks">([\s\S]*?)<\/div>/) || ["", ""])[1]; A.eq((aug20.match(/>DW</g) || []).length, 1, "the calendar shows Dana once on Aug 20 (" + (aug20.match(/ptof-mark /g) || []).length + " people marked)"); w.ptofView = "queue";
+  delete w.ptofOpen[dana];
+})();
 /* person Info pop-up (owner, 26 Sep): two sections, no placeholder note */
 if (person) {
   const ih = EX.pto.info(w.id, person);
