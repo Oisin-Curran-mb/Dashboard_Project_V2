@@ -248,37 +248,33 @@
     },
     "W10": {
       "name": "Loans With Balance Due",
-      "driver": "w10-loans-mb.driver.js",
-      "ours": {
-        "kind": "loans-mb",
+      "driver": "w10-loans.driver.js",
+      "decided": "2026-09-26 OC",
+      "removed": [
+        "loans-mb"
+      ],
+      "baselineDrop": [
+        "{id:\"loan\",",
+        "{id:\"loan_k\",",
+        "{id:\"loan2\",",
+        "{id:\"loan3\",",
+        "{id:\"loan4\",",
+        "{id:\"loan5\",",
+        "{id:\"loan6\","
+      ],
+      "final": {
+        "kind": "loans",
         "prefix": "lonF",
         "css": {
-          "grep": [
-            ".lonf-"
-          ]
+          "start": "/* ===== W10 Loans With Balance Due V2 CSS ===== */",
+          "end": "/* ===== end W10 Loans With Balance Due V2 CSS ===== */"
         },
         "js": {
-          "start": "var LONF_TODAY=",
+          "start": "/* ===== W10 Loans With Balance Due V2 ===== */",
           "end": "/* ===== end W10 Loans With Balance Due V2 ===== */"
         },
         "registry": {
           "grep": [
-            "kind:\"loans-mb\""
-          ]
-        }
-      },
-      "jo": {
-        "kind": "loans",
-        "prefix": "loan",
-        "css": {
-          "grep": [
-            ".loan-"
-          ]
-        },
-        "js": {
-          "grep": [
-            "function loan",
-            "LOAN_",
             "kind:\"loans\""
           ]
         }

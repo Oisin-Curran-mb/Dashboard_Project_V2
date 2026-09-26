@@ -82,7 +82,7 @@ A.eq(dash.custom, true, "it is a custom dashboard, so it is not the read-only sy
 A.eq(EX.dashboards.length, 4, "the shell now has four dashboards, hers plus this one");
 A.eq(EX.dashboards.map(function (d) { return d.id; }).join(","), "d1,sys,nowidgets,cmp",
   "the tab is APPENDED after her three, so her order and default dashboard are unchanged");
-A.ok(EX.dashboards[0].widgets.length > 100, "her main dashboard still holds its cards (" + EX.dashboards[0].widgets.length + ")");
+A.ok(EX.dashboards[0].widgets.length > 40, "her main dashboard still holds its cards (" + EX.dashboards[0].widgets.length + "; the count shrinks as decided widgets drop her rows)");
 A.eq(EX.dashboards[1].widgets.length, 1, "her System dashboard still holds its one card");
 A.eq(EX.dashboards[2].widgets.length, 0, "her No widgets dashboard is still empty");
 

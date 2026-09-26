@@ -1363,145 +1363,6 @@
 
 @media (prefers-reduced-motion:reduce){.gft-fill,.gft-clickable,.gft-fu-row{transition:none;}}
 
-/* ===== Loans With Balance Due (prefix: loan) , CSS =====
-   All loan-* rules the block uses. Shared shell classes it also relies on
-   (.dep-hd*, .kpi-row/.kpi-num, .dep-hd-kpigrp/.metric-value, .gl-sub/.bgt-caption,
-   .filter-chip/.fc-label, .bank-pill/.delta-pill, .state*, .mi/.cap, .wt-row/.wt-head,
-   .wt-sort, .wt-c2, .lr-main/.lr-stack/.lr-link, .scroll, .dep-total, .dep-full/.dep-col/
-   .dep-col-h, .btn/.iconbtn, .sk/.bgt-spin/.bgt-skel-cap, .bgt-pop*, .sr-only, .modal*)
-   are provided by the shell, not redefined here. Amethyst only; no red on any
-   chart element. */
-
-/* ---- Header control row (left of the two-row .dep-hd grid) ---- */
-.loan-ctlrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0;}
-.loan-ctlrow .loan-chip{min-width:0;flex:0 1 auto;}
-.loan-numwrap{display:flex;flex-direction:column;gap:3px;min-width:0;}
-.loan-ctx{font-size:11.5px;font-weight:400;color:var(--txt-subtle);line-height:1.4;max-width:72ch;}
-
-/* ---- Glance: compact aging read under the KPI ---- */
-.loan-glance-read{display:flex;flex-direction:column;gap:7px;margin-top:9px;min-width:0;}
-.loan-stack{display:flex;height:9px;border-radius:5px;overflow:hidden;background:var(--wn-200);}
-.loan-seg{display:block;min-width:3px;height:100%;}
-.loan-glance-cap{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;color:var(--txt-secondary);min-width:0;}
-.loan-glance-cap .material-symbols-rounded{font-size:15px;flex:0 0 auto;}
-.loan-cap-ok,.loan-cap-ok .material-symbols-rounded{color:var(--txt-pos);}
-.loan-sevdot{width:9px;height:9px;border-radius:2px;flex:0 0 auto;display:inline-block;align-self:center;}
-.loan-allset{color:var(--txt-pos);display:inline-flex;align-items:center;gap:7px;font-size:20px;}
-.loan-allset .material-symbols-rounded{font-size:22px;color:var(--txt-pos);}
-
-/* ---- Body (Detail: full-width table hero) ---- */
-.loan-body{padding:2px 0 0;min-width:0;}
-
-/* ---- Table columns (over shell .wt-row primitives) ---- */
-.loan-c-acct{flex:0 0 84px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--txt-secondary);font-variant-numeric:tabular-nums;font-size:12.5px;}
-.wt-head .loan-c-acct{color:var(--txt-subtle);}
-.loan-c-name{flex:1.4 1 0;min-width:0;}
-.loan-nm-wrap{display:flex;flex-direction:column;min-width:0;line-height:1.25;}
-.loan-nm{color:var(--txt-primary);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:pointer;}
-.loan-row:hover .loan-nm{text-decoration:underline;text-underline-offset:2px;}
-.loan-type-sub{font-size:10.5px;color:var(--txt-subtle);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.loan-c-last{flex:0 0 132px;min-width:0;display:inline-flex;align-items:center;gap:5px;color:var(--txt-secondary);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.wt-head .loan-c-last{color:var(--txt-subtle);}
-.loan-dormant{display:inline-flex;align-items:center;color:var(--txt-subtle);}
-.loan-dormant .material-symbols-rounded{font-size:15px;}
-.loan-c-days{flex:0 0 108px;min-width:0;white-space:nowrap;font-variant-numeric:tabular-nums;}
-.wt-head .loan-c-days{color:var(--txt-subtle);}
-.loan-days-v{color:var(--txt-secondary);}
-.loan-days-v.over{color:var(--txt-primary);font-weight:600;}
-.loan-notdue{color:var(--txt-subtle);}
-.loan-c-amt{flex:0 0 116px;text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--txt-primary);}
-.wt-head .loan-c-amt{font-weight:600;color:var(--txt-subtle);}
-.loan-row{cursor:pointer;}
-.loan-row:hover{background:var(--wn-100);}
-.loan-row:focus-visible{outline:2px solid var(--am-400);outline-offset:-2px;}
-
-/* Aging-band group subheaders (the ordered aging report) */
-.wt-row.loan-grp{gap:12px;background:var(--wn-100);padding-top:8px;padding-bottom:8px;}
-.loan-grp-nm{flex:1 1 0;min-width:0;display:inline-flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;color:var(--txt-secondary);}
-.loan-grp-nm.over{color:var(--txt-primary);}
-.loan-grp-dot{width:9px;height:9px;border-radius:2px;flex:0 0 auto;}
-.loan-grp-ct{font-weight:500;color:var(--txt-subtle);}
-.loan-grp-amt{flex:0 0 116px;text-align:right;font-variant-numeric:tabular-nums;font-weight:700;color:var(--txt-primary);}
-.loan-zeroline{display:flex;align-items:center;gap:7px;font-size:11.5px;color:var(--txt-subtle);padding:14px;line-height:1.4;}
-.loan-zeroline .material-symbols-rounded{font-size:16px;color:var(--txt-subtle);flex:0 0 auto;}
-
-/* ---- Explore: table + aging/risk side panel ---- */
-.loan-col-side{min-width:0;}
-.loan-panel{display:flex;flex-direction:column;gap:2px;min-width:0;}
-.loan-panel-sub{font-size:11.5px;color:var(--txt-subtle);line-height:1.4;margin-bottom:6px;}
-.loan-panel-sep{height:1px;background:var(--stroke-widget);margin:10px 0 8px;}
-.loan-panel-h{font-size:11px;font-weight:600;color:var(--txt-secondary);margin-bottom:4px;}
-
-/* Band rows double as the table filter (values-as-text, amethyst share bars) */
-.loan-band-row{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:transparent;border:1px solid transparent;border-radius:8px;padding:7px 9px;font-family:inherit;cursor:pointer;}
-.loan-band-row:hover:not(.loan-band-static){background:var(--wn-100);}
-.loan-band-row.sel{background:var(--wn-100);border-color:var(--wn-300);}
-.loan-band-row:focus-visible{outline:2px solid var(--am-400);outline-offset:-1px;}
-.loan-band-static{cursor:default;opacity:.72;}
-.loan-band-main{flex:1 1 0;min-width:0;display:flex;flex-direction:column;gap:4px;}
-.loan-band-lbl{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;color:var(--txt-primary);}
-.loan-band-lbl .material-symbols-rounded{font-size:16px;color:var(--txt-subtle);}
-.loan-band-dot{width:9px;height:9px;border-radius:2px;flex:0 0 auto;}
-.loan-mini-track{display:block;height:6px;border-radius:4px;background:var(--wn-200);overflow:hidden;}
-.loan-mini-fill{display:block;height:100%;border-radius:4px;min-width:3px;}
-.loan-band-meta{font-size:10.5px;color:var(--txt-subtle);}
-.loan-band-val{flex:0 0 auto;text-align:right;font-size:12.5px;font-weight:600;color:var(--txt-primary);font-variant-numeric:tabular-nums;align-self:flex-start;}
-.loan-band-val.loan-band-zero{color:var(--txt-subtle);font-weight:500;}
-
-/* Portfolio-risk stat rows */
-.loan-risk-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding:4px 9px;}
-.loan-risk-lbl{font-size:12px;color:var(--txt-secondary);}
-.loan-risk-v{font-size:13px;font-weight:700;color:var(--txt-primary);font-variant-numeric:tabular-nums;}
-.loan-risk-pct{font-size:11px;font-weight:500;color:var(--txt-subtle);}
-
-/* Most-overdue borrowers (collections priority) */
-.loan-worst-row{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:transparent;border:none;border-radius:8px;padding:6px 9px;font-family:inherit;cursor:pointer;}
-.loan-worst-row:hover{background:var(--wn-100);}
-.loan-worst-row:focus-visible{outline:2px solid var(--am-400);outline-offset:-1px;}
-.loan-worst-main{flex:1 1 0;min-width:0;display:flex;flex-direction:column;line-height:1.3;}
-.loan-worst-nm{font-size:12.5px;font-weight:600;color:var(--txt-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.loan-worst-meta{font-size:10.5px;color:var(--txt-subtle);}
-.loan-worst-val{flex:0 0 auto;text-align:right;font-size:12.5px;font-weight:600;color:var(--txt-primary);font-variant-numeric:tabular-nums;}
-
-/* ---- Loading skeleton (data-fetch only) ---- */
-.loan-skel{padding:16px;display:flex;flex-direction:column;gap:12px;}
-.loan-sk-row{display:flex;align-items:center;gap:12px;}
-
-/* ---- Positive empty state (shared .state; a touch of positive colour) ---- */
-.loan-empty>.material-symbols-rounded{color:var(--txt-pos);}
-
-/* ---- Drill-to-detail focus overlay (single loan) ---- */
-.loan-detail-modal{max-width:640px;}
-.loan-detail-h{align-items:center;}
-.loan-dsub{font-size:12px;font-weight:600;color:var(--txt-secondary);background:var(--wn-200);border-radius:999px;padding:2px 10px;margin-left:10px;white-space:nowrap;}
-.loan-dh-spacer{flex:1;}
-.loan-detail-b{display:block;padding:16px 18px 6px;}
-.loan-dl-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 22px;border:1px solid var(--stroke-widget);border-radius:10px;padding:4px 14px;}
-.loan-dl-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:8px 0;border-bottom:1px solid var(--stroke-widget);}
-.loan-dl-grid .loan-dl-row:nth-last-child(-n+1){border-bottom:none;}
-.loan-dl-lbl{font-size:11.5px;color:var(--txt-subtle);}
-.loan-dl-val{font-size:12.5px;font-weight:600;color:var(--txt-primary);text-align:right;font-variant-numeric:tabular-nums;}
-.loan-dl-val.loan-dl-amt{font-size:14px;font-weight:700;}
-.loan-dl-val.over{color:var(--txt-primary);}
-.loan-dl-band{display:inline-flex;align-items:center;gap:6px;}
-.loan-dl-since{font-weight:500;color:var(--txt-subtle);}
-.loan-dl-dormant{display:flex;align-items:center;gap:8px;margin-top:12px;padding:9px 12px;background:var(--wn-100);border:1px solid var(--wn-300);border-radius:8px;font-size:12px;color:var(--txt-secondary);}
-.loan-dl-dormant .material-symbols-rounded{font-size:18px;color:var(--txt-subtle);flex:0 0 auto;}
-.loan-dl-payh{margin:16px 0 8px;font-size:11px;font-weight:600;color:var(--txt-secondary);}
-.loan-pays{border:1px solid var(--stroke-widget);border-radius:8px;overflow:hidden;background:var(--surface-widget);}
-.loan-prow{display:flex;align-items:center;gap:10px;padding:7px 12px;border-bottom:1px solid var(--stroke-widget);font-variant-numeric:tabular-nums;font-size:12.5px;}
-.loan-prow:last-child{border-bottom:none;}
-.loan-phead{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--txt-subtle);background:var(--wn-100);}
-.loan-prow>span:first-child{flex:0 0 120px;}
-.loan-prow>span:nth-child(2){flex:1 1 0;min-width:0;color:var(--txt-primary);}
-.loan-pa{flex:0 0 110px;text-align:right;font-weight:600;color:var(--txt-primary);}
-.loan-tab-empty{display:flex;align-items:center;gap:8px;color:var(--txt-subtle);padding:12px 2px;font-size:12.5px;}
-.loan-tab-empty .material-symbols-rounded{font-size:18px;}
-.loan-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
-
-@media(max-width:560px){.loan-dl-grid{grid-template-columns:1fr;}}
-
-/* ===== Shared progress bar (Gifts, Remittance, any pacing) ===== */
 .pbar{position:relative;display:block;width:100%;padding:3px 0;}
 .pbar-track{position:relative;display:block;width:100%;height:9px;border-radius:999px;background:var(--wn-200);overflow:hidden;}
 .pbar-sm .pbar-track{height:6px;}
@@ -3822,7 +3683,7 @@
   function viewOnlySelectHTML(){var h=location.hash||"",cur_=(/[#&](w=W\d\d|k=[a-z0-9,-]+)/i.exec(h)||["",""])[1];
     var opts=[["","Review: all widgets"]];
     if(typeof CMP_ROWS!=="undefined")CMP_ROWS.forEach(function(r){opts.push(["w="+r[0],r[0]+" "+r[1]+" (Jo vs OC, 3 sizes)"]);});
-    var VIEW_WNUM={budget:"W01",pension:"W02",payroll:"W03",remittance:"W04",receivables:"W05",insurance:"W06",deposits:"W07",mystatus:"W08",pto:"W09",tasks:"W14"}; /* finished widgets: kind -> W number, so they sort with the rest */
+    var VIEW_WNUM={budget:"W01",pension:"W02",payroll:"W03",remittance:"W04",receivables:"W05",insurance:"W06",deposits:"W07",mystatus:"W08",pto:"W09",loans:"W10",tasks:"W14"}; /* finished widgets: kind -> W number, so they sort with the rest */
     Object.keys(WIDGETS.kinds).forEach(function(k){var row=dashboards[0].widgets.filter(function(x){return x.kind===k;})[0];if(!row)return;var wn=VIEW_WNUM[k]||"W??";opts.push(["k="+k,wn+" "+(row.title||k).replace(/\s*\([^)]*\)\s*$/,"")+" (final, 3 sizes)"]);});
     opts=[opts[0]].concat(opts.slice(1).sort(function(x,y){return x[1].localeCompare(y[1]);}));
     return '<select id="viewOnlySel" class="btn outlined sm" aria-label="Review aid: show one widget" style="margin-right:8px;max-width:320px">'+opts.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===cur_?" selected":"")+'>'+o[1]+'</option>';}).join("")+'</select>';}
@@ -7600,6 +7461,463 @@ var PTOF_WIRED=false;
 WIDGETS.register("pto",{content:ptoFContent,about:function(w){return {h:w.title,b:PTOF_ABOUT};}});
 /* ===== end W09 Payroll Scheduled Time Off V2 ===== */
 
+/* ===== W10 Loans With Balance Due V2 ===== */
+/* Loans With Balance Due: every loan with a balance owing by how overdue it is. Five aging ranges (Current, 1-30, 31-60, 61-90, 90+); the loan-type filter drives every figure; Explore has a Table / Pie segment with the ranges as a chip filter, Detail shows the flat loan list beside the balance-by-range donut whose legend filters the list; a loan opens a detail pop-up. */
+
+/* (1) DATA ------------------------------------------------------------- */
+var LONF_TODAY="2026-07-24";
+var LONF_ABOUT="Every loan that still has a balance owing, the total still out, and how much of it is past due, split across five time ranges so you can see which borrowers to follow up with first. The loan type filter narrows every figure here, not just the table.";
+/* Five ranges in severity order. lonFBucketOf returns the first range whose hi
+   the loan's day count does not exceed, so the ladder must be exhaustive: the
+   61-90 range is what stops 61 to 89 day loans falling through to 90+. */
+var LONF_BUCKETS=[
+  {key:"cur",label:"Current",   sub:"not yet due",            hi:0,       sev:0},
+  {key:"b1", label:"1-30 days", sub:"up to 1 month past due", hi:30,      sev:1},
+  {key:"b2", label:"31-60 days",sub:"1 to 2 months past due", hi:60,      sev:2},
+  {key:"b25",label:"61-90 days",sub:"2 to 3 months past due", hi:90,      sev:3},
+  {key:"b3", label:"90+ days",  sub:"most overdue",           hi:Infinity,sev:4}
+];
+var LONF_SEV_COLORS=["--am-200","--am-300","--am-400","--am-500","--am-700"];
+var LONF_TYPES=["All","Church - Special","Church Expansion","Individual"];
+/* Loans with at least one invoice and a remaining balance. amount = principal
+   plus interest invoiced, minus posted payments. days = days past due on the
+   oldest unpaid invoice, negative when nothing is yet due. */
+var LONF_LOANS=[
+  {acct:"LN-1042",name:"Grace Fellowship",type:"Church Expansion",orig:150000,amount:28450.00,days:-8,lastPay:"2026-07-08",nextDue:"2026-08-01",
+    payments:[{date:"2026-07-08",method:"ACH",amount:2100.00},{date:"2026-06-08",method:"ACH",amount:2100.00}]},
+  {acct:"LN-1017",name:"New Life Center",type:"Church Expansion",orig:120000,amount:24800.00,days:-12,lastPay:"2026-07-10",nextDue:"2026-08-05",
+    payments:[{date:"2026-07-10",method:"Check #2093",amount:1750.00}]},
+  {acct:"LN-2231",name:"Maria Alvarez",type:"Individual",orig:5000,amount:640.00,days:-6,lastPay:"2026-07-02",nextDue:"2026-07-30",
+    payments:[{date:"2026-07-02",method:"ACH",amount:160.00},{date:"2026-06-02",method:"ACH",amount:160.00}]},
+  {acct:"LN-1188",name:"First Baptist Church",type:"Church - Special",orig:12000,amount:186.86,days:6,lastPay:"2026-06-30",nextDue:"2026-07-18",
+    payments:[{date:"2026-06-30",method:"Check #4021",amount:930.00}]},
+  {acct:"LN-1205",name:"Trinity Chapel",type:"Church - Special",orig:30000,amount:8200.00,days:22,lastPay:"2026-05-28",nextDue:"2026-07-02",
+    payments:[{date:"2026-05-28",method:"ACH",amount:1200.00}]},
+  {acct:"LN-2044",name:"Stephen Ho",type:"Individual",orig:8000,amount:1020.97,days:44,lastPay:"2026-05-02",nextDue:"2026-06-10",
+    payments:[{date:"2026-05-02",method:"ACH",amount:255.00}]},
+  {acct:"LN-1150",name:"St. Mark Parish",type:"Church - Special",orig:40000,amount:9800.00,days:58,lastPay:"2026-04-15",nextDue:"2026-05-27",
+    payments:[]},
+  {acct:"LN-1301",name:"Third Presbyterian Church",type:"Church Expansion",orig:300000,amount:24690.13,days:95,lastPay:"2026-03-18",nextDue:"2026-04-20",
+    payments:[{date:"2026-03-18",method:"Wire",amount:3400.00}]},
+  {acct:"LN-1099",name:"Cornerstone Academy",type:"Church - Special",orig:60000,amount:14250.00,days:145,lastPay:"2026-01-30",nextDue:"2026-03-01",
+    payments:[]}
+];
+/* Edge instance: every loan current. The pill reads All current and every
+   past-due range is a muted, inert $0 row. */
+var LONF_LOANS_CURRENT=[
+  {acct:"LN-3001",name:"Hope Chapel",type:"Church Expansion",orig:90000,amount:12400.00,days:-9,lastPay:"2026-07-12",nextDue:"2026-08-03",payments:[{date:"2026-07-12",method:"ACH",amount:1300.00}]},
+  {acct:"LN-3002",name:"Faith Community Church",type:"Church - Special",orig:25000,amount:3800.00,days:-4,lastPay:"2026-07-15",nextDue:"2026-07-28",payments:[{date:"2026-07-15",method:"Check #118",amount:600.00}]},
+  {acct:"LN-3003",name:"David Nguyen",type:"Individual",orig:6000,amount:520.00,days:-15,lastPay:"2026-07-05",nextDue:"2026-08-06",payments:[{date:"2026-07-05",method:"ACH",amount:130.00}]}
+];
+/* Edge instance: a single populated range (90+). */
+var LONF_LOANS_SINGLE=[
+  {acct:"LN-4001",name:"Emmanuel Church",type:"Church Expansion",orig:80000,amount:9300.00,days:112,lastPay:"2026-02-14",nextDue:"2026-03-20",payments:[]},
+  {acct:"LN-4002",name:"Shepherd Fellowship",type:"Church - Special",orig:20000,amount:4100.00,days:98,lastPay:"2026-03-01",nextDue:"2026-04-10",payments:[{date:"2026-03-01",method:"ACH",amount:500.00}]}
+];
+
+/* (2) RENDER ----------------------------------------------------------- */
+function lonFEsc(s){return String(s).replace(/"/g,"&quot;");}
+function lonFMoney(n){return "$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
+function lonFFmtDate(iso){var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];var p=String(iso).split("-");if(p.length!==3)return iso;return M[(+p[1])-1]+" "+(+p[2])+", "+p[0];}
+function lonFParse(iso){var p=String(iso).split("-");return new Date(+p[0],(+p[1])-1,+p[2]);}
+function lonFDaysSincePay(iso){if(!iso)return null;var t=lonFParse(LONF_TODAY);return Math.round((t-lonFParse(iso))/86400000);}
+function lonFIsDormant(x){var d=lonFDaysSincePay(x.lastPay);return d!=null&&d>90;}
+function lonFDataset(w){if(w.dataset==="current")return LONF_LOANS_CURRENT;if(w.dataset==="single")return LONF_LOANS_SINGLE;if(w.dataset==="none")return [];return LONF_LOANS;}
+function lonFFiltered(w){var ty=w.lonType||"All";return lonFDataset(w).filter(function(x){return ty==="All"||x.type===ty;});}
+function lonFBucketOf(days){for(var i=0;i<LONF_BUCKETS.length;i++){if(days<=LONF_BUCKETS[i].hi)return LONF_BUCKETS[i].key;}return "b3";}
+function lonFSevOf(days){for(var i=0;i<LONF_BUCKETS.length;i++){if(days<=LONF_BUCKETS[i].hi)return LONF_BUCKETS[i].sev;}return 4;}
+function lonFBucketLabel(key){for(var i=0;i<LONF_BUCKETS.length;i++)if(LONF_BUCKETS[i].key===key)return LONF_BUCKETS[i].label;return key;}
+function lonFColorOf(key){for(var i=0;i<LONF_BUCKETS.length;i++)if(LONF_BUCKETS[i].key===key)return LONF_SEV_COLORS[LONF_BUCKETS[i].sev];return LONF_SEV_COLORS[4];}
+function lonFBuckets(w){
+  var ls=lonFFiltered(w),m={};LONF_BUCKETS.forEach(function(b){m[b.key]={count:0,total:0};});
+  ls.forEach(function(x){var k=lonFBucketOf(x.days);m[k].count++;m[k].total+=x.amount;});
+  return LONF_BUCKETS.map(function(b){return {key:b.key,label:b.label,sub:b.sub,sev:b.sev,color:LONF_SEV_COLORS[b.sev],count:m[b.key].count,total:m[b.key].total};});
+}
+function lonFTotal(w){return lonFFiltered(w).reduce(function(s,x){return s+x.amount;},0);}
+function lonFCount(w){return lonFFiltered(w).length;}
+function lonFPastDue(w){return lonFFiltered(w).filter(function(x){return x.days>0;}).reduce(function(s,x){return s+x.amount;},0);}
+function lonFPastDueCount(w){return lonFFiltered(w).filter(function(x){return x.days>0;}).length;}
+function lonF90(w){return lonFFiltered(w).filter(function(x){return lonFBucketOf(x.days)==="b3";}).reduce(function(s,x){return s+x.amount;},0);}
+function lonFPct(w){var t=lonFTotal(w);return t>0?Math.round(lonFPastDue(w)/t*100):0;}
+function lonFWorstBucket(w){var nz=lonFBuckets(w).filter(function(r){return r.total>0;});return nz.length?nz[nz.length-1]:null;}
+function lonFFind(w,acct){var ls=lonFDataset(w);for(var i=0;i<ls.length;i++)if(ls[i].acct===acct)return ls[i];return null;}
+function lonFTopOverdue(w){return lonFFiltered(w).filter(function(x){return x.days>0;}).slice().sort(function(a,b){return (b.days-a.days)||(b.amount-a.amount);});}
+/* Time range selection (whole book = "total", or one range key). Client-side
+   narrowing of an already-loaded set, never a data fetch. */
+function lonFSel(w){var v=w&&w.lonBucket;if(v==null||v==="total")return "total";for(var i=0;i<LONF_BUCKETS.length;i++)if(LONF_BUCKETS[i].key===v)return v;return "total";}
+function lonFRows(w){
+  var sel=lonFSel(w),list=lonFFiltered(w).slice();
+  if(sel!=="total")list=list.filter(function(x){return lonFBucketOf(x.days)===sel;});
+  var sk=(w.lonSort||"amt-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
+  list.sort(function(a,b){
+    if(key==="acct")return dir*a.acct.localeCompare(b.acct);
+    if(key==="name")return dir*a.name.localeCompare(b.name);
+    if(key==="last")return dir*(lonFParse(a.lastPay)-lonFParse(b.lastPay));
+    return dir*(a.amount-b.amount);
+  });
+  return list;
+}
+/* Filter chip: the shell's secondary-fill chip with a leading filter glyph and
+   a trailing chevron. Drives the whole widget, not just the table. */
+function lonFTypeChip(w){
+  var ty=w.lonType||"All",spin=w.lonLoading?'<span class="bgt-spin" aria-hidden="true"></span>':"";
+  return '<button class="filter-chip lon-chip" data-lon="lon-type" data-id="'+w.id+'" aria-haspopup="listbox" aria-expanded="'+(LONF_POP&&LONF_POP.id===w.id?"true":"false")+'" aria-label="Loan type, tap to change"><span class="fc-label">'+spin+(ty==="All"?"All loan types":ty)+'</span>'+ICON("expand_more")+'</button>';
+}
+/* KPI badge: past-due money on an amethyst-neutral pill (no red), or a
+   positive "All current". */
+function lonFBadge(w){
+  var over=lonFPastDue(w);
+  if(over>0){var n=lonFPastDueCount(w),pct=lonFPct(w);return '<span class="bank-pill" data-tip="'+lonFEsc(lonFMoney(over)+" across "+n+" loan"+(n===1?"":"s")+" is past due, that is "+pct+"% of the outstanding balance.")+'" data-tip-plain>'+ICON("schedule")+lonFMoney(over)+' past due ('+pct+'%)</span>';}
+  return '<span class="delta-pill" data-tip="Every loan with a balance is current, nothing is past due." data-tip-plain>'+ICON("check")+'All current</span>';
+}
+/* Compact stacked severity strip + sr-only ladder sentence (values as text). */
+function lonFStackBar(w){
+  var tot=lonFTotal(w);if(tot<=0)return "";
+  var segs=lonFBuckets(w).filter(function(r){return r.total>0;});
+  var inner=segs.map(function(r){var pct=r.total/tot*100;return '<span class="lon-seg" style="flex-basis:'+pct.toFixed(2)+'%;background:var('+r.color+')" data-tip="'+lonFEsc(r.label+": "+lonFMoney(r.total))+'" data-tip-plain></span>';}).join("");
+  return '<div class="lon-stack">'+inner+'</div>';
+}
+function lonFAgeSr(w){var b=lonFBuckets(w);return 'Outstanding by age: '+b.map(function(r){return r.label+" "+lonFMoney(r.total);}).join(", ")+'.';}
+/* GLANCE (kpi): total owed + past-due badge on the LEFT, plain context line,
+   then the compact range read. Values in text plus sr-only. */
+function lonFGlance(w){
+  var tot=lonFTotal(w),n=lonFCount(w),worst=lonFWorstBucket(w),over=lonFPastDue(w);
+  var read="";
+  if(tot>0){
+    var call=(over>0&&worst&&worst.key!=="cur")
+      ?'<span class="lon-glance-cap"><span class="lon-sevdot" style="background:var('+worst.color+')"></span>'+lonFMoney(worst.total)+' in '+worst.label+', the most overdue with a balance</span>'
+      :'<span class="lon-glance-cap lon-cap-ok">'+ICON("check")+'Every loan is current</span>';
+    read='<div class="lon-glance-read">'+lonFStackBar(w)+call+'</div>';
+  }
+  return '<div class="kpi-row"><div class="kpi-num">'+
+    '<div class="dep-hd-kpigrp"><span class="metric-value">'+lonFMoney(tot)+'</span>'+lonFBadge(w)+'</div>'+
+    '<div class="gl-sub"><span class="bgt-caption">owed across '+n+' loan'+(n===1?"":"s")+' with a balance</span></div>'+
+    read+
+    '<span class="sr-only">'+lonFAgeSr(w)+'</span>'+
+  '</div></div>';
+}
+function lonFEmpty(w){
+  if(w.size==="kpi")return '<div class="kpi-row"><div class="kpi-num"><div class="dep-hd-kpigrp"><span class="metric-value lon-allset">'+ICON("check_circle")+'All settled</span></div><div class="gl-sub"><span class="bgt-caption">no loans have a balance right now</span></div></div></div>';
+  return '<div class="state lon-empty" data-kind="empty">'+ICON("task_alt")+'<div class="state-title">Nothing outstanding</div><div class="state-sub">No loans currently carry a balance. There is nothing to collect right now.</div></div>';
+}
+/* Header (Explore / Detail): two-row .dep-hd. Row 1: the loan type chip on the
+   LEFT, the Table / Pie segment in the toggle slot on the RIGHT. Row 2: total
+   owed + past-due badge on the LEFT with one quiet context line under it. */
+function lonFHeaderBlock(w,mode){
+  var loading=(mode==="loading"),numInner,ctx;
+  if(loading){
+    numInner='<div class="dep-hd-kpigrp"><span class="sk" style="width:130px;height:22px;border-radius:6px"></span><span class="sk" style="width:130px;height:20px;border-radius:999px"></span></div>';
+    ctx="Updating loans with a balance";
+  }else{
+    numInner='<div class="dep-hd-kpigrp"><span class="metric-value">'+lonFMoney(lonFTotal(w))+'</span>'+lonFBadge(w)+'</div>';
+    var over=lonFPastDue(w),nine=lonF90(w),pct=lonFPct(w);
+    ctx=(over>0?(lonFMoney(over)+' ('+pct+'%) past due, of which '+lonFMoney(nine)+' is 90+ days'):'Nothing past due');
+  }
+  var tog=(w.size==="wide"&&!loading)?lonFViewToggle(w):"";
+  return '<div class="dep-hd">'+
+    '<div class="dep-hd-top"><div class="lon-ctlrow">'+lonFTypeChip(w)+'</div><div class="dep-hd-toggle">'+tog+'</div></div>'+
+    '<div class="dep-hd-num"><div class="lon-numwrap">'+numInner+'<div class="lon-ctx">'+ctx+'</div></div></div>'+
+  '</div>';
+}
+function lonFDaysCell(x){
+  if(x.days<=0)return '<span class="lon-c-days"><span class="lon-notdue">Not due</span></span>';
+  return '<span class="lon-c-days"><span class="lon-days-v over">'+x.days+' day'+(x.days===1?"":"s")+'</span></span>';
+}
+function lonFLastCell(x){
+  var dorm=lonFIsDormant(x);
+  var flag=dorm?('<span class="lon-dormant" data-tip="No payment received in over 90 days on this loan." data-tip-plain>'+ICON("hourglass_empty")+'</span>'):"";
+  return '<span class="lon-c-last">'+lonFFmtDate(x.lastPay)+flag+'</span>';
+}
+function lonFRowHTML(w,x){
+  var lbl=x.name+", account "+x.acct+", "+(x.days>0?(x.days+" days past due"):"current")+", "+lonFMoney(x.amount)+" due, tap to open the loan";
+  return '<div class="wt-row lon-row" data-lon="lon-open" data-id="'+w.id+'" data-acct="'+lonFEsc(x.acct)+'" role="button" tabindex="0" aria-label="'+lonFEsc(lbl)+'">'+
+    '<span class="lon-c-acct">'+x.acct+'</span>'+
+    '<span class="lr-main lr-stack lon-c-name"><span class="lon-nm-wrap"><span class="lr-link lon-nm">'+x.name+'</span><span class="lon-type-sub">'+x.type+'</span></span></span>'+
+    lonFLastCell(x)+
+    '<span class="wt-c2 lon-c-amt">'+lonFMoney(x.amount)+'</span>'+
+  '</div>';
+}
+function lonFTable(w){
+  var sel=lonFSel(w),rows=lonFRows(w);
+  var sk=(w.lonSort||"amt-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
+  function sb(k,label){var on=key===k,ic=on?(dir<0?"arrow_downward":"arrow_upward"):"unfold_more";return '<button class="wt-sort'+(on?" on":"")+'" data-lon="lon-sort" data-id="'+w.id+'" data-k="'+k+'">'+label+' '+ICON(ic)+'</button>';}
+  var head='<div class="wt-row wt-head lon-head"><span class="lon-c-acct">'+sb("acct","Account")+'</span><span class="lr-main lr-stack lon-c-name">'+sb("name","Borrower")+'</span><span class="lon-c-last">'+sb("last","Last payment")+'</span><span class="wt-c2 lon-c-amt">'+sb("amt","Amount due")+'</span></div>';
+  var body=rows.map(function(x){return lonFRowHTML(w,x);}).join("");
+  var tot=rows.reduce(function(s,x){return s+x.amount;},0);
+  var footLbl=(sel==="total")?("All loans ("+rows.length+")"):(lonFBucketLabel(sel)+" ("+rows.length+" loan"+(rows.length===1?"":"s")+")");
+  var empty=rows.length?"":'<div class="lon-zeroline">'+ICON("info")+'No loans match this selection.</div>';
+  return '<div class="scroll">'+head+body+empty+'</div><div class="dep-total"><span>'+footLbl+'</span><span>'+lonFMoney(tot)+'</span></div>';
+}
+function lonFMiniBar(frac,color){var pct=Math.max(3,Math.round(frac*100));return '<span class="lon-mini-track" aria-hidden="true"><span class="lon-mini-fill" style="width:'+pct+'%;background:var('+color+')"></span></span>';}
+function lonFAgingPanel(w){
+  var sel=lonFSel(w),grand=lonFTotal(w),bs=lonFBuckets(w),n=lonFCount(w);
+  var out='<div class="lon-panel">';
+  bs.forEach(function(r){
+    var has=r.total>0,frac=grand>0?r.total/grand:0,isSel=(sel===r.key),share=grand>0?Math.round(r.total/grand*100):0;
+    var arpop=[r.label,r.total,r.count,share].join("|");
+    out+='<button class="lon-band-row'+(isSel?" sel":"")+(has?"":" lon-band-static")+'"'+(has?' data-lon="lon-set-bucket" data-bucket="'+r.key+'" data-id="'+w.id+'" data-lonpop="'+lonFEsc(arpop)+'" aria-pressed="'+isSel+'"':' disabled aria-disabled="true"')+'>'+
+      '<span class="lon-band-main">'+
+        '<span class="lon-band-lbl'+(r.sev>=1&&has?" over":"")+'"><span class="lon-band-dot" style="background:var('+r.color+')"></span>'+r.label+'</span>'+
+        /* bar and its caption share one line, which is what lets seven rows
+           fit a card without scrolling */
+        '<span class="lon-band-barrow">'+lonFMiniBar(frac,r.color)+
+          '<span class="lon-band-meta">'+(has?(r.count+' loan'+(r.count===1?"":"s")+', '+share+'%'):'no balance')+'</span>'+
+        '</span>'+
+      '</span>'+
+      '<span class="lon-band-val'+(has?"":" lon-band-zero")+'">'+lonFMoney(r.total)+'</span></button>';
+  });
+  var allSel=(sel==="total");
+  out+='<button class="lon-band-row lon-band-total'+(allSel?" sel":"")+'" data-lon="lon-set-bucket" data-bucket="total" data-id="'+w.id+'" aria-pressed="'+allSel+'">'+
+    '<span class="lon-band-main"><span class="lon-band-lbl">'+ICON("account_balance")+'All aging bands</span>'+
+    '<span class="lon-band-meta">'+n+' loan'+(n===1?"":"s")+' with a balance</span></span>'+
+    '<span class="lon-band-val">'+lonFMoney(grand)+'</span></button>';
+  return out+'</div>';
+}
+
+function lonFRiskPanel(w){
+  var grand=lonFTotal(w),over=lonFPastDue(w),nine=lonF90(w),pct=lonFPct(w);
+  var pctN=grand>0?Math.round(nine/grand*100):0,out="";
+  out+='<div class="lon-panel-sep"></div><div class="lon-panel-h">Portfolio risk</div>';
+  out+='<div class="lon-risk-row"><span class="lon-risk-lbl">Past due</span><span class="lon-risk-v">'+lonFMoney(over)+' <span class="lon-risk-pct">('+pct+'%)</span></span></div>';
+  out+='<div class="lon-risk-row"><span class="lon-risk-lbl">90+ days</span><span class="lon-risk-v">'+lonFMoney(nine)+' <span class="lon-risk-pct">('+pctN+'%)</span></span></div>';
+  var top=lonFTopOverdue(w).slice(0,4);
+  if(top.length){
+    out+='<div class="lon-panel-sep"></div><div class="lon-panel-h">Most overdue</div>';
+    top.forEach(function(x){
+      out+='<button class="lon-worst-row" data-lon="lon-open" data-id="'+w.id+'" data-acct="'+lonFEsc(x.acct)+'" aria-label="'+lonFEsc("Open "+x.name+", "+x.days+" days past due")+'"><span class="lon-worst-main"><span class="lon-worst-nm">'+x.name+'</span><span class="lon-worst-meta">'+x.days+' days past due'+(lonFIsDormant(x)?', dormant':'')+'</span></span><span class="lon-worst-val">'+lonFMoney(x.amount)+'</span></button>';
+    });
+  }
+  return out;
+}
+
+function lonFBandPie(w){
+  var all=lonFBuckets(w);
+  var bands=all.filter(function(b){return b.total>0;});
+  var tot=bands.reduce(function(t,b){return t+b.total;},0);
+  var sel=lonFSel(w);
+  if(!bands.length||tot<=0){
+    return '<div class="lon-chart-empty">'+ICON("donut_small")+'<span>Nothing outstanding to chart for '+lonFEsc((w.lonType&&w.lonType!=="All")?w.lonType:"any loan type")+'.</span></div>';
+  }
+  var R=52,C=2*Math.PI*R,off=0,arcs="",legend="",DS=(w.size==="xwide")?200:168;
+  bands.forEach(function(b){
+    var frac=b.total/tot,len=frac*C;
+    var on=(sel===b.key);
+    var lbl=b.label+", "+lonFMoney(b.total)+" across "+b.count+" loan"+(b.count===1?"":"s")+", "+Math.round(frac*100)+" percent of the balance";
+    arcs+='<circle class="seg'+(on?' hi':'')+'" cx="70" cy="70" r="'+R+'" fill="none" stroke="var('+b.color+')" stroke-width="20" stroke-dasharray="'+Math.min(len+0.9,C).toFixed(2)+' '+Math.max(0,C-len-0.9).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 70 70)"><title>'+lonFEsc(lbl)+'</title></circle>';
+    off+=len;
+  });
+  all.forEach(function(b){
+    var pct=tot>0?Math.round(b.total/tot*100):0;
+    if(b.total<=0){
+      legend+='<div class="leg lon-leg is-zero" aria-label="'+lonFEsc(b.label+", no balance in this range")+'">'+
+        '<span class="dot" style="background:var('+b.color+')"></span>'+
+        '<span class="lg-main">'+b.label+'</span>'+
+        '<span class="lg-meta">'+lonFMoney(0)+'</span></div>';
+      return;
+    }
+    var on=(sel===b.key);
+    var lbl=b.label+", "+lonFMoney(b.total)+" across "+b.count+" loan"+(b.count===1?"":"s")+", "+pct+" percent of the balance";
+    legend+='<button class="leg lon-leg'+(on?' on':'')+'" data-lon="lon-set-bucket" data-bucket="'+b.key+'" data-id="'+w.id+'" aria-pressed="'+on+'" aria-label="'+lonFEsc(lbl+", "+(on?"tap to clear this filter":"tap to filter the table to this range"))+'">'+
+      '<span class="dot" style="background:var('+b.color+')"></span>'+
+      '<span class="lg-main">'+b.label+'</span>'+
+      '<span class="lg-meta">'+lonFMoney(b.total)+' &middot; '+pct+'%</span></button>';
+  });
+  var note=(sel!=="total")
+    ? '<div class="lon-pie-note">'+ICON("filter_alt")+'<span>Table filtered to '+lonFEsc(lonFBucketLabel(sel))+'. Tap that range again to show every loan.</span></div>'
+    : '';
+  /* selected arc emphasis uses the shell's own donut mechanism: .pie-wrap.dim
+     fades every .seg that is not .hi, and .seg.hi thickens the selected one. */
+  return '<div class="lon-pie"><div class="pie-wrap row'+(sel!=="total"?" dim":"")+'">'+
+    '<svg class="donut" viewBox="0 0 140 140" width="'+DS+'" height="'+DS+'" role="img" aria-label="'+lonFEsc("Balance due by time range, "+lonFMoney(tot)+" across "+bands.length+" range"+(bands.length===1?"":"s"))+'">'+arcs+
+    '<text x="70" y="67" text-anchor="middle" class="donut-c1">'+lonFMoney(tot)+'</text>'+
+    '<text x="70" y="86" text-anchor="middle" class="donut-c2">due</text></svg>'+
+    '<div class="legend-col"><div class="legend-head"><span class="legend-hd">Balance by time range</span></div>'+
+    '<div class="legend">'+legend+'</div></div></div>'+note+'</div>';
+}
+/* The same filter without the chart, for the tier that has no room for a donut
+   beside a table. Full ladder here too, ranges with no loans muted and inert. */
+function lonFBandChips(w){
+  var bands=lonFBuckets(w),sel=lonFSel(w);
+  var any=bands.some(function(b){return b.total>0;});
+  if(!any)return "";
+  var chips=bands.map(function(b){
+    if(b.total<=0){
+      return '<span class="lon-bchip is-zero" aria-label="'+lonFEsc(b.label+", no loans in this range")+'">'+
+        '<span class="lon-bchip-dot" style="background:var('+b.color+')"></span>'+b.label+
+        '<span class="lon-bchip-n">0</span></span>';
+    }
+    var on=(sel===b.key);
+    return '<button class="lon-bchip'+(on?' on':'')+'" data-lon="lon-set-bucket" data-bucket="'+b.key+'" data-id="'+w.id+'" aria-pressed="'+on+'" aria-label="'+lonFEsc(b.label+", "+lonFMoney(b.total)+", "+b.count+" loan"+(b.count===1?"":"s")+(on?", tap to clear":", tap to filter"))+'">'+
+      '<span class="lon-bchip-dot" style="background:var('+b.color+')"></span>'+b.label+
+      '<span class="lon-bchip-n">'+b.count+'</span></button>';
+  }).join("");
+  return '<div class="lon-bchips" role="group" aria-label="Filter the table by time range">'+chips+'</div>';
+}
+function lonFViewToggle(w){
+  var v=w.lonView||"table";
+  function seg(val,lbl,ic,tip){return '<button class="vt'+(v===val?" on":"")+'" data-lon="lon-view" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(v===val)+'" data-tip="'+lonFEsc(tip)+'" data-tip-plain>'+ICON(ic)+lbl+'</button>';}
+  return '<div class="vtoggle lon-vtoggle" role="group" aria-label="View">'+
+    seg("table","Table","table_rows","Every loan with a balance as a sortable list.")+
+    seg("pie","Pie","donut_small","Balance split across the time ranges, with the ranges as a filter.")+
+    seg("bands","Bands","stacked_bar_chart","Each aging band as a bar with its share of the balance, plus past due, 90+ and the most overdue loans.")+
+  '</div>';
+}
+function lonFSide(w){return w.lonSide==="bands"?"bands":"pie";}
+function lonFSideToggle(w){
+  var s=lonFSide(w);
+  function seg(val,lbl,ic,tip){return '<button class="vt'+(s===val?" on":"")+'" data-lon="lon-side" data-id="'+w.id+'" data-s="'+val+'" aria-pressed="'+(s===val)+'" data-tip="'+lonFEsc(tip)+'" data-tip-plain>'+ICON(ic)+lbl+'</button>';}
+  return '<div class="vtoggle lon-side-vt" role="group" aria-label="Right column">'+
+    seg("pie","Pie","donut_small","Balance split across the time ranges as a donut.")+
+    seg("bands","Bands","stacked_bar_chart","Each aging band as a bar with its share of the balance.")+
+  '</div>';
+}
+function lonFFull(w){
+  var bands=lonFSide(w)==="bands";
+  return '<div class="dep-full">'+
+    '<div class="dep-col"><div class="dep-col-h">Loans with a balance</div>'+lonFTable(w)+'</div>'+
+    '<div class="dep-col lon-col-side"><div class="dep-col-h lon-side-h"><span>'+(bands?'Aging bands':'Balance by time range')+'</span>'+lonFSideToggle(w)+'</div>'+
+    (bands?('<div class="lon-side-bands">'+lonFAgingPanel(w)+'</div>'):lonFBandPie(w))+'</div>'+
+  '</div>';
+}
+function lonFSkeleton(){var rows="";[82,58,70,48,64].forEach(function(wd){rows+='<div class="lon-sk-row"><span class="sk" style="width:70px;height:12px;border-radius:4px"></span><span class="sk" style="flex:1;height:12px;border-radius:4px"></span><span class="sk" style="width:'+wd+'px;height:12px;border-radius:4px"></span></div>';});return '<div class="lon-skel" aria-busy="true">'+rows+'<div class="bgt-skel-cap"><span class="bgt-spin"></span>Loading</div></div>';}
+/* Single entry point, dispatched by w.kind==="loans". */
+function lonFContent(w){
+  if(w.state==="empty"||!lonFDataset(w).length)return lonFEmpty(w);
+  if(w.size==="kpi")return lonFGlance(w);
+  if(w.lonLoading)return lonFHeaderBlock(w,"loading")+lonFSkeleton();
+  var mh=lonFHeaderBlock(w);
+  if(w.size==="xwide")return mh+lonFFull(w);
+  /* Explore is six columns, which cannot hold a table and a legible donut side
+     by side, so the two are switched between rather than shown together. The
+     chip filter rides with the table view, since the donut carries its own
+     filter in its legend. */
+  var v=w.lonView||"table";
+  if(v==="pie")return mh+'<div class="lon-body">'+lonFBandPie(w)+'</div>';
+  if(v==="bands")return mh+'<div class="lon-body lon-body-bands">'+lonFAgingPanel(w)+'</div>';
+  return mh+'<div class="lon-body">'+lonFBandChips(w)+lonFTable(w)+'</div>';
+}
+/* Loading only on a data fetch (a loan type change), never on a sort or a
+   range pick. Uses the shell's own timers map. */
+function lonFLoad(w){w.lonLoading=true;clearTimeout(timers["lon-"+w.id]);timers["lon-"+w.id]=setTimeout(function(){w.lonLoading=false;w.updated="just now";render();},800);}
+
+var LONF_MODAL=null,LONF_POP=null,LONF_HOVER=null;
+function lonFDetailModalHTML(){
+  if(!LONF_MODAL)return "";
+  var w=find(LONF_MODAL.id);if(!w)return "";
+  var x=lonFFind(w,LONF_MODAL.acct);if(!x)return "";
+  var bucket=lonFBucketOf(x.days),bl=lonFBucketLabel(bucket),bcolor=lonFColorOf(bucket);
+  var dpd=x.days>0?(x.days+" day"+(x.days===1?"":"s")+" past due"):"Not yet due";
+  var dorm=lonFIsDormant(x),since=lonFDaysSincePay(x.lastPay);
+  function line(lbl,val,cls){return '<div class="lon-dl-row"><span class="lon-dl-lbl">'+lbl+'</span><span class="lon-dl-val'+(cls?" "+cls:"")+'">'+val+'</span></div>';}
+  var grid='<div class="lon-dl-grid">'+
+    line("Account",x.acct)+
+    line("Loan type",x.type)+
+    line("Original amount",lonFMoney(x.orig))+
+    line("Amount due",lonFMoney(x.amount),"lon-dl-amt")+
+    line("Aging",'<span class="lon-dl-band"><span class="lon-band-dot" style="background:var('+bcolor+')"></span>'+bl+'</span>')+
+    line("Days past due",dpd,x.days>0?"over":"")+
+    line("Next payment due",lonFFmtDate(x.nextDue))+
+    line("Last payment",lonFFmtDate(x.lastPay)+(since!=null?(' <span class="lon-dl-since">('+since+' days ago)</span>'):''))+
+  '</div>';
+  var dormNote=dorm?('<div class="lon-dl-dormant">'+ICON("hourglass_empty")+'No payment in over 90 days. Consider making contact.</div>'):'';
+  var pays=(x.payments||[]).filter(function(p){return p.amount>0;});
+  var payTbl=pays.length
+    ?'<div class="lon-pays"><div class="lon-prow lon-phead"><span>Date</span><span>Method</span><span class="lon-pa">Amount</span></div>'+pays.map(function(p){return '<div class="lon-prow"><span>'+lonFFmtDate(p.date)+'</span><span>'+p.method+'</span><span class="lon-pa">'+lonFMoney(p.amount)+'</span></div>';}).join("")+'</div>'
+    :'<div class="lon-tab-empty">'+ICON("payments")+'No payments recorded yet on this loan.</div>';
+  var actions='<div class="lon-actions"><button class="btn outlined sm" data-lon="lon-open-loan" data-id="'+w.id+'" data-acct="'+lonFEsc(x.acct)+'" data-tip="Placeholder: the destination for this link is not confirmed yet." data-tip-plain>'+ICON("open_in_new")+'Open loan</button>'+
+    '<button class="btn naked sm" data-lon="lon-contact" data-id="'+w.id+'" data-acct="'+lonFEsc(x.acct)+'" data-tip="Placeholder: recording a contact has no backend in this mock." data-tip-plain>'+ICON("event_note")+'Record a contact</button></div>'+
+    '<div class="lon-dl-note">'+ICON("info")+'<span>Placeholders: "Open loan" has no confirmed destination yet, and "Record a contact" is not wired to a backend.</span></div>';
+  return '<div class="modal-backdrop" data-lon="lon-detail-close"><div class="modal lon-detail-modal" data-lon="stop" role="dialog" aria-modal="true" aria-label="Loan detail">'+
+    '<div class="modal-h lon-detail-h"><span class="modal-title"><span class="material-symbols-rounded" aria-hidden="true" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">account_balance</span>Loan detail</span><span class="lon-dsub">'+x.name+'</span><span class="lon-dh-spacer"></span><button class="iconbtn" data-lon="lon-detail-close" aria-label="Close">'+ICON("close")+'</button></div>'+
+    '<div class="modal-b lon-detail-b">'+grid+dormNote+'<div class="lon-dl-payh">Payment history</div>'+payTbl+actions+'</div>'+
+    '<div class="modal-f"><button class="btn naked sm" data-lon="lon-export" data-id="'+w.id+'">'+ICON("download")+'Export to Excel</button><span class="lon-dh-spacer"></span><button class="btn primary sm" data-lon="lon-detail-close">Close</button></div></div></div>';
+}
+function lonFRenderModal(){
+  var mr=document.getElementById("lonModalRoot");
+  if(!mr){mr=document.createElement("div");mr.id="lonModalRoot";mr.className="lon-root";document.body.appendChild(mr);}
+  mr.innerHTML=LONF_MODAL?lonFDetailModalHTML():"";
+  try{document.body.style.overflow=LONF_MODAL?"hidden":"";}catch(e){}
+}
+
+/* (4) LOAN TYPE POPOVER (self-contained, reuses the shell's .pop / .mi / .cap) */
+function lonFPopContent(){
+  if(!LONF_POP)return "";
+  var w=find(LONF_POP.id);if(!w)return "";
+  var cur=w.lonType||"All";
+  return '<div class="cap">Loan type</div>'+LONF_TYPES.map(function(o){var on=cur===o;return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-lon="lon-set-type" data-id="'+w.id+'" data-v="'+lonFEsc(o)+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+(o==="All"?"All loan types":o)+'</button>';}).join("");
+}
+function lonFPositionPop(el,anchor){
+  var r=anchor.getBoundingClientRect(),M=8;
+  el.style.visibility="hidden";el.style.left="0px";el.style.top="0px";
+  var bw=el.offsetWidth,bh=el.offsetHeight;
+  var left=Math.min(Math.max(M,r.left),window.innerWidth-bw-M);
+  var top=r.bottom+6;if(top+bh>window.innerHeight-M)top=Math.max(M,r.top-bh-6);
+  el.style.left=left+"px";el.style.top=top+"px";el.style.visibility="";
+}
+function lonFOpenPop(anchor,id){
+  LONF_POP={type:"lon-type",id:id};
+  var el=document.getElementById("lonPop");
+  if(!el){el=document.createElement("div");el.id="lonPop";document.body.appendChild(el);}
+  el.className="pop lon-root";el.innerHTML=lonFPopContent();
+  lonFPositionPop(el,anchor);
+}
+function lonFRepositionPop(){var el=document.getElementById("lonPop");if(!el||!LONF_POP)return;var a=document.querySelector('[data-lon="lon-type"][data-id="'+LONF_POP.id+'"]');if(a)lonFPositionPop(el,a);}
+function lonFClosePop(){LONF_POP=null;var el=document.getElementById("lonPop");if(el)el.remove();}
+
+/* (5) TIME RANGE HOVER CARD (reuses the shell's .bgt-pop card). Only the
+   lonFAgingPanel rows carry data-lonpop, and that panel is currently
+   unreachable, so this is carried with it for the one-line rollback. */
+function lonFHideHover(){if(LONF_HOVER){LONF_HOVER.remove();LONF_HOVER=null;}}
+function lonFShowHover(row,mx,my){
+  var raw=row.getAttribute("data-lonpop");if(!raw)return;var p=raw.split("|");
+  var label=p[0],total=+p[1],count=+p[2],share=+p[3];
+  if(!LONF_HOVER){LONF_HOVER=document.createElement("div");LONF_HOVER.className="bgt-pop";document.body.appendChild(LONF_HOVER);}
+  LONF_HOVER.innerHTML='<div class="bgt-pop-h">'+label+'</div>'+
+    '<div class="bgt-pop-r"><span class="bgt-pop-lbl">Outstanding</span><span class="bgt-pop-v">'+lonFMoney(total)+'</span></div>'+
+    '<div class="bgt-pop-r"><span class="bgt-pop-lbl">Loans</span><span class="bgt-pop-v">'+count+'</span></div>'+
+    '<div class="bgt-pop-div"></div><div class="bgt-pop-var"><span class="bgt-pop-lbl">Share of balance</span><span class="bgt-pop-fav neutral">'+share+'%</span></div>';
+  var bw=LONF_HOVER.offsetWidth,bh=LONF_HOVER.offsetHeight,M=10;
+  var left=mx+14,top=my-bh-10;if(left+bw>window.innerWidth-M)left=mx-bw-14;if(top<M)top=my+16;
+  LONF_HOVER.style.left=left+"px";LONF_HOVER.style.top=top+"px";
+}
+
+/* (6) DELEGATED HANDLERS (self-contained, keyed to data-lon) --------------- */
+function lonFHandleClick(e){
+  var t=e.target.closest?e.target.closest("[data-lon]"):null;
+  if(!t){if(LONF_POP&&!(e.target.closest&&e.target.closest("#lonPop")))lonFClosePop();return;}
+  var a=t.getAttribute("data-lon"),id=t.getAttribute("data-id");
+  if(a==="stop")return;
+  if(a==="lon-detail-close"){LONF_MODAL=null;lonFRenderModal();return;}
+  var w=id?find(id):null;if(!w)return;
+  if(a==="lon-type"){if(LONF_POP&&LONF_POP.id===id&&document.getElementById("lonPop")){lonFClosePop();}else{lonFOpenPop(t,id);}render();return;}
+  if(a==="lon-set-type"){var nv=t.getAttribute("data-v");if((w.lonType||"All")!==nv){w.lonType=nv;w.lonBucket="total";lonFLoad(w);}lonFClosePop();render();return;}
+  if(a==="lon-sort"){var k=t.getAttribute("data-k"),cs=(w.lonSort||"amt-desc").split("-");w.lonSort=(cs[0]===k)?(k+"-"+(cs[1]==="asc"?"desc":"asc")):(k+"-"+((k==="name"||k==="last")?"asc":"desc"));render();return;}
+  if(a==="lon-side"){w.lonSide=t.getAttribute("data-s")||"pie";render();return;}
+  if(a==="lon-view"){w.lonView=t.getAttribute("data-v")||"table";render();return;}
+  if(a==="lon-set-bucket"){var nb=t.getAttribute("data-bucket");w.lonBucket=(w.lonBucket===nb)?"total":nb;render();return;}
+  if(a==="lon-open"){LONF_MODAL={id:id,acct:t.getAttribute("data-acct")};lonFClosePop();lonFRenderModal();return;}
+  if(a==="lon-open-loan"){setStatus("Open loan is a placeholder: no destination is confirmed yet for loan "+t.getAttribute("data-acct")+".");return;}
+  if(a==="lon-contact"){setStatus("Record a contact is a placeholder: loan "+t.getAttribute("data-acct")+" has no contact record to write to yet.");return;}
+  if(a==="lon-export"){setStatus("Export to Excel is a placeholder: there is no export endpoint for loans yet.");return;}
+}
+var LONF_WIRED=false;
+(function(){
+  if(LONF_WIRED)return;LONF_WIRED=true;
+  document.addEventListener("click",lonFHandleClick);
+  document.addEventListener("keydown",function(e){
+    if(e.key==="Escape"){if(LONF_MODAL){LONF_MODAL=null;lonFRenderModal();}else if(LONF_POP){lonFClosePop();}return;}
+    if((e.key==="Enter"||e.key===" ")&&e.target&&e.target.getAttribute&&e.target.getAttribute("data-lon")==="lon-open"&&e.target.tagName!=="BUTTON"){e.preventDefault();e.target.click();}
+  });
+  document.addEventListener("mousemove",function(e){
+    var row=e.target.closest&&e.target.closest(".lon-band-row[data-lonpop]");
+    if(!row){lonFHideHover();return;}
+    lonFShowHover(row,e.clientX,e.clientY);
+  });
+  window.addEventListener("resize",function(){lonFRepositionPop();});
+})();
+WIDGETS.register("loans",{content:lonFContent,about:function(w){return {h:w.title,b:LONF_ABOUT};}});
+/* ===== end W10 Loans With Balance Due V2 ===== */
+
   /* ===== P2/P3 WIDGET BLOCKS (pension, remittance, gifts, loans) ===== */
 /* =======================================================================
    Gifts Pledges  (prefix: gft, kind:"gifts")
@@ -7990,397 +8308,6 @@ function gftPopContent(){
 /* triggerSelector branches (kept here for parity / verification). */
 function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft-date"][data-id="'+pop.id+'"]';if(pop.type==="gft-purpose")return '[data-action="gft-purpose"][data-id="'+pop.id+'"]';return null;}
 
-/* =====================================================================
-   Loans With Balance Due (prefix: loan, kind: "loans")  , v2 redesign
-   Confluence DR page 7372046373. Drop-in, namespaced block for
-   widget-container.html. Shell contract:
-     contentHTML() ......... if(w.kind==="loans")return loanContent(w);
-     click dispatch ........ if(a&&a.indexOf("loan-")===0&&loanHandleClick(a,id,t))return;
-     popContent() .......... if(pop.type==="loan-type")return loanPopContent();
-     triggerSelector() ..... if(pop.type==="loan-type")return '[data-action="loan-type"][data-id="'+pop.id+'"]';
-     renderModal() ......... if(modal.type==="loandetail"){mr.innerHTML=loanDetailModalHTML();return;}
-   Every action is "loan-"-prefixed and routed to loanHandleClick; the only
-   pop type is loan-type; the drill uses modal.type "loandetail"; the aging
-   hover card mousemove listener lives inside this block. No other shell
-   wiring changes required.
-
-   What changed vs the live widget (Part A): the misleading By-Age PIE with
-   labels "Current / 30 / 60 / Over 60" is replaced by an ordered aging read,
-   severity Current -> 90+, values as text (DR 11.1, 11.2); the loan-type
-   filter now drives EVERY read , table, aging and KPI all recompute from the
-   same filtered set, fixing the filter-affects-table-only + all-loans-chart
-   antipattern confirmed live (DR 11.3); a portfolio-risk KPI is added ,
-   total, past-due and 90+ with a percent-past-due read (DR 11.4); the loan is
-   collections-actionable , a row opens a loan detail with "Open loan" and
-   "Record a contact" next-steps and a dormancy flag on a long-dormant loan
-   (DR 11.5); currency follows the org ($, fixing the live GBP localisation
-   defect); amethyst severity ramp, no red on any chart element.
-   ===================================================================== */
-
-/* ===== DATA =========================================================== */
-var LOAN_TODAY="2026-07-24";
-/* Four aging bands in severity order, labelled exactly per DR 11.1
-   (Current / 1-30 / 31-60 / 90+). The top band captures everything over
-   60 days (matching the live "Over 60" band the brief relabels to 90+);
-   no shipped loan sits in 61-89, so "90+" reads truthfully. */
-var LOAN_BUCKETS=[
-  {key:"cur",label:"Current",   sub:"not yet due",           hi:0,       sev:0},
-  {key:"b1", label:"1-30 days", sub:"up to 1 month past due", hi:30,     sev:1},
-  {key:"b2", label:"31-60 days",sub:"1 to 2 months past due", hi:60,     sev:2},
-  {key:"b3", label:"90+ days",  sub:"most overdue",           hi:Infinity,sev:3}
-];
-/* Amethyst severity ramp: light (Current) deepening to dark (90+). No red;
-   severity reads from depth of amethyst + order + labels + text. */
-var LOAN_SEV_COLORS=["--am-200","--am-300","--am-500","--am-700"];
-/* Loan types are organisation-defined (not a fixed list). Live values. */
-var LOAN_TYPES=["All","Church - Special","Church Expansion","Individual"];
-
-/* Loans with at least one invoice and a remaining balance. amount = principal
-   plus interest invoiced, minus posted payments. days = days past due on the
-   oldest unpaid invoice. Some payment histories left empty on purpose. */
-var LOAN_LOANS=[
-  {acct:"LN-1042",name:"Grace Fellowship",type:"Church Expansion",orig:150000,amount:28450.00,days:-8,lastPay:"2026-07-08",nextDue:"2026-08-01",
-    payments:[{date:"2026-07-08",method:"ACH",amount:2100.00},{date:"2026-06-08",method:"ACH",amount:2100.00}]},
-  {acct:"LN-1017",name:"New Life Center",type:"Church Expansion",orig:120000,amount:24800.00,days:-12,lastPay:"2026-07-10",nextDue:"2026-08-05",
-    payments:[{date:"2026-07-10",method:"Check #2093",amount:1750.00}]},
-  {acct:"LN-2231",name:"Maria Alvarez",type:"Individual",orig:5000,amount:640.00,days:-6,lastPay:"2026-07-02",nextDue:"2026-07-30",
-    payments:[{date:"2026-07-02",method:"ACH",amount:160.00},{date:"2026-06-02",method:"ACH",amount:160.00}]},
-  {acct:"LN-1188",name:"First Baptist Church",type:"Church - Special",orig:12000,amount:186.86,days:6,lastPay:"2026-06-30",nextDue:"2026-07-18",
-    payments:[{date:"2026-06-30",method:"Check #4021",amount:930.00}]},
-  {acct:"LN-1205",name:"Trinity Chapel",type:"Church - Special",orig:30000,amount:8200.00,days:22,lastPay:"2026-05-28",nextDue:"2026-07-02",
-    payments:[{date:"2026-05-28",method:"ACH",amount:1200.00}]},
-  {acct:"LN-2044",name:"Stephen Ho",type:"Individual",orig:8000,amount:1020.97,days:44,lastPay:"2026-05-02",nextDue:"2026-06-10",
-    payments:[{date:"2026-05-02",method:"ACH",amount:255.00}]},
-  {acct:"LN-1150",name:"St. Mark Parish",type:"Church - Special",orig:40000,amount:9800.00,days:58,lastPay:"2026-04-15",nextDue:"2026-05-27",
-    payments:[]},
-  {acct:"LN-1301",name:"Third Presbyterian Church",type:"Church Expansion",orig:300000,amount:24690.13,days:95,lastPay:"2026-03-18",nextDue:"2026-04-20",
-    payments:[{date:"2026-03-18",method:"Wire",amount:3400.00}]},
-  {acct:"LN-1099",name:"Cornerstone Academy",type:"Church - Special",orig:60000,amount:14250.00,days:145,lastPay:"2026-01-30",nextDue:"2026-03-01",
-    payments:[]}
-];
-/* Edge instance: every loan current (nothing past due). KPI reads All current;
-   overdue bands are empty and not clickable. */
-var LOAN_LOANS_CURRENT=[
-  {acct:"LN-3001",name:"Hope Chapel",type:"Church Expansion",orig:90000,amount:12400.00,days:-9,lastPay:"2026-07-12",nextDue:"2026-08-03",payments:[{date:"2026-07-12",method:"ACH",amount:1300.00}]},
-  {acct:"LN-3002",name:"Faith Community Church",type:"Church - Special",orig:25000,amount:3800.00,days:-4,lastPay:"2026-07-15",nextDue:"2026-07-28",payments:[{date:"2026-07-15",method:"Check #118",amount:600.00}]},
-  {acct:"LN-3003",name:"David Nguyen",type:"Individual",orig:6000,amount:520.00,days:-15,lastPay:"2026-07-05",nextDue:"2026-08-06",payments:[{date:"2026-07-05",method:"ACH",amount:130.00}]}
-];
-/* Edge instance: a single populated band (90+). Every other band is zero and
-   not clickable; the aging read shows one band plus a quiet "no balance in" line. */
-var LOAN_LOANS_SINGLE=[
-  {acct:"LN-4001",name:"Emmanuel Church",type:"Church Expansion",orig:80000,amount:9300.00,days:112,lastPay:"2026-02-14",nextDue:"2026-03-20",payments:[]},
-  {acct:"LN-4002",name:"Shepherd Fellowship",type:"Church - Special",orig:20000,amount:4100.00,days:98,lastPay:"2026-03-01",nextDue:"2026-04-10",payments:[{date:"2026-03-01",method:"ACH",amount:500.00}]}
-];
-
-/* ===== RENDER ========================================================= */
-function loanEsc(s){return String(s).replace(/"/g,"&quot;");}
-function loanMoney(n){return "$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
-function loanFmtDate(iso){var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];var p=String(iso).split("-");if(p.length!==3)return iso;return M[(+p[1])-1]+" "+(+p[2])+", "+p[0];}
-function loanParse(iso){var p=String(iso).split("-");return new Date(+p[0],(+p[1])-1,+p[2]);}
-function loanDaysSincePay(iso){if(!iso)return null;var t=loanParse(LOAN_TODAY);return Math.round((t-loanParse(iso))/86400000);}
-function loanIsDormant(x){var d=loanDaysSincePay(x.lastPay);return d!=null&&d>90;}
-
-var LOAN_NOINDIV=LOAN_LOANS.filter(function(x){return x.type!=="Individual";});
-function loanDataset(w){if(w.dataset==="current")return LOAN_LOANS_CURRENT;if(w.dataset==="single")return LOAN_LOANS_SINGLE;if(w.dataset==="notype")return LOAN_NOINDIV;return LOAN_LOANS;}
-function loanFiltered(w){var ty=w.loanType||"All";return loanDataset(w).filter(function(x){return ty==="All"||x.type===ty;});}
-function loanBucketOf(days){for(var i=0;i<LOAN_BUCKETS.length;i++){if(days<=LOAN_BUCKETS[i].hi)return LOAN_BUCKETS[i].key;}return "b3";}
-function loanSevOf(days){for(var i=0;i<LOAN_BUCKETS.length;i++){if(days<=LOAN_BUCKETS[i].hi)return LOAN_BUCKETS[i].sev;}return 3;}
-function loanBucketLabel(key){for(var i=0;i<LOAN_BUCKETS.length;i++)if(LOAN_BUCKETS[i].key===key)return LOAN_BUCKETS[i].label;return key;}
-function loanColorOf(key){for(var i=0;i<LOAN_BUCKETS.length;i++)if(LOAN_BUCKETS[i].key===key)return LOAN_SEV_COLORS[LOAN_BUCKETS[i].sev];return LOAN_SEV_COLORS[3];}
-function loanBuckets(w){
-  var ls=loanFiltered(w),m={};LOAN_BUCKETS.forEach(function(b){m[b.key]={count:0,total:0};});
-  ls.forEach(function(x){var k=loanBucketOf(x.days);m[k].count++;m[k].total+=x.amount;});
-  return LOAN_BUCKETS.map(function(b){return {key:b.key,label:b.label,sub:b.sub,sev:b.sev,color:LOAN_SEV_COLORS[b.sev],count:m[b.key].count,total:m[b.key].total};});
-}
-function loanTotal(w){return loanFiltered(w).reduce(function(s,x){return s+x.amount;},0);}
-function loanCount(w){return loanFiltered(w).length;}
-function loanPastDue(w){return loanFiltered(w).filter(function(x){return x.days>0;}).reduce(function(s,x){return s+x.amount;},0);}
-function loanPastDueCount(w){return loanFiltered(w).filter(function(x){return x.days>0;}).length;}
-function loan90(w){return loanFiltered(w).filter(function(x){return loanBucketOf(x.days)==="b3";}).reduce(function(s,x){return s+x.amount;},0);}
-function loanPct(w){var t=loanTotal(w);return t>0?Math.round(loanPastDue(w)/t*100):0;}
-function loanWorstBucket(w){var nz=loanBuckets(w).filter(function(r){return r.total>0;});return nz.length?nz[nz.length-1]:null;}
-function loanFind(w,acct){var ls=loanDataset(w);for(var i=0;i<ls.length;i++)if(ls[i].acct===acct)return ls[i];return null;}
-function loanTopOverdue(w){return loanFiltered(w).filter(function(x){return x.days>0;}).slice().sort(function(a,b){return (b.days-a.days)||(b.amount-a.amount);});}
-
-/* Aging band selection (whole book = "total", or one band key). Client-side
-   narrowing of an already-loaded set , never a data-fetch. */
-function loanSel(w){var v=w&&w.loanBucket;if(v==null||v==="total")return "total";for(var i=0;i<LOAN_BUCKETS.length;i++)if(LOAN_BUCKETS[i].key===v)return v;return "total";}
-function loanRows(w){
-  var sel=loanSel(w),list=loanFiltered(w).slice();
-  if(sel!=="total")list=list.filter(function(x){return loanBucketOf(x.days)===sel;});
-  var sk=(w.loanSort||"days-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
-  list.sort(function(a,b){
-    if(key==="name")return dir*a.name.localeCompare(b.name);
-    if(key==="last")return dir*(loanParse(a.lastPay)-loanParse(b.lastPay));
-    if(key==="amt")return dir*(a.amount-b.amount);
-    return dir*(a.days-b.days);
-  });
-  return list;
-}
-
-/* Filter chip: secondary-fill + leading filter glyph (via .filter-chip[data-action])
-   + trailing chevron. Sized to its label. Drives the whole widget. */
-function loanTypeChip(w){
-  var ty=w.loanType||"All",spin=w.loanloading?'<span class="bgt-spin" aria-hidden="true"></span>':"";
-  return '<button class="filter-chip loan-chip" data-action="loan-type" data-id="'+w.id+'" aria-haspopup="listbox" aria-expanded="'+(pop&&pop.type==="loan-type"&&pop.id===w.id?"true":"false")+'" aria-label="Loan type, tap to change"><span class="fc-label">'+spin+(ty==="All"?"All loan types":ty)+'</span>'+ICON("expand_more")+'</button>';
-}
-
-/* KPI badge: past-due money on an amethyst-neutral pill (no red), or a positive
-   "All current". */
-function loanBadge(w){
-  var over=loanPastDue(w);
-  if(over>0){var n=loanPastDueCount(w),pct=loanPct(w);return '<span class="bank-pill" data-tip="'+loanEsc(loanMoney(over)+" across "+n+" loan"+(n===1?"":"s")+" is past due, that is "+pct+"% of the outstanding balance.")+'" data-tip-plain>'+ICON("schedule")+loanMoney(over)+' past due ('+pct+'%)</span>';}
-  return '<span class="delta-pill" data-tip="Every loan with a balance is current, nothing is past due." data-tip-plain>'+ICON("check")+'All current</span>';
-}
-
-/* Compact stacked severity strip + sr-only aging sentence (values as text). */
-function loanStackBar(w){
-  var tot=loanTotal(w);if(tot<=0)return "";
-  var segs=loanBuckets(w).filter(function(r){return r.total>0;});
-  var inner=segs.map(function(r){var pct=r.total/tot*100;return '<span class="loan-seg" style="flex-basis:'+pct.toFixed(2)+'%;background:var('+r.color+')" title="'+loanEsc(r.label+": "+loanMoney(r.total))+'"></span>';}).join("");
-  return '<div class="loan-stack" aria-hidden="true">'+inner+'</div>';
-}
-function loanAgeSr(w){var b=loanBuckets(w);return 'Outstanding by age: '+b.map(function(r){return r.label+" "+loanMoney(r.total);}).join(", ")+'.';}
-
-/* GLANCE (kpi): total owed + past-due badge on the LEFT, plain context line,
-   then a compact aging read. Values in text + sr-only. */
-function loanGlance(w){
-  var tot=loanTotal(w),n=loanCount(w),worst=loanWorstBucket(w),over=loanPastDue(w);
-  var read="";
-  if(tot>0){
-    var call=(over>0&&worst&&worst.key!=="cur")
-      ?'<span class="loan-glance-cap"><span class="loan-sevdot" style="background:var('+worst.color+')"></span>'+loanMoney(worst.total)+' in '+worst.label+'</span>'
-      :'<span class="loan-glance-cap loan-cap-ok">'+ICON("check")+'Every loan is current</span>';
-    read='<div class="loan-glance-read">'+loanStackBar(w)+call+'</div>';
-  }
-  return '<div class="kpi-row"><div class="kpi-num">'+
-    '<div class="dep-hd-kpigrp"><span class="metric-value">'+loanMoney(tot)+'</span>'+loanBadge(w)+'</div>'+
-    ''+
-    read+
-    '<span class="sr-only">'+loanAgeSr(w)+'</span>'+
-  '</div></div>';
-}
-
-function loanEmpty(w){
-  if(w.size==="kpi")return '<div class="kpi-row"><div class="kpi-num"><div class="dep-hd-kpigrp"><span class="metric-value loan-allset">'+ICON("check_circle")+'All settled</span></div><div class="gl-sub"><span class="bgt-caption">no loans have a balance right now</span></div></div></div>';
-  return '<div class="state loan-empty" data-kind="empty">'+ICON("task_alt")+'<div class="state-title">Nothing outstanding</div><div class="state-sub">No loans currently carry a balance. There is nothing to collect right now.</div></div>';
-}
-
-/* Header (Detail / Explore): two-row .dep-hd. Row 1: loan-type chip (left).
-   Row 2: total owed + past-due badge (LEFT) and one quiet context line stating
-   the count, the past-due and 90+ read, and "as of". */
-function loanHeaderBlock(w,mode){
-  var loading=(mode==="loading"),numInner,ctx;
-  if(loading){
-    numInner='<div class="dep-hd-kpigrp"><span class="sk" style="width:130px;height:22px;border-radius:6px"></span><span class="sk" style="width:130px;height:20px;border-radius:999px"></span></div>';
-    ctx="Updating loans with a balance…";
-  }else{
-    numInner='<div class="dep-hd-kpigrp"><span class="metric-value">'+loanMoney(loanTotal(w))+'</span>'+loanBadge(w)+'</div>';
-    var n=loanCount(w),over=loanPastDue(w),nine=loan90(w),pct=loanPct(w);
-    ctx=(over>0?(loanMoney(over)+' ('+pct+'%) past due, of which '+loanMoney(nine)+' is 90+ days'):'Nothing past due');
-  }
-  return '<div class="dep-hd">'+
-    '<div class="dep-hd-top"><div class="loan-ctlrow">'+loanTypeChip(w)+'</div><div class="dep-hd-toggle"></div></div>'+
-    '<div class="dep-hd-num"><div class="loan-numwrap">'+numInner+'<div class="loan-ctx">'+ctx+'</div></div></div>'+
-  '</div>';
-}
-
-/* The hero: the loans table. Columns Account, Borrower (with type + a link),
-   Last payment (dormancy-flagged), Days past due, Amount due. Row-tap opens the
-   loan detail. When the whole book is shown it is grouped into aging bands, most
-   overdue last, each with a subtotal , the ordered aging report (DR 11.2). */
-function loanDaysCell(x){
-  if(x.days<=0)return '<span class="loan-c-days"><span class="loan-notdue">Not due</span></span>';
-  return '<span class="loan-c-days"><span class="loan-days-v over">'+x.days+' day'+(x.days===1?"":"s")+'</span></span>';
-}
-function loanLastCell(x){
-  var dorm=loanIsDormant(x);
-  var flag=dorm?('<span class="loan-dormant" data-tip="No payment received in over 90 days on this loan." data-tip-plain>'+ICON("hourglass_empty")+'</span>'):"";
-  return '<span class="loan-c-last">'+loanFmtDate(x.lastPay)+flag+'</span>';
-}
-function loanRowHTML(w,x){
-  var lbl=x.name+", account "+x.acct+", "+(x.days>0?(x.days+" days past due"):"current")+", "+loanMoney(x.amount)+" due, tap to open the loan";
-  return '<div class="wt-row loan-row" data-action="loan-open" data-id="'+w.id+'" data-acct="'+loanEsc(x.acct)+'" role="button" tabindex="0" aria-label="'+loanEsc(lbl)+'">'+
-    '<span class="loan-c-acct">'+x.acct+'</span>'+
-    '<span class="lr-main lr-stack loan-c-name"><span class="loan-nm-wrap"><span class="lr-link loan-nm">'+x.name+'</span><span class="loan-type-sub">'+x.type+'</span></span></span>'+
-    loanLastCell(x)+
-    loanDaysCell(x)+
-    '<span class="wt-c2 loan-c-amt">'+loanMoney(x.amount)+'</span>'+
-  '</div>';
-}
-function loanTable(w){
-  var sel=loanSel(w),rows=loanRows(w);
-  var sk=(w.loanSort||"days-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
-  function sb(k,label){var on=key===k,ic=on?(dir<0?"arrow_downward":"arrow_upward"):"unfold_more";return '<button class="wt-sort'+(on?" on":"")+'" data-action="loan-sort" data-id="'+w.id+'" data-k="'+k+'">'+label+' '+ICON(ic)+'</button>';}
-  var head='<div class="wt-row wt-head loan-head"><span class="loan-c-acct">'+sb("acct","Account")+'</span><span class="lr-main loan-c-name">'+sb("name","Borrower")+'</span><span class="loan-c-last">'+sb("last","Last payment")+'</span><span class="loan-c-days">'+sb("days","Days past due")+'</span><span class="wt-c2 loan-c-amt">'+sb("amt","Amount due")+'</span></div>';
-  var body;
-  if(sel==="total"){
-    body=LOAN_BUCKETS.map(function(b){
-      var br=rows.filter(function(x){return loanBucketOf(x.days)===b.key;});
-      if(!br.length)return "";
-      var st=br.reduce(function(s,x){return s+x.amount;},0),over=(b.sev>=1);
-      var gh='<div class="wt-row loan-grp"><span class="loan-grp-nm'+(over?" over":"")+'"><span class="loan-grp-dot" style="background:var('+LOAN_SEV_COLORS[b.sev]+')"></span>'+b.label+' <span class="loan-grp-ct">'+br.length+' loan'+(br.length===1?"":"s")+'</span></span><span class="loan-grp-amt">'+loanMoney(st)+'</span></div>';
-      return gh+br.map(function(x){return loanRowHTML(w,x);}).join("");
-    }).join("");
-  }else{
-    body=rows.map(function(x){return loanRowHTML(w,x);}).join("");
-  }
-  var tot=rows.reduce(function(s,x){return s+x.amount;},0);
-  var footLbl=(sel==="total")?("All aging bands ("+rows.length+" loan"+(rows.length===1?"":"s")+")"):(loanBucketLabel(sel)+" ("+rows.length+" loan"+(rows.length===1?"":"s")+")");
-  var empty=rows.length?"":'<div class="loan-zeroline">'+ICON("info")+'No loans match this selection.</div>';
-  return '<div class="scroll">'+head+body+empty+'</div><div class="dep-total"><span>'+footLbl+'</span><span>'+loanMoney(tot)+'</span></div>';
-}
-
-/* Explore right column: the aging read + portfolio-risk KPI + most-overdue
-   borrowers. The band rows are values-as-text with amethyst share bars and
-   double as the table filter , the synced chart the brief asked for (DR 11.3),
-   done as synced values, not an un-synced chart. */
-function loanMiniBar(frac,color){var pct=Math.max(3,Math.round(frac*100));return '<span class="loan-mini-track" aria-hidden="true"><span class="loan-mini-fill" style="width:'+pct+'%;background:var('+color+')"></span></span>';}
-function loanAgingPanel(w){
-  var sel=loanSel(w),grand=loanTotal(w),bs=loanBuckets(w),n=loanCount(w);
-  var out='<div class="loan-panel">';
-  var allSel=(sel==="total");
-  out+='<button class="loan-band-row loan-band-all'+(allSel?" sel":"")+'" data-action="loan-set-bucket" data-bucket="total" data-id="'+w.id+'" aria-pressed="'+allSel+'"><span class="loan-band-main"><span class="loan-band-lbl">'+ICON("account_balance")+'All aging bands</span><span class="loan-band-meta">'+n+' loan'+(n===1?"":"s")+' with a balance</span></span><span class="loan-band-val">'+loanMoney(grand)+'</span></button>';
-  bs.forEach(function(r){
-    var has=r.total>0,frac=grand>0?r.total/grand:0,isSel=(sel===r.key),share=grand>0?Math.round(r.total/grand*100):0;
-    var arpop=[r.label,r.total,r.count,share].join("|");
-    out+='<button class="loan-band-row'+(isSel?" sel":"")+(has?"":" loan-band-static")+'"'+(has?' data-action="loan-set-bucket" data-bucket="'+r.key+'" data-id="'+w.id+'" data-loanpop="'+loanEsc(arpop)+'" aria-pressed="'+isSel+'"':' disabled aria-disabled="true"')+'>'+
-      '<span class="loan-band-main">'+
-        '<span class="loan-band-lbl'+(r.sev>=1&&has?" over":"")+'"><span class="loan-band-dot" style="background:var('+r.color+')"></span>'+r.label+'</span>'+
-        loanMiniBar(frac,r.color)+
-        '<span class="loan-band-meta">'+(has?(r.count+' loan'+(r.count===1?"":"s")+', '+share+'% of balance'):'no balance in this band')+'</span>'+
-      '</span>'+
-      '<span class="loan-band-val'+(has?"":" loan-band-zero")+'">'+loanMoney(r.total)+'</span></button>';
-  });
-  /* Portfolio-risk read (DR 11.4). */
-  var over=loanPastDue(w),nine=loan90(w),pct=loanPct(w),pctN=grand>0?Math.round(nine/grand*100):0;
-  out+='<div class="loan-panel-sep"></div><div class="loan-panel-h">Portfolio risk</div>';
-  out+='<div class="loan-risk-row"><span class="loan-risk-lbl">Past due</span><span class="loan-risk-v">'+loanMoney(over)+' <span class="loan-risk-pct">('+pct+'%)</span></span></div>';
-  out+='<div class="loan-risk-row"><span class="loan-risk-lbl">90+ days</span><span class="loan-risk-v">'+loanMoney(nine)+' <span class="loan-risk-pct">('+pctN+'%)</span></span></div>';
-  /* Most-overdue borrowers , collections priority. */
-  var top=loanTopOverdue(w).slice(0,4);
-  if(top.length){
-    out+='<div class="loan-panel-sep"></div><div class="loan-panel-h">Most overdue</div>';
-    top.forEach(function(x){
-      out+='<button class="loan-worst-row" data-action="loan-open" data-id="'+w.id+'" data-acct="'+loanEsc(x.acct)+'" aria-label="'+loanEsc("Open "+x.name+", "+x.days+" days past due")+'"><span class="loan-worst-main"><span class="loan-worst-nm">'+x.name+'</span><span class="loan-worst-meta">'+x.days+' days past due'+(loanIsDormant(x)?', dormant':'')+'</span></span><span class="loan-worst-val">'+loanMoney(x.amount)+'</span></button>';
-    });
-  }
-  return out+'</div>';
-}
-function loanFull(w){
-  return '<div class="dep-full">'+
-    '<div class="dep-col"><div class="dep-col-h">Loans with a balance</div>'+loanTable(w)+'</div>'+
-    '<div class="dep-col loan-col-side"><div class="dep-col-h">Aging and risk</div>'+loanAgingPanel(w)+'</div>'+
-  '</div>';
-}
-
-function loanSkeleton(){var rows="";[82,58,70,48,64].forEach(function(wd){rows+='<div class="loan-sk-row"><span class="sk" style="width:70px;height:12px;border-radius:4px"></span><span class="sk" style="flex:1;height:12px;border-radius:4px"></span><span class="sk" style="width:'+wd+'px;height:12px;border-radius:4px"></span></div>';});return '<div class="loan-skel" aria-busy="true">'+rows+'<div class="bgt-skel-cap"><span class="bgt-spin"></span>Loading…</div></div>';}
-
-/* Single entry point, dispatched by w.kind==="loans". */
-function loanContent(w){
-  if(w.state==="empty"||!loanDataset(w).length)return loanEmpty(w);
-  if(w.size==="kpi")return loanGlance(w);
-  if(w.loanloading)return loanHeaderBlock(w,"loading")+loanSkeleton();
-  if(!loanFiltered(w).length)return loanControlsHeader(w)+'<div class="loan-body">'+loanScopedEmpty(w)+'</div>';
-  var mh=loanHeaderBlock(w);
-  if(w.size==="xwide")return mh+loanFull(w);
-  return mh+'<div class="loan-body">'+loanTable(w)+'</div>';
-}
-function loanControlsHeader(w){return '<div class="dep-hd"><div class="dep-hd-top"><div class="loan-ctlrow">'+loanTypeChip(w)+'</div><div class="dep-hd-toggle"></div></div></div>';}
-function loanScopedEmpty(w){var ty=(w.loanType&&w.loanType!=="All")?w.loanType:"";if(!ty)return loanEmpty(w);return '<div class="state" data-kind="empty">'+ICON("task_alt")+'<div class="state-title">No '+loanEsc(ty)+' loans</div><div class="state-sub">No loans of this type are carrying a balance. Pick another type above to see the rest.</div></div>';}
-
-/* Loading only on a data-fetch (loan-type change), never on sort or band pick. */
-function loanLoad(w){w.loanloading=true;clearTimeout(timers["loan-"+w.id]);timers["loan-"+w.id]=setTimeout(function(){w.loanloading=false;w.updated="just now";render();},800);}
-
-/* Drill-to-detail focus overlay: one loan, collections-actionable. Summary of
-   the loan, a payment history, a dormancy flag, and two next-steps , Open loan
-   and Record a contact. Export + Close. */
-function loanDetailModalHTML(){
-  var w=find(modal.id);if(!w)return "";
-  var x=loanFind(w,modal.acct);if(!x)return "";
-  var bucket=loanBucketOf(x.days),bl=loanBucketLabel(bucket),bcolor=loanColorOf(bucket);
-  var dpd=x.days>0?(x.days+" day"+(x.days===1?"":"s")+" past due"):"Not yet due";
-  var dorm=loanIsDormant(x),since=loanDaysSincePay(x.lastPay);
-  function line(lbl,val,cls){return '<div class="loan-dl-row"><span class="loan-dl-lbl">'+lbl+'</span><span class="loan-dl-val'+(cls?" "+cls:"")+'">'+val+'</span></div>';}
-  var grid='<div class="loan-dl-grid">'+
-    line("Account",x.acct)+
-    line("Loan type",x.type)+
-    line("Original amount",loanMoney(x.orig))+
-    line("Amount due",loanMoney(x.amount),"loan-dl-amt")+
-    line("Aging",'<span class="loan-dl-band"><span class="loan-band-dot" style="background:var('+bcolor+')"></span>'+bl+'</span>')+
-    line("Days past due",dpd,x.days>0?"over":"")+
-    line("Next payment due",loanFmtDate(x.nextDue))+
-    line("Last payment",loanFmtDate(x.lastPay)+(since!=null?(' <span class="loan-dl-since">('+since+' days ago)</span>'):''))+
-  '</div>';
-  var dormNote=dorm?('<div class="loan-dl-dormant">'+ICON("hourglass_empty")+'No payment in over 90 days. Consider making contact.</div>'):'';
-  var pays=(x.payments||[]).filter(function(p){return p.amount>0;});
-  var payTbl=pays.length
-    ?'<div class="loan-pays"><div class="loan-prow loan-phead"><span>Date</span><span>Method</span><span class="loan-pa">Amount</span></div>'+pays.map(function(p){return '<div class="loan-prow"><span>'+loanFmtDate(p.date)+'</span><span>'+p.method+'</span><span class="loan-pa">'+loanMoney(p.amount)+'</span></div>';}).join("")+'</div>'
-    :'<div class="loan-tab-empty">'+ICON("payments")+'No payments recorded yet on this loan.</div>';
-  var actions='<div class="loan-actions"><button class="btn outlined sm" data-action="loan-open-loan" data-id="'+w.id+'" data-acct="'+loanEsc(x.acct)+'">'+ICON("open_in_new")+'Open loan</button>'+
-    '<button class="btn naked sm" data-action="loan-contact" data-id="'+w.id+'" data-acct="'+loanEsc(x.acct)+'">'+ICON("event_note")+'Record a contact</button></div>';
-  return '<div class="modal-backdrop" data-action="loan-detail-close"><div class="modal loan-detail-modal" data-action="stop" role="dialog" aria-modal="true" aria-label="Loan detail">'+
-    '<div class="modal-h loan-detail-h"><span class="modal-title"><span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">account_balance</span>Loan detail</span><span class="loan-dsub">'+x.name+'</span><span class="loan-dh-spacer"></span><button class="iconbtn" data-action="loan-detail-close" aria-label="Close">'+ICON("close")+'</button></div>'+
-    '<div class="modal-b loan-detail-b">'+grid+dormNote+'<div class="loan-dl-payh">Payment history</div>'+payTbl+actions+'</div>'+
-    '<div class="modal-f"><button class="btn naked sm" data-action="loan-export" data-id="'+w.id+'">'+ICON("download")+'Export to Excel</button><span class="loan-dh-spacer"></span><button class="btn primary sm" data-action="loan-detail-close">Close</button></div></div></div>';
-}
-
-/* ===== REGISTRY ======================================================= */
-/* Paste these into a dashboard's widgets array. Actions array = the standard
-   export/manage set every widget carries. */
-var LOAN_REGISTRY=[
-  {id:"loan",title:"Loans With Balance Due",kind:"loans",size:"wide",tiers:["kpi","wide","xwide"],loanType:"All",loanSort:"days-desc",loanBucket:"total",updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-  {id:"loan2",title:"Loans With Balance Due (every loan current)",kind:"loans",size:"wide",tiers:["kpi","wide","xwide"],dataset:"current",loanType:"All",loanSort:"days-desc",loanBucket:"total",updated:"just now"},
-  {id:"loan3",title:"Loans With Balance Due (single aging band)",kind:"loans",size:"wide",tiers:["kpi","wide","xwide"],dataset:"single",loanType:"All",loanSort:"days-desc",loanBucket:"total",updated:"just now"},
-  {id:"loan4",title:"Loans With Balance Due (nothing outstanding)",kind:"loans",size:"wide",tiers:["kpi","wide","xwide"],state:"empty",loanType:"All",loanBucket:"total",updated:"just now"},
-  {id:"loan5",title:"Loans With Balance Due (Explore, aging and risk)",kind:"loans",size:"xwide",tiers:["kpi","wide","xwide"],loanType:"All",loanSort:"days-desc",loanBucket:"total",updated:"just now"},
-  {id:"loan6",title:"Loans With Balance Due (Individual filter, none outstanding)",kind:"loans",size:"wide",tiers:["kpi","wide","xwide"],dataset:"notype",loanType:"Individual",loanSort:"days-desc",loanBucket:"total",updated:"just now"}
-];
-
-/* ===== HANDLERS ======================================================= */
-/* Shell hook lines (add verbatim to widget-container.html):
-     contentHTML() ....... if(w.kind==="loans")return loanContent(w);
-     click dispatch ...... if(a&&a.indexOf("loan-")===0&&loanHandleClick(a,id,t))return;
-     popContent() ........ if(pop.type==="loan-type")return loanPopContent();
-     triggerSelector() ... if(pop.type==="loan-type")return '[data-action="loan-type"][data-id="'+pop.id+'"]';
-     renderModal() ....... if(modal.type==="loandetail"){mr.innerHTML=loanDetailModalHTML();return;}                           */
-function loanHandleClick(a,id,t){
-  if(a==="loan-type"){pop=(pop&&pop.type==="loan-type"&&pop.id===id)?null:{type:"loan-type",id:id};render();return true;}
-  if(a==="loan-set-type"){var wt=find(id);if(wt){var nv=t.getAttribute("data-v");if((wt.loanType||"All")!==nv){wt.loanType=nv;wt.loanBucket="total";loanLoad(wt);}}pop=null;render();return true;}
-  if(a==="loan-sort"){var ws=find(id),k=t.getAttribute("data-k");if(ws){var cs=(ws.loanSort||"days-desc").split("-");ws.loanSort=(cs[0]===k)?(k+"-"+(cs[1]==="asc"?"desc":"asc")):(k+"-"+((k==="name"||k==="last")?"asc":"desc"));}render();return true;}
-  if(a==="loan-set-bucket"){var wb=find(id);if(wb){var nb=t.getAttribute("data-bucket");wb.loanBucket=(wb.loanBucket===nb)?"total":nb;}render();return true;}
-  if(a==="loan-open"){var wop=find(id);if(!wop)return true;modal={type:"loandetail",id:id,acct:t.getAttribute("data-acct")};modalMounted=false;pop=null;render();return true;}
-  if(a==="loan-detail-close"){modal=null;pop=null;render();return true;}
-  if(a==="loan-open-loan"){setStatus("Opening loan "+t.getAttribute("data-acct")+" in Loan Processing…");return true;}
-  if(a==="loan-contact"){setStatus("Contact logged for loan "+t.getAttribute("data-acct")+".");return true;}
-  if(a==="loan-export"){pop=null;setStatus("Exporting the loan detail to Excel…");render();return true;}
-  return false;
-}
-/* popContent branch (routed from popContent(): loan-type -> loanPopContent). */
-function loanPopContent(){
-  if(pop.type==="loan-type"){var w=find(pop.id),cur=w.loanType||"All";return '<div class="cap">Loan type</div>'+LOAN_TYPES.map(function(o){var on=cur===o;return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-action="loan-set-type" data-id="'+w.id+'" data-v="'+loanEsc(o)+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+(o==="All"?"All loan types":o)+'</button>';}).join("");}
-  return "";
-}
-/* triggerSelector branch. */
-function loanTriggerSelector(){if(pop&&pop.type==="loan-type")return '[data-action="loan-type"][data-id="'+pop.id+'"]';return null;}
-
-/* Aging-band hover card (formatted; reuses .bgt-pop styling). Attached once at
-   load; lives inside this block. */
-var loanPopEl=null;
-function loanHidePop(){if(loanPopEl){loanPopEl.remove();loanPopEl=null;}}
-function loanShowPop(row,mx,my){
-  var raw=row.getAttribute("data-loanpop");if(!raw)return;var p=raw.split("|");
-  var label=p[0],total=+p[1],count=+p[2],share=+p[3];
-  if(!loanPopEl){loanPopEl=document.createElement("div");loanPopEl.className="bgt-pop";document.body.appendChild(loanPopEl);}
-  loanPopEl.innerHTML='<div class="bgt-pop-h">'+label+'</div>'+
-    '<div class="bgt-pop-r"><span class="bgt-pop-lbl">Outstanding</span><span class="bgt-pop-v">'+loanMoney(total)+'</span></div>'+
-    '<div class="bgt-pop-r"><span class="bgt-pop-lbl">Loans</span><span class="bgt-pop-v">'+count+'</span></div>'+
-    '<div class="bgt-pop-div"></div><div class="bgt-pop-var"><span class="bgt-pop-lbl">Share of balance</span><span class="bgt-pop-fav neutral">'+share+'%</span></div>';
-  var bw=loanPopEl.offsetWidth,bh=loanPopEl.offsetHeight,M=10;
-  var left=mx+14,top=my-bh-10;if(left+bw>innerWidth-M)left=mx-bw-14;if(top<M)top=my+16;
-  loanPopEl.style.left=left+"px";loanPopEl.style.top=top+"px";
-}
-document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.target.closest(".loan-band-row[data-loanpop]");if(!row){if(loanPopEl)loanHidePop();return;}loanShowPop(row,e.clientX,e.clientY);});
 
   /* ===== end P2/P3 widget blocks ===== */
 
@@ -8406,7 +8333,6 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
      the pre-edit snapshot.
   ===================================================================== */
   var CMPNOTE_={
-    W10:{h:"Ours is her Loans widget with six changes, five owner-directed and one a latent bug fix.",rows:["Four aging ranges become five: a 61 to 90 range closes a latent gap that mislabelled those loans as most overdue.","Her aging and risk panel is replaced by a balance by time range donut whose legend rows ARE the table filter.","The table goes flat: the ranges became a filter, so band group headers and subtotals would restate them twice.","The Days past due column is removed, so the default sort moves to amount descending.","Explore gains a Table / Pie segment, because the first pass left no route to the chart there at all.","The loan-type filter now drives EVERYTHING, not just the table: donut, chip counts, header total and Glance bar.","An empty range renders as a muted, inert zero row rather than vanishing from the ladder."],open:"The modern API does not replicate legacy oldest-first payment allocation, so every range figure depends on backend work that does not exist."},
     W11:{h:"Ours is a from-scratch rebuild, deliberately not a restyle of her block.",rows:["All seven columns become sortable, server-side, defaulting to asset tag ascending; her block has no sort control.","Server paging at 10 rows per page, with totals computed over the whole group and unaffected by paging.","Two views behind a toggle, Asset Detail table and Donut; the third group-bars view was removed.","Detail shows ONE view full width; the side-by-side pair was retired.","The Financial Measure chip is Donut-only, legitimate as a client filter because all five measures arrive per group.","An icon-only download is added, recorded in the spec as an unfunded gap.","The register grows from 13 assets to 52 across six dimensions."],open:"The default view is contested: the amended handoff says Donut, the built code treats a null state as Asset Detail, and the port follows the build."},
     W13:{h:"Ours rebuilds her Purchasing board as the real approval process from the record screen.",rows:["Four payment-progress lanes become THREE real approval states: Pending, Approved and Rejected.","A split Finish column adds Close for paid orders and Void for unpaid, each behind a confirm with a reason.","Cards are DRAGGED between columns; her focus overlay with Approve and Reject buttons is gone.","Hold with a reason is added: a held card turns yellow, shows a lock and refuses to move until the hold clears.","Card colour carries the payment sub-state and is always paired with a text badge, never colour alone.","The record popup reaches record-screen parity across five tabs, including a real interactive Approvals grid.","The encumbrance chart is cut entirely, and sort is fixed oldest first with no sort control anywhere."],open:"The payment-location dispute is live and no side is taken, and no dashboard API serves approve, reject, hold, payment or the archive yet."},
     W15:{h:"Ours is her Bank widget rebuilt to her design, reusing her CSS rather than redeclaring it.",rows:["Both presentations stay, but ONE shows at a time at every tier; her paired Detail layout is retired.","Client-side Load more becomes SERVER paging: 12 per page over 52 accounts, stating the page and the range.","Ordering is fixed alphabetical server-side with a unique tiebreaker; her sortable column headers are not built.","Totals and the bar scale come from the whole filtered set, so turning the page moves neither the total nor a bar.","Drill-through is dropped: Single Account mode already IS this widget's drill-in mechanism.","Her div row stacks become real tables with header cells and scope, because a scoped header cell cannot survive a div row.","Red leaves the bars for the amethyst ramp and survives only on the Overdrawn status chip."],open:"The paged accounts endpoint exists in no API document, and the seven-line per-account activity breakdown is entirely new backend work."},
@@ -8415,7 +8341,6 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
   };
   /* number, display name, HER kind + her state, OUR kind + our state */
   var CMP_ROWS=[
-    ["W10","Loans With Balance Due","loans",{loanType:"All",loanSort:"days-desc",loanBucket:"total",updated:"just now"},"loans-mb",{lonType:"All",lonSort:"amt-desc",lonBucket:"total",lonView:"table",updated:"just now"}],
     ["W11","Fixed Asset Values","fixedassets",{faGroupBy:"cls",faGroup:"__all",faMeasure:"net",updated:"just now"},"fixedassets-mb",{faFDim:"cls",faFMeasure:"net",faFSort:"tag-asc",faFPage:0,updated:"just now"}],
     ["W13","Purchasing Management","purchasing",{admin:true,pstatus:"mine",ppath:null,purview:"queue",encview:"chart",psort:"age-desc"},"purchasing-mb",{purfView:"kanban",purfStatus:"All statuses",purfPath:null,purfDept:null,purfYear:null,purfOv:false,updated:"just now"}],
     ["W15","Bank Balances","bank",{bkacct:null,bkview:"table",bksort:"bal-desc"},"bank-mb",{bkFAcct:null,bkFView:"table",bkFPage:0,bkFOver:false,bkFSort:"nm-asc"}],
@@ -8560,18 +8485,14 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
       {id:"remO3", title:"Remittance Pledges", kind:"remittance", size:"wide",  tiers:["kpi","wide","xwide"], state:"empty", updated:"just now"},
       {id:"remO4", title:"Remittance Pledges", kind:"remittance", size:"wide",  tiers:["kpi","wide","xwide"], state:"noscope", updated:"just now"},
       */
-      {id:"loan",title:"Loans With Balance Due",kind:"loans",size:"wide",tiers:["kpi","wide","xwide"],loanType:"All",loanSort:"days-desc",loanBucket:"total",updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-      {id:"loan_k",title:"Loans With Balance Due (Glance)",kind:"loans",size:"kpi",tiers:["kpi","wide","xwide"],loanType:"All",loanSort:"days-desc",loanBucket:"total",updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-      {id:"loan2",title:"Loans With Balance Due (every loan current)",kind:"loans",size:"wide",tiers:["kpi","wide","xwide"],dataset:"current",loanType:"All",loanSort:"days-desc",loanBucket:"total",updated:"just now"},
-      {id:"loan3",title:"Loans With Balance Due (single aging band)",kind:"loans",size:"wide",tiers:["kpi","wide","xwide"],dataset:"single",loanType:"All",loanSort:"days-desc",loanBucket:"total",updated:"just now"},
-      {id:"loan4",title:"Loans With Balance Due (nothing outstanding)",kind:"loans",size:"wide",tiers:["kpi","wide","xwide"],state:"empty",loanType:"All",loanBucket:"total",updated:"just now"},
-      {id:"loan5",title:"Loans With Balance Due (Explore, aging and risk)",kind:"loans",size:"xwide",tiers:["kpi","wide","xwide"],loanType:"All",loanSort:"days-desc",loanBucket:"total",updated:"just now"},
-  {id:"loan6",title:"Loans With Balance Due (Individual filter, none outstanding)",kind:"loans",size:"wide",tiers:["kpi","wide","xwide"],dataset:"notype",loanType:"Individual",loanSort:"days-desc",loanBucket:"total",updated:"just now"}
-      ,{id:"lonF", title:"Loans With Balance Due (OC)",               kind:"loans-mb",size:"wide", tiers:["kpi","wide","xwide"],lonType:"All",lonSort:"amt-desc",lonBucket:"total",lonView:"table",updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-      {id:"lonF_k",title:"Loans With Balance Due (OC, Glance)",       kind:"loans-mb",size:"kpi",  tiers:["kpi","wide","xwide"],lonType:"All",lonSort:"amt-desc",lonBucket:"total",lonView:"table",updated:"just now"},
-      {id:"lonF_x",title:"Loans With Balance Due (OC, Detail)",       kind:"loans-mb",size:"xwide",tiers:["kpi","wide","xwide"],lonType:"All",lonSort:"amt-desc",lonBucket:"total",lonView:"table",updated:"just now"},
-      {id:"lonF2", title:"Loans With Balance Due (OC, all current)",  kind:"loans-mb",size:"wide", tiers:["kpi","wide","xwide"],dataset:"current",lonType:"All",lonSort:"amt-desc",lonBucket:"total",lonView:"table",updated:"just now"},
-      {id:"lonF3", title:"Loans With Balance Due (OC, no loans)",     kind:"loans-mb",size:"wide", tiers:["kpi","wide","xwide"],state:"empty",lonType:"All",lonSort:"amt-desc",lonBucket:"total",lonView:"table",updated:"just now"}
+      /* W10 Loans With Balance Due */
+      {id:"lonF", title:"Loans With Balance Due",               kind:"loans",size:"wide", tiers:["kpi","wide","xwide"],lonType:"All",lonSort:"amt-desc",lonBucket:"total",lonView:"table",updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
+      {id:"lonF_k",title:"Loans With Balance Due",       kind:"loans",size:"kpi",  tiers:["kpi","wide","xwide"],lonType:"All",lonSort:"amt-desc",lonBucket:"total",lonView:"table",updated:"just now"},
+      {id:"lonF_x",title:"Loans With Balance Due",       kind:"loans",size:"xwide",tiers:["kpi","wide","xwide"],lonType:"All",lonSort:"amt-desc",lonBucket:"total",lonView:"table",updated:"just now"}
+      /* W10 driver fixtures (state variants), not rendered as cards:
+      {id:"lonF2", title:"Loans With Balance Due",  kind:"loans",size:"wide", tiers:["kpi","wide","xwide"],dataset:"current",lonType:"All",lonSort:"amt-desc",lonBucket:"total",lonView:"table",updated:"just now"}
+      {id:"lonF3", title:"Loans With Balance Due",     kind:"loans",size:"wide", tiers:["kpi","wide","xwide"],state:"empty",lonType:"All",lonSort:"amt-desc",lonBucket:"total",lonView:"table",updated:"just now"}
+      */
       ,{id:"faF",  title:"Fixed Asset Values (OC)",                             kind:"fixedassets-mb",size:"wide", tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFPage:0,updated:"just now"}
       ,{id:"faF_k",title:"Fixed Asset Values (OC, Glance)",                     kind:"fixedassets-mb",size:"kpi",  tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFPage:0,updated:"just now"}
       ,{id:"faF_x",title:"Fixed Asset Values (OC, Detail view)",                kind:"fixedassets-mb",size:"xwide",tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFPage:0,updated:"just now"}
@@ -8629,7 +8550,7 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
     fund:{h:"Spend by fund",b:"How spending breaks down across your restricted and unrestricted funds."},
     signups:{h:"New sign-ups",b:"People who recently joined a group or ministry. The number is the total for the period you choose; the list shows the most recent sign-ups regardless of period."}
   };
-  function aboutOf(w){var wa=WIDGETS.about(w);if(wa)return wa;if(w.kind==="bank")return {h:w.title,b:"The current balance of each active bank account, based on unreconciled activity since the last reconciliation. Select one account to see what has moved (deposits, voids, checks, withdrawals, EFT) since then."};if(w.kind==="purchasing")return {h:w.title,b:PUR_ABOUT_BODY};if(w.kind==="gifts")return {h:w.title,b:GFT_ABOUT_BODY};if(w.kind==="loans")return {h:w.title,b:"Every loan that still has a balance owing, grouped by how overdue it is, so you can see the total still out and which borrowers to follow up with."};if(w.kind==="loans-mb")return {h:w.title,b:LONF_ABOUT};if(w.kind==="fixedassets-mb")return {h:w.title,b:FAF_ABOUT};if(w.kind==="purchasing-mb")return {h:w.title,b:PURF_ABOUT};if(w.kind==="bank-mb")return {h:w.title,b:BKF_ABOUT};if(w.kind==="payables-mb")return {h:w.title,b:APF_ABOUT};if(w.kind==="gifts-mb")return {h:w.title,b:GPF_ABOUT};return ABOUT[w.id]||{h:w.title,b:"A short, plain-language description of what this widget shows and where its data comes from."};}
+  function aboutOf(w){var wa=WIDGETS.about(w);if(wa)return wa;if(w.kind==="bank")return {h:w.title,b:"The current balance of each active bank account, based on unreconciled activity since the last reconciliation. Select one account to see what has moved (deposits, voids, checks, withdrawals, EFT) since then."};if(w.kind==="purchasing")return {h:w.title,b:PUR_ABOUT_BODY};if(w.kind==="gifts")return {h:w.title,b:GFT_ABOUT_BODY};if(w.kind==="fixedassets-mb")return {h:w.title,b:FAF_ABOUT};if(w.kind==="purchasing-mb")return {h:w.title,b:PURF_ABOUT};if(w.kind==="bank-mb")return {h:w.title,b:BKF_ABOUT};if(w.kind==="payables-mb")return {h:w.title,b:APF_ABOUT};if(w.kind==="gifts-mb")return {h:w.title,b:GPF_ABOUT};return ABOUT[w.id]||{h:w.title,b:"A short, plain-language description of what this widget shows and where its data comes from."};}
   var EMPTY_COPY={deposits:{title:"No deposit accounts",sub:"There are no deposit accounts to show here yet.",cta:"Add account",action:"add-acct"},payroll:{title:"No payroll runs in this range",sub:"There's no payroll history for the selected period yet."},budget:{title:"No budget set up",sub:"Once a budget is entered for this fiscal year, actuals will be compared against it here.",cta:"Set up budget",action:"add-budget"}};
   var ERROR_COPY={deposits:{title:"Couldn’t load balances",sub:"Something went wrong fetching account data."},payroll:{title:"Couldn’t load payroll data",sub:"Something went wrong fetching payroll history."},budget:{title:"Couldn’t load budget data",sub:"Something went wrong fetching budget and actual figures."}};
 /* --- Bank Balances additive copy --- */
@@ -9791,8 +9712,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(w.kind==="payables")return apContent(w);
     if(w.kind==="fixedassets")return faContent(w);
     if(w.kind==="gifts")return gftContent(w);
-    if(w.kind==="loans")return loanContent(w);
-    if(w.kind==="loans-mb")return lonFContent(w); // Loans With Balance Due (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its "no loans" variant renders lonFEmpty and not the Deposits copy
     if(w.kind==="fixedassets-mb")return faFContent(w); // Fixed Asset Values (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its "no fixed assets" variant renders faFNoAssets and not the Deposits copy
     if(w.kind==="purchasing-mb")return purFContent(w); // Purchasing Management (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its "nothing to approve" variant renders purFEmpty and not the Deposits copy
     if(w.kind==="bank-mb")return bkFContent(w); // Bank Balances (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its "no accounts" variant renders bkFEmptyState and not the Deposits copy
@@ -9839,7 +9758,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(!pop)return "";
     var wp=WIDGETS.pop();if(wp!==null)return wp;
     if(pop.type==="gft-date"||pop.type==="gft-purpose")return gftPopContent();
-    if(pop.type==="loan-type")return loanPopContent();
     if(pop.type==="wfind"){var dwf=null;for(var _di=0;_di<dashboards.length;_di++){if(dashboards[_di].id===currentId){dwf=dashboards[_di];break;}}if(!dwf)dwf=dashboards[0];var qwf=widgetFindQuery.trim().toLowerCase(),SZ={kpi:"Glance",wide:"Detail",large:"Large",xwide:"Explore"};
       var listwf=dwf.widgets.filter(function(w){return !qwf||(w.title||"").toLowerCase().indexOf(qwf)>-1;});
       var rowswf=listwf.length
@@ -9892,7 +9810,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(pop.type==="fa-groupby"||pop.type==="fa-group"||pop.type==="fa-measure")return faPopContent();
     return "";
   }
-  function triggerSelector(){if(!pop)return null;var wt=WIDGETS.trigger();if(wt)return wt;if(pop.type==="wmenu")return '[data-action="wmenu"][data-id="'+pop.id+'"]';if(pop.type==="size")return '[data-action="wsize"][data-id="'+pop.id+'"]';if(pop.type==="switcher")return '[data-action="switcher"]';if(pop.type==="save")return '[data-action="savemenu"]';if(pop.type==="depfilter")return '[data-action="depfilter"][data-id="'+pop.id+'"]';if(pop.type==="advfilter")return '[data-action="advfilter"][data-id="'+pop.id+'"]';if(pop.type==="cmenu"||pop.type==="companydd")return '[data-action="cmenu"][data-id="'+pop.id+'"]';if(pop.type==="rangemenu")return '[data-action="rangemenu"][data-id="'+pop.id+'"]';if(pop.type==="winfo")return '[data-action="winfo"][data-id="'+pop.id+'"]';if(pop.type==="fa-groupby")return '[data-action="fa-groupby"][data-id="'+pop.id+'"]';if(pop.type==="fa-group")return '[data-action="fa-group"][data-id="'+pop.id+'"]';if(pop.type==="fa-measure")return '[data-action="fa-measure"][data-id="'+pop.id+'"]';if(pop.type==="ap-due")return '[data-action="ap-due"][data-id="'+pop.id+'"]';if(pop.type==="pur-status")return '[data-action="pur-status"][data-id="'+pop.id+'"]';if(pop.type==="pur-path")return '[data-action="pur-path"][data-id="'+pop.id+'"]';if(pop.type==="bank-acct")return '[data-action="bank-acct"][data-id="'+pop.id+'"]';if(pop.type==="expmenu")return '[data-action="expmenu"][data-id="'+pop.id+'"]';if(pop.type==="gft-date")return '[data-action="gft-date"][data-id="'+pop.id+'"]';if(pop.type==="gft-purpose")return '[data-action="gft-purpose"][data-id="'+pop.id+'"]';if(pop.type==="loan-type")return '[data-action="loan-type"][data-id="'+pop.id+'"]';if(pop.type==="wfind")return '[data-action="wfind"]';}
+  function triggerSelector(){if(!pop)return null;var wt=WIDGETS.trigger();if(wt)return wt;if(pop.type==="wmenu")return '[data-action="wmenu"][data-id="'+pop.id+'"]';if(pop.type==="size")return '[data-action="wsize"][data-id="'+pop.id+'"]';if(pop.type==="switcher")return '[data-action="switcher"]';if(pop.type==="save")return '[data-action="savemenu"]';if(pop.type==="depfilter")return '[data-action="depfilter"][data-id="'+pop.id+'"]';if(pop.type==="advfilter")return '[data-action="advfilter"][data-id="'+pop.id+'"]';if(pop.type==="cmenu"||pop.type==="companydd")return '[data-action="cmenu"][data-id="'+pop.id+'"]';if(pop.type==="rangemenu")return '[data-action="rangemenu"][data-id="'+pop.id+'"]';if(pop.type==="winfo")return '[data-action="winfo"][data-id="'+pop.id+'"]';if(pop.type==="fa-groupby")return '[data-action="fa-groupby"][data-id="'+pop.id+'"]';if(pop.type==="fa-group")return '[data-action="fa-group"][data-id="'+pop.id+'"]';if(pop.type==="fa-measure")return '[data-action="fa-measure"][data-id="'+pop.id+'"]';if(pop.type==="ap-due")return '[data-action="ap-due"][data-id="'+pop.id+'"]';if(pop.type==="pur-status")return '[data-action="pur-status"][data-id="'+pop.id+'"]';if(pop.type==="pur-path")return '[data-action="pur-path"][data-id="'+pop.id+'"]';if(pop.type==="bank-acct")return '[data-action="bank-acct"][data-id="'+pop.id+'"]';if(pop.type==="expmenu")return '[data-action="expmenu"][data-id="'+pop.id+'"]';if(pop.type==="gft-date")return '[data-action="gft-date"][data-id="'+pop.id+'"]';if(pop.type==="gft-purpose")return '[data-action="gft-purpose"][data-id="'+pop.id+'"]';if(pop.type==="wfind")return '[data-action="wfind"]';}
   function renderOverlay(){var ov=document.getElementById("overlay");if(!pop){ov.innerHTML="";return;}var sel=triggerSelector(),trig=sel&&document.querySelector(sel);if(!trig){ov.innerHTML="";return;}
     ov.innerHTML='<div class="pop'+(pop.type==="size"?" pop-size":"")+(pop.type==="depfilter"?" pop-filter":"")+(pop.type==="prO-period"?" pop-period":"")+'" data-action="stop" style="visibility:hidden;left:0;top:0;">'+popContent()+'</div>';
     var el=ov.firstChild;
@@ -9927,7 +9845,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(modal.type==="pur-drill"){mr.innerHTML=purDrillModalHTML();return;}
     if(modal.type==="bankdrill"){mr.innerHTML=bankDrillModalHTML();return;}
     if(modal.type==="gftdetail"){mr.innerHTML=gftDetailModalHTML();return;}
-    if(modal.type==="loandetail"){mr.innerHTML=loanDetailModalHTML();return;}
     if(modal.type==="fafTable"){mr.innerHTML=faFTableModalHTML();return;} // Fixed Asset Values (MB updated): the full seven-column table
     var body=(modal.scoped?'<div class="wcontent acct-mw">'+((modal.mw&&modal.mw.kind==="payroll")?prOContent(modal.mw):depContent(modal.mw))+'</div>':modal.b);
     if(modalMounted){var bEl=mr.querySelector(".modal-b");if(bEl){bEl.innerHTML=body;return;}}
@@ -9947,7 +9864,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(faHandleClick(a,id,t))return;
     if(a&&a.indexOf("ap-")===0&&apHandleClick(a,id,t))return;
     if(a&&a.indexOf("gft-")===0&&gftHandleClick(a,id,t))return;
-    if(a&&a.indexOf("loan-")===0&&loanHandleClick(a,id,t))return;
     if(purHandleClick(a,t,id))return;
     if(a==="bank-acct"){bankQuery="";pop=(pop&&pop.type==="bank-acct"&&pop.id===id)?null:{type:"bank-acct",id:id};render();return;}
     if(a==="bank-set-acct"){var wba=find(id);if(wba){var na=t.getAttribute("data-acct");var nv=(na==="all"||!na)?null:na;if(wba.bkacct!==nv){wba.bkacct=nv;bankLoad(wba);}}pop=null;render();return;}
@@ -10084,506 +10000,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
   document.addEventListener("mousemove",function(e){var col=e.target.closest&&e.target.closest(".bank-col[data-bankpop]");if(!col){if(bankPopEl)bankHideBpop();return;}bankShowBpop(col,e.clientX,e.clientY);});
 
 
-/* =====================================================================
-   Loans With Balance Due (MB updated) , prefix lonF , kind "loans-mb"
-   Added 2026-09-02, built against design-sandbox commit a9bc157 on branch
-   oisin-v2-port. This is our finalized W10 (Step 3 Final v3.1,
-   FC_VERSION[10] = 3.1) ported ADDITIVELY alongside Jo's `loan` block above.
-   Nothing of hers is edited: everything here is lonF- / LONF_-prefixed, keyed
-   to data-lon, styled with .lon-* classes and dispatched by kind "loans-mb",
-   so it shares no name with her loan / .loan-* / data-loan / data-loanpop set.
-
-   Built FROM her block, reusing her components and plumbing: .dep-hd two-row
-   header, .filter-chip + .mi/.cap menu, .vtoggle/.vt segment, .wt-row/.wt-head
-   /.wt-sort table, .scroll, .dep-total, .dep-full/.dep-col, .donut/.legend/.leg
-   /.pie-wrap, .state, .sk/.bgt-spin, the .modal and .modal-backdrop family, the
-   .bgt-pop hover card, and her ICON / find / render / setStatus / timers and
-   data-tip helpers.
-   Amethyst ramp only, no red on any chart element.
-
-   Owner-directed deltas vs her version (Step 4 - Widget Final Design/W10 -
-   Loans With Balance Due.md, v3.0 and v3.1 banners; data logic per Step 5 -
-   API documents/Loans With Balance Due/v2):
-     1. A 61-90 days range closes the ladder gap that made 61-89 day loans
-        render as "90+ days" (item C1). Five ranges, in severity order.
-     2. The "Aging and risk" side panel is replaced by a "Balance by time
-        range" donut whose legend rows ARE the table filter. lonFAgingPanel and
-        lonFDaysCell stay defined but UNCALLED, so that rollback is one line.
-     3. The table is ONE FLAT LIST: no range group headers, no per-range
-        subtotals, no Days past due column. Last payment stays, with its
-        dormancy flag.
-     4. Default sort moved from days-desc to amt-desc, since Days past due is
-        no longer a column a user could see or reverse.
-     5. Explore carries a Table / Pie segment in the header's toggle slot,
-        Table default. Detail shows both at once and so has no toggle.
-     6. The full ladder always renders in order; a range holding no balance is
-        a muted, INERT row reading $0, not a filter control. Arcs are drawn
-        only for ranges that hold a balance.
-     7. The loan type filter drives EVERYTHING (donut, chips, header total,
-        past-due pill, Glance bar), fixing the filter-affects-table-only
-        antipattern the dossier flags at 11.3.
-   The drill modal is UNTOUCHED from hers and still reports days past due.
-
-   Integration style (b), a self-contained subsystem: its own delegated click /
-   keydown / mousemove listeners behind LONF_WIRED, its own #lonPop popover and
-   #lonModalRoot overlay, following the depF (W07) precedent already in this
-   file. Jo's click listener, input listener, popContent(), triggerSelector()
-   and renderModal() are not touched at all. The only edits in a Jo-owned
-   region are one contentHTML() dispatch line and one aboutOf() branch.
-   No em dashes in any user-facing string. */
-
-/* (1) DATA ------------------------------------------------------------- */
-var LONF_TODAY="2026-07-24";
-var LONF_ABOUT="Every loan that still has a balance owing, the total still out, and how much of it is past due, split across five time ranges so you can see which borrowers to follow up with first. The loan type filter narrows every figure here, not just the table.";
-/* Five ranges in severity order. lonFBucketOf returns the first range whose hi
-   the loan's day count does not exceed, so the ladder must be exhaustive: the
-   61-90 range is what stops 61 to 89 day loans falling through to 90+. */
-var LONF_BUCKETS=[
-  {key:"cur",label:"Current",   sub:"not yet due",            hi:0,       sev:0},
-  {key:"b1", label:"1-30 days", sub:"up to 1 month past due", hi:30,      sev:1},
-  {key:"b2", label:"31-60 days",sub:"1 to 2 months past due", hi:60,      sev:2},
-  {key:"b25",label:"61-90 days",sub:"2 to 3 months past due", hi:90,      sev:3},
-  {key:"b3", label:"90+ days",  sub:"most overdue",           hi:Infinity,sev:4}
-];
-var LONF_SEV_COLORS=["--am-200","--am-300","--am-400","--am-500","--am-700"];
-var LONF_TYPES=["All","Church - Special","Church Expansion","Individual"];
-/* Loans with at least one invoice and a remaining balance. amount = principal
-   plus interest invoiced, minus posted payments. days = days past due on the
-   oldest unpaid invoice, negative when nothing is yet due. */
-var LONF_LOANS=[
-  {acct:"LN-1042",name:"Grace Fellowship",type:"Church Expansion",orig:150000,amount:28450.00,days:-8,lastPay:"2026-07-08",nextDue:"2026-08-01",
-    payments:[{date:"2026-07-08",method:"ACH",amount:2100.00},{date:"2026-06-08",method:"ACH",amount:2100.00}]},
-  {acct:"LN-1017",name:"New Life Center",type:"Church Expansion",orig:120000,amount:24800.00,days:-12,lastPay:"2026-07-10",nextDue:"2026-08-05",
-    payments:[{date:"2026-07-10",method:"Check #2093",amount:1750.00}]},
-  {acct:"LN-2231",name:"Maria Alvarez",type:"Individual",orig:5000,amount:640.00,days:-6,lastPay:"2026-07-02",nextDue:"2026-07-30",
-    payments:[{date:"2026-07-02",method:"ACH",amount:160.00},{date:"2026-06-02",method:"ACH",amount:160.00}]},
-  {acct:"LN-1188",name:"First Baptist Church",type:"Church - Special",orig:12000,amount:186.86,days:6,lastPay:"2026-06-30",nextDue:"2026-07-18",
-    payments:[{date:"2026-06-30",method:"Check #4021",amount:930.00}]},
-  {acct:"LN-1205",name:"Trinity Chapel",type:"Church - Special",orig:30000,amount:8200.00,days:22,lastPay:"2026-05-28",nextDue:"2026-07-02",
-    payments:[{date:"2026-05-28",method:"ACH",amount:1200.00}]},
-  {acct:"LN-2044",name:"Stephen Ho",type:"Individual",orig:8000,amount:1020.97,days:44,lastPay:"2026-05-02",nextDue:"2026-06-10",
-    payments:[{date:"2026-05-02",method:"ACH",amount:255.00}]},
-  {acct:"LN-1150",name:"St. Mark Parish",type:"Church - Special",orig:40000,amount:9800.00,days:58,lastPay:"2026-04-15",nextDue:"2026-05-27",
-    payments:[]},
-  {acct:"LN-1301",name:"Third Presbyterian Church",type:"Church Expansion",orig:300000,amount:24690.13,days:95,lastPay:"2026-03-18",nextDue:"2026-04-20",
-    payments:[{date:"2026-03-18",method:"Wire",amount:3400.00}]},
-  {acct:"LN-1099",name:"Cornerstone Academy",type:"Church - Special",orig:60000,amount:14250.00,days:145,lastPay:"2026-01-30",nextDue:"2026-03-01",
-    payments:[]}
-];
-/* Edge instance: every loan current. The pill reads All current and every
-   past-due range is a muted, inert $0 row. */
-var LONF_LOANS_CURRENT=[
-  {acct:"LN-3001",name:"Hope Chapel",type:"Church Expansion",orig:90000,amount:12400.00,days:-9,lastPay:"2026-07-12",nextDue:"2026-08-03",payments:[{date:"2026-07-12",method:"ACH",amount:1300.00}]},
-  {acct:"LN-3002",name:"Faith Community Church",type:"Church - Special",orig:25000,amount:3800.00,days:-4,lastPay:"2026-07-15",nextDue:"2026-07-28",payments:[{date:"2026-07-15",method:"Check #118",amount:600.00}]},
-  {acct:"LN-3003",name:"David Nguyen",type:"Individual",orig:6000,amount:520.00,days:-15,lastPay:"2026-07-05",nextDue:"2026-08-06",payments:[{date:"2026-07-05",method:"ACH",amount:130.00}]}
-];
-/* Edge instance: a single populated range (90+). */
-var LONF_LOANS_SINGLE=[
-  {acct:"LN-4001",name:"Emmanuel Church",type:"Church Expansion",orig:80000,amount:9300.00,days:112,lastPay:"2026-02-14",nextDue:"2026-03-20",payments:[]},
-  {acct:"LN-4002",name:"Shepherd Fellowship",type:"Church - Special",orig:20000,amount:4100.00,days:98,lastPay:"2026-03-01",nextDue:"2026-04-10",payments:[{date:"2026-03-01",method:"ACH",amount:500.00}]}
-];
-
-/* (2) RENDER ----------------------------------------------------------- */
-function lonFEsc(s){return String(s).replace(/"/g,"&quot;");}
-function lonFMoney(n){return "$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
-function lonFFmtDate(iso){var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];var p=String(iso).split("-");if(p.length!==3)return iso;return M[(+p[1])-1]+" "+(+p[2])+", "+p[0];}
-function lonFParse(iso){var p=String(iso).split("-");return new Date(+p[0],(+p[1])-1,+p[2]);}
-function lonFDaysSincePay(iso){if(!iso)return null;var t=lonFParse(LONF_TODAY);return Math.round((t-lonFParse(iso))/86400000);}
-function lonFIsDormant(x){var d=lonFDaysSincePay(x.lastPay);return d!=null&&d>90;}
-function lonFDataset(w){if(w.dataset==="current")return LONF_LOANS_CURRENT;if(w.dataset==="single")return LONF_LOANS_SINGLE;if(w.dataset==="none")return [];return LONF_LOANS;}
-function lonFFiltered(w){var ty=w.lonType||"All";return lonFDataset(w).filter(function(x){return ty==="All"||x.type===ty;});}
-function lonFBucketOf(days){for(var i=0;i<LONF_BUCKETS.length;i++){if(days<=LONF_BUCKETS[i].hi)return LONF_BUCKETS[i].key;}return "b3";}
-function lonFSevOf(days){for(var i=0;i<LONF_BUCKETS.length;i++){if(days<=LONF_BUCKETS[i].hi)return LONF_BUCKETS[i].sev;}return 4;}
-function lonFBucketLabel(key){for(var i=0;i<LONF_BUCKETS.length;i++)if(LONF_BUCKETS[i].key===key)return LONF_BUCKETS[i].label;return key;}
-function lonFColorOf(key){for(var i=0;i<LONF_BUCKETS.length;i++)if(LONF_BUCKETS[i].key===key)return LONF_SEV_COLORS[LONF_BUCKETS[i].sev];return LONF_SEV_COLORS[4];}
-function lonFBuckets(w){
-  var ls=lonFFiltered(w),m={};LONF_BUCKETS.forEach(function(b){m[b.key]={count:0,total:0};});
-  ls.forEach(function(x){var k=lonFBucketOf(x.days);m[k].count++;m[k].total+=x.amount;});
-  return LONF_BUCKETS.map(function(b){return {key:b.key,label:b.label,sub:b.sub,sev:b.sev,color:LONF_SEV_COLORS[b.sev],count:m[b.key].count,total:m[b.key].total};});
-}
-function lonFTotal(w){return lonFFiltered(w).reduce(function(s,x){return s+x.amount;},0);}
-function lonFCount(w){return lonFFiltered(w).length;}
-function lonFPastDue(w){return lonFFiltered(w).filter(function(x){return x.days>0;}).reduce(function(s,x){return s+x.amount;},0);}
-function lonFPastDueCount(w){return lonFFiltered(w).filter(function(x){return x.days>0;}).length;}
-function lonF90(w){return lonFFiltered(w).filter(function(x){return lonFBucketOf(x.days)==="b3";}).reduce(function(s,x){return s+x.amount;},0);}
-function lonFPct(w){var t=lonFTotal(w);return t>0?Math.round(lonFPastDue(w)/t*100):0;}
-function lonFWorstBucket(w){var nz=lonFBuckets(w).filter(function(r){return r.total>0;});return nz.length?nz[nz.length-1]:null;}
-function lonFFind(w,acct){var ls=lonFDataset(w);for(var i=0;i<ls.length;i++)if(ls[i].acct===acct)return ls[i];return null;}
-function lonFTopOverdue(w){return lonFFiltered(w).filter(function(x){return x.days>0;}).slice().sort(function(a,b){return (b.days-a.days)||(b.amount-a.amount);});}
-/* Time range selection (whole book = "total", or one range key). Client-side
-   narrowing of an already-loaded set, never a data fetch. */
-function lonFSel(w){var v=w&&w.lonBucket;if(v==null||v==="total")return "total";for(var i=0;i<LONF_BUCKETS.length;i++)if(LONF_BUCKETS[i].key===v)return v;return "total";}
-function lonFRows(w){
-  var sel=lonFSel(w),list=lonFFiltered(w).slice();
-  if(sel!=="total")list=list.filter(function(x){return lonFBucketOf(x.days)===sel;});
-  var sk=(w.lonSort||"amt-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
-  list.sort(function(a,b){
-    if(key==="acct")return dir*a.acct.localeCompare(b.acct);
-    if(key==="name")return dir*a.name.localeCompare(b.name);
-    if(key==="last")return dir*(lonFParse(a.lastPay)-lonFParse(b.lastPay));
-    return dir*(a.amount-b.amount);
-  });
-  return list;
-}
-/* Filter chip: the shell's secondary-fill chip with a leading filter glyph and
-   a trailing chevron. Drives the whole widget, not just the table. */
-function lonFTypeChip(w){
-  var ty=w.lonType||"All",spin=w.lonLoading?'<span class="bgt-spin" aria-hidden="true"></span>':"";
-  return '<button class="filter-chip lon-chip" data-lon="lon-type" data-id="'+w.id+'" aria-haspopup="listbox" aria-expanded="'+(LONF_POP&&LONF_POP.id===w.id?"true":"false")+'" aria-label="Loan type, tap to change"><span class="fc-label">'+spin+(ty==="All"?"All loan types":ty)+'</span>'+ICON("expand_more")+'</button>';
-}
-/* KPI badge: past-due money on an amethyst-neutral pill (no red), or a
-   positive "All current". */
-function lonFBadge(w){
-  var over=lonFPastDue(w);
-  if(over>0){var n=lonFPastDueCount(w),pct=lonFPct(w);return '<span class="bank-pill" data-tip="'+lonFEsc(lonFMoney(over)+" across "+n+" loan"+(n===1?"":"s")+" is past due, that is "+pct+"% of the outstanding balance.")+'" data-tip-plain>'+ICON("schedule")+lonFMoney(over)+' past due ('+pct+'%)</span>';}
-  return '<span class="delta-pill" data-tip="Every loan with a balance is current, nothing is past due." data-tip-plain>'+ICON("check")+'All current</span>';
-}
-/* Compact stacked severity strip + sr-only ladder sentence (values as text). */
-function lonFStackBar(w){
-  var tot=lonFTotal(w);if(tot<=0)return "";
-  var segs=lonFBuckets(w).filter(function(r){return r.total>0;});
-  var inner=segs.map(function(r){var pct=r.total/tot*100;return '<span class="lon-seg" style="flex-basis:'+pct.toFixed(2)+'%;background:var('+r.color+')" data-tip="'+lonFEsc(r.label+": "+lonFMoney(r.total))+'" data-tip-plain></span>';}).join("");
-  return '<div class="lon-stack">'+inner+'</div>';
-}
-function lonFAgeSr(w){var b=lonFBuckets(w);return 'Outstanding by age: '+b.map(function(r){return r.label+" "+lonFMoney(r.total);}).join(", ")+'.';}
-/* GLANCE (kpi): total owed + past-due badge on the LEFT, plain context line,
-   then the compact range read. Values in text plus sr-only. */
-function lonFGlance(w){
-  var tot=lonFTotal(w),n=lonFCount(w),worst=lonFWorstBucket(w),over=lonFPastDue(w);
-  var read="";
-  if(tot>0){
-    var call=(over>0&&worst&&worst.key!=="cur")
-      ?'<span class="lon-glance-cap"><span class="lon-sevdot" style="background:var('+worst.color+')"></span>'+lonFMoney(worst.total)+' in '+worst.label+', the most overdue with a balance</span>'
-      :'<span class="lon-glance-cap lon-cap-ok">'+ICON("check")+'Every loan is current</span>';
-    read='<div class="lon-glance-read">'+lonFStackBar(w)+call+'</div>';
-  }
-  return '<div class="kpi-row"><div class="kpi-num">'+
-    '<div class="dep-hd-kpigrp"><span class="metric-value">'+lonFMoney(tot)+'</span>'+lonFBadge(w)+'</div>'+
-    '<div class="gl-sub"><span class="bgt-caption">owed across '+n+' loan'+(n===1?"":"s")+' with a balance</span></div>'+
-    read+
-    '<span class="sr-only">'+lonFAgeSr(w)+'</span>'+
-  '</div></div>';
-}
-function lonFEmpty(w){
-  if(w.size==="kpi")return '<div class="kpi-row"><div class="kpi-num"><div class="dep-hd-kpigrp"><span class="metric-value lon-allset">'+ICON("check_circle")+'All settled</span></div><div class="gl-sub"><span class="bgt-caption">no loans have a balance right now</span></div></div></div>';
-  return '<div class="state lon-empty" data-kind="empty">'+ICON("task_alt")+'<div class="state-title">Nothing outstanding</div><div class="state-sub">No loans currently carry a balance. There is nothing to collect right now.</div></div>';
-}
-/* Header (Explore / Detail): two-row .dep-hd. Row 1: the loan type chip on the
-   LEFT, the Table / Pie segment in the toggle slot on the RIGHT. Row 2: total
-   owed + past-due badge on the LEFT with one quiet context line under it. */
-function lonFHeaderBlock(w,mode){
-  var loading=(mode==="loading"),numInner,ctx;
-  if(loading){
-    numInner='<div class="dep-hd-kpigrp"><span class="sk" style="width:130px;height:22px;border-radius:6px"></span><span class="sk" style="width:130px;height:20px;border-radius:999px"></span></div>';
-    ctx="Updating loans with a balance";
-  }else{
-    numInner='<div class="dep-hd-kpigrp"><span class="metric-value">'+lonFMoney(lonFTotal(w))+'</span>'+lonFBadge(w)+'</div>';
-    var over=lonFPastDue(w),nine=lonF90(w),pct=lonFPct(w);
-    ctx=(over>0?(lonFMoney(over)+' ('+pct+'%) past due, of which '+lonFMoney(nine)+' is 90+ days'):'Nothing past due');
-  }
-  var tog=(w.size==="wide"&&!loading)?lonFViewToggle(w):"";
-  return '<div class="dep-hd">'+
-    '<div class="dep-hd-top"><div class="lon-ctlrow">'+lonFTypeChip(w)+'</div><div class="dep-hd-toggle">'+tog+'</div></div>'+
-    '<div class="dep-hd-num"><div class="lon-numwrap">'+numInner+'<div class="lon-ctx">'+ctx+'</div></div></div>'+
-  '</div>';
-}
-function lonFDaysCell(x){
-  if(x.days<=0)return '<span class="lon-c-days"><span class="lon-notdue">Not due</span></span>';
-  return '<span class="lon-c-days"><span class="lon-days-v over">'+x.days+' day'+(x.days===1?"":"s")+'</span></span>';
-}
-function lonFLastCell(x){
-  var dorm=lonFIsDormant(x);
-  var flag=dorm?('<span class="lon-dormant" data-tip="No payment received in over 90 days on this loan." data-tip-plain>'+ICON("hourglass_empty")+'</span>'):"";
-  return '<span class="lon-c-last">'+lonFFmtDate(x.lastPay)+flag+'</span>';
-}
-function lonFRowHTML(w,x){
-  var lbl=x.name+", account "+x.acct+", "+(x.days>0?(x.days+" days past due"):"current")+", "+lonFMoney(x.amount)+" due, tap to open the loan";
-  return '<div class="wt-row lon-row" data-lon="lon-open" data-id="'+w.id+'" data-acct="'+lonFEsc(x.acct)+'" role="button" tabindex="0" aria-label="'+lonFEsc(lbl)+'">'+
-    '<span class="lon-c-acct">'+x.acct+'</span>'+
-    '<span class="lr-main lr-stack lon-c-name"><span class="lon-nm-wrap"><span class="lr-link lon-nm">'+x.name+'</span><span class="lon-type-sub">'+x.type+'</span></span></span>'+
-    lonFLastCell(x)+
-    '<span class="wt-c2 lon-c-amt">'+lonFMoney(x.amount)+'</span>'+
-  '</div>';
-}
-function lonFTable(w){
-  var sel=lonFSel(w),rows=lonFRows(w);
-  var sk=(w.lonSort||"amt-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
-  function sb(k,label){var on=key===k,ic=on?(dir<0?"arrow_downward":"arrow_upward"):"unfold_more";return '<button class="wt-sort'+(on?" on":"")+'" data-lon="lon-sort" data-id="'+w.id+'" data-k="'+k+'">'+label+' '+ICON(ic)+'</button>';}
-  var head='<div class="wt-row wt-head lon-head"><span class="lon-c-acct">'+sb("acct","Account")+'</span><span class="lr-main lon-c-name">'+sb("name","Borrower")+'</span><span class="lon-c-last">'+sb("last","Last payment")+'</span><span class="wt-c2 lon-c-amt">'+sb("amt","Amount due")+'</span></div>';
-  var body=rows.map(function(x){return lonFRowHTML(w,x);}).join("");
-  var tot=rows.reduce(function(s,x){return s+x.amount;},0);
-  var footLbl=(sel==="total")?("All loans ("+rows.length+")"):(lonFBucketLabel(sel)+" ("+rows.length+" loan"+(rows.length===1?"":"s")+")");
-  var empty=rows.length?"":'<div class="lon-zeroline">'+ICON("info")+'No loans match this selection.</div>';
-  return '<div class="scroll">'+head+body+empty+'</div><div class="dep-total"><span>'+footLbl+'</span><span>'+lonFMoney(tot)+'</span></div>';
-}
-function lonFMiniBar(frac,color){var pct=Math.max(3,Math.round(frac*100));return '<span class="lon-mini-track" aria-hidden="true"><span class="lon-mini-fill" style="width:'+pct+'%;background:var('+color+')"></span></span>';}
-function lonFAgingPanel(w){
-  var sel=lonFSel(w),grand=lonFTotal(w),bs=lonFBuckets(w),n=lonFCount(w);
-  var out='<div class="lon-panel">';
-  bs.forEach(function(r){
-    var has=r.total>0,frac=grand>0?r.total/grand:0,isSel=(sel===r.key),share=grand>0?Math.round(r.total/grand*100):0;
-    var arpop=[r.label,r.total,r.count,share].join("|");
-    out+='<button class="lon-band-row'+(isSel?" sel":"")+(has?"":" lon-band-static")+'"'+(has?' data-lon="lon-set-bucket" data-bucket="'+r.key+'" data-id="'+w.id+'" data-lonpop="'+lonFEsc(arpop)+'" aria-pressed="'+isSel+'"':' disabled aria-disabled="true"')+'>'+
-      '<span class="lon-band-main">'+
-        '<span class="lon-band-lbl'+(r.sev>=1&&has?" over":"")+'"><span class="lon-band-dot" style="background:var('+r.color+')"></span>'+r.label+'</span>'+
-        /* bar and its caption share one line, which is what lets seven rows
-           fit a card without scrolling */
-        '<span class="lon-band-barrow">'+lonFMiniBar(frac,r.color)+
-          '<span class="lon-band-meta">'+(has?(r.count+' loan'+(r.count===1?"":"s")+', '+share+'%'):'no balance')+'</span>'+
-        '</span>'+
-      '</span>'+
-      '<span class="lon-band-val'+(has?"":" lon-band-zero")+'">'+lonFMoney(r.total)+'</span></button>';
-  });
-  var allSel=(sel==="total");
-  out+='<button class="lon-band-row lon-band-total'+(allSel?" sel":"")+'" data-lon="lon-set-bucket" data-bucket="total" data-id="'+w.id+'" aria-pressed="'+allSel+'">'+
-    '<span class="lon-band-main"><span class="lon-band-lbl">'+ICON("account_balance")+'All aging bands</span>'+
-    '<span class="lon-band-meta">'+n+' loan'+(n===1?"":"s")+' with a balance</span></span>'+
-    '<span class="lon-band-val">'+lonFMoney(grand)+'</span></button>';
-  return out+'</div>';
-}
-
-function lonFRiskPanel(w){
-  var grand=lonFTotal(w),over=lonFPastDue(w),nine=lonF90(w),pct=lonFPct(w);
-  var pctN=grand>0?Math.round(nine/grand*100):0,out="";
-  out+='<div class="lon-panel-sep"></div><div class="lon-panel-h">Portfolio risk</div>';
-  out+='<div class="lon-risk-row"><span class="lon-risk-lbl">Past due</span><span class="lon-risk-v">'+lonFMoney(over)+' <span class="lon-risk-pct">('+pct+'%)</span></span></div>';
-  out+='<div class="lon-risk-row"><span class="lon-risk-lbl">90+ days</span><span class="lon-risk-v">'+lonFMoney(nine)+' <span class="lon-risk-pct">('+pctN+'%)</span></span></div>';
-  var top=lonFTopOverdue(w).slice(0,4);
-  if(top.length){
-    out+='<div class="lon-panel-sep"></div><div class="lon-panel-h">Most overdue</div>';
-    top.forEach(function(x){
-      out+='<button class="lon-worst-row" data-lon="lon-open" data-id="'+w.id+'" data-acct="'+lonFEsc(x.acct)+'" aria-label="'+lonFEsc("Open "+x.name+", "+x.days+" days past due")+'"><span class="lon-worst-main"><span class="lon-worst-nm">'+x.name+'</span><span class="lon-worst-meta">'+x.days+' days past due'+(lonFIsDormant(x)?', dormant':'')+'</span></span><span class="lon-worst-val">'+lonFMoney(x.amount)+'</span></button>';
-    });
-  }
-  return out;
-}
-
-function lonFBandPie(w){
-  var all=lonFBuckets(w);
-  var bands=all.filter(function(b){return b.total>0;});
-  var tot=bands.reduce(function(t,b){return t+b.total;},0);
-  var sel=lonFSel(w);
-  if(!bands.length||tot<=0){
-    return '<div class="lon-chart-empty">'+ICON("donut_small")+'<span>Nothing outstanding to chart for '+lonFEsc((w.lonType&&w.lonType!=="All")?w.lonType:"any loan type")+'.</span></div>';
-  }
-  var R=52,C=2*Math.PI*R,off=0,arcs="",legend="",DS=(w.size==="xwide")?200:168;
-  bands.forEach(function(b){
-    var frac=b.total/tot,len=frac*C;
-    var on=(sel===b.key);
-    var lbl=b.label+", "+lonFMoney(b.total)+" across "+b.count+" loan"+(b.count===1?"":"s")+", "+Math.round(frac*100)+" percent of the balance";
-    arcs+='<circle class="seg'+(on?' hi':'')+'" cx="70" cy="70" r="'+R+'" fill="none" stroke="var('+b.color+')" stroke-width="20" stroke-dasharray="'+Math.min(len+0.9,C).toFixed(2)+' '+Math.max(0,C-len-0.9).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 70 70)"><title>'+lonFEsc(lbl)+'</title></circle>';
-    off+=len;
-  });
-  all.forEach(function(b){
-    var pct=tot>0?Math.round(b.total/tot*100):0;
-    if(b.total<=0){
-      legend+='<div class="leg lon-leg is-zero" aria-label="'+lonFEsc(b.label+", no balance in this range")+'">'+
-        '<span class="dot" style="background:var('+b.color+')"></span>'+
-        '<span class="lg-main">'+b.label+'</span>'+
-        '<span class="lg-meta">'+lonFMoney(0)+'</span></div>';
-      return;
-    }
-    var on=(sel===b.key);
-    var lbl=b.label+", "+lonFMoney(b.total)+" across "+b.count+" loan"+(b.count===1?"":"s")+", "+pct+" percent of the balance";
-    legend+='<button class="leg lon-leg'+(on?' on':'')+'" data-lon="lon-set-bucket" data-bucket="'+b.key+'" data-id="'+w.id+'" aria-pressed="'+on+'" aria-label="'+lonFEsc(lbl+", "+(on?"tap to clear this filter":"tap to filter the table to this range"))+'">'+
-      '<span class="dot" style="background:var('+b.color+')"></span>'+
-      '<span class="lg-main">'+b.label+'</span>'+
-      '<span class="lg-meta">'+lonFMoney(b.total)+' &middot; '+pct+'%</span></button>';
-  });
-  var note=(sel!=="total")
-    ? '<div class="lon-pie-note">'+ICON("filter_alt")+'<span>Table filtered to '+lonFEsc(lonFBucketLabel(sel))+'. Tap that range again to show every loan.</span></div>'
-    : '';
-  /* selected arc emphasis uses the shell's own donut mechanism: .pie-wrap.dim
-     fades every .seg that is not .hi, and .seg.hi thickens the selected one. */
-  return '<div class="lon-pie"><div class="pie-wrap row'+(sel!=="total"?" dim":"")+'">'+
-    '<svg class="donut" viewBox="0 0 140 140" width="'+DS+'" height="'+DS+'" role="img" aria-label="'+lonFEsc("Balance due by time range, "+lonFMoney(tot)+" across "+bands.length+" range"+(bands.length===1?"":"s"))+'">'+arcs+
-    '<text x="70" y="67" text-anchor="middle" class="donut-c1">'+lonFMoney(tot)+'</text>'+
-    '<text x="70" y="86" text-anchor="middle" class="donut-c2">due</text></svg>'+
-    '<div class="legend-col"><div class="legend-head"><span class="legend-hd">Balance by time range</span></div>'+
-    '<div class="legend">'+legend+'</div></div></div>'+note+'</div>';
-}
-/* The same filter without the chart, for the tier that has no room for a donut
-   beside a table. Full ladder here too, ranges with no loans muted and inert. */
-function lonFBandChips(w){
-  var bands=lonFBuckets(w),sel=lonFSel(w);
-  var any=bands.some(function(b){return b.total>0;});
-  if(!any)return "";
-  var chips=bands.map(function(b){
-    if(b.total<=0){
-      return '<span class="lon-bchip is-zero" aria-label="'+lonFEsc(b.label+", no loans in this range")+'">'+
-        '<span class="lon-bchip-dot" style="background:var('+b.color+')"></span>'+b.label+
-        '<span class="lon-bchip-n">0</span></span>';
-    }
-    var on=(sel===b.key);
-    return '<button class="lon-bchip'+(on?' on':'')+'" data-lon="lon-set-bucket" data-bucket="'+b.key+'" data-id="'+w.id+'" aria-pressed="'+on+'" aria-label="'+lonFEsc(b.label+", "+lonFMoney(b.total)+", "+b.count+" loan"+(b.count===1?"":"s")+(on?", tap to clear":", tap to filter"))+'">'+
-      '<span class="lon-bchip-dot" style="background:var('+b.color+')"></span>'+b.label+
-      '<span class="lon-bchip-n">'+b.count+'</span></button>';
-  }).join("");
-  return '<div class="lon-bchips" role="group" aria-label="Filter the table by time range">'+chips+'</div>';
-}
-function lonFViewToggle(w){
-  var v=w.lonView||"table";
-  function seg(val,lbl,ic,tip){return '<button class="vt'+(v===val?" on":"")+'" data-lon="lon-view" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(v===val)+'" data-tip="'+lonFEsc(tip)+'" data-tip-plain>'+ICON(ic)+lbl+'</button>';}
-  return '<div class="vtoggle lon-vtoggle" role="group" aria-label="View">'+
-    seg("table","Table","table_rows","Every loan with a balance as a sortable list.")+
-    seg("pie","Pie","donut_small","Balance split across the time ranges, with the ranges as a filter.")+
-    seg("bands","Bands","stacked_bar_chart","Each aging band as a bar with its share of the balance, plus past due, 90+ and the most overdue loans.")+
-  '</div>';
-}
-function lonFSide(w){return w.lonSide==="bands"?"bands":"pie";}
-function lonFSideToggle(w){
-  var s=lonFSide(w);
-  function seg(val,lbl,ic,tip){return '<button class="vt'+(s===val?" on":"")+'" data-lon="lon-side" data-id="'+w.id+'" data-s="'+val+'" aria-pressed="'+(s===val)+'" data-tip="'+lonFEsc(tip)+'" data-tip-plain>'+ICON(ic)+lbl+'</button>';}
-  return '<div class="vtoggle lon-side-vt" role="group" aria-label="Right column">'+
-    seg("pie","Pie","donut_small","Balance split across the time ranges as a donut.")+
-    seg("bands","Bands","stacked_bar_chart","Each aging band as a bar with its share of the balance.")+
-  '</div>';
-}
-function lonFFull(w){
-  var bands=lonFSide(w)==="bands";
-  return '<div class="dep-full">'+
-    '<div class="dep-col"><div class="dep-col-h">Loans with a balance</div>'+lonFTable(w)+'</div>'+
-    '<div class="dep-col lon-col-side"><div class="dep-col-h lon-side-h"><span>'+(bands?'Aging bands':'Balance by time range')+'</span>'+lonFSideToggle(w)+'</div>'+
-    (bands?('<div class="lon-side-bands">'+lonFAgingPanel(w)+'</div>'):lonFBandPie(w))+'</div>'+
-  '</div>';
-}
-function lonFSkeleton(){var rows="";[82,58,70,48,64].forEach(function(wd){rows+='<div class="lon-sk-row"><span class="sk" style="width:70px;height:12px;border-radius:4px"></span><span class="sk" style="flex:1;height:12px;border-radius:4px"></span><span class="sk" style="width:'+wd+'px;height:12px;border-radius:4px"></span></div>';});return '<div class="lon-skel" aria-busy="true">'+rows+'<div class="bgt-skel-cap"><span class="bgt-spin"></span>Loading</div></div>';}
-/* Single entry point, dispatched by w.kind==="loans-mb". */
-function lonFContent(w){
-  if(w.state==="empty"||!lonFDataset(w).length)return lonFEmpty(w);
-  if(w.size==="kpi")return lonFGlance(w);
-  if(w.lonLoading)return lonFHeaderBlock(w,"loading")+lonFSkeleton();
-  var mh=lonFHeaderBlock(w);
-  if(w.size==="xwide")return mh+lonFFull(w);
-  /* Explore is six columns, which cannot hold a table and a legible donut side
-     by side, so the two are switched between rather than shown together. The
-     chip filter rides with the table view, since the donut carries its own
-     filter in its legend. */
-  var v=w.lonView||"table";
-  if(v==="pie")return mh+'<div class="lon-body">'+lonFBandPie(w)+'</div>';
-  if(v==="bands")return mh+'<div class="lon-body lon-body-bands">'+lonFAgingPanel(w)+'</div>';
-  return mh+'<div class="lon-body">'+lonFBandChips(w)+lonFTable(w)+'</div>';
-}
-/* Loading only on a data fetch (a loan type change), never on a sort or a
-   range pick. Uses the shell's own timers map. */
-function lonFLoad(w){w.lonLoading=true;clearTimeout(timers["lon-"+w.id]);timers["lon-"+w.id]=setTimeout(function(){w.lonLoading=false;w.updated="just now";render();},800);}
-
-var LONF_MODAL=null,LONF_POP=null,LONF_HOVER=null;
-function lonFDetailModalHTML(){
-  if(!LONF_MODAL)return "";
-  var w=find(LONF_MODAL.id);if(!w)return "";
-  var x=lonFFind(w,LONF_MODAL.acct);if(!x)return "";
-  var bucket=lonFBucketOf(x.days),bl=lonFBucketLabel(bucket),bcolor=lonFColorOf(bucket);
-  var dpd=x.days>0?(x.days+" day"+(x.days===1?"":"s")+" past due"):"Not yet due";
-  var dorm=lonFIsDormant(x),since=lonFDaysSincePay(x.lastPay);
-  function line(lbl,val,cls){return '<div class="lon-dl-row"><span class="lon-dl-lbl">'+lbl+'</span><span class="lon-dl-val'+(cls?" "+cls:"")+'">'+val+'</span></div>';}
-  var grid='<div class="lon-dl-grid">'+
-    line("Account",x.acct)+
-    line("Loan type",x.type)+
-    line("Original amount",lonFMoney(x.orig))+
-    line("Amount due",lonFMoney(x.amount),"lon-dl-amt")+
-    line("Aging",'<span class="lon-dl-band"><span class="lon-band-dot" style="background:var('+bcolor+')"></span>'+bl+'</span>')+
-    line("Days past due",dpd,x.days>0?"over":"")+
-    line("Next payment due",lonFFmtDate(x.nextDue))+
-    line("Last payment",lonFFmtDate(x.lastPay)+(since!=null?(' <span class="lon-dl-since">('+since+' days ago)</span>'):''))+
-  '</div>';
-  var dormNote=dorm?('<div class="lon-dl-dormant">'+ICON("hourglass_empty")+'No payment in over 90 days. Consider making contact.</div>'):'';
-  var pays=(x.payments||[]).filter(function(p){return p.amount>0;});
-  var payTbl=pays.length
-    ?'<div class="lon-pays"><div class="lon-prow lon-phead"><span>Date</span><span>Method</span><span class="lon-pa">Amount</span></div>'+pays.map(function(p){return '<div class="lon-prow"><span>'+lonFFmtDate(p.date)+'</span><span>'+p.method+'</span><span class="lon-pa">'+lonFMoney(p.amount)+'</span></div>';}).join("")+'</div>'
-    :'<div class="lon-tab-empty">'+ICON("payments")+'No payments recorded yet on this loan.</div>';
-  var actions='<div class="lon-actions"><button class="btn outlined sm" data-lon="lon-open-loan" data-id="'+w.id+'" data-acct="'+lonFEsc(x.acct)+'" data-tip="Placeholder: the destination for this link is not confirmed yet." data-tip-plain>'+ICON("open_in_new")+'Open loan</button>'+
-    '<button class="btn naked sm" data-lon="lon-contact" data-id="'+w.id+'" data-acct="'+lonFEsc(x.acct)+'" data-tip="Placeholder: recording a contact has no backend in this mock." data-tip-plain>'+ICON("event_note")+'Record a contact</button></div>'+
-    '<div class="lon-dl-note">'+ICON("info")+'<span>Placeholders: "Open loan" has no confirmed destination yet, and "Record a contact" is not wired to a backend.</span></div>';
-  return '<div class="modal-backdrop" data-lon="lon-detail-close"><div class="modal lon-detail-modal" data-lon="stop" role="dialog" aria-modal="true" aria-label="Loan detail">'+
-    '<div class="modal-h lon-detail-h"><span class="modal-title"><span class="material-symbols-rounded" aria-hidden="true" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">account_balance</span>Loan detail</span><span class="lon-dsub">'+x.name+'</span><span class="lon-dh-spacer"></span><button class="iconbtn" data-lon="lon-detail-close" aria-label="Close">'+ICON("close")+'</button></div>'+
-    '<div class="modal-b lon-detail-b">'+grid+dormNote+'<div class="lon-dl-payh">Payment history</div>'+payTbl+actions+'</div>'+
-    '<div class="modal-f"><button class="btn naked sm" data-lon="lon-export" data-id="'+w.id+'">'+ICON("download")+'Export to Excel</button><span class="lon-dh-spacer"></span><button class="btn primary sm" data-lon="lon-detail-close">Close</button></div></div></div>';
-}
-function lonFRenderModal(){
-  var mr=document.getElementById("lonModalRoot");
-  if(!mr){mr=document.createElement("div");mr.id="lonModalRoot";mr.className="lon-root";document.body.appendChild(mr);}
-  mr.innerHTML=LONF_MODAL?lonFDetailModalHTML():"";
-  try{document.body.style.overflow=LONF_MODAL?"hidden":"";}catch(e){}
-}
-
-/* (4) LOAN TYPE POPOVER (self-contained, reuses the shell's .pop / .mi / .cap) */
-function lonFPopContent(){
-  if(!LONF_POP)return "";
-  var w=find(LONF_POP.id);if(!w)return "";
-  var cur=w.lonType||"All";
-  return '<div class="cap">Loan type</div>'+LONF_TYPES.map(function(o){var on=cur===o;return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-lon="lon-set-type" data-id="'+w.id+'" data-v="'+lonFEsc(o)+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+(o==="All"?"All loan types":o)+'</button>';}).join("");
-}
-function lonFPositionPop(el,anchor){
-  var r=anchor.getBoundingClientRect(),M=8;
-  el.style.visibility="hidden";el.style.left="0px";el.style.top="0px";
-  var bw=el.offsetWidth,bh=el.offsetHeight;
-  var left=Math.min(Math.max(M,r.left),window.innerWidth-bw-M);
-  var top=r.bottom+6;if(top+bh>window.innerHeight-M)top=Math.max(M,r.top-bh-6);
-  el.style.left=left+"px";el.style.top=top+"px";el.style.visibility="";
-}
-function lonFOpenPop(anchor,id){
-  LONF_POP={type:"lon-type",id:id};
-  var el=document.getElementById("lonPop");
-  if(!el){el=document.createElement("div");el.id="lonPop";document.body.appendChild(el);}
-  el.className="pop lon-root";el.innerHTML=lonFPopContent();
-  lonFPositionPop(el,anchor);
-}
-function lonFRepositionPop(){var el=document.getElementById("lonPop");if(!el||!LONF_POP)return;var a=document.querySelector('[data-lon="lon-type"][data-id="'+LONF_POP.id+'"]');if(a)lonFPositionPop(el,a);}
-function lonFClosePop(){LONF_POP=null;var el=document.getElementById("lonPop");if(el)el.remove();}
-
-/* (5) TIME RANGE HOVER CARD (reuses the shell's .bgt-pop card). Only the
-   lonFAgingPanel rows carry data-lonpop, and that panel is currently
-   unreachable, so this is carried with it for the one-line rollback. */
-function lonFHideHover(){if(LONF_HOVER){LONF_HOVER.remove();LONF_HOVER=null;}}
-function lonFShowHover(row,mx,my){
-  var raw=row.getAttribute("data-lonpop");if(!raw)return;var p=raw.split("|");
-  var label=p[0],total=+p[1],count=+p[2],share=+p[3];
-  if(!LONF_HOVER){LONF_HOVER=document.createElement("div");LONF_HOVER.className="bgt-pop";document.body.appendChild(LONF_HOVER);}
-  LONF_HOVER.innerHTML='<div class="bgt-pop-h">'+label+'</div>'+
-    '<div class="bgt-pop-r"><span class="bgt-pop-lbl">Outstanding</span><span class="bgt-pop-v">'+lonFMoney(total)+'</span></div>'+
-    '<div class="bgt-pop-r"><span class="bgt-pop-lbl">Loans</span><span class="bgt-pop-v">'+count+'</span></div>'+
-    '<div class="bgt-pop-div"></div><div class="bgt-pop-var"><span class="bgt-pop-lbl">Share of balance</span><span class="bgt-pop-fav neutral">'+share+'%</span></div>';
-  var bw=LONF_HOVER.offsetWidth,bh=LONF_HOVER.offsetHeight,M=10;
-  var left=mx+14,top=my-bh-10;if(left+bw>window.innerWidth-M)left=mx-bw-14;if(top<M)top=my+16;
-  LONF_HOVER.style.left=left+"px";LONF_HOVER.style.top=top+"px";
-}
-
-/* (6) DELEGATED HANDLERS (self-contained, keyed to data-lon) --------------- */
-function lonFHandleClick(e){
-  var t=e.target.closest?e.target.closest("[data-lon]"):null;
-  if(!t){if(LONF_POP&&!(e.target.closest&&e.target.closest("#lonPop")))lonFClosePop();return;}
-  var a=t.getAttribute("data-lon"),id=t.getAttribute("data-id");
-  if(a==="stop")return;
-  if(a==="lon-detail-close"){LONF_MODAL=null;lonFRenderModal();return;}
-  var w=id?find(id):null;if(!w)return;
-  if(a==="lon-type"){if(LONF_POP&&LONF_POP.id===id&&document.getElementById("lonPop")){lonFClosePop();}else{lonFOpenPop(t,id);}render();return;}
-  if(a==="lon-set-type"){var nv=t.getAttribute("data-v");if((w.lonType||"All")!==nv){w.lonType=nv;w.lonBucket="total";lonFLoad(w);}lonFClosePop();render();return;}
-  if(a==="lon-sort"){var k=t.getAttribute("data-k"),cs=(w.lonSort||"amt-desc").split("-");w.lonSort=(cs[0]===k)?(k+"-"+(cs[1]==="asc"?"desc":"asc")):(k+"-"+((k==="name"||k==="last")?"asc":"desc"));render();return;}
-  if(a==="lon-side"){w.lonSide=t.getAttribute("data-s")||"pie";render();return;}
-  if(a==="lon-view"){w.lonView=t.getAttribute("data-v")||"table";render();return;}
-  if(a==="lon-set-bucket"){var nb=t.getAttribute("data-bucket");w.lonBucket=(w.lonBucket===nb)?"total":nb;render();return;}
-  if(a==="lon-open"){LONF_MODAL={id:id,acct:t.getAttribute("data-acct")};lonFClosePop();lonFRenderModal();return;}
-  if(a==="lon-open-loan"){setStatus("Open loan is a placeholder: no destination is confirmed yet for loan "+t.getAttribute("data-acct")+".");return;}
-  if(a==="lon-contact"){setStatus("Record a contact is a placeholder: loan "+t.getAttribute("data-acct")+" has no contact record to write to yet.");return;}
-  if(a==="lon-export"){setStatus("Export to Excel is a placeholder: there is no export endpoint for loans yet.");return;}
-}
-var LONF_WIRED=false;
-(function(){
-  if(LONF_WIRED)return;LONF_WIRED=true;
-  document.addEventListener("click",lonFHandleClick);
-  document.addEventListener("keydown",function(e){
-    if(e.key==="Escape"){if(LONF_MODAL){LONF_MODAL=null;lonFRenderModal();}else if(LONF_POP){lonFClosePop();}return;}
-    if((e.key==="Enter"||e.key===" ")&&e.target&&e.target.getAttribute&&e.target.getAttribute("data-lon")==="lon-open"&&e.target.tagName!=="BUTTON"){e.preventDefault();e.target.click();}
-  });
-  document.addEventListener("mousemove",function(e){
-    var row=e.target.closest&&e.target.closest(".lon-band-row[data-lonpop]");
-    if(!row){lonFHideHover();return;}
-    lonFShowHover(row,e.clientX,e.clientY);
-  });
-  window.addEventListener("resize",function(){lonFRepositionPop();});
-})();
-/* ===== end W10 Loans With Balance Due V2 ===== */
 /* ===== W11 Fixed Asset Values V2 JS , prefix faF , kind "fixedassets-mb" ===== */
 
 /* (1) SAMPLE DATA. Fifty-two assets: a low-cardinality dimension (Class, 6

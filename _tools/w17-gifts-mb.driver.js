@@ -816,10 +816,12 @@ A.ok(registry.some(function (w) { return w.state === "empty"; }), "an empty-stat
   const bCur = seg(cur, "var GFT_TODAY=", "function gftTriggerSelector(){");
   A.ok(bOld && bCur, "her gifts render block was located in both files");
   A.eq(bCur, bOld, "her ENTIRE gifts block (" + (bCur || "").length + " bytes) is byte-identical");
-  const cssOld = seg(old, ".gft-body{display:block;}", "/* ===== Loans With Balance Due (prefix: loan)");
-  const cssCur = seg(cur, ".gft-body{display:block;}", "/* ===== Loans With Balance Due (prefix: loan)");
+  /* the cluster runs from .gft-body to the next top-level CSS header; in the baseline that header is her loan CSS block, which W10 removed, so the end is found rather than named */
+  const clusterTo = function (s) { const i = s.indexOf(".gft-body{display:block;}"); if (i < 0) return null; const j = s.indexOf("\r\n/* =====", i); return j < 0 ? null : s.slice(i, j); };
+  const cssOld = clusterTo(old), cssCur = clusterTo(cur);
   A.ok(cssOld && cssCur, "her gifts CSS cluster was located in both files");
-  A.eq(cssCur, cssOld, "her gifts CSS cluster (" + (cssCur || "").length + " bytes) is byte-identical");
+  /* shell blocks lifted out of decided widgets (the .pbar pacing bar) now sit right after the cluster, so the cluster is asserted as an unchanged prefix */
+  A.ok(!!cssOld && !!cssCur && cssCur.indexOf(cssOld) === 0, "her gifts CSS cluster (" + (cssOld || "").length + " bytes) is byte-identical at its place");
   /* our namespace was clean before the port and is ours alone now */
   A.eq((old.match(/GPF_/g) || []).length, 0, "GPF_ had zero occurrences before the port");
   A.eq((old.match(/\.gpf-/g) || []).length, 0, ".gpf- had zero occurrences before the port");
