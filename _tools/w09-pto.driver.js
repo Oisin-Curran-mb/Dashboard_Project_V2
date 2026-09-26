@@ -33,7 +33,7 @@ A.noEmDash(code(js), "W09 block code (comments excluded)");
 const TAIL = "\r\n  render();\r\n})();\r\n";
 const EXPORTS = "\r\n  __EX={WIDGETS:WIDGETS,contentHTML:contentHTML,popContent:popContent,triggerSelector:triggerSelector,aboutOf:aboutOf,find:find,dashboards:dashboards," +
   "setPop:function(p){pop=p;},getPop:function(){return pop;},setModal:function(m){modal=m;},getModal:function(){return modal;},modalHTML:function(){return WIDGETS.modal();}," +
-  "pto:{click:ptoFHandleClick,calStep:ptoFCalStep,closeOverlay:ptoFCloseOverlay,closePop:ptoFClosePop}," +
+  "pto:{click:ptoFHandleClick,calStep:ptoFCalStep,closeOverlay:ptoFCloseOverlay,closePop:ptoFClosePop,info:function(id,pk){PTOF_INFO={id:id,pk:pk};var h=ptoFInfoPanelHTML();PTOF_INFO=null;return h;}}," +
   "stubRender:function(){render=function(){};renderModal=function(){};renderOverlay=function(){};showModal=function(){};setStatus=function(){};}};\r\n" +
   "  try{render();}catch(e){__EX.renderErr=String(e&&e.message);}\r\n})();\r\n";
 const env = H.runBlock(S.slice(0, -TAIL.length) + EXPORTS, { dataAttr: "data-action", globals: {
@@ -85,6 +85,14 @@ if (person) {
   A.ok(!!day, "an expanded person shows per-day Approve buttons");
   if (day) { const before = (html.match(/data-pto="pto-approve"/g) || []).length; const el = env.shim.mkTarget({ "data-pto": "pto-approve", "data-id": w.id, "data-day": day }, "button"); el.closest = function (sel) { return sel.indexOf("data-pto") > -1 ? el : null; }; EX.pto.click({ target: el }); const after = (EX.contentHTML(w).match(/data-pto="pto-approve"/g) || []).length; A.eq(after, before - 1, "approving one day removes exactly that day's Approve button (" + before + " -> " + after + ")"); }
   delete w.ptofOpen[person];
+}
+/* person Info pop-up (owner, 26 Sep): two sections, no placeholder note */
+if (person) {
+  const ih = EX.pto.info(w.id, person);
+  A.ok(ih.length > 400, "Info pop-up renders (" + ih.length + " bytes)"); A.absent(ih, "Placeholder", "no placeholder note in the pop-up");
+  A.contains(ih, "Pending approval, ", "Pending approval section with its day count"); A.contains(ih, "Taken and approved, ", "Taken and approved section with its day count");
+  A.ok(/Also out from [^<]+ during these dates|No one else from/.test(ih), "same-department overlap under the pending section");
+  A.absent(ih, "Also off during these dates", "old all-departments overlap heading gone"); A.noEmDash(ih, "Info pop-up");
 }
 /* calendar */
 w.ptofView = "calendar"; html = EX.contentHTML(w); A.contains(html, "ptof-cal", "Leave Calendar renders the month grid"); A.noEmDash(html, "calendar");

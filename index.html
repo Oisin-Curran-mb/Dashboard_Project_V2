@@ -2111,8 +2111,6 @@
   .ptof-info-oth-dt{font-size:12px;font-weight:600;color:var(--txt-secondary);font-variant-numeric:tabular-nums;}
   .ptof-info-oth-lt{font-size:10.5px;color:var(--txt-subtle);margin-top:1px;}
   .ptof-info-empty{font-size:12px;color:var(--txt-subtle);padding:8px 0;}
-  .ptof-note{display:flex;align-items:flex-start;gap:7px;margin-top:10px;font-size:11px;color:var(--txt-subtle);line-height:1.45;}
-  .ptof-note .material-symbols-rounded{font-size:15px;flex:0 0 auto;}
   /* header rows stack: controls, then the KPI row across the full width (the shell grid would put the KPI beside the control segment) */
   .ptof-hd{grid-template-columns:1fr;row-gap:8px;}
   .ptof-hd .dep-hd-top{display:flex;align-items:center;justify-content:flex-start;gap:8px;flex-wrap:wrap;min-width:0;}
@@ -7226,8 +7224,6 @@ function ptoFStatusCell(w,fe){var eff=ptoFEff(w,fe);
   return '<span class="ptof-chip ptof-chip-pend">'+ICON("schedule")+'Pending</span>';}
 function ptoFEntryDays(fe){var n=(fe.dEnd||fe.d)-fe.d+1;return n>0?n:1;}
 function ptoFYearFlat(w){return ptoFFlat(w).filter(function(fe){return fe.year===PTOF_WORK_Y;});}
-function ptoFPersonYearByType(w,pk){var out={};PTOF_LEAVE_TYPES.forEach(function(o){out[o.key]=0;});ptoFYearFlat(w).forEach(function(fe){if(fe.personKey===pk){out[fe.type]=(out[fe.type]||0)+ptoFEntryDays(fe);}});return out;}
-function ptoFPersonYearTotal(w,pk){return ptoFYearFlat(w).filter(function(fe){return fe.personKey===pk;}).reduce(function(a,fe){return a+ptoFEntryDays(fe);},0);}
 function ptoFPersonMeta(w,pk){var m={dept:"",pg:""};ptoFFlat(w).some(function(fe){if(fe.personKey===pk){m.dept=fe.dept;m.pg=fe.pg;return true;}return false;});return m;}
 /* Overlap / coverage-conflict helpers. Two entries overlap when they fall
    in the same month of the same year and their day ranges intersect
@@ -7238,7 +7234,6 @@ function ptoFPersonMeta(w,pk){var m={dept:"",pg:""};ptoFFlat(w).some(function(fe
    then dates. Status-agnostic, so a supervisor sees the full coverage
    picture. Also an aggregation with no existing endpoint. */
 function ptoFRangesOverlap(a,b){return a.year===b.year&&a.mo===b.mo&&a.d<=b.dEnd&&b.d<=a.dEnd;}
-function ptoFOverlapStaff(w,pk){var mine=ptoFFlat(w).filter(function(fe){return fe.personKey===pk;});var out=[],seen={};ptoFFlat(w).forEach(function(fe){if(fe.personKey===pk)return;var ok=false;for(var i=0;i<mine.length;i++){if(ptoFRangesOverlap(mine[i],fe)){ok=true;break;}}if(!ok)return;if(seen[fe._id])return;seen[fe._id]=1;out.push({person:fe.person,dept:fe.dept,pg:fe.pg,type:fe.type,dates:ptoFDates(fe),status:ptoFEff(w,fe)});});out.sort(function(a,b){return a.person.localeCompare(b.person)||a.dates.localeCompare(b.dates);});return out;}
 function ptoFPersonName(pk){var i=pk.indexOf("|");return i>=0?pk.slice(i+1):pk;}
 
 /* ---- Controls: her segmented .vtoggle / .vt, and her .filter-chip ---- */
@@ -7457,22 +7452,29 @@ function ptoFDayDetailHTML(){
    one else is off during these dates." The subject's own department and
    pay group sit in the header. Informational only, no approve action
    here. ---------------------------------------------------------------- */
+/* Person pop-up: two sections. Pending approval (days by leave type this year, and who else from the same
+   department is out during those pending dates) and Taken and approved (days by type). Informational only. */
+function ptoFPersonDaysByState(w,pk,approved){var out={},tot=0;ptoFYearFlat(w).forEach(function(fe){if(fe.personKey!==pk)return;var isA=(ptoFEff(w,fe)==="Approved");if(isA!==approved)return;var n=ptoFEntryDays(fe);out[fe.type]=(out[fe.type]||0)+n;tot+=n;});return {by:out,tot:tot};}
+function ptoFOverlapSameDept(w,pk,dept){var mine=ptoFFlat(w).filter(function(fe){return fe.personKey===pk&&ptoFEff(w,fe)!=="Approved";});var out=[],seen={};ptoFFlat(w).forEach(function(fe){if(fe.personKey===pk||fe.dept!==dept)return;var ok=false;for(var i=0;i<mine.length;i++){if(ptoFRangesOverlap(mine[i],fe)){ok=true;break;}}if(!ok||seen[fe._id])return;seen[fe._id]=1;out.push({person:fe.person,pg:fe.pg,type:fe.type,dates:ptoFDates(fe),status:ptoFEffState(w,fe)});});return out;}
+function ptoFInfoTypes(by){var rows=PTOF_LEAVE_TYPES.filter(function(o){return (by[o.key]||0)>0;});if(!rows.length)return '<div class="ptof-info-empty">None</div>';return rows.map(function(o){var n=by[o.key];return '<div class="ptof-info-typ"><span class="ptof-info-typ-nm">'+o.key+'</span><span class="ptof-info-typ-n">'+n+(n===1?" day":" days")+'</span></div>';}).join("");}
 function ptoFInfoPanelHTML(){
   var st=PTOF_INFO;if(!st)return "";
   var w=find(st.id);if(!w)return "";
   var pk=st.pk;var nm=ptoFPersonName(pk);var meta=ptoFPersonMeta(w,pk);
-  var by=ptoFPersonYearByType(w,pk),tot=ptoFPersonYearTotal(w,pk);
-  var typesHtml=PTOF_LEAVE_TYPES.map(function(o){var n=by[o.key]||0;return '<div class="ptof-info-typ"><span class="ptof-info-typ-nm">'+o.key+'</span><span class="ptof-info-typ-n">'+n+(n===1?" day":" days")+'</span></div>';}).join("");
-  var overlaps=ptoFOverlapStaff(w,pk);
-  var overlapHtml=overlaps.length
-    ?overlaps.map(function(o){return '<div class="ptof-info-oth"><div class="ptof-info-oth-main"><div class="ptof-info-oth-nm">'+o.person+'</div><div class="ptof-info-oth-grp">'+o.dept+' &middot; '+o.pg+'</div></div><div class="ptof-info-oth-side"><div class="ptof-info-oth-dt">'+o.dates+'</div><div class="ptof-info-oth-lt">'+o.type+' &middot; '+o.status+'</div></div></div>';}).join("")
-    :'<div class="ptof-info-empty">No one else is off during these dates.</div>';
-  var note='<div class="ptof-note">'+ICON("info")+'<span>Placeholder, not yet available: both figures below are aggregations with no endpoint today, and the approval-authority filter is not implemented on the Modern API, so this list is not yet scoped to the departments you are authorised to approve.</span></div>';
+  var pend=ptoFPersonDaysByState(w,pk,false),appr=ptoFPersonDaysByState(w,pk,true);
+  var others=ptoFOverlapSameDept(w,pk,meta.dept);
+  var othersHtml=others.length
+    ?others.map(function(o){return '<div class="ptof-info-oth"><div class="ptof-info-oth-main"><div class="ptof-info-oth-nm">'+o.person+'</div><div class="ptof-info-oth-grp">'+o.pg+'</div></div><div class="ptof-info-oth-side"><div class="ptof-info-oth-dt">'+o.dates+'</div><div class="ptof-info-oth-lt">'+o.type+' &middot; '+o.status+'</div></div></div>';}).join("")
+    :'<div class="ptof-info-empty">No one else from '+meta.dept+' is off during these dates.</div>';
+  var days=function(n){return n+(n===1?" day":" days");};
   return '<div class="modal-backdrop" data-pto="pto-ovl-close"><div class="modal ptof-ovl" data-pto="stop" role="dialog" aria-modal="true" aria-label="Time off detail for '+ptoFEsc(nm+", "+meta.dept+", "+meta.pg)+'">'+
     '<div class="modal-h"><div class="ptof-info-hd-main"><span class="modal-title">'+nm+'</span><span class="ptof-info-hd-sub">'+meta.dept+' &middot; '+meta.pg+'</span></div><button class="iconbtn" data-pto="pto-ovl-close" aria-label="Close detail">'+ICON("close")+'</button></div>'+
-    '<div class="modal-b ptof-ovl-b">'+note+'<div class="ptof-info-cap">Time off this year ('+PTOF_WORK_Y+'), '+tot+(tot===1?" day":" days")+' total</div>'+typesHtml+
-    '<div class="ptof-info-cap ptof-info-cap2">Also off during these dates</div>'+overlapHtml+'</div>'+
-    '<div class="modal-f ptof-ovl-f"><span class="w09-caption">Coverage overlap, informational only. Approvals are handled in the Approval Queue.</span></div></div></div>';
+    '<div class="modal-b ptof-ovl-b">'+
+      '<div class="ptof-info-cap">Pending approval, '+days(pend.tot)+'</div>'+ptoFInfoTypes(pend.by)+
+      (pend.tot?('<div class="ptof-info-cap ptof-info-cap2">Also out from '+meta.dept+' during these dates</div>'+othersHtml):'')+
+      '<div class="ptof-info-cap ptof-info-cap2">Taken and approved, '+days(appr.tot)+' this year ('+PTOF_WORK_Y+')</div>'+ptoFInfoTypes(appr.by)+
+    '</div>'+
+    '<div class="modal-f ptof-ovl-f"><span class="w09-caption">Informational only. Approvals are handled in the Approval Queue.</span></div></div></div>';
 }
 
 /* ---- States / router -------------------------------------------------- */
