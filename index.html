@@ -1969,7 +1969,6 @@
   .faf-root .faf-body{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 2px 6px;}
   /* Download: its own slim right-aligned row, height set by the button itself
      so it does not push the content down. */
-  .faf-root .faf-dl{flex:0 0 auto;}
   .faf-root .faf-tblwrap{display:flex;flex-direction:column;flex:1;min-height:0;}
   .faf-root .faf-tscroll{flex:1 1 auto;min-height:0;overflow-x:auto;}
   .faf-root .faf-tbl{min-width:624px;}
@@ -7994,8 +7993,7 @@ function faFPageN(w){return w.faFPage||0;}
 /* (3) HELPERS. money() and ICON() are the shell's own. */
 function faFIcon(n){return '<span class="material-symbols-rounded" aria-hidden="true">'+n+'</span>';}
 function faFEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-/* The full unshortened figure: what every title and aria-label carries, and what
-   the download would carry. */
+/* The full unshortened figure: what every title and aria-label carries. */
 function faFMoneyFull(n){return money(Math.round(Number(n)||0));}
 /* The shortened display figure, computed in the FRONT END from the same values.
    No separate rounded dataset exists. */
@@ -8154,12 +8152,9 @@ function faFViewToggle(w){
     seg('donut','Donut','donut_small','The selected measure split across the groups of the chosen dimension.')+
   '</div>';
 }
-function faFDownloadBtn(w){
-  return '<button class="iconbtn faf-dl" data-faf="download" data-id="'+w.id+'" aria-label="Download every measure at full precision" title="Download every measure at full precision, not the shortened figures shown on screen.">'+faFIcon('download')+'</button>';
-}
 function faFHeader(w){
   return '<div class="dep-hd faf-hd"><div class="dep-hd-top">'+faFControls(w)+
-    '<div class="dep-hd-toggle faf-hd-right">'+faFViewToggle(w)+faFDownloadBtn(w)+'</div></div></div>';
+    '<div class="dep-hd-toggle faf-hd-right">'+faFViewToggle(w)+'</div></div></div>';
 }
 
 /* (6) CHART POPULATION. The rule a build must not get wrong in either direction:
@@ -8388,7 +8383,7 @@ function faFTableModalHTML(){
   '</div>';
   return '<div class="modal-backdrop" data-action="modal-close"><div class="modal faf-table-modal faf-root" data-action="stop" role="dialog" aria-modal="true" aria-label="'+faFEsc('Every asset measure for '+ttl)+'">'+
     '<div class="modal-h"><span class="modal-title"><span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">table_rows</span>'+faFEsc(ttl)+'</span>'+
-    '<span class="faf-modal-acts">'+faFDownloadBtn(w)+
+    '<span class="faf-modal-acts">'+
     '<button class="iconbtn" data-action="modal-close" aria-label="Close">'+faFIcon('close')+'</button></span></div>'+
     '<div class="modal-b">'+chips+faFAssetTable(w,true)+'</div>'+
     '<div class="modal-f"><button class="btn primary sm" data-action="modal-close">Close</button></div>'+
@@ -8498,11 +8493,6 @@ function faFHandleClick(e){
     var firstDir=FAF_MEASURES.some(function(m){return m.k===k;})?'desc':'asc';
     w.faFSort=(p[0]===k)?(k+'-'+(p[1]==='asc'?'desc':'asc')):(k+'-'+firstDir);
     faFClosePop();render();return;
-  }
-  if(a==='download'){
-    faFClosePop();
-    setStatus('Download is a placeholder: it would carry every measure at full precision, and no export endpoint exists for fixed assets yet.');
-    return;
   }
 }
 var FAF_WIRED=false;
@@ -9084,9 +9074,9 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
       {id:"lonF3", title:"Loans With Balance Due",     kind:"loans",size:"wide", tiers:["kpi","wide","xwide"],state:"empty",lonType:"All",lonSort:"amt-desc",lonBucket:"total",lonView:"table",updated:"just now"}
       */
       /* W11 Fixed Asset Values */
-      ,{id:"faF",  title:"Fixed Asset Values",                             kind:"fixedassets",size:"wide", tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFPage:0,updated:"just now"}
-      ,{id:"faF_k",title:"Fixed Asset Values",                     kind:"fixedassets",size:"kpi",  tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFPage:0,updated:"just now"}
-      ,{id:"faF_x",title:"Fixed Asset Values",                kind:"fixedassets",size:"xwide",tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFPage:0,updated:"just now"}
+      ,{id:"faF",  title:"Fixed Asset Values",                             kind:"fixedassets",size:"wide", tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFPage:0,updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]}
+      ,{id:"faF_k",title:"Fixed Asset Values",                     kind:"fixedassets",size:"kpi",  tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFPage:0,updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]}
+      ,{id:"faF_x",title:"Fixed Asset Values",                kind:"fixedassets",size:"xwide",tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFPage:0,updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]}
       /* W11 driver fixtures (state variants), not rendered as cards:
       {id:"faF2", title:"Fixed Asset Values",          kind:"fixedassets",size:"wide", tiers:["kpi","wide","xwide"],goto:false,faFDim:"bldg",faFMeasure:"accum",faFSort:"tag-asc",faFPage:0,faFView:"donut",updated:"just now"}
       {id:"faF3", title:"Fixed Asset Values",       kind:"fixedassets",size:"wide", tiers:["kpi","wide","xwide"],goto:false,faFDim:"acctAsset",faFMeasure:"net",faFSort:"tag-asc",faFPage:0,updated:"just now"}

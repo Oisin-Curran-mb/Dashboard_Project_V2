@@ -19,7 +19,7 @@ const CSS_START = "/* ===== W11 Fixed Asset Values V2 CSS ===== */", CSS_END = "
 const JS_START = "/* ===== W11 Fixed Asset Values V2 ===== */", JS_END = "/* ===== end W11 Fixed Asset Values V2 ===== */";
 [CSS_START, CSS_END, JS_START, JS_END].forEach(function (m) { A.eq(raw.split(m).length - 1, 1, "exactly one " + m.slice(0, 48)); });
 const css = H.extractRegion(shell.css, CSS_START, CSS_END), js = H.extractRegion(S, JS_START, JS_END);
-A.ok(css.length > 5000, "CSS region has substance (" + css.length + " bytes)"); A.ok(js.length > 40000, "JS region has substance (" + js.length + " bytes)");
+A.ok(css.length > 5000, "CSS region has substance (" + css.length + " bytes)"); A.ok(js.length > 30000, "JS region has substance (" + js.length + " bytes)");
 A.ok(S.indexOf(JS_END) < S.indexOf("  var dashboards=["), "the block sits before the registry literal");
 A.contains(js, 'WIDGETS.register("fixedassets",{', "registers itself"); A.contains(js, "var FAF_ABOUT=", "info text lives in the block");
 const outside = S.replace(js, ""), code = function (s) { return s.replace(/\/\*[\s\S]*?\*\//g, ""); };
@@ -52,6 +52,9 @@ rows.forEach(function (w) { settle(w); A.eq(w.title, "Fixed Asset Values", w.id 
 const w = rows.filter(function (x) { return x.size === "wide"; })[0];
 const click = function (attrs) { const el = env.shim.mkTarget(attrs, "button"); el.closest = function (sel) { return sel.indexOf("data-faf") > -1 ? el : null; }; EX.faf.click({ target: el }); };
 
+/* owner (26 Sep): no icon-only download; export lives in the card's three-dot menu with the standard set */
+rows.forEach(function (r) { A.absent(EX.contentHTML(r), 'data-faf="download"', r.id + ": no download button"); A.ok(r.actions && r.actions.length === 3 && r.actions.map(function (a) { return a.fmt; }).join(",") === "CSV,Excel,PDF", r.id + ": standard export actions on the row"); });
+A.absent(js, "faFDownloadBtn", "download helper gone");
 /* ---------- 4. behaviour ---------------------------------------------- */
 let html = EX.contentHTML(w);
 const acts = [...new Set((html.match(/data-faf="([a-z-]+)"/g) || []).map(function (m) { return /"([a-z-]+)"/.exec(m)[1]; }))];
