@@ -23,3 +23,5 @@ cssRep("  .ptof-hd .dep-hd-top{display:flex;align-items:center;justify-content:s
 cssRep("  .ptof-hd{grid-template-columns:1fr;row-gap:10px;}", "  .ptof-hd{grid-template-columns:1fr;row-gap:8px;}", "header row gap");
 if ((t.match(/(?<!\r)\n/g) || []).length) throw new Error("bare LF");
 fs.writeFileSync(FILE, t, "utf8"); console.log("done: " + t.split(NL).length + " lines");
+// Owner, same day: the sub-row keeps its position but loses the band (background and border) so its
+// controls look like every other widget's filters.
