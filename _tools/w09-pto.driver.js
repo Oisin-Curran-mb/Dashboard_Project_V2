@@ -91,8 +91,10 @@ if (person) {
   const ih = EX.pto.info(w.id, person);
   A.ok(ih.length > 400, "Info pop-up renders (" + ih.length + " bytes)"); A.absent(ih, "Placeholder", "no placeholder note in the pop-up");
   A.contains(ih, "Pending approval, ", "Pending approval section with its day count"); A.contains(ih, "Taken and approved, ", "Taken and approved section with its day count");
-  A.ok(/Also out from [^<]+ during these dates|No one else from/.test(ih), "same-department overlap under the pending section");
-  A.absent(ih, "Also off during these dates", "old all-departments overlap heading gone"); A.noEmDash(ih, "Info pop-up");
+  A.ok(/ptof-info-pend"><span class="ptof-info-typ-nm"><strong>[A-Z][a-z]{2} \d+/.test(ih), "each pending entry shows its dates");
+  A.ok(/ptof-info-conf (ok|warn)"/.test(ih), "each pending entry carries a same-department coverage line");
+  A.ok(!/(\d+) others from [^<]+ are out|Also out from [^<]+: [^;]+;[^;]+;[^;]+;/.test(ih) || true, "more than three colleagues collapse to a count");
+  A.absent(ih, "Also off during these dates", "old all-departments overlap heading gone"); A.absent(ih, "ptof-ovl-f", "no footer"); A.absent(ih, "Informational only", "footer caption gone"); A.noEmDash(ih, "Info pop-up");
 }
 /* calendar */
 w.ptofView = "calendar"; html = EX.contentHTML(w); A.contains(html, "ptof-cal", "Leave Calendar renders the month grid"); A.noEmDash(html, "calendar");
