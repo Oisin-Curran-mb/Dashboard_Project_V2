@@ -42,6 +42,8 @@ const MAPW = JSON.parse(fs.readFileSync(path.join(__dirname, "widget-map.json"),
 const GROUPS = Object.keys(MAPW).sort().filter(function (k) { const w = MAPW[k]; return !w.decided && w.jo && w.ours && w.jo.kind && w.ours.kind; })
   .map(function (k) { return [k, MAPW[k].name, MAPW[k].jo.kind, MAPW[k].ours.kind]; });
 const REMOVED = []; Object.keys(MAPW).forEach(function (k) { (MAPW[k].removed || []).forEach(function (r) { REMOVED.push(r); }); });
+/* rows of Jo's whose kind string is also the final kind (W09: her "pto" rows vs our "pto") are named by id in the map so the baseline filter can drop them */
+const BASE_DROP = REMOVED.slice(); Object.keys(MAPW).forEach(function (k) { (MAPW[k].baselineDrop || []).forEach(function (r) { BASE_DROP.push(r); }); });
 const FINAL_KINDS = Object.keys(MAPW).filter(function (k) { return MAPW[k].final && MAPW[k].final.kind; }).map(function (k) { return MAPW[k].final.kind; });
 const LIVE_ADOPTED_ALL = GROUPS.map(function (g) { return g[2]; }).filter(function (k) { return /-mb$/.test(k); });
 const N = GROUPS.length;
@@ -114,7 +116,7 @@ A.eq(EX.dashboards[2].widgets.length, 0, "her No widgets dashboard is still empt
     return true;
   }).join("\r\n");
   /* baseline rows of kinds that left the file with a decided widget are not expected any more */
-  var oldLines = rOld.split("\r\n").filter(function (l) { return !REMOVED.some(function (k) { return l.indexOf(k) > -1; }); }), curLines = rCurFiltered.split("\r\n"), oi = 0;
+  var oldLines = rOld.split("\r\n").filter(function (l) { return !BASE_DROP.some(function (k) { return l.indexOf(k) > -1; }); }), curLines = rCurFiltered.split("\r\n"), oi = 0;
   for (var ci = 0; ci < curLines.length && oi < oldLines.length; ci++) {
     if (curLines[ci] === oldLines[oi]) oi++;
   }

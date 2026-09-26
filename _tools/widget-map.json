@@ -216,37 +216,35 @@
     },
     "W09": {
       "name": "Payroll Scheduled Time Off",
-      "driver": "w09-pto-mb.driver.js",
-      "ours": {
-        "kind": "pto-mb",
+      "driver": "w09-pto.driver.js",
+      "decided": "2026-09-26 OC",
+      "removed": [
+        "pto-mb"
+      ],
+      "final": {
+        "kind": "pto",
         "prefix": "ptoF",
         "css": {
-          "grep": [
-            ".ptof-"
-          ]
+          "start": "/* ===== W09 Payroll Scheduled Time Off V2 CSS ===== */",
+          "end": "/* ===== end W09 Payroll Scheduled Time Off V2 CSS ===== */"
         },
         "js": {
-          "start": "var PTOF_ME=",
+          "start": "/* ===== W09 Payroll Scheduled Time Off V2 ===== */",
           "end": "/* ===== end W09 Payroll Scheduled Time Off V2 ===== */"
         },
         "registry": {
           "grep": [
-            "kind:\"pto-mb\""
+            "kind:\"pto\""
           ]
         }
       },
-      "jo": {
-        "kind": "pto",
-        "prefix": "pto",
-        "css": {
-          "start": "/* ===== Payroll Scheduled Time Off (pto) ===== */",
-          "end": "/* ===== Fixed Asset Values (fa) ===== */"
-        },
-        "js": {
-          "start": "/* ===== Payroll Scheduled Time Off (pto) ===== */",
-          "end": "/* ===== Fixed Asset Values (fa, kind:\"fixedassets\") ===== */"
-        }
-      }
+      "baselineDrop": [
+        "{id:\"pto\",",
+        "{id:\"pto_k\",",
+        "{id:\"pto2\",",
+        "{id:\"pto3\",",
+        "{id:\"pto4\","
+      ]
     },
     "W10": {
       "name": "Loans With Balance Due",
