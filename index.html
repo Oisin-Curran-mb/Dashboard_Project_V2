@@ -1742,8 +1742,6 @@
   .lon-tab-empty{display:flex;align-items:center;gap:8px;color:var(--txt-subtle);padding:12px 2px;font-size:12.5px;}
   .lon-tab-empty .material-symbols-rounded{font-size:18px;}
   .lon-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
-  .lon-dl-note{display:flex;align-items:flex-start;gap:7px;margin-top:10px;font-size:11px;color:var(--txt-subtle);line-height:1.45;}
-  .lon-dl-note .material-symbols-rounded{font-size:15px;flex:0 0 auto;}
   @media(max-width:560px){.lon-dl-grid{grid-template-columns:1fr;}}
   .lon-body-bands{overflow-y:auto;overscroll-behavior:contain;}
   .lon-body-bands .lon-panel{max-width:520px;width:100%;}
@@ -7585,7 +7583,7 @@ function lonFGlance(w){
   var read="";
   if(tot>0){
     var call=(over>0&&worst&&worst.key!=="cur")
-      ?'<span class="lon-glance-cap"><span class="lon-sevdot" style="background:var('+worst.color+')"></span>'+lonFMoney(worst.total)+' in '+worst.label+', the most overdue with a balance</span>'
+      ?'<span class="lon-glance-cap"><span class="lon-sevdot" style="background:var('+worst.color+')"></span>'+lonFMoney(worst.total)+' in '+worst.label+'</span>'
       :'<span class="lon-glance-cap lon-cap-ok">'+ICON("check")+'Every loan is current</span>';
     read='<div class="lon-glance-read">'+lonFStackBar(w)+call+'</div>';
   }
@@ -7824,13 +7822,12 @@ function lonFDetailModalHTML(){
   var payTbl=pays.length
     ?'<div class="lon-pays"><div class="lon-prow lon-phead"><span>Date</span><span>Method</span><span class="lon-pa">Amount</span></div>'+pays.map(function(p){return '<div class="lon-prow"><span>'+lonFFmtDate(p.date)+'</span><span>'+p.method+'</span><span class="lon-pa">'+lonFMoney(p.amount)+'</span></div>';}).join("")+'</div>'
     :'<div class="lon-tab-empty">'+ICON("payments")+'No payments recorded yet on this loan.</div>';
-  var actions='<div class="lon-actions"><button class="btn outlined sm" data-lon="lon-open-loan" data-id="'+w.id+'" data-acct="'+lonFEsc(x.acct)+'" data-tip="Placeholder: the destination for this link is not confirmed yet." data-tip-plain>'+ICON("open_in_new")+'Open loan</button>'+
-    '<button class="btn naked sm" data-lon="lon-contact" data-id="'+w.id+'" data-acct="'+lonFEsc(x.acct)+'" data-tip="Placeholder: recording a contact has no backend in this mock." data-tip-plain>'+ICON("event_note")+'Record a contact</button></div>'+
-    '<div class="lon-dl-note">'+ICON("info")+'<span>Placeholders: "Open loan" has no confirmed destination yet, and "Record a contact" is not wired to a backend.</span></div>';
+  var actions='<div class="lon-actions"><button class="btn outlined sm" data-lon="lon-open-loan" data-id="'+w.id+'" data-acct="'+lonFEsc(x.acct)+'">'+ICON("open_in_new")+'Open loan</button>'+
+    '</div>';
   return '<div class="modal-backdrop" data-lon="lon-detail-close"><div class="modal lon-detail-modal" data-lon="stop" role="dialog" aria-modal="true" aria-label="Loan detail">'+
-    '<div class="modal-h lon-detail-h"><span class="modal-title"><span class="material-symbols-rounded" aria-hidden="true" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">account_balance</span>Loan detail</span><span class="lon-dsub">'+x.name+'</span><span class="lon-dh-spacer"></span><button class="iconbtn" data-lon="lon-detail-close" aria-label="Close">'+ICON("close")+'</button></div>'+
+    '<div class="modal-h lon-detail-h"><span class="modal-title"><span class="material-symbols-rounded" aria-hidden="true" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">account_balance</span>Loan detail</span><span class="lon-dsub">'+x.name+'</span><span class="lon-dh-spacer"></span><button class="btn naked sm" data-lon="lon-export" data-id="'+w.id+'">'+ICON("download")+'Export to Excel</button><button class="iconbtn" data-lon="lon-detail-close" aria-label="Close">'+ICON("close")+'</button></div>'+
     '<div class="modal-b lon-detail-b">'+grid+dormNote+'<div class="lon-dl-payh">Payment history</div>'+payTbl+actions+'</div>'+
-    '<div class="modal-f"><button class="btn naked sm" data-lon="lon-export" data-id="'+w.id+'">'+ICON("download")+'Export to Excel</button><span class="lon-dh-spacer"></span><button class="btn primary sm" data-lon="lon-detail-close">Close</button></div></div></div>';
+    '<div class="modal-f"><button class="btn primary sm" data-lon="lon-detail-close">Close</button></div></div></div>';
 }
 function lonFRenderModal(){
   var mr=document.getElementById("lonModalRoot");
@@ -7897,7 +7894,6 @@ function lonFHandleClick(e){
   if(a==="lon-set-bucket"){var nb=t.getAttribute("data-bucket");w.lonBucket=(w.lonBucket===nb)?"total":nb;render();return;}
   if(a==="lon-open"){LONF_MODAL={id:id,acct:t.getAttribute("data-acct")};lonFClosePop();lonFRenderModal();return;}
   if(a==="lon-open-loan"){setStatus("Open loan is a placeholder: no destination is confirmed yet for loan "+t.getAttribute("data-acct")+".");return;}
-  if(a==="lon-contact"){setStatus("Record a contact is a placeholder: loan "+t.getAttribute("data-acct")+" has no contact record to write to yet.");return;}
   if(a==="lon-export"){setStatus("Export to Excel is a placeholder: there is no export endpoint for loans yet.");return;}
 }
 var LONF_WIRED=false;
