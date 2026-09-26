@@ -64,6 +64,9 @@ const w = rows.filter(function (x) { return x.size === "wide"; })[0];
 /* ---------- 4. behaviour ---------------------------------------------- */
 let html = EX.contentHTML(w);
 A.ok(/Pending/.test(html) && /Outstanding|Approved/.test(html), "queue shows the status vocabulary");
+/* owner (26 Sep): no placeholder / API-gap note under the queue at Explore or Detail */
+rows.forEach(function (r) { if (r.size !== "kpi") { A.absent(EX.contentHTML(r), "Placeholder, not yet available: approving", r.id + ": no placeholder note under the queue"); } });
+A.absent(js, "function ptoFGapNote", "the gap-note function is gone");
 w.ptofStatus = "approved"; html = EX.contentHTML(w); A.ok(html.length > 400, "Approved status filter renders"); w.ptofStatus = "pending";
 w.ptofQueueGroup = "pg"; html = EX.contentHTML(w); A.ok(html.length > 400, "Pay Group grouping renders"); A.noEmDash(html, "pay group view"); w.ptofQueueGroup = "dept";
 /* per-day approve via the block's own click handler */

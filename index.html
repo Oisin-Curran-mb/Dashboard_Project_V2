@@ -2115,7 +2115,6 @@
   .ptof-info-empty{font-size:12px;color:var(--txt-subtle);padding:8px 0;}
   .ptof-note{display:flex;align-items:flex-start;gap:7px;margin-top:10px;font-size:11px;color:var(--txt-subtle);line-height:1.45;}
   .ptof-note .material-symbols-rounded{font-size:15px;flex:0 0 auto;}
-  .ptof-note-foot{flex-shrink:0;padding-bottom:4px;}
 /* ===== end W09 Payroll Scheduled Time Off V2 CSS ===== */
   /* ===== W11 Fixed Asset Values V2 CSS ===== */
   .faf-root.faf-w{height:100%;display:flex;flex-direction:column;min-height:0;overflow:hidden;}
@@ -7478,15 +7477,11 @@ function ptoFEmpty(w){
     '<div class="kpi-num ptof-fig"><div class="metric-value ptof-num-zero">0</div><div class="gl-sub"><span class="w09-caption">Outstanding</span></div></div></div>';
   return '<div class="state" data-kind="empty">'+ICON("event_available")+'<div class="state-title">No time off scheduled</div><div class="state-sub">Once employees request time off, their requests will appear here grouped by department for review and approval.</div></div>';
 }
-function ptoFGapNote(w){
-  if(ptoFView(w)!=="queue")return "";
-  return '<div class="ptof-note ptof-note-foot">'+ICON("info")+'<span>Placeholder, not yet available: approving here writes to the mock only. There is no inline approval endpoint on the Modern API, the approval-authority filter is not implemented (so every supervisor would see every employee), leave-type column names cannot yet be renamed per organisation, and the confirm prompt, success message and failure handling for an approve are not specified yet.</span></div>';
-}
 function ptoFContent(w){
   if(w.state==="empty"||w.dataset==="none"||!ptoFFlat(w).length)return ptoFEmpty(w);
   if(ptoFTier(w)==="glance")return ptoFGlance(w);
   var head=ptoFHeaderBlock(w);
-  var body=(ptoFView(w)==="queue")?(ptoFQueue(w)+ptoFGapNote(w)):ptoFCalendar(w);
+  var body=(ptoFView(w)==="queue")?ptoFQueue(w):ptoFCalendar(w);
   return head+'<div class="ptof-body">'+body+'</div>';
 }
 
