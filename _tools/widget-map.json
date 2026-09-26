@@ -282,36 +282,30 @@
     },
     "W11": {
       "name": "Fixed Asset Values",
-      "driver": "w11-fixedassets-mb.driver.js",
-      "ours": {
-        "kind": "fixedassets-mb",
+      "driver": "w11-fixedassets.driver.js",
+      "decided": "2026-09-26 OC",
+      "removed": [
+        "fixedassets-mb"
+      ],
+      "baselineDrop": [
+        "{id:\"fa1\",",
+        "{id:\"fa1_k\",",
+        "{id:\"fa2\",",
+        "{id:\"fa3\","
+      ],
+      "final": {
+        "kind": "fixedassets",
         "prefix": "faF",
         "css": {
-          "grep": [
-            ".faf-"
-          ]
+          "start": "/* ===== W11 Fixed Asset Values V2 CSS ===== */",
+          "end": "/* ===== end W11 Fixed Asset Values V2 CSS ===== */"
         },
         "js": {
-          "start": "var FAF_ASSETS=[",
+          "start": "/* ===== W11 Fixed Asset Values V2 ===== */",
           "end": "/* ===== end W11 Fixed Asset Values V2 ===== */"
         },
         "registry": {
           "grep": [
-            "kind:\"fixedassets-mb\""
-          ]
-        }
-      },
-      "jo": {
-        "kind": "fixedassets",
-        "prefix": "fa",
-        "css": {
-          "start": "/* ===== Fixed Asset Values (fa) ===== */",
-          "end": "/* ===== P2/P3 widget styles ===== */"
-        },
-        "js": {
-          "grep": [
-            "function fa",
-            "FA_",
             "kind:\"fixedassets\""
           ]
         }

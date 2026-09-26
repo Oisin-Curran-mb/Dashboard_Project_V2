@@ -204,7 +204,6 @@
   .dep-hd-num>*:first-child{grid-column:1;justify-self:start;}
   /* Multi-column table totals reuse the row column structure so numbers sit under their columns */
   .gft-total-row{border-top:1.5px solid var(--stroke-widget);font-weight:600;padding-top:9px;margin-top:2px;}
-  .fa-total-row{border-top:1.5px solid var(--stroke-widget);font-weight:600;padding-top:8px;margin-top:2px;}
   .tbl-search{display:flex;justify-content:flex-start;padding:2px 14px 8px;}
   .tbl-search .dep-search{flex:1 1 auto;width:100%;max-width:none;}
   .dep-search{flex:1 1 auto;min-width:70px;max-width:240px;display:flex;align-items:center;gap:6px;border:1px solid var(--stroke-widget);border-radius:8px;padding:6px 10px;min-height:34px;box-sizing:border-box;background:var(--surface-widget);}
@@ -1162,32 +1161,6 @@
 .ap-skel{padding:6px 0;}
 .ap-sk-row{display:flex;align-items:center;gap:12px;padding:8px 14px;}
 
-  .fa-ctlrow{display:flex;gap:8px;flex-wrap:wrap;min-width:0;}
-  .fa-numwrap{display:flex;flex-direction:column;gap:3px;min-width:0;}
-  .fa-count-badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;color:var(--txt-secondary);background:var(--wn-200);border:1px solid var(--stroke-widget);border-radius:999px;padding:2px 9px 2px 6px;white-space:nowrap;}
-  .fa-count-badge .material-symbols-rounded{font-size:15px;color:var(--txt-subtle);}
-  .fa-ctx{color:var(--txt-subtle);}
-  .fa-full{flex:1;min-height:0;display:flex;gap:12px;padding:12px 14px;}
-  .fa-panel{flex:1 1 0;min-width:0;display:flex;flex-direction:column;border:1px solid var(--stroke-widget);border-radius:9px;overflow:hidden;}
-  .fa-panel-pie{flex:0 1 auto;}
-  .fa-single{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 14px 12px;}
-  .fa-tbl{flex:1;min-height:0;display:flex;flex-direction:column;}
-  .fa-tbl-scroll{overflow:auto;flex:1;min-height:0;}
-  .fa-row{gap:10px;min-width:560px;}
-  .fa-c-tag{flex:0 0 74px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;white-space:nowrap;}
-  .fa-c-name{flex:1 1 150px;min-width:120px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500;}
-  .fa-c-num{flex:0 0 116px;text-align:right;font-variant-numeric:tabular-nums;color:var(--txt-secondary);white-space:nowrap;}
-  .wt-head .fa-c-num{color:var(--txt-subtle);font-weight:600;font-size:11px;}
-  .fa-c-num.fa-emph{color:var(--txt-primary);font-weight:700;}
-  .wt-head .fa-c-num.fa-emph{color:var(--am-700);}
-  .fa-total{gap:10px;min-width:560px;}
-  .fa-total>span:first-child{flex:0 0 148px;}
-  .fa-total .fa-c-num{flex:0 0 116px;}
-  .fa-pie{display:flex;flex-direction:column;justify-content:center;min-width:0;padding:6px 4px 10px;}
-  .fa-seg{transition:opacity var(--dur,.15s) ease;}
-  .fa-seg-hi{filter:drop-shadow(0 1px 3px rgba(70,63,127,.35));}
-  .fa-leg-hi{background:var(--wn-200);border-radius:6px;font-weight:600;}
-  .fa-inline-empty{flex:1;padding:22px 12px;}
   .mi .mi-sub{margin-left:auto;font-size:11px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;}
   .pur-rowclick{cursor:pointer;}
   .pur-rowclick:hover{background:var(--wn-100);}
@@ -3681,7 +3654,7 @@
   function viewOnlySelectHTML(){var h=location.hash||"",cur_=(/[#&](w=W\d\d|k=[a-z0-9,-]+)/i.exec(h)||["",""])[1];
     var opts=[["","Review: all widgets"]];
     if(typeof CMP_ROWS!=="undefined")CMP_ROWS.forEach(function(r){opts.push(["w="+r[0],r[0]+" "+r[1]+" (Jo vs OC, 3 sizes)"]);});
-    var VIEW_WNUM={budget:"W01",pension:"W02",payroll:"W03",remittance:"W04",receivables:"W05",insurance:"W06",deposits:"W07",mystatus:"W08",pto:"W09",loans:"W10",tasks:"W14"}; /* finished widgets: kind -> W number, so they sort with the rest */
+    var VIEW_WNUM={budget:"W01",pension:"W02",payroll:"W03",remittance:"W04",receivables:"W05",insurance:"W06",deposits:"W07",mystatus:"W08",pto:"W09",loans:"W10",fixedassets:"W11",tasks:"W14"}; /* finished widgets: kind -> W number, so they sort with the rest */
     Object.keys(WIDGETS.kinds).forEach(function(k){var row=dashboards[0].widgets.filter(function(x){return x.kind===k;})[0];if(!row)return;var wn=VIEW_WNUM[k]||"W??";opts.push(["k="+k,wn+" "+(row.title||k).replace(/\s*\([^)]*\)\s*$/,"")+" (final, 3 sizes)"]);});
     opts=[opts[0]].concat(opts.slice(1).sort(function(x,y){return x[1].localeCompare(y[1]);}));
     return '<select id="viewOnlySel" class="btn outlined sm" aria-label="Review aid: show one widget" style="margin-right:8px;max-width:320px">'+opts.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===cur_?" selected":"")+'>'+o[1]+'</option>';}).join("")+'</select>';}
@@ -7914,6 +7887,633 @@ var LONF_WIRED=false;
 WIDGETS.register("loans",{content:lonFContent,about:function(w){return {h:w.title,b:LONF_ABOUT};}});
 /* ===== end W10 Loans With Balance Due V2 ===== */
 
+/* ===== W11 Fixed Asset Values V2 ===== */
+/* Fixed Asset Values: net book value of the asset register, grouped by a chosen classification (Class, Building, Room, Asset Account) with a chosen measure (Cost, Accumulated depreciation, Net book value); Table / Donut views, sortable columns, paged rows; the full seven-column table opens in a modal. */
+
+/* (1) SAMPLE DATA. Fifty-two assets: a low-cardinality dimension (Class, 6
+   groups), a mid one (Building, 4 groups plus "not assigned") and a higher one
+   (Room, 9 groups plus "not assigned"); the real "not assigned" group, which is
+   a selectable group and not an error state; and fully depreciated assets so a
+   group can genuinely total zero for Net Value, which the chart must exclude and
+   the table must keep.
+   salv is Salvage Value, used only to derive Depreciable Value.
+   dep is BOOK accumulated depreciation, SUM(Depreciation) WHERE !Tax: excluding
+   tax depreciation is part of the definition, not an optimisation. */
+var FAF_ASSETS=[
+  {tag:'FA-1001',nm:'Sanctuary Sound System',cls:'Audio Visual',bldg:'',room:'Media Room',cap:111719,cost:118850,salv:4754,dep:114096},
+  {tag:'FA-1002',nm:'Sanctuary Lighting Rig',cls:'Audio Visual',bldg:'Main Campus',room:'',cap:130707,cost:134750,salv:10780,dep:30992},
+  {tag:'FA-1003',nm:'Media Cameras',cls:'Audio Visual',bldg:'',room:'',cap:37927,cost:39100,salv:1955,dep:0},
+  {tag:'FA-1004',nm:'Choir Risers',cls:'Audio Visual',bldg:'Main Campus',room:'Sanctuary',cap:41313,cost:43950,salv:0,dep:5274},
+  {tag:'FA-1005',nm:'Stage Monitors',cls:'Audio Visual',bldg:'Annex',room:'',cap:64950,cost:64950,salv:0,dep:64950},
+  {tag:'FA-1006',nm:'Video Switcher',cls:'Audio Visual',bldg:'Chapel',room:'Sanctuary',cap:53800,cost:53800,salv:0,dep:26900},
+  {tag:'FA-1007',nm:'Wireless Mic Set',cls:'Audio Visual',bldg:'Chapel',room:'Sanctuary',cap:24700,cost:24700,salv:1976,dep:11362},
+  {tag:'FA-1008',nm:'Projection Screen',cls:'Audio Visual',bldg:'Main Campus',room:'Sanctuary',cap:68500,cost:68500,salv:0,dep:34250},
+  {tag:'FA-1009',nm:'Livestream Encoder',cls:'Audio Visual',bldg:'Chapel',room:'Sanctuary',cap:28764,cost:30600,salv:0,dep:15300},
+  {tag:'FA-1010',nm:'Broadcast Mixer',cls:'Audio Visual',bldg:'Chapel',room:'',cap:3300,cost:3300,salv:0,dep:0},
+  {tag:'FA-1011',nm:'LED Wall Panel',cls:'Audio Visual',bldg:'Annex',room:'Stage',cap:98371,cost:104650,salv:0,dep:35581},
+  {tag:'FA-1012',nm:'Foldback Speakers',cls:'Audio Visual',bldg:'Main Campus',room:'Media Room',cap:77550,cost:82500,salv:0,dep:66000},
+  {tag:'FA-1013',nm:'Main Campus Building',cls:'Buildings',bldg:'Chapel',room:'',cap:813000,cost:813000,salv:0,dep:813000},
+  {tag:'FA-1014',nm:'Family Life Center',cls:'Buildings',bldg:'Family Life Center',room:'',cap:1171700,cost:1171700,salv:58585,dep:378459},
+  {tag:'FA-1015',nm:'Annex Hall',cls:'Buildings',bldg:'Family Life Center',room:'',cap:1912015,cost:1971150,salv:78846,dep:1513843},
+  {tag:'FA-1016',nm:'Nursery Wing',cls:'Buildings',bldg:'Chapel',room:'',cap:1546300,cost:1645000,salv:0,dep:411250},
+  {tag:'FA-1017',nm:'Maintenance Shed',cls:'Buildings',bldg:'Main Campus',room:'',cap:969321,cost:999300,salv:39972,dep:479664},
+  {tag:'FA-1018',nm:'Chapel',cls:'Buildings',bldg:'Family Life Center',room:'',cap:1862234,cost:1981100,salv:0,dep:237732},
+  {tag:'FA-1019',nm:'Youth Building',cls:'Buildings',bldg:'Family Life Center',room:'',cap:1910550,cost:1910550,salv:95527,dep:1815023},
+  {tag:'FA-1020',nm:'Storage Barn',cls:'Buildings',bldg:'Annex',room:'',cap:955600,cost:955600,salv:0,dep:238900},
+  {tag:'FA-1021',nm:'Passenger Van',cls:'Vehicles',bldg:'Chapel',room:'',cap:59300,cost:59300,salv:0,dep:20162},
+  {tag:'FA-1022',nm:'Bus, 14 Seat',cls:'Vehicles',bldg:'Main Campus',room:'',cap:38650,cost:38650,salv:0,dep:4638},
+  {tag:'FA-1023',nm:'Maintenance Truck',cls:'Vehicles',bldg:'Annex',room:'',cap:60350,cost:60350,salv:4828,dep:44417},
+  {tag:'FA-1024',nm:'Grounds Utility Cart',cls:'Vehicles',bldg:'Main Campus',room:'',cap:85023,cost:90450,salv:4522,dep:21482},
+  {tag:'FA-1025',nm:'Minibus',cls:'Vehicles',bldg:'Annex',room:'',cap:84459,cost:89850,salv:7188,dep:9919},
+  {tag:'FA-1026',nm:'Trailer, Enclosed',cls:'Vehicles',bldg:'Chapel',room:'',cap:28294,cost:30100,salv:602,dep:23598},
+  {tag:'FA-1027',nm:'Pickup, Half Ton',cls:'Vehicles',bldg:'',room:'',cap:31255,cost:33250,salv:665,dep:21506},
+  {tag:'FA-1028',nm:'Nursery Furnishings',cls:'Office Equipment',bldg:'',room:'Reception',cap:95200,cost:95200,salv:3808,dep:60318},
+  {tag:'FA-1029',nm:'Reception Desk',cls:'Office Equipment',bldg:'Annex',room:'Office 201',cap:10340,cost:11000,salv:440,dep:6969},
+  {tag:'FA-1030',nm:'Copier, Main Office',cls:'Office Equipment',bldg:'Annex',room:'Reception',cap:21385,cost:22750,salv:0,dep:11375},
+  {tag:'FA-1031',nm:'Server Cabinet',cls:'Office Equipment',bldg:'Main Campus',room:'Reception',cap:22019,cost:22700,salv:1135,dep:14232},
+  {tag:'FA-1032',nm:'Network Switch Stack',cls:'Office Equipment',bldg:'Main Campus',room:'Server Room',cap:87514,cost:93100,salv:7448,dep:85652},
+  {tag:'FA-1033',nm:'Office Workstations',cls:'Office Equipment',bldg:'Chapel',room:'Office 201',cap:130900,cost:130900,salv:0,dep:104720},
+  {tag:'FA-1034',nm:'Conference Table',cls:'Office Equipment',bldg:'Annex',room:'Server Room',cap:21100,cost:21100,salv:0,dep:2532},
+  {tag:'FA-1035',nm:'Filing System',cls:'Office Equipment',bldg:'Chapel',room:'Server Room',cap:87600,cost:87600,salv:7008,dep:80592},
+  {tag:'FA-1036',nm:'Postage Machine',cls:'Office Equipment',bldg:'Annex',room:'Office 201',cap:24056,cost:24800,salv:1240,dep:0},
+  {tag:'FA-1037',nm:'Printer, Wide Format',cls:'Office Equipment',bldg:'Chapel',room:'Server Room',cap:8099,cost:8350,salv:668,dep:921},
+  {tag:'FA-1038',nm:'Car Park Resurface',cls:'Land Improvements',bldg:'',room:'',cap:11550,cost:11550,salv:231,dep:2829},
+  {tag:'FA-1039',nm:'Perimeter Fencing',cls:'Land Improvements',bldg:'Chapel',room:'',cap:50925,cost:52500,salv:4200,dep:48300},
+  {tag:'FA-1040',nm:'Playground Structure',cls:'Land Improvements',bldg:'Family Life Center',room:'',cap:109028,cost:112400,salv:0,dep:89920},
+  {tag:'FA-1041',nm:'Irrigation System',cls:'Land Improvements',bldg:'Family Life Center',room:'',cap:63923,cost:65900,salv:1318,dep:21957},
+  {tag:'FA-1042',nm:'Signage, Roadside',cls:'Land Improvements',bldg:'Annex',room:'',cap:92167,cost:98050,salv:7844,dep:10824},
+  {tag:'FA-1043',nm:'Retaining Wall',cls:'Land Improvements',bldg:'Chapel',room:'',cap:124750,cost:124750,salv:2495,dep:41566},
+  {tag:'FA-1044',nm:'Exterior Lighting',cls:'Land Improvements',bldg:'',room:'',cap:138467,cost:142750,salv:11420,dep:86677},
+  {tag:'FA-1045',nm:'Commercial Oven',cls:'Kitchen Equipment',bldg:'Annex',room:'Fellowship Hall',cap:21388,cost:22050,salv:441,dep:0},
+  {tag:'FA-1046',nm:'Walk In Cooler',cls:'Kitchen Equipment',bldg:'Family Life Center',room:'Kitchen',cap:6984,cost:7200,salv:288,dep:6912},
+  {tag:'FA-1047',nm:'Dishwasher, Industrial',cls:'Kitchen Equipment',bldg:'Chapel',room:'Kitchen',cap:63200,cost:63200,salv:0,dep:7584},
+  {tag:'FA-1048',nm:'Prep Tables',cls:'Kitchen Equipment',bldg:'Family Life Center',room:'Fellowship Hall',cap:136333,cost:140550,salv:0,dep:47787},
+  {tag:'FA-1049',nm:'Coffee Service Unit',cls:'Kitchen Equipment',bldg:'Family Life Center',room:'Kitchen',cap:46560,cost:48000,salv:1920,dep:0},
+  {tag:'FA-1050',nm:'Freezer, Upright',cls:'Kitchen Equipment',bldg:'Chapel',room:'Kitchen',cap:86339,cost:91850,salv:7348,dep:21125},
+  {tag:'FA-1900',nm:'Fully Depreciated Organ',cls:'Audio Visual',bldg:'Main Campus',room:'Sanctuary',cap:74000,cost:76000,salv:0,dep:76000},
+  {tag:'FA-1901',nm:'Unclassified Equipment',cls:'',bldg:'',room:'',cap:5400,cost:5600,salv:0,dep:1200}
+];
+var FAF_ASSETS_EMPTY=[];
+var FAF_NA='not assigned';
+
+/* All six Group By dimensions are offered, as the design does, and the three the
+   Modern API does not implement are MARKED so on the menu rather than silently
+   presented as working. A build that offers all six without acknowledging this
+   produces three dead selections. */
+var FAF_DIMS=[
+  {k:'cls',      l:'Class',                            impl:true},
+  {k:'bldg',     l:'Building',                         impl:true},
+  {k:'room',     l:'Room',                             impl:true},
+  {k:'acctAsset',l:'Asset Account',                    impl:false},
+  {k:'acctAccum',l:'Accumulated Depreciation Account', impl:false},
+  {k:'acctExp',  l:'Expense Account',                  impl:false}
+];
+/* The five financial measures, in the canonical order the table keeps. */
+var FAF_MEASURES=[
+  {k:'cap',  l:'Capitalized Value',        short:'Capitalized'},
+  {k:'cost', l:'Cost',                     short:'Cost'},
+  {k:'depr', l:'Depreciable Value',        short:'Depreciable'},
+  {k:'accum',l:'Accumulated Depreciation', short:'Accumulated'},
+  {k:'net',  l:'Net Value',                short:'Net'}
+];
+/* The amethyst ramp: largest share darkest, no red on the arcs. Colour is never
+   the only signal, so every arc and legend row carries its group name and its
+   value as text in the DOM. */
+var FAF_COLORS=['--am-600','--am-500','--am-400','--am-300','--am-200'];
+var FAF_PAGE_SIZE=10;
+var FAF_SORTABLE=['tag','nm','cap','cost','depr','accum','net'];
+var FAF_POP=null;
+var FAF_ABOUT="The financial value of the organisation's fixed assets, grouped by class, building or room. Pick a grouping and a group to list the individual assets with all five money measures and a totals row, or switch to the donut to see one measure split across the groups. The headline figure is Total Net Value across every fixed asset, organisation wide, and it ignores the filters.";
+
+function faFDimK(w){return w.faFDim||'cls';}
+function faFMeasK(w){return w.faFMeasure||'net';}
+function faFViewK(w){return (w.faFView==='assets'||w.faFView==null)?'assets':'donut';}
+function faFSortK(w){return w.faFSort||'tag-asc';}
+function faFPageN(w){return w.faFPage||0;}
+
+/* (3) HELPERS. money() and ICON() are the shell's own. */
+function faFIcon(n){return '<span class="material-symbols-rounded" aria-hidden="true">'+n+'</span>';}
+function faFEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+/* The full unshortened figure: what every title and aria-label carries, and what
+   the download would carry. */
+function faFMoneyFull(n){return money(Math.round(Number(n)||0));}
+/* The shortened display figure, computed in the FRONT END from the same values.
+   No separate rounded dataset exists. */
+function faFMoneyShort(n){
+  var v=Number(n)||0, sign=v<0?'-':'', a=Math.abs(v), out;
+  if(a>=1e9) out=(a/1e9).toFixed(1)+'B';
+  else if(a>=1e6) out=(a/1e6).toFixed(1)+'M';
+  else if(a>=1e3) out=(a/1e3).toFixed(1)+'K';
+  else return sign+faFMoneyFull(a);
+  out=out.replace(/\.0([BMK])$/,'$1');
+  return sign+'$'+out;
+}
+function faFDimDef(k){for(var i=0;i<FAF_DIMS.length;i++){if(FAF_DIMS[i].k===k)return FAF_DIMS[i];}return FAF_DIMS[0];}
+function faFMeasDef(k){for(var i=0;i<FAF_MEASURES.length;i++){if(FAF_MEASURES[i].k===k)return FAF_MEASURES[i];}return FAF_MEASURES[FAF_MEASURES.length-1];}
+function faFDataset(w){return (w.dataset==='none'||w.dataset==='empty')?FAF_ASSETS_EMPTY:FAF_ASSETS;}
+/* The five measures. Depreciable Value and Net Value are DERIVED, not stored,
+   and Net Value's base is Depreciable Value (Cost minus Salvage), NOT Cost. Step
+   1 records that as a correction to its own earlier wording, so a build using
+   Cost as the base is wrong. */
+function faFValue(a,mk){
+  if(mk==='cap')  return a.cap;
+  if(mk==='cost') return a.cost;
+  if(mk==='depr') return a.cost-a.salv;
+  if(mk==='accum')return a.dep;
+  return (a.cost-a.salv)-a.dep;
+}
+/* An asset with no group appears under "not assigned", which is a real group and
+   must be selectable. */
+function faFGroupOf(a,dimk){var v=a[dimk];return (v===undefined||v===null||v==='')?FAF_NA:v;}
+/* The groups inside the selected dimension, "not assigned" sorted last. An
+   unimplemented dimension returns an empty list, which is what the target API
+   does today. */
+function faFGroupNames(w){
+  var d=faFDimDef(faFDimK(w));
+  if(!d.impl) return [];
+  var seen={},out=[];
+  faFDataset(w).forEach(function(a){var g=faFGroupOf(a,d.k);if(!seen[g]){seen[g]=1;out.push(g);}});
+  out.sort(function(x,y){
+    if(x===FAF_NA) return 1;
+    if(y===FAF_NA) return -1;
+    return x.localeCompare(y);
+  });
+  return out;
+}
+/* Every group with its selected-measure total and asset count. NOT filtered
+   here: the chart filters this list, the table does not. */
+function faFGroupTotals(w){
+  var d=faFDimDef(faFDimK(w)),mk=faFMeasK(w);
+  return faFGroupNames(w).map(function(g){
+    var items=faFDataset(w).filter(function(a){return faFGroupOf(a,d.k)===g;});
+    return {name:g,count:items.length,total:items.reduce(function(s,a){return s+faFValue(a,mk);},0)};
+  });
+}
+/* No "All groups" option: the table always shows exactly one group. A stale
+   saved group that no longer exists in this dimension falls back to the first,
+   which is also what the API contract's conflict rule specifies. */
+function faFCurrentGroup(w){
+  var names=faFGroupNames(w);
+  if(!names.length) return null;
+  return (w.faFGroup!=null&&names.indexOf(w.faFGroup)>=0)?w.faFGroup:names[0];
+}
+
+function faFServerQuery(w){
+  /* --- everything from here to the return is SERVER-SIDE work --- */
+  var d=faFDimDef(faFDimK(w)),g=faFCurrentGroup(w);
+  if(g===null) return {rows:[],totalCount:0,totals:{},pageIndex:0,pageCount:1};
+  var set=faFDataset(w).filter(function(a){return faFGroupOf(a,d.k)===g;});
+  var parts=faFSortK(w).split('-'),key=parts[0],dir=parts[1]==='asc'?1:-1;
+  if(FAF_SORTABLE.indexOf(key)<0) key='tag';               /* whitelist, as the API must */
+  var isMeasure=FAF_MEASURES.some(function(m){return m.k===key;});
+  set.sort(function(a,b){
+    var r;
+    if(isMeasure) r=faFValue(a,key)-faFValue(b,key);
+    else if(key==='nm') r=a.nm.localeCompare(b.nm);
+    else r=a.tag.localeCompare(b.tag);
+    if(r===0) r=a.tag.localeCompare(b.tag);                 /* unique tiebreaker */
+    return dir*r;
+  });
+  var totals={};
+  FAF_MEASURES.forEach(function(m){
+    totals[m.k]=set.reduce(function(s,a){return s+faFValue(a,m.k);},0);
+  });
+  var pageCount=Math.max(1,Math.ceil(set.length/FAF_PAGE_SIZE));
+  var pi=faFPageN(w); if(pi<0) pi=0; if(pi>pageCount-1) pi=pageCount-1;
+  return {
+    rows:set.slice(pi*FAF_PAGE_SIZE,(pi+1)*FAF_PAGE_SIZE),
+    totalCount:set.length,
+    totals:totals,
+    pageIndex:pi,
+    pageCount:pageCount
+  };
+}
+/* Reads the response only. The client does not know how many pages there are
+   until the server says so, which is the point. */
+function faFPager(w,res){
+  if(res.totalCount<=FAF_PAGE_SIZE) return '';
+  var i=res.pageIndex,n=res.pageCount;
+  var from=i*FAF_PAGE_SIZE+1,to=Math.min(res.totalCount,(i+1)*FAF_PAGE_SIZE);
+  function btn(act,ic,lbl,off){
+    return '<button class="iconbtn faf-pgbtn" data-faf="'+act+'" data-id="'+w.id+'"'+(off?' disabled aria-disabled="true"':'')+
+      ' aria-label="'+lbl+'" title="'+lbl+'">'+faFIcon(ic)+'</button>';
+  }
+  return '<div class="faf-pager">'+
+    '<span class="faf-pgcount">'+from+' to '+to+' of '+res.totalCount+'</span>'+
+    btn('page-prev','chevron_left','Previous page, refetches from the server',i===0)+
+    '<span class="faf-pgnum">Page '+(i+1)+' of '+n+'</span>'+
+    btn('page-next','chevron_right','Next page, refetches from the server',i>=n-1)+
+  '</div>';
+}
+
+/* Glance: Total Net Value across ALL fixed assets, organisation wide. It ignores
+   Group By, Specific Group and Financial Measure entirely: always Net Value,
+   always org-wide. A build that makes it follow the measure selector is wrong.
+   The org-wide summation itself is not spelled out in any source and is carried
+   as an open item, not as a settled fact. */
+function faFOrgNetTotal(w){return faFDataset(w).reduce(function(s,a){return s+faFValue(a,'net');},0);}
+function faFOrgAssetCount(w){return faFDataset(w).length;}
+/* FIXED canonical column order. The old behaviour promoted the selected measure
+   to the front, and once the measure chip is hidden in the table view that
+   reordering would be driven by a control the user cannot see. Columns silently
+   moving is worse than columns being in a fixed order. */
+function faFMeasureOrder(){return FAF_MEASURES.slice();}
+var FAF_COMPACT_MEAS=['cost','accum','net'];
+function faFVisibleMeasures(full){
+  if(full) return FAF_MEASURES.slice();
+  return FAF_MEASURES.filter(function(m){return FAF_COMPACT_MEAS.indexOf(m.k)>-1;});
+}
+/* Tag # is the row identity, so it belongs wherever the full set is shown: the
+   pop-up and Detail. The sort default stays tag-asc, which keeps the order
+   stable and explicable the moment the pop-up shows the column it sorts on. */
+function faFColCount(full){return faFVisibleMeasures(full).length+(full?2:1);}
+
+/* (5) CONTROLS: three selections and no others. */
+function faFChip(w,type,label,aria,dead){
+  var open=!!(FAF_POP&&FAF_POP.type===type&&FAF_POP.id===w.id);
+  return '<button class="filter-chip'+(dead?' faf-chip-dead':'')+'" data-faf="'+type+'" data-id="'+w.id+'"'+
+    ' aria-haspopup="listbox" aria-expanded="'+open+'"'+
+    ' aria-label="'+faFEsc(aria)+'">'+
+    '<span class="fc-label">'+faFEsc(label)+'</span>'+faFIcon('expand_more')+'</button>';
+}
+function faFControls(w){
+  var d=faFDimDef(faFDimK(w)),g=faFCurrentGroup(w);
+  var groupLbl=(g===null)?'No groups returned':g;
+  return '<div class="faf-chiprow">'+
+    faFChip(w,'dim',d.l,'Group by, currently '+d.l,false)+
+    faFChip(w,'group',groupLbl,'Specific group, currently '+groupLbl,g===null)+
+  '</div>';
+}
+function faFViewToggle(w){
+  var v=faFViewK(w);
+  function seg(val,lbl,ic,tip){
+    return '<button class="vt'+(v===val?' on':'')+'" data-faf="view" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(v===val)+'" title="'+faFEsc(tip)+'">'+faFIcon(ic)+lbl+'</button>';
+  }
+  return '<div class="vtoggle faf-vtoggle" role="group" aria-label="View">'+
+    seg('assets','Asset Detail','table_rows','Individual assets within the selected specific group, with all five financial measures and a totals row.')+
+    seg('donut','Donut','donut_small','The selected measure split across the groups of the chosen dimension.')+
+  '</div>';
+}
+function faFDownloadBtn(w){
+  return '<button class="iconbtn faf-dl" data-faf="download" data-id="'+w.id+'" aria-label="Download every measure at full precision" title="Download every measure at full precision, not the shortened figures shown on screen.">'+faFIcon('download')+'</button>';
+}
+function faFHeader(w){
+  return '<div class="dep-hd faf-hd"><div class="dep-hd-top">'+faFControls(w)+
+    '<div class="dep-hd-toggle faf-hd-right">'+faFViewToggle(w)+faFDownloadBtn(w)+'</div></div></div>';
+}
+
+/* (6) CHART POPULATION. The rule a build must not get wrong in either direction:
+   the chart plots all groups in the dimension EXCLUDING any group whose selected
+   measure totals zero, and the TABLE is not filtered that way. The excluded
+   groups are NAMED in a note beneath the chart, so the information stays in the
+   DOM as text rather than silently disappearing. */
+function faFChartRows(w){
+  var all=faFGroupTotals(w);
+  var charted=all.filter(function(g){return g.total!==0;}).slice().sort(function(a,b){return Math.abs(b.total)-Math.abs(a.total);});
+  var zero=all.filter(function(g){return g.total===0;});
+  return {all:all,charted:charted,zero:zero,total:charted.reduce(function(s,g){return s+g.total;},0)};
+}
+function faFZeroNote(w,cut){
+  if(!cut.length) return '';
+  var m=faFMeasDef(faFMeasK(w));
+  var names=cut.map(function(g){return g.name;}).join(', ');
+  return '<div class="faf-note">'+faFIcon('info')+'<span>'+cut.length+' group'+(cut.length===1?'':'s')+' with no '+faFEsc(m.l)+' ('+faFEsc(names)+') '+(cut.length===1?'is':'are')+' excluded from the chart, as the widget defines it. A zero value group still appears in the asset table.</span></div>';
+}
+
+/* (7) VIEW: DONUT BY GROUP. */
+/* The pie's own control, placed with the chart instead of with the filters.
+   It reuses the shell's shared legend head, which thirteen other widgets also
+   is her chrome in her position rather than a new bar of our own. The
+   dimension stays beside it as quiet context, which is what the static
+   "<measure> by <dimension>" line used to carry on its own. */
+function faFMeasureRow(w){
+  var m=faFMeasDef(faFMeasK(w));
+  return '<div class="faf-meas-row">'+
+    faFChip(w,'measure','Financial Measure: '+m.l,'Financial measure for the chart, currently '+m.l,false)+
+  '</div>';
+}
+/* The keys' own header. It reuses the shell's shared legend heading, which is
+   what that element is for, and now genuinely heads the key list beneath it
+   instead of trailing the measure as context. */
+function faFKeysHead(w){
+  var d=faFDimDef(faFDimK(w));
+  return '<div class="legend-head faf-keys-head"><span class="legend-hd">By '+faFEsc(d.l)+'</span></div>';
+}
+function faFDonut(w){
+  var m=faFMeasDef(faFMeasK(w)),d=faFDimDef(faFDimK(w)),c=faFChartRows(w);
+  if(!c.charted.length||c.total===0){
+    /* the measure row comes FIRST here: this state is reached by picking a
+       measure nothing has, so the control that gets you out of it has to be
+       on screen. Without it the state would be a dead end. */
+    return faFMeasureRow(w)+'<div class="faf-chart-empty">'+faFIcon('donut_small')+'<span>No group in '+faFEsc(d.l)+' has a '+faFEsc(m.l)+' to chart.</span></div>'+faFZeroNote(w,c.zero);
+  }
+  var DS=({wide:260,xwide:340})[faFTier(w)]||200;
+  var R=52,C=2*Math.PI*R,off=0,arcs='',legend='';
+  c.charted.forEach(function(g,i){
+    var col=FAF_COLORS[i%FAF_COLORS.length];
+    var frac=Math.abs(g.total)/Math.abs(c.total),len=frac*C,pct=Math.round(frac*100);
+    var lbl=g.name+', '+m.l+' '+faFMoneyFull(g.total)+', '+pct+' percent of the charted total, '+g.count+' asset'+(g.count===1?'':'s')+'.';
+    arcs+='<circle class="faf-seg" cx="70" cy="70" r="'+R+'" fill="none" stroke="var('+col+')" stroke-width="20" stroke-dasharray="'+Math.min(len+0.9,C).toFixed(2)+' '+Math.max(0,C-len-0.9).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 70 70)"><title>'+faFEsc(lbl)+'</title></circle>';
+    off+=len;
+    legend+='<div class="leg faf-leg" title="'+faFEsc(lbl)+'"><span class="dot" style="background:var('+col+')"></span>'+
+      '<span class="lg-main">'+faFEsc(g.name)+'</span>'+
+      '<span class="lg-meta">'+faFMoneyShort(g.total)+' &middot; '+pct+'%</span></div>';
+  });
+  var aria=m.l+' by '+d.l+', '+faFMoneyFull(c.total)+' across '+c.charted.length+' group'+(c.charted.length===1?'':'s');
+  return '<div class="faf-pie">'+faFMeasureRow(w)+'<div class="pie-wrap row">'+
+    '<svg class="donut" viewBox="0 0 140 140" width="'+DS+'" height="'+DS+'" role="img" aria-label="'+faFEsc(aria)+'">'+arcs+
+    '<text x="70" y="67" text-anchor="middle" class="donut-c1">'+faFMoneyShort(c.total)+'</text>'+
+    '<text x="70" y="86" text-anchor="middle" class="donut-c2">'+faFEsc(m.short)+'</text></svg>'+
+    '<div class="legend-col">'+faFKeysHead(w)+
+    '<div class="legend" style="max-height:'+DS+'px">'+legend+'</div></div></div>'+
+    faFZeroNote(w,c.zero)+
+  '</div>';
+}
+
+/* (8) VIEW: ASSET DETAIL TABLE. Tag number, Name and all five measures in fixed
+   canonical order, plus a totals row over the whole filtered group.
+   Real table semantics: role="table" with aria-rowcount / aria-colcount, three
+   display:contents rowgroups so no box comes between the scroller and the flex
+   rows, columnheader / cell / rowheader roles, live aria-sort on every one of
+   the seven sortable columns, and the EXACT figure in title and aria-label
+   wherever the displayed figure is shortened. */
+function faFSortBtn(w,k,label){
+  var parts=faFSortK(w).split('-'),on=parts[0]===k;
+  var ic=on?(parts[1]==='asc'?'arrow_upward':'arrow_downward'):'unfold_more';
+  var dirWord=on?(parts[1]==='asc'?'ascending, click for descending':'descending, click for ascending'):'click to sort';
+  return '<button class="wt-sort'+(on?' on':'')+'" data-faf="sort" data-id="'+w.id+'" data-k="'+faFEsc(k)+'" title="'+faFEsc(label+', '+dirWord)+'" aria-label="'+faFEsc(label+', '+dirWord)+'">'+faFEsc(label)+' '+faFIcon(ic)+'</button>';
+}
+function faFSortAria(w,k){
+  var parts=faFSortK(w).split('-');
+  if(parts[0]!==k) return 'none';
+  return parts[1]==='asc'?'ascending':'descending';
+}
+function faFAssetHead(w,full){
+  var cells=faFVisibleMeasures(full).map(function(m){
+    return '<span class="faf-c" role="columnheader" aria-sort="'+faFSortAria(w,m.k)+'">'+faFSortBtn(w,m.k,m.short)+'</span>';
+  }).join('');
+  return '<div class="wt-row wt-head faf-arow" role="row">'+
+    (full?('<span class="faf-tag" role="columnheader" aria-sort="'+faFSortAria(w,'tag')+'">'+faFSortBtn(w,'tag','Tag #')+'</span>'):'')+
+    '<span class="faf-nm" role="columnheader" aria-sort="'+faFSortAria(w,'nm')+'">'+faFSortBtn(w,'nm','Name')+'</span>'+
+    cells+'</div>';
+}
+/* The zero treatment used to key off the SELECTED measure being zero, which
+   cannot mean anything once no measure is selected in this view, so a row is
+   marked only when its Net Value is zero, Net Value being the measure the
+   widget's own headline figure uses. The marker is not colour-only: the words
+   "fully depreciated" sit in the DOM next to the name. */
+function faFAssetRow(w,a,full){
+  var netZero=faFValue(a,'net')===0;
+  var cells=faFVisibleMeasures(full).map(function(m){
+    var v=faFValue(a,m.k);
+    var exact=a.tag+', '+a.nm+', '+m.l+' '+faFMoneyFull(v);
+    return '<span class="faf-c" role="cell" title="'+faFEsc(exact)+'" aria-label="'+faFEsc(exact)+'">'+faFMoneyShort(v)+'</span>';
+  }).join('');
+  /* When the table is slim the row opens the pop-up, which is where the
+     columns it does not show can be read. When it is already full there is
+     nothing more to open, so the row stays inert rather than offering a
+     control that would do nothing. */
+  var open=full?'':' data-faf="open-table" data-id="'+w.id+'" tabindex="0" aria-label="'+faFEsc(a.tag+', '+a.nm+', open the full breakdown')+'"';
+  return '<div class="wt-row faf-arow'+(netZero?' faf-zero':'')+(full?'':' faf-rowopen')+'" role="row"'+open+'>'+
+    (full?('<span class="faf-tag" role="cell">'+faFEsc(a.tag)+'</span>'):'')+
+    '<span class="faf-nm" role="cell" title="'+faFEsc(a.nm)+'">'+faFEsc(a.nm)+
+      (netZero?'<span class="faf-zerotag">fully depreciated</span>':'')+'</span>'+
+    cells+'</div>';
+}
+/* Takes the SERVER'S totals and count. It must NOT reduce over the rows it was
+   given, because those are one page. This is the function that would silently
+   produce a wrong number if the work drifted back into the browser. */
+function faFAssetTotalRow(w,res,full){
+  var cells=faFVisibleMeasures(full).map(function(m){
+    var v=res.totals[m.k]||0;
+    var exact='Total '+m.l+', '+faFMoneyFull(v)+' across '+res.totalCount+' asset'+(res.totalCount===1?'':'s');
+    return '<span class="faf-c" role="cell" title="'+faFEsc(exact)+'" aria-label="'+faFEsc(exact)+'">'+faFMoneyShort(v)+'</span>';
+  }).join('');
+  return '<div class="wt-row faf-arow faf-totalrow" role="row">'+
+    (full?'<span class="faf-tag" role="rowheader">Total</span>':'')+
+    '<span class="faf-nm"'+(full?'':' role="rowheader"')+'>'+(full?'':'Total, ')+res.totalCount+' asset'+(res.totalCount===1?'':'s')+'</span>'+
+    cells+'</div>';
+}
+function faFAssetTable(w,full){
+  var g=faFCurrentGroup(w);
+  if(g===null) return faFUnimplemented(w);
+  /* ONE request per render. The renderers sort nothing, slice nothing and total
+     nothing: they display what came back. */
+  var res=faFServerQuery(w),d=faFDimDef(faFDimK(w));
+  var cols=faFColCount(full);
+  var body=res.rows.length
+    ? res.rows.map(function(a){return faFAssetRow(w,a,full);}).join('')
+    : '<div class="wt-row faf-arow" role="row"><span class="faf-nm" role="cell">No assets in this group.</span></div>';
+  /* the column count was hardcoded at seven, which would have lied the moment
+     the slim table dropped three of them */
+  var aria='Assets in '+d.l+' '+g+', '+res.totalCount+' asset row'+(res.totalCount===1?'':'s')+', '+cols+' columns'+(full?'':', select a row for every column');
+  return '<div class="faf-tblwrap">'+
+    '<div class="scroll faf-tscroll" role="table" aria-label="'+faFEsc(aria)+'" aria-rowcount="'+(res.totalCount+2)+'" aria-colcount="'+cols+'">'+
+      '<div class="faf-tbl'+(full?'':' faf-tbl-slim')+'">'+
+        '<div class="faf-rowgroup" role="rowgroup">'+faFAssetHead(w,full)+'</div>'+
+        '<div class="faf-rowgroup" role="rowgroup">'+body+'</div>'+
+        '<div class="faf-rowgroup" role="rowgroup">'+faFAssetTotalRow(w,res,full)+'</div>'+
+      '</div>'+
+    '</div>'+
+    faFPager(w,res)+
+  '</div>';
+}
+
+/* (9) STATES. Most are unspecified in every source, so each renders something
+   obvious and leaves the gap VISIBLE rather than inventing behaviour. */
+function faFUnimplemented(w){
+  var d=faFDimDef(faFDimK(w));
+  return '<div class="state" data-kind="empty">'+faFIcon('layers_clear')+
+    '<div class="state-title">No groups returned for '+faFEsc(d.l)+'</div>'+
+    '<div class="state-sub">On the current Modern API this dimension hits an unimplemented switch case and returns an empty list, so neither the table nor the chart has anything to show. Pick Class, Building or Room instead.</div>'+
+  '</div>';
+}
+function faFNoAssets(w){
+  if(faFTier(w)==='kpi'){
+    return '<div class="kpi-row"><div class="kpi-num"><div class="dep-hd-kpigrp"><span class="metric-value faf-kpi-none">No assets</span></div>'+
+      '<div class="gl-sub"><span>no fixed asset records for this organisation</span></div>'+
+    '</div></div>';
+  }
+  return '<div class="state" data-kind="empty">'+faFIcon('inventory_2')+
+    '<div class="state-title">No fixed assets</div>'+
+    '<div class="state-sub">There are no fixed asset records for this organisation. This wording is build-invented: no empty-state copy has been decided (Step 4 Sign-off Readiness row 8).</div>'+
+  '</div>';
+}
+/* No module rights, loading, error or API failure, stale data and a "data as of"
+   signal have NO defined behaviour anywhere, so nothing has been designed for
+   them. This ONE frame stands in for all of them and names the gap, rather than
+   each being quietly invented. Reached with state:"unspecified". */
+function faFUnbuilt(w){
+  return '<div class="state" data-kind="empty">'+faFIcon('help')+
+    '<div class="state-title">State not specified</div>'+
+    '<div class="state-sub">This state has no defined behaviour in any source, so nothing has been designed for it: no module rights, loading, error and stale data all land here (Step 4 Sign-off Readiness row 8).</div>'+
+  '</div>';
+}
+
+/* (10) GLANCE: ONE figure, Total Net Value org-wide, plus an asset-count pill.
+   No controls, no view switch, no download. Refresh comes from the card chrome. */
+function faFGlance(w){
+  var tot=faFOrgNetTotal(w),n=faFOrgAssetCount(w);
+  var exact='Total Net Value across all fixed assets, organisation wide, '+faFMoneyFull(tot);
+  return '<div class="kpi-row"><div class="kpi-num">'+
+    '<div class="dep-hd-kpigrp"><span class="metric-value" title="'+faFEsc(exact)+'" aria-label="'+faFEsc(exact)+'">'+faFMoneyShort(tot)+'</span>'+
+      '<span class="bank-pill">'+faFIcon('inventory_2')+n+' asset'+(n===1?'':'s')+'</span></div>'+
+    '<div class="gl-sub"><span>Total Net Value, all fixed assets, organisation wide</span></div>'+
+  '</div></div>';
+}
+
+function faFTier(w){
+  var s=w.size;
+  if(s==='kpi') return 'kpi';
+  if(s==='xwide'||s==='large'||s==='detail') return 'xwide';
+  return 'wide';
+}
+/* Bars removed, so anything that is not the asset table is the donut, including
+   a stale 'bars' left in state from before the change. */
+function faFActiveView(w){
+  /* Detail has the room for all seven columns; Explore gets the slim table and
+     offers the rest through the pop-up. */
+  return (faFViewK(w)==='assets')?faFAssetTable(w,faFTier(w)==='xwide'):faFDonut(w);
+}
+
+function faFTableModalHTML(){
+  var w=modal&&modal.id?find(modal.id):null;
+  if(!w) return '';
+  var d=faFDimDef(faFDimK(w)),g=faFCurrentGroup(w);
+  var ttl=(g===null?d.l:(d.l+': '+g));
+  var groupLbl=(g===null)?'No groups returned':g;
+  var chips='<div class="faf-chiprow faf-modal-chips">'+
+    faFChip(w,'dim',d.l,'Group by, currently '+d.l,false)+
+    faFChip(w,'group',groupLbl,'Specific group, currently '+groupLbl,g===null)+
+  '</div>';
+  return '<div class="modal-backdrop" data-action="modal-close"><div class="modal faf-table-modal faf-root" data-action="stop" role="dialog" aria-modal="true" aria-label="'+faFEsc('Every asset measure for '+ttl)+'">'+
+    '<div class="modal-h"><span class="modal-title"><span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">table_rows</span>'+faFEsc(ttl)+'</span>'+
+    '<span class="faf-modal-acts">'+faFDownloadBtn(w)+
+    '<button class="iconbtn" data-action="modal-close" aria-label="Close">'+faFIcon('close')+'</button></span></div>'+
+    '<div class="modal-b">'+chips+faFAssetTable(w,true)+'</div>'+
+    '<div class="modal-f"><button class="btn primary sm" data-action="modal-close">Close</button></div>'+
+  '</div></div>';
+}
+function faFBody(w){
+  /* The real empty-data guard keys off the DATASET being empty, not only off an
+     explicitly set state flag, so both routes land on the same state. */
+  if(w.state==='empty'||!faFDataset(w).length) return faFNoAssets(w);
+  if(w.state==='unspecified') return faFUnbuilt(w);
+  if(faFTier(w)==='kpi') return faFGlance(w);
+  /* An unimplemented Group By has no groups at all, so there is no view to
+     render at either Explore or Detail: the placeholder replaces the body and
+     the controls stay live so the user can pick a dimension that works. */
+  if(!faFGroupNames(w).length) return faFHeader(w)+'<div class="faf-body">'+faFUnimplemented(w)+'</div>';
+  return faFHeader(w)+'<div class="faf-body">'+faFActiveView(w)+'</div>';
+}
+/* Single entry point, dispatched by w.kind==="fixedassets". */
+function faFContent(w){
+  var tier=faFTier(w);
+  return '<div class="faf-root faf-w" data-tier="'+tier+'">'+faFBody(w)+'</div>';
+}
+
+/* (12) POPOVER. Its own #fafPop, body-appended and .faf-root-scoped so it
+   inherits the same tokens as the card. */
+function faFPopContent(){
+  var w=FAF_POP?find(FAF_POP.id):null;
+  if(!w) return '';
+  if(FAF_POP.type==='dim'){
+    return '<div class="cap">Group by</div><div class="menu-scroll">'+FAF_DIMS.map(function(d){
+      var on=faFDimK(w)===d.k;
+      return '<button class="mi'+(on?' check':'')+(d.impl?'':' faf-mi-dead')+'" role="option" aria-selected="'+on+'" data-faf="set-dim" data-id="'+w.id+'" data-v="'+d.k+'">'+
+        (on?faFIcon('check'):'<span class="mi-gap"></span>')+'<span class="mi-nm">'+faFEsc(d.l)+'</span>'+
+        (d.impl?'':'<span class="faf-mi-tag">not on API</span>')+'</button>';
+    }).join('')+'</div>';
+  }
+  if(FAF_POP.type==='group'){
+    var names=faFGroupNames(w),cur=faFCurrentGroup(w);
+    if(!names.length){
+      return '<div class="cap">Specific group</div><div class="mi faf-mi-dead"><span class="mi-gap"></span><span class="mi-nm">No groups returned for this dimension</span></div>';
+    }
+    return '<div class="cap">Specific group</div><div class="menu-scroll">'+names.map(function(g){
+      var on=cur===g;
+      return '<button class="mi'+(on?' check':'')+'" role="option" aria-selected="'+on+'" data-faf="set-group" data-id="'+w.id+'" data-v="'+faFEsc(g)+'">'+
+        (on?faFIcon('check'):'<span class="mi-gap"></span>')+'<span class="mi-nm">'+faFEsc(g)+'</span></button>';
+    }).join('')+'</div>';
+  }
+  return '<div class="cap">Financial measure</div><div class="menu-scroll">'+FAF_MEASURES.map(function(m){
+    var on=faFMeasK(w)===m.k;
+    return '<button class="mi'+(on?' check':'')+'" role="option" aria-selected="'+on+'" data-faf="set-measure" data-id="'+w.id+'" data-v="'+m.k+'">'+
+      (on?faFIcon('check'):'<span class="mi-gap"></span>')+'<span class="mi-nm">'+faFEsc(m.l)+'</span></button>';
+  }).join('')+'</div>';
+}
+function faFOpenPop(anchor,type,id){
+  FAF_POP={type:type,id:id};
+  var el=document.getElementById('fafPop');
+  if(!el){el=document.createElement('div');el.id='fafPop';document.body.appendChild(el);}
+  el.setAttribute('data-faf','stop');
+  el.className='faf-root faf-pop';
+  el.setAttribute('role','listbox');
+  el.innerHTML=faFPopContent();
+  var r=anchor.getBoundingClientRect(),M=8;
+  el.style.visibility='hidden';el.style.left='0px';el.style.top='0px';
+  var bw=el.offsetWidth,bh=el.offsetHeight;
+  var left=Math.min(Math.max(M,r.left),window.innerWidth-bw-M);
+  var top=r.bottom+6;if(top+bh>window.innerHeight-M)top=Math.max(M,r.top-bh-6);
+  el.style.left=left+'px';el.style.top=top+'px';el.style.visibility='';
+}
+function faFClosePop(){FAF_POP=null;var el=document.getElementById('fafPop');if(el)el.remove();}
+
+function faFHandleClick(e){
+  var t=e.target.closest?e.target.closest('[data-faf]'):null;
+  if(!t){if(FAF_POP&&!(e.target.closest&&e.target.closest('#fafPop')))faFClosePop();return;}
+  var a=t.getAttribute('data-faf');
+  if(a==='stop')return;
+  var id=t.getAttribute('data-id'),w=id?find(id):null;
+  if(!w)return;
+  if(a==='view'){w.faFView=(t.getAttribute('data-v')==='donut')?'donut':'assets';faFClosePop();render();return;}
+    /* a slim row opens the full table; the pop-up uses her shared modal
+       object, so her own modal-close action closes it and we add no closer */
+    if(a==='open-table'){modal={type:'fafTable',id:id,t:'Fixed assets'};modalMounted=false;faFClosePop();render();return;}
+  /* Paging. Prev and Next move one page from the page the server actually
+     served, so a change that shortens the set cannot strand the view past the
+     end. Totals and the donut never page. */
+  if(a==='page-prev'){w.faFPage=Math.max(0,faFServerQuery(w).pageIndex-1);render();return;}
+  if(a==='page-next'){var q=faFServerQuery(w);w.faFPage=Math.min(q.pageCount-1,q.pageIndex+1);render();return;}
+  if(a==='dim'||a==='group'||a==='measure'){
+    if(FAF_POP&&FAF_POP.type===a&&FAF_POP.id===id&&document.getElementById('fafPop'))faFClosePop();
+    else faFOpenPop(t,a,id);
+    render();return;
+  }
+  if(a==='set-dim'){
+    var nd=t.getAttribute('data-v');
+    if(faFDimK(w)!==nd){w.faFDim=nd;w.faFGroup=null;w.faFPage=0;}  /* THE RESET */
+    faFClosePop();render();return;
+  }
+  /* Back to page 1 whenever the row set changes: landing on page 4 of a group
+     that now has one page would show an empty table. */
+  if(a==='set-group'){w.faFPage=0;w.faFGroup=t.getAttribute('data-v');faFClosePop();render();return;}
+  if(a==='set-measure'){w.faFMeasure=t.getAttribute('data-v');faFClosePop();render();return;}
+  if(a==='sort'){
+    w.faFPage=0;
+    var k=t.getAttribute('data-k'),p=faFSortK(w).split('-');
+    /* First click on a money column opens DESCENDING, because the useful
+       question of a value column is which is largest. Text columns open
+       ascending. Re-clicking the active column flips it. */
+    var firstDir=FAF_MEASURES.some(function(m){return m.k===k;})?'desc':'asc';
+    w.faFSort=(p[0]===k)?(k+'-'+(p[1]==='asc'?'desc':'asc')):(k+'-'+firstDir);
+    faFClosePop();render();return;
+  }
+  if(a==='download'){
+    faFClosePop();
+    setStatus('Download is a placeholder: it would carry every measure at full precision, and no export endpoint exists for fixed assets yet.');
+    return;
+  }
+}
+var FAF_WIRED=false;
+(function(){
+  if(FAF_WIRED)return;FAF_WIRED=true;
+  document.addEventListener("click",faFHandleClick);
+  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&FAF_POP)faFClosePop();});
+})();
+WIDGETS.register("fixedassets",{content:faFContent,about:function(w){return {h:w.title,b:FAF_ABOUT};},modals:{fafTable:faFTableModalHTML}});
+/* ===== end W11 Fixed Asset Values V2 ===== */
+
   /* ===== P2/P3 WIDGET BLOCKS (pension, remittance, gifts, loans) ===== */
 /* =======================================================================
    Gifts Pledges  (prefix: gft, kind:"gifts")
@@ -8329,7 +8929,6 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
      the pre-edit snapshot.
   ===================================================================== */
   var CMPNOTE_={
-    W11:{h:"Ours is a from-scratch rebuild, deliberately not a restyle of her block.",rows:["All seven columns become sortable, server-side, defaulting to asset tag ascending; her block has no sort control.","Server paging at 10 rows per page, with totals computed over the whole group and unaffected by paging.","Two views behind a toggle, Asset Detail table and Donut; the third group-bars view was removed.","Detail shows ONE view full width; the side-by-side pair was retired.","The Financial Measure chip is Donut-only, legitimate as a client filter because all five measures arrive per group.","An icon-only download is added, recorded in the spec as an unfunded gap.","The register grows from 13 assets to 52 across six dimensions."],open:"The default view is contested: the amended handoff says Donut, the built code treats a null state as Asset Detail, and the port follows the build."},
     W13:{h:"Ours rebuilds her Purchasing board as the real approval process from the record screen.",rows:["Four payment-progress lanes become THREE real approval states: Pending, Approved and Rejected.","A split Finish column adds Close for paid orders and Void for unpaid, each behind a confirm with a reason.","Cards are DRAGGED between columns; her focus overlay with Approve and Reject buttons is gone.","Hold with a reason is added: a held card turns yellow, shows a lock and refuses to move until the hold clears.","Card colour carries the payment sub-state and is always paired with a text badge, never colour alone.","The record popup reaches record-screen parity across five tabs, including a real interactive Approvals grid.","The encumbrance chart is cut entirely, and sort is fixed oldest first with no sort control anywhere."],open:"The payment-location dispute is live and no side is taken, and no dashboard API serves approve, reject, hold, payment or the archive yet."},
     W15:{h:"Ours is her Bank widget rebuilt to her design, reusing her CSS rather than redeclaring it.",rows:["Both presentations stay, but ONE shows at a time at every tier; her paired Detail layout is retired.","Client-side Load more becomes SERVER paging: 12 per page over 52 accounts, stating the page and the range.","Ordering is fixed alphabetical server-side with a unique tiebreaker; her sortable column headers are not built.","Totals and the bar scale come from the whole filtered set, so turning the page moves neither the total nor a bar.","Drill-through is dropped: Single Account mode already IS this widget's drill-in mechanism.","Her div row stacks become real tables with header cells and scope, because a scoped header cell cannot survive a div row.","Red leaves the bars for the amethyst ramp and survives only on the Overdrawn status chip."],open:"The paged accounts endpoint exists in no API document, and the seven-line per-account activity breakdown is entirely new backend work."},
     W16:{h:"Ours is a one-to-one copy of her v2 Payables design plus exactly one owner-approved addition.",rows:["A second chip is added: a due-date horizon of all outstanding, or the next 7, 30, 60 or 90 days.","Overdue invoices are ALWAYS included whatever the horizon, so a narrowed horizon can never shrink the overdue band.","A due filter that a new horizon just emptied SNAPS back to All due dates rather than rendering an empty table.","A filter goes widget-wide: every aggregate reads one horizon-scoped function, so nothing on the card can disagree.","Five table columns become four, folding her Status pill into a two-line Due date cell.","Row click and the invoice detail modal are not built at all; drill-through stays an open question.","Her loading line, computed but never rendered in her own block, is now actually shown under the KPI."],open:"The aging basis, due date versus invoice date, was never confirmed against the API, and it moves every band, subtotal and the horizon itself."},
@@ -8337,7 +8936,6 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
   };
   /* number, display name, HER kind + her state, OUR kind + our state */
   var CMP_ROWS=[
-    ["W11","Fixed Asset Values","fixedassets",{faGroupBy:"cls",faGroup:"__all",faMeasure:"net",updated:"just now"},"fixedassets-mb",{faFDim:"cls",faFMeasure:"net",faFSort:"tag-asc",faFPage:0,updated:"just now"}],
     ["W13","Purchasing Management","purchasing",{admin:true,pstatus:"mine",ppath:null,purview:"queue",encview:"chart",psort:"age-desc"},"purchasing-mb",{purfView:"kanban",purfStatus:"All statuses",purfPath:null,purfDept:null,purfYear:null,purfOv:false,updated:"just now"}],
     ["W15","Bank Balances","bank",{bkacct:null,bkview:"table",bksort:"bal-desc"},"bank-mb",{bkFAcct:null,bkFView:"table",bkFPage:0,bkFOver:false,bkFSort:"nm-asc"}],
     ["W16","Accounts Payable By Due Date","payables",{apview:"table",apDue:"total",apsort:"due-asc",updated:"just now"},"payables-mb",{apFDue:"total",apFSort:"due-asc",apFHz:"all",updated:"just now"}],
@@ -8454,10 +9052,6 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
       {id:"gft3", title:"Gifts Pledges (one purpose)", kind:"gifts", size:"wide",  tiers:["kpi","wide","xwide"], dataset:"single", gftThru:GFT_TODAY, gftView:"progress", gftSort:"fulfilled-asc"},
       {id:"gft4", title:"Gifts Pledges (all on track)", kind:"gifts", size:"wide",  tiers:["kpi","wide","xwide"], dataset:"ontrack", gftThru:GFT_TODAY, gftView:"progress", gftSort:"fulfilled-asc"},
       {id:"gft5", title:"Gifts Pledges (no pledges yet)", kind:"gifts", size:"wide", tiers:["kpi","wide","xwide"], dataset:"empty", state:"empty"},
-      {id:"fa1",kind:"fixedassets",title:"Fixed Asset Values",size:"wide",updated:"just now",goto:false,tiers:["kpi","wide","xwide"],faGroupBy:"cls",faGroup:"__all",faMeasure:"net"},
-      {id:"fa1_k",kind:"fixedassets",title:"Fixed Asset Values (Glance)",size:"kpi",updated:"just now",goto:false,tiers:["kpi","wide","xwide"],faGroupBy:"cls",faGroup:"__all",faMeasure:"net"},
-      {id:"fa2",kind:"fixedassets",title:"Fixed Asset Values (Annex, accumulated depreciation)",size:"xwide",updated:"just now",tiers:["kpi","wide","xwide"],faGroupBy:"bld",faGroup:"Annex",faMeasure:"acc"},
-      {id:"fa3",kind:"fixedassets",title:"Fixed Asset Values (nothing set up)",size:"wide",updated:"just now",state:"empty",tiers:["kpi","wide","xwide"]},
       /* W06 Insurance Billing Plans */
       {id:"insO", title:"Insurance Billing Plans",                     kind:"insurance", size:"wide",  tiers:["kpi","wide","xwide"], insType:"All",      insSort:"count-desc", insView:"table", insExpanded:{}, updated:"just now", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
       {id:"insO_k", title:"Insurance Billing Plans",                     kind:"insurance", size:"kpi",  tiers:["kpi","wide","xwide"], insType:"All",      insSort:"count-desc", insView:"table", insExpanded:{}, updated:"just now", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
@@ -8489,13 +9083,16 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
       {id:"lonF2", title:"Loans With Balance Due",  kind:"loans",size:"wide", tiers:["kpi","wide","xwide"],dataset:"current",lonType:"All",lonSort:"amt-desc",lonBucket:"total",lonView:"table",updated:"just now"}
       {id:"lonF3", title:"Loans With Balance Due",     kind:"loans",size:"wide", tiers:["kpi","wide","xwide"],state:"empty",lonType:"All",lonSort:"amt-desc",lonBucket:"total",lonView:"table",updated:"just now"}
       */
-      ,{id:"faF",  title:"Fixed Asset Values (OC)",                             kind:"fixedassets-mb",size:"wide", tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFPage:0,updated:"just now"}
-      ,{id:"faF_k",title:"Fixed Asset Values (OC, Glance)",                     kind:"fixedassets-mb",size:"kpi",  tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFPage:0,updated:"just now"}
-      ,{id:"faF_x",title:"Fixed Asset Values (OC, Detail view)",                kind:"fixedassets-mb",size:"xwide",tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFPage:0,updated:"just now"}
-      ,{id:"faF2", title:"Fixed Asset Values (OC, donut by building)",          kind:"fixedassets-mb",size:"wide", tiers:["kpi","wide","xwide"],goto:false,faFDim:"bldg",faFMeasure:"accum",faFSort:"tag-asc",faFPage:0,faFView:"donut",updated:"just now"}
-      ,{id:"faF3", title:"Fixed Asset Values (OC, dimension not on API)",       kind:"fixedassets-mb",size:"wide", tiers:["kpi","wide","xwide"],goto:false,faFDim:"acctAsset",faFMeasure:"net",faFSort:"tag-asc",faFPage:0,updated:"just now"}
-      ,{id:"faF4", title:"Fixed Asset Values (OC, no fixed assets)",            kind:"fixedassets-mb",size:"wide", tiers:["kpi","wide","xwide"],goto:false,state:"empty",faFDim:"cls",faFMeasure:"net",faFSort:"tag-asc",faFPage:0,updated:"just now"}
-      ,{id:"faF5", title:"Fixed Asset Values (OC, state not specified)",        kind:"fixedassets-mb",size:"wide", tiers:["kpi","wide","xwide"],goto:false,state:"unspecified",faFDim:"cls",faFMeasure:"net",faFSort:"tag-asc",faFPage:0,updated:"just now"}
+      /* W11 Fixed Asset Values */
+      ,{id:"faF",  title:"Fixed Asset Values",                             kind:"fixedassets",size:"wide", tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFPage:0,updated:"just now"}
+      ,{id:"faF_k",title:"Fixed Asset Values",                     kind:"fixedassets",size:"kpi",  tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFPage:0,updated:"just now"}
+      ,{id:"faF_x",title:"Fixed Asset Values",                kind:"fixedassets",size:"xwide",tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFPage:0,updated:"just now"}
+      /* W11 driver fixtures (state variants), not rendered as cards:
+      {id:"faF2", title:"Fixed Asset Values",          kind:"fixedassets",size:"wide", tiers:["kpi","wide","xwide"],goto:false,faFDim:"bldg",faFMeasure:"accum",faFSort:"tag-asc",faFPage:0,faFView:"donut",updated:"just now"}
+      {id:"faF3", title:"Fixed Asset Values",       kind:"fixedassets",size:"wide", tiers:["kpi","wide","xwide"],goto:false,faFDim:"acctAsset",faFMeasure:"net",faFSort:"tag-asc",faFPage:0,updated:"just now"}
+      {id:"faF4", title:"Fixed Asset Values",            kind:"fixedassets",size:"wide", tiers:["kpi","wide","xwide"],goto:false,state:"empty",faFDim:"cls",faFMeasure:"net",faFSort:"tag-asc",faFPage:0,updated:"just now"}
+      {id:"faF5", title:"Fixed Asset Values",        kind:"fixedassets",size:"wide", tiers:["kpi","wide","xwide"],goto:false,state:"unspecified",faFDim:"cls",faFMeasure:"net",faFSort:"tag-asc",faFPage:0,updated:"just now"}
+      */
       /* ===== W13 Purchasing Management V2 registry, prefix purF, kind "purchasing-mb". Six ===== */
       ,{id:"purF",  title:"Purchasing Management (OC)",                        kind:"purchasing-mb",size:"wide", tiers:["kpi","wide","xwide"],purfView:"kanban",purfStatus:"All statuses",purfPath:null,purfDept:null,purfYear:null,purfOv:false,updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]}
       ,{id:"purF_k",title:"Purchasing Management (OC, Glance)",                kind:"purchasing-mb",size:"kpi",  tiers:["kpi","wide","xwide"],purfView:"kanban",purfStatus:"All statuses",purfPath:null,purfDept:null,purfYear:null,purfOv:false,updated:"just now"}
@@ -8546,7 +9143,7 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
     fund:{h:"Spend by fund",b:"How spending breaks down across your restricted and unrestricted funds."},
     signups:{h:"New sign-ups",b:"People who recently joined a group or ministry. The number is the total for the period you choose; the list shows the most recent sign-ups regardless of period."}
   };
-  function aboutOf(w){var wa=WIDGETS.about(w);if(wa)return wa;if(w.kind==="bank")return {h:w.title,b:"The current balance of each active bank account, based on unreconciled activity since the last reconciliation. Select one account to see what has moved (deposits, voids, checks, withdrawals, EFT) since then."};if(w.kind==="purchasing")return {h:w.title,b:PUR_ABOUT_BODY};if(w.kind==="gifts")return {h:w.title,b:GFT_ABOUT_BODY};if(w.kind==="fixedassets-mb")return {h:w.title,b:FAF_ABOUT};if(w.kind==="purchasing-mb")return {h:w.title,b:PURF_ABOUT};if(w.kind==="bank-mb")return {h:w.title,b:BKF_ABOUT};if(w.kind==="payables-mb")return {h:w.title,b:APF_ABOUT};if(w.kind==="gifts-mb")return {h:w.title,b:GPF_ABOUT};return ABOUT[w.id]||{h:w.title,b:"A short, plain-language description of what this widget shows and where its data comes from."};}
+  function aboutOf(w){var wa=WIDGETS.about(w);if(wa)return wa;if(w.kind==="bank")return {h:w.title,b:"The current balance of each active bank account, based on unreconciled activity since the last reconciliation. Select one account to see what has moved (deposits, voids, checks, withdrawals, EFT) since then."};if(w.kind==="purchasing")return {h:w.title,b:PUR_ABOUT_BODY};if(w.kind==="gifts")return {h:w.title,b:GFT_ABOUT_BODY};if(w.kind==="purchasing-mb")return {h:w.title,b:PURF_ABOUT};if(w.kind==="bank-mb")return {h:w.title,b:BKF_ABOUT};if(w.kind==="payables-mb")return {h:w.title,b:APF_ABOUT};if(w.kind==="gifts-mb")return {h:w.title,b:GPF_ABOUT};return ABOUT[w.id]||{h:w.title,b:"A short, plain-language description of what this widget shows and where its data comes from."};}
   var EMPTY_COPY={deposits:{title:"No deposit accounts",sub:"There are no deposit accounts to show here yet.",cta:"Add account",action:"add-acct"},payroll:{title:"No payroll runs in this range",sub:"There's no payroll history for the selected period yet."},budget:{title:"No budget set up",sub:"Once a budget is entered for this fiscal year, actuals will be compared against it here.",cta:"Set up budget",action:"add-budget"}};
   var ERROR_COPY={deposits:{title:"Couldn’t load balances",sub:"Something went wrong fetching account data."},payroll:{title:"Couldn’t load payroll data",sub:"Something went wrong fetching payroll history."},budget:{title:"Couldn’t load budget data",sub:"Something went wrong fetching budget and actual figures."}};
 /* --- Bank Balances additive copy --- */
@@ -9591,114 +10188,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
 
 
 
-  /* ===== Fixed Asset Values (fa, kind:"fixedassets") ===== */
-  var FA_ASSETS=[
-    {tag:"FA-1001",name:"Main Sanctuary Building",cap:2400000,cost:2400000,dep:2400000,acc:480000,net:1920000,cls:"Buildings",bld:"Main Campus",room:null,aacct:"1500 Buildings",dacct:"1591 Accum Deprec - Buildings",eacct:"6600 Depreciation Expense"},
-    {tag:"FA-1002",name:"Fellowship Hall",cap:850000,cost:850000,dep:850000,acc:255000,net:595000,cls:"Buildings",bld:"Main Campus",room:null,aacct:"1500 Buildings",dacct:"1591 Accum Deprec - Buildings",eacct:"6600 Depreciation Expense"},
-    {tag:"FA-1003",name:"15-Passenger Van",cap:48000,cost:48000,dep:43000,acc:36000,net:12000,cls:"Vehicles",bld:"Main Campus",room:null,aacct:"1520 Vehicles",dacct:"1592 Accum Deprec - Vehicles",eacct:"6600 Depreciation Expense"},
-    {tag:"FA-1004",name:"Activity Bus",cap:92000,cost:92000,dep:88000,acc:23000,net:69000,cls:"Vehicles",bld:"Main Campus",room:null,aacct:"1520 Vehicles",dacct:"1592 Accum Deprec - Vehicles",eacct:"6600 Depreciation Expense"},
-    {tag:"FA-1005",name:"Commercial Range",cap:18500,cost:18500,dep:16500,acc:12900,net:5600,cls:"Equipment",bld:"Main Campus",room:"Kitchen",aacct:"1530 Equipment",dacct:"1593 Accum Deprec - Equipment",eacct:"6600 Depreciation Expense"},
-    {tag:"FA-1006",name:"AV Sound System",cap:64000,cost:64000,dep:60000,acc:40000,net:24000,cls:"Equipment",bld:"Main Campus",room:"Sanctuary",aacct:"1530 Equipment",dacct:"1593 Accum Deprec - Equipment",eacct:"6600 Depreciation Expense"},
-    {tag:"FA-1007",name:"Copier / MFP",cap:12000,cost:12000,dep:11000,acc:9600,net:2400,cls:"Equipment",bld:"Annex",room:"Office 201",aacct:"1530 Equipment",dacct:"1593 Accum Deprec - Equipment",eacct:"6650 Office Equipment Deprec"},
-    {tag:"FA-1008",name:"Playground Structure",cap:35000,cost:35000,dep:33000,acc:7000,net:28000,cls:"Equipment",bld:"Main Campus",room:null,aacct:"1530 Equipment",dacct:"1593 Accum Deprec - Equipment",eacct:"6600 Depreciation Expense"},
-    {tag:"FA-1009",name:"Parking Lot Land",cap:300000,cost:300000,dep:0,acc:0,net:300000,cls:"Land",bld:null,room:null,aacct:"1510 Land",dacct:null,eacct:null},
-    {tag:"FA-1010",name:"Riding Mower",cap:9800,cost:9800,dep:9000,acc:8200,net:1600,cls:"Equipment",bld:"Annex",room:null,aacct:"1530 Equipment",dacct:"1593 Accum Deprec - Equipment",eacct:"6600 Depreciation Expense"},
-    {tag:"FA-1011",name:"Portable Classroom",cap:120000,cost:120000,dep:120000,acc:60000,net:60000,cls:"Buildings",bld:null,room:null,aacct:"1500 Buildings",dacct:"1591 Accum Deprec - Buildings",eacct:"6600 Depreciation Expense"},
-    {tag:"FA-1012",name:"Grand Piano",cap:55000,cost:55000,dep:50000,acc:11000,net:44000,cls:"Equipment",bld:"Main Campus",room:"Sanctuary",aacct:null,dacct:"1593 Accum Deprec - Equipment",eacct:"6600 Depreciation Expense"}
-  ];
-  var FA_DIMS=[["cls","Class"],["bld","Building"],["room","Room"],["aacct","Asset Account"],["dacct","Accumulated Depreciation Account"],["eacct","Expense Account"]];
-  var FA_MEASURES=[["cap","Capitalized Value"],["cost","Cost"],["dep","Depreciable Value"],["acc","Accumulated Depreciation"],["net","Net Value"]];
-  var FA_CATALOG={
-    cls:["Buildings","Vehicles","Equipment","Land","Furniture & Fixtures"],
-    bld:["Main Campus","Annex","Off-site Storage"],
-    room:["Sanctuary","Kitchen","Office 201","Choir Room"],
-    aacct:["1500 Buildings","1510 Land","1520 Vehicles","1530 Equipment","1540 Furniture & Fixtures"],
-    dacct:["1591 Accum Deprec - Buildings","1592 Accum Deprec - Vehicles","1593 Accum Deprec - Equipment"],
-    eacct:["6600 Depreciation Expense","6650 Office Equipment Deprec"]
-  };
-  var FA_NA="__na",FA_ALL="__all",FA_NA_LABEL="Not assigned";
-  var FA_PIE=["var(--am-600)","var(--am-400)","var(--am-300)","var(--am-500)","var(--am-200)","var(--am-700)","var(--am-100)"];
-  function faDimLabel(d){for(var i=0;i<FA_DIMS.length;i++)if(FA_DIMS[i][0]===d)return FA_DIMS[i][1];return "Class";}
-  function faMeasureLabel(m){for(var i=0;i<FA_MEASURES.length;i++)if(FA_MEASURES[i][0]===m)return FA_MEASURES[i][1];return "Net Value";}
-  function faDim(w){return w.faGroupBy||"cls";}
-  function faMeasure(w){return w.faMeasure||"net";}
-  function faGroup(w){return w.faGroup||FA_ALL;}
-  function faHasNA(dim){return FA_ASSETS.some(function(a){return a[dim]==null;});}
-  function faTableAssets(w){var dim=faDim(w),g=faGroup(w);
-    if(g===FA_ALL)return FA_ASSETS.slice();
-    if(g===FA_NA)return FA_ASSETS.filter(function(a){return a[dim]==null;});
-    return FA_ASSETS.filter(function(a){return a[dim]===g;});}
-  function faGroupOptions(w){var dim=faDim(w),out=[{v:FA_ALL,label:"All groups",count:FA_ASSETS.length}];
-    FA_CATALOG[dim].forEach(function(name){out.push({v:name,label:name,count:FA_ASSETS.filter(function(a){return a[dim]===name;}).length});});
-    if(faHasNA(dim))out.push({v:FA_NA,label:FA_NA_LABEL,count:FA_ASSETS.filter(function(a){return a[dim]==null;}).length,na:true});
-    return out;}
-  function faGroupLabel(w){var g=faGroup(w);if(g===FA_ALL)return "All groups";if(g===FA_NA)return FA_NA_LABEL;return g;}
-  function faSum(list,m){return list.reduce(function(s,a){return s+(a[m]||0);},0);}
-  function faPieData(w){var dim=faDim(w),m=faMeasure(w),rows=[];
-    FA_CATALOG[dim].forEach(function(name){var v=faSum(FA_ASSETS.filter(function(a){return a[dim]===name;}),m);if(v>0)rows.push({name:name,val:v});});
-    if(faHasNA(dim)){var vn=faSum(FA_ASSETS.filter(function(a){return a[dim]==null;}),m);if(vn>0)rows.push({name:FA_NA_LABEL,val:vn,na:true});}
-    rows.sort(function(a,b){return b.val-a.val;});return rows;}
-  function faColumns(w){var sel=faMeasure(w),cols=[sel];FA_MEASURES.forEach(function(mm){if(mm[0]!==sel)cols.push(mm[0]);});return cols;}
-  function faChip(action,id,label){return '<button class="filter-chip fa-chip" data-action="'+action+'" data-id="'+id+'" aria-haspopup="listbox" aria-label="'+label.replace(/"/g,"&quot;")+', tap to change"><span class="fc-label">'+label+'</span>'+ICON("expand_more")+'</button>';}
-  function faControls(w){return '<div class="bgt-ctlrow fa-ctlrow">'+
-    faChip("fa-groupby",w.id,"Group by: "+faDimLabel(faDim(w)))+
-    faChip("fa-group",w.id,faGroupLabel(w))+
-    faChip("fa-measure",w.id,faMeasureLabel(faMeasure(w)))+'</div>';}
-  function faHeader(w){var m=faMeasure(w),list=faTableAssets(w),total=faSum(list,m),n=list.length,numInner;
-    if(w.faLoading){numInner='<div class="dep-hd-kpigrp"><span class="sk" style="width:120px;height:22px;border-radius:6px"></span><span class="sk" style="width:84px;height:20px;border-radius:999px"></span></div>';}
-    else{numInner='<div class="dep-hd-kpigrp"><span class="metric-value">'+money(total)+'</span><span class="fa-count-badge">'+ICON("inventory_2")+n+(n===1?" asset":" assets")+'</span></div>';}
-    var ctx='';
-    return '<div class="dep-hd fa-hd"><div class="dep-hd-top">'+faControls(w)+'</div>'+
-      '<div class="dep-hd-num"><div class="fa-numwrap">'+numInner+ctx+'</div></div></div>';}
-  function faTable(w){var cols=faColumns(w),sel=faMeasure(w),list=faTableAssets(w);
-    if(!list.length)return '<div class="fa-tbl"><div class="state fa-inline-empty" data-kind="empty">'+ICON("inbox")+'<div class="state-title">No assets in this group</div><div class="state-sub">Nothing is assigned to '+faGroupLabel(w)+' under '+faDimLabel(faDim(w))+' yet.</div></div></div>';
-    var head='<div class="wt-row wt-head fa-row"><span class="fa-c-tag">Tag #</span><span class="fa-c-name">Name</span>'+cols.map(function(c){return '<span class="fa-c-num'+(c===sel?" fa-emph":"")+'">'+faMeasureLabel(c)+'</span>';}).join("")+'</div>';
-    var body=list.map(function(a){return '<div class="wt-row fa-row" data-acct="'+a.name.replace(/"/g,"&quot;")+'"><span class="fa-c-tag">'+a.tag+'</span><span class="fa-c-name">'+a.name+'</span>'+cols.map(function(c){return '<span class="fa-c-num'+(c===sel?" fa-emph":"")+'">'+money(a[c])+'</span>';}).join("")+'</div>';}).join("");
-    var totals='<div class="wt-row fa-row fa-total-row"><span class="fa-c-tag"></span><span class="fa-c-name">Total ('+list.length+(list.length===1?" asset":" assets")+')</span>'+cols.map(function(c){return '<span class="fa-c-num'+(c===sel?" fa-emph":"")+'">'+money(faSum(list,c))+'</span>';}).join("")+'</div>';
-    return '<div class="fa-tbl"><div class="scroll fa-tbl-scroll">'+head+body+totals+'</div></div>';}
-  function faPie(w,size){var rows=faPieData(w),tot=rows.reduce(function(s,r){return s+r.val;},0),R=52,C=2*Math.PI*R,off=0,arcs="",legend="";
-    var selName=(faGroup(w)===FA_NA)?FA_NA_LABEL:(faGroup(w)===FA_ALL?null:faGroup(w));
-    if(!rows.length)return '<div class="fa-pie"><div class="state fa-inline-empty" data-kind="empty">'+ICON("donut_large")+'<div class="state-title">Nothing to chart</div><div class="state-sub">No group has a '+faMeasureLabel(faMeasure(w)).toLowerCase()+' above zero.</div></div></div>';
-    rows.forEach(function(r,i){var frac=tot?r.val/tot:0,len=frac*C,c=FA_PIE[i%FA_PIE.length],hi=(selName!=null&&r.name===selName);
-      arcs+='<circle class="fa-seg'+(hi?" fa-seg-hi":"")+'" data-seg="'+i+'" cx="70" cy="70" r="'+R+'" fill="none" stroke="'+c+'" stroke-width="'+(hi?24:20)+'" stroke-dasharray="'+Math.min(len+0.9,C).toFixed(2)+' '+Math.max(0,C-len-0.9).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 70 70)"></circle>';off+=len;
-      legend+='<div class="leg fa-leg'+(hi?" fa-leg-hi":"")+'" data-seg="'+i+'"><span class="dot" style="background:'+c+'"></span><span class="lg-main">'+r.name+'</span><span class="lg-meta">'+money(r.val)+' · '+Math.round(frac*100)+'%</span></div>';});
-    var DS=size||210;
-    return '<div class="fa-pie"><div class="pie-wrap row"><svg class="donut" viewBox="0 0 140 140" width="'+DS+'" height="'+DS+'" aria-hidden="true">'+arcs+'<text x="70" y="67" text-anchor="middle" class="donut-c1">'+money(tot)+'</text><text x="70" y="86" text-anchor="middle" class="donut-c2">total</text></svg><div class="legend-col"><div class="legend-head"><span class="legend-hd">'+faMeasureLabel(faMeasure(w))+' by '+faDimLabel(faDim(w))+'</span></div><div class="legend" style="max-height:'+DS+'px">'+legend+'</div></div></div></div>';}
-  function faEmptyState(w){return '<div class="state" data-kind="empty">'+ICON("inventory_2")+'<div class="state-title">No fixed assets yet</div><div class="state-sub">When assets are added to the Fixed Assets module they will show here, grouped and valued.</div></div>';}
-  function faSkeletonBody(big){var t='<div class="fa-tbl"><div class="skeleton" aria-busy="true"><div class="sk" style="width:60%"></div><div class="sk" style="flex:1"></div><div class="sk" style="flex:1"></div></div></div>';
-    if(!big)return t;return '<div class="fa-full">'+t+'<div class="fa-pie"><div class="skeleton" aria-busy="true"><div class="sk" style="width:70%"></div><div class="sk" style="flex:1"></div></div></div></div>';}
-  function faContent(w){
-    if(w.state==="empty")return faEmptyState(w);
-    var sz=w.size,big=(sz==="large"||sz==="xwide"||sz==="detail");
-    if(sz==="kpi"){var m=faMeasure(w),list=faTableAssets(w),total=faSum(list,m),n=list.length;
-      var num=w.faLoading?'<div class="dep-hd-kpigrp"><span class="sk" style="width:110px;height:24px;border-radius:6px"></span></div>':'<div class="metric-value" data-total="'+money(total)+'">'+money(total)+'</div>';
-      return '<div class="kpi-row"><div class="kpi-num">'+num+'<div class="gl-sub fa-ctx">'+faMeasureLabel(m)+' · '+n+(n===1?" asset":" assets")+' · '+faDimLabel(faDim(w))+'</div></div></div>';}
-    var head=faHeader(w);
-    if(w.faLoading)return head+faSkeletonBody(big);
-    if(big)return head+'<div class="fa-full"><div class="fa-panel"><div class="dep-col-h">Assets in '+faGroupLabel(w)+'</div>'+faTable(w)+'</div><div class="fa-panel fa-panel-pie"><div class="dep-col-h">'+faMeasureLabel(faMeasure(w))+' by '+faDimLabel(faDim(w))+'</div>'+faPie(w,220)+'</div></div>';
-    return head+'<div class="fa-single">'+faTable(w)+'</div>';
-  }
-  function faLoad(w){w.faLoading=true;render();clearTimeout(timers["fa-"+w.id]);timers["fa-"+w.id]=setTimeout(function(){w.faLoading=false;w.updated="just now";render();},700);}
-  function faHandleClick(a,id,t){
-    if(a==="fa-groupby"){pop=(pop&&pop.type==="fa-groupby"&&pop.id===id)?null:{type:"fa-groupby",id:id};render();return true;}
-    if(a==="fa-set-groupby"){var wg=find(id);if(wg){var nd=t.getAttribute("data-d");if(faDim(wg)!==nd){wg.faGroupBy=nd;wg.faGroup=FA_ALL;faLoad(wg);}}pop=null;render();return true;}
-    if(a==="fa-group"){pop=(pop&&pop.type==="fa-group"&&pop.id===id)?null:{type:"fa-group",id:id};render();return true;}
-    if(a==="fa-set-group"){var wg2=find(id);if(wg2){var ng=t.getAttribute("data-g");if(faGroup(wg2)!==ng){wg2.faGroup=ng;faLoad(wg2);}}pop=null;render();return true;}
-    if(a==="fa-measure"){pop=(pop&&pop.type==="fa-measure"&&pop.id===id)?null:{type:"fa-measure",id:id};render();return true;}
-    if(a==="fa-set-measure"){var wg3=find(id);if(wg3){var nm=t.getAttribute("data-m");if(faMeasure(wg3)!==nm){wg3.faMeasure=nm;faLoad(wg3);}}pop=null;render();return true;}
-    return false;
-  }
-  function faPopContent(){
-    if(pop.type==="fa-groupby"){var wg=find(pop.id),cd=faDim(wg);
-      return '<div class="cap">Group assets by</div>'+FA_DIMS.map(function(o){var on=cd===o[0];return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-action="fa-set-groupby" data-id="'+wg.id+'" data-d="'+o[0]+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm">'+o[1]+'</span></button>';}).join("");}
-    if(pop.type==="fa-group"){var wg2=find(pop.id),cg=faGroup(wg2),opts=faGroupOptions(wg2),all=opts[0],rest=opts.slice(1);
-      var out='<div class="cap">Show group</div><button class="mi'+(cg===all.v?" check":"")+'" role="option" aria-selected="'+(cg===all.v)+'" data-action="fa-set-group" data-id="'+wg2.id+'" data-g="'+all.v+'">'+(cg===all.v?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm">'+all.label+'</span><span class="mi-sub">'+all.count+'</span></button>';
-      out+='<div class="sep"></div><div class="menu-scroll" role="listbox">'+rest.map(function(o){var on=cg===o.v;return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-action="fa-set-group" data-id="'+wg2.id+'" data-g="'+String(o.v).replace(/"/g,"&quot;")+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-ic material-symbols-rounded">'+(o.na?"help":"folder")+'</span><span class="mi-nm">'+o.label+'</span><span class="mi-sub">'+(o.count?o.count:"no assets")+'</span></button>';}).join("")+'</div>';
-      return out;}
-    if(pop.type==="fa-measure"){var wg3=find(pop.id),cm=faMeasure(wg3);
-      return '<div class="cap">Financial measure</div>'+FA_MEASURES.map(function(o){var on=cm===o[0];return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-action="fa-set-measure" data-id="'+wg3.id+'" data-m="'+o[0]+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm">'+o[1]+'</span></button>';}).join("");}
-    return "";
-  }
 
   function contentHTML(w){
     if(w.state==="loading")return '<div class="skeleton" aria-busy="true"><div class="sk" style="width:55%"></div><div class="sk" style="flex:1"></div></div>';
@@ -9706,9 +10195,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     var wreg=WIDGETS.content(w);if(wreg!==null)return wreg;
     if(w.kind==="purchasing")return purContent(w);
     if(w.kind==="payables")return apContent(w);
-    if(w.kind==="fixedassets")return faContent(w);
     if(w.kind==="gifts")return gftContent(w);
-    if(w.kind==="fixedassets-mb")return faFContent(w); // Fixed Asset Values (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its "no fixed assets" variant renders faFNoAssets and not the Deposits copy
     if(w.kind==="purchasing-mb")return purFContent(w); // Purchasing Management (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its "nothing to approve" variant renders purFEmpty and not the Deposits copy
     if(w.kind==="bank-mb")return bkFContent(w); // Bank Balances (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its "no accounts" variant renders bkFEmptyState and not the Deposits copy
     if(w.kind==="payables-mb")return apFContent(w); // Accounts Payable By Due Date (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its nothing-outstanding variant renders apFEmptyState and not the Deposits copy
@@ -9803,10 +10290,9 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
       return out+'</div>';}
     if(pop.type==="pur-status"||pop.type==="pur-path")return purPopContent();
     if(pop.type==="ap-due")return apPopContent();
-    if(pop.type==="fa-groupby"||pop.type==="fa-group"||pop.type==="fa-measure")return faPopContent();
     return "";
   }
-  function triggerSelector(){if(!pop)return null;var wt=WIDGETS.trigger();if(wt)return wt;if(pop.type==="wmenu")return '[data-action="wmenu"][data-id="'+pop.id+'"]';if(pop.type==="size")return '[data-action="wsize"][data-id="'+pop.id+'"]';if(pop.type==="switcher")return '[data-action="switcher"]';if(pop.type==="save")return '[data-action="savemenu"]';if(pop.type==="depfilter")return '[data-action="depfilter"][data-id="'+pop.id+'"]';if(pop.type==="advfilter")return '[data-action="advfilter"][data-id="'+pop.id+'"]';if(pop.type==="cmenu"||pop.type==="companydd")return '[data-action="cmenu"][data-id="'+pop.id+'"]';if(pop.type==="rangemenu")return '[data-action="rangemenu"][data-id="'+pop.id+'"]';if(pop.type==="winfo")return '[data-action="winfo"][data-id="'+pop.id+'"]';if(pop.type==="fa-groupby")return '[data-action="fa-groupby"][data-id="'+pop.id+'"]';if(pop.type==="fa-group")return '[data-action="fa-group"][data-id="'+pop.id+'"]';if(pop.type==="fa-measure")return '[data-action="fa-measure"][data-id="'+pop.id+'"]';if(pop.type==="ap-due")return '[data-action="ap-due"][data-id="'+pop.id+'"]';if(pop.type==="pur-status")return '[data-action="pur-status"][data-id="'+pop.id+'"]';if(pop.type==="pur-path")return '[data-action="pur-path"][data-id="'+pop.id+'"]';if(pop.type==="bank-acct")return '[data-action="bank-acct"][data-id="'+pop.id+'"]';if(pop.type==="expmenu")return '[data-action="expmenu"][data-id="'+pop.id+'"]';if(pop.type==="gft-date")return '[data-action="gft-date"][data-id="'+pop.id+'"]';if(pop.type==="gft-purpose")return '[data-action="gft-purpose"][data-id="'+pop.id+'"]';if(pop.type==="wfind")return '[data-action="wfind"]';}
+  function triggerSelector(){if(!pop)return null;var wt=WIDGETS.trigger();if(wt)return wt;if(pop.type==="wmenu")return '[data-action="wmenu"][data-id="'+pop.id+'"]';if(pop.type==="size")return '[data-action="wsize"][data-id="'+pop.id+'"]';if(pop.type==="switcher")return '[data-action="switcher"]';if(pop.type==="save")return '[data-action="savemenu"]';if(pop.type==="depfilter")return '[data-action="depfilter"][data-id="'+pop.id+'"]';if(pop.type==="advfilter")return '[data-action="advfilter"][data-id="'+pop.id+'"]';if(pop.type==="cmenu"||pop.type==="companydd")return '[data-action="cmenu"][data-id="'+pop.id+'"]';if(pop.type==="rangemenu")return '[data-action="rangemenu"][data-id="'+pop.id+'"]';if(pop.type==="winfo")return '[data-action="winfo"][data-id="'+pop.id+'"]';if(pop.type==="ap-due")return '[data-action="ap-due"][data-id="'+pop.id+'"]';if(pop.type==="pur-status")return '[data-action="pur-status"][data-id="'+pop.id+'"]';if(pop.type==="pur-path")return '[data-action="pur-path"][data-id="'+pop.id+'"]';if(pop.type==="bank-acct")return '[data-action="bank-acct"][data-id="'+pop.id+'"]';if(pop.type==="expmenu")return '[data-action="expmenu"][data-id="'+pop.id+'"]';if(pop.type==="gft-date")return '[data-action="gft-date"][data-id="'+pop.id+'"]';if(pop.type==="gft-purpose")return '[data-action="gft-purpose"][data-id="'+pop.id+'"]';if(pop.type==="wfind")return '[data-action="wfind"]';}
   function renderOverlay(){var ov=document.getElementById("overlay");if(!pop){ov.innerHTML="";return;}var sel=triggerSelector(),trig=sel&&document.querySelector(sel);if(!trig){ov.innerHTML="";return;}
     ov.innerHTML='<div class="pop'+(pop.type==="size"?" pop-size":"")+(pop.type==="depfilter"?" pop-filter":"")+(pop.type==="prO-period"?" pop-period":"")+'" data-action="stop" style="visibility:hidden;left:0;top:0;">'+popContent()+'</div>';
     var el=ov.firstChild;
@@ -9841,7 +10327,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(modal.type==="pur-drill"){mr.innerHTML=purDrillModalHTML();return;}
     if(modal.type==="bankdrill"){mr.innerHTML=bankDrillModalHTML();return;}
     if(modal.type==="gftdetail"){mr.innerHTML=gftDetailModalHTML();return;}
-    if(modal.type==="fafTable"){mr.innerHTML=faFTableModalHTML();return;} // Fixed Asset Values (MB updated): the full seven-column table
     var body=(modal.scoped?'<div class="wcontent acct-mw">'+((modal.mw&&modal.mw.kind==="payroll")?prOContent(modal.mw):depContent(modal.mw))+'</div>':modal.b);
     if(modalMounted){var bEl=mr.querySelector(".modal-b");if(bEl){bEl.innerHTML=body;return;}}
     mr.innerHTML='<div class="modal-backdrop" data-action="modal-close"><div class="modal'+(modal.scoped?" modal-wide":"")+'" data-action="stop" role="dialog" aria-modal="true" aria-label="'+modal.t+'"><div class="modal-h"><span class="modal-title">'+(modal.glyph?'<span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">'+modal.glyph+'</span>':'')+modal.t+'</span><button class="iconbtn" data-action="modal-close" aria-label="Close">'+ICON("close")+'</button></div><div class="modal-b">'+body+'</div><div class="modal-f"><button class="btn primary sm" data-action="modal-close">'+(modal.scoped?"Done":"Got it")+'</button></div></div></div>';
@@ -9857,7 +10342,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(a==="noop"){pop=null;render();return;}
     if(a==="stop"){return;}
     if(a==="modal-close"){modal=null;pop=null;render();return;}
-    if(faHandleClick(a,id,t))return;
     if(a&&a.indexOf("ap-")===0&&apHandleClick(a,id,t))return;
     if(a&&a.indexOf("gft-")===0&&gftHandleClick(a,id,t))return;
     if(purHandleClick(a,t,id))return;
@@ -9996,630 +10480,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
   document.addEventListener("mousemove",function(e){var col=e.target.closest&&e.target.closest(".bank-col[data-bankpop]");if(!col){if(bankPopEl)bankHideBpop();return;}bankShowBpop(col,e.clientX,e.clientY);});
 
 
-/* ===== W11 Fixed Asset Values V2 JS , prefix faF , kind "fixedassets-mb" ===== */
-
-/* (1) SAMPLE DATA. Fifty-two assets: a low-cardinality dimension (Class, 6
-   groups), a mid one (Building, 4 groups plus "not assigned") and a higher one
-   (Room, 9 groups plus "not assigned"); the real "not assigned" group, which is
-   a selectable group and not an error state; and fully depreciated assets so a
-   group can genuinely total zero for Net Value, which the chart must exclude and
-   the table must keep.
-   salv is Salvage Value, used only to derive Depreciable Value.
-   dep is BOOK accumulated depreciation, SUM(Depreciation) WHERE !Tax: excluding
-   tax depreciation is part of the definition, not an optimisation. */
-var FAF_ASSETS=[
-  {tag:'FA-1001',nm:'Sanctuary Sound System',cls:'Audio Visual',bldg:'',room:'Media Room',cap:111719,cost:118850,salv:4754,dep:114096},
-  {tag:'FA-1002',nm:'Sanctuary Lighting Rig',cls:'Audio Visual',bldg:'Main Campus',room:'',cap:130707,cost:134750,salv:10780,dep:30992},
-  {tag:'FA-1003',nm:'Media Cameras',cls:'Audio Visual',bldg:'',room:'',cap:37927,cost:39100,salv:1955,dep:0},
-  {tag:'FA-1004',nm:'Choir Risers',cls:'Audio Visual',bldg:'Main Campus',room:'Sanctuary',cap:41313,cost:43950,salv:0,dep:5274},
-  {tag:'FA-1005',nm:'Stage Monitors',cls:'Audio Visual',bldg:'Annex',room:'',cap:64950,cost:64950,salv:0,dep:64950},
-  {tag:'FA-1006',nm:'Video Switcher',cls:'Audio Visual',bldg:'Chapel',room:'Sanctuary',cap:53800,cost:53800,salv:0,dep:26900},
-  {tag:'FA-1007',nm:'Wireless Mic Set',cls:'Audio Visual',bldg:'Chapel',room:'Sanctuary',cap:24700,cost:24700,salv:1976,dep:11362},
-  {tag:'FA-1008',nm:'Projection Screen',cls:'Audio Visual',bldg:'Main Campus',room:'Sanctuary',cap:68500,cost:68500,salv:0,dep:34250},
-  {tag:'FA-1009',nm:'Livestream Encoder',cls:'Audio Visual',bldg:'Chapel',room:'Sanctuary',cap:28764,cost:30600,salv:0,dep:15300},
-  {tag:'FA-1010',nm:'Broadcast Mixer',cls:'Audio Visual',bldg:'Chapel',room:'',cap:3300,cost:3300,salv:0,dep:0},
-  {tag:'FA-1011',nm:'LED Wall Panel',cls:'Audio Visual',bldg:'Annex',room:'Stage',cap:98371,cost:104650,salv:0,dep:35581},
-  {tag:'FA-1012',nm:'Foldback Speakers',cls:'Audio Visual',bldg:'Main Campus',room:'Media Room',cap:77550,cost:82500,salv:0,dep:66000},
-  {tag:'FA-1013',nm:'Main Campus Building',cls:'Buildings',bldg:'Chapel',room:'',cap:813000,cost:813000,salv:0,dep:813000},
-  {tag:'FA-1014',nm:'Family Life Center',cls:'Buildings',bldg:'Family Life Center',room:'',cap:1171700,cost:1171700,salv:58585,dep:378459},
-  {tag:'FA-1015',nm:'Annex Hall',cls:'Buildings',bldg:'Family Life Center',room:'',cap:1912015,cost:1971150,salv:78846,dep:1513843},
-  {tag:'FA-1016',nm:'Nursery Wing',cls:'Buildings',bldg:'Chapel',room:'',cap:1546300,cost:1645000,salv:0,dep:411250},
-  {tag:'FA-1017',nm:'Maintenance Shed',cls:'Buildings',bldg:'Main Campus',room:'',cap:969321,cost:999300,salv:39972,dep:479664},
-  {tag:'FA-1018',nm:'Chapel',cls:'Buildings',bldg:'Family Life Center',room:'',cap:1862234,cost:1981100,salv:0,dep:237732},
-  {tag:'FA-1019',nm:'Youth Building',cls:'Buildings',bldg:'Family Life Center',room:'',cap:1910550,cost:1910550,salv:95527,dep:1815023},
-  {tag:'FA-1020',nm:'Storage Barn',cls:'Buildings',bldg:'Annex',room:'',cap:955600,cost:955600,salv:0,dep:238900},
-  {tag:'FA-1021',nm:'Passenger Van',cls:'Vehicles',bldg:'Chapel',room:'',cap:59300,cost:59300,salv:0,dep:20162},
-  {tag:'FA-1022',nm:'Bus, 14 Seat',cls:'Vehicles',bldg:'Main Campus',room:'',cap:38650,cost:38650,salv:0,dep:4638},
-  {tag:'FA-1023',nm:'Maintenance Truck',cls:'Vehicles',bldg:'Annex',room:'',cap:60350,cost:60350,salv:4828,dep:44417},
-  {tag:'FA-1024',nm:'Grounds Utility Cart',cls:'Vehicles',bldg:'Main Campus',room:'',cap:85023,cost:90450,salv:4522,dep:21482},
-  {tag:'FA-1025',nm:'Minibus',cls:'Vehicles',bldg:'Annex',room:'',cap:84459,cost:89850,salv:7188,dep:9919},
-  {tag:'FA-1026',nm:'Trailer, Enclosed',cls:'Vehicles',bldg:'Chapel',room:'',cap:28294,cost:30100,salv:602,dep:23598},
-  {tag:'FA-1027',nm:'Pickup, Half Ton',cls:'Vehicles',bldg:'',room:'',cap:31255,cost:33250,salv:665,dep:21506},
-  {tag:'FA-1028',nm:'Nursery Furnishings',cls:'Office Equipment',bldg:'',room:'Reception',cap:95200,cost:95200,salv:3808,dep:60318},
-  {tag:'FA-1029',nm:'Reception Desk',cls:'Office Equipment',bldg:'Annex',room:'Office 201',cap:10340,cost:11000,salv:440,dep:6969},
-  {tag:'FA-1030',nm:'Copier, Main Office',cls:'Office Equipment',bldg:'Annex',room:'Reception',cap:21385,cost:22750,salv:0,dep:11375},
-  {tag:'FA-1031',nm:'Server Cabinet',cls:'Office Equipment',bldg:'Main Campus',room:'Reception',cap:22019,cost:22700,salv:1135,dep:14232},
-  {tag:'FA-1032',nm:'Network Switch Stack',cls:'Office Equipment',bldg:'Main Campus',room:'Server Room',cap:87514,cost:93100,salv:7448,dep:85652},
-  {tag:'FA-1033',nm:'Office Workstations',cls:'Office Equipment',bldg:'Chapel',room:'Office 201',cap:130900,cost:130900,salv:0,dep:104720},
-  {tag:'FA-1034',nm:'Conference Table',cls:'Office Equipment',bldg:'Annex',room:'Server Room',cap:21100,cost:21100,salv:0,dep:2532},
-  {tag:'FA-1035',nm:'Filing System',cls:'Office Equipment',bldg:'Chapel',room:'Server Room',cap:87600,cost:87600,salv:7008,dep:80592},
-  {tag:'FA-1036',nm:'Postage Machine',cls:'Office Equipment',bldg:'Annex',room:'Office 201',cap:24056,cost:24800,salv:1240,dep:0},
-  {tag:'FA-1037',nm:'Printer, Wide Format',cls:'Office Equipment',bldg:'Chapel',room:'Server Room',cap:8099,cost:8350,salv:668,dep:921},
-  {tag:'FA-1038',nm:'Car Park Resurface',cls:'Land Improvements',bldg:'',room:'',cap:11550,cost:11550,salv:231,dep:2829},
-  {tag:'FA-1039',nm:'Perimeter Fencing',cls:'Land Improvements',bldg:'Chapel',room:'',cap:50925,cost:52500,salv:4200,dep:48300},
-  {tag:'FA-1040',nm:'Playground Structure',cls:'Land Improvements',bldg:'Family Life Center',room:'',cap:109028,cost:112400,salv:0,dep:89920},
-  {tag:'FA-1041',nm:'Irrigation System',cls:'Land Improvements',bldg:'Family Life Center',room:'',cap:63923,cost:65900,salv:1318,dep:21957},
-  {tag:'FA-1042',nm:'Signage, Roadside',cls:'Land Improvements',bldg:'Annex',room:'',cap:92167,cost:98050,salv:7844,dep:10824},
-  {tag:'FA-1043',nm:'Retaining Wall',cls:'Land Improvements',bldg:'Chapel',room:'',cap:124750,cost:124750,salv:2495,dep:41566},
-  {tag:'FA-1044',nm:'Exterior Lighting',cls:'Land Improvements',bldg:'',room:'',cap:138467,cost:142750,salv:11420,dep:86677},
-  {tag:'FA-1045',nm:'Commercial Oven',cls:'Kitchen Equipment',bldg:'Annex',room:'Fellowship Hall',cap:21388,cost:22050,salv:441,dep:0},
-  {tag:'FA-1046',nm:'Walk In Cooler',cls:'Kitchen Equipment',bldg:'Family Life Center',room:'Kitchen',cap:6984,cost:7200,salv:288,dep:6912},
-  {tag:'FA-1047',nm:'Dishwasher, Industrial',cls:'Kitchen Equipment',bldg:'Chapel',room:'Kitchen',cap:63200,cost:63200,salv:0,dep:7584},
-  {tag:'FA-1048',nm:'Prep Tables',cls:'Kitchen Equipment',bldg:'Family Life Center',room:'Fellowship Hall',cap:136333,cost:140550,salv:0,dep:47787},
-  {tag:'FA-1049',nm:'Coffee Service Unit',cls:'Kitchen Equipment',bldg:'Family Life Center',room:'Kitchen',cap:46560,cost:48000,salv:1920,dep:0},
-  {tag:'FA-1050',nm:'Freezer, Upright',cls:'Kitchen Equipment',bldg:'Chapel',room:'Kitchen',cap:86339,cost:91850,salv:7348,dep:21125},
-  {tag:'FA-1900',nm:'Fully Depreciated Organ',cls:'Audio Visual',bldg:'Main Campus',room:'Sanctuary',cap:74000,cost:76000,salv:0,dep:76000},
-  {tag:'FA-1901',nm:'Unclassified Equipment',cls:'',bldg:'',room:'',cap:5400,cost:5600,salv:0,dep:1200}
-];
-var FAF_ASSETS_EMPTY=[];
-var FAF_NA='not assigned';
-
-/* All six Group By dimensions are offered, as the design does, and the three the
-   Modern API does not implement are MARKED so on the menu rather than silently
-   presented as working. A build that offers all six without acknowledging this
-   produces three dead selections. */
-var FAF_DIMS=[
-  {k:'cls',      l:'Class',                            impl:true},
-  {k:'bldg',     l:'Building',                         impl:true},
-  {k:'room',     l:'Room',                             impl:true},
-  {k:'acctAsset',l:'Asset Account',                    impl:false},
-  {k:'acctAccum',l:'Accumulated Depreciation Account', impl:false},
-  {k:'acctExp',  l:'Expense Account',                  impl:false}
-];
-/* The five financial measures, in the canonical order the table keeps. */
-var FAF_MEASURES=[
-  {k:'cap',  l:'Capitalized Value',        short:'Capitalized'},
-  {k:'cost', l:'Cost',                     short:'Cost'},
-  {k:'depr', l:'Depreciable Value',        short:'Depreciable'},
-  {k:'accum',l:'Accumulated Depreciation', short:'Accumulated'},
-  {k:'net',  l:'Net Value',                short:'Net'}
-];
-/* The amethyst ramp: largest share darkest, no red on the arcs. Colour is never
-   the only signal, so every arc and legend row carries its group name and its
-   value as text in the DOM. */
-var FAF_COLORS=['--am-600','--am-500','--am-400','--am-300','--am-200'];
-var FAF_PAGE_SIZE=10;
-var FAF_SORTABLE=['tag','nm','cap','cost','depr','accum','net'];
-var FAF_POP=null;
-var FAF_ABOUT="The financial value of the organisation's fixed assets, grouped by class, building or room. Pick a grouping and a group to list the individual assets with all five money measures and a totals row, or switch to the donut to see one measure split across the groups. The headline figure is Total Net Value across every fixed asset, organisation wide, and it ignores the filters.";
-
-function faFDimK(w){return w.faFDim||'cls';}
-function faFMeasK(w){return w.faFMeasure||'net';}
-function faFViewK(w){return (w.faFView==='assets'||w.faFView==null)?'assets':'donut';}
-function faFSortK(w){return w.faFSort||'tag-asc';}
-function faFPageN(w){return w.faFPage||0;}
-
-/* (3) HELPERS. money() and ICON() are the shell's own. */
-function faFIcon(n){return '<span class="material-symbols-rounded" aria-hidden="true">'+n+'</span>';}
-function faFEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-/* The full unshortened figure: what every title and aria-label carries, and what
-   the download would carry. */
-function faFMoneyFull(n){return money(Math.round(Number(n)||0));}
-/* The shortened display figure, computed in the FRONT END from the same values.
-   No separate rounded dataset exists. */
-function faFMoneyShort(n){
-  var v=Number(n)||0, sign=v<0?'-':'', a=Math.abs(v), out;
-  if(a>=1e9) out=(a/1e9).toFixed(1)+'B';
-  else if(a>=1e6) out=(a/1e6).toFixed(1)+'M';
-  else if(a>=1e3) out=(a/1e3).toFixed(1)+'K';
-  else return sign+faFMoneyFull(a);
-  out=out.replace(/\.0([BMK])$/,'$1');
-  return sign+'$'+out;
-}
-function faFDimDef(k){for(var i=0;i<FAF_DIMS.length;i++){if(FAF_DIMS[i].k===k)return FAF_DIMS[i];}return FAF_DIMS[0];}
-function faFMeasDef(k){for(var i=0;i<FAF_MEASURES.length;i++){if(FAF_MEASURES[i].k===k)return FAF_MEASURES[i];}return FAF_MEASURES[FAF_MEASURES.length-1];}
-function faFDataset(w){return (w.dataset==='none'||w.dataset==='empty')?FAF_ASSETS_EMPTY:FAF_ASSETS;}
-/* The five measures. Depreciable Value and Net Value are DERIVED, not stored,
-   and Net Value's base is Depreciable Value (Cost minus Salvage), NOT Cost. Step
-   1 records that as a correction to its own earlier wording, so a build using
-   Cost as the base is wrong. */
-function faFValue(a,mk){
-  if(mk==='cap')  return a.cap;
-  if(mk==='cost') return a.cost;
-  if(mk==='depr') return a.cost-a.salv;
-  if(mk==='accum')return a.dep;
-  return (a.cost-a.salv)-a.dep;
-}
-/* An asset with no group appears under "not assigned", which is a real group and
-   must be selectable. */
-function faFGroupOf(a,dimk){var v=a[dimk];return (v===undefined||v===null||v==='')?FAF_NA:v;}
-/* The groups inside the selected dimension, "not assigned" sorted last. An
-   unimplemented dimension returns an empty list, which is what the target API
-   does today. */
-function faFGroupNames(w){
-  var d=faFDimDef(faFDimK(w));
-  if(!d.impl) return [];
-  var seen={},out=[];
-  faFDataset(w).forEach(function(a){var g=faFGroupOf(a,d.k);if(!seen[g]){seen[g]=1;out.push(g);}});
-  out.sort(function(x,y){
-    if(x===FAF_NA) return 1;
-    if(y===FAF_NA) return -1;
-    return x.localeCompare(y);
-  });
-  return out;
-}
-/* Every group with its selected-measure total and asset count. NOT filtered
-   here: the chart filters this list, the table does not. */
-function faFGroupTotals(w){
-  var d=faFDimDef(faFDimK(w)),mk=faFMeasK(w);
-  return faFGroupNames(w).map(function(g){
-    var items=faFDataset(w).filter(function(a){return faFGroupOf(a,d.k)===g;});
-    return {name:g,count:items.length,total:items.reduce(function(s,a){return s+faFValue(a,mk);},0)};
-  });
-}
-/* No "All groups" option: the table always shows exactly one group. A stale
-   saved group that no longer exists in this dimension falls back to the first,
-   which is also what the API contract's conflict rule specifies. */
-function faFCurrentGroup(w){
-  var names=faFGroupNames(w);
-  if(!names.length) return null;
-  return (w.faFGroup!=null&&names.indexOf(w.faFGroup)>=0)?w.faFGroup:names[0];
-}
-
-function faFServerQuery(w){
-  /* --- everything from here to the return is SERVER-SIDE work --- */
-  var d=faFDimDef(faFDimK(w)),g=faFCurrentGroup(w);
-  if(g===null) return {rows:[],totalCount:0,totals:{},pageIndex:0,pageCount:1};
-  var set=faFDataset(w).filter(function(a){return faFGroupOf(a,d.k)===g;});
-  var parts=faFSortK(w).split('-'),key=parts[0],dir=parts[1]==='asc'?1:-1;
-  if(FAF_SORTABLE.indexOf(key)<0) key='tag';               /* whitelist, as the API must */
-  var isMeasure=FAF_MEASURES.some(function(m){return m.k===key;});
-  set.sort(function(a,b){
-    var r;
-    if(isMeasure) r=faFValue(a,key)-faFValue(b,key);
-    else if(key==='nm') r=a.nm.localeCompare(b.nm);
-    else r=a.tag.localeCompare(b.tag);
-    if(r===0) r=a.tag.localeCompare(b.tag);                 /* unique tiebreaker */
-    return dir*r;
-  });
-  var totals={};
-  FAF_MEASURES.forEach(function(m){
-    totals[m.k]=set.reduce(function(s,a){return s+faFValue(a,m.k);},0);
-  });
-  var pageCount=Math.max(1,Math.ceil(set.length/FAF_PAGE_SIZE));
-  var pi=faFPageN(w); if(pi<0) pi=0; if(pi>pageCount-1) pi=pageCount-1;
-  return {
-    rows:set.slice(pi*FAF_PAGE_SIZE,(pi+1)*FAF_PAGE_SIZE),
-    totalCount:set.length,
-    totals:totals,
-    pageIndex:pi,
-    pageCount:pageCount
-  };
-}
-/* Reads the response only. The client does not know how many pages there are
-   until the server says so, which is the point. */
-function faFPager(w,res){
-  if(res.totalCount<=FAF_PAGE_SIZE) return '';
-  var i=res.pageIndex,n=res.pageCount;
-  var from=i*FAF_PAGE_SIZE+1,to=Math.min(res.totalCount,(i+1)*FAF_PAGE_SIZE);
-  function btn(act,ic,lbl,off){
-    return '<button class="iconbtn faf-pgbtn" data-faf="'+act+'" data-id="'+w.id+'"'+(off?' disabled aria-disabled="true"':'')+
-      ' aria-label="'+lbl+'" title="'+lbl+'">'+faFIcon(ic)+'</button>';
-  }
-  return '<div class="faf-pager">'+
-    '<span class="faf-pgcount">'+from+' to '+to+' of '+res.totalCount+'</span>'+
-    btn('page-prev','chevron_left','Previous page, refetches from the server',i===0)+
-    '<span class="faf-pgnum">Page '+(i+1)+' of '+n+'</span>'+
-    btn('page-next','chevron_right','Next page, refetches from the server',i>=n-1)+
-  '</div>';
-}
-
-/* Glance: Total Net Value across ALL fixed assets, organisation wide. It ignores
-   Group By, Specific Group and Financial Measure entirely: always Net Value,
-   always org-wide. A build that makes it follow the measure selector is wrong.
-   The org-wide summation itself is not spelled out in any source and is carried
-   as an open item, not as a settled fact. */
-function faFOrgNetTotal(w){return faFDataset(w).reduce(function(s,a){return s+faFValue(a,'net');},0);}
-function faFOrgAssetCount(w){return faFDataset(w).length;}
-/* FIXED canonical column order. The old behaviour promoted the selected measure
-   to the front, and once the measure chip is hidden in the table view that
-   reordering would be driven by a control the user cannot see. Columns silently
-   moving is worse than columns being in a fixed order. */
-function faFMeasureOrder(){return FAF_MEASURES.slice();}
-var FAF_COMPACT_MEAS=['cost','accum','net'];
-function faFVisibleMeasures(full){
-  if(full) return FAF_MEASURES.slice();
-  return FAF_MEASURES.filter(function(m){return FAF_COMPACT_MEAS.indexOf(m.k)>-1;});
-}
-/* Tag # is the row identity, so it belongs wherever the full set is shown: the
-   pop-up and Detail. The sort default stays tag-asc, which keeps the order
-   stable and explicable the moment the pop-up shows the column it sorts on. */
-function faFColCount(full){return faFVisibleMeasures(full).length+(full?2:1);}
-
-/* (5) CONTROLS: three selections and no others. */
-function faFChip(w,type,label,aria,dead){
-  var open=!!(FAF_POP&&FAF_POP.type===type&&FAF_POP.id===w.id);
-  return '<button class="filter-chip'+(dead?' faf-chip-dead':'')+'" data-faf="'+type+'" data-id="'+w.id+'"'+
-    ' aria-haspopup="listbox" aria-expanded="'+open+'"'+
-    ' aria-label="'+faFEsc(aria)+'">'+
-    '<span class="fc-label">'+faFEsc(label)+'</span>'+faFIcon('expand_more')+'</button>';
-}
-function faFControls(w){
-  var d=faFDimDef(faFDimK(w)),g=faFCurrentGroup(w);
-  var groupLbl=(g===null)?'No groups returned':g;
-  return '<div class="faf-chiprow">'+
-    faFChip(w,'dim',d.l,'Group by, currently '+d.l,false)+
-    faFChip(w,'group',groupLbl,'Specific group, currently '+groupLbl,g===null)+
-  '</div>';
-}
-function faFViewToggle(w){
-  var v=faFViewK(w);
-  function seg(val,lbl,ic,tip){
-    return '<button class="vt'+(v===val?' on':'')+'" data-faf="view" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(v===val)+'" title="'+faFEsc(tip)+'">'+faFIcon(ic)+lbl+'</button>';
-  }
-  return '<div class="vtoggle faf-vtoggle" role="group" aria-label="View">'+
-    seg('assets','Asset Detail','table_rows','Individual assets within the selected specific group, with all five financial measures and a totals row.')+
-    seg('donut','Donut','donut_small','The selected measure split across the groups of the chosen dimension.')+
-  '</div>';
-}
-function faFDownloadBtn(w){
-  return '<button class="iconbtn faf-dl" data-faf="download" data-id="'+w.id+'" aria-label="Download every measure at full precision" title="Download every measure at full precision, not the shortened figures shown on screen.">'+faFIcon('download')+'</button>';
-}
-function faFHeader(w){
-  return '<div class="dep-hd faf-hd"><div class="dep-hd-top">'+faFControls(w)+
-    '<div class="dep-hd-toggle faf-hd-right">'+faFViewToggle(w)+faFDownloadBtn(w)+'</div></div></div>';
-}
-
-/* (6) CHART POPULATION. The rule a build must not get wrong in either direction:
-   the chart plots all groups in the dimension EXCLUDING any group whose selected
-   measure totals zero, and the TABLE is not filtered that way. The excluded
-   groups are NAMED in a note beneath the chart, so the information stays in the
-   DOM as text rather than silently disappearing. */
-function faFChartRows(w){
-  var all=faFGroupTotals(w);
-  var charted=all.filter(function(g){return g.total!==0;}).slice().sort(function(a,b){return Math.abs(b.total)-Math.abs(a.total);});
-  var zero=all.filter(function(g){return g.total===0;});
-  return {all:all,charted:charted,zero:zero,total:charted.reduce(function(s,g){return s+g.total;},0)};
-}
-function faFZeroNote(w,cut){
-  if(!cut.length) return '';
-  var m=faFMeasDef(faFMeasK(w));
-  var names=cut.map(function(g){return g.name;}).join(', ');
-  return '<div class="faf-note">'+faFIcon('info')+'<span>'+cut.length+' group'+(cut.length===1?'':'s')+' with no '+faFEsc(m.l)+' ('+faFEsc(names)+') '+(cut.length===1?'is':'are')+' excluded from the chart, as the widget defines it. A zero value group still appears in the asset table.</span></div>';
-}
-
-/* (7) VIEW: DONUT BY GROUP. */
-/* The pie's own control, placed with the chart instead of with the filters.
-   It reuses the shell's shared legend head, which thirteen other widgets also
-   is her chrome in her position rather than a new bar of our own. The
-   dimension stays beside it as quiet context, which is what the static
-   "<measure> by <dimension>" line used to carry on its own. */
-function faFMeasureRow(w){
-  var m=faFMeasDef(faFMeasK(w));
-  return '<div class="faf-meas-row">'+
-    faFChip(w,'measure','Financial Measure: '+m.l,'Financial measure for the chart, currently '+m.l,false)+
-  '</div>';
-}
-/* The keys' own header. It reuses the shell's shared legend heading, which is
-   what that element is for, and now genuinely heads the key list beneath it
-   instead of trailing the measure as context. */
-function faFKeysHead(w){
-  var d=faFDimDef(faFDimK(w));
-  return '<div class="legend-head faf-keys-head"><span class="legend-hd">By '+faFEsc(d.l)+'</span></div>';
-}
-function faFDonut(w){
-  var m=faFMeasDef(faFMeasK(w)),d=faFDimDef(faFDimK(w)),c=faFChartRows(w);
-  if(!c.charted.length||c.total===0){
-    /* the measure row comes FIRST here: this state is reached by picking a
-       measure nothing has, so the control that gets you out of it has to be
-       on screen. Without it the state would be a dead end. */
-    return faFMeasureRow(w)+'<div class="faf-chart-empty">'+faFIcon('donut_small')+'<span>No group in '+faFEsc(d.l)+' has a '+faFEsc(m.l)+' to chart.</span></div>'+faFZeroNote(w,c.zero);
-  }
-  var DS=({wide:260,xwide:340})[faFTier(w)]||200;
-  var R=52,C=2*Math.PI*R,off=0,arcs='',legend='';
-  c.charted.forEach(function(g,i){
-    var col=FAF_COLORS[i%FAF_COLORS.length];
-    var frac=Math.abs(g.total)/Math.abs(c.total),len=frac*C,pct=Math.round(frac*100);
-    var lbl=g.name+', '+m.l+' '+faFMoneyFull(g.total)+', '+pct+' percent of the charted total, '+g.count+' asset'+(g.count===1?'':'s')+'.';
-    arcs+='<circle class="faf-seg" cx="70" cy="70" r="'+R+'" fill="none" stroke="var('+col+')" stroke-width="20" stroke-dasharray="'+Math.min(len+0.9,C).toFixed(2)+' '+Math.max(0,C-len-0.9).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 70 70)"><title>'+faFEsc(lbl)+'</title></circle>';
-    off+=len;
-    legend+='<div class="leg faf-leg" title="'+faFEsc(lbl)+'"><span class="dot" style="background:var('+col+')"></span>'+
-      '<span class="lg-main">'+faFEsc(g.name)+'</span>'+
-      '<span class="lg-meta">'+faFMoneyShort(g.total)+' &middot; '+pct+'%</span></div>';
-  });
-  var aria=m.l+' by '+d.l+', '+faFMoneyFull(c.total)+' across '+c.charted.length+' group'+(c.charted.length===1?'':'s');
-  return '<div class="faf-pie">'+faFMeasureRow(w)+'<div class="pie-wrap row">'+
-    '<svg class="donut" viewBox="0 0 140 140" width="'+DS+'" height="'+DS+'" role="img" aria-label="'+faFEsc(aria)+'">'+arcs+
-    '<text x="70" y="67" text-anchor="middle" class="donut-c1">'+faFMoneyShort(c.total)+'</text>'+
-    '<text x="70" y="86" text-anchor="middle" class="donut-c2">'+faFEsc(m.short)+'</text></svg>'+
-    '<div class="legend-col">'+faFKeysHead(w)+
-    '<div class="legend" style="max-height:'+DS+'px">'+legend+'</div></div></div>'+
-    faFZeroNote(w,c.zero)+
-  '</div>';
-}
-
-/* (8) VIEW: ASSET DETAIL TABLE. Tag number, Name and all five measures in fixed
-   canonical order, plus a totals row over the whole filtered group.
-   Real table semantics: role="table" with aria-rowcount / aria-colcount, three
-   display:contents rowgroups so no box comes between the scroller and the flex
-   rows, columnheader / cell / rowheader roles, live aria-sort on every one of
-   the seven sortable columns, and the EXACT figure in title and aria-label
-   wherever the displayed figure is shortened. */
-function faFSortBtn(w,k,label){
-  var parts=faFSortK(w).split('-'),on=parts[0]===k;
-  var ic=on?(parts[1]==='asc'?'arrow_upward':'arrow_downward'):'unfold_more';
-  var dirWord=on?(parts[1]==='asc'?'ascending, click for descending':'descending, click for ascending'):'click to sort';
-  return '<button class="wt-sort'+(on?' on':'')+'" data-faf="sort" data-id="'+w.id+'" data-k="'+faFEsc(k)+'" title="'+faFEsc(label+', '+dirWord)+'" aria-label="'+faFEsc(label+', '+dirWord)+'">'+faFEsc(label)+' '+faFIcon(ic)+'</button>';
-}
-function faFSortAria(w,k){
-  var parts=faFSortK(w).split('-');
-  if(parts[0]!==k) return 'none';
-  return parts[1]==='asc'?'ascending':'descending';
-}
-function faFAssetHead(w,full){
-  var cells=faFVisibleMeasures(full).map(function(m){
-    return '<span class="faf-c" role="columnheader" aria-sort="'+faFSortAria(w,m.k)+'">'+faFSortBtn(w,m.k,m.short)+'</span>';
-  }).join('');
-  return '<div class="wt-row wt-head faf-arow" role="row">'+
-    (full?('<span class="faf-tag" role="columnheader" aria-sort="'+faFSortAria(w,'tag')+'">'+faFSortBtn(w,'tag','Tag #')+'</span>'):'')+
-    '<span class="faf-nm" role="columnheader" aria-sort="'+faFSortAria(w,'nm')+'">'+faFSortBtn(w,'nm','Name')+'</span>'+
-    cells+'</div>';
-}
-/* The zero treatment used to key off the SELECTED measure being zero, which
-   cannot mean anything once no measure is selected in this view, so a row is
-   marked only when its Net Value is zero, Net Value being the measure the
-   widget's own headline figure uses. The marker is not colour-only: the words
-   "fully depreciated" sit in the DOM next to the name. */
-function faFAssetRow(w,a,full){
-  var netZero=faFValue(a,'net')===0;
-  var cells=faFVisibleMeasures(full).map(function(m){
-    var v=faFValue(a,m.k);
-    var exact=a.tag+', '+a.nm+', '+m.l+' '+faFMoneyFull(v);
-    return '<span class="faf-c" role="cell" title="'+faFEsc(exact)+'" aria-label="'+faFEsc(exact)+'">'+faFMoneyShort(v)+'</span>';
-  }).join('');
-  /* When the table is slim the row opens the pop-up, which is where the
-     columns it does not show can be read. When it is already full there is
-     nothing more to open, so the row stays inert rather than offering a
-     control that would do nothing. */
-  var open=full?'':' data-faf="open-table" data-id="'+w.id+'" tabindex="0" aria-label="'+faFEsc(a.tag+', '+a.nm+', open the full breakdown')+'"';
-  return '<div class="wt-row faf-arow'+(netZero?' faf-zero':'')+(full?'':' faf-rowopen')+'" role="row"'+open+'>'+
-    (full?('<span class="faf-tag" role="cell">'+faFEsc(a.tag)+'</span>'):'')+
-    '<span class="faf-nm" role="cell" title="'+faFEsc(a.nm)+'">'+faFEsc(a.nm)+
-      (netZero?'<span class="faf-zerotag">fully depreciated</span>':'')+'</span>'+
-    cells+'</div>';
-}
-/* Takes the SERVER'S totals and count. It must NOT reduce over the rows it was
-   given, because those are one page. This is the function that would silently
-   produce a wrong number if the work drifted back into the browser. */
-function faFAssetTotalRow(w,res,full){
-  var cells=faFVisibleMeasures(full).map(function(m){
-    var v=res.totals[m.k]||0;
-    var exact='Total '+m.l+', '+faFMoneyFull(v)+' across '+res.totalCount+' asset'+(res.totalCount===1?'':'s');
-    return '<span class="faf-c" role="cell" title="'+faFEsc(exact)+'" aria-label="'+faFEsc(exact)+'">'+faFMoneyShort(v)+'</span>';
-  }).join('');
-  return '<div class="wt-row faf-arow faf-totalrow" role="row">'+
-    (full?'<span class="faf-tag" role="rowheader">Total</span>':'')+
-    '<span class="faf-nm"'+(full?'':' role="rowheader"')+'>'+(full?'':'Total, ')+res.totalCount+' asset'+(res.totalCount===1?'':'s')+'</span>'+
-    cells+'</div>';
-}
-function faFAssetTable(w,full){
-  var g=faFCurrentGroup(w);
-  if(g===null) return faFUnimplemented(w);
-  /* ONE request per render. The renderers sort nothing, slice nothing and total
-     nothing: they display what came back. */
-  var res=faFServerQuery(w),d=faFDimDef(faFDimK(w));
-  var cols=faFColCount(full);
-  var body=res.rows.length
-    ? res.rows.map(function(a){return faFAssetRow(w,a,full);}).join('')
-    : '<div class="wt-row faf-arow" role="row"><span class="faf-nm" role="cell">No assets in this group.</span></div>';
-  /* the column count was hardcoded at seven, which would have lied the moment
-     the slim table dropped three of them */
-  var aria='Assets in '+d.l+' '+g+', '+res.totalCount+' asset row'+(res.totalCount===1?'':'s')+', '+cols+' columns'+(full?'':', select a row for every column');
-  return '<div class="faf-tblwrap">'+
-    '<div class="scroll faf-tscroll" role="table" aria-label="'+faFEsc(aria)+'" aria-rowcount="'+(res.totalCount+2)+'" aria-colcount="'+cols+'">'+
-      '<div class="faf-tbl'+(full?'':' faf-tbl-slim')+'">'+
-        '<div class="faf-rowgroup" role="rowgroup">'+faFAssetHead(w,full)+'</div>'+
-        '<div class="faf-rowgroup" role="rowgroup">'+body+'</div>'+
-        '<div class="faf-rowgroup" role="rowgroup">'+faFAssetTotalRow(w,res,full)+'</div>'+
-      '</div>'+
-    '</div>'+
-    faFPager(w,res)+
-  '</div>';
-}
-
-/* (9) STATES. Most are unspecified in every source, so each renders something
-   obvious and leaves the gap VISIBLE rather than inventing behaviour. */
-function faFUnimplemented(w){
-  var d=faFDimDef(faFDimK(w));
-  return '<div class="state" data-kind="empty">'+faFIcon('layers_clear')+
-    '<div class="state-title">No groups returned for '+faFEsc(d.l)+'</div>'+
-    '<div class="state-sub">On the current Modern API this dimension hits an unimplemented switch case and returns an empty list, so neither the table nor the chart has anything to show. Pick Class, Building or Room instead.</div>'+
-  '</div>';
-}
-function faFNoAssets(w){
-  if(faFTier(w)==='kpi'){
-    return '<div class="kpi-row"><div class="kpi-num"><div class="dep-hd-kpigrp"><span class="metric-value faf-kpi-none">No assets</span></div>'+
-      '<div class="gl-sub"><span>no fixed asset records for this organisation</span></div>'+
-    '</div></div>';
-  }
-  return '<div class="state" data-kind="empty">'+faFIcon('inventory_2')+
-    '<div class="state-title">No fixed assets</div>'+
-    '<div class="state-sub">There are no fixed asset records for this organisation. This wording is build-invented: no empty-state copy has been decided (Step 4 Sign-off Readiness row 8).</div>'+
-  '</div>';
-}
-/* No module rights, loading, error or API failure, stale data and a "data as of"
-   signal have NO defined behaviour anywhere, so nothing has been designed for
-   them. This ONE frame stands in for all of them and names the gap, rather than
-   each being quietly invented. Reached with state:"unspecified". */
-function faFUnbuilt(w){
-  return '<div class="state" data-kind="empty">'+faFIcon('help')+
-    '<div class="state-title">State not specified</div>'+
-    '<div class="state-sub">This state has no defined behaviour in any source, so nothing has been designed for it: no module rights, loading, error and stale data all land here (Step 4 Sign-off Readiness row 8).</div>'+
-  '</div>';
-}
-
-/* (10) GLANCE: ONE figure, Total Net Value org-wide, plus an asset-count pill.
-   No controls, no view switch, no download. Refresh comes from the card chrome. */
-function faFGlance(w){
-  var tot=faFOrgNetTotal(w),n=faFOrgAssetCount(w);
-  var exact='Total Net Value across all fixed assets, organisation wide, '+faFMoneyFull(tot);
-  return '<div class="kpi-row"><div class="kpi-num">'+
-    '<div class="dep-hd-kpigrp"><span class="metric-value" title="'+faFEsc(exact)+'" aria-label="'+faFEsc(exact)+'">'+faFMoneyShort(tot)+'</span>'+
-      '<span class="bank-pill">'+faFIcon('inventory_2')+n+' asset'+(n===1?'':'s')+'</span></div>'+
-    '<div class="gl-sub"><span>Total Net Value, all fixed assets, organisation wide</span></div>'+
-  '</div></div>';
-}
-
-function faFTier(w){
-  var s=w.size;
-  if(s==='kpi') return 'kpi';
-  if(s==='xwide'||s==='large'||s==='detail') return 'xwide';
-  return 'wide';
-}
-/* Bars removed, so anything that is not the asset table is the donut, including
-   a stale 'bars' left in state from before the change. */
-function faFActiveView(w){
-  /* Detail has the room for all seven columns; Explore gets the slim table and
-     offers the rest through the pop-up. */
-  return (faFViewK(w)==='assets')?faFAssetTable(w,faFTier(w)==='xwide'):faFDonut(w);
-}
-
-function faFTableModalHTML(){
-  var w=modal&&modal.id?find(modal.id):null;
-  if(!w) return '';
-  var d=faFDimDef(faFDimK(w)),g=faFCurrentGroup(w);
-  var ttl=(g===null?d.l:(d.l+': '+g));
-  var groupLbl=(g===null)?'No groups returned':g;
-  var chips='<div class="faf-chiprow faf-modal-chips">'+
-    faFChip(w,'dim',d.l,'Group by, currently '+d.l,false)+
-    faFChip(w,'group',groupLbl,'Specific group, currently '+groupLbl,g===null)+
-  '</div>';
-  return '<div class="modal-backdrop" data-action="modal-close"><div class="modal faf-table-modal faf-root" data-action="stop" role="dialog" aria-modal="true" aria-label="'+faFEsc('Every asset measure for '+ttl)+'">'+
-    '<div class="modal-h"><span class="modal-title"><span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">table_rows</span>'+faFEsc(ttl)+'</span>'+
-    '<span class="faf-modal-acts">'+faFDownloadBtn(w)+
-    '<button class="iconbtn" data-action="modal-close" aria-label="Close">'+faFIcon('close')+'</button></span></div>'+
-    '<div class="modal-b">'+chips+faFAssetTable(w,true)+'</div>'+
-    '<div class="modal-f"><button class="btn primary sm" data-action="modal-close">Close</button></div>'+
-  '</div></div>';
-}
-function faFBody(w){
-  /* The real empty-data guard keys off the DATASET being empty, not only off an
-     explicitly set state flag, so both routes land on the same state. */
-  if(w.state==='empty'||!faFDataset(w).length) return faFNoAssets(w);
-  if(w.state==='unspecified') return faFUnbuilt(w);
-  if(faFTier(w)==='kpi') return faFGlance(w);
-  /* An unimplemented Group By has no groups at all, so there is no view to
-     render at either Explore or Detail: the placeholder replaces the body and
-     the controls stay live so the user can pick a dimension that works. */
-  if(!faFGroupNames(w).length) return faFHeader(w)+'<div class="faf-body">'+faFUnimplemented(w)+'</div>';
-  return faFHeader(w)+'<div class="faf-body">'+faFActiveView(w)+'</div>';
-}
-/* Single entry point, dispatched by w.kind==="fixedassets-mb". */
-function faFContent(w){
-  var tier=faFTier(w);
-  return '<div class="faf-root faf-w" data-tier="'+tier+'">'+faFBody(w)+'</div>';
-}
-
-/* (12) POPOVER. Its own #fafPop, body-appended and .faf-root-scoped so it
-   inherits the same tokens as the card. */
-function faFPopContent(){
-  var w=FAF_POP?find(FAF_POP.id):null;
-  if(!w) return '';
-  if(FAF_POP.type==='dim'){
-    return '<div class="cap">Group by</div><div class="menu-scroll">'+FAF_DIMS.map(function(d){
-      var on=faFDimK(w)===d.k;
-      return '<button class="mi'+(on?' check':'')+(d.impl?'':' faf-mi-dead')+'" role="option" aria-selected="'+on+'" data-faf="set-dim" data-id="'+w.id+'" data-v="'+d.k+'">'+
-        (on?faFIcon('check'):'<span class="mi-gap"></span>')+'<span class="mi-nm">'+faFEsc(d.l)+'</span>'+
-        (d.impl?'':'<span class="faf-mi-tag">not on API</span>')+'</button>';
-    }).join('')+'</div>';
-  }
-  if(FAF_POP.type==='group'){
-    var names=faFGroupNames(w),cur=faFCurrentGroup(w);
-    if(!names.length){
-      return '<div class="cap">Specific group</div><div class="mi faf-mi-dead"><span class="mi-gap"></span><span class="mi-nm">No groups returned for this dimension</span></div>';
-    }
-    return '<div class="cap">Specific group</div><div class="menu-scroll">'+names.map(function(g){
-      var on=cur===g;
-      return '<button class="mi'+(on?' check':'')+'" role="option" aria-selected="'+on+'" data-faf="set-group" data-id="'+w.id+'" data-v="'+faFEsc(g)+'">'+
-        (on?faFIcon('check'):'<span class="mi-gap"></span>')+'<span class="mi-nm">'+faFEsc(g)+'</span></button>';
-    }).join('')+'</div>';
-  }
-  return '<div class="cap">Financial measure</div><div class="menu-scroll">'+FAF_MEASURES.map(function(m){
-    var on=faFMeasK(w)===m.k;
-    return '<button class="mi'+(on?' check':'')+'" role="option" aria-selected="'+on+'" data-faf="set-measure" data-id="'+w.id+'" data-v="'+m.k+'">'+
-      (on?faFIcon('check'):'<span class="mi-gap"></span>')+'<span class="mi-nm">'+faFEsc(m.l)+'</span></button>';
-  }).join('')+'</div>';
-}
-function faFOpenPop(anchor,type,id){
-  FAF_POP={type:type,id:id};
-  var el=document.getElementById('fafPop');
-  if(!el){el=document.createElement('div');el.id='fafPop';document.body.appendChild(el);}
-  el.setAttribute('data-faf','stop');
-  el.className='faf-root faf-pop';
-  el.setAttribute('role','listbox');
-  el.innerHTML=faFPopContent();
-  var r=anchor.getBoundingClientRect(),M=8;
-  el.style.visibility='hidden';el.style.left='0px';el.style.top='0px';
-  var bw=el.offsetWidth,bh=el.offsetHeight;
-  var left=Math.min(Math.max(M,r.left),window.innerWidth-bw-M);
-  var top=r.bottom+6;if(top+bh>window.innerHeight-M)top=Math.max(M,r.top-bh-6);
-  el.style.left=left+'px';el.style.top=top+'px';el.style.visibility='';
-}
-function faFClosePop(){FAF_POP=null;var el=document.getElementById('fafPop');if(el)el.remove();}
-
-function faFHandleClick(e){
-  var t=e.target.closest?e.target.closest('[data-faf]'):null;
-  if(!t){if(FAF_POP&&!(e.target.closest&&e.target.closest('#fafPop')))faFClosePop();return;}
-  var a=t.getAttribute('data-faf');
-  if(a==='stop')return;
-  var id=t.getAttribute('data-id'),w=id?find(id):null;
-  if(!w)return;
-  if(a==='view'){w.faFView=(t.getAttribute('data-v')==='donut')?'donut':'assets';faFClosePop();render();return;}
-    /* a slim row opens the full table; the pop-up uses her shared modal
-       object, so her own modal-close action closes it and we add no closer */
-    if(a==='open-table'){modal={type:'fafTable',id:id,t:'Fixed assets'};modalMounted=false;faFClosePop();render();return;}
-  /* Paging. Prev and Next move one page from the page the server actually
-     served, so a change that shortens the set cannot strand the view past the
-     end. Totals and the donut never page. */
-  if(a==='page-prev'){w.faFPage=Math.max(0,faFServerQuery(w).pageIndex-1);render();return;}
-  if(a==='page-next'){var q=faFServerQuery(w);w.faFPage=Math.min(q.pageCount-1,q.pageIndex+1);render();return;}
-  if(a==='dim'||a==='group'||a==='measure'){
-    if(FAF_POP&&FAF_POP.type===a&&FAF_POP.id===id&&document.getElementById('fafPop'))faFClosePop();
-    else faFOpenPop(t,a,id);
-    render();return;
-  }
-  if(a==='set-dim'){
-    var nd=t.getAttribute('data-v');
-    if(faFDimK(w)!==nd){w.faFDim=nd;w.faFGroup=null;w.faFPage=0;}  /* THE RESET */
-    faFClosePop();render();return;
-  }
-  /* Back to page 1 whenever the row set changes: landing on page 4 of a group
-     that now has one page would show an empty table. */
-  if(a==='set-group'){w.faFPage=0;w.faFGroup=t.getAttribute('data-v');faFClosePop();render();return;}
-  if(a==='set-measure'){w.faFMeasure=t.getAttribute('data-v');faFClosePop();render();return;}
-  if(a==='sort'){
-    w.faFPage=0;
-    var k=t.getAttribute('data-k'),p=faFSortK(w).split('-');
-    /* First click on a money column opens DESCENDING, because the useful
-       question of a value column is which is largest. Text columns open
-       ascending. Re-clicking the active column flips it. */
-    var firstDir=FAF_MEASURES.some(function(m){return m.k===k;})?'desc':'asc';
-    w.faFSort=(p[0]===k)?(k+'-'+(p[1]==='asc'?'desc':'asc')):(k+'-'+firstDir);
-    faFClosePop();render();return;
-  }
-  if(a==='download'){
-    faFClosePop();
-    setStatus('Download is a placeholder: it would carry every measure at full precision, and no export endpoint exists for fixed assets yet.');
-    return;
-  }
-}
-var FAF_WIRED=false;
-(function(){
-  if(FAF_WIRED)return;FAF_WIRED=true;
-  document.addEventListener("click",faFHandleClick);
-  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&FAF_POP)faFClosePop();});
-})();
-/* ===== end W11 Fixed Asset Values V2 ===== */
 /* ===== W13 Purchasing Management V2 JS , prefix purF , kind "purchasing-mb" ===== */
 
 /* (1) DATA ------------------------------------------------------------- */
