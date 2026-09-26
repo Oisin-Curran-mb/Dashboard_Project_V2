@@ -64,6 +64,12 @@ const w = rows.filter(function (x) { return x.size === "wide"; })[0];
 /* ---------- 4. behaviour ---------------------------------------------- */
 let html = EX.contentHTML(w);
 A.ok(/Pending/.test(html) && /Outstanding|Approved/.test(html), "queue shows the status vocabulary");
+/* owner (26 Sep): header = view switch alone on the top row, view-specific controls in a sub-row, KPI row in the queue only; Glance untouched */
+rows.forEach(function (r) { const h = EX.contentHTML(r); if (r.size === "kpi") { A.absent(h, "ptof-subrow", r.id + ": Glance has no sub-row"); return; }
+  A.ok(/<div class="dep-hd ptof-hd"><div class="dep-hd-top"><div class="dep-hd-toggle">/.test(h), r.id + ": top row starts with the view switch");
+  A.ok(/<\/div><div class="ptof-subrow"><div class="ptof-ctlrow">/.test(h), r.id + ": view controls sit in the sub-row");
+  A.contains(h, "dep-hd-num", r.id + ": queue view keeps the KPI row");
+  const c = Object.assign({}, r, { ptofView: "calendar" }); const hc = EX.contentHTML(c); A.absent(hc, "dep-hd-num", r.id + ": calendar view has no KPI row"); A.contains(hc, "ptof-subrow", r.id + ": calendar view keeps the Department sub-row"); });
 /* owner (26 Sep): no placeholder / API-gap note under the queue at Explore or Detail */
 rows.forEach(function (r) { if (r.size !== "kpi") { A.absent(EX.contentHTML(r), "Placeholder, not yet available: approving", r.id + ": no placeholder note under the queue"); } });
 A.absent(js, "function ptoFGapNote", "the gap-note function is gone");

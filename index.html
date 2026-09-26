@@ -2114,8 +2114,11 @@
   .ptof-note{display:flex;align-items:flex-start;gap:7px;margin-top:10px;font-size:11px;color:var(--txt-subtle);line-height:1.45;}
   .ptof-note .material-symbols-rounded{font-size:15px;flex:0 0 auto;}
   /* header rows stack: controls, then the KPI row across the full width (the shell grid would put the KPI beside the control segment) */
-  .ptof-hd{grid-template-columns:1fr;row-gap:10px;}
-  .ptof-hd .dep-hd-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;min-width:0;}
+  .ptof-hd{grid-template-columns:1fr;row-gap:8px;}
+  .ptof-hd .dep-hd-top{display:flex;align-items:center;justify-content:flex-start;gap:8px;flex-wrap:wrap;min-width:0;}
+  .ptof-hd .dep-hd-top .dep-hd-toggle{margin:0;}
+  /* view-specific controls read as a sub-view of the switch above: a quiet band, left-aligned */
+  .ptof-subrow{display:flex;align-items:center;min-width:0;padding:6px 10px;border-radius:8px;background:var(--wn-100);border:1px solid var(--stroke-widget);}
   .ptof-hd .dep-hd-num{display:block;min-width:0;}
   .ptof-hd .w09-ctx{max-width:none;}
 /* ===== end W09 Payroll Scheduled Time Off V2 CSS ===== */
@@ -7265,7 +7268,7 @@ function ptoFHeaderBlock(w){
     ?(pend+' of '+all+' scheduled days in '+PTOF_MONTHS[PTOF_WORK_M]+' are waiting on your approval')
     :('Nothing is waiting on your approval in '+PTOF_MONTHS[PTOF_WORK_M]+', across '+all+' scheduled days');
   var kpiRow=(ptoFView(w)==="queue")?('<div class="dep-hd-num"><div class="w09-numwrap">'+kpi+'<div class="w09-ctx">'+ctx+'</div></div></div>'):"";
-  return '<div class="dep-hd ptof-hd"><div class="dep-hd-top"><div class="ptof-ctlrow">'+ctls+'</div>'+ptoFViewToggle(w)+'</div>'+kpiRow+'</div>';
+  return '<div class="dep-hd ptof-hd"><div class="dep-hd-top">'+ptoFViewToggle(w)+'</div><div class="ptof-subrow"><div class="ptof-ctlrow">'+ctls+'</div></div>'+kpiRow+'</div>';
 }
 
 /* ---- Glance (KPI): two figures side by side, Pending and Outstanding.
