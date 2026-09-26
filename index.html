@@ -2020,7 +2020,7 @@
   .ptof-cal-title{font-size:13px;font-weight:700;color:var(--txt-primary);min-width:118px;text-align:center;font-variant-numeric:tabular-nums;}
   .ptof-wk{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:4px;flex-shrink:0;}
   .ptof-wkc{text-align:center;font-size:10px;font-weight:700;color:var(--txt-subtle);text-transform:uppercase;letter-spacing:.3px;}
-  .ptof-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;flex:1 1 auto;min-height:0;grid-auto-rows:minmax(var(--ptof-cell),1fr);overflow-y:auto;overscroll-behavior:contain;}
+  .ptof-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;flex:1 1 auto;min-height:calc(var(--ptof-cell)*5 + 16px);grid-auto-rows:minmax(var(--ptof-cell),1fr);overflow-y:auto;overscroll-behavior:contain;}
   /* A uniform 1px border throughout: a sub-pixel border renders
      inconsistently across DPRs, and it is what let `today` physically
      resize its own cell in the version before this one. */
@@ -2069,10 +2069,8 @@
   .ptof-more{font-size:9.5px;font-weight:700;color:var(--txt-secondary);background:var(--wn-300);border-radius:4px;padding:1px 4px;line-height:1.35;}
   .ptof-cal-t-detail .ptof-mark-tx{font-size:11px;}
   .ptof-cal-t-detail .ptof-daynum{font-size:12px;}
-  .ptof-legend{display:flex;flex-wrap:wrap;align-items:center;gap:5px 12px;margin-top:9px;padding-top:8px;border-top:1px solid var(--stroke-widget);flex-shrink:0;}
-  .ptof-legend-cap{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txt-subtle);}
-  .ptof-legend-item{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--txt-secondary);}
-  .ptof-legend-item .material-symbols-rounded{font-size:14px;}
+  .ptof-legend{display:flex;flex-wrap:nowrap;align-items:center;gap:12px;margin-top:6px;padding-top:6px;border-top:1px solid var(--stroke-widget);flex-shrink:0;}
+  .ptof-legend-item{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;color:var(--txt-secondary);white-space:nowrap;}
   .ptof-legend-sw{width:10px;height:10px;border-radius:3px;flex:0 0 auto;}
   .ptof-lg-appr .material-symbols-rounded{color:var(--ptof-st-appr);}
   .ptof-lg-appr .ptof-legend-sw{background:var(--ptof-st-appr);}
@@ -2115,6 +2113,11 @@
   .ptof-info-empty{font-size:12px;color:var(--txt-subtle);padding:8px 0;}
   .ptof-note{display:flex;align-items:flex-start;gap:7px;margin-top:10px;font-size:11px;color:var(--txt-subtle);line-height:1.45;}
   .ptof-note .material-symbols-rounded{font-size:15px;flex:0 0 auto;}
+  /* header rows stack: controls, then the KPI row across the full width (the shell grid would put the KPI beside the control segment) */
+  .ptof-hd{grid-template-columns:1fr;row-gap:10px;}
+  .ptof-hd .dep-hd-top{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;min-width:0;}
+  .ptof-hd .dep-hd-num{display:block;min-width:0;}
+  .ptof-hd .w09-ctx{max-width:none;}
 /* ===== end W09 Payroll Scheduled Time Off V2 CSS ===== */
   /* ===== W11 Fixed Asset Values V2 CSS ===== */
   .faf-root.faf-w{height:100%;display:flex;flex-direction:column;min-height:0;overflow:hidden;}
@@ -7261,8 +7264,8 @@ function ptoFHeaderBlock(w){
   var ctx=pend
     ?(pend+' of '+all+' scheduled days in '+PTOF_MONTHS[PTOF_WORK_M]+' are waiting on your approval')
     :('Nothing is waiting on your approval in '+PTOF_MONTHS[PTOF_WORK_M]+', across '+all+' scheduled days');
-  return '<div class="dep-hd ptof-hd"><div class="dep-hd-top"><div class="ptof-ctlrow">'+ctls+'</div>'+ptoFViewToggle(w)+
-    '</div><div class="dep-hd-num"><div class="w09-numwrap">'+kpi+'<div class="w09-ctx">'+ctx+'</div></div></div></div>';
+  var kpiRow=(ptoFView(w)==="queue")?('<div class="dep-hd-num"><div class="w09-numwrap">'+kpi+'<div class="w09-ctx">'+ctx+'</div></div></div>'):"";
+  return '<div class="dep-hd ptof-hd"><div class="dep-hd-top"><div class="ptof-ctlrow">'+ctls+'</div>'+ptoFViewToggle(w)+'</div>'+kpiRow+'</div>';
 }
 
 /* ---- Glance (KPI): two figures side by side, Pending and Outstanding.
@@ -7367,8 +7370,8 @@ function ptoFDayCell(cls,daynum,inner,attrs){return '<div class="ptof-day'+cls+'
    glyph and word so colour is never the only signal. It is fixed and does
    not change with any control. */
 function ptoFLegend(w){var stItems=[["Approved","appr","check_circle"],["Pending","pend","schedule"],["Outstanding","out","error"]];
-  return '<div class="ptof-legend" role="group" aria-label="Calendar key: colour is approval status, green approved, yellow pending, red outstanding (past due and still pending)"><span class="ptof-legend-cap">Colour = status</span>'+
-    stItems.map(function(o){return '<span class="ptof-legend-item ptof-lg-'+o[1]+'"><span class="ptof-legend-sw" aria-hidden="true"></span>'+ICON(o[2])+o[0]+'</span>';}).join("")+'</div>';}
+  return '<div class="ptof-legend" role="group" aria-label="Calendar key: colour is approval status, green approved, yellow pending, red outstanding (past due and still pending)">'+
+    stItems.map(function(o){return '<span class="ptof-legend-item ptof-lg-'+o[1]+'"><span class="ptof-legend-sw" aria-hidden="true"></span>'+o[0]+'</span>';}).join("")+'</div>';}
 function ptoFCalendar(w){var y=ptoFCalY(w),m=ptoFCalM(w);
   /* ptoFCalEntries, not ptoFMonthEntries, so the department filter reaches
      the grid, the summary, the legend and the empty state alike. */
@@ -7385,7 +7388,7 @@ function ptoFCalendar(w){var y=ptoFCalY(w),m=ptoFCalM(w);
   }
   var gk={};monthEntries.forEach(function(fe){gk[fe.dept]=1;});var nG=Object.keys(gk).length;
   var distinct=ptoFDistinctOut(monthEntries);
-  var summary='<div class="ptof-hint"><strong>'+distinct+(distinct===1?" person":" people")+'</strong> out across '+nG+' department'+(nG===1?"":"s")+' in '+PTOF_MONTHS[m]+((dsel!=="all")?(", filtered to "+dsel):"")+'. Click a day for detail.</div>';
+  var summary='<div class="ptof-hint"><strong>'+distinct+(distinct===1?" person":" people")+'</strong> out in '+PTOF_MONTHS[m]+((dsel!=="all")?(", "+dsel):"")+'</div>';
   /* Tiered chrome: Explore gets single-letter initials, because seven
      three-letter labels across a 440px panel crowd the columns; Detail
      keeps the three-letter abbreviation. */
