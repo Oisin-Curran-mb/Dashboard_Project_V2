@@ -19,7 +19,7 @@ const S = shell.script, raw = shell.html;
 A.absent(shell.css, ".apf-", "no .apf- rule survives");
 ["function apContent(", "function apHandleClick(", 'a==="ap-due"', 'a==="ap-open"', "function apPopContent("].forEach(function (n) { A.contains(S, n, "her block holds " + n); });
 A.contains(S, 'WIDGETS.register("payables",{content:apContent});', "her content is registered under kind payables");
-A.absent(S.replace(//*[sS]*?*//g, ""), '    if(w.kind==="payables")return apContent(w);', "the old contentHTML hook is gone (her banner comment still quotes it)");
+A.absent(S.replace(/\/\*[\s\S]*?\*\//g, ""), '    if(w.kind==="payables")return apContent(w);', "the old contentHTML hook is gone (her banner comment still quotes it)");
 A.absent(S, 'if(w.kind==="payables-mb")', "no payables-mb branch anywhere");
 A.eq((raw.match(/title:"[^"]*",kind:"payables",/g) || []).length, 3, "exactly three registry rows (her banner comment also says kind:payables)");
 A.eq((raw.match(/title:"Accounts Payable By Due Date",kind:"payables"/g) || []).length, 3, "all three titled Accounts Payable By Due Date");
