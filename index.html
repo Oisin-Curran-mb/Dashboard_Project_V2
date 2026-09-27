@@ -2239,8 +2239,7 @@
   .purf-root .purf-ap-me{background:var(--am-50,var(--wn-100));}
   .purf-root .purf-apgrid+.purf-flbl{margin-top:14px;}
   /* Legend: header info icon (plain, no circle, no border) and the legend pop-up rows. */
-  .purf-root .purf-hd-acts{display:flex;align-items:center;gap:4px;}
-  .purf-root .purf-lgbtn{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border:0;background:transparent;color:var(--txt-subtle);border-radius:8px;cursor:pointer;padding:0;}
+  .purf-root .purf-lgbtn{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border:0;background:transparent;color:var(--txt-subtle);border-radius:8px;cursor:pointer;padding:0;justify-self:end;align-self:start;}
   .purf-root .purf-lgbtn .material-symbols-rounded{font-size:19px;}
   .purf-root .purf-lgbtn:hover{color:var(--txt-primary);}
   .purf-pop-lg{min-width:300px;max-width:360px;max-height:min(78vh,640px);overflow-y:auto;}
@@ -10798,9 +10797,10 @@ function purFHeaderBlock(w){
     : '<div class="dep-hd-kpigrp"><span class="metric-value">'+mine+'</span><span class="bank-pill">'+(mine===1?"needs":"need")+' your approval</span></div>';
   var ctx=loading?"":'<div class="purf-ctx">'+pending+' pending approval, '+purFMoney(outstanding)+' outstanding. '+setRows.length+' request'+(setRows.length===1?"":"s")+' in view.</div>';
   return '<div class="dep-hd purf-hd">'+
-    '<div class="dep-hd-top"><div class="purf-chiprow">'+chips+'</div><div class="dep-hd-toggle purf-hd-acts">'+purFViewToggle(w)+
-      '<button class="purf-lgbtn" data-purf="legend" data-id="'+w.id+'" aria-haspopup="dialog" aria-label="Legend: what the lanes, badges and colours mean" data-tip="Legend">'+purFIcon("info")+'</button></div></div>'+
-    '<div class="dep-hd-num"><div class="purf-numwrap">'+kpi+ctx+'</div></div>'+
+    '<div class="dep-hd-top"><div class="purf-chiprow">'+chips+'</div><div class="dep-hd-toggle">'+purFViewToggle(w)+'</div></div>'+
+    '<div class="dep-hd-num"><div class="purf-numwrap">'+kpi+ctx+'</div>'+
+      '<button class="purf-lgbtn" data-purf="legend" data-id="'+w.id+'" aria-haspopup="dialog" aria-label="Legend: what the lanes, badges and colours mean" data-tip="Legend">'+purFIcon("info")+'</button>'+
+    '</div>'+
   '</div>';
 }
 function purFSkeleton(){

@@ -134,7 +134,7 @@ A.absent(mh, "Rejected requests do not enter", "rejected copy keyed on the row, 
 const hdWide = C("purFHeaderBlock", wide), hdX = C("purFHeaderBlock", xw), glance = C("purFContent", kpi);
 A.contains(hdWide, 'data-purf="legend"', "Explore header carries the legend icon"); A.contains(hdX, 'data-purf="legend"', "Detail header carries the legend icon");
 A.absent(glance, 'data-purf="legend"', "Glance has no legend icon");
-A.ok(hdX.indexOf('data-purf="legend"') > hdX.indexOf('data-purf="view"'), "the icon sits after the view toggle, top right");
+A.ok(hdX.indexOf("dep-hd-num") < hdX.indexOf('data-purf="legend"'), "the icon sits in the headline row, one line below the toggle (owner, 27 Sep)");
 C("purFOpenPop", "legend", xw.id, null); A.eq(env.get("PURF_POP").type, "legend", "the icon opens the legend pop-up");
 const lg = C("purFPopContent");
 ["Lanes", "Badges: whose turn it is", "Card colours", "Moving a card"].forEach(function (c) { A.contains(lg, '<div class="cap">' + c + "</div>", "legend section " + c); });
