@@ -368,26 +368,25 @@
     },
     "W15": {
       "name": "Bank Balances",
-      "driver": "w15-bank-mb.driver.js",
-      "ours": {
-        "kind": "bank-mb",
-        "prefix": "bkF",
-        "css": {
-          "grep": [
-            ".bkf-"
-          ]
-        },
-        "js": {
-          "start": "/* ===== W15 Bank Balances V2 JS , prefix bkF , kind \"bank-mb\" =",
-          "end": "/* ===== end W15 Bank Balances V2 ===== */"
-        },
-        "registry": {
-          "grep": [
-            "kind:\"bank-mb\""
-          ]
-        }
-      },
-      "jo": {
+      "driver": "w15-bank.driver.js",
+      "decided": "2026-09-27 Jo (owner: accept Jo version; ours deleted; her Glance re-laid to the owner's spec first)",
+      "removed": [
+        "bank-mb"
+      ],
+      "baselineDrop": [
+        "{id:\"bank_k\",",
+        "{id:\"bank_x\",",
+        "{id:\"bank2\",",
+        "{id:\"bank3\",",
+        "{id:\"bkF\"",
+        "{id:\"bkF_k\"",
+        "{id:\"bkF_x\"",
+        "{id:\"bkF2\"",
+        "{id:\"bkF3\"",
+        "{id:\"bkF4\"",
+        "{id:\"bkF5\""
+      ],
+      "final": {
         "kind": "bank",
         "prefix": "bank",
         "css": {
@@ -395,10 +394,17 @@
           "end": "/* ===== Payroll Distributions (pr): scope dropdown + distribution badges ===== */"
         },
         "js": {
-          "start": "/* ===== Bank Balances (prefix: bank), RENDER ===== */",
-          "end": "/* ===== Payroll Scheduled Time Off (pto) ===== */"
-        }
-      }
+          "start": "  function bankAccounts(w){return BANK_ACCOUNTS;}",
+          "end": "   Accounts Payable By Due Date  (ap, kind:\"payables\")"
+        },
+        "registry": {
+          "grep": [
+            "kind:\"bank\""
+          ]
+        },
+        "note": "Jo's block kept with its shell hooks (contentHTML, popContent, renderModal, click), not converted to WIDGETS.register"
+      },
+      "baselineNote": "bank_k and bank_x are retitled 'Bank Balances' (owner), so they leave the line-for-line baseline check like her removed fixtures"
     },
     "W16": {
       "name": "Accounts Payable By Due Date",

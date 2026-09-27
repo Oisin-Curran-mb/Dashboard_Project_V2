@@ -850,7 +850,7 @@
   .bank-hb-name.lr-link{cursor:pointer;}
   .bank-hb-name.lr-link:hover{color:var(--am-600);text-decoration:underline;}
   .bank-hb-track{position:relative;height:15px;background:var(--wn-200);border-radius:3px;}
-  .bank-hb-zero{position:absolute;top:-2px;bottom:-2px;width:1px;background:var(--wn-500);}
+  .bank-hb-zero{position:absolute;top:-2px;bottom:-2px;width:1px;background:var(--wn-400);}
   .bank-hb-fill{position:absolute;top:0;bottom:0;background:var(--am-500);border-radius:2px;min-width:2px;}
   .bank-hb-fill.neg{background:var(--red-100);}
   .bank-hb-val{text-align:right;font-size:12px;font-variant-numeric:tabular-nums;color:var(--txt-secondary);}
@@ -2199,111 +2199,6 @@
   .purf-root .purf-kc-amt{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--txt-primary);}
   .purf-root .purf-kempty{font-size:11.5px;color:var(--txt-subtle);padding:6px 2px;}
 /* ===== end W13 Purchasing Management V2 CSS ===== */
-  /* ===== W15 Bank Balances V2 CSS , prefix bkF , kind "bank-mb" ===== */
-
-  /* Bare .bkf-root carries scope only; .bkf-w carries the card layout, so the
-     body-mounted popover can share the class without inheriting flex. */
-  .bkf-root{color:var(--txt-primary);}
-  .bkf-root.bkf-w{display:flex;flex-direction:column;min-height:0;height:100%;overflow:hidden;}
-  .bkf-root .bkf-body{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 2px 6px;min-width:0;}
-  .bkf-root .bkf-tblwrap{display:flex;flex-direction:column;flex:1;min-height:0;min-width:0;}
-  .bkf-root .bkf-tscroll{flex:1 1 auto;min-height:0;}
-
-  .bkf-root .bkf-tbl{width:100%;border-collapse:collapse;font-size:13px;table-layout:fixed;}
-  .bkf-root .bkf-tbl .wt-row{display:table-row;padding:0;gap:0;border-bottom:none;}
-  .bkf-root .bkf-tbl .wt-row>th,.bkf-root .bkf-tbl .wt-row>td{display:table-cell;padding:7px 14px;border-bottom:1px solid var(--stroke-widget);text-align:left;font-weight:400;vertical-align:middle;}
-  .bkf-root .bkf-tbl tbody .wt-row:last-child>th,.bkf-root .bkf-tbl tbody .wt-row:last-child>td{border-bottom:none;}
-  .bkf-root .bkf-tbl .lr-main{display:table-cell;flex:none;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .bkf-root .bkf-tbl .wt-c2{display:table-cell;flex:none;min-width:0;text-align:right;font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap;}
-  .bkf-root .bkf-tbl .wt-head>th{position:sticky;top:0;background:var(--surface-widget);font-size:11px;font-weight:600;color:var(--txt-subtle);z-index:2;}
-  .bkf-root .bkf-tbl .wt-c2.bank-bal{width:158px;}
-  .bkf-root .bkf-tbl .wt-c2.bank-amt{width:150px;}
-  .bkf-root .bkf-tbl tbody .wt-row:hover>*{background:var(--wn-100);}
-  /* Her .dep-total is a flex strip; as a <tfoot> row it becomes a sticky row with
-     the same weight and top rule. */
-  .bkf-root .bkf-tbl .dep-total{display:table-row;padding:0;}
-  .bkf-root .bkf-tbl .dep-total>th,.bkf-root .bkf-tbl .dep-total>td{position:sticky;bottom:0;background:var(--surface-widget);border-top:1px solid var(--stroke-widget);border-bottom:none;padding:9px 14px;font-size:13px;font-weight:600;z-index:2;}
-  .bkf-root .bkf-tbl .dep-total>th{color:var(--txt-primary);}
-  .bkf-root .bkf-tbl .bank-tag-over{margin-left:6px;}
-
-  /* Pager. Her .bank-pager is reused for the strip; ours right-aligns it, adds a
-     separating rule, and pushes the count label to the left. The two labels are
-     new because her .bank-count belongs to her Load-more caption, and this is a
-     page-N-of-M control instead. */
-  .bkf-root .bkf-pager{justify-content:flex-end;align-items:center;gap:8px;flex:0 0 auto;padding:6px 12px 2px;border-top:1px solid var(--stroke-widget);font-size:11.5px;color:var(--txt-subtle);}
-  .bkf-root .bkf-pgcount{margin-right:auto;font-variant-numeric:tabular-nums;padding:0;}
-  .bkf-root .bkf-pgnum{font-variant-numeric:tabular-nums;min-width:86px;text-align:center;}
-
-  /* Diverging balance bars. Her .bank-hb family does all the work; .bkf-hb only
-     makes the list scroll inside the card, and .bkf-hb-head is a header row her
-     block has no counterpart for (hers labels its columns nowhere). The head
-     shares her exact grid so the columns line up with her rows, including her two
-     tier variants. */
-  .bkf-root .bkf-hb{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;}
-  .bkf-root .bkf-hb-head{display:grid;grid-template-columns:minmax(96px,150px) 1fr 104px;align-items:center;gap:12px;padding:0 16px 4px;font-size:11px;font-weight:600;color:var(--txt-subtle);flex:0 0 auto;}
-  .bkf-root .bkf-hb-head .bank-hb-val{color:var(--txt-subtle);font-weight:600;}
-  .bkf-root[data-tier="wide"] .bkf-hb-head{grid-template-columns:minmax(88px,132px) 1fr 92px;gap:10px;}
-  .bkf-root[data-tier="xwide"] .bkf-hb-head{grid-template-columns:minmax(150px,240px) 1fr 116px;gap:14px;}
-
-  /* FORCED OVERRIDE 2 OF 3, THE ZERO AXIS. Her .bank-hb-zero reads
-     var(--wn-500), and --wn-500 IS DECLARED NOWHERE IN THIS FILE, so the rule
-     resolves to nothing and her diverging bar's zero axis is INVISIBLE IN HER OWN
-     BUILD. That is a real defect in her original and it is reported rather than
-     copied: her rule is left exactly as it is, and ours re-points only our own
-     axis at --wn-750, a Pathway primitive this file does declare. */
-  .bkf-root .bank-hb-zero{background:var(--wn-750);width:1.5px;border-radius:1px;}
-
-  .bkf-root .bank-hb-fill{background:var(--am-500);}
-  .bkf-root .bank-hb-fill.neg{background:var(--am-700);}
-  .bkf-root .bank-sw.in{background:var(--am-500);}
-  .bkf-root .bank-sw.out{background:var(--am-700);}
-  .bkf-root .bank-col.in .bank-bar{background:var(--am-500);}
-  .bkf-root .bank-col.out .bank-bar{background:var(--am-700);}
-  .bkf-root .bank-xval.in{color:var(--am-500);}
-  .bkf-root .bank-xval.out{color:var(--am-700);}
-
-  /* Seven-row breakdown. Her .bank-anchor mutes the Beginning Balance row and is
-     reused as is. .bkf-brk scrolls the table, .bkf-brk-cap is the statement
-     heading, .bkf-brk-sub is the per-row explanatory line (which row is the
-     reconciliation boundary, and why there is no totals row), and .bkf-brk-end
-     gives row 7 her .dep-total weight without making it an eighth row outside
-     the table, which is where hers puts it. */
-  .bkf-root .bkf-brk{flex:0 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;}
-  .bkf-root .bkf-brk-cap{font-size:11px;font-weight:600;color:var(--txt-secondary);padding:6px 14px 4px;flex:0 0 auto;}
-  .bkf-root .bkf-brk-sub{display:block;font-size:10.5px;font-weight:400;color:var(--txt-subtle);padding-top:2px;white-space:normal;}
-  .bkf-root .bkf-tbl .bkf-brk-end>th,.bkf-root .bkf-tbl .bkf-brk-end>td{border-top:1px solid var(--stroke-widget);border-bottom:none;background:var(--wn-100);padding:9px 14px;font-size:13px;font-weight:600;}
-  .bkf-root .bkf-tbl .bkf-brk-end .lr-main{color:var(--txt-primary);font-weight:600;white-space:normal;}
-  .bkf-root .bkf-tbl .bank-anchor .lr-main{white-space:normal;}
-
-  /* Four-category activity chart. Her .bank-chart-wrap / .bank-plotrow /
-     .bank-yax / .bank-canvas / .bank-gl / .bank-cols / .bank-col / .bank-bar /
-     .bank-xaxrow / .bank-xcol* do all of it. Only the outer flex column and its
-     heading are new. */
-  .bkf-root .bkf-cats{display:flex;flex-direction:column;flex:1 1 auto;min-height:0;min-width:0;}
-  .bkf-root .bkf-cats-hd{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--txt-secondary);padding:6px 14px 2px;flex:0 0 auto;}
-  .bkf-root .bank-chart-wrap{flex:1 1 auto;min-height:0;}
-
-  /* The overdrawn chip's label. Her .bank-odchip supplies the whole visual
-     treatment including its pressed .on state and is reused unchanged; this only
-     lets a long label ellipsise instead of forcing the chip wider. */
-  .bkf-root .bkf-odchip-l{min-width:0;overflow:hidden;text-overflow:ellipsis;}
-
-  /* A muted line that NAMES AN UNRESOLVED GAP on screen rather than inventing a
-     rule for it (negative balances in the bar chart, open item 6; and the
-     display-only sign flip on the activity magnitudes). */
-  .bkf-root .bkf-gap{display:flex;align-items:flex-start;gap:6px;padding:2px 14px 6px;font-size:10.5px;color:var(--txt-subtle);line-height:1.45;flex:0 0 auto;}
-  .bkf-root .bkf-gap .material-symbols-rounded{font-size:14px;flex:0 0 auto;margin-top:1px;}
-
-  /* The mode-change announcement, visually hidden. Its own class rather than
-     .sr-only because it is a live region that must stay in the layout. */
-  .bkf-root .bkf-live{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
-
-  /* Our own account popover, body-mounted, .bkf-root-scoped so it picks up the
-     token block. Her .mi / .mi-gap / .mi-nm / .cap / .sep / .menu-scroll /
-     .bank-mi-bal fill it and are reused. */
-  .bkf-root.bkf-pop{position:fixed;z-index:3000;background:var(--surface-widget);border:1px solid var(--stroke-widget);border-radius:10px;box-shadow:0 14px 36px rgba(41,39,36,.24),0 3px 10px rgba(41,39,36,.14);padding:6px;min-width:260px;max-width:min(380px,calc(100vw - 16px));}
-  .bkf-root.bkf-pop .menu-scroll{max-height:300px;overflow-y:auto;scrollbar-width:thin;}
-  /* ===== end W15 Bank Balances V2 CSS ===== */
   /* ===== W16 Accounts Payable By Due Date V2 CSS , prefix apF , kind "payables-mb" ===== */
   .apf-root{color:var(--txt-primary);}
   .apf-root.apf-w{display:flex;flex-direction:column;min-height:0;height:100%;overflow:hidden;}
@@ -3629,7 +3524,7 @@
   function viewOnlySelectHTML(){var h=location.hash||"",cur_=(/[#&](w=W\d\d|k=[a-z0-9,-]+)/i.exec(h)||["",""])[1];
     var opts=[["","Review: all widgets"]];
     if(typeof CMP_ROWS!=="undefined")CMP_ROWS.forEach(function(r){opts.push(["w="+r[0],r[0]+" "+r[1]+" (Jo vs OC, 3 sizes)"]);});
-    var VIEW_WNUM={budget:"W01",pension:"W02",payroll:"W03",remittance:"W04",receivables:"W05",insurance:"W06",deposits:"W07",mystatus:"W08",pto:"W09",loans:"W10",fixedassets:"W11",purchasing:"W13",tasks:"W14"}; /* finished widgets: kind -> W number, so they sort with the rest */
+    var VIEW_WNUM={budget:"W01",pension:"W02",payroll:"W03",remittance:"W04",receivables:"W05",insurance:"W06",deposits:"W07",mystatus:"W08",pto:"W09",loans:"W10",fixedassets:"W11",purchasing:"W13",bank:"W15",tasks:"W14"}; /* finished widgets: kind -> W number, so they sort with the rest */
     Object.keys(WIDGETS.kinds).forEach(function(k){var row=dashboards[0].widgets.filter(function(x){return x.kind===k;})[0];if(!row)return;var wn=VIEW_WNUM[k]||"W??";opts.push(["k="+k,wn+" "+(row.title||k).replace(/\s*\([^)]*\)\s*$/,"")+" (final, 3 sizes)"]);});
     opts=[opts[0]].concat(opts.slice(1).sort(function(x,y){return x[1].localeCompare(y[1]);}));
     return '<select id="viewOnlySel" class="btn outlined sm" aria-label="Review aid: show one widget" style="margin-right:8px;max-width:320px">'+opts.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===cur_?" selected":"")+'>'+o[1]+'</option>';}).join("")+'</select>';}
@@ -10029,13 +9924,11 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
      the pre-edit snapshot.
   ===================================================================== */
   var CMPNOTE_={
-    W15:{h:"Ours is her Bank widget rebuilt to her design, reusing her CSS rather than redeclaring it.",rows:["Both presentations stay, but ONE shows at a time at every tier; her paired Detail layout is retired.","Client-side Load more becomes SERVER paging: 12 per page over 52 accounts, stating the page and the range.","Ordering is fixed alphabetical server-side with a unique tiebreaker; her sortable column headers are not built.","Totals and the bar scale come from the whole filtered set, so turning the page moves neither the total nor a bar.","Drill-through is dropped: Single Account mode already IS this widget's drill-in mechanism.","Her div row stacks become real tables with header cells and scope, because a scoped header cell cannot survive a div row.","Red leaves the bars for the amethyst ramp and survives only on the Overdrawn status chip."],open:"The paged accounts endpoint exists in no API document, and the seven-line per-account activity breakdown is entirely new backend work."},
     W16:{h:"Ours is a one-to-one copy of her v2 Payables design plus exactly one owner-approved addition.",rows:["A second chip is added: a due-date horizon of all outstanding, or the next 7, 30, 60 or 90 days.","Overdue invoices are ALWAYS included whatever the horizon, so a narrowed horizon can never shrink the overdue band.","A due filter that a new horizon just emptied SNAPS back to All due dates rather than rendering an empty table.","A filter goes widget-wide: every aggregate reads one horizon-scoped function, so nothing on the card can disagree.","Five table columns become four, folding her Status pill into a two-line Due date cell.","Row click and the invoice detail modal are not built at all; drill-through stays an open question.","Her loading line, computed but never rendered in her own block, is now actually shown under the KPI."],open:"The aging basis, due date versus invoice date, was never confirmed against the API, and it moves every band, subtotal and the horizon itself."},
     W17:{h:"Ours pivots her Gifts widget to GOAL progress; W04 keeps the exception job.",rows:["The subject changes from percent fulfilled against the pledge total to progress against a distinct campaign Goal.","Two pace states become three goal bands: under 75 percent, 75 percent or more, and goal met.","Pledge Due uses per-pledge installment proration, explicitly NOT the linear day fraction Remittance uses.","The as-of anchor follows the SELECTED range end; the legacy routine anchors on today, a defect not reproduced.","A single received-through date becomes a range with an inline custom reveal and no Refresh button.","The drill goes INLINE under the row, paged 20 at a time, and each pledge expands again to its gift transactions.","The sort control is removed entirely, and export is the only action on the card."],open:"The received basis conflict blocks every summed figure: ours counts pledge-linked gifts only while the API counts all posted gifts for the purpose."}
   };
   /* number, display name, HER kind + her state, OUR kind + our state */
   var CMP_ROWS=[
-    ["W15","Bank Balances","bank",{bkacct:null,bkview:"table",bksort:"bal-desc"},"bank-mb",{bkFAcct:null,bkFView:"table",bkFPage:0,bkFOver:false,bkFSort:"nm-asc"}],
     ["W16","Accounts Payable By Due Date","payables",{apview:"table",apDue:"total",apsort:"due-asc",updated:"just now"},"payables-mb",{apFDue:"total",apFSort:"due-asc",apFHz:"all",updated:"just now"}],
     ["W17","Gifts Pledges","gifts",{gftView:"progress",gftSort:"fulfilled-asc",gftPurpose:"All purposes"},"gifts-mb",{gpFView:"goal",gpFCamp:"All Campaigns",gpFRange:"year",gpFExp:{},gpFPage:{},gpFPlExp:{},updated:"just now"}],
   ];
@@ -10078,10 +9971,8 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
   var dashboards=[
     {id:"d1",name:"Dashboard",custom:true,widgets:[
       {id:"bank",title:"Bank Balances",kind:"bank",size:"wide",tiers:["kpi","wide","xwide"],bkacct:null,bkview:"table",bksort:"bal-desc",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-      {id:"bank_k",title:"Bank Balances (Glance)",kind:"bank",size:"kpi",tiers:["kpi","wide","xwide"],bkacct:null,bkview:"table",bksort:"bal-desc",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-      {id:"bank_x",title:"Bank Balances (Detail)",kind:"bank",size:"xwide",tiers:["kpi","wide","xwide"],bkacct:null,bkview:"table",bksort:"bal-desc",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-      {id:"bank2",title:"Bank Balances: Operating Checking",kind:"bank",size:"wide",tiers:["kpi","wide","xwide"],bkacct:"bk-op",bkview:"chart",bksort:"bal-desc"},
-      {id:"bank3",title:"Bank Balances (no accounts)",kind:"bank",size:"wide",tiers:["kpi","wide","xwide"],bkacct:null,bkview:"table",state:"empty"},
+      {id:"bank_k",title:"Bank Balances",kind:"bank",size:"kpi",tiers:["kpi","wide","xwide"],bkacct:null,bkview:"table",bksort:"bal-desc",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
+      {id:"bank_x",title:"Bank Balances",kind:"bank",size:"xwide",tiers:["kpi","wide","xwide"],bkacct:null,bkview:"table",bksort:"bal-desc",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
       /* W01 Budget Compared to Actual */
       {id:"bgtO",title:"Budget Compared to Actual",kind:"budget",size:"wide",tiers:["kpi","wide","xwide"],acctview:"income",bspan:"year",binterval:"month",bshape:"bar",bsort:"idx-asc",iA:"month",iB:"period",fA:"bar",fB:"line",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
       {id:"bgtO_k",title:"Budget Compared to Actual",kind:"budget",size:"kpi",tiers:["kpi","wide","xwide"],acctview:"income",bspan:"year",binterval:"month",bshape:"bar",bsort:"idx-asc",iA:"month",iB:"month",fA:"bar",fB:"line",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
@@ -10189,14 +10080,6 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
       ,{id:"purF",  title:"Purchasing Management",           kind:"purchasing",size:"wide", tiers:["kpi","wide","xwide"],purfView:"table",purfStatus:"All statuses",purfPath:null,purfOv:false,updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]}
       ,{id:"purF_k",title:"Purchasing Management",           kind:"purchasing",size:"kpi",  tiers:["kpi","wide","xwide"],purfView:"table",purfStatus:"All statuses",purfPath:null,purfOv:false,updated:"just now"}
       ,{id:"purF_x",title:"Purchasing Management",           kind:"purchasing",size:"xwide",tiers:["kpi","wide","xwide"],purfView:"table",purfStatus:"All statuses",purfPath:null,purfOv:false,updated:"just now"}
-      /* ===== W15 Bank Balances V2 registry, prefix bkF, kind "bank-mb". Seven registry ===== */
-      ,{id:"bkF",   title:"Bank Balances (OC)",                        kind:"bank-mb",size:"wide", tiers:["kpi","wide","xwide"],bkFAcct:null,      bkFView:"table",bkFPage:0,bkFOver:false,bkFSort:"nm-asc"}
-      ,{id:"bkF_k", title:"Bank Balances (OC, Glance)",                kind:"bank-mb",size:"kpi",  tiers:["kpi","wide","xwide"],bkFAcct:null,      bkFView:"table",bkFPage:0,bkFOver:false,bkFSort:"nm-asc"}
-      ,{id:"bkF_x", title:"Bank Balances (OC, Detail)",                kind:"bank-mb",size:"xwide",tiers:["kpi","wide","xwide"],bkFAcct:null,      bkFView:"table",bkFPage:0,bkFOver:false,bkFSort:"nm-asc"}
-      ,{id:"bkF2",  title:"Bank Balances (OC, Bar chart)",             kind:"bank-mb",size:"wide", tiers:["kpi","wide","xwide"],bkFAcct:null,      bkFView:"bars", bkFPage:0,bkFOver:false,bkFSort:"nm-asc"}
-      ,{id:"bkF3",  title:"Bank Balances (OC, Single account)",        kind:"bank-mb",size:"xwide",tiers:["kpi","wide","xwide"],bkFAcct:"BA-1042", bkFView:"table",bkFPage:0,bkFOver:false,bkFSort:"nm-asc"}
-      ,{id:"bkF4",  title:"Bank Balances (OC, Overdrawn only)",        kind:"bank-mb",size:"wide", tiers:["kpi","wide","xwide"],bkFAcct:null,      bkFView:"table",bkFPage:0,bkFOver:true, bkFSort:"nm-asc"}
-      ,{id:"bkF5",  title:"Bank Balances (OC, no accounts)",           kind:"bank-mb",size:"wide", tiers:["kpi","wide","xwide"],dataset:"empty",bkFAcct:null,bkFView:"table",bkFPage:0,bkFOver:false,bkFSort:"nm-asc"}
       /* ===== W16 Accounts Payable By Due Date V2 registry, prefix apF, kind "payables-mb". ===== */
       ,{id:"apF",   title:"Accounts Payable By Due Date (OC)",                       kind:"payables-mb",size:"wide", tiers:["kpi","wide","xwide"],apFDue:"total",  apFSort:"due-asc",apFHz:"all",updated:"just now"}
       ,{id:"apF_k", title:"Accounts Payable By Due Date (OC, Glance)",               kind:"payables-mb",size:"kpi",  tiers:["kpi","wide","xwide"],apFDue:"total",  apFSort:"due-asc",apFHz:"all",updated:"just now"}
@@ -10232,7 +10115,7 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
     fund:{h:"Spend by fund",b:"How spending breaks down across your restricted and unrestricted funds."},
     signups:{h:"New sign-ups",b:"People who recently joined a group or ministry. The number is the total for the period you choose; the list shows the most recent sign-ups regardless of period."}
   };
-  function aboutOf(w){var wa=WIDGETS.about(w);if(wa)return wa;if(w.kind==="bank")return {h:w.title,b:"The current balance of each active bank account, based on unreconciled activity since the last reconciliation. Select one account to see what has moved (deposits, voids, checks, withdrawals, EFT) since then."};if(w.kind==="gifts")return {h:w.title,b:GFT_ABOUT_BODY};if(w.kind==="bank-mb")return {h:w.title,b:BKF_ABOUT};if(w.kind==="payables-mb")return {h:w.title,b:APF_ABOUT};if(w.kind==="gifts-mb")return {h:w.title,b:GPF_ABOUT};return ABOUT[w.id]||{h:w.title,b:"A short, plain-language description of what this widget shows and where its data comes from."};}
+  function aboutOf(w){var wa=WIDGETS.about(w);if(wa)return wa;if(w.kind==="bank")return {h:w.title,b:"The current balance of each active bank account, based on unreconciled activity since the last reconciliation. Select one account to see what has moved (deposits, voids, checks, withdrawals, EFT) since then."};if(w.kind==="gifts")return {h:w.title,b:GFT_ABOUT_BODY};if(w.kind==="payables-mb")return {h:w.title,b:APF_ABOUT};if(w.kind==="gifts-mb")return {h:w.title,b:GPF_ABOUT};return ABOUT[w.id]||{h:w.title,b:"A short, plain-language description of what this widget shows and where its data comes from."};}
   var EMPTY_COPY={deposits:{title:"No deposit accounts",sub:"There are no deposit accounts to show here yet.",cta:"Add account",action:"add-acct"},payroll:{title:"No payroll runs in this range",sub:"There's no payroll history for the selected period yet."},budget:{title:"No budget set up",sub:"Once a budget is entered for this fiscal year, actuals will be compared against it here.",cta:"Set up budget",action:"add-budget"}};
   var ERROR_COPY={deposits:{title:"Couldn’t load balances",sub:"Something went wrong fetching account data."},payroll:{title:"Couldn’t load payroll data",sub:"Something went wrong fetching payroll history."},budget:{title:"Couldn’t load budget data",sub:"Something went wrong fetching budget and actual figures."}};
 /* --- Bank Balances additive copy --- */
@@ -10488,7 +10371,6 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
   function bankAbbr(n){n=Math.abs(n);if(n>=1e6)return "$"+(n/1e6).toFixed(n>=1e7?0:1).replace(/\.0$/,"")+"M";if(n>=1e3)return "$"+Math.round(n/1e3)+"k";return "$"+n.toLocaleString();}
   function bankTotal(w){return bankAccounts(w).reduce(function(s,a){return s+bankEnding(a);},0);}
   function bankNegCount(w){return bankAccounts(w).filter(function(a){return bankEnding(a)<0;}).length;}
-  function bankBeginTotal(w){return bankAccounts(w).reduce(function(s,a){return s+(a.a[0]||0);},0);}
   /* Running balance across the reconciliation entries (Beginning, then Deposits,
      Voids, Checks, Withdrawals, EFT, to Ending). Not a time axis: the sequence of
      movements since the last reconciliation. Endpoints are Beginning and Ending,
@@ -10964,7 +10846,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     var wreg=WIDGETS.content(w);if(wreg!==null)return wreg;
     if(w.kind==="payables")return apContent(w);
     if(w.kind==="gifts")return gftContent(w);
-    if(w.kind==="bank-mb")return bkFContent(w); // Bank Balances (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its "no accounts" variant renders bkFEmptyState and not the Deposits copy
     if(w.kind==="payables-mb")return apFContent(w); // Accounts Payable By Due Date (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its nothing-outstanding variant renders apFEmptyState and not the Deposits copy
     if(w.kind==="gifts-mb")return gpFContentRoot(w); // Gifts Pledges (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its no-campaigns variant renders gpFEmpty and not the Deposits copy
     if(w.state==="empty"){var ec=EMPTY_COPY[w.kind]||EMPTY_COPY.deposits;return '<div class="state" data-kind="empty">'+ICON("inbox")+'<div class="state-title">'+ec.title+'</div><div class="state-sub">'+ec.sub+'</div>'+(ec.showZero?'<div class="dep-total" style="margin-top:4px"><span>Total</span><span>'+money(0)+'</span></div>':'')+(ec.cta?'<button class="btn outlined" data-action="'+ec.action+'" data-id="'+w.id+'">'+ICON("add")+ec.cta+'</button>':'')+'</div>';}
@@ -11243,621 +11124,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
   document.addEventListener("mousemove",function(e){var col=e.target.closest&&e.target.closest(".bank-col[data-bankpop]");if(!col){if(bankPopEl)bankHideBpop();return;}bankShowBpop(col,e.clientX,e.clientY);});
 
 
-/* ===== W15 Bank Balances V2 JS , prefix bkF , kind "bank-mb" ===== */
-
-var BKF_ACCOUNTS=[
-  {id:'BA-1042',nm:'Operating Checking, Main',        beg:412870.55, dep:186240.00,vd:2140.00,chk:-142380.25,wdr:-31500.00,eft:-58120.40, rec:true},
-  {id:'BA-1103',nm:'Missions Fund Checking',          beg:88410.20,  dep:31250.00, vd:0,       chk:-19840.75, wdr:-4200.00, eft:-6310.00,  rec:true},
-  {id:'BA-1007',nm:'Building Fund Money Market',      beg:1284900.00,dep:96500.00, vd:0,       chk:-12400.00, wdr:0,        eft:8420.15,   rec:true},
-  {id:'BA-1215',nm:'Youth Ministry Checking',         beg:14280.40,  dep:9640.00,  vd:180.00,  chk:-11920.60, wdr:-1450.00, eft:-2380.00,  rec:true},
-  {id:'BA-1088',nm:'Payroll Clearing',                beg:6200.00,   dep:214800.00,vd:1420.00, chk:-96340.00, wdr:-2100.00, eft:-119880.50,rec:true},
-  {id:'BA-1301',nm:'Benevolence Fund',                beg:41260.75,  dep:12880.00, vd:0,       chk:-16420.30, wdr:-900.00,  eft:-1240.00,  rec:true},
-  {id:'BA-1019',nm:'General Savings Reserve',         beg:742180.00, dep:24000.00, vd:0,       chk:0,         wdr:-18000.00,eft:3140.60,   rec:true},
-  {id:'BA-1256',nm:'Preschool Tuition Checking',      beg:52940.10,  dep:68420.00, vd:840.00,  chk:-41260.00, wdr:-3800.00, eft:-22140.25, rec:true},
-  {id:'BA-1177',nm:'Capital Campaign Escrow',         beg:968450.00, dep:142600.00,vd:0,       chk:-88400.00, wdr:0,        eft:-4200.00,  rec:true},
-  {id:'BA-1064',nm:'Bookstore Receipts',              beg:9840.55,   dep:22140.00, vd:310.00,  chk:-6820.40,  wdr:-1200.00, eft:-14980.00, rec:true},
-  {id:'BA-1330',nm:'Cemetery Trust',                  beg:186420.00, dep:4200.00,  vd:0,       chk:-1840.00,  wdr:0,        eft:0,         rec:true},
-  {id:'BA-1002',nm:'Adams Street Campus Operating',   beg:124680.90, dep:74320.00, vd:1180.00, chk:-58940.60, wdr:-9400.00, eft:-21460.00, rec:true},
-  {id:'BA-1290',nm:'Vehicle Replacement Reserve',     beg:64280.00,  dep:7200.00,  vd:0,       chk:-42800.00, wdr:0,        eft:0,         rec:true},
-  {id:'BA-1141',nm:'Music and Worship Checking',      beg:18940.25,  dep:6420.00,  vd:220.00,  chk:-9840.50,  wdr:-1100.00, eft:-3260.00,  rec:true},
-  {id:'BA-1055',nm:'Facilities Maintenance',          beg:96420.40,  dep:18400.00, vd:640.00,  chk:-64280.90, wdr:-7200.00, eft:-12840.00, rec:true},
-  {id:'BA-1208',nm:'Scholarship Endowment',           beg:1642800.00,dep:38400.00, vd:0,       chk:-24600.00, wdr:0,        eft:12480.30,  rec:true},
-  {id:'BA-1096',nm:'Camp Registration Holding',       beg:2840.00,   dep:96420.00, vd:1840.00, chk:-42180.00, wdr:-1400.00, eft:-38940.60, rec:true},
-  {id:'BA-1372',nm:'Womens Ministry Checking',        beg:11420.60,  dep:4180.00,  vd:0,       chk:-5940.20,  wdr:-620.00,  eft:-1840.00,  rec:true},
-  {id:'BA-1023',nm:'Bequest Holding Account',         beg:284600.00, dep:0,        vd:0,       chk:0,         wdr:0,        eft:0,         rec:false},
-  {id:'BA-1310',nm:'Technology Fund',                 beg:74280.15,  dep:12400.00, vd:0,       chk:-58420.40, wdr:-2800.00, eft:-9640.00,  rec:true},
-  {id:'BA-1163',nm:'Food Pantry Operating',           beg:22840.30,  dep:16420.00, vd:480.00,  chk:-14280.60, wdr:-2400.00, eft:-6180.00,  rec:true},
-  {id:'BA-1047',nm:'Debt Service Sinking Fund',       beg:486200.00, dep:64800.00, vd:0,       chk:0,         wdr:0,        eft:-142600.00,rec:true},
-  {id:'BA-1281',nm:'Sunday School Supplies',          beg:4180.40,   dep:2640.00,  vd:120.00,  chk:-6840.90,  wdr:-480.00,  eft:-1240.00,  rec:true},
-  {id:'BA-1129',nm:'Community Outreach Checking',     beg:38420.85,  dep:14180.00, vd:0,       chk:-21640.40, wdr:-3200.00, eft:-8420.00,  rec:true},
-  {id:'BA-1074',nm:'Insurance Reserve',               beg:212400.00, dep:0,        vd:0,       chk:-96840.00, wdr:0,        eft:0,         rec:true},
-  {id:'BA-1344',nm:'Van Ministry Petty Cash',         beg:1240.00,   dep:640.00,   vd:0,       chk:-380.50,   wdr:-420.00,  eft:0,         rec:true},
-  {id:'BA-1011',nm:'Annual Fund Receipts',            beg:18420.00,  dep:284600.00,vd:3180.00, chk:-42800.00, wdr:-1200.00, eft:-216480.90,rec:true},
-  {id:'BA-1236',nm:'Pastoral Care Discretionary',     beg:16840.20,  dep:5240.00,  vd:0,       chk:-8420.60,  wdr:-1840.00, eft:-2400.00,  rec:true},
-  {id:'BA-1185',nm:'Library and Media Fund',          beg:8420.75,   dep:2180.00,  vd:0,       chk:-4640.30,  wdr:-380.00,  eft:-1140.00,  rec:true},
-  {id:'BA-1358',nm:'Wedding and Event Deposits',      beg:12840.00,  dep:38420.00, vd:2140.00, chk:-6180.00,  wdr:-840.00,  eft:-28460.50, rec:true},
-  {id:'BA-1032',nm:'Childrens Ministry Checking',     beg:21480.60,  dep:8420.00,  vd:340.00,  chk:-12840.90, wdr:-1600.00, eft:-4280.00,  rec:true},
-  {id:'BA-1268',nm:'Radio Broadcast Fund',            beg:3240.50,   dep:6840.00,  vd:0,       chk:-9420.80,  wdr:-1200.00, eft:-2840.00,  rec:true},
-  {id:'BA-1152',nm:'Grounds and Landscaping',         beg:34620.40,  dep:6200.00,  vd:0,       chk:-28940.60, wdr:-4200.00, eft:-7840.00,  rec:true},
-  {id:'BA-1085',nm:'Endowment Income Sweep',          beg:96480.00,  dep:142800.00,vd:0,       chk:0,         wdr:0,        eft:-186420.30,rec:true},
-  {id:'BA-1319',nm:'Special Projects Holding',        beg:64200.00,  dep:0,        vd:0,       chk:0,         wdr:0,        eft:0,         rec:false},
-  {id:'BA-1198',nm:'Mens Ministry Checking',          beg:9840.30,   dep:3420.00,  vd:0,       chk:-4180.70,  wdr:-540.00,  eft:-1620.00,  rec:true},
-  {id:'BA-1061',nm:'Disaster Relief Fund',            beg:142680.00, dep:64280.00, vd:0,       chk:-38420.00, wdr:0,        eft:-12840.00, rec:true},
-  {id:'BA-1247',nm:'Parking Lot Reserve',             beg:186400.00, dep:12000.00, vd:0,       chk:-142800.00,wdr:0,        eft:0,         rec:true},
-  {id:'BA-1136',nm:'Kitchen and Hospitality',         beg:14280.90,  dep:6420.00,  vd:180.00,  chk:-11640.40, wdr:-2200.00, eft:-3840.00,  rec:true},
-  {id:'BA-1381',nm:'Yearbook and Print Shop',         beg:6420.60,   dep:9840.00,  vd:0,       chk:-12480.30, wdr:-1400.00, eft:-4280.00,  rec:true},
-  {id:'BA-1008',nm:'Archive Restoration Fund',        beg:48620.00,  dep:2400.00,  vd:0,       chk:-1840.00,  wdr:0,        eft:0,         rec:true},
-  {id:'BA-1275',nm:'Senior Adults Ministry',          beg:12840.40,  dep:4620.00,  vd:0,       chk:-6840.90,  wdr:-980.00,  eft:-2140.00,  rec:true},
-  {id:'BA-1114',nm:'Guest Services Checking',         beg:7420.20,   dep:2840.00,  vd:0,       chk:-3640.50,  wdr:-420.00,  eft:-1180.00,  rec:true},
-  {id:'BA-1051',nm:'Denominational Remittance',       beg:2400.00,   dep:186420.00,vd:0,       chk:-4200.00,  wdr:0,        eft:-184860.70,rec:true},
-  {id:'BA-1327',nm:'Trust Distribution Account',      beg:396840.00, dep:18400.00, vd:0,       chk:-64200.00, wdr:0,        eft:-8420.00,  rec:true},
-  {id:'BA-1221',nm:'Recreation Center Operating',     beg:42680.55,  dep:38420.00, vd:920.00,  chk:-31840.60, wdr:-6200.00, eft:-18420.00, rec:true},
-  {id:'BA-1170',nm:'Land Acquisition Escrow',         beg:1842600.00,dep:0,        vd:0,       chk:0,         wdr:0,        eft:0,         rec:false},
-  {id:'BA-1093',nm:'Counseling Center Receipts',      beg:16420.80,  dep:24180.00, vd:640.00,  chk:-12840.00, wdr:-1800.00, eft:-14620.40, rec:true},
-  {id:'BA-1364',nm:'Weekday School Payroll',          beg:4820.00,   dep:96480.00, vd:1240.00, chk:-38420.00, wdr:-1400.00, eft:-64280.90, rec:true},
-  {id:'BA-1039',nm:'Choir Robe and Uniform Fund',     beg:2840.60,   dep:1420.00,  vd:0,       chk:-5240.80,  wdr:-380.00,  eft:-940.00,   rec:true},
-  {id:'BA-1292',nm:'Utility Deposit Escrow',          beg:28400.00,  dep:0,        vd:0,       chk:0,         wdr:-2400.00, eft:0,         rec:true},
-  {id:'BA-1206',nm:'Sabbatical Reserve',              beg:38420.00,  dep:6000.00,  vd:0,       chk:-12840.00, wdr:0,        eft:0,         rec:true}
-];
-var BKF_ACCOUNTS_EMPTY=[];
-var BKF_ALL='all';
-var BKF_PAGE_SIZE=12;
-var BKF_SORTABLE=['nm'];
-var BKF_DEFAULT_SORT='nm-asc';
-var BKF_ABOUT="The current balance of every active bank account, as a running tally of unreconciled activity since each account's last reconciliation. Select one account to switch the whole widget into Single Account mode and see what has moved since then: deposits, voids, checks, withdrawals and EFT.";
-var BKF_POP=null;
-var BKF_VIEWS=[
-  {k:'table',l:'Table',ic:'table_rows',tip:'Balance Table. Account name and balance for every active account, with the combined total. The default presentation, and the closest to the legacy design.'},
-  {k:'bars', l:'Bars', ic:'bar_chart', tip:'Balance Bar Chart. One bar per account against a zero axis, for comparing accounts at a glance.'}
-];
-/* The FIXED SEVEN-ROW ORDER. It must not be reordered or sorted, and there is NO
-   TOTALS ROW because Ending Balance already is the total. beg and end are the
-   structural boundaries; the five in between are the BR_Item activity types. */
-var BKF_BREAKDOWN=[
-  {k:'beg',l:'Beginning Balance',edge:'beg'},
-  {k:'dep',l:'Deposits'},
-  {k:'vd', l:'Voids'},
-  {k:'chk',l:'Checks'},
-  {k:'wdr',l:'Withdrawals'},
-  {k:'eft',l:'EFT'},
-  {k:'end',l:'Ending Balance',edge:'end'}
-];
-/* The FOUR activity categories, Detail only. EFT is deliberately not among them,
-   and Beginning and Ending are not activity. All four read as POSITIVE
-   MAGNITUDES, a display transform only. flow says which side of the account the
-   money moved, carrying the direction in words rather than in colour. */
-var BKF_CATEGORIES=[
-  {k:'dep',l:'Deposits',   flow:'in'},
-  {k:'vd', l:'Voids',      flow:'in'},
-  {k:'chk',l:'Checks',     flow:'out'},
-  {k:'wdr',l:'Withdrawals',flow:'out'}
-];
-
-function bkFIcon(n){return '<span class="material-symbols-rounded" aria-hidden="true">'+n+'</span>';}
-function bkFEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function bkFAcctCur(w){return w.bkFAcct||BKF_ALL;}
-function bkFViewCur(w){var v=w.bkFView;return (v==='bars'||v==='table')?v:'table';}
-function bkFPageCur(w){var p=Number(w.bkFPage);return isFinite(p)?Math.floor(p):0;}
-function bkFOverCur(w){return !!w.bkFOver;}
-function bkFSortCur(w){return w.bkFSort||BKF_DEFAULT_SORT;}
-function bkFTier(w){return (w.size==='kpi')?'kpi':((w.size==='xwide')?'xwide':'wide');}
-function bkFMoneyFull(n){
-  var v=Math.abs(Number(n));
-  return (Number(n)<0?'−$':'$')+v.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-}
-function bkFMoneyShort(n){
-  var v=Math.abs(Number(n)),sg=(Number(n)<0?'−$':'$');
-  if(v>=1000000) return sg+(v/1000000).toFixed(v>=10000000?1:2)+'M';
-  if(v>=10000)   return sg+Math.round(v/1000).toLocaleString()+'k';
-  return sg+Math.round(v).toLocaleString();
-}
-function bkFDataset(w){return (w.dataset==='empty')?BKF_ACCOUNTS_EMPTY:BKF_ACCOUNTS;}
-/* ENDING EQUALS BEGINNING PLUS ALL ACTIVITY. The five types are ADDED to the
-   beginning balance, not substituted for it, and the stored signs are what the
-   arithmetic uses. Written as a plain sum rather than a reduce so it is obvious
-   that nothing is being reordered or dropped. */
-function bkFEnding(a){return a.beg+a.dep+a.vd+a.chk+a.wdr+a.eft;}
-function bkFActivity(a,k){return (k==='beg')?a.beg:((k==='end')?bkFEnding(a):a[k]);}
-/* THE DISPLAY-ONLY SIGN FLIP. Checks and Withdrawals are stored negative and
-   their magnitude is taken HERE, at the point of chart display, so the four
-   activity bars read as positive magnitudes. A build that flips the sign in the
-   data computes the wrong ending balance. Called by the category chart only. */
-function bkFMagnitude(a,k){return Math.abs(bkFActivity(a,k));}
-function bkFFindAccount(w,id){
-  var set=bkFDataset(w),i;
-  for(i=0;i<set.length;i++){ if(set[i].id===id) return set[i]; }
-  return null;
-}
-/* The All Bank Accounts option only appears when more than one active account
-   exists. With a single account there is nothing to aggregate. */
-function bkFHasAllOption(w){return bkFDataset(w).length>1;}
-/* Mode is set by the Account selection and it is a MODE SWITCH, not a row filter:
-   the two modes show different data in a different shape. Everything downstream
-   branches on this one predicate. An acct value that no longer resolves to a real
-   account falls back to All Accounts rather than rendering an empty mode. */
-function bkFIsAllMode(w){
-  if(bkFAcctCur(w)===BKF_ALL) return true;
-  return bkFFindAccount(w,bkFAcctCur(w))===null;
-}
-
-function bkFServerQuery(w){
-  /* --- everything from here to the return is SERVER-SIDE work --- */
-  var all=bkFDataset(w),i;
-  /* THE OVERDRAWN COUNT IS OVER THE WHOLE ACTIVE SET, never the filtered set and
-     never the page. The chip has to say how many overdrawn accounts EXIST, which
-     is the one number that must not move when the filter turns on or the page
-     turns. Counting the filtered set instead would make the chip read "4
-     overdrawn" and then, once pressed, still read "4 overdrawn" for a reason that
-     is now circular. OVERDRAWN IS ENDING BALANCE STRICTLY LESS THAN ZERO. */
-  var overdrawnCount=0;
-  for(i=0;i<all.length;i++){ if(bkFEnding(all[i])<0) overdrawnCount++; }
-  /* THE FILTER IS A REQUEST PARAMETER, so it is applied HERE, before the
-     ordering, the aggregation and the page cut, exactly as the endpoint must.
-     Filtering the page in the browser would give a page of 12 with 4 rows on it,
-     a total that still covered all 52, and a page count that no longer matched. */
-  var onlyOverdrawn=bkFOverCur(w);
-  var set=[];
-  for(i=0;i<all.length;i++){ if(!onlyOverdrawn||bkFEnding(all[i])<0) set.push(all[i]); }
-  var parts=String(bkFSortCur(w)).split('-'),key=parts[0],dir=parts[1]==='desc'?-1:1;
-  if(BKF_SORTABLE.indexOf(key)<0){ key='nm'; dir=1; }        /* rule 1, the whitelist */
-  set.sort(function(a,b){
-    var r=(key==='nm')?a.nm.localeCompare(b.nm):0;
-    if(r===0) r=a.id.localeCompare(b.id);                    /* rule 2, unique tiebreaker */
-    return dir*r;
-  });
-  /* rule 4: over the whole set, before any page is cut */
-  var totals={ending:0,beginning:0,negativeCount:0,neverReconciledCount:0,maxEnding:0,minEnding:0};
-  for(i=0;i<set.length;i++){
-    var e=bkFEnding(set[i]);
-    totals.ending+=e;
-    totals.beginning+=set[i].beg;
-    if(e<0) totals.negativeCount++;
-    if(!set[i].rec) totals.neverReconciledCount++;
-    if(e>totals.maxEnding) totals.maxEnding=e;
-    if(e<totals.minEnding) totals.minEnding=e;
-  }
-  var pageCount=Math.max(1,Math.ceil(set.length/BKF_PAGE_SIZE));
-  var pi=bkFPageCur(w);                                       /* rule 3, the clamp */
-  if(pi<0) pi=0;
-  if(pi>pageCount-1) pi=pageCount-1;
-  return {
-    rows:set.slice(pi*BKF_PAGE_SIZE,(pi+1)*BKF_PAGE_SIZE),
-    totalCount:set.length,
-    totals:totals,
-    pageIndex:pi,
-    pageCount:pageCount,
-    sortBy:key,
-    sortDir:dir<0?'desc':'asc',
-    /* echoed back the way an endpoint echoes the filter it applied, so the render
-       never has to guess whether the rows it holds are filtered */
-    overdrawnCount:overdrawnCount,
-    overdrawnOnly:onlyOverdrawn
-  };
-}
-function bkFAccountQuery(w){
-  var a=bkFFindAccount(w,bkFAcctCur(w));
-  if(!a) return null;
-  var rows=[],cats=[],i,d,c,mx=0;
-  for(i=0;i<BKF_BREAKDOWN.length;i++){
-    d=BKF_BREAKDOWN[i];
-    rows.push({k:d.k,l:d.l,edge:d.edge||'',v:bkFActivity(a,d.k)});
-  }
-  for(i=0;i<BKF_CATEGORIES.length;i++){
-    c=BKF_CATEGORIES[i];
-    var mag=bkFMagnitude(a,c.k);
-    if(mag>mx) mx=mag;
-    cats.push({k:c.k,l:c.l,flow:c.flow,v:mag,stored:bkFActivity(a,c.k)});
-  }
-  return {account:a,rows:rows,categories:cats,categoryMax:mx,beginningFromReconciliation:!!a.rec};
-}
-
-function bkFAccountLabel(w){
-  if(bkFIsAllMode(w)) return bkFHasAllOption(w)?'All Bank Accounts':'The only active account';
-  var a=bkFFindAccount(w,bkFAcctCur(w));
-  return a?a.nm:'All Bank Accounts';
-}
-function bkFAccountChip(w){
-  var lbl=bkFAccountLabel(w);
-  var aria='Account, '+lbl+'. Selecting one account switches the whole widget into Single Account mode.';
-  return '<button class="filter-chip bank-acct-chip" data-bkf="acct" data-id="'+bkFEsc(w.id)+'" aria-haspopup="listbox"'+
-    ' aria-expanded="'+((BKF_POP&&BKF_POP.id===w.id&&BKF_POP.type==='acct')?'true':'false')+'"'+
-    ' aria-label="'+bkFEsc(aria)+'"><span class="fc-label">'+bkFEsc(lbl)+'</span>'+bkFIcon('expand_more')+'</button>';
-}
-function bkFOverdrawnChip(w,res){
-  if(!res||!res.overdrawnCount) return '';
-  var on=!!res.overdrawnOnly,n=res.overdrawnCount;
-  var lbl=on?(n+' overdrawn only'):(n+' overdrawn');
-  var aria=on
-    ? 'Showing only the '+n+' overdrawn account'+(n===1?'':'s')+'. Activate to show every active account again.'
-    : n+' of the active accounts '+(n===1?'is':'are')+' overdrawn. Activate to show only those.';
-  return '<button class="bank-odchip'+(on?' on':'')+'" data-bkf="overdrawn" data-id="'+bkFEsc(w.id)+'" aria-pressed="'+(on?'true':'false')+'"'+
-    ' aria-label="'+bkFEsc(aria)+'" title="'+bkFEsc(aria)+'">'+bkFIcon('error')+
-    '<span class="bkf-odchip-l">'+bkFEsc(lbl)+'</span>'+(on?bkFIcon('close'):'')+'</button>';
-}
-function bkFViewToggle(w){
-  var v=bkFViewCur(w),out='',i,d,on;
-  for(i=0;i<BKF_VIEWS.length;i++){
-    d=BKF_VIEWS[i]; on=(v===d.k);
-    out+='<button class="vt'+(on?' on':'')+'" data-bkf="view" data-id="'+bkFEsc(w.id)+'" data-v="'+d.k+'" aria-pressed="'+on+'" title="'+bkFEsc(d.tip)+'">'+bkFIcon(d.ic)+bkFEsc(d.l)+'</button>';
-  }
-  return '<div class="vtoggle" role="group" aria-label="Switch View">'+out+'</div>';
-}
-/* Because the Account control changes the ENTIRE WIDGET rather than filtering a
-   list, THE MODE CHANGE MUST BE ANNOUNCED and not left as a silent replacement.
-   This is that announcement. */
-function bkFLiveRegion(w){
-  var msg;
-  if(bkFIsAllMode(w)){
-    msg=bkFOverCur(w)
-      ? 'All Accounts mode, filtered to overdrawn accounts only. Only accounts with a negative ending balance are listed, and the total is their combined balance.'
-      : 'All Accounts mode. Every active bank account with its ending balance, and the combined total across all accounts.';
-  }else{
-    var a=bkFFindAccount(w,bkFAcctCur(w));
-    msg='Single Account mode. '+(a?a.nm:'')+', activity since its last reconciliation.';
-  }
-  return '<div class="bkf-live" role="status" aria-live="polite">'+bkFEsc(msg)+'</div>';
-}
-function bkFHeader(w,res,acc){
-  var all=bkFIsAllMode(w);
-  var right=all?('<div class="dep-hd-toggle">'+bkFViewToggle(w)+'</div>'):'<div class="dep-hd-toggle"></div>';
-  var val,ctx,exact;
-  if(all){
-    val=res.totals.ending;
-    /* WITH THE FILTER ON, THE FIGURE IS THE OVERDRAWN SUBTOTAL, NOT THE ORG
-       TOTAL, so the wording has to change with it. Leaving the "across all
-       accounts" phrasing in place while the rows are filtered would make the
-       header state something false. */
-    if(res.overdrawnOnly){
-      exact='Combined balance of the '+res.totalCount+' overdrawn account'+(res.totalCount===1?'':'s')+', '+bkFMoneyFull(val)+'. This is the overdrawn subtotal, not the balance across every account.';
-      ctx='Filtered to overdrawn accounts only. '+res.totalCount+' of '+bkFDataset(w).length+' active accounts, ordered alphabetically.';
-    }else{
-      exact='Total balance across all '+res.totalCount+' active bank account'+(res.totalCount===1?'':'s')+', '+bkFMoneyFull(val)+'. Computed over every account, not this page.';
-      ctx=res.totalCount+' active account'+(res.totalCount===1?'':'s')+', ordered alphabetically. Balances are the running tally since the last reconciliation of each account.';
-    }
-  }else{
-    val=bkFEnding(acc.account);
-    exact=acc.account.nm+', ending balance '+bkFMoneyFull(val)+(val<0?', overdrawn':'');
-    ctx=acc.beginningFromReconciliation
-      ? 'Activity since the last reconciliation. Beginning balance is the ending balance of that reconciliation.'
-      : 'Activity since the account was opened. This account has never been reconciled, so the beginning balance is its opening balance.';
-  }
-  var neg=val<0;
-  var pill=neg?('<span class="bank-pill warn">'+bkFIcon('error')+'Overdrawn</span>'):'';
-  return '<div class="dep-hd">'+
-    '<div class="dep-hd-top"><div class="bank-hd-left">'+bkFAccountChip(w)+(all?bkFOverdrawnChip(w,res):'')+'</div>'+right+'</div>'+
-    '<div class="dep-hd-num"><div class="bank-numwrap">'+
-      '<div class="dep-hd-kpigrp"><span class="metric-value'+(neg?' bank-neg':'')+'" title="'+bkFEsc(exact)+'" aria-label="'+bkFEsc(exact)+'">'+bkFMoneyShort(val)+'</span>'+pill+'</div>'+
-      '<div class="bank-ctx">'+bkFEsc(ctx)+'</div>'+
-    '</div></div>'+
-  '</div>'+bkFLiveRegion(w);
-}
-function bkFPager(w,res){
-  if(res.totalCount<=BKF_PAGE_SIZE) return '';
-  var i=res.pageIndex,n=res.pageCount;
-  var from=i*BKF_PAGE_SIZE+1,to=Math.min(res.totalCount,(i+1)*BKF_PAGE_SIZE);
-  function btn(act,ic,lbl,off){
-    return '<button class="iconbtn" data-bkf="'+act+'" data-id="'+bkFEsc(w.id)+'"'+(off?' disabled aria-disabled="true"':'')+
-      ' aria-label="'+bkFEsc(lbl)+'" title="'+bkFEsc(lbl)+'">'+bkFIcon(ic)+'</button>';
-  }
-  return '<div class="bank-pager bkf-pager">'+
-    '<span class="bkf-pgcount">'+from+' to '+to+' of '+res.totalCount+(res.overdrawnOnly?' overdrawn':'')+' accounts</span>'+
-    btn('page-prev','chevron_left','Previous page, refetched from the server',i===0)+
-    '<span class="bkf-pgnum">Page '+(i+1)+' of '+n+'</span>'+
-    btn('page-next','chevron_right','Next page, refetched from the server',i>=n-1)+
-  '</div>';
-}
-function bkFNegativeGap(rows){
-  var n=0,i;
-  for(i=0;i<rows.length;i++){ if(bkFEnding(rows[i])<0) n++; }
-  if(!n) return '';
-  return '<div class="bkf-gap">'+bkFIcon('info')+'<span>'+n+' account'+(n===1?'':'s')+' on this page '+(n===1?'is':'are')+' overdrawn, shown to the left of the zero axis. Whether negative balances belong in the bar chart at all is not specified in any source, because the legacy rule covered only the pie, which is not carried forward. Design settles it.</span></div>';
-}
-
-/* (5) THE TWO ALL ACCOUNTS PRESENTATIONS ------------------------------------
-   Both read the SAME server response, which guarantees that neither can show
-   accounts the other does not, and that both page identically. */
-
-function bkFBalanceTable(w,res){
-  var body='',i,a,e,neg,exact;
-  for(i=0;i<res.rows.length;i++){
-    a=res.rows[i]; e=bkFEnding(a); neg=e<0;
-    exact=a.nm+', ending balance '+bkFMoneyFull(e)+(neg?', overdrawn':'');
-    body+='<tr class="wt-row'+(neg?' bank-neg':'')+'">'+
-      '<th class="lr-main" scope="row" title="'+bkFEsc(a.nm)+'">'+bkFEsc(a.nm)+(neg?'<span class="bank-tag-over">Overdrawn</span>':'')+'</th>'+
-      '<td class="wt-c2 bank-bal" title="'+bkFEsc(exact)+'" aria-label="'+bkFEsc(exact)+'">'+bkFMoneyShort(e)+'</td>'+
-    '</tr>';
-  }
-  if(!res.rows.length){
-    body='<tr class="wt-row"><th class="lr-main" scope="row">No accounts on this page.</th><td class="wt-c2 bank-bal"></td></tr>';
-  }
-  var tv=res.totals.ending,tneg=tv<0;
-  /* Same rule as the header: the totals row must describe the set it actually
-     sums. "Total, all 52 accounts" printed under four filtered rows is the kind
-     of caption a reader trusts and should not have to check. */
-  var scope=res.overdrawnOnly
-    ? ('the '+res.totalCount+' overdrawn account'+(res.totalCount===1?'':'s'))
-    : ('all '+res.totalCount+' active bank account'+(res.totalCount===1?'':'s'));
-  var texact=(res.overdrawnOnly?'Combined balance of ':'Total balance across ')+scope+', '+bkFMoneyFull(tv)+'. Computed over every account in the current filter, not this page.';
-  var cap='Bank account balances'+(res.overdrawnOnly?', filtered to overdrawn accounts only':'')+'. '+res.totalCount+(res.overdrawnOnly?' overdrawn':' active')+' account'+(res.totalCount===1?'':'s')+' in total, page '+(res.pageIndex+1)+' of '+res.pageCount+', ordered alphabetically by account name. The total row covers every account in the filter, not this page.';
-  return '<div class="bkf-tblwrap">'+
-    '<div class="scroll bkf-tscroll">'+
-      '<table class="bkf-tbl"><caption class="sr-only">'+bkFEsc(cap)+'</caption>'+
-        '<thead><tr class="wt-row wt-head"><th class="lr-main" scope="col" aria-sort="none">Account</th><th class="wt-c2 bank-bal" scope="col" aria-sort="none">Balance</th></tr></thead>'+
-        '<tbody>'+body+'</tbody>'+
-        '<tfoot><tr class="wt-row dep-total">'+
-          '<th class="lr-main" scope="row">'+(res.overdrawnOnly?('Total, '+res.totalCount+' overdrawn account'+(res.totalCount===1?'':'s')):('Total, all '+res.totalCount+' account'+(res.totalCount===1?'':'s')))+'</th>'+
-          '<td class="wt-c2 bank-bal'+(tneg?' bank-neg':'')+'" title="'+bkFEsc(texact)+'" aria-label="'+bkFEsc(texact)+'">'+bkFMoneyShort(tv)+'</td>'+
-        '</tr></tfoot>'+
-      '</table>'+
-    '</div>'+
-    bkFPager(w,res)+
-  '</div>';
-}
-
-/* Balance Bar Chart. THIS IS JO'S DIVERGING BALANCE BAR, her .bank-hb family
-   reused, with a zero axis, magnitude growing right for a positive balance and
-   left for an overdrawn one, and the value as text at the end of each row. Three
-   differences from hers, all in the scoped CSS overrides: the axis is VISIBLE
-   (hers reads an undeclared --wn-500 and is invisible in her own build), the
-   negative fill stays on the amethyst ramp per Styling Reference 8.2 rather than
-   going red, and the rows are not sorted because the order is fixed server-side.
-
-   THE SCALE COMES FROM THE SERVER (res.totals.maxEnding / minEnding), over the
-   FULL SET, so a bar's length does not change when the reader turns the page, for
-   the same reason the total does not. EVERY VALUE EXISTS AS TEXT IN THE DOM
-   beside its bar and again for screen readers. Hover shows the same figure but is
-   never the only route to it, which is why her per-bar hover card is dropped. */
-function bkFBalanceBars(w,res){
-  var maxPos=res.totals.maxEnding>0?res.totals.maxEnding:0;
-  var maxNeg=res.totals.minEnding<0?-res.totals.minEnding:0;
-  var span=(maxPos+maxNeg)||1,zero=maxNeg/span*100;
-  var rowsHtml='',i,a,e,neg,mag,wd,exact,style;
-  for(i=0;i<res.rows.length;i++){
-    a=res.rows[i]; e=bkFEnding(a); neg=e<0; mag=Math.abs(e);
-    wd=Math.max(0.4,mag/span*100);
-    exact=a.nm+', ending balance '+bkFMoneyFull(e)+(neg?', overdrawn':'');
-    style=neg?('right:'+(100-zero)+'%;width:'+wd+'%'):('left:'+zero+'%;width:'+wd+'%');
-    rowsHtml+='<div class="bank-hb-row" role="listitem" title="'+bkFEsc(exact)+'">'+
-      '<span class="bank-hb-name">'+bkFEsc(a.nm)+'</span>'+
-      '<span class="bank-hb-track" aria-hidden="true"><span class="bank-hb-zero" style="left:'+zero+'%"></span><span class="bank-hb-fill'+(neg?' neg':'')+'" style="'+style+'"></span></span>'+
-      '<span class="bank-hb-val'+(neg?' bank-neg':'')+'">'+(neg?'<span class="material-symbols-rounded bank-hb-warn" aria-hidden="true">error</span>':'')+bkFMoneyShort(e)+'</span>'+
-      '<span class="sr-only">'+bkFEsc(exact)+'</span>'+
-    '</div>';
-  }
-  if(!res.rows.length) rowsHtml='<div class="bank-hb-row" role="listitem"><span class="bank-hb-name">No accounts on this page.</span><span class="bank-hb-track" aria-hidden="true"></span><span class="bank-hb-val"></span></div>';
-  var tot=bkFMoneyFull(res.totals.ending);
-  return '<div class="bkf-tblwrap">'+
-    '<div class="bank-legend"><span class="bank-lg"><span class="bank-sw in" aria-hidden="true"></span>In credit, bar grows right of the zero axis</span>'+
-      '<span class="bank-lg"><span class="bank-sw out" aria-hidden="true"></span>Overdrawn, bar grows left of the zero axis</span></div>'+
-    '<div class="bkf-hb-head"><span>Account</span><span aria-hidden="true"></span><span class="bank-hb-val">Balance</span></div>'+
-    '<div class="bank-hb bkf-hb" role="list" aria-label="Balance Bar Chart, one bar per account against a zero axis'+(res.overdrawnOnly?', filtered to overdrawn accounts only':'')+', page '+(res.pageIndex+1)+' of '+res.pageCount+'">'+rowsHtml+'</div>'+
-    '<span class="sr-only">'+(res.overdrawnOnly
-        ? ('Combined balance of the '+res.totalCount+' overdrawn account'+(res.totalCount===1?'':'s')+', '+tot+'. This is the overdrawn subtotal, not the balance across every account.')
-        : ('Combined total across all '+res.totalCount+' active accounts, '+tot+'. This total covers every account, not this page.'))+'</span>'+
-    bkFNegativeGap(res.rows)+
-    bkFPager(w,res)+
-  '</div>';
-}
-
-function bkFAllView(w,res){
-  return (bkFViewCur(w)==='bars')?bkFBalanceBars(w,res):bkFBalanceTable(w,res);
-}
-
-function bkFBreakdownTable(w,acc){
-  var body='',i,r,neg,pos,cls,val,sub;
-  for(i=0;i<acc.rows.length;i++){
-    r=acc.rows[i];
-    neg=r.v<0; pos=r.v>0;
-    cls='wt-row';
-    if(r.edge==='beg') cls+=' bank-anchor';
-    if(r.edge==='end') cls+=' bkf-brk-end';
-    /* Only the five activity rows carry a sign colour, and each carries the word
-       alongside it in the aria label, so colour is never the only signal. The two
-       boundary rows are balances, not movements, so they are not signed. */
-    val=r.edge?'':(neg?' bank-neg':(pos?' bank-pos':''));
-    sub='';
-    if(r.edge==='beg'){
-      sub=acc.beginningFromReconciliation
-        ? '<span class="bkf-brk-sub">The ending balance of the last reconciliation.</span>'
-        : '<span class="bkf-brk-sub">This account has never been reconciled, so this is its opening balance.</span>';
-    }
-    if(r.edge==='end') sub='<span class="bkf-brk-sub">Beginning balance plus all activity above. This is the total, so there is no separate totals row.</span>';
-    var exact=r.l+', '+bkFMoneyFull(r.v)+(r.edge?'':(neg?', money out of the account':(pos?', money into the account':', no activity')));
-    body+='<tr class="'+cls+'">'+
-      '<th class="lr-main" scope="row">'+bkFEsc(r.l)+sub+'</th>'+
-      '<td class="wt-c2 bank-amt'+val+'" title="'+bkFEsc(exact)+'" aria-label="'+bkFEsc(exact)+'">'+bkFMoneyFull(r.v)+'</td>'+
-    '</tr>';
-  }
-  var cap='Balance movement for '+acc.account.nm+' since its last reconciliation, in seven fixed rows: beginning balance, the five activity types, and the ending balance. The order is structural and is not sortable. There is no totals row because the ending balance is the total.';
-  return '<div class="bkf-tblwrap">'+
-    '<div class="bkf-brk-cap">Balance movement since the last reconciliation</div>'+
-    '<div class="scroll bkf-brk">'+
-      '<table class="bkf-tbl"><caption class="sr-only">'+bkFEsc(cap)+'</caption>'+
-        '<thead><tr class="wt-row wt-head"><th class="lr-main" scope="col">Line</th><th class="wt-c2 bank-amt" scope="col">Amount</th></tr></thead>'+
-        '<tbody>'+body+'</tbody>'+
-      '</table>'+
-    '</div>'+
-  '</div>';
-}
-/* The four activity categories, DETAIL ONLY. THIS IS JO'S .bank-cols VERTICAL
-   COLUMN CHART, reused whole: her 40px y axis, her canvas with a bottom rule and
-   a dashed mid gridline, her hover band per column, her 56%-wide bar capped at
-   46px, and her x-axis row repeating the label and the value as text under each
-   column. Two changes: her money-out bar is red-100 and Styling Reference 8.2
-   keeps red off bars, so out uses --am-700 and in --am-500 with the direction
-   stated in words in her .bank-xflow line; and her per-column hover popover
-   (bankShowBpop, keyed to data-bankpop) is dropped, because it is unspecified in
-   our sources and the value is already text in the DOM. Our columns carry NO
-   data-bankpop attribute, so her document-level mousemove listener never fires
-   on them.
-
-   EFT is deliberately not among the four, and Beginning and Ending are not
-   activity. All four read as positive magnitudes, which happens here at the point
-   of display and never in the data. */
-function bkFCategoryChart(w,acc){
-  var max=(acc.categoryMax||0)*1.15;
-  if(!(max>0)) max=1;
-  var cols='',xl='',i,c,h,vlab,srtxt;
-  for(i=0;i<acc.categories.length;i++){
-    c=acc.categories[i];
-    h=Math.max(1,Math.round(c.v/max*100));
-    vlab=(c.v===0)?'$0':bkFMoneyShort(c.v);
-    srtxt=c.l+', '+bkFMoneyFull(c.v)+', '+(c.flow==='out'?'money out of the account':'money into the account');
-    cols+='<div class="bank-col '+c.flow+'" role="group" aria-label="'+bkFEsc(srtxt)+'" title="'+bkFEsc(srtxt)+'">'+
-      '<div class="bank-barwrap"><div class="bank-bar" style="height:'+h+'%"></div></div>'+
-      '<span class="sr-only">'+bkFEsc(srtxt)+'</span>'+
-    '</div>';
-    xl+='<div class="bank-xcol"><span class="bank-xlbl">'+bkFEsc(c.l)+'</span>'+
-      '<span class="bank-xval '+c.flow+'">'+vlab+'</span>'+
-      '<span class="bank-xflow">'+(c.flow==='out'?'Out':'In')+'</span></div>';
-  }
-  var yl='<span>'+bkFMoneyShort(max)+'</span><span>'+bkFMoneyShort(max/2)+'</span><span>$0</span>';
-  return '<div class="bkf-cats">'+
-    '<div class="bkf-cats-hd">Activity by category, magnitudes since the last reconciliation</div>'+
-    '<div class="bank-chart-wrap" data-tier="'+bkFEsc(bkFTier(w))+'">'+
-      '<div class="bank-plotrow"><div class="bank-yax">'+yl+'</div>'+
-        '<div class="bank-canvas"><div class="bank-gl" aria-hidden="true"></div><div class="bank-cols">'+cols+'</div></div></div>'+
-      '<div class="bank-xaxrow"><div class="bank-yaxsp"></div><div class="bank-xcols">'+xl+'</div></div>'+
-    '</div>'+
-    '<div class="bkf-gap">'+bkFIcon('info')+'<span>Deposits, Voids, Checks and Withdrawals only. EFT is not one of the four comparison categories, and the beginning and ending balances are not activity. Checks and Withdrawals are stored negative and are shown here as positive magnitudes, which is a display transform only.</span></div>'+
-  '</div>';
-}
-
-function bkFEmptyState(){
-  return '<div class="state" data-kind="empty">'+bkFIcon('account_balance')+
-    '<div class="state-title">No active bank accounts</div>'+
-    '<div class="state-sub">What a zero account organisation should see is not specified in any source. Design and the owner settle it.</div>'+
-  '</div>';
-}
-function bkFMissingAccountState(){
-  return '<div class="state" data-kind="empty">'+bkFIcon('search_off')+
-    '<div class="state-title">That account is no longer active</div>'+
-    '<div class="state-sub">Choose another account, or All Bank Accounts.</div>'+
-  '</div>';
-}
-
-function bkFGlance(w){
-  var q={id:w.id,dataset:w.dataset,bkFAcct:BKF_ALL,bkFPage:0,bkFSort:BKF_DEFAULT_SORT,bkFOver:false};
-  var res=bkFServerQuery(q);
-  if(!res.totalCount) return bkFEmptyState();
-  var v=res.totals.ending,neg=v<0;
-  var exact='Total balance across all '+res.totalCount+' active bank account'+(res.totalCount===1?'':'s')+', '+bkFMoneyFull(v)+'. Always the all accounts aggregate, whatever account is selected at a larger size.';
-  return '<div class="kpi-row"><div class="kpi-num">'+
-    '<span class="metric-value'+(neg?' bank-neg':'')+'" title="'+bkFEsc(exact)+'" aria-label="'+bkFEsc(exact)+'">'+bkFMoneyShort(v)+'</span>'+
-    '<div class="gl-sub"><span>Total balance, all '+res.totalCount+' bank account'+(res.totalCount===1?'':'s')+'</span>'+
-      (neg?('<span class="bank-pill warn">'+bkFIcon('error')+'Overdrawn</span>'):'')+'</div>'+
-    '<span class="sr-only">'+bkFEsc(exact)+'</span>'+
-  '</div></div>';
-}
-function bkFDepth(w,detail){
-  if(!bkFDataset(w).length) return bkFEmptyState();
-  if(bkFIsAllMode(w)){
-    var res=bkFServerQuery(w);
-    return bkFHeader(w,res,null)+'<div class="bkf-body">'+bkFAllView(w,res)+'</div>';
-  }
-  var acc=bkFAccountQuery(w);
-  if(!acc) return bkFMissingAccountState();
-  var head=bkFHeader(w,null,acc);
-  if(!detail) return head+'<div class="bkf-body">'+bkFBreakdownTable(w,acc)+'</div>';
-  return head+'<div class="dep-full">'+
-    '<div class="dep-col"><div class="dep-col-h">Seven row breakdown</div>'+bkFBreakdownTable(w,acc)+'</div>'+
-    '<div class="dep-col"><div class="dep-col-h">Activity categories</div>'+bkFCategoryChart(w,acc)+'</div>'+
-  '</div>';
-}
-function bkFContent(w){
-  var tier=bkFTier(w);
-  return '<div class="bkf-root bkf-w" data-tier="'+tier+'">'+
-    ((tier==='kpi')?bkFGlance(w):bkFDepth(w,tier==='xwide'))+
-  '</div>';
-}
-
-function bkFPopContent(){
-  if(!BKF_POP) return '';
-  var w=find(BKF_POP.id);
-  if(!w) return '';
-  var base={id:w.id,dataset:w.dataset,bkFAcct:BKF_ALL,bkFPage:0,bkFSort:BKF_DEFAULT_SORT,bkFOver:false},all=[];
-  /* Ask the server for every page in turn rather than reading the source array,
-     so the picker sees exactly what the table sees, page boundaries included. */
-  var first=bkFServerQuery(base),p,i;
-  for(p=0;p<first.pageCount;p++){
-    var page=bkFServerQuery({id:w.id,dataset:w.dataset,bkFAcct:BKF_ALL,bkFPage:p,bkFSort:BKF_DEFAULT_SORT,bkFOver:false});
-    for(i=0;i<page.rows.length;i++) all.push(page.rows[i]);
-  }
-  var out='';
-  /* The All Bank Accounts option only appears when more than one active account
-     exists, because with a single account there is nothing to aggregate. */
-  if(bkFHasAllOption(w)){
-    var on=bkFIsAllMode(w);
-    out+='<div class="cap">Scope</div>'+
-      '<button class="mi'+(on?' check':'')+'" role="option" aria-selected="'+on+'" data-bkf="set-acct" data-id="'+bkFEsc(w.id)+'" data-v="'+BKF_ALL+'">'+
-      (on?bkFIcon('check'):'<span class="mi-gap"></span>')+'<span class="mi-nm">All Bank Accounts</span>'+
-      '<span class="bank-mi-bal'+(first.totals.ending<0?' bank-neg':'')+'">'+bkFMoneyShort(first.totals.ending)+'</span></button>'+
-      '<div class="sep"></div>';
-  }
-  out+='<div class="cap">One account, switches the whole widget</div><div class="menu-scroll" role="group">';
-  if(!all.length){
-    out+='<div class="mi"><span class="mi-gap"></span><span class="mi-nm">No active bank accounts</span></div>';
-  }
-  for(var j=0;j<all.length;j++){
-    var a=all[j],e=bkFEnding(a),sel=(bkFAcctCur(w)===a.id);
-    out+='<button class="mi'+(sel?' check':'')+'" role="option" aria-selected="'+sel+'" data-bkf="set-acct" data-id="'+bkFEsc(w.id)+'" data-v="'+bkFEsc(a.id)+'" title="'+bkFEsc(a.nm+', '+bkFMoneyFull(e))+'">'+
-      (sel?bkFIcon('check'):'<span class="mi-gap"></span>')+
-      '<span class="mi-nm">'+bkFEsc(a.nm)+'</span>'+
-      '<span class="bank-mi-bal'+(e<0?' bank-neg':'')+'">'+bkFMoneyShort(e)+'</span></button>';
-  }
-  return out+'</div>';
-}
-function bkFOpenPop(anchor,id,type){
-  BKF_POP={id:id,type:type};
-  var el=document.getElementById('bkFPop');
-  if(!el){el=document.createElement('div');el.id='bkFPop';document.body.appendChild(el);}
-  el.setAttribute('data-bkf','stop');
-  el.className='bkf-root bkf-pop';
-  el.setAttribute('role','listbox');
-  el.setAttribute('aria-label','Bank account');
-  el.innerHTML=bkFPopContent();
-  var r=anchor.getBoundingClientRect(),M=8;
-  el.style.visibility='hidden';el.style.left='0px';el.style.top='0px';
-  var bw=el.offsetWidth,bh=el.offsetHeight;
-  var left=Math.min(Math.max(M,r.left),window.innerWidth-bw-M);
-  var top=r.bottom+6;if(top+bh>window.innerHeight-M)top=Math.max(M,r.top-bh-6);
-  el.style.left=left+'px';el.style.top=top+'px';el.style.visibility='';
-}
-function bkFClosePop(){BKF_POP=null;var el=document.getElementById('bkFPop');if(el)el.remove();}
-
-function bkFHandleClick(e){
-  var t=e.target.closest?e.target.closest('[data-bkf]'):null;
-  if(!t){ if(BKF_POP&&!(e.target.closest&&e.target.closest('#bkFPop'))) bkFClosePop(); return; }
-  if(!t.closest('.bkf-root')) return;
-  var a=t.getAttribute('data-bkf');
-  if(a==='stop') return;
-  var w=find(t.getAttribute('data-id'));
-  if(!w) return;
-  if(a==='view'){ w.bkFView=t.getAttribute('data-v')||'table'; bkFClosePop(); render(); return; }
-  if(a==='acct'){
-    if(BKF_POP&&BKF_POP.id===w.id&&BKF_POP.type==='acct'&&document.getElementById('bkFPop')) bkFClosePop();
-    else bkFOpenPop(t,w.id,'acct');
-    return;
-  }
-  /* THE MODE SWITCH. Page resets because the two modes are different datasets and
-     a page index carried across them means nothing, and THE OVERDRAWN FILTER
-     CLEARS because it has no meaning in Single Account mode. */
-  if(a==='set-acct'){ w.bkFAcct=t.getAttribute('data-v')||BKF_ALL; w.bkFPage=0; w.bkFOver=false; bkFClosePop(); render(); return; }
-  /* THE OVERDRAWN FILTER. Page resets because the result set changes size: a page
-     index of 3 against 52 accounts is meaningless against 4. The server clamps it
-     anyway, but resetting means the user lands on page 1 of the thing they just
-     asked for rather than on its last page. */
-  if(a==='overdrawn'){ w.bkFOver=!bkFOverCur(w); w.bkFPage=0; bkFClosePop(); render(); return; }
-  if(a==='page-prev'){ w.bkFPage=Math.max(0,bkFServerQuery(w).pageIndex-1); render(); return; }
-  if(a==='page-next'){ var q=bkFServerQuery(w); w.bkFPage=Math.min(q.pageCount-1,q.pageIndex+1); render(); return; }
-}
-var BKF_WIRED=false;
-(function(){
-  if(BKF_WIRED)return;BKF_WIRED=true;
-  document.addEventListener('click',bkFHandleClick);
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape'&&BKF_POP) bkFClosePop(); });
-})();
-/* ===== end W15 Bank Balances V2 ===== */
 /* ===== W16 Accounts Payable By Due Date V2 JS , prefix apF , kind "payables-mb" ===== */
 /* (1) DATA. Her invoice set, today-anchor and band list, values verbatim, under
    APF_ names. The anchor stays her 23 Jul 2026 so the band populations reproduce
@@ -13107,7 +12373,7 @@ function fkpRender(){
    It began as an absolutely positioned child of the cash tile and was
    clipped by our own .fkp-root overflow:hidden, and would in any case have
    been cut by her .appmain overflow:auto. Body mounting at position:fixed is
-   how .bkf-pop, .faf-pop, .apf-pop and .gpf-pop already solve this in this
+   how .faf-pop, .apf-pop and .gpf-pop already solve this in this
    file, so it is the house answer rather than a new one, and it lets
    .fkp-root keep the overflow:hidden of her real .widget rule. */
 function fkpClosePop(){

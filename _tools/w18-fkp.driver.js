@@ -137,7 +137,8 @@ A.contains(ourCss, "overflow:hidden", ".fkp-root keeps overflow:hidden, faithful
 const popRule = /^\.fkp-pop\{[^}]*\}/m.exec(ourCss)[0];
 A.contains(popRule, "position:fixed", "panel is position:fixed so no ancestor can clip it");
 A.contains(popRule, "z-index:3000", "panel z-index matches the four sibling ported popovers");
-["bkf-pop", "faf-pop", "apf-pop", "gpf-pop"].forEach(sib => {
+/* .bkf-pop left with our W15 block on 2026-09-27 (owner took Jo's Bank Balances) */
+["faf-pop", "apf-pop", "gpf-pop"].forEach(sib => {
   const m = new RegExp("\\." + sib + "\\{[^}]*z-index:3000").test(css);
   A.ok(m, "sibling ." + sib + " is also body mounted at z-index:3000 (house precedent)");
 });

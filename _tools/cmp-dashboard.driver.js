@@ -427,7 +427,7 @@ function liveRows(text, kind) {
      keeps every other widget's registry line count where it was */
   A.eq(S.split('kind:"gifts"').length - 1, 12, "no new kind:\"gifts\" literal was introduced");
   A.eq((S.match(/,kind:"payables",/g) || []).length, 6, "her six payables registry lines are still six");
-  A.eq((S.match(/kind:"bank"/g) || []).length, 5, "her five bank registry lines are still five");
+  A.eq((S.match(/kind:"bank"/g) || []).length, (MAPW.W15 && MAPW.W15.decided) ? 3 : 5, "her bank registry lines: five while undecided, the three sizes once decided (W15 decided 2026-09-27)");
   /* Every widget's own registry row count is unmoved, measured against the
      pre-edit snapshot rather than against a hardcoded number, so this holds
      if any of them is ever re-ported. */
