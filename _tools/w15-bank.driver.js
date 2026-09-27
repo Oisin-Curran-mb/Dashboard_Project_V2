@@ -20,6 +20,7 @@ const S = shell.script, raw = shell.html;
 A.absent(shell.css, ".bkf-", "no .bkf- rule survives");
 ["function bankContent(", "function bankGlance(", "function bankSpark(", "function bankHistory(", "function bankMonthLabels(", 'a==="bank-acct"', 'a==="bank-drill"', "function bankDrillModalHTML("].forEach(function (n) { A.contains(S, n, "her block holds " + n); });
 A.absent(S, "function bankBeginTotal(", "dead bankBeginTotal removed");
+A.contains(S, 'WIDGETS.register("bank",{content:bankContent,about:function(w){return {h:w.title,b:BANK_ABOUT};}});', "her content and about text are registered under kind bank (so the viewer lists W15)"); A.absent(S, 'if(w.kind==="bank")return {h:w.title', "aboutOf no longer special-cases bank"); A.absent(S, 'if(w.kind==="bank")return bankContent(w);', "the old contentHTML hook is gone");
 A.contains(shell.css, ".bank-hb-zero{position:absolute;top:-2px;bottom:-2px;width:1px;background:var(--wn-400);}", "zero axis uses a declared token (was the undeclared --wn-500)");
 A.absent(shell.css, "--wn-500", "no reference to the undeclared --wn-500");
 A.contains(shell.css, ".bank-glrow{flex-direction:column;gap:var(--space-xtight);padding:8px 8px calc(8px + var(--space-xtight));}", "Glance row uses the xtight spacing token");

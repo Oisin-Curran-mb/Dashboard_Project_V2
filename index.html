@@ -10114,7 +10114,7 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
     fund:{h:"Spend by fund",b:"How spending breaks down across your restricted and unrestricted funds."},
     signups:{h:"New sign-ups",b:"People who recently joined a group or ministry. The number is the total for the period you choose; the list shows the most recent sign-ups regardless of period."}
   };
-  function aboutOf(w){var wa=WIDGETS.about(w);if(wa)return wa;if(w.kind==="bank")return {h:w.title,b:"The current balance of each active bank account, based on unreconciled activity since the last reconciliation. Select one account to see what has moved (deposits, voids, checks, withdrawals, EFT) since then."};if(w.kind==="gifts")return {h:w.title,b:GFT_ABOUT_BODY};if(w.kind==="payables-mb")return {h:w.title,b:APF_ABOUT};if(w.kind==="gifts-mb")return {h:w.title,b:GPF_ABOUT};return ABOUT[w.id]||{h:w.title,b:"A short, plain-language description of what this widget shows and where its data comes from."};}
+  function aboutOf(w){var wa=WIDGETS.about(w);if(wa)return wa;if(w.kind==="gifts")return {h:w.title,b:GFT_ABOUT_BODY};if(w.kind==="payables-mb")return {h:w.title,b:APF_ABOUT};if(w.kind==="gifts-mb")return {h:w.title,b:GPF_ABOUT};return ABOUT[w.id]||{h:w.title,b:"A short, plain-language description of what this widget shows and where its data comes from."};}
   var EMPTY_COPY={deposits:{title:"No deposit accounts",sub:"There are no deposit accounts to show here yet.",cta:"Add account",action:"add-acct"},payroll:{title:"No payroll runs in this range",sub:"There's no payroll history for the selected period yet."},budget:{title:"No budget set up",sub:"Once a budget is entered for this fiscal year, actuals will be compared against it here.",cta:"Set up budget",action:"add-budget"}};
   var ERROR_COPY={deposits:{title:"Couldn’t load balances",sub:"Something went wrong fetching account data."},payroll:{title:"Couldn’t load payroll data",sub:"Something went wrong fetching payroll history."},budget:{title:"Couldn’t load budget data",sub:"Something went wrong fetching budget and actual figures."}};
 /* --- Bank Balances additive copy --- */
@@ -10554,6 +10554,10 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
 
 
 
+  /* Registered so the shell (and the review viewer) find her block through WIDGETS; her pops, modal and clicks stay as shell hooks. */
+  var BANK_ABOUT="The current balance of each active bank account, based on unreconciled activity since the last reconciliation. Select one account to see what has moved (deposits, voids, checks, withdrawals, EFT) since then.";
+  WIDGETS.register("bank",{content:bankContent,about:function(w){return {h:w.title,b:BANK_ABOUT};}});
+
   /* =====================================================================
    Accounts Payable By Due Date  (ap, kind:"payables")  ,  v2 redesign
    =====================================================================
@@ -10848,7 +10852,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(w.kind==="payables-mb")return apFContent(w); // Accounts Payable By Due Date (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its nothing-outstanding variant renders apFEmptyState and not the Deposits copy
     if(w.kind==="gifts-mb")return gpFContentRoot(w); // Gifts Pledges (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its no-campaigns variant renders gpFEmpty and not the Deposits copy
     if(w.state==="empty"){var ec=EMPTY_COPY[w.kind]||EMPTY_COPY.deposits;return '<div class="state" data-kind="empty">'+ICON("inbox")+'<div class="state-title">'+ec.title+'</div><div class="state-sub">'+ec.sub+'</div>'+(ec.showZero?'<div class="dep-total" style="margin-top:4px"><span>Total</span><span>'+money(0)+'</span></div>':'')+(ec.cta?'<button class="btn outlined" data-action="'+ec.action+'" data-id="'+w.id+'">'+ICON("add")+ec.cta+'</button>':'')+'</div>';}
-    if(w.kind==="bank")return bankContent(w);
     if(w.kind==="metric")return metricHTML(w);
     if(w.kind==="chart")return chartHTML(w);
     if(w.kind==="table")return fundContent(w);
