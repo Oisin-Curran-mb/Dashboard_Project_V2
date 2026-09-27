@@ -860,6 +860,19 @@
   .bank-hd-left{display:flex;align-items:center;gap:8px;min-width:0;justify-self:start;align-self:center;grid-column:1;}
   /* Glance: interactive chip row (account picker + overdrawn drill) */
   .bank-gl-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;}
+  /* Glance (owner, 27 Sep): chip; amount + sparkline side by side; pills in one row underneath. */
+  .bank-glrow{flex-direction:column;gap:4px;padding:8px 8px;}
+  .bank-glrow .bank-gl-top{margin-bottom:0;}
+  .bank-glrow .bank-gl-mid{display:flex;align-items:center;gap:10px;min-width:0;}
+  .bank-glrow .bank-gl-amt{flex:0 0 auto;}
+  .bank-glrow .kpi-spark.bank-spark{flex:1 1 auto;min-width:0;max-width:none;height:40px;margin:0;align-self:center;}
+  .bank-glrow .kpi-spark.bank-spark svg{height:100%;}
+  .bank-glrow .bank-gl-pills{display:flex;flex-wrap:nowrap;align-items:center;gap:6px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none;white-space:nowrap;min-width:0;}
+  .bank-glrow .bank-gl-pills::-webkit-scrollbar{display:none;}
+  .bank-glrow .bank-gl-pills{gap:4px;}
+  .bank-glrow .bank-gl-pills .trend-range.static{display:none;} /* the delta pill's tooltip carries 'vs beginning balance' */
+  .bank-glrow .bank-odpill{font-size:10.5px;padding:2px 5px;gap:1px;}
+  .bank-glrow .bank-odpill .material-symbols-rounded:last-child{display:none;}
   .bank-gl-lbl{font-size:11px;color:var(--txt-subtle);margin-bottom:1px;}
   .bank-gl-sub2{display:flex;align-items:center;gap:10px;margin-top:5px;font-size:12px;font-variant-numeric:tabular-nums;}
   .bank-gl-beg{color:var(--txt-secondary);}
@@ -10603,20 +10616,23 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
   /* Glance is interactive: the account chip opens the real picker (filter/search),
      and the overdrawn chip DRILLS, opening the Detail view in a closable overlay
      filtered to the overdrawn accounts. No inert button-looking chip. */
+  /* Glance (owner, 27 Sep): chip; amount + sparkline side by side; pills in a row underneath. */
   function bankGlance(w){var sel=bankSelected(w);
+    var amt=function(v,neg){return '<div class="metric-value bank-gl-amt'+(neg?" bank-neg":"")+'" title="'+bankMoney(v)+'" aria-label="'+bankMoney(v)+'">'+bankAbbr(v)+'</div>';};
+    var delta=function(beg,chg,up){return '<span class="delta-pill'+(up?"":" neg")+'" data-tip="Beginning balance '+bankMoney(beg)+' \u00b7 '+(up?"up ":"down ")+bankMoney(Math.abs(chg))+' since the last reconciliation" data-tip-plain tabindex="0">'+ICON(up?"north_east":"south_east")+bankAbbr(chg)+'</span><span class="trend-range static">vs beginning balance</span>';};
     if(sel){var end=bankEnding(sel),beg=sel.a[0],chg=end-beg,neg=end<0,up=chg>=0;
-      return '<div class="kpi-row"><div class="kpi-num">'+
+      return '<div class="kpi-row bank-glrow">'+
         '<div class="bank-gl-top">'+bankAcctChip(w)+'</div>'+
-        '<div class="metric-value'+(neg?" bank-neg":"")+'">'+bankMoney(end)+'</div>'+
-        '<div class="gl-sub">'+(neg?'<span class="bank-pill warn">'+ICON("error")+'Overdrawn</span>':'')+'<span class="delta-pill'+(up?"":" neg")+'" data-tip="Beginning balance '+bankMoney(beg)+' · '+(up?"up ":"down ")+bankMoney(Math.abs(chg))+' since the last reconciliation" data-tip-plain tabindex="0">'+ICON(up?"north_east":"south_east")+bankAbbr(chg)+'</span><span class="trend-range static">vs beginning balance</span></div>'+
-        '</div>'+bankSpark(w)+'</div>';}
+        '<div class="bank-gl-mid">'+amt(end,neg)+bankSpark(w)+'</div>'+
+        '<div class="gl-sub bank-gl-pills">'+(neg?'<span class="bank-pill warn">'+ICON("error")+'Overdrawn</span>':'')+delta(beg,chg,up)+'</div>'+
+        '</div>';}
     var val=bankTotal(w),negT=val<0,over=bankNegCount(w),bt=bankBeginTotal(w),tchg=val-bt,tup=tchg>=0;
     var od=over?'<button class="bank-pill warn bank-odpill" data-action="bank-drill" data-over="1" data-id="'+w.id+'" aria-label="'+over+' account'+(over>1?"s":"")+' overdrawn, tap to open">'+ICON("error")+over+' overdrawn'+ICON("chevron_right")+'</button>':'';
-    return '<div class="kpi-row"><div class="kpi-num">'+
+    return '<div class="kpi-row bank-glrow">'+
       '<div class="bank-gl-top">'+bankAcctChip(w)+'</div>'+
-      '<div class="metric-value'+(negT?" bank-neg":"")+'">'+bankMoney(val)+'</div>'+
-      '<div class="gl-sub">'+od+'<span class="delta-pill'+(tup?"":" neg")+'" data-tip="Beginning balance '+bankMoney(bt)+' · '+(tup?"up ":"down ")+bankMoney(Math.abs(tchg))+' since the last reconciliation" data-tip-plain tabindex="0">'+ICON(tup?"north_east":"south_east")+bankAbbr(tchg)+'</span><span class="trend-range static">vs beginning balance</span></div>'+
-      '</div>'+bankSpark(w)+'</div>';}
+      '<div class="bank-gl-mid">'+amt(val,negT)+bankSpark(w)+'</div>'+
+      '<div class="gl-sub bank-gl-pills">'+od+delta(bt,tchg,tup)+'</div>'+
+      '</div>';}
   function bankDrillModalHTML(){
     var w=find(modal.id);if(!w)return "";
     var clone=Object.assign({},w,{size:"xwide"}),title="Bank Balances",ao=null;
