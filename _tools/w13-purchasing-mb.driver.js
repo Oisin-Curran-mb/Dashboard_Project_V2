@@ -156,7 +156,7 @@ A.contains(css, '.purf-root[data-tier="wide"] .purf-board{overflow-x:auto;overfl
 
 /* ---------- 4d. Encumbrances view (owner, 27 Sep) ----------------------- */
 reset();
-A.contains(C("purFViewToggle", wide), 'data-v="enc"', "toggle offers Encumbrances"); A.contains(C("purFViewToggle", wide), ">Encumbrances<", "segment label");
+A.contains(C("purFViewToggle", wide), 'data-v="enc"', "toggle offers Encumbrances"); A.contains(C("purFViewToggle", xw), ">Encumbrances<", "segment label at Detail (Explore is icon-only)");
 wide.purfView = "enc"; xw.purfView = "enc"; wide.purfPath = null; xw.purfPath = null;
 A.eq(C("purFViewCur", wide), "enc", "view resolves to enc");
 const encRows = C("purFEncRows", wide), all = env.get("PURF_POS");
@@ -202,6 +202,31 @@ A.contains(lgT, "purf-ovflag", "table legend shows the Overdue flag"); A.contain
 xw.purfView = "kanban"; C("purFOpenPop", "legend", xw.id, null); const lgK = C("purFPopContent"); C("purFClosePop");
 A.contains(lgK, '<div class="cap">Lanes</div>', "board legend: Lanes"); A.contains(lgK, "purf-card-next", "board legend: card colours"); A.contains(lgK, "Moving a card", "board legend: move rules"); A.absent(lgK, ">Closed</span>", "board legend has no Closed chip");
 xw.purfView = null; reset();
+
+/* ---------- 4f. Table first; short chip labels at Explore (owner, 27 Sep) -- */
+reset(); wide.purfView = null; xw.purfView = null; wide.purfScope = null; xw.purfScope = null;
+const tgX = C("purFViewToggle", xw); A.ok(tgX.indexOf('data-v="table"') < tgX.indexOf('data-v="kanban"') && tgX.indexOf('data-v="kanban"') < tgX.indexOf('data-v="enc"'), "Detail toggle order: Table, Kanban, Encumbrances");
+const tgW = C("purFViewToggle", wide); A.ok(tgW.indexOf('data-v="table"') < tgW.indexOf('data-v="enc"'), "Explore toggle order: Table, Encumbrances");
+const hW = C("purFHeaderBlock", wide), hX = C("purFHeaderBlock", xw);
+A.contains(hW, '<span class="fc-label">All statuses</span>', "Explore status chip drops the Status: prefix"); A.contains(hX, '<span class="fc-label">Status: All statuses</span>', "Detail status chip unchanged");
+A.contains(hW, '<span class="fc-label">All paths</span>', "Explore path chip reads All paths"); A.contains(hX, '<span class="fc-label">All approval paths</span>', "Detail path chip unchanged");
+A.contains(hW, 'aria-label="Approval path, currently All approval paths"', "Explore aria keeps the full wording");
+wide.purfScope = "Awaiting my approval next"; A.contains(C("purFHeaderBlock", wide), '<span class="fc-label">My approval next</span>', "Explore scope: My approval next");
+wide.purfScope = "Awaiting my approval"; A.contains(C("purFHeaderBlock", wide), '<span class="fc-label">My approval</span>', "Explore scope: My approval");
+xw.purfScope = "Awaiting my approval next"; A.contains(C("purFHeaderBlock", xw), '<span class="fc-label">Awaiting my approval next</span>', "Detail scope unchanged");
+wide.purfScope = null; xw.purfScope = null; reset();
+
+/* ---------- 4g. Explore header stack (owner, 27 Sep) --------------------- */
+reset(); wide.purfView = null; xw.purfView = null;
+const hsW = C("purFHeaderBlock", wide), hsX = C("purFHeaderBlock", xw);
+A.contains(hsW, "purf-chiprow purf-chiprow-full", "Explore: chips span the full first line"); A.absent(hsW, 'class="dep-hd-toggle"', "Explore: no toggle on the chip line");
+A.contains(hsW, 'class="purf-hd-acts"', "Explore: toggle and legend share the headline row"); A.ok(hsW.indexOf("purf-vtoggle") < hsW.indexOf('data-purf="legend"') && hsW.indexOf("purf-hd-acts") < hsW.indexOf("purf-vtoggle"), "Explore: toggle then legend icon inside the actions cell");
+A.contains(hsW, "purf-vtoggle purf-vtoggle-ic", "Explore toggle is icon-only"); A.absent(hsW, ">Encumbrances</button>", "Explore toggle has no text label"); A.contains(hsW, 'aria-label="Encumbrances"', "Explore toggle keeps the word for screen readers");
+A.contains(hsX, 'class="dep-hd-toggle"', "Detail: toggle stays on the chip line"); A.contains(hsX, ">Encumbrances</button>", "Detail toggle keeps its labels"); A.absent(hsX, "purf-chiprow-full", "Detail chips unchanged");
+A.contains(css, ".purf-root .purf-chiprow{", "chip row CSS present"); A.contains(css, "justify-self:stretch;align-self:center;}", "chip row stretches to its track (was start-justified and overflowed)");
+A.contains(css, '.purf-root[data-tier="wide"] .purf-chip::before{display:none;}', "Explore chips drop the leading filter glyph so all three fit");
+xw.purfView = "enc"; A.contains(C("purFHeaderBlock", xw), 'class="dep-hd-toggle"', "Detail enc view still has the toggle"); xw.purfView = null;
+wide.purfView = "enc"; const hsWE = C("purFHeaderBlock", wide); A.contains(hsWE, "purf-hd-acts", "Explore enc view keeps the toggle"); A.absent(hsWE, 'data-purf="legend"', "Explore enc view hides the legend"); wide.purfView = null; reset();
 
 /* ---------- 5. hygiene --------------------------------------------------- */
 A.noEmDash(block.replace(/\/\*[\s\S]*?\*\//g, ""), "block code");

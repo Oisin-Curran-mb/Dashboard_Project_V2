@@ -2062,7 +2062,14 @@
   .purf-root{color:var(--txt-primary);}
   .purf-root.purf-w{display:flex;flex-direction:column;min-height:0;height:100%;overflow:hidden;}
   .purf-root .purf-hd{row-gap:8px;}
-  .purf-root .purf-chiprow{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;min-width:0;overflow-x:auto;overscroll-behavior:contain;scrollbar-width:none;justify-self:start;align-self:center;}
+  .purf-root .purf-chiprow{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;min-width:0;overflow-x:auto;overscroll-behavior:contain;scrollbar-width:none;justify-self:stretch;align-self:center;}
+  .purf-root[data-tier="wide"] .purf-chiprow-full{grid-column:1 / -1;}
+  .purf-root .purf-hd-acts{display:flex;align-items:center;gap:6px;justify-self:end;align-self:start;}
+  .purf-root .purf-vtoggle-ic .vt{padding-left:8px;padding-right:8px;}
+  .purf-root .purf-vtoggle-ic .vt .material-symbols-rounded{margin:0;}
+  /* Explore chips drop the leading filter glyph so the three chips fit the header width. */
+  .purf-root[data-tier="wide"] .purf-chip::before{display:none;}
+  .purf-root[data-tier="wide"] .purf-chip{padding-left:9px;}
   .purf-root .purf-chiprow::-webkit-scrollbar{display:none;}
   .purf-root .purf-chip,.purf-root .purf-ovchip{background:var(--wn-200);border-color:var(--wn-300);color:var(--txt-primary);flex:0 0 auto;max-width:230px;}
   .purf-root .purf-chip:hover,.purf-root .purf-ovchip:hover{background:var(--wn-300);border-color:var(--wn-400);}
@@ -10815,23 +10822,26 @@ function purFOvChip(w){
     purFIcon("warning")+'<span class="fc-label">Overdue only</span></button>';
 }
 function purFViewToggle(w){
-  var v=purFViewCur(w);
+  var v=purFViewCur(w),iconOnly=(purFTier(w)==="wide");
   function seg(val,lbl,ic,tip){
-    return '<button class="vt'+(v===val?" on":"")+'" data-purf="view" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(v===val)+'" title="'+purFEsc(tip)+'">'+purFIcon(ic)+lbl+'</button>';
+    return '<button class="vt'+(v===val?" on":"")+'" data-purf="view" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(v===val)+'" aria-label="'+purFEsc(lbl)+'" title="'+purFEsc(lbl+". "+tip)+'">'+purFIcon(ic)+(iconOnly?"":lbl)+'</button>';
   }
-  return '<div class="vtoggle purf-vtoggle" role="group" aria-label="View">'+
+  return '<div class="vtoggle purf-vtoggle'+(iconOnly?" purf-vtoggle-ic":"")+'" role="group" aria-label="View">'+
+    seg("table","Table","table_rows","Every purchase order over time, including closed and voided ones, with the overdue filter.")+
     ((purFTier(w)==="wide")?"":seg("kanban","Kanban","view_kanban","The live approval flow: one column per approval state, longest waiting first, drag a card to action it."))+
-    seg("table","Table","table_rows","Every purchase order over time, including closed and voided ones, with the department, year and overdue filters.")+
     seg("enc","Encumbrances","account_balance_wallet","Budget committed by open purchase orders, by accounting period: pending or approved, unpaid, not rejected.")+
   '</div>';
 }
+function purFShortScope(s){return s==="Awaiting my approval next"?"My approval next":(s==="Awaiting my approval"?"My approval":s);}
 function purFHeaderBlock(w){
   var view=purFViewCur(w),tier=purFTier(w),loading=!!w.purfLoading;
   var mine=purFMineSet(w).length,pending=purFPendingCount(w),outstanding=purFSum(purFPendingSet(w));
   var setRows=(view==="table")?purFTableRows(w):purFBoardRows(w);
-  var chips=purFChip(w,"scope",purFScopeCur(w),"Viewer scope, currently "+purFScopeCur(w),false);
-  if(view!=="enc")chips+=purFChip(w,"status","Status: "+purFStatusCur(w),"PO status, currently "+purFStatusCur(w),loading);
-  if(purFPathVals(w).length>1)chips+=purFChip(w,"path",purFPathCur(w),"Approval path, currently "+purFPathCur(w),false);
+  /* Explore shortens the chip labels so all three fit beside the view toggle (owner, 27 Sep). */
+  var sh=(tier==="wide"),sc=purFScopeCur(w),st=purFStatusCur(w),pa=purFPathCur(w);
+  var chips=purFChip(w,"scope",sh?purFShortScope(sc):sc,"Viewer scope, currently "+sc,false);
+  if(view!=="enc")chips+=purFChip(w,"status",sh?st:("Status: "+st),"PO status, currently "+st,loading);
+  if(purFPathVals(w).length>1)chips+=purFChip(w,"path",(sh&&pa==="All approval paths")?"All paths":pa,"Approval path, currently "+pa,false);
   if(view==="table"&&tier==="xwide"){
     chips+=purFOvChip(w);
   }
@@ -10840,11 +10850,14 @@ function purFHeaderBlock(w){
     : ((view==="enc")?'<div class="dep-hd-kpigrp"><span class="metric-value">'+purFMoney(purFEncTotal(w))+'</span><span class="bank-pill">encumbered, not yet paid</span></div>'
     : '<div class="dep-hd-kpigrp"><span class="metric-value">'+mine+'</span><span class="bank-pill">'+(mine===1?"needs":"need")+' your approval</span></div>');
   var ctx=loading?"":(view==="enc")?'<div class="purf-ctx">'+purFEncCtx(w)+'</div>':'<div class="purf-ctx">'+pending+' pending approval, '+purFMoney(outstanding)+' outstanding. '+setRows.length+' request'+(setRows.length===1?"":"s")+' in view.</div>';
+  var lg=(view==="enc")?"":'<button class="purf-lgbtn" data-purf="legend" data-id="'+w.id+'" aria-haspopup="dialog" aria-label="Legend: what the lanes, badges and colours mean" data-tip="Legend">'+purFIcon("info")+'</button>';
   return '<div class="dep-hd purf-hd">'+
-    '<div class="dep-hd-top"><div class="purf-chiprow">'+chips+'</div><div class="dep-hd-toggle">'+purFViewToggle(w)+'</div></div>'+
-    '<div class="dep-hd-num"><div class="purf-numwrap">'+kpi+ctx+'</div>'+
-      ((view==="enc")?"":'<button class="purf-lgbtn" data-purf="legend" data-id="'+w.id+'" aria-haspopup="dialog" aria-label="Legend: what the lanes, badges and colours mean" data-tip="Legend">'+purFIcon("info")+'</button>')+
-    '</div>'+
+    /* Explore: chips take the whole first line; the icon-only toggle and the legend icon share the headline row. */
+    ((tier==="wide")
+      ? '<div class="dep-hd-top"><div class="purf-chiprow purf-chiprow-full">'+chips+'</div></div>'+
+        '<div class="dep-hd-num"><div class="purf-numwrap">'+kpi+ctx+'</div><div class="purf-hd-acts">'+purFViewToggle(w)+lg+'</div></div>'
+      : '<div class="dep-hd-top"><div class="purf-chiprow">'+chips+'</div><div class="dep-hd-toggle">'+purFViewToggle(w)+'</div></div>'+
+        '<div class="dep-hd-num"><div class="purf-numwrap">'+kpi+ctx+'</div>'+lg+'</div>')+
   '</div>';
 }
 function purFSkeleton(){
