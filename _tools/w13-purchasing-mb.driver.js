@@ -36,16 +36,22 @@ A.eq(env.get("PURF_STAGES").join(","), "Pending,Approved", "record status vocabu
 A.eq(env.get("PURF_LANES").join("|"), "Pending approval|Payment approval|Ready to pay|Paid", "the four derived lanes");
 A.eq(env.get("PURF_SCOPES").join("|"), "Awaiting my approval next|Awaiting my approval|All requests", "scope uses the legacy queue vocabulary");
 A.ok(PATHS["QA Path"].steps[0].users.length === 2, "an Or level holds two interchangeable approvers (QA Path level 1)");
-A.ok(PATHS["Education Ministry"].steps[1].min === 500, "a level carries a dollar threshold (Education Ministry level 2 from $500)");
-A.eq(C("purFSteps", "Education Ministry", 430).length, 1, "a request under the threshold skips that level");
-A.eq(C("purFSteps", "Education Ministry", 640).length, 2, "a request over the threshold keeps it");
+/* the owner's real Education Ministry path: Start with Alfred >= $500, Then Jim or Lanette >= $2,000, Ends with Pastor Bob >= $5,000 */
+A.eq(PATHS["Education Ministry"].steps.map(function (s) { return s.users.length + ":" + s.mins.join("/"); }).join(" "), "1:500 2:2000/2000 1:5000", "per-approver minimums on every level");
+A.eq(C("purFSteps", "Education Ministry", 430).length, 0, "$430: no approver's minimum is reached, no level applies");
+A.eq(C("purFSteps", "Education Ministry", 640).length, 1, "$640: Alfred's level only");
+A.eq(C("purFSteps", "Education Ministry", 3150).map(function (s) { return s.users.join("|"); }).join(" > "), "Alfred Johnson > Jim AndersonAndMoreLetters|Lanette Stewart", "$3,150: Alfred, then Jim or Lanette; Pastor Bob not reached");
+A.eq(C("purFSteps", "Education Ministry", 5000).length, 3, "$5,000: all three levels");
+A.eq(C("purFStepUsers", { users: ["A", "B"], mins: [1000, 3000] }, 1500).join(","), "A", "an Or level with different minimums keeps only the approvers whose minimum the total reaches");
 A.eq(POS.filter(function (p) { return p.stage === "Rejected"; }).length, 0, "no order carries a Rejected stage");
 A.eq(POS.filter(function (p) { return (p.appr || []).some(function (a) { return a.state === "rejected"; }); }).length, 2, "two orders carry a rejected approval row");
 /* turn per demo record */
 const turn = function (ref) { return C("purFTurn", po(ref)); };
 A.eq(turn("PO-2893").kind, "next", "PO-2893: Nitzi approved level 1, my level 2 is next");
 A.eq(turn("PO-2888").kind, "mine", "PO-2888: nobody has acted, I am on level 2, so awaiting me later");
-A.eq(turn("PO-2899").kind, "waiting", "PO-2899: Education Ministry, I am not on the path");
+A.eq(turn("PO-2899").kind, "waiting", "PO-2899 ($640): waiting on Alfred Johnson, the only applying approver"); A.ok(/Alfred Johnson \(level 1 of 1\)/.test(turn("PO-2899").label), "the label names Alfred and a one-level path at this amount");
+A.eq(turn("PO-2891").kind, "hold", "PO-2891 ($3,150): Lanette holds at the Or level");
+A.ok(turn("PO-2907").none === true && turn("PO-2907").kind === "next", "PO-2907 ($430): no approver required, offered for release");
 A.eq(turn("PO-2897").kind, "next", "PO-2897: QA Path level 1 is Feargal OR me, so it is my turn");
 A.eq(turn("PO-2902").kind, "rejected", "PO-2902: rejected row surfaces as the turn");
 A.eq(turn("PO-2891").kind, "hold", "PO-2891: hold row surfaces as the turn");
@@ -57,20 +63,20 @@ A.eq(turn("PO-2861").kind, "none", "PO-2861: approved for payment, nobody's turn
 const lane = function (ref) { return C("purFLane", po(ref)); };
 A.eq(lane("PO-2893"), "Pending approval", "pending request lane"); A.eq(lane("PO-2902"), "Pending approval", "a rejected request stays in Pending approval");
 A.eq(lane("PO-2872"), "Payment approval", "approved with open payment steps"); A.eq(lane("PO-2861"), "Ready to pay", "payment approved, no check yet"); A.eq(lane("PO-2864"), "Paid", "paid");
-A.eq(C("purFMineSet", wide).length, 9, "nine requests await me (next or later) across both paths");
-A.eq(C("purFPendingCount", wide), 12, "twelve requests pending approval");
+A.eq(C("purFMineSet", wide).length, 10, "ten requests await me (next or later, incl. the release case) across both paths");
+A.eq(C("purFPendingCount", wide), 13, "thirteen requests pending approval");
 
 /* ---------- 2. render ---------------------------------------------------- */
 [wide, kpi, xw].forEach(function (w) { const h = C("purFContent", w); A.ok(h && h.length > 800, w.id + " (" + w.size + ") renders (" + h.length + " bytes)"); A.noEmDash(h, w.id); if (/wt-head/.test(h)) A.headMatchesBody(h, w.id + " table (D12)"); });
 let h = C("purFContent", xw);
-A.contains(h, '<span class="metric-value">9</span><span class="bank-pill">need your approval</span>', "Detail headline: requests awaiting me");
+A.contains(h, '<span class="metric-value">10</span><span class="bank-pill">need your approval</span>', "Detail headline: requests awaiting me");
 ["Pending approval", "Payment approval", "Ready to pay", "Paid"].forEach(function (l) { A.contains(h, 'data-purf-drop="' + l + '"', "board has the " + l + " lane"); });
 A.absent(h, 'data-purf-drop="Rejected"', "no Rejected lane"); A.absent(h, 'data-purf-drop="Approved"', "no raw Approved lane");
 A.contains(h, 'class="purf-finish"', "Finish column at All statuses");
 A.contains(h, "purf-turn purf-turn-next", "cards carry a next-turn badge"); A.contains(h, "purf-turn purf-turn-rejected", "rejected badge"); A.contains(h, "purf-turn purf-turn-hold", "hold badge"); A.contains(h, "purf-turn purf-turn-waiting", "waiting badge");
 A.contains(h, 'draggable="false"', "cards the viewer cannot act on are not draggable"); A.contains(h, 'draggable="true"', "cards the viewer can act on are draggable");
 A.contains(h, 'data-purf="scope"', "scope chip present"); A.contains(h, ">All requests<", "scope defaults to All requests");
-const hk = C("purFContent", kpi); A.contains(hk, '<span class="metric-value">9</span>', "Glance headline: requests awaiting me"); A.contains(hk, ">Pending<", "Glance tiles"); A.contains(hk, "12 pending, ", "Glance caption");
+const hk = C("purFContent", kpi); A.contains(hk, '<span class="metric-value">10</span>', "Glance headline: requests awaiting me"); A.contains(hk, ">Pending<", "Glance tiles"); A.contains(hk, "13 pending, ", "Glance caption");
 /* scope filter */
 xw.purfScope = "Awaiting my approval next"; h = C("purFContent", xw); A.eq((h.match(/purf-turn-next/g) || []).length, (h.match(/class="pur-kcard/g) || []).length, "'Awaiting my approval next' shows only next-turn cards"); A.absent(h, "purf-turn-waiting", "no waiting cards under 'next'");
 xw.purfScope = "Awaiting my approval"; h = C("purFContent", xw); A.ok(/purf-turn-mine/.test(h) && !/purf-turn-waiting/.test(h), "'Awaiting my approval' adds my later levels, still no waiting cards");
@@ -91,6 +97,8 @@ A.eq(po("PO-2888").stage, "Approved", "a higher-level approval implies the lower
 ok = C("purFApplyMove", wide, "PO-2897", "Payment approval", ""); A.eq(ok && po("PO-2897").stage === "Approved", true, "an Or level is satisfied by any one approver; the threshold level above is skipped");
 /* PO-2899: not my path */
 let chk = C("purFMoveCheck", po("PO-2899"), "Payment approval"); A.eq(chk.ok, false, "cannot approve a request I am not on"); A.ok(/Not your approval/.test(chk.msg), "the refusal names the turn");
+/* PO-2907: no applying approver at $430, released by the viewer */
+ok = C("purFApplyMove", wide, "PO-2907", "Payment approval", ""); A.eq(ok && po("PO-2907").stage === "Approved", true, "a request no level applies to is released on approval");
 /* PO-2902: rejected */
 chk = C("purFMoveCheck", po("PO-2902"), "Payment approval"); A.eq(chk.ok, false, "a rejected request cannot be approved until the rejection is cleared");
 A.eq(C("purFClearReject", po("PO-2902")), true, "clearing the rejection"); A.eq(turn("PO-2902").kind, "mine", "after clearing, the path restarts at Nitzi's level 1 with me later at level 2");
@@ -119,7 +127,7 @@ A.eq((mh.match(/purf-ap-me/g) || []).length, 1, "exactly one row is the viewer's
 A.absent(mh, "Payment Approval Path: ", "no payment grid while Pending (the form field of that name stays)");
 A.contains(mh, "purf-turnline purf-turn-next", "the tab states the turn");
 mh = openTab("PO-2872"); A.contains(mh, "Payment Approval Path: Administration", "payment grid once Approved"); A.contains(mh, "Approval Path: Everyone", "request grid stays for the record");
-mh = openTab("PO-2891"); A.contains(mh, "Skipped: below this level", "a threshold-skipped level says so (Education Ministry level 2 at $430)"); C("purFCloseModal");
+mh = openTab("PO-2899"); A.contains(mh, "Skipped: below every minimum on this level", "a skipped level says so (Jim or Lanette at $640)"); A.contains(mh, "Alfred Johnson (from $500.00)", "each approver shows their own minimum"); A.contains(mh, "Jim AndersonAndMoreLetters (from $2,000.00) or Lanette Stewart (from $2,000.00)", "an Or level lists both approvers with minimums"); C("purFCloseModal");
 A.absent(mh, "Rejected requests do not enter", "rejected copy keyed on the row, not a stage");
 
 /* ---------- 5. hygiene --------------------------------------------------- */

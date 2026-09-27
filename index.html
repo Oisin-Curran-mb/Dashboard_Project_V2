@@ -10518,11 +10518,12 @@ var PURF_STAGE_TONE={
   "Voided":"var(--txt-subtle)"
 };
 /* Approval paths as the record screen defines them: ordered LEVELS; "Then" opens a new level, "Or" adds an
-   interchangeable approver to the same level (any one satisfies it); min = the dollar threshold under which
-   that level is skipped. forRequest / forPayment mirror the path list flags. */
+   interchangeable approver to the same level (any one satisfies it). Each approver carries their own dollar
+   minimum ("X has to approve if at least $N"): an approver applies only when the total reaches it, and a level
+   with no applying approver is skipped. forRequest / forPayment mirror the path list flags. */
 var PURF_PATHS={
   "Administration":{forRequest:true,forPayment:true,steps:[{seq:1,users:["Nitzi Wright"],min:0},{seq:2,users:[PURF_ME],min:0}]},
-  "Education Ministry":{forRequest:true,forPayment:true,steps:[{seq:1,users:["Ben Lane"],min:0},{seq:2,users:["Marvin Hall"],min:500}]},
+  "Education Ministry":{forRequest:true,forPayment:true,steps:[{seq:1,users:["Alfred Johnson"],mins:[500]},{seq:2,users:["Jim AndersonAndMoreLetters","Lanette Stewart"],mins:[2000,2000]},{seq:3,users:["Pastor Bob"],mins:[5000]}]},
   "Everyone":{forRequest:true,forPayment:true,steps:[{seq:1,users:[PURF_ME],min:0}]},
   "QA Path":{forRequest:true,forPayment:true,steps:[{seq:1,users:["Feargal Phelan",PURF_ME],min:0},{seq:2,users:["Nitzi Wright"],min:2000}]}
 };
@@ -10538,10 +10539,11 @@ var PURF_POS=[
   {ref:"PO-2897",vendor:"A-1 Advertising",  dept:"Ministry",  amt:1120,  issued:"2026-07-28",due:"2026-08-27",path:"QA Path",           fy:"FY 2026",stage:"Pending",appr:[],log:[]},
   {ref:"PO-2901",vendor:"Back Yard Burgers",dept:"Admin",     amt:87.5,  issued:"2026-08-10",due:"2026-09-09",path:"Everyone",          fy:"FY 2026",stage:"Pending",appr:[],log:[]},
   {ref:"PO-2888",vendor:"IT Direct",        dept:"IT",        amt:2350,  issued:"2026-06-18",due:"2026-07-18",path:"Administration",    fy:"FY 2026",stage:"Pending",appr:[],log:[]},
-  {ref:"PO-2899",vendor:"Tech Supplies",    dept:"Ministry",  amt:640,   issued:"2026-08-04",due:"2026-09-03",path:"Education Ministry",fy:"FY 2026",stage:"Pending",appr:[{seq:1,user:"Ben Lane",state:"approved",d:"2026-08-05"}],log:[]},
+  {ref:"PO-2899",vendor:"Tech Supplies",    dept:"Ministry",  amt:640,   issued:"2026-08-04",due:"2026-09-03",path:"Education Ministry",fy:"FY 2026",stage:"Pending",appr:[],log:[]},
   {ref:"PO-2904",vendor:"Print Works",      dept:"Finance",   amt:310,   issued:"2026-08-14",due:"2026-09-13",path:"Everyone",          fy:"FY 2026",stage:"Pending",appr:[],log:[]},
+  {ref:"PO-2907",vendor:"Choir Robes Ltd", dept:"Ministry",  amt:430,   issued:"2026-08-16",due:"2026-09-15",path:"Education Ministry",fy:"FY 2026",stage:"Pending",appr:[],log:[]},
   {ref:"PO-2885",vendor:"Facilities Plus",  dept:"Facilities",amt:1975,  issued:"2026-06-05",due:"2026-07-05",path:"Administration",    fy:"FY 2026",stage:"Pending",appr:[{seq:1,user:"Nitzi Wright",state:"approved",d:"2026-06-06"}],log:[]},
-  {ref:"PO-2891",vendor:"Catering Co.",     dept:"Ministry",  amt:430,   issued:"2026-07-15",due:"2026-08-14",path:"Education Ministry",fy:"FY 2026",stage:"Pending",hold:true,appr:[{seq:1,user:"Ben Lane",state:"hold",reason:"Waiting on budget confirmation",d:"2026-08-14"}],log:[{d:"2026-08-14",by:"Ben Lane",to:"On hold",note:"Waiting on budget confirmation"}]},
+  {ref:"PO-2891",vendor:"Catering Co.",     dept:"Ministry",  amt:3150,  issued:"2026-07-15",due:"2026-08-14",path:"Education Ministry",fy:"FY 2026",stage:"Pending",hold:true,appr:[{seq:1,user:"Alfred Johnson",state:"approved",d:"2026-07-16"},{seq:2,user:"Lanette Stewart",state:"hold",reason:"Waiting on budget confirmation",d:"2026-08-14"}],log:[{d:"2026-08-14",by:"Lanette Stewart",to:"On hold",note:"Waiting on budget confirmation"}]},
   {ref:"PO-2898",vendor:"Cleaning Svcs",    dept:"Facilities",amt:268,   issued:"2026-08-01",due:"2026-08-31",path:"Everyone",          fy:"FY 2026",stage:"Pending",appr:[],log:[]},
   {ref:"PO-2903",vendor:"Office Depot",     dept:"Admin",     amt:152,   issued:"2026-08-12",due:"2026-09-11",path:"QA Path",           fy:"FY 2026",stage:"Pending",appr:[],log:[]},
   {ref:"PO-2902",vendor:"Catering Co.",     dept:"Ministry",  amt:520,   issued:"2026-08-06",due:"2026-09-05",path:"Administration",    fy:"FY 2026",stage:"Pending",appr:[{seq:1,user:"Nitzi Wright",state:"rejected",reason:"Duplicate of PO-2891",d:"2026-08-12"}],log:[{d:"2026-08-12",by:"Nitzi Wright",to:"Rejected",note:"Duplicate of PO-2891"}]},
@@ -10551,7 +10553,7 @@ var PURF_POS=[
   {ref:"PO-2861",vendor:"Office Depot",     dept:"Admin",     amt:312,   issued:"2026-06-20",due:"2026-07-20",path:"Administration",    fy:"FY 2026",stage:"Approved",pay:"unpaid",appr:[{seq:1,user:"Nitzi Wright",state:"approved",d:"2026-06-21"},{seq:2,user:PURF_ME,state:"approved",d:"2026-06-22"}],payPath:"Administration",payAppr:[{seq:1,user:"Nitzi Wright",state:"approved",d:"2026-07-02"},{seq:2,user:PURF_ME,state:"approved",d:"2026-07-03"}],payDone:true,log:[]},
   {ref:"PO-2864",vendor:"Acme Paper Supply",dept:"Finance",   amt:45,    issued:"2026-05-09",due:"2026-06-08",path:"Administration",    fy:"FY 2026",stage:"Approved",pay:"paid",type:"Check Request",crNo:"2",crDate:"May 9, 2026",appr:[{seq:1,user:"Nitzi Wright",state:"approved",d:"2026-05-09"},{seq:2,user:PURF_ME,state:"approved",d:"2026-05-09"}],payPath:"Administration",payAppr:[{seq:1,user:"Nitzi Wright",state:"approved",d:"2026-05-10"},{seq:2,user:PURF_ME,state:"approved",d:"2026-05-10"}],payDone:true,paid:true,log:[]},
   {ref:"PO-2610",vendor:"A-1 Advertising",  dept:"Ministry",  amt:140,   issued:"2025-04-04",due:"2025-05-04",path:"Administration",    fy:"FY 2025",stage:"Approved",pay:"paid",appr:[{seq:2,user:PURF_ME,state:"approved",d:"2025-04-05"}],payPath:"Administration",payAppr:[{seq:2,user:PURF_ME,state:"approved",d:"2025-04-20"}],payDone:true,paid:true,log:[]},
-  {ref:"PO-2633",vendor:"Back Yard Burgers",dept:"Admin",     amt:15,    issued:"2025-11-01",due:"2025-12-01",path:"Education Ministry",fy:"FY 2025",stage:"Approved",pay:"paid",appr:[{seq:1,user:"Ben Lane",state:"approved",d:"2025-11-02"}],payPath:"Education Ministry",payAppr:[{seq:1,user:"Ben Lane",state:"approved",d:"2025-11-10"}],payDone:true,paid:true,log:[]},
+  {ref:"PO-2633",vendor:"Back Yard Burgers",dept:"Admin",     amt:15,    issued:"2025-11-01",due:"2025-12-01",path:"Education Ministry",fy:"FY 2025",stage:"Approved",pay:"paid",appr:[],payPath:"Education Ministry",payAppr:[],payDone:true,paid:true,log:[]},
   {ref:"PO-2655",vendor:"Acme Paper Supply",dept:"Finance",   amt:76.25, issued:"2025-09-15",due:"2025-10-15",path:"Everyone",          fy:"FY 2025",stage:"Approved",pay:"paid",appr:[{seq:1,user:PURF_ME,state:"approved",d:"2025-09-16"}],payPath:"Everyone",payAppr:[{seq:1,user:PURF_ME,state:"approved",d:"2025-09-30"}],payDone:true,paid:true,log:[]}
 ];
 var PURF_POS_EMPTY=[];
@@ -10610,7 +10612,9 @@ function purFSum(list){return list.reduce(function(s,p){return s+p.amt;},0);}
    Sequence)+1 is my level; mine = I am on the path and have not acted. Rejected and Hold are rows,
    so they surface as badges, never as lanes. ---- */
 function purFWho(n){return n===PURF_ME?(n+" (you)"):n;}
-function purFSteps(pathName,amt){var p=PURF_PATHS[pathName];if(!p)return [];return p.steps.filter(function(s){return (s.min||0)<=amt;});}
+/* The levels of a path that apply to this amount, each reduced to the approvers whose own minimum the total reaches. */
+function purFStepUsers(s,amt){return s.users.filter(function(u,i){var m=(s.mins&&s.mins[i]!=null)?s.mins[i]:(s.min||0);return m<=amt;});}
+function purFSteps(pathName,amt){var p=PURF_PATHS[pathName];if(!p)return [];var out=[];p.steps.forEach(function(s){var us=purFStepUsers(s,amt);if(us.length)out.push({seq:s.seq,users:us,all:s});});return out;}
 function purFLivePath(po){
   if(po.stage==="Pending")return {kind:"request",path:po.path,acted:po.appr||[]};
   if(po.stage==="Approved"&&!po.payDone&&!po.paid)return {kind:"payment",path:po.payPath||po.path,acted:po.payAppr||[]};
@@ -10627,6 +10631,7 @@ function purFTurn(po){
   if(hold||po.hold)return {kind:"hold",label:"On hold"+((hold&&hold.reason)?": "+hold.reason:(purFHoldReason(po)?": "+purFHoldReason(po):"")),by:hold?hold.user:""};
   var maxSeq=acted.length?Math.max.apply(null,acted.map(function(a){return a.seq;})):0;
   var level=null,idx=-1;for(var i=0;i<steps.length;i++){if(steps[i].seq>maxSeq){level=steps[i];idx=i;break;}}
+  if(!steps.length)return {kind:"next",label:"No approver required at "+purFMoney(po.amt)+" on "+live.path+". Approve to release.",level:null,idx:0,n:0,live:live,none:true};
   if(!level)return {kind:"complete",label:live.kind==="request"?"Fully approved":"Approved for payment"};
   var meHere=level.users.indexOf(PURF_ME)>-1;
   var meLater=steps.some(function(s,k){return k>idx&&s.users.indexOf(PURF_ME)>-1;});
@@ -10649,7 +10654,7 @@ function purFTurnBadge(po){var tn=purFTurn(po);if(tn.kind==="none"||tn.kind==="c
 /* Recording an approval on the live path: any one approver satisfies a level; approving at a higher level
    implicitly approves the lower ones (legacy ApproveOrder). When every level is satisfied the request becomes
    Approved (request path) or approved for payment (payment path). */
-function purFMyLevel(po){var tn=purFTurn(po);if(tn.kind!=="next"&&tn.kind!=="mine")return null;var live=tn.live,steps=purFSteps(live.path,po.amt);var mine=steps.filter(function(s){return s.users.indexOf(PURF_ME)>-1&&!live.acted.some(function(a){return a.seq===s.seq&&a.state==="approved";});})[0];return mine?{live:live,step:mine}:null;}
+function purFMyLevel(po){var tn=purFTurn(po);if(tn.kind!=="next"&&tn.kind!=="mine")return null;var live=tn.live,steps=purFSteps(live.path,po.amt);if(tn.none)return {live:live,step:{seq:0,users:[PURF_ME]},release:true};var mine=steps.filter(function(s){return s.users.indexOf(PURF_ME)>-1&&!live.acted.some(function(a){return a.seq===s.seq&&a.state==="approved";});})[0];return mine?{live:live,step:mine}:null;}
 function purFApproveStep(w,po,note){
   var m=purFMyLevel(po);if(!m)return false;
   var acted=m.live.acted;for(var i=acted.length-1;i>=0;i--)if(acted[i].state==="hold")acted.splice(i,1);
@@ -11066,13 +11071,13 @@ function purFModalHTML(){
      var apGrid=function(title,pathName,acted,live){
        var steps=purFSteps(pathName,po.amt),all=PURF_PATHS[pathName]?PURF_PATHS[pathName].steps:[];
        var rows=all.map(function(st,i){
-         var skipped=steps.indexOf(st)<0,rowsHere=acted.filter(function(a){return a.seq===st.seq;});
+         var applying=purFStepUsers(st,po.amt),skipped=!applying.length,rowsHere=acted.filter(function(a){return a.seq===st.seq;});
          var ap=rowsHere.filter(function(a){return a.state==="approved";})[0],rj=rowsHere.filter(function(a){return a.state==="rejected";})[0],hd=rowsHere.filter(function(a){return a.state==="hold";})[0];
          var maxOk=acted.filter(function(a){return a.state==="approved";}).reduce(function(m,a){return Math.max(m,a.seq);},0);
          var implied=!ap&&maxOk>=st.seq;
-         var meHere=st.users.indexOf(PURF_ME)>-1,canAct=live&&meHere&&!locked&&!skipped;
-         var who=(i===all.length-1?"Ends with ":(i===0?"Starts with ":"Then "))+st.users.map(purFWho).join(" or ")+((st.min||0)>0?" (from "+purFMoney(st.min)+")":"");
-         var upd=(ap||rj||hd)?((ap||rj||hd).user+" "+purFFmtDate((ap||rj||hd).d)):(implied?"Implied by a higher level":(skipped?"Skipped: below this level's threshold":""));
+         var meHere=applying.indexOf(PURF_ME)>-1,canAct=live&&meHere&&!locked&&!skipped;
+         var who=(i===all.length-1?"Ends with ":(i===0?"Starts with ":"Then "))+st.users.map(function(u,k){var m=(st.mins&&st.mins[k]!=null)?st.mins[k]:(st.min||0);return purFWho(u)+(m>0?" (from "+purFMoney(m)+")":"");}).join(" or ");
+         var upd=(ap||rj||hd)?((ap||rj||hd).user+" "+purFFmtDate((ap||rj||hd).d)):(implied?"Implied by a higher level":(skipped?"Skipped: below every minimum on this level":""));
          return '<div class="wt-row purf-aprow'+(skipped?" purf-ap-skip":"")+(canAct?" purf-ap-me":"")+'" role="row"><span class="lr-main" role="cell">'+purFEsc(who)+'</span>'+
            '<span class="purf-a-b" role="cell">'+box("approve",!!ap||implied,"Approved",!canAct,st.seq)+'</span>'+
            '<span class="purf-a-b" role="cell">'+box("reject",!!rj,"Rejected",!canAct,st.seq)+'</span>'+
