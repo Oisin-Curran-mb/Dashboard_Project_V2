@@ -680,11 +680,9 @@
   .mct-q-clear:hover{background:var(--wn-300);color:var(--txt-primary);}
   .mct-q-clear .material-symbols-rounded{font-size:17px;}
   .mct-sec{display:flex;flex-direction:column;gap:7px;padding:10px 10px 8px;border-radius:12px;}
-  /* Section tints (owner, 27 Sep): design-system tokens, distinct from each other and from every badge tint. */
-  .mct-sec-recent{background:var(--cn-30);}
-  .mct-sec-my{background:var(--wn-250);}
-  .mct-sec-content{background:var(--surface-widget);border:1px solid var(--stroke-widget);}
-  .mct-sec-recent .mct-sec-h,.mct-sec-my .mct-sec-h{color:var(--txt-secondary);}
+  /* Section panels (owner, 27 Sep): one warm-sand token, --wn-250, no badge uses it. */
+  .mct-sec-recent,.mct-sec-my,.mct-sec-content{background:var(--wn-250);}
+  .mct-sec .mct-sec-h{color:var(--txt-secondary);}
   .mct-sec-head{display:flex;align-items:center;justify-content:space-between;gap:8px;}
   .mct-sec-h{font-size:12px;font-weight:600;color:var(--txt-subtle);}
   .mct-sec-empty{font-size:12px;color:var(--txt-subtle);padding:2px 2px 4px;}

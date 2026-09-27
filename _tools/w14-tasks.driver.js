@@ -99,12 +99,10 @@ A.ok(w.mctSaved.indexOf("ap-void") < 0, "task removed again");
 A.eq(w.mctSaved.length, before, "saved list back to its starting length");
 A.eq(EX.WIDGETS.click("mct-open", w.id, T({ "data-t": "ap-check" }), {}), true, "mct-open handled (opens the explainer modal)");
 
-/* section tints (owner, 27 Sep): tokens only, distinct from each other and from every badge tint */
-A.contains(css, ".mct-sec-recent{background:var(--cn-30);}", "Recent Tasks tinted with the cool-grey token");
-A.contains(css, ".mct-sec-my{background:var(--wn-250);}", "My Tasks tinted with the warm-sand token");
-A.contains(css, ".mct-sec-content{background:var(--surface-widget);", "Content Tasks on the widget surface");
-["--brand-10", "--am-100", "--am-50", "--green-10", "--pos-10", "--wn-200"].forEach(function (tok) { A.absent(css.split(".mct-sec-").slice(1).join(" ").split("}")[0] + css.match(/\.mct-sec-(recent|my|content)\{[^}]*\}/g).join(" "), tok, "section tints avoid the badge and icon tint " + tok); });
-(function () { const tinted = (css.match(/\.mct-sec-(recent|my|content)\{background:var\((--[a-z0-9-]+)\)/g) || []).map(function (m) { return m.replace(/.*var\(/, "").replace(/\).*/, ""); }); A.eq(new Set(tinted).size, tinted.length, "the three section tints are three different tokens"); })();
+/* section panels (owner, 27 Sep): every section on the warm-sand token, which no badge or icon uses */
+A.contains(css, ".mct-sec-recent,.mct-sec-my,.mct-sec-content{background:var(--wn-250);}", "all three sections share the --wn-250 panel tint");
+["--brand-10", "--am-100", "--am-50", "--green-10", "--pos-10", "--wn-200", "--cn-30"].forEach(function (tok) { A.absent((css.match(/.mct-sec-[^{]*{[^}]*}/g) || []).join(" "), tok, "section panel avoids " + tok); });
+A.contains(css, ".mct-sec{display:flex;flex-direction:column;gap:7px;padding:10px 10px 8px;border-radius:12px;}", "sections are padded rounded panels");
 (function () { w.mctQ = ""; const h = EX.contentHTML(w); A.contains(h, 'class="mct-sec mct-sec-recent"', "Recent Tasks section carries its tint class"); A.contains(h, 'class="mct-sec mct-sec-my"', "My Tasks section carries its tint class"); A.contains(h, 'class="mct-sec mct-sec-content"', "Content Tasks section carries its tint class"); w.mctQ = "check"; const r = EX.contentHTML(w); A.absent(r, "mct-sec-recent", "search results replace the sections and stay untinted"); w.mctQ = ""; })();
 
 process.exit(A.report());
