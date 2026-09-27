@@ -2063,10 +2063,6 @@
   .purf-root.purf-w{display:flex;flex-direction:column;min-height:0;height:100%;overflow:hidden;}
   .purf-root .purf-hd{row-gap:8px;}
   .purf-root .purf-chiprow{display:flex;align-items:center;gap:8px;flex-wrap:nowrap;min-width:0;overflow-x:auto;overscroll-behavior:contain;scrollbar-width:none;justify-self:stretch;align-self:center;}
-  .purf-root[data-tier="wide"] .purf-chiprow-full{grid-column:1 / -1;}
-  .purf-root .purf-hd-acts{display:flex;align-items:center;gap:6px;justify-self:end;align-self:start;}
-  .purf-root .purf-vtoggle-ic .vt{padding-left:8px;padding-right:8px;}
-  .purf-root .purf-vtoggle-ic .vt .material-symbols-rounded{margin:0;}
   /* Explore chips drop the leading filter glyph so the three chips fit the header width. */
   .purf-root[data-tier="wide"] .purf-chip::before{display:none;}
   .purf-root[data-tier="wide"] .purf-chip{padding-left:9px;}
@@ -10822,11 +10818,11 @@ function purFOvChip(w){
     purFIcon("warning")+'<span class="fc-label">Overdue only</span></button>';
 }
 function purFViewToggle(w){
-  var v=purFViewCur(w),iconOnly=(purFTier(w)==="wide");
+  var v=purFViewCur(w),iconOnly=false; /* owner, 27 Sep: labelled toggle at every tier */
   function seg(val,lbl,ic,tip){
     return '<button class="vt'+(v===val?" on":"")+'" data-purf="view" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(v===val)+'" aria-label="'+purFEsc(lbl)+'" title="'+purFEsc(lbl+". "+tip)+'">'+purFIcon(ic)+(iconOnly?"":lbl)+'</button>';
   }
-  return '<div class="vtoggle purf-vtoggle'+(iconOnly?" purf-vtoggle-ic":"")+'" role="group" aria-label="View">'+
+  return '<div class="vtoggle purf-vtoggle" role="group" aria-label="View">'+
     seg("table","Table","table_rows","Every purchase order over time, including closed and voided ones, with the overdue filter.")+
     ((purFTier(w)==="wide")?"":seg("kanban","Kanban","view_kanban","The live approval flow: one column per approval state, longest waiting first, drag a card to action it."))+
     seg("enc","Encumbrances","account_balance_wallet","Budget committed by open purchase orders, by accounting period: pending or approved, unpaid, not rejected.")+
@@ -10852,12 +10848,8 @@ function purFHeaderBlock(w){
   var ctx=loading?"":(view==="enc")?'<div class="purf-ctx">'+purFEncCtx(w)+'</div>':'<div class="purf-ctx">'+pending+' pending approval, '+purFMoney(outstanding)+' outstanding. '+setRows.length+' request'+(setRows.length===1?"":"s")+' in view.</div>';
   var lg=(view==="enc")?"":'<button class="purf-lgbtn" data-purf="legend" data-id="'+w.id+'" aria-haspopup="dialog" aria-label="Legend: what the lanes, badges and colours mean" data-tip="Legend">'+purFIcon("info")+'</button>';
   return '<div class="dep-hd purf-hd">'+
-    /* Explore: chips take the whole first line; the icon-only toggle and the legend icon share the headline row. */
-    ((tier==="wide")
-      ? '<div class="dep-hd-top"><div class="purf-chiprow purf-chiprow-full">'+chips+'</div></div>'+
-        '<div class="dep-hd-num"><div class="purf-numwrap">'+kpi+ctx+'</div><div class="purf-hd-acts">'+purFViewToggle(w)+lg+'</div></div>'
-      : '<div class="dep-hd-top"><div class="purf-chiprow">'+chips+'</div><div class="dep-hd-toggle">'+purFViewToggle(w)+'</div></div>'+
-        '<div class="dep-hd-num"><div class="purf-numwrap">'+kpi+ctx+'</div>'+lg+'</div>')+
+    '<div class="dep-hd-top"><div class="purf-chiprow">'+chips+'</div><div class="dep-hd-toggle">'+purFViewToggle(w)+'</div></div>'+
+    '<div class="dep-hd-num"><div class="purf-numwrap">'+kpi+ctx+'</div>'+lg+'</div>'+
   '</div>';
 }
 function purFSkeleton(){

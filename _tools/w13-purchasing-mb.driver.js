@@ -216,17 +216,14 @@ wide.purfScope = "Awaiting my approval"; A.contains(C("purFHeaderBlock", wide), 
 xw.purfScope = "Awaiting my approval next"; A.contains(C("purFHeaderBlock", xw), '<span class="fc-label">Awaiting my approval next</span>', "Detail scope unchanged");
 wide.purfScope = null; xw.purfScope = null; reset();
 
-/* ---------- 4g. Explore header stack (owner, 27 Sep) --------------------- */
+/* ---------- 4g. Explore header: one layout at both tiers (owner, 27 Sep: "fix this to way it was before") -- */
 reset(); wide.purfView = null; xw.purfView = null;
 const hsW = C("purFHeaderBlock", wide), hsX = C("purFHeaderBlock", xw);
-A.contains(hsW, "purf-chiprow purf-chiprow-full", "Explore: chips span the full first line"); A.absent(hsW, 'class="dep-hd-toggle"', "Explore: no toggle on the chip line");
-A.contains(hsW, 'class="purf-hd-acts"', "Explore: toggle and legend share the headline row"); A.ok(hsW.indexOf("purf-vtoggle") < hsW.indexOf('data-purf="legend"') && hsW.indexOf("purf-hd-acts") < hsW.indexOf("purf-vtoggle"), "Explore: toggle then legend icon inside the actions cell");
-A.contains(hsW, "purf-vtoggle purf-vtoggle-ic", "Explore toggle is icon-only"); A.absent(hsW, ">Encumbrances</button>", "Explore toggle has no text label"); A.contains(hsW, 'aria-label="Encumbrances"', "Explore toggle keeps the word for screen readers");
-A.contains(hsX, 'class="dep-hd-toggle"', "Detail: toggle stays on the chip line"); A.contains(hsX, ">Encumbrances</button>", "Detail toggle keeps its labels"); A.absent(hsX, "purf-chiprow-full", "Detail chips unchanged");
-A.contains(css, ".purf-root .purf-chiprow{", "chip row CSS present"); A.contains(css, "justify-self:stretch;align-self:center;}", "chip row stretches to its track (was start-justified and overflowed)");
-A.contains(css, '.purf-root[data-tier="wide"] .purf-chip::before{display:none;}', "Explore chips drop the leading filter glyph so all three fit");
-xw.purfView = "enc"; A.contains(C("purFHeaderBlock", xw), 'class="dep-hd-toggle"', "Detail enc view still has the toggle"); xw.purfView = null;
-wide.purfView = "enc"; const hsWE = C("purFHeaderBlock", wide); A.contains(hsWE, "purf-hd-acts", "Explore enc view keeps the toggle"); A.absent(hsWE, 'data-purf="legend"', "Explore enc view hides the legend"); wide.purfView = null; reset();
+[hsW, hsX].forEach(function (h, i) { const n = i ? "Detail" : "Explore"; A.contains(h, 'class="dep-hd-toggle"', n + ": labelled toggle on the chip line"); A.contains(h, ">Encumbrances</button>", n + ": toggle keeps its labels"); A.ok(h.indexOf("dep-hd-num") < h.indexOf('data-purf="legend"'), n + ": legend icon on the headline row"); });
+A.absent(hsW, "purf-hd-acts", "no stacked actions cell"); A.absent(css, "purf-vtoggle-ic", "no icon-only toggle CSS");
+A.contains(css, "justify-self:stretch;align-self:center;}", "chip row stretches to its track (was start-justified and overflowed under the toggle)");
+A.contains(css, '.purf-root[data-tier="wide"] .purf-chip::before{display:none;}', "Explore chips drop the leading filter glyph");
+wide.purfView = "enc"; A.absent(C("purFHeaderBlock", wide), 'data-purf="legend"', "Explore enc view hides the legend"); wide.purfView = null; reset();
 
 /* ---------- 5. hygiene --------------------------------------------------- */
 A.noEmDash(block.replace(/\/\*[\s\S]*?\*\//g, ""), "block code");
