@@ -76,7 +76,7 @@ A.contains(h, '<span class="metric-value">10</span><span class="bank-pill">need 
 A.absent(h, 'data-purf-drop="Rejected"', "no Rejected lane"); A.absent(h, 'data-purf-drop="Approved"', "no raw Approved lane");
 A.contains(h, 'class="purf-finish"', "Finish column at All statuses");
 A.contains(h, "purf-turn purf-turn-next", "cards carry a next-turn badge"); A.contains(h, "purf-turn purf-turn-rejected", "rejected badge"); A.contains(h, "purf-turn purf-turn-hold", "hold badge"); A.contains(h, "purf-turn purf-turn-waiting", "waiting badge");
-A.contains(h, 'draggable="false"', "cards the viewer cannot act on are not draggable"); A.contains(h, 'draggable="true"', "cards the viewer can act on are draggable");
+A.absent(h, 'draggable="false"', "every open card can be picked up (Close and Void are status actions, whatever the turn)"); A.contains(h, 'draggable="true"', "cards are draggable"); A.eq(C("purFCanDrag", { stage: "Closed" }), false, "a closed card cannot be picked up"); A.eq(C("purFCanDrag", { stage: "Voided" }), false, "a voided card cannot be picked up");
 A.contains(h, 'data-purf="scope"', "scope chip present"); A.contains(h, ">All requests<", "scope defaults to All requests");
 const hk = C("purFContent", kpi); A.contains(hk, '<span class="metric-value">10</span>', "Glance headline: requests awaiting me"); A.contains(hk, ">Pending<", "Glance tiles"); A.contains(hk, "13 pending, ", "Glance caption");
 /* scope filter */
@@ -110,7 +110,7 @@ chk = C("purFMoveCheck", po("PO-2891"), "Payment approval"); A.eq(chk.ok, false,
 chk = C("purFMoveCheck", po("PO-2872"), "Paid"); A.eq(chk.ok, false, "a request moves one lane at a time");
 /* payment approval then payment entry then close */
 ok = C("purFApplyMove", wide, "PO-2872", "Ready to pay", ""); A.eq(ok, true, "approving my payment level"); A.eq(po("PO-2872").payDone, true, "payment path complete"); A.eq(lane("PO-2872"), "Ready to pay", "PO-2872 is ready to pay");
-chk = C("purFMoveCheck", po("PO-2872"), "Closed"); A.eq(chk.ok, false, "cannot close before payment");
+chk = C("purFMoveCheck", po("PO-2872"), "Closed"); A.eq(chk.ok, true, "Close is allowed at any time, as the record's Status list offers Closed from every status (owner, 27 Sep)"); chk = C("purFMoveCheck", po("PO-2891"), "Closed"); A.eq(chk.ok, true, "a held card can be closed"); chk = C("purFMoveCheck", po("PO-2899"), "Voided"); A.eq(chk.ok, true, "a card that is not my turn can be voided"); chk = C("purFMoveCheck", po("PO-2899"), "Payment approval"); A.eq(chk.ok, false, "but not approved");
 ok = C("purFApplyMove", wide, "PO-2872", "Paid", ""); A.eq(ok, true, "payment entry"); A.eq(lane("PO-2872"), "Paid", "PO-2872 is paid");
 ok = C("purFApplyMove", wide, "PO-2872", "Closed", "done"); A.eq(ok, true, "a paid order can be closed"); A.eq(po("PO-2872").stage, "Closed", "PO-2872 closed");
 chk = C("purFMoveCheck", po("PO-2864"), "Voided"); A.eq(chk.ok, false, "a paid order cannot be voided here");
@@ -161,7 +161,7 @@ opts = C("purFStatusOptions", po("PO-2610"), "Closed", []); A.ok(opts.filter(fun
 /* Save applies the draft; Cancel discards */
 reset(); mh = openTab("PO-2888"); rows = draft().rows; C("purFGridTick", rows, 2, "approve", true);
 C("purFRecordSave", xw, po("PO-2888"), draft()); A.eq(po("PO-2888").stage, "Approved", "Save: my approval with the cascade completes the path"); A.ok(po("PO-2888").appr.some(function (a) { return a.user === "Nitzi Wright" && a.by === ME; }), "the cascaded row is stored with me as the actor"); A.contains(po("PO-2888").log[po("PO-2888").log.length - 1].note, "Record saved", "activity logged");
-reset(); mh = openTab("PO-2888"); const d2 = draft(); d2.submit = false; C("purFRecordSave", xw, po("PO-2888"), d2); A.eq(po("PO-2888").submitted, false, "Save unticked: not submitted"); A.eq(turn("PO-2888").kind, "hold", "not submitted shows as a hold on the approval process (the page's hover text)"); A.eq(C("purFCanDrag", po("PO-2888")), false, "and cannot be dragged");
+reset(); mh = openTab("PO-2888"); const d2 = draft(); d2.submit = false; C("purFRecordSave", xw, po("PO-2888"), d2); A.eq(po("PO-2888").submitted, false, "Save unticked: not submitted"); A.eq(turn("PO-2888").kind, "hold", "not submitted shows as a hold on the approval process (the page's hover text)"); A.eq(C("purFMoveCheck", po("PO-2888"), "Payment approval").ok, false, "and cannot be approved from the board (Close and Void stay possible, as on the page)");
 mh = openTab("PO-2888"); A.contains(mh, "Not submitted for approval", "turn line says so"); A.eq(draft().submit, false, "checkbox reflects it"); const d3 = draft(); d3.submit = true; C("purFRecordSave", xw, po("PO-2888"), d3); A.eq(po("PO-2888").submitted, true, "re-submitted"); A.eq(turn("PO-2888").kind, "mine", "back on the path");
 reset(); mh = openTab("PO-2893", "detail"); C("purFFieldSet", po("PO-2893"), "email", "x@y.z"); C("purFRecordCancel", po("PO-2893"), draft()); A.eq(C("purFF", po("PO-2893"), "email"), "", "Cancel restores header fields");
 /* status dropdown on save */

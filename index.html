@@ -10892,7 +10892,8 @@ function purFSkeleton(){
    on our own purf- classes: the colour state, the pay badge, the hold flag. */
 /* One card, on her .pur-kcard component, plus our turn badge: who has to act, from the live path. Only a
    card the viewer can act on is draggable. */
-function purFCanDrag(po){var k=purFTurn(po).kind,lane=purFLane(po);if(po.hold)return false;return k==="next"||k==="mine"||lane==="Ready to pay"||lane==="Paid";}
+/* Any open card can be picked up; purFMoveCheck rules on the drop (owner, 27 Sep: the page allows Close, and Void from Approved, whatever the turn). */
+function purFCanDrag(po){return po.stage!=="Closed"&&po.stage!=="Voided";}
 function purFCard(w,po){
   var ov=purFOverdue(po),age=purFAgeLabel(po),tn=purFTurn(po),hr=purFHoldReason(po),can=purFCanDrag(po);
   var lbl=po.ref+", "+po.vendor+", "+purFMoney(po.amt)+", "+age+(ov?", overdue":"")+". "+tn.label+". "+
@@ -10926,7 +10927,7 @@ function purFBoard(w){
   }).join("");
   var fin=finish
     ? '<div class="purf-finish" role="group" aria-label="Finish: drop a card here to close or void it">'+
-        '<div class="purf-fin-half purf-fin-close" data-purf-drop="Closed" data-id="'+w.id+'">'+purFIcon("task_alt")+'<span class="purf-fin-t">Close</span><span class="purf-fin-s">paid orders only</span></div>'+
+        '<div class="purf-fin-half purf-fin-close" data-purf-drop="Closed" data-id="'+w.id+'">'+purFIcon("task_alt")+'<span class="purf-fin-t">Close</span><span class="purf-fin-s">any status</span></div>'+
         '<div class="purf-fin-half purf-fin-void" data-purf-drop="Voided" data-id="'+w.id+'">'+purFIcon("block")+'<span class="purf-fin-t">Void</span><span class="purf-fin-s">unpaid only</span></div>'+
       '</div>'
     : "";
@@ -11107,24 +11108,24 @@ function purFPositionPop(el,anchor){
    legend shows is what the board draws. */
 function purFLegendHTML(w){
   var view=purFViewCur(w),table=(view==="table");
-  var lanes=[["Pending approval","Request path open. Approvers act in level order."],["Payment approval","Approved. Payment path open, one per invoice."],["Ready to pay","Payment approved. Waiting on the check."],["Paid",table?"Check posted.":"Check posted. Drag to Close when done."]];
+  var lanes=[["Pending approval","Request path open. Approvers act in level order."],["Payment approval","Approved. Payment path open, one per invoice."],["Ready to pay","Payment approved. Waiting on the check."],["Paid",table?"Check posted.":"Check posted. Drag to Close when the order is done."]];
   if(table)lanes=lanes.concat([["Closed","Final. Archive state, listed in the Table only."],["Voided","Cancelled. Archive state, listed in the Table only."]]);
   var out='<div class="cap">'+(table?"Status":"Lanes")+'</div>'+lanes.map(function(l){return '<div class="purf-lg-row"><span class="purf-chip-st purf-lg-lane" style="color:'+PURF_STAGE_TONE[l[0]]+'">'+l[0]+'</span><span class="purf-lg-txt">'+l[1]+'</span></div>';}).join("");
   if(!table){
-    out+='<div class="purf-lg-row"><span class="purf-lg-fin purf-fin-close">Close</span><span class="purf-lg-txt">Finish column: paid orders only. Leaves the board, stays in the Table.</span></div>';
+    out+='<div class="purf-lg-row"><span class="purf-lg-fin purf-fin-close">Close</span><span class="purf-lg-txt">Finish column: closes an order from any lane, as the Status list on the record does. Leaves the board, stays in the Table.</span></div>';
     out+='<div class="purf-lg-row"><span class="purf-lg-fin purf-fin-void">Void</span><span class="purf-lg-txt">Finish column: unpaid orders only. Leaves the board, stays in the Table.</span></div>';
   }
   var act=table?"Approve on the Approvals tab of the record.":"Drag the card on, or approve on the Approvals tab.";
-  var badges=[["next","how_to_reg","Your approval next","Your level is the next one. "+act],["mine","schedule","Your approval later","You are on the path, someone else is first. You may still approve; that also satisfies the lower levels."],["waiting","hourglass_top","Waiting on","Someone else's turn."+(table?"":" You cannot move the card.")],["rejected","block","Rejected by","An approver rejected it with a reason. Clear the rejection on the Approvals tab to resume."],["hold","lock","On hold","Parked with a reason. Remove the hold before it moves."],["next","how_to_reg","No approver required","The amount is under every minimum on the path. Approve to release it."]];
+  var badges=[["next","how_to_reg","Your approval next","Your level is the next one. "+act],["mine","schedule","Your approval later","You are on the path, someone else is first. You may still approve; that also satisfies the lower levels."],["waiting","hourglass_top","Waiting on","Someone else's turn."+(table?"":" You can only drag it to Close or Void.")],["rejected","block","Rejected by","An approver rejected it with a reason. Clear the rejection on the Approvals tab to resume."],["hold","lock","On hold","Parked with a reason. Remove the hold before it moves."],["next","how_to_reg","No approver required","The amount is under every minimum on the path. Approve to release it."]];
   out+='<div class="cap">Badges: whose turn it is</div>'+badges.map(function(b){return '<div class="purf-lg-row"><span class="purf-turn purf-turn-'+b[0]+'">'+purFIcon(b[1])+b[2]+'</span><span class="purf-lg-txt">'+b[3]+'</span></div>';}).join("");
   if(table){
     out+='<div class="cap">Issued column</div><div class="purf-lg-row"><span class="purf-ovflag purf-lg-ov">'+purFIcon("warning")+'Overdue</span><span class="purf-lg-txt">Past its expected-by date and not yet approved.</span></div>';
     return out;
   }
-  var cards=[["purf-card-next","Your turn","Amber edge: you can act on this card now."],["purf-card-ok","Ready to pay","Grey: payment approved, waiting on the check."],["purf-card-paid","Paid","Green: check posted."],["purf-card-hold","On hold","Cream: parked, not draggable."],["purf-card-rej","Rejected","Red tint: rejected, not draggable until cleared."]];
+  var cards=[["purf-card-next","Your turn","Amber edge: you can act on this card now."],["purf-card-ok","Ready to pay","Grey: payment approved, waiting on the check."],["purf-card-paid","Paid","Green: check posted."],["purf-card-hold","On hold","Cream: parked. Moves only to Close or Void."],["purf-card-rej","Rejected","Red tint: rejected. Clear it on the Approvals tab to approve; Close or Void still allowed."]];
   out+='<div class="cap">Card colours</div>'+cards.map(function(c){return '<div class="purf-lg-row"><span class="pur-kcard purf-card purf-lg-card '+c[0]+'">'+c[1]+'</span><span class="purf-lg-txt">'+c[2]+'</span></div>';}).join("");
   out+='<div class="purf-lg-row"><span class="purf-card-age purf-age-hot purf-lg-age">'+purFIcon("schedule")+'overdue</span><span class="purf-lg-txt">Red clock: past its due date.</span></div>';
-  out+='<div class="cap">Moving a card</div><div class="mi-note purf-popnote purf-lg-rules">Dragging a card to the next lane records your approval. One lane at a time, forward only. Only paid orders can be closed; a paid order cannot be voided here. A card on hold moves only to Void.</div>';
+  out+='<div class="cap">Moving a card</div><div class="mi-note purf-popnote purf-lg-rules">Dragging a card to the next lane records your approval, so only your turn can move it forward. One lane at a time. Any card can be dragged to Close, and any unpaid card to Void, whatever the turn. A paid order cannot be voided here. A card on hold moves only to Close or Void.</div>';
   return out;
 }
 function purFRenderPop(anchor){
@@ -11479,8 +11480,8 @@ function purFMoveCheck(po,to){
   var from=purFLane(po),tn=purFTurn(po);
   if(po.stage==="Closed"||po.stage==="Voided")return {ok:false,msg:"Closed and voided orders are final."};
   if(from===to)return {ok:false,msg:""};
+  if(to==="Closed")return {ok:true}; /* the page offers Closed from every status */
   if(po.hold&&to!=="Voided")return {ok:false,msg:"On hold: remove the hold on "+po.ref+" before moving it."};
-  if(to==="Closed")return (from==="Paid")?{ok:true}:{ok:false,msg:"Only paid orders can be closed. "+po.ref+" is not paid."};
   if(to==="Voided")return (from==="Paid")?{ok:false,msg:"A paid order cannot be voided here. Reverse the check in Accounts Payable first."}:{ok:true};
   if(from==="Pending approval"&&to==="Payment approval"){if(tn.kind==="rejected")return {ok:false,msg:po.ref+" is rejected. Clear the rejection on the Approvals tab first."};return (tn.kind==="next"||tn.kind==="mine")?{ok:true}:{ok:false,msg:"Not your approval: "+tn.label+"."};}
   if(from==="Payment approval"&&to==="Ready to pay")return (tn.kind==="next"||tn.kind==="mine")?{ok:true}:{ok:false,msg:"Not your payment approval: "+tn.label+"."};
@@ -11634,7 +11635,7 @@ function purFDragStart(e){
   if(!purFCanDrag(po)){
     if(e.preventDefault)e.preventDefault();
     PURF_DRAG=null;
-    setStatus(po.hold?("On hold: remove the hold on "+po.ref+" before moving it."):("Not your turn: "+purFTurn(po).label+"."));
+    setStatus(po.ref+" is "+po.stage.toLowerCase()+": closed and voided orders are final.");
     return;
   }
   PURF_DRAG={id:w.id,ref:po.ref};
