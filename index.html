@@ -2157,11 +2157,9 @@
   /* Record header form. This shell has no text-field primitive, so .purf-fin is
      derived from her own .pur-po-note declarations (token border, 8px radius,
      inherited font) rather than invented. FLAGGED in the block comment. */
-  .purf-root .purf-vhd{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:10px 16px 0;}
   .purf-root .purf-vname{font-size:13px;font-weight:600;color:var(--txt-primary);}
   .purf-root .purf-vmeta{font-size:11.5px;color:var(--txt-secondary);}
   .purf-root .purf-vship{min-width:220px;flex:0 1 260px;}
-  .purf-root .purf-hdgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px 16px;padding:10px 16px 2px;}
   .purf-root .purf-fld{display:flex;flex-direction:column;gap:2px;min-width:0;}
   .purf-root .purf-flbl{display:block;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--txt-subtle);}
   .purf-root .purf-fin{width:100%;box-sizing:border-box;border:1px solid var(--stroke-widget);border-radius:8px;padding:6px 9px;font-family:inherit;font-size:12.5px;color:var(--txt-primary);background:var(--surface-widget);outline:none;}
@@ -2170,8 +2168,6 @@
   .purf-root .purf-fin-sm{width:82px;}
   .purf-root .purf-fro{font-size:12.5px;font-weight:500;color:var(--txt-primary);padding:6px 0 0;}
   .purf-root .purf-fnote{font-size:10.5px;color:var(--txt-subtle);line-height:1.35;}
-  .purf-root .purf-fpath{display:flex;flex-wrap:wrap;gap:4px;}
-  .purf-root .purf-pathbtn.on{background:var(--am-50);color:var(--am-700);}
   /* Detail tab */
   .purf-root .purf-lines{border:1px solid var(--stroke-widget);border-radius:9px;overflow:hidden;}
   .purf-root .purf-lrow{gap:10px;}
@@ -2223,8 +2219,7 @@
   .purf-root .purf-submitlbl{font-size:12.5px;font-weight:600;color:var(--txt-primary);}
   .purf-root .purf-paidnote{font-size:11px;font-weight:600;color:#0b6b4c;}
   @media (max-width:520px){
-    .purf-root .purf-hdgrid{grid-template-columns:1fr;}
-  }
+    }
     /* turn badge: whose approval is next, from the live path */
   .purf-root .purf-turn{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;line-height:1.3;border-radius:8px;padding:2px 7px;max-width:100%;white-space:normal;text-align:left;}
   .purf-root .purf-turn .material-symbols-rounded{font-size:13px;flex:0 0 auto;}
@@ -2302,6 +2297,30 @@
   .purf-root .purf-enc-mi-a{font-size:12px;font-variant-numeric:tabular-nums;flex:0 0 auto;}
   .purf-root .purf-lg-ov{justify-self:start;font-size:11px;}
   .purf-root .purf-enc-tot{margin-top:auto;}
+  /* Record screen (Requests / Update, one to one): fixed header and footer, scrolling body, two-column form, per-approver grid. */
+  .purf-root .purf-record{display:flex;flex-direction:column;}
+  .purf-root .purf-m-scroll{flex:1;min-height:0;overflow-y:auto;display:flex;flex-direction:column;scrollbar-width:thin;}
+  .purf-root .purf-rec{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px;padding:10px 16px 2px;}
+  .purf-root .purf-rec-col{display:flex;flex-direction:column;gap:8px;min-width:0;}
+  .purf-root .purf-fld-vendor .purf-vname,.purf-root .purf-shipto{display:flex;align-items:center;gap:6px;}
+  .purf-root .purf-pick{display:inline-flex;align-items:center;border:0;background:transparent;color:var(--txt-subtle);cursor:pointer;padding:0;}
+  .purf-root .purf-pick .material-symbols-rounded{font-size:16px;}
+  .purf-root .purf-pick[aria-disabled="true"]{opacity:.4;cursor:default;}
+  .purf-root .purf-sel{appearance:auto;-webkit-appearance:menulist;padding:5px 8px;}
+  .purf-root .purf-sel:disabled{background:var(--wn-100);color:var(--txt-secondary);}
+  .purf-root .purf-req{color:var(--red-100);}
+  .purf-root .purf-a-or{display:inline-block;width:16px;}
+  .purf-root .purf-a-flag{color:var(--red-100);font-size:11px;margin-left:4px;}
+  .purf-root .purf-ap-creator .lr-main{color:var(--txt-secondary);}
+  .purf-root .purf-a-ro{font-size:12px;color:var(--txt-secondary);}
+  .purf-root .purf-fin-reason{padding:4px 7px;font-size:12px;}
+  .purf-root .purf-gridttl{padding-top:4px;}
+  .purf-root .purf-submit-order{padding:6px 16px 10px;}
+  .purf-root .purf-hoverinfo{display:inline-flex;color:var(--txt-subtle);cursor:help;}
+  .purf-root .purf-hoverinfo .material-symbols-rounded{font-size:16px;}
+  .purf-root .purf-rec-ft{border-top:1px solid var(--stroke-widget);padding-top:12px;}
+  .purf-root .purf-rec-ft .btn[disabled]{opacity:.5;cursor:default;}
+  @media (max-width:640px){.purf-root .purf-rec{grid-template-columns:1fr;}}
 /* ===== end W13 Purchasing Management V2 CSS ===== */
   /* ===== W15 Bank Balances V2 CSS , prefix bkF , kind "bank-mb" ===== */
 
@@ -10587,7 +10606,7 @@ var PURF_STAGE_TONE={
    with no applying approver is skipped. forRequest / forPayment mirror the path list flags. */
 var PURF_PATHS={
   "Administration":{forRequest:true,forPayment:true,steps:[{seq:1,users:["Nitzi Wright"],min:0},{seq:2,users:[PURF_ME],min:0}]},
-  "Education Ministry":{forRequest:true,forPayment:true,steps:[{seq:1,users:["Alfred Johnson"],mins:[500]},{seq:2,users:["Jim AndersonAndMoreLetters","Lanette Stewart"],mins:[2000,2000]},{seq:3,users:["Pastor Bob"],mins:[5000]}]},
+  "Education Ministry":{forRequest:true,forPayment:true,steps:[{seq:1,users:["Alfred Johnson"],mins:[500]},{seq:2,users:["Lanette Stewart","Jim AndersonAndMoreLetters"],mins:[2000,2000]},{seq:3,users:["Pastor Bob"],mins:[5000]}]},
   "Everyone":{forRequest:true,forPayment:true,steps:[{seq:1,users:[PURF_ME],min:0}]},
   "QA Path":{forRequest:true,forPayment:true,steps:[{seq:1,users:["Feargal Phelan",PURF_ME],min:0},{seq:2,users:["Nitzi Wright"],min:2000}]}
 };
@@ -10686,6 +10705,7 @@ function purFPathDone(pathName,amt,acted){var steps=purFSteps(pathName,amt);if(!
 function purFTurn(po){
   var live=purFLivePath(po);
   if(!live){if(po.paid)return {kind:"none",label:"Paid"};if(po.stage==="Approved")return {kind:"none",label:"Approved for payment"};return {kind:"none",label:po.stage};}
+  if(live.kind==="request"&&!purFSubmitted(po))return {kind:"hold",label:"Not submitted for approval. Open the record and tick Submit for Approval.",by:purFCreator(po)};
   var steps=purFSteps(live.path,po.amt),acted=live.acted,n=steps.length;
   var rej=acted.filter(function(a){return a.state==="rejected";})[0];
   if(rej)return {kind:"rejected",label:"Rejected by "+rej.user+(rej.reason?": "+rej.reason:""),by:rej.user,reason:rej.reason||""};
@@ -10717,15 +10737,27 @@ function purFTurnBadge(po){var tn=purFTurn(po);if(tn.kind==="none"||tn.kind==="c
    implicitly approves the lower ones (legacy ApproveOrder). When every level is satisfied the request becomes
    Approved (request path) or approved for payment (payment path). */
 function purFMyLevel(po){var tn=purFTurn(po);if(tn.kind!=="next"&&tn.kind!=="mine")return null;var live=tn.live,steps=purFSteps(live.path,po.amt);if(tn.none)return {live:live,step:{seq:0,users:[PURF_ME]},release:true};var mine=steps.filter(function(s){return s.users.indexOf(PURF_ME)>-1&&!live.acted.some(function(a){return a.seq===s.seq&&a.state==="approved";});})[0];return mine?{live:live,step:mine}:null;}
+/* A drop on the board is my approval at my level, applied with the record screen's cascade (levels at or below
+   mine tick too) and stored as the same rows Save writes, so the board and the record cannot disagree. */
 function purFApproveStep(w,po,note){
   var m=purFMyLevel(po);if(!m)return false;
-  var acted=m.live.acted;for(var i=acted.length-1;i>=0;i--)if(acted[i].state==="hold")acted.splice(i,1);
-  acted.push({seq:m.step.seq,user:PURF_ME,state:"approved",reason:note||"",d:"2026-08-19"});po.hold=false;
-  po.log=po.log||[];
-  if(purFPathDone(m.live.path,po.amt,acted)){
-    if(m.live.kind==="request"){po.stage="Approved";po.pay="unpaid";po.payPath=po.payPath||po.path;po.payAppr=po.payAppr||[];po.log.push({d:"2026-08-19",by:purFWho(PURF_ME),to:"Approved",note:note||""});}
+  var live=m.live;po.log=po.log||[];
+  if(m.release){
+    if(live.kind==="request"){po.stage="Approved";po.pay="unpaid";po.payPath=po.payPath||po.path;po.payAppr=po.payAppr||[];po.submitted=true;po.log.push({d:"2026-08-19",by:purFWho(PURF_ME),to:"Approved",note:"Released: no approver required at this amount"+(note?". "+note:"")});}
+    else{po.payDone=true;po.log.push({d:"2026-08-19",by:purFWho(PURF_ME),to:"Approved for payment",note:"Released: no approver required at this amount"+(note?". "+note:"")});}
+    return true;
+  }
+  var rows=purFGridRows(po,live.path,live.acted,live.kind==="request"),idx=-1;
+  rows.forEach(function(r,i){if(idx<0&&r.user===PURF_ME&&r.seq===m.step.seq)idx=i;});
+  if(idx<0)return false;
+  purFGridTick(rows,idx,"approve",true);
+  var acted=purFRowsToActed(rows);
+  if(live.kind==="request"){po.appr=acted;po.submitted=true;}else po.payAppr=acted;
+  po.hold=acted.some(function(a){return a.state==="hold";});
+  if(purFPathDone(live.path,po.amt,acted)){
+    if(live.kind==="request"){po.stage="Approved";po.pay="unpaid";po.payPath=po.payPath||po.path;po.payAppr=po.payAppr||[];po.log.push({d:"2026-08-19",by:purFWho(PURF_ME),to:"Approved",note:note||""});}
     else{po.payDone=true;po.log.push({d:"2026-08-19",by:purFWho(PURF_ME),to:"Approved for payment",note:note||""});}
-  }else po.log.push({d:"2026-08-19",by:purFWho(PURF_ME),to:(m.live.kind==="request"?"Approved level "+m.step.seq:"Payment approved level "+m.step.seq),note:note||""});
+  }else po.log.push({d:"2026-08-19",by:purFWho(PURF_ME),to:(live.kind==="request"?"Approved level "+m.step.seq:"Payment approved level "+m.step.seq),note:note||""});
   return true;
 }
 function purFRejectStep(w,po,reason){var live=purFLivePath(po);if(!live)return false;var m=purFMyLevel(po);var seq=m?m.step.seq:(purFSteps(live.path,po.amt)[0]||{seq:1}).seq;live.acted.push({seq:seq,user:PURF_ME,state:"rejected",reason:reason||"unknown",d:"2026-08-19"});po.log=po.log||[];po.log.push({d:"2026-08-19",by:purFWho(PURF_ME),to:"Rejected",note:reason||""});return true;}
@@ -11144,150 +11176,249 @@ function purFFld(w,po,label,key,val,ro,ph){
     ' data-purf-field="'+key+'" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'"'+(ph?' placeholder="'+purFEsc(ph)+'"':'')+
     ' aria-label="'+purFEsc(label)+'"></div>';
 }
+/* ---- Record screen: the Requests / Update page, one to one, inside the pop-up ------------------------
+   Rules ported from Requests/Update.aspx(.cs) and Content/scripts/Controls/POApprovalsGrid.js:
+     - one grid row per approver (LoadApprovals): a "Starts with <creator>" row at level 0 when the creator is
+       not on the path, then every approver in path order, "Or" for a second approver on the same level, the
+       last non-Or row reads "Ends with"; inactive / out-of-office approvers flagged in red
+     - ticking Approved on a row ticks every row at or below its level and clears their Rejected and Hold;
+       unticking clears Approved and Rejected on its level and above (checkApproved click handler)
+     - a box is enabled only down to and including the viewer's own level (setApprovalRows), Approved
+       disables Rejected and Hold on the row and the reverse, a Reason is editable only while its box is
+       ticked, and an acted row on a level after the viewer's disables every Approved and Rejected box
+     - any acted row locks Type, Approval Path, Vendor, Ship To and the Detail lines
+     - Status list: the current value and Closed are always offered; Voided only from Approved (and only when
+       the creator is on the path); Approved from Closed, or from Voided when every box is ticked
+     - Submit for Approval is shown while Unapproved with nothing approved; saved unticked the request is
+       "not submitted" (legacy Status -1) and the hover text calls that a hold on the approval process
+     - Save applies everything at once, like the postback; Cancel discards; the body scrolls, header and
+       footer stay put.
+   Every edit is kept for this session only: no dashboard write API exists yet. */
+var PURF_OVERRIDE=false; /* the /PurchasingManagement/Requests/ApprovalOverride right; off for the demo viewer */
+var PURF_USER_META={"Jim AndersonAndMoreLetters":{outOfOffice:true,until:"2026-09-05"}};
+var PURF_STATUSES=["Unapproved","Approved","Closed","Voided"];
+function purFCreator(po){return po.creator||"Alberto Allen";}
+function purFSubmitted(po){return po.submitted!==false;}
+function purFStageToStatus(po){return po.stage==="Pending"?"Unapproved":po.stage;}
+function purFCreatorOnPath(po,pathName){var p=PURF_PATHS[pathName];return !!p&&p.steps.some(function(s){return s.users.indexOf(purFCreator(po))>-1;});}
+/* One row per approver, as LoadApprovals builds them. acted = the stored rows for that path. */
+function purFGridRows(po,pathName,acted,isRequest){
+  var p=PURF_PATHS[pathName];if(!p)return [];
+  var rows=[],creator=purFCreator(po);
+  if(isRequest&&!purFCreatorOnPath(po,pathName))rows.push({seq:0,user:creator,min:0,creator:true});
+  p.steps.forEach(function(s){s.users.forEach(function(u,i){rows.push({seq:s.seq,user:u,min:(s.mins&&s.mins[i]!=null)?s.mins[i]:(s.min||0)});});});
+  var last=-1;
+  rows.forEach(function(r){if(last===r.seq){r.pre="Or ";r.or=true;}else{r.pre=(last===-1)?"Starts with ":"Then ";last=r.seq;}});
+  for(var i=rows.length-1;i>=0;i--){if(!rows[i].or){rows[i].pre="Ends with ";break;}}
+  rows.forEach(function(r){
+    var here=(acted||[]).filter(function(a){return a.user===r.user;});
+    var ap=here.filter(function(a){return a.state==="approved";})[0],rj=here.filter(function(a){return a.state==="rejected";})[0],hd=here.filter(function(a){return a.state==="hold";})[0];
+    if(r.creator){ap=purFSubmitted(po)?{user:creator,d:po.issued}:null;rj=null;hd=null;}
+    r.approved=!!ap;r.rejected=!!rj;r.rejReason=rj?(rj.reason||""):"";r.hold=!!hd;r.holdReason=hd?(hd.reason||""):"";
+    var act=ap||rj||hd;r.updatedBy=act?((act.by||act.user)+" "+purFFmtDate(act.d)):"";r.d=act?act.d:null;r.by=act?(act.by||act.user):null;
+    var meta=PURF_USER_META[r.user]||{};r.flag=meta.inactive?" - inactive":(meta.outOfOffice?(" - out of office"+(meta.until?(" until "+purFFmtDate(meta.until)):"")):"");
+  });
+  return rows;
+}
+/* setApprovalRows: which boxes the viewer may tick. Returns whether any row has acted (locks the header). */
+function purFGridEnable(rows,editEnabled){
+  var found=false,last=-1,disableAll=false,anyActed=false;
+  rows.forEach(function(r){
+    var approved=r.approved,rejected=!approved&&r.rejected,held=!approved&&!rejected&&r.hold;
+    if(approved||rejected||held)anyActed=true;
+    var base=(!found||last===r.seq);
+    r.canApprove=base&&!rejected&&!held;r.canReject=base&&!approved&&!held;r.canHold=base&&!approved&&!rejected;
+    r.canRejReason=base&&rejected;r.canHoldReason=base&&held;
+    if(found&&last!==r.seq&&(approved||rejected||held))disableAll=true;
+    if(!found)last=r.seq;
+    if(!PURF_OVERRIDE&&r.user===PURF_ME)found=true;
+  });
+  var noRight=(!PURF_OVERRIDE&&!found);
+  if(disableAll||noRight)rows.forEach(function(r){r.canApprove=false;r.canReject=false;});
+  if(!editEnabled)rows.forEach(function(r){r.canApprove=r.canReject=r.canHold=r.canRejReason=r.canHoldReason=false;});
+  return {anyActed:anyActed,lockedAbove:disableAll,noRight:noRight};
+}
+/* checkApproved click: the cascade. */
+function purFGridTick(rows,i,kind,on){
+  var r=rows[i];if(!r)return;
+  if(kind==="approve"){
+    if(on)rows.forEach(function(x){if(x.seq<=r.seq){x.approved=true;x.rejected=false;x.rejReason="";x.hold=false;x.holdReason="";}});
+    else rows.forEach(function(x){if(x.seq>=r.seq){x.approved=false;x.rejected=false;}});
+  }else if(kind==="reject"){r.rejected=on;if(!on)r.rejReason="";}
+  else if(kind==="hold"){r.hold=on;if(!on)r.holdReason="";}
+}
+/* Rows back to stored acted rows. Ticks made in this session carry the viewer as the actor (Approval Updated By). */
+function purFRowsToActed(rows){
+  var out=[];rows.forEach(function(r){
+    if(r.creator)return;
+    var d=r.d||"2026-08-19",by=r.by||PURF_ME;
+    if(r.approved)out.push({seq:r.seq,user:r.user,state:"approved",d:d,by:by,reason:""});
+    else if(r.rejected)out.push({seq:r.seq,user:r.user,state:"rejected",d:d,by:by,reason:r.rejReason||"unknown"});
+    else if(r.hold)out.push({seq:r.seq,user:r.user,state:"hold",d:d,by:by,reason:r.holdReason||"unknown"});
+  });return out;
+}
+/* Status list enablement (setApprovalRows tail + LoadApprovals). */
+function purFStatusOptions(po,cur,rows){
+  var allTicked=rows.length>0&&rows.every(function(r){return r.approved;}),creatorOn=purFCreatorOnPath(po,po.path);
+  return PURF_STATUSES.map(function(s){
+    var on=(s===cur)||(s==="Closed")||(s==="Voided"&&cur==="Approved"&&creatorOn)||(s==="Approved"&&(cur==="Closed"||(cur==="Voided"&&allTicked)));
+    return {value:s,enabled:on};
+  });
+}
+function purFRecordDraft(po){
+  var st=purFStageToStatus(po);
+  return {status:st,type:po.type||"Purchase Order",path:po.path,payPath:po.payPath||po.path,submit:purFSubmitted(po),
+    rows:purFGridRows(po,po.path,po.appr||[],true),
+    payRows:(po.stage==="Approved"||po.stage==="Closed")?purFGridRows(po,po.payPath||po.path,po.payAppr||[],false):[],
+    snapF:JSON.stringify(po.f||{}),snapInv:JSON.stringify(po.inv||null)};
+}
+/* Save: the postback. */
+function purFRecordSave(w,po,dr){
+  var editEnabled=!(po.paid||po.pay==="paid"||po.stage==="Closed"||po.stage==="Voided");
+  var log=[],before=po.stage;
+  var en=purFGridEnable(dr.rows,editEnabled);
+  if(editEnabled){
+    if(!en.anyActed){if(dr.path!==po.path){po.path=dr.path;log.push("approval path "+dr.path);}if(dr.type!==(po.type||"Purchase Order")){po.type=dr.type;log.push("type "+dr.type);}}
+    po.appr=purFRowsToActed(dr.rows);
+    var wasSub=purFSubmitted(po);po.submitted=(dr.status!=="Unapproved")||dr.submit||dr.rows.some(function(r){return r.approved&&!r.creator;});
+    if(po.submitted!==wasSub)log.push(po.submitted?"submitted for approval":"not submitted: will submit later");
+    po.hold=po.appr.some(function(a){return a.state==="hold";});
+    if(dr.payRows.length){po.payPath=dr.payPath||po.payPath||po.path;po.payAppr=purFRowsToActed(dr.payRows);po.payDone=purFPathDone(po.payPath,po.amt,po.payAppr);}
+  }
+  /* status: the dropdown first, then the path outcome (ApproveOrder POR:1776-1785) */
+  var cur=purFStageToStatus(po),opts=purFStatusOptions(po,cur,dr.rows),pick=opts.filter(function(o){return o.value===dr.status&&o.enabled;})[0]?dr.status:cur;
+  if(pick!==cur){po.stage=(pick==="Unapproved")?"Pending":pick;log.push("status "+pick);}
+  if(po.stage==="Pending"&&po.submitted&&!po.appr.some(function(a){return a.state==="rejected";})&&purFPathDone(po.path,po.amt,po.appr)){po.stage="Approved";po.pay=po.pay||"unpaid";po.payPath=po.payPath||po.path;po.payAppr=po.payAppr||[];log.push("approved: every level satisfied");}
+  else if(po.stage==="Approved"&&pick==="Approved"&&cur==="Approved"&&!po.paid&&po.pay!=="paid"&&!po.payDone&&!purFPathDone(po.path,po.amt,po.appr)){po.stage="Pending";po.pay=null;log.push("back to Unapproved: an approval was removed");}
+  po.log=po.log||[];
+  po.log.push({d:"2026-08-19",by:purFWho(PURF_ME),to:purFStageToStatus(po)+(po.hold?" (on hold)":""),note:"Record saved"+(log.length?": "+log.join(", "):"")});
+  return {changed:log.length>0||before!==po.stage,summary:log};
+}
+function purFRecordCancel(po,dr){try{po.f=JSON.parse(dr.snapF);var inv=JSON.parse(dr.snapInv);if(inv)po.inv=inv;}catch(e){}}
+/* The grid, both paths. */
+function purFRecordGrid(w,po,rows,editEnabled,which,title){
+  var en=purFGridEnable(rows,editEnabled);
+  var box=function(kind,on,can,i,lbl){return '<button class="purf-box'+(on?" on":"")+'" role="checkbox" aria-checked="'+on+'" aria-label="'+purFEsc(lbl)+'"'+(can?'':' aria-disabled="true"')+' data-purf="grid-tick" data-g="'+which+'" data-k="'+kind+'" data-i="'+i+'" data-v="'+(on?"off":"on")+'" data-id="'+w.id+'">'+purFIcon(on?"check_box":"check_box_outline_blank")+'</button>';};
+  var reason=function(kind,val,can,i,lbl){return can?'<input class="purf-fin purf-fin-reason" type="text" value="'+purFEsc(val)+'" data-purf-reason="'+kind+'" data-g="'+which+'" data-i="'+i+'" data-id="'+w.id+'" aria-label="'+purFEsc(lbl)+'">':'<span class="purf-a-ro">'+purFEsc(val)+'</span>';};
+  var body=rows.map(function(r,i){
+    var name=(r.or?'<span class="purf-a-or"></span>':"")+purFEsc(r.pre)+purFEsc(purFWho(r.user))+(r.flag?'<span class="purf-a-flag">'+purFEsc(r.flag)+'</span>':"");
+    return '<div class="wt-row purf-aprow'+(r.user===PURF_ME?" purf-ap-me":"")+(r.creator?" purf-ap-creator":"")+'" role="row"><span class="lr-main" role="cell">'+name+'</span>'+
+      '<span class="purf-a-b" role="cell">'+box("approve",r.approved,r.canApprove,i,"Approved, "+r.user)+'</span>'+
+      '<span class="purf-a-b" role="cell">'+box("reject",r.rejected&&!r.approved,r.canReject,i,"Rejected, "+r.user)+'</span>'+
+      '<span class="purf-a-r" role="cell">'+reason("reject",r.rejReason,r.canRejReason,i,"Rejected reason, "+r.user)+'</span>'+
+      '<span class="purf-a-b" role="cell">'+box("hold",r.hold&&!r.approved&&!r.rejected,r.canHold,i,"Hold, "+r.user)+'</span>'+
+      '<span class="purf-a-r" role="cell">'+reason("hold",r.holdReason,r.canHoldReason,i,"Hold reason, "+r.user)+'</span>'+
+      '<span class="purf-a-u" role="cell">'+purFEsc(r.updatedBy)+'</span></div>';
+  }).join("");
+  var note=en.noRight?"You are not on this path, so the Approved and Rejected boxes are read-only.":(en.lockedAbove?"A later level has already acted, so Approved and Rejected are locked on every row.":"Boxes are enabled down to your own level. Ticking Approved also ticks the levels below it.");
+  return '<div class="purf-flbl purf-gridttl">'+purFEsc(title)+'</div><div class="purf-apgrid" role="table" aria-label="'+purFEsc(title)+'">'+
+    '<div class="wt-row wt-head purf-aprow" role="row"><span class="lr-main" role="columnheader">Approval Needed By:</span><span class="purf-a-b" role="columnheader">Approved</span><span class="purf-a-b" role="columnheader">Rejected</span><span class="purf-a-r" role="columnheader">Reason</span><span class="purf-a-b" role="columnheader">Hold</span><span class="purf-a-r" role="columnheader">Reason</span><span class="purf-a-u" role="columnheader">Approval Updated By:</span></div>'+body+'</div>'+
+    (editEnabled?'<div class="purf-mnote">'+note+'</div>':'<div class="purf-mnote">Read-only: this order is '+purFEsc(purFStageToStatus(po).toLowerCase())+(po.paid||po.pay==="paid"?" and paid":"")+'.</div>');
+}
+function purFSel(w,key,val,opts,disabled,label){
+  return '<select class="purf-fin purf-sel" data-purf-sel="'+key+'" data-id="'+w.id+'" aria-label="'+purFEsc(label)+'"'+(disabled?' disabled':'')+'>'+opts.map(function(o){var v=(typeof o==="string")?o:o.value,en=(typeof o==="string")?true:o.enabled;return '<option value="'+purFEsc(v)+'"'+(v===val?' selected':'')+(en?'':' disabled')+'>'+purFEsc(v)+'</option>';}).join("")+'</select>';
+}
 function purFModalHTML(){
   if(!PURF_MODAL)return "";
   var w=find(PURF_MODAL.id);if(!w)return "";
   var po=purFPO(w,PURF_MODAL.ref);if(!po)return "";
-  var tab=PURF_MODAL.tab||"detail";
-  var vm=purFVendorMeta(po.vendor),da=purFDeptAcct(po.dept),isCR=(po.type==="Check Request");
-  var sub="Requests, Update. "+po.stage+(po.hold?", on hold":"")+((po.stage==="Approved"&&po.pay)?", "+(po.pay==="paid"?"paid":"not paid"):"");
+  if(!PURF_MODAL.draft)PURF_MODAL.draft=purFRecordDraft(po);
+  var dr=PURF_MODAL.draft,tab=PURF_MODAL.tab||"detail";
+  var vm=purFVendorMeta(po.vendor),da=purFDeptAcct(po.dept),isCR=(dr.type==="Check Request");
+  var editEnabled=!(po.paid||po.pay==="paid"||po.stage==="Closed"||po.stage==="Voided");
+  var en=purFGridEnable(dr.rows.map(function(r){var c={};for(var k in r)c[k]=r[k];return c;}),editEnabled);
+  var headLocked=en.anyActed||!editEnabled;
+  var statusIsApproved=(dr.status==="Approved");
+  var vendorOn=editEnabled&&!statusIsApproved&&!dr.rows.some(function(r){return r.approved&&!r.creator;}),shipOn=editEnabled&&!statusIsApproved;
+  var sub="Purchasing Management, Requests, Update. "+purFStageToStatus(po)+(po.hold?", on hold":"")+((po.stage==="Approved"&&po.pay)?", "+(po.pay==="paid"?"paid":"not paid"):"")+(purFSubmitted(po)?"":", not submitted");
   var head='<div class="modal-h purf-m-hd"><span class="modal-title">'+purFIcon("receipt_long")+(isCR?"Check request ":"Purchase order ")+po.ref+
     '<span class="purf-m-sub">'+purFEsc(sub)+'</span></span><button class="iconbtn" data-purf="close-modal" aria-label="Close">'+purFIcon("close")+'</button></div>';
-  var vhd='<div class="purf-vhd"><div><span class="purf-flbl">Vendor</span><div class="purf-vname">'+purFEsc(po.vendor)+'</div><div class="purf-vmeta">'+purFEsc(vm.a)+'</div><div class="purf-vmeta">Terms: '+purFEsc(vm.t)+'</div></div>'+
-    '<div class="purf-vship">'+purFFld(w,po,"Ship To","shipTo",purFF(po,"shipTo"),false,"")+'</div></div>';
-  var paths=[];for(var k in PURF_PATH_APPROVERS)paths.push(k);
-  var pathLocked=!(po.stage==="Pending"&&!po.hold);
-  var grid='<div class="purf-hdgrid">'+
-    purFFld(w,po,"Email","email",purFF(po,"email"),false,"vendor or requester email")+
-    (isCR?purFFld(w,po,"Check Request Date","crDate",po.crDate||"",true,""):purFFld(w,po,"Date Requested","issuedOn",purFFmtDate(po.issued),true,""))+
-    '<div class="purf-fld"><span class="purf-flbl">Type</span><div class="purf-fro">'+(isCR?"Check Request":"Purchase Order")+'</div></div>'+
-    purFFld(w,po,"Issued To","issuedTo",purFF(po,"issuedTo"),false,"")+
-    '<div class="purf-fld"><span class="purf-flbl">Status</span><div class="purf-fro">'+purFRecordStatus(po)+'</div><span class="purf-fnote">Editable while unapproved on the record screen, locked once approved.</span></div>'+
-    purFFld(w,po,"Agent","agent",purFF(po,"agent"),false,"")+
-    '<div class="purf-fld"><span class="purf-flbl">Approval Path</span>'+
-      (pathLocked
-        ? '<div class="purf-fro">'+purFEsc(po.path)+'</div><span class="purf-fnote">Locked: the path is editable only while the request is pending and not on hold.</span>'
-        : '<div class="purf-fpath">'+paths.map(function(p){return '<button class="btn naked sm purf-pathbtn'+(p===po.path?" on":"")+'" data-purf="set-po-path" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'" data-v="'+purFEsc(p)+'" aria-pressed="'+(p===po.path)+'">'+purFEsc(p)+'</button>';}).join("")+'</div>')+
-    '</div>'+
-    purFFld(w,po,"Shipping","shipping",purFF(po,"shipping"),false,"")+
-    '<div class="purf-fld"><span class="purf-flbl">Payment Approval Path</span><div class="purf-fro">'+purFEsc(purFF(po,"payPath",po.path))+'</div></div>'+
-    purFFld(w,po,isCR?"Check Request #":"Requisition #",isCR?"crNoRO":"reqNo",isCR?(po.crNo||""):po.ref.replace("PO-",""),true,"")+
+  var pick=function(key,on,lbl){return '<button class="purf-pick" data-purf="pick-stub" data-v="'+key+'" data-id="'+w.id+'" aria-label="'+purFEsc(lbl)+'"'+(on?'':' aria-disabled="true"')+'>'+purFIcon("search")+'</button>';};
+  var left='<div class="purf-rec-col">'+
+    '<div class="purf-fld purf-fld-vendor"><span class="purf-flbl">Vendor</span><div class="purf-vname">'+purFEsc(po.vendor)+pick("vendor",vendorOn,"Pick a vendor")+'</div><div class="purf-vmeta">'+purFEsc(vm.a)+'</div><div class="purf-vmeta"><strong>Terms:</strong> '+purFEsc(vm.t)+'</div></div>'+
+    purFFld(w,po,"Email","email",purFF(po,"email"),!editEnabled,"")+
+    '<div class="purf-fld"><span class="purf-flbl">Type</span>'+purFSel(w,"type",dr.type,["Purchase Order","Check Request"],headLocked,"Type")+'</div>'+
+    '<div class="purf-fld"><span class="purf-flbl">Status</span>'+purFSel(w,"status",dr.status,purFStatusOptions(po,purFStageToStatus(po),dr.rows),!editEnabled&&po.stage!=="Closed"&&po.stage!=="Voided","Status")+'</div>'+
+    '<div class="purf-fld"><span class="purf-flbl"><span class="purf-req">*</span> Approval Path</span>'+purFSel(w,"path",dr.path,Object.keys(PURF_PATHS).filter(function(k){return PURF_PATHS[k].forRequest!==false;}),headLocked,"Approval Path")+'</div>'+
+    (statusIsApproved||po.stage==="Approved"||po.stage==="Closed"?'<div class="purf-fld"><span class="purf-flbl">Payment Approval Path</span>'+purFSel(w,"payPath",dr.payPath,Object.keys(PURF_PATHS).filter(function(k){return PURF_PATHS[k].forPayment!==false;}),!editEnabled||!!po.payDone,"Payment Approval Path")+'</div>':"")+
+    purFFld(w,po,"Requisition #","reqNo",po.ref.replace("PO-",""),true,"")+
+    purFFld(w,po,isCR?"Check Request #":"Purchase Order #","poNo",purFF(po,"poNo",po.stage==="Pending"?"":po.ref.replace("PO-","")),!editEnabled||isCR,"")+
   '</div>';
-  var tabs=[["detail","Detail"],["approvals","Approvals"],["attachments","Attachments"],["note","Note"],["payment","Payment Approval"]];
+  var right='<div class="purf-rec-col">'+
+    '<div class="purf-fld"><span class="purf-flbl">Ship To</span><div class="purf-vname purf-shipto">'+purFEsc(purFF(po,"shipTo","(not set)"))+pick("shipTo",shipOn,"Pick a ship-to")+'</div></div>'+
+    purFFld(w,po,"Purchase Order Date","poDate",purFF(po,"poDate",purFFmtDate(po.issued)),!editEnabled,"")+
+    purFFld(w,po,"Issued To","issuedTo",purFF(po,"issuedTo"),!editEnabled,"")+
+    purFFld(w,po,"Agent","agent",purFF(po,"agent"),!editEnabled,"")+
+    purFFld(w,po,"Shipping","shipping",purFF(po,"shipping"),!editEnabled,"")+
+    purFFld(w,po,"Date Requested","reqDate",purFF(po,"reqDate",purFFmtDate(po.issued)),!editEnabled,"")+
+  '</div>';
+  var rec='<div class="purf-rec">'+left+right+'</div>';
+  var tabs=[["detail","Detail"],["approvals","Approvals"],["attachments","Attachments"],["note","Note"]];
+  if(po.stage==="Approved"||po.stage==="Closed")tabs.push(["payment","Payment Approval"]);
+  if(!tabs.some(function(t){return t[0]===tab;}))tab="detail";
   var tabRow='<div class="pur-tabs purf-mtabs" role="tablist" aria-label="Record sections">'+tabs.map(function(t){
     return '<button class="pur-tab'+(tab===t[0]?" on":"")+'" role="tab" aria-selected="'+(tab===t[0])+'" data-purf="tab" data-v="'+t[0]+'" data-id="'+w.id+'">'+t[1]+'</button>';
   }).join("")+'</div>';
   var body="";
+  var linesRO=headLocked;
   if(tab==="detail"){
+    var lin=function(key,val,lbl,ph){return linesRO?'<span class="purf-a-ro">'+purFEsc(val)+'</span>':'<input class="purf-fin" type="text" value="'+purFEsc(val)+'" data-purf-field="'+key+'" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'" aria-label="'+lbl+'"'+(ph?' placeholder="'+ph+'"':'')+'>';};
     body+='<div class="purf-lines" role="table" aria-label="Line items">'+
       '<div class="wt-row wt-head purf-lrow" role="row"><span class="purf-l-per" role="columnheader">Period</span><span class="lr-main" role="columnheader">Account</span><span class="purf-l-desc" role="columnheader">Description</span><span class="purf-l-proj" role="columnheader">Project</span><span class="wt-c2" role="columnheader">Amount</span></div>'+
       '<div class="wt-row purf-lrow" role="row"><span class="purf-l-per" role="cell">8 August</span><span class="lr-main" role="cell">'+purFEsc(da.acct)+'</span>'+
-        '<span class="purf-l-desc" role="cell"><input class="purf-fin" type="text" value="'+purFEsc(purFF(po,"lineDesc"))+'" data-purf-field="lineDesc" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'" aria-label="Line description" placeholder="Description"></span>'+
-        '<span class="purf-l-proj" role="cell"><input class="purf-fin" type="text" value="'+purFEsc(purFF(po,"lineProj"))+'" data-purf-field="lineProj" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'" aria-label="Project"></span>'+
+        '<span class="purf-l-desc" role="cell">'+lin("lineDesc",purFF(po,"lineDesc"),"Line description","Description")+'</span>'+
+        '<span class="purf-l-proj" role="cell">'+lin("lineProj",purFF(po,"lineProj"),"Project","")+'</span>'+
         '<span class="wt-c2" role="cell">'+purFMoney(po.amt)+'</span></div>'+
     '</div>';
     body+='<div class="purf-dist">Fund: '+purFEsc(da.fund)+' &middot; Department: '+purFEsc(da.dept)+' &middot; Account #: '+purFEsc(da.acct)+'</div>';
-    body+='<div class="purf-totrow"><span>1 item</span>'+
-      '<span>Tax <input class="purf-fin purf-fin-sm" type="text" value="'+purFEsc(purFF(po,"tax","$0.00"))+'" data-purf-field="tax" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'" aria-label="Tax"></span>'+
-      '<span>Freight <input class="purf-fin purf-fin-sm" type="text" value="'+purFEsc(purFF(po,"freight","$0.00"))+'" data-purf-field="freight" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'" aria-label="Freight"></span>'+
-      '<span>Other <input class="purf-fin purf-fin-sm" type="text" value="'+purFEsc(purFF(po,"other","$0.00"))+'" data-purf-field="other" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'" aria-label="Other"></span>'+
-      '<span class="purf-tot-tot">Total <strong>'+purFMoney(po.amt)+'</strong></span></div>';
+    var money=function(key,lbl){return '<span>'+lbl+' '+(linesRO?'<span class="purf-a-ro">'+purFEsc(purFF(po,key,"$0.00"))+'</span>':'<input class="purf-fin purf-fin-sm" type="text" value="'+purFEsc(purFF(po,key,"$0.00"))+'" data-purf-field="'+key+'" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'" aria-label="'+lbl+'">')+'</span>';};
+    body+='<div class="purf-totrow"><span>1 item</span>'+money("tax","Tax")+money("freight","Freight")+money("other","Other")+'<span class="purf-tot-tot">Total <strong>'+purFMoney(po.amt)+'</strong></span></div>';
+    if(linesRO&&editEnabled)body+='<div class="purf-mnote">Lines, Type, Approval Path, Vendor and Ship To are locked once an approval row has acted, as on the record screen.</div>';
     if(po.hold)body+='<div class="purf-holdbar">'+purFIcon("lock")+'On hold'+(purFHoldReason(po)?": "+purFEsc(purFHoldReason(po)):"")+'</div>';
-   }else if(tab==="approvals"){
-     var locked=po.paid||po.pay==="paid"||po.stage==="Closed"||po.stage==="Voided";
-     var box=function(kind,on,lbl,off,seq){
-       return '<button class="purf-box'+(on?" on":"")+'" role="checkbox" aria-checked="'+on+'" aria-label="'+purFEsc(lbl)+'"'+(off?' aria-disabled="true"':'')+
-         ' data-purf="appr-box" data-k="'+kind+'" data-v="'+(on?"off":"on")+'" data-seq="'+seq+'" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'">'+purFIcon(on?"check_box":"check_box_outline_blank")+'</button>';
-     };
-     var apGrid=function(title,pathName,acted,live){
-       var steps=purFSteps(pathName,po.amt),all=PURF_PATHS[pathName]?PURF_PATHS[pathName].steps:[];
-       var rows=all.map(function(st,i){
-         var applying=purFStepUsers(st,po.amt),skipped=!applying.length,rowsHere=acted.filter(function(a){return a.seq===st.seq;});
-         var ap=rowsHere.filter(function(a){return a.state==="approved";})[0],rj=rowsHere.filter(function(a){return a.state==="rejected";})[0],hd=rowsHere.filter(function(a){return a.state==="hold";})[0];
-         var maxOk=acted.filter(function(a){return a.state==="approved";}).reduce(function(m,a){return Math.max(m,a.seq);},0);
-         var implied=!ap&&maxOk>=st.seq;
-         var meHere=applying.indexOf(PURF_ME)>-1,canAct=live&&meHere&&!locked&&!skipped;
-         var who=(i===all.length-1?"Ends with ":(i===0?"Starts with ":"Then "))+st.users.map(function(u,k){var m=(st.mins&&st.mins[k]!=null)?st.mins[k]:(st.min||0);return purFWho(u)+(m>0?" (from "+purFMoney(m)+")":"");}).join(" or ");
-         var upd=(ap||rj||hd)?((ap||rj||hd).user+" "+purFFmtDate((ap||rj||hd).d)):(implied?"Implied by a higher level":(skipped?"Skipped: below every minimum on this level":""));
-         return '<div class="wt-row purf-aprow'+(skipped?" purf-ap-skip":"")+(canAct?" purf-ap-me":"")+'" role="row"><span class="lr-main" role="cell">'+purFEsc(who)+'</span>'+
-           '<span class="purf-a-b" role="cell">'+box("approve",!!ap||implied,"Approved",!canAct,st.seq)+'</span>'+
-           '<span class="purf-a-b" role="cell">'+box("reject",!!rj,"Rejected",!canAct,st.seq)+'</span>'+
-           '<span class="purf-a-r" role="cell">'+(canAct?'<input class="purf-fin" type="text" id="purfApprReason" value="'+purFEsc(rj?rj.reason:"")+'" aria-label="Approval reason" placeholder="Reason">':purFEsc(rj?rj.reason:""))+'</span>'+
-           '<span class="purf-a-b" role="cell">'+box("hold",!!(hd||(po.hold&&meHere)),"Hold",!canAct,st.seq)+'</span>'+
-           '<span class="purf-a-r" role="cell">'+(canAct?'<input class="purf-fin" type="text" id="purfHoldReason" value="'+purFEsc(hd?hd.reason:purFHoldReason(po))+'" aria-label="Hold reason" placeholder="Reason">':purFEsc(hd?hd.reason:""))+'</span>'+
-           '<span class="purf-a-u" role="cell">'+purFEsc(upd)+'</span></div>';
-       }).join("");
-       return '<div class="purf-flbl">'+purFEsc(title)+'</div><div class="purf-apgrid" role="table" aria-label="'+purFEsc(title)+'">'+
-         '<div class="wt-row wt-head purf-aprow" role="row"><span class="lr-main" role="columnheader">Approval Needed By</span><span class="purf-a-b" role="columnheader">Approved</span><span class="purf-a-b" role="columnheader">Rejected</span><span class="purf-a-r" role="columnheader">Reason</span><span class="purf-a-b" role="columnheader">Hold</span><span class="purf-a-r" role="columnheader">Reason</span><span class="purf-a-u" role="columnheader">Approval Updated By</span></div>'+rows+'</div>';
-     };
-     var live=purFLivePath(po),tnA=purFTurn(po);
-     body+='<div class="purf-turnline purf-turn-'+tnA.kind+'">'+purFIcon(tnA.kind==="next"?"how_to_reg":tnA.kind==="rejected"?"block":tnA.kind==="hold"?"lock":"account_tree")+purFEsc(tnA.label)+'</div>';
-     body+=apGrid("Approval Path: "+po.path,po.path,po.appr||[],!!live&&live.kind==="request");
-     if(po.stage!=="Pending")body+=apGrid("Payment Approval Path: "+(po.payPath||po.path),po.payPath||po.path,po.payAppr||[],!!live&&live.kind==="payment");
-     body+='<div class="purf-mnote">Any one approver satisfies a level, and approving at a higher level implies the lower ones, as on the record screen. Boxes are enabled on your own level only. Rejected and Hold are recorded on the approval row; the request stays Unapproved until the rejection is cleared. Approvals are kept for this session only: no dashboard write API exists yet.</div>';
+  }else if(tab==="approvals"){
+    var tnA=purFTurn(po);
+    body+='<div class="purf-turnline purf-turn-'+tnA.kind+'">'+purFIcon(tnA.kind==="next"?"how_to_reg":tnA.kind==="rejected"?"block":tnA.kind==="hold"?"lock":"account_tree")+purFEsc(tnA.label)+'</div>';
+    body+=purFRecordGrid(w,po,dr.rows,editEnabled&&po.stage!=="Approved"||editEnabled&&po.stage==="Approved"&&!po.payDone,"req","Approval Path: "+dr.path);
   }else if(tab==="attachments"){
     body+='<div class="purf-none">No attachments on this request.</div>'+
       '<div class="purf-mact"><button class="btn outlined sm" data-purf="attach-stub" data-id="'+w.id+'">'+purFIcon("attach_file")+'Add New Attachment</button></div>';
   }else if(tab==="note"){
-    body+='<textarea class="purf-note" rows="3" id="purfRecordNote" aria-label="Note" placeholder="Add a note to this request" data-purf-field="note" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'">'+purFEsc(purFF(po,"note"))+'</textarea>';
+    body+='<textarea class="purf-note" rows="3" id="purfRecordNote" aria-label="Note" placeholder="Add a note to this request" data-purf-field="note" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'"'+(editEnabled?'':' readonly')+'>'+purFEsc(purFF(po,"note"))+'</textarea>';
     body+='<div class="purf-flbl purf-actlbl">Activity</div>';
     if(po.log&&po.log.length){
-      body+=po.log.map(function(l){
-        return '<div class="purf-actrow"><span class="purf-actmain">Moved to <strong>'+purFEsc(l.to)+'</strong> by '+purFEsc(l.by)+', '+purFFmtDate(l.d)+'</span>'+(l.note?'<span class="purf-actnote">'+purFEsc(l.note)+'</span>':"")+'</div>';
-      }).join("");
-    }else{
-      body+='<div class="purf-none">No activity recorded on this request yet.</div>';
-    }
+      body+=po.log.map(function(l){return '<div class="purf-actrow"><span class="purf-actmain"><strong>'+purFEsc(l.to)+'</strong> by '+purFEsc(l.by)+', '+purFFmtDate(l.d)+'</span>'+(l.note?'<span class="purf-actnote">'+purFEsc(l.note)+'</span>':"")+'</div>';}).join("");
+    }else body+='<div class="purf-none">No activity recorded on this request yet.</div>';
   }else{
     body+='<div class="purf-mnote purf-disputed">'+purFIcon("info")+'<span>Payment approval inside the widget versus a redirect to the established payment screen is an open dispute (Feargal Phelan, action item C3). This is the built behaviour, carried unresolved.</span></div>';
-    if(po.stage==="Voided"){
-      body+='<div class="purf-none">Voided orders do not enter payment approval.</div>';
-    }else if(po.stage==="Approved"||po.stage==="Closed"){
-      var inv=purFInvoices(po);
-      if(po.stage!=="Closed")body+='<div class="purf-mact purf-mact-l"><button class="btn naked sm" data-purf="add-invoice" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'">'+purFIcon("add")+'Add Invoice Payment Approval</button></div>';
-      else body+='<div class="purf-none">Closed order: the payment history is read-only.</div>';
-      body+='<div class="purf-invtbl" role="table" aria-label="Invoice payment approvals">'+
-        '<div class="wt-row wt-head purf-irow" role="row"><span class="lr-main" role="columnheader">Invoice Number</span><span class="purf-i-n" role="columnheader">Tax</span><span class="purf-i-n" role="columnheader">Freight</span><span class="purf-i-n" role="columnheader">Other</span><span class="purf-i-c" role="columnheader">Check #</span><span class="purf-i-c" role="columnheader">Check Date</span><span class="purf-i-s" role="columnheader">Setup Information</span></div>';
-      if(!inv.length){
-        body+='<div class="wt-row purf-irow" role="row"><span class="lr-main purf-none" role="cell">No invoice payment approvals yet. Use Add Invoice Payment Approval above.</span></div>';
-      }else{
-        body+=inv.map(function(r,i){
-          return '<div class="wt-row purf-irow" role="row">'+
-            '<span class="lr-main" role="cell"><input class="purf-fin" type="text" value="'+purFEsc(r.no)+'" data-purf-inv="no" data-purf-i="'+i+'" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'" aria-label="Invoice number"></span>'+
-            '<span class="purf-i-n" role="cell"><input class="purf-fin purf-fin-sm" type="text" value="'+purFEsc(r.tax)+'" data-purf-inv="tax" data-purf-i="'+i+'" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'" aria-label="Tax"></span>'+
-            '<span class="purf-i-n" role="cell"><input class="purf-fin purf-fin-sm" type="text" value="'+purFEsc(r.freight)+'" data-purf-inv="freight" data-purf-i="'+i+'" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'" aria-label="Freight"></span>'+
-            '<span class="purf-i-n" role="cell"><input class="purf-fin purf-fin-sm" type="text" value="'+purFEsc(r.other)+'" data-purf-inv="other" data-purf-i="'+i+'" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'" aria-label="Other"></span>'+
-            '<span class="purf-i-c" role="cell">'+purFEsc(r.check||"")+'</span>'+
-            '<span class="purf-i-c" role="cell">'+purFEsc(r.checkDate||"")+'</span>'+
-            '<span class="purf-i-s" role="cell">'+purFEsc(r.setup)+'</span></div>'+
-            '<div class="wt-row purf-irow purf-idist" role="row"><span class="lr-main" role="cell"><span class="purf-dist">Account: '+purFEsc(da.acct)+
-              '<span class="purf-distf">Description <input class="purf-fin" type="text" value="'+purFEsc(r.desc)+'" data-purf-inv="desc" data-purf-i="'+i+'" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'" aria-label="Distribution description"></span>'+
-              '<span class="purf-distf">Project <input class="purf-fin purf-fin-sm" type="text" value="'+purFEsc(r.proj)+'" data-purf-inv="proj" data-purf-i="'+i+'" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'" aria-label="Project"></span>'+
-              '<span class="purf-distf">Amount <input class="purf-fin purf-fin-sm" type="text" value="'+purFEsc(r.amt)+'" data-purf-inv="amt" data-purf-i="'+i+'" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'" aria-label="Amount"></span>'+
-              '<span class="purf-distline">Fund: '+purFEsc(da.fund)+' &middot; Department: '+purFEsc(da.dept)+' &middot; Account #: '+purFEsc(da.acct)+'</span></span></span></div>';
-        }).join("");
-      }
-      body+='</div>';
-      var paid=(po.pay==="paid");
-      body+='<div class="purf-submitrow"><button class="purf-box'+(paid?" on":"")+'" role="checkbox" aria-checked="'+paid+'" aria-label="Submit for Approval"'+(paid?' aria-disabled="true"':'')+' data-purf="pay-submit" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'">'+purFIcon(paid?"check_box":"check_box_outline_blank")+'</button>'+
-        '<span class="purf-submitlbl">Submit for Approval</span>'+
-        (paid?'<span class="purf-paidnote">Paid: this card is green on the board.</span>':"")+'</div>';
-      body+='<div class="purf-mnote">Payment approval follows the '+purFEsc(purFF(po,"payPath",po.path))+' payment approval path. Submitting marks the request paid and turns its card green; in the live product the paid signal is the check being issued, so a developer should read green as check issued.</div>';
-    }else{
-      body+=(purFTurn(po).kind==="rejected")
-        ? '<div class="purf-none">Rejected requests do not enter payment approval.</div>'
-        : '<div class="purf-none">Payment approval starts after the purchase order is fully approved.</div>';
-    }
+    if(dr.payRows.length)body+=purFRecordGrid(w,po,dr.payRows,editEnabled&&!po.payDone,"pay","Payment Approval Path: "+dr.payPath);
+    var inv=purFInvoices(po);
+    if(po.stage!=="Closed")body+='<div class="purf-mact purf-mact-l"><button class="btn naked sm" data-purf="add-invoice" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'">'+purFIcon("add")+'Add Invoice Payment Approval</button></div>';
+    else body+='<div class="purf-none">Closed order: the payment history is read-only.</div>';
+    body+='<div class="purf-invtbl" role="table" aria-label="Invoice payment approvals">'+
+      '<div class="wt-row wt-head purf-irow" role="row"><span class="lr-main" role="columnheader">Invoice Number</span><span class="purf-i-n" role="columnheader">Tax</span><span class="purf-i-n" role="columnheader">Freight</span><span class="purf-i-n" role="columnheader">Other</span><span class="purf-i-c" role="columnheader">Check #</span><span class="purf-i-c" role="columnheader">Check Date</span><span class="purf-i-s" role="columnheader">Who Setup</span></div>';
+    if(!inv.length)body+='<div class="wt-row purf-irow" role="row"><span class="lr-main purf-none" role="cell">No invoice payment approvals yet. Use Add Invoice Payment Approval above.</span></div>';
+    else body+=inv.map(function(r,i){
+      return '<div class="wt-row purf-irow" role="row">'+
+        '<span class="lr-main" role="cell"><input class="purf-fin" type="text" value="'+purFEsc(r.no)+'" data-purf-inv="no" data-purf-i="'+i+'" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'" aria-label="Invoice number"></span>'+
+        '<span class="purf-i-n" role="cell"><input class="purf-fin purf-fin-sm" type="text" value="'+purFEsc(r.tax)+'" data-purf-inv="tax" data-purf-i="'+i+'" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'" aria-label="Tax"></span>'+
+        '<span class="purf-i-n" role="cell"><input class="purf-fin purf-fin-sm" type="text" value="'+purFEsc(r.freight)+'" data-purf-inv="freight" data-purf-i="'+i+'" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'" aria-label="Freight"></span>'+
+        '<span class="purf-i-n" role="cell"><input class="purf-fin purf-fin-sm" type="text" value="'+purFEsc(r.other)+'" data-purf-inv="other" data-purf-i="'+i+'" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'" aria-label="Other"></span>'+
+        '<span class="purf-i-c" role="cell">'+purFEsc(r.check||"")+'</span><span class="purf-i-c" role="cell">'+purFEsc(r.checkDate||"")+'</span><span class="purf-i-s" role="cell">'+purFEsc(r.setup)+'</span></div>';
+    }).join("");
+    body+='</div>';
+    var paid=(po.pay==="paid"||po.paid);
+    body+='<div class="purf-submitrow"><button class="purf-box'+(paid?" on":"")+'" role="checkbox" aria-checked="'+paid+'" aria-label="Submit for payment"'+(paid||!po.payDone?' aria-disabled="true"':'')+' data-purf="pay-submit" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'">'+purFIcon(paid?"check_box":"check_box_outline_blank")+'</button>'+
+      '<span class="purf-submitlbl">Submit for Approval</span>'+(paid?'<span class="purf-paidnote">Paid: the card is green on the board.</span>':(po.payDone?"":'<span class="purf-paidnote">Enabled once the payment approval path is satisfied.</span>'))+'</div>';
   }
-  var holdBtn=po.hold
-    ? '<button class="btn outlined sm" data-purf="hold-open" data-v="unhold" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'">'+purFIcon("lock_open")+'Remove hold</button>'
-    : (purFCanHold(po)?'<button class="btn outlined sm" data-purf="hold-open" data-v="hold" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'">'+purFIcon("lock")+'Put on hold</button>':"");
-  var foot='<div class="modal-f purf-m-ft"><span class="purf-m-note">Mirrors the full purchase order record in Purchasing Management, Requests, Update, the same screen as today. Every edit is kept for this session only: no dashboard write API exists yet.</span>'+
-    holdBtn+
+  /* Submit for Approval (order): shown while Unapproved with nothing approved, as submitForApproval() does */
+  var showSubmit=editEnabled&&dr.status==="Unapproved"&&!dr.rows.some(function(r){return r.approved&&!r.creator;});
+  var submitRow=showSubmit?'<div class="purf-submitrow purf-submit-order"><button class="purf-box'+(dr.submit?" on":"")+'" role="checkbox" aria-checked="'+dr.submit+'" aria-label="Submit for Approval" data-purf="submit-toggle" data-id="'+w.id+'">'+purFIcon(dr.submit?"check_box":"check_box_outline_blank")+'</button>'+
+    '<span class="purf-submitlbl">Submit for Approval</span><span class="purf-hoverinfo" title="Leaving this check box unchecked will put this request on hold from proceeding with the approval process." aria-label="Leaving this check box unchecked will put this request on hold from proceeding with the approval process.">'+purFIcon("info")+'</span></div>':"";
+  var foot='<div class="modal-f purf-m-ft purf-rec-ft"><span class="purf-m-note">Every edit is kept for this session only: no dashboard write API exists yet.</span>'+
     '<button class="btn naked sm" data-purf="close-modal">Cancel</button>'+
-    '<button class="btn primary sm" data-purf="update" data-id="'+w.id+'">Update</button></div>';
-  return '<div class="modal-backdrop" data-purf="close-modal"><div class="modal purf-modal" data-purf="stop" role="dialog" aria-modal="true" aria-label="'+purFEsc("Purchase order "+po.ref+", "+po.vendor)+'">'+
-    head+vhd+grid+tabRow+'<div class="modal-b purf-m-bd">'+body+'</div>'+foot+'</div></div>';
+    '<button class="btn primary sm" data-purf="record-save" data-id="'+w.id+'"'+(editEnabled||po.stage==="Closed"||po.stage==="Voided"?'':' disabled')+'>Save</button></div>';
+  return '<div class="modal-backdrop" data-purf="close-modal"><div class="modal purf-modal purf-record" data-purf="stop" role="dialog" aria-modal="true" aria-label="'+purFEsc("Purchase order "+po.ref+", "+po.vendor)+'">'+
+    head+'<div class="purf-m-scroll">'+rec+tabRow+'<div class="modal-b purf-m-bd">'+body+'</div>'+submitRow+'</div>'+foot+'</div></div>';
 }
 /* Move / Close / Void confirm popup: the Reason field from the real Approvals tab.
    Confirm applies the move and records the note; Cancel leaves everything alone. */
@@ -11336,7 +11467,7 @@ function purFRenderModal(){
 function purFOpenPO(w,ref){
   var po=purFPO(w,ref);if(!po)return;
   var lane=purFLane(po);var tab=(lane==="Ready to pay")?"payment":((lane==="Pending approval"||lane==="Payment approval")&&purFTurn(po).kind!=="waiting"?"approvals":"detail");
-  PURF_MODAL={id:w.id,ref:ref,tab:tab};
+  PURF_MODAL={id:w.id,ref:ref,tab:tab,draft:purFRecordDraft(po)};
   purFClosePop();purFRenderModal();
 }
 function purFCloseModal(){PURF_MODAL=null;purFRenderModal();}
@@ -11418,30 +11549,33 @@ function purFHandleClick(e){
   if(a==="view"){if(w)w.purfView=v;purFClosePop();render();return;}
   if(a==="more"){if(w)w.purfView="table";purFClosePop();render();return;}
   if(a==="open"){if(w&&ref)purFOpenPO(w,ref);return;}
-  if(a==="close-modal"){purFCloseModal();return;}
+  if(a==="close-modal"){if(PURF_MODAL&&PURF_MODAL.draft){var wc=find(PURF_MODAL.id),pc=wc?purFPO(wc,PURF_MODAL.ref):null;if(pc)purFRecordCancel(pc,PURF_MODAL.draft);}purFCloseModal();render();return;}
   if(a==="tab"){if(PURF_MODAL){PURF_MODAL.tab=v;purFRenderModal();}return;}
-  if(a==="update"){setStatus("Changes to this purchase order are kept for this session only: no dashboard write API exists yet.");purFCloseModal();render();return;}
   if(a==="attach-stub"){setStatus("Attachment upload is a placeholder here: no dashboard attachment endpoint exists.");return;}
-  if(a==="set-po-path"){
-    if(w&&ref){var pp=purFPO(w,ref);if(pp&&pp.stage==="Pending"&&!pp.hold){pp.path=v;setStatus(pp.ref+" moved to the "+v+" approval path.");}}
-    purFRenderModal();render();return;
-  }
   if(a==="add-invoice"){if(w&&ref){purFAddInvoice(purFPO(w,ref));purFRenderModal();}return;}
   if(a==="pay-submit"){if(w&&ref){purFPaySubmit(w,ref);purFRenderModal();render();}return;}
   /* The Approvals grid drives the card through the SAME guards as drag. */
    /* The Approvals grid drives the card through the SAME rules as drag: my level on the live path. */
-   if(a==="appr-box"){
-     if(!w||!ref)return;
-     var p2=purFPO(w,ref),k2=t.getAttribute("data-k"),on=(v==="on");
-     if(!p2)return;
-     if(t.getAttribute("aria-disabled")==="true"){setStatus("Not your level: "+purFTurn(p2).label+".");return;}
-     var reason=purFReadField("purfApprReason"),hreason=purFReadField("purfHoldReason"),done=false;
-     if(k2==="approve"){if(on){if(purFTurn(p2).kind==="rejected"){purFClearReject(p2);}done=purFApproveStep(w,p2,reason);}else{var lv=purFLivePath(p2)||{acted:[]};var before=lv.acted.length;for(var q=before-1;q>=0;q--)if(lv.acted[q].user===PURF_ME&&lv.acted[q].state==="approved")lv.acted.splice(q,1);done=lv.acted.length!==before;if(done){p2.log=p2.log||[];p2.log.push({d:"2026-08-19",by:purFWho(PURF_ME),to:"Approval unticked",note:""});}}}
-     else if(k2==="reject"){done=on?purFRejectStep(w,p2,reason):purFClearReject(p2);}
-     else if(k2==="hold")done=purFApplyHold(w,ref,on?"hold":"unhold",hreason);
-     if(done)setStatus(p2.ref+": "+purFTurn(p2).label+".");
-     purFRenderModal();render();return;
-   }
+  /* record screen: ticks and reasons edit the draft; Save applies them (the postback), Cancel discards */
+  if(a==="grid-tick"){
+    if(!PURF_MODAL||!PURF_MODAL.draft)return;
+    var dr=PURF_MODAL.draft,rows=(t.getAttribute("data-g")==="pay")?dr.payRows:dr.rows,gi=+t.getAttribute("data-i"),gk=t.getAttribute("data-k");
+    if(t.getAttribute("aria-disabled")==="true"){setStatus("Locked: boxes are enabled down to your own level, and a later level that has acted locks Approved and Rejected.");return;}
+    purFGridTick(rows,gi,gk,v==="on");
+    if(rows===dr.rows&&gi===0&&rows[0].user===PURF_ME&&gk==="approve")dr.submit=rows[0].approved;
+    purFRenderModal();return;
+  }
+  if(a==="submit-toggle"){
+    if(!PURF_MODAL||!PURF_MODAL.draft)return;
+    var ds=PURF_MODAL.draft;ds.submit=!ds.submit;
+    if(ds.rows[0]&&ds.rows[0].user===PURF_ME)ds.rows[0].approved=ds.submit; /* checkSubmitForApproval change: ticks the first row when it is mine */
+    purFRenderModal();return;
+  }
+  if(a==="record-save"){
+    if(PURF_MODAL&&PURF_MODAL.draft){var ws=find(PURF_MODAL.id),ps=ws?purFPO(ws,PURF_MODAL.ref):null;if(ps){var rs=purFRecordSave(ws,ps,PURF_MODAL.draft);setStatus(ps.ref+" saved"+(rs.summary.length?": "+rs.summary.join(", "):"")+". "+purFTurn(ps).label+".");}}
+    PURF_MODAL=null;purFRenderModal();render();return;
+  }
+  if(a==="pick-stub"){if(t.getAttribute("aria-disabled")==="true"){setStatus("Locked: Vendor and Ship To cannot change once the request is approved or an approval row has acted.");return;}setStatus("The person picker is not built in the dashboard yet; the record screen opens it here.");return;}
   if(a==="hold-open"){PURF_HOLD={id:id,ref:ref,mode:v,note:""};purFRenderModal();return;}
   if(a==="hold-cancel"){PURF_HOLD=null;purFRenderModal();return;}
   if(a==="hold-confirm"){
@@ -11468,6 +11602,8 @@ function purFHandleInput(e){
   if(el.id==="purfPathQ"){PURF_Q=el.value;purFRenderPop(null);return;}
   if(el.id==="purfMoveNote"){if(PURF_MOVE)PURF_MOVE.note=el.value;return;}
   if(el.id==="purfHoldNote"){if(PURF_HOLD)PURF_HOLD.note=el.value;return;}
+  var rk=el.getAttribute&&el.getAttribute("data-purf-reason");
+  if(rk&&PURF_MODAL&&PURF_MODAL.draft){var drr=PURF_MODAL.draft,rrows=(el.getAttribute("data-g")==="pay")?drr.payRows:drr.rows,ri=+el.getAttribute("data-i");if(rrows[ri]){if(rk==="reject")rrows[ri].rejReason=el.value;else rrows[ri].holdReason=el.value;}return;}
   var fk=el.getAttribute&&el.getAttribute("data-purf-field");
   var ik=el.getAttribute&&el.getAttribute("data-purf-inv");
   var ref=el.getAttribute&&el.getAttribute("data-purf-ref");
@@ -11479,6 +11615,16 @@ function purFHandleInput(e){
     if(p3&&p3.inv&&p3.inv[i])p3.inv[i][ik]=el.value;
     return;
   }
+}
+/* Record screen dropdowns: Type, Status, Approval Path, Payment Approval Path edit the draft; a path change rebuilds its grid. */
+function purFHandleChange(e){
+  var el=e.target;if(!el||!el.getAttribute)return;
+  var key=el.getAttribute("data-purf-sel");if(!key||!PURF_MODAL||!PURF_MODAL.draft)return;
+  var w=find(el.getAttribute("data-id")),po=w?purFPO(w,PURF_MODAL.ref):null;if(!po)return;
+  var dr=PURF_MODAL.draft;dr[key]=el.value;
+  if(key==="path")dr.rows=purFGridRows(po,dr.path,po.appr||[],true);
+  if(key==="payPath")dr.payRows=purFGridRows(po,dr.payPath,po.payAppr||[],false);
+  purFRenderModal();
 }
 function purFDragStart(e){
   var c=e.target.closest&&e.target.closest("[data-purf-card]");
@@ -11524,6 +11670,7 @@ var PURF_WIRED=false;
   if(PURF_WIRED)return;PURF_WIRED=true;
   document.addEventListener("click",purFHandleClick);
   document.addEventListener("input",purFHandleInput);
+  document.addEventListener("change",purFHandleChange);
   document.addEventListener("dragstart",purFDragStart);
   document.addEventListener("dragover",purFDragOver);
   document.addEventListener("dragleave",purFDragLeave);

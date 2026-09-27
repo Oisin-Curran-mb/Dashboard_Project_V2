@@ -40,7 +40,7 @@ A.ok(PATHS["QA Path"].steps[0].users.length === 2, "an Or level holds two interc
 A.eq(PATHS["Education Ministry"].steps.map(function (s) { return s.users.length + ":" + s.mins.join("/"); }).join(" "), "1:500 2:2000/2000 1:5000", "per-approver minimums on every level");
 A.eq(C("purFSteps", "Education Ministry", 430).length, 0, "$430: no approver's minimum is reached, no level applies");
 A.eq(C("purFSteps", "Education Ministry", 640).length, 1, "$640: Alfred's level only");
-A.eq(C("purFSteps", "Education Ministry", 3150).map(function (s) { return s.users.join("|"); }).join(" > "), "Alfred Johnson > Jim AndersonAndMoreLetters|Lanette Stewart", "$3,150: Alfred, then Jim or Lanette; Pastor Bob not reached");
+A.eq(C("purFSteps", "Education Ministry", 3150).map(function (s) { return s.users.join("|"); }).join(" > "), "Alfred Johnson > Lanette Stewart|Jim AndersonAndMoreLetters", "$3,150: Alfred, then Lanette or Jim (screenshot order); Pastor Bob not reached");
 A.eq(C("purFSteps", "Education Ministry", 5000).length, 3, "$5,000: all three levels");
 A.eq(C("purFStepUsers", { users: ["A", "B"], mins: [1000, 3000] }, 1500).join(","), "A", "an Or level with different minimums keeps only the approvers whose minimum the total reaches");
 A.eq(POS.filter(function (p) { return p.stage === "Rejected"; }).length, 0, "no order carries a Rejected stage");
@@ -121,16 +121,61 @@ A.eq(C("purFApplyHold", wide, "PO-2904", "hold", "Budget check"), true, "holding
 A.eq(C("purFApplyHold", wide, "PO-2904", "unhold", ""), true, "removing the hold"); A.eq(turn("PO-2904").kind, "next", "PO-2904 is my turn again");
 reset();
 
-/* ---------- 4. Approvals tab: one row per level ------------------------- */
-const openTab = function (ref) { C("purFOpenPO", xw, ref); const m = env.get("PURF_MODAL"); m.tab = "approvals"; return C("purFModalHTML"); };
-let mh = openTab("PO-2893"); A.ok(mh.length > 1500, "modal renders");
-A.contains(mh, "Approval Path: Administration", "request path grid"); A.contains(mh, "Starts with Nitzi Wright", "level 1 named"); A.contains(mh, "Ends with Oisin Curran (you)", "level 2 named as the viewer");
-A.eq((mh.match(/purf-ap-me/g) || []).length, 1, "exactly one row is the viewer's to act on"); A.contains(mh, "Nitzi Wright " , "updated-by carries the actor");
-A.absent(mh, "Payment Approval Path: ", "no payment grid while Pending (the form field of that name stays)");
-A.contains(mh, "purf-turnline purf-turn-next", "the tab states the turn");
-mh = openTab("PO-2872"); A.contains(mh, "Payment Approval Path: Administration", "payment grid once Approved"); A.contains(mh, "Approval Path: Everyone", "request grid stays for the record");
-mh = openTab("PO-2899"); A.contains(mh, "Skipped: below every minimum on this level", "a skipped level says so (Jim or Lanette at $640)"); A.contains(mh, "Alfred Johnson (from $500.00)", "each approver shows their own minimum"); A.contains(mh, "Jim AndersonAndMoreLetters (from $2,000.00) or Lanette Stewart (from $2,000.00)", "an Or level lists both approvers with minimums"); C("purFCloseModal");
-A.absent(mh, "Rejected requests do not enter", "rejected copy keyed on the row, not a stage");
+/* ---------- 4. Record screen: Requests/Update one to one (owner, 27 Sep) --- */
+const openTab = function (ref, tab) { C("purFOpenPO", xw, ref); const m = env.get("PURF_MODAL"); m.tab = tab || "approvals"; return C("purFModalHTML"); };
+const draft = function () { return env.get("PURF_MODAL").draft; };
+reset();
+/* header, tabs, footer, scroll */
+let mh = openTab("PO-2893", "detail"); A.ok(mh.length > 3000, "record renders");
+["Vendor", "Ship To", ">Email<", ">Type<", ">Status<", "Approval Path", "Requisition #", "Purchase Order #", "Purchase Order Date", "Issued To", ">Agent<", ">Shipping<", "Date Requested"].forEach(function (f) { A.contains(mh, f, "header field " + f); });
+A.contains(mh, "<strong>Terms:</strong>", "vendor terms line"); A.contains(mh, "purf-m-scroll", "scrolling body"); A.contains(mh, 'data-purf="record-save"', "Save button"); A.contains(mh, ">Cancel</button>", "Cancel button");
+A.ok(mh.indexOf(">Cancel</button>") < mh.indexOf('data-purf="record-save"'), "Cancel then Save, bottom right"); A.absent(mh, ">Update</button>", "no Update button");
+A.contains(mh, 'data-v="detail"', "tab Detail"); A.contains(mh, 'data-v="approvals"', "tab Approvals"); A.contains(mh, 'data-v="attachments"', "tab Attachments"); A.contains(mh, 'data-v="note"', "tab Note"); A.absent(mh, 'data-v="payment"', "no Payment Approval tab while Unapproved");
+A.contains(mh, 'data-purf-sel="status"', "Status is a dropdown"); A.contains(mh, 'data-purf-sel="path"', "Approval Path is a dropdown"); A.contains(mh, 'data-purf-sel="type"', "Type is a dropdown");
+A.absent(mh, 'data-purf="submit-toggle"', "PO-2893 has an approved row, so Submit for Approval is hidden (submitForApproval())");
+mh = openTab("PO-2888", "detail"); A.contains(mh, 'data-purf="submit-toggle"', "Submit for Approval shown while Unapproved with nothing approved"); A.contains(mh, "Leaving this check box unchecked will put this request on hold", "the page's hover text");
+/* grid: one row per approver, legacy wording */
+mh = openTab("PO-2893"); A.contains(mh, "Starts with Alberto Allen", "creator row at level 0 when the creator is not on the path"); A.contains(mh, "Then Nitzi Wright", "then the path in order"); A.contains(mh, "Ends with Oisin Curran (you)", "last row reads Ends with");
+A.contains(mh, "Approval Needed By:", "column 1"); A.contains(mh, ">Approved<", "column Approved"); A.contains(mh, ">Rejected<", "column Rejected"); A.contains(mh, ">Hold<", "column Hold"); A.contains(mh, "Approval Updated By:", "column Approval Updated By"); A.eq((mh.match(/>Reason</g) || []).length, 2, "two Reason columns");
+A.contains(mh, 'role="cell">Nitzi Wright Jul 3, 2026</span>', "Approval Updated By carries actor and date"); A.absent(mh, "(from $", "no per-approver minimum text (the page has none)"); A.absent(mh, "Skipped:", "no skipped wording (the page has none)");
+mh = openTab("PO-2899"); A.contains(mh, "Then Lanette Stewart", "Or level: first approver as Then"); A.contains(mh, '<span class="purf-a-or"></span>Or Jim AndersonAndMoreLetters', "second approver on the same level indented as Or"); A.contains(mh, "out of office until Sep 5, 2026", "out-of-office flag from user meta"); A.contains(mh, "Ends with Pastor Bob", "Ends with the last level");
+/* enablement (setApprovalRows) */
+let rows = draft().rows; let en = C("purFGridEnable", rows, true);
+A.eq(en.noRight, true, "PO-2899: I am not on Education Ministry, so Approved and Rejected are read-only"); A.ok(rows.every(function (r) { return !r.canApprove && !r.canReject; }), "no Approved/Rejected box enabled");
+mh = openTab("PO-2893"); rows = draft().rows; en = C("purFGridEnable", rows, true);
+A.eq(rows[0].creator, true, "row 0 is the creator"); A.eq(rows[0].approved, true, "creator row ticked = submitted"); A.eq(rows[1].approved, true, "Nitzi's level 1 is approved"); A.eq(rows[2].user, ME, "row 2 is mine"); A.eq(rows[2].canApprove, true, "my row is enabled");
+mh = openTab("PO-2888"); rows = draft().rows; en = C("purFGridEnable", rows, true);
+A.eq(rows.filter(function (r) { return !r.creator; }).every(function (r) { return r.canApprove; }), true, "PO-2888: nothing acted, every level down to mine is enabled");
+/* cascade (checkApproved click) */
+C("purFGridTick", rows, 2, "approve", true); A.ok(rows[1].approved && rows[2].approved, "ticking my level ticks the level below"); A.eq(rows[1].rejected || rows[1].hold, false, "and clears its Rejected and Hold");
+C("purFGridTick", rows, 1, "approve", false); A.ok(!rows[1].approved && !rows[2].approved, "unticking a level clears it and every level above");
+C("purFGridTick", rows, 1, "reject", true); en = C("purFGridEnable", rows, true); A.eq(rows[1].canApprove, false, "a rejected row disables its Approved"); A.eq(rows[1].canRejReason, true, "its Reason is editable while ticked"); A.eq(rows[1].canHold, false, "and its Hold");
+C("purFGridTick", rows, 1, "reject", false); C("purFGridTick", rows, 1, "hold", true); en = C("purFGridEnable", rows, true); A.eq(rows[1].canHoldReason, true, "hold reason editable while Hold is ticked"); A.eq(rows[1].canApprove, false, "hold disables Approved on the row");
+/* a later level acted locks Approved and Rejected everywhere */
+const fake = [{ seq: 1, user: "Nitzi Wright", min: 0, pre: "Starts with " }, { seq: 2, user: ME, min: 0, pre: "Then " }, { seq: 3, user: "Pastor Bob", min: 0, pre: "Ends with ", approved: true }];
+en = C("purFGridEnable", fake, true); A.eq(en.lockedAbove, true, "an acted row on a later level locks"); A.ok(fake.every(function (r) { return !r.canApprove && !r.canReject; }), "every Approved and Rejected box disabled");
+/* status options */
+let opts = C("purFStatusOptions", po("PO-2893"), "Unapproved", draft().rows); A.eq(opts.filter(function (o) { return o.enabled; }).map(function (o) { return o.value; }).join(","), "Unapproved,Closed", "Unapproved: current and Closed only");
+opts = C("purFStatusOptions", po("PO-2872"), "Approved", []); A.eq(opts.filter(function (o) { return o.enabled; }).map(function (o) { return o.value; }).join(","), "Approved,Closed", "Approved on Everyone (creator not on path): Voided stays disabled, as LoadApprovals does");
+opts = C("purFStatusOptions", po("PO-2610"), "Closed", []); A.ok(opts.filter(function (o) { return o.value === "Approved"; })[0].enabled, "Closed offers Approved (reopen)");
+/* Save applies the draft; Cancel discards */
+reset(); mh = openTab("PO-2888"); rows = draft().rows; C("purFGridTick", rows, 2, "approve", true);
+C("purFRecordSave", xw, po("PO-2888"), draft()); A.eq(po("PO-2888").stage, "Approved", "Save: my approval with the cascade completes the path"); A.ok(po("PO-2888").appr.some(function (a) { return a.user === "Nitzi Wright" && a.by === ME; }), "the cascaded row is stored with me as the actor"); A.contains(po("PO-2888").log[po("PO-2888").log.length - 1].note, "Record saved", "activity logged");
+reset(); mh = openTab("PO-2888"); const d2 = draft(); d2.submit = false; C("purFRecordSave", xw, po("PO-2888"), d2); A.eq(po("PO-2888").submitted, false, "Save unticked: not submitted"); A.eq(turn("PO-2888").kind, "hold", "not submitted shows as a hold on the approval process (the page's hover text)"); A.eq(C("purFCanDrag", po("PO-2888")), false, "and cannot be dragged");
+mh = openTab("PO-2888"); A.contains(mh, "Not submitted for approval", "turn line says so"); A.eq(draft().submit, false, "checkbox reflects it"); const d3 = draft(); d3.submit = true; C("purFRecordSave", xw, po("PO-2888"), d3); A.eq(po("PO-2888").submitted, true, "re-submitted"); A.eq(turn("PO-2888").kind, "mine", "back on the path");
+reset(); mh = openTab("PO-2893", "detail"); C("purFFieldSet", po("PO-2893"), "email", "x@y.z"); C("purFRecordCancel", po("PO-2893"), draft()); A.eq(C("purFF", po("PO-2893"), "email"), "", "Cancel restores header fields");
+/* status dropdown on save */
+reset(); mh = openTab("PO-2903"); const d4 = draft(); d4.status = "Closed"; C("purFRecordSave", xw, po("PO-2903"), d4); A.eq(po("PO-2903").stage, "Closed", "Closed is always offered on the record, as on the page");
+reset(); mh = openTab("PO-2903"); const d5 = draft(); d5.status = "Voided"; C("purFRecordSave", xw, po("PO-2903"), d5); A.eq(po("PO-2903").stage, "Pending", "Voided is refused from Unapproved (not offered)");
+/* header lock once a row acted */
+reset(); mh = openTab("PO-2893", "detail"); A.contains(mh, 'aria-label="Approval Path" disabled', "Approval Path locked once a row has acted"); A.contains(mh, 'aria-label="Type" disabled', "Type locked too"); A.contains(mh, "Lines, Type, Approval Path, Vendor and Ship To are locked", "lines locked note");
+mh = openTab("PO-2888", "detail"); A.contains(mh, 'aria-label="Approval Path" disabled', "submitted: the creator row counts as acted, so the path is locked (setApprovalRows)"); po("PO-2888").submitted = false; mh = openTab("PO-2888", "detail"); A.absent(mh, 'aria-label="Approval Path" disabled', "not submitted: nothing acted, path editable"); po("PO-2888").submitted = true;
+/* read-only records */
+mh = openTab("PO-2610"); A.contains(mh, "Read-only: this order is approved and paid", "paid order grid is read-only"); A.contains(mh, 'data-v="payment"', "Payment Approval tab once Approved/Closed");
+mh = openTab("PO-2872", "payment"); A.contains(mh, "Payment Approval Path: Administration", "payment grid lives on the Payment Approval tab"); A.contains(mh, "Add Invoice Payment Approval", "invoice grid follows");
+/* the board drop writes the same rows Save writes */
+reset(); C("purFApplyMove", wide, "PO-2888", "Payment approval", ""); A.eq(po("PO-2888").stage, "Approved", "drop: approved"); A.ok(po("PO-2888").appr.some(function (a) { return a.user === "Nitzi Wright" && a.by === ME; }) && po("PO-2888").appr.some(function (a) { return a.user === ME; }), "drop stores the cascaded rows like Save");
+C("purFCloseModal"); reset();
 
 /* ---------- 4b. legend (owner, 27 Sep): info icon top right, Explore and Detail only ---- */
 xw.purfView = "kanban"; const hdWide = C("purFHeaderBlock", wide), hdX = C("purFHeaderBlock", xw), glance = C("purFContent", kpi);

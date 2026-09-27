@@ -91,6 +91,27 @@ Encumbrance (`GL/GLAccountRepository.cs:2220`): open detail dollars while Status
 
 **Scope chip** (`purFNeedsMe`): "Awaiting my approval next" = `kind === "next"`; "Awaiting my approval" = `next || mine`; "All requests" = everything. The headline count uses the current scope.
 
+## 5b. The record pop-up = the Requests/Update page
+
+Source: `Shelby.Web.Financials/PurchasingManagement/Requests/Update.aspx(.cs)` and `Content/scripts/Controls/POApprovalsGrid.js`. Demo: `purFGridRows`, `purFGridEnable`, `purFGridTick`, `purFStatusOptions`, `purFRecordSave` in the W13 block.
+
+**Grid rows** (`LoadApprovals`, Update.aspx.cs:507-640): one row per approver in path order. A creator who is not on the path gets a "Starts with <creator>" row at Sequence 0. A second approver on the same Sequence reads "Or" (indented). The last non-Or row reads "Ends with". Inactive and out-of-office approvers are flagged in red. Existing acted rows are matched by user.
+
+**Cascade** (`POApprovalsGrid.js:16-37`): ticking Approved on a row ticks every row with Sequence at or below it and clears their Rejected, Hold and both Reasons. Unticking clears Approved and Rejected on every row with Sequence at or above it.
+
+**Enablement** (`setApprovalRows`, `POApprovalsGrid.js:50-90`), walking the rows in order:
+- a row is in reach while the viewer's row has not been passed, or it shares the viewer's Sequence (Or siblings);
+- Approved enabled = in reach and not Rejected and not Hold; Rejected = in reach and not Approved and not Hold; Hold = in reach and not Approved and not Rejected;
+- a Reason is editable only while its own box is ticked and in reach;
+- an acted row on a Sequence after the viewer's disables every Approved and Rejected box; a viewer who is not on the path (and lacks the ApprovalOverride right) gets every Approved and Rejected disabled;
+- any acted row disables Type, Approval Path, the Vendor and Ship To pickers, the Detail selects and the add-line controls.
+
+**Status list** (`setApprovalRows` tail, `LoadApprovals`): the current value and Closed are always enabled. Voided only from Approved, and only when the creator is on the path. Approved from Closed, or from Voided when every box is ticked. Unapproved is never re-selectable.
+
+**Submit for Approval** (Update.aspx:82-125, .cs:391-393, 704-705): shown while Unapproved with nothing approved. Ticking it ticks the first grid row when that row is the viewer's. Saved unticked, the order stores Status -1 (not submitted); the hover text calls that a hold on the approval process. The demo shows it as a hold-style badge.
+
+**Save** (`buttonUpdate_Click`): one postback applies status, header, grid rows and the submit flag; `ApproveOrder` then flips 0 to 1 when no row is unapproved, or 1 back to 0 when one is. The demo's `purFRecordSave` does the same, and the Kanban drop (`purFApproveStep`) uses the same cascade and stores the same rows.
+
 ## 6. "Awaiting my approval next" vs "Awaiting my approval"
 
 Legacy (`FilterOrders`, POR:1058-1093). Both start from Status < 1 with no rejected row.
