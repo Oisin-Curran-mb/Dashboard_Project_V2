@@ -2198,30 +2198,6 @@
   .purf-root .purf-kc-amt{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--txt-primary);}
   .purf-root .purf-kempty{font-size:11.5px;color:var(--txt-subtle);padding:6px 2px;}
 /* ===== end W13 Purchasing Management V2 CSS ===== */
-  /* ===== W16 Accounts Payable By Due Date V2 CSS , prefix apF , kind "payables-mb" ===== */
-  .apf-root{color:var(--txt-primary);}
-  .apf-root.apf-w{display:flex;flex-direction:column;min-height:0;height:100%;overflow:hidden;}
-  .apf-root .apf-body{flex:1;min-height:0;display:flex;flex-direction:column;min-width:0;}
-  /* toolbar row: due-date chip then horizon chip, wrapping on a narrow card so a
-     long chip label never pushes the empty toggle slot off the row. */
-  .apf-root .apf-ctlrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0;}
-  /* the horizon chip, our one addition to her design. Her filter-chip secondary
-     fill and glyphs do the styling; this only caps the width and ellipses a long
-     label, mirroring what she does to her own due-date chip. */
-  .apf-root .apf-hz-chip{max-width:220px;}
-  .apf-root .apf-hz-chip .fc-label{display:inline-flex;align-items:center;gap:6px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  /* the quiet context line under the KPI: small, regular weight, muted, never an
-     eyebrow. Carries the outstanding count and, under a horizon, the scope note. */
-  .apf-root .apf-ctx{font-size:11px;color:var(--txt-subtle);margin-top:3px;line-height:1.45;}
-  /* Her selector-row hover keys on her own attribute; ours key on data-apf, so
-     the hover has to be restated for our attribute. Same token, same one step. */
-  .apf-root .ap-sum-row[data-apf]:hover{background:var(--wn-100);}
-  /* body-mounted popovers (the due-date filter and the horizon picker), same
-     chrome as the other ported widgets' pickers. Everything inside them, the
-     menu items, captions and scrolling list, is hers. */
-  .apf-root.apf-pop{position:fixed;z-index:3000;background:var(--surface-widget);border:1px solid var(--stroke-widget);border-radius:10px;box-shadow:0 14px 36px rgba(41,39,36,.24),0 3px 10px rgba(41,39,36,.14);padding:6px;min-width:264px;max-width:min(400px,calc(100vw - 16px));}
-  .apf-root.apf-pop .menu-scroll{max-height:320px;overflow-y:auto;scrollbar-width:thin;}
-  /* ===== end W16 Accounts Payable By Due Date V2 CSS ===== */
   /* ===== W17 Gifts Pledges V2 CSS , prefix gpF , kind "gifts-mb" ===== */
   .gpf-root{color:var(--txt-primary);display:flex;flex-direction:column;min-height:0;min-width:0;}
   .gpf-root .gpf-body{flex:1;min-height:0;display:flex;flex-direction:column;min-width:0;}
@@ -3523,7 +3499,7 @@
   function viewOnlySelectHTML(){var h=location.hash||"",cur_=(/[#&](w=W\d\d|k=[a-z0-9,-]+)/i.exec(h)||["",""])[1];
     var opts=[["","Review: all widgets"]];
     if(typeof CMP_ROWS!=="undefined")CMP_ROWS.forEach(function(r){opts.push(["w="+r[0],r[0]+" "+r[1]+" (Jo vs OC, 3 sizes)"]);});
-    var VIEW_WNUM={budget:"W01",pension:"W02",payroll:"W03",remittance:"W04",receivables:"W05",insurance:"W06",deposits:"W07",mystatus:"W08",pto:"W09",loans:"W10",fixedassets:"W11",purchasing:"W13",bank:"W15",tasks:"W14"}; /* finished widgets: kind -> W number, so they sort with the rest */
+    var VIEW_WNUM={budget:"W01",pension:"W02",payroll:"W03",remittance:"W04",receivables:"W05",insurance:"W06",deposits:"W07",mystatus:"W08",pto:"W09",loans:"W10",fixedassets:"W11",purchasing:"W13",bank:"W15",payables:"W16",tasks:"W14"}; /* finished widgets: kind -> W number, so they sort with the rest */
     Object.keys(WIDGETS.kinds).forEach(function(k){var row=dashboards[0].widgets.filter(function(x){return x.kind===k;})[0];if(!row)return;var wn=VIEW_WNUM[k]||"W??";opts.push(["k="+k,wn+" "+(row.title||k).replace(/\s*\([^)]*\)\s*$/,"")+" (final, 3 sizes)"]);});
     opts=[opts[0]].concat(opts.slice(1).sort(function(x,y){return x[1].localeCompare(y[1]);}));
     return '<select id="viewOnlySel" class="btn outlined sm" aria-label="Review aid: show one widget" style="margin-right:8px;max-width:320px">'+opts.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===cur_?" selected":"")+'>'+o[1]+'</option>';}).join("")+'</select>';}
@@ -9923,12 +9899,10 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
      the pre-edit snapshot.
   ===================================================================== */
   var CMPNOTE_={
-    W16:{h:"Ours is a one-to-one copy of her v2 Payables design plus exactly one owner-approved addition.",rows:["A second chip is added: a due-date horizon of all outstanding, or the next 7, 30, 60 or 90 days.","Overdue invoices are ALWAYS included whatever the horizon, so a narrowed horizon can never shrink the overdue band.","A due filter that a new horizon just emptied SNAPS back to All due dates rather than rendering an empty table.","A filter goes widget-wide: every aggregate reads one horizon-scoped function, so nothing on the card can disagree.","Five table columns become four, folding her Status pill into a two-line Due date cell.","Row click and the invoice detail modal are not built at all; drill-through stays an open question.","Her loading line, computed but never rendered in her own block, is now actually shown under the KPI."],open:"The aging basis, due date versus invoice date, was never confirmed against the API, and it moves every band, subtotal and the horizon itself."},
     W17:{h:"Ours pivots her Gifts widget to GOAL progress; W04 keeps the exception job.",rows:["The subject changes from percent fulfilled against the pledge total to progress against a distinct campaign Goal.","Two pace states become three goal bands: under 75 percent, 75 percent or more, and goal met.","Pledge Due uses per-pledge installment proration, explicitly NOT the linear day fraction Remittance uses.","The as-of anchor follows the SELECTED range end; the legacy routine anchors on today, a defect not reproduced.","A single received-through date becomes a range with an inline custom reveal and no Refresh button.","The drill goes INLINE under the row, paged 20 at a time, and each pledge expands again to its gift transactions.","The sort control is removed entirely, and export is the only action on the card."],open:"The received basis conflict blocks every summed figure: ours counts pledge-linked gifts only while the API counts all posted gifts for the purpose."}
   };
   /* number, display name, HER kind + her state, OUR kind + our state */
   var CMP_ROWS=[
-    ["W16","Accounts Payable By Due Date","payables",{apview:"table",apDue:"total",apsort:"due-asc",updated:"just now"},"payables-mb",{apFDue:"total",apFSort:"due-asc",apFHz:"all",updated:"just now"}],
     ["W17","Gifts Pledges","gifts",{gftView:"progress",gftSort:"fulfilled-asc",gftPurpose:"All purposes"},"gifts-mb",{gpFView:"goal",gpFCamp:"All Campaigns",gpFRange:"year",gpFExp:{},gpFPage:{},gpFPlExp:{},updated:"just now"}],
   ];
   var CMP_TIERS=["kpi","wide","xwide"],CMP_TIERLBL={kpi:"Glance",wide:"Explore",xwide:"Detail"};
@@ -10023,11 +9997,8 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
       {id:"mys",title:"My Status",kind:"mystatus",size:"wide",tiers:["wide","xwide"],selected:MYS_DEFAULT.slice(),mode:"urgency",hideZero:false,goto:false},
       {id:"mys_x",title:"My Status (Detail)",kind:"mystatus",size:"xwide",tiers:["wide","xwide"],selected:MYS_DEFAULT.slice(),mode:"urgency",hideZero:false,goto:false},
       {id:"ap",title:"Accounts Payable By Due Date",kind:"payables",size:"wide",tiers:["kpi","wide","xwide"],apview:"table",apDue:"total",apsort:"due-asc",updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-      {id:"ap_k",title:"Accounts Payable By Due Date (Glance)",kind:"payables",size:"kpi",tiers:["kpi","wide","xwide"],apview:"table",apDue:"total",apsort:"due-asc",updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-      {id:"ap_x",title:"Accounts Payable By Due Date (Detail)",kind:"payables",size:"xwide",tiers:["kpi","wide","xwide"],apview:"table",apDue:"total",apsort:"due-asc",updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
-      {id:"ap2",title:"Accounts Payable By Due Date (Total view)",kind:"payables",size:"wide",tiers:["kpi","wide","xwide"],apDue:"total",apview:"table",apsort:"due-asc",updated:"just now"},
-      {id:"ap3",title:"Accounts Payable By Due Date (single due date)",kind:"payables",size:"wide",tiers:["kpi","wide","xwide"],dataset:"single",apview:"timeline",apsort:"amt-desc",updated:"just now"},
-      {id:"ap4",title:"Accounts Payable By Due Date (nothing outstanding)",kind:"payables",size:"wide",tiers:["kpi","wide","xwide"],state:"empty",updated:"just now"},
+      {id:"ap_k",title:"Accounts Payable By Due Date",kind:"payables",size:"kpi",tiers:["kpi","wide","xwide"],apview:"table",apDue:"total",apsort:"due-asc",updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
+      {id:"ap_x",title:"Accounts Payable By Due Date",kind:"payables",size:"xwide",tiers:["kpi","wide","xwide"],apview:"table",apDue:"total",apsort:"due-asc",updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
       {id:"gft",  title:"Gifts Pledges", kind:"gifts", size:"wide",  tiers:["kpi","wide","xwide"], gftThru:GFT_TODAY, gftView:"progress", gftSort:"fulfilled-asc", gftPurpose:"All purposes", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
       {id:"gft_k",  title:"Gifts Pledges (Glance)", kind:"gifts", size:"kpi",  tiers:["kpi","wide","xwide"], gftThru:GFT_TODAY, gftView:"progress", gftSort:"fulfilled-asc", gftPurpose:"All purposes", actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
       {id:"gft2", title:"Gifts Pledges (report view)", kind:"gifts", size:"xwide", tiers:["kpi","wide","xwide"], gftThru:GFT_TODAY, gftView:"progress", gftSort:"fulfilled-asc", gftPurpose:"All purposes"},
@@ -10079,13 +10050,6 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
       ,{id:"purF",  title:"Purchasing Management",           kind:"purchasing",size:"wide", tiers:["kpi","wide","xwide"],purfView:"table",purfStatus:"All statuses",purfPath:null,purfOv:false,updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]}
       ,{id:"purF_k",title:"Purchasing Management",           kind:"purchasing",size:"kpi",  tiers:["kpi","wide","xwide"],purfView:"table",purfStatus:"All statuses",purfPath:null,purfOv:false,updated:"just now"}
       ,{id:"purF_x",title:"Purchasing Management",           kind:"purchasing",size:"xwide",tiers:["kpi","wide","xwide"],purfView:"table",purfStatus:"All statuses",purfPath:null,purfOv:false,updated:"just now"}
-      /* ===== W16 Accounts Payable By Due Date V2 registry, prefix apF, kind "payables-mb". ===== */
-      ,{id:"apF",   title:"Accounts Payable By Due Date (OC)",                       kind:"payables-mb",size:"wide", tiers:["kpi","wide","xwide"],apFDue:"total",  apFSort:"due-asc",apFHz:"all",updated:"just now"}
-      ,{id:"apF_k", title:"Accounts Payable By Due Date (OC, Glance)",               kind:"payables-mb",size:"kpi",  tiers:["kpi","wide","xwide"],apFDue:"total",  apFSort:"due-asc",apFHz:"all",updated:"just now"}
-      ,{id:"apF_x", title:"Accounts Payable By Due Date (OC, Detail)",               kind:"payables-mb",size:"xwide",tiers:["kpi","wide","xwide"],apFDue:"total",  apFSort:"due-asc",apFHz:"all",updated:"just now"}
-      ,{id:"apF2",  title:"Accounts Payable By Due Date (OC, Overdue only)",         kind:"payables-mb",size:"wide", tiers:["kpi","wide","xwide"],apFDue:"overdue",apFSort:"due-asc",apFHz:"all",updated:"just now"}
-      ,{id:"apF3",  title:"Accounts Payable By Due Date (OC, Due within 30 days)",   kind:"payables-mb",size:"xwide",tiers:["kpi","wide","xwide"],apFDue:"total",  apFSort:"due-asc",apFHz:"h30",updated:"just now"}
-      ,{id:"apF4",  title:"Accounts Payable By Due Date (OC, nothing outstanding)",  kind:"payables-mb",size:"wide", tiers:["kpi","wide","xwide"],dataset:"none",apFDue:"total",apFSort:"due-asc",apFHz:"all",updated:"just now"}
       /* ===== W17 Gifts Pledges V2 registry, prefix gpF, kind "gifts-mb". Seven registry ===== */
       ,{id:"gpF",   title:"Gifts Pledges (OC)",                          kind:"gifts-mb",size:"wide", tiers:["kpi","wide","xwide"],gpFView:"goal", gpFCamp:"All Campaigns",gpFRange:"year",gpFExp:{},gpFPage:{},gpFPlExp:{},updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]}
       ,{id:"gpF_k", title:"Gifts Pledges (OC, Glance)",                  kind:"gifts-mb",size:"kpi",  tiers:["kpi","wide","xwide"],gpFView:"goal", gpFCamp:"All Campaigns",gpFRange:"year",gpFExp:{},gpFPage:{},gpFPlExp:{},updated:"just now"}
@@ -10114,7 +10078,7 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
     fund:{h:"Spend by fund",b:"How spending breaks down across your restricted and unrestricted funds."},
     signups:{h:"New sign-ups",b:"People who recently joined a group or ministry. The number is the total for the period you choose; the list shows the most recent sign-ups regardless of period."}
   };
-  function aboutOf(w){var wa=WIDGETS.about(w);if(wa)return wa;if(w.kind==="gifts")return {h:w.title,b:GFT_ABOUT_BODY};if(w.kind==="payables-mb")return {h:w.title,b:APF_ABOUT};if(w.kind==="gifts-mb")return {h:w.title,b:GPF_ABOUT};return ABOUT[w.id]||{h:w.title,b:"A short, plain-language description of what this widget shows and where its data comes from."};}
+  function aboutOf(w){var wa=WIDGETS.about(w);if(wa)return wa;if(w.kind==="gifts")return {h:w.title,b:GFT_ABOUT_BODY};if(w.kind==="gifts-mb")return {h:w.title,b:GPF_ABOUT};return ABOUT[w.id]||{h:w.title,b:"A short, plain-language description of what this widget shows and where its data comes from."};}
   var EMPTY_COPY={deposits:{title:"No deposit accounts",sub:"There are no deposit accounts to show here yet.",cta:"Add account",action:"add-acct"},payroll:{title:"No payroll runs in this range",sub:"There's no payroll history for the selected period yet."},budget:{title:"No budget set up",sub:"Once a budget is entered for this fiscal year, actuals will be compared against it here.",cta:"Set up budget",action:"add-budget"}};
   var ERROR_COPY={deposits:{title:"Couldn’t load balances",sub:"Something went wrong fetching account data."},payroll:{title:"Couldn’t load payroll data",sub:"Something went wrong fetching payroll history."},budget:{title:"Couldn’t load budget data",sub:"Something went wrong fetching budget and actual figures."}};
 /* --- Bank Balances additive copy --- */
@@ -10594,7 +10558,7 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
 
    FIVE INTEGRATION PIECES (see the wiring notes returned with this file):
      1. RENDER BLOCK ................ everything below (single apContent(w))
-     2. contentHTML() dispatch ...... if(w.kind==="payables")return apContent(w);   (UNCHANGED)
+     2. contentHTML() dispatch ...... registered through WIDGETS.register under kind payables, content apContent   (2026-09-27; the shell consults the registry first, so no kind branch remains)
      3. click-handler dispatch ...... if(a&&a.indexOf("ap-")===0&&apHandleClick(a,id,t))return;
      4. popContent() dispatch ....... if(pop.type==="ap-due")return apPopContent();
      5. triggerSelector() branch .... if(pop.type==="ap-due")return '[data-action="ap-due"][data-id="'+pop.id+'"]';   (UNCHANGED, already present)
@@ -10847,9 +10811,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(w.state==="loading")return '<div class="skeleton" aria-busy="true"><div class="sk" style="width:55%"></div><div class="sk" style="flex:1"></div></div>';
     if(w.state==="error"){var xc=ERROR_COPY[w.kind]||ERROR_COPY.deposits;return '<div class="state" data-kind="error">'+ICON("error")+'<div class="state-title">'+xc.title+'</div><div class="state-sub">'+xc.sub+'</div><button class="btn sm outlined" data-action="retry" data-id="'+w.id+'">Retry</button></div>';}
     var wreg=WIDGETS.content(w);if(wreg!==null)return wreg;
-    if(w.kind==="payables")return apContent(w);
     if(w.kind==="gifts")return gftContent(w);
-    if(w.kind==="payables-mb")return apFContent(w); // Accounts Payable By Due Date (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its nothing-outstanding variant renders apFEmptyState and not the Deposits copy
     if(w.kind==="gifts-mb")return gpFContentRoot(w); // Gifts Pledges (MB updated); dispatched with the other MB variants, BEFORE the generic empty fallback, so its no-campaigns variant renders gpFEmpty and not the Deposits copy
     if(w.state==="empty"){var ec=EMPTY_COPY[w.kind]||EMPTY_COPY.deposits;return '<div class="state" data-kind="empty">'+ICON("inbox")+'<div class="state-title">'+ec.title+'</div><div class="state-sub">'+ec.sub+'</div>'+(ec.showZero?'<div class="dep-total" style="margin-top:4px"><span>Total</span><span>'+money(0)+'</span></div>':'')+(ec.cta?'<button class="btn outlined" data-action="'+ec.action+'" data-id="'+w.id+'">'+ICON("add")+ec.cta+'</button>':'')+'</div>';}
     if(w.kind==="metric")return metricHTML(w);
@@ -11126,326 +11088,9 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
   document.addEventListener("mousemove",function(e){var col=e.target.closest&&e.target.closest(".bank-col[data-bankpop]");if(!col){if(bankPopEl)bankHideBpop();return;}bankShowBpop(col,e.clientX,e.clientY);});
 
 
-/* ===== W16 Accounts Payable By Due Date V2 JS , prefix apF , kind "payables-mb" ===== */
-/* (1) DATA. Her invoice set, today-anchor and band list, values verbatim, under
-   APF_ names. The anchor stays her 23 Jul 2026 so the band populations reproduce
-   exactly against her own card sitting above. Only posted invoices with a due
-   date and an outstanding balance are in the set, per the Data Contract. */
-var APF_TODAY="2026-07-23";
-var APF_INVOICES=[
-  {vendor:"Staples",                 inv:"INV-0003", due:"2026-07-10", amount:5555.00},
-  {vendor:"Grainger Supply",         inv:"INV-2201", due:"2026-07-18", amount:1240.50},
-  {vendor:"City Water & Power",      inv:"INV-2202", due:"2026-07-18", amount:875.00},
-  {vendor:"Faithful Cleaning Co.",   inv:"INV-3310", due:"2026-07-25", amount:2100.00},
-  {vendor:"Lakeside Print & Mail",   inv:"INV-3311", due:"2026-07-25", amount:640.75},
-  {vendor:"Grainger Supply",         inv:"INV-3312", due:"2026-07-25", amount:980.00},
-  {vendor:"Guardian Insurance",      inv:"INV-4400", due:"2026-08-01", amount:8400.00},
-  {vendor:"Summit HVAC Services",    inv:"INV-4401", due:"2026-08-01", amount:3250.00},
-  {vendor:"Cornerstone Landscaping", inv:"INV-5500", due:"2026-08-15", amount:1450.00},
-  {vendor:"Harmony Music Licensing", inv:"INV-6600", due:"2026-09-01", amount:720.00},
-  {vendor:"Guardian Insurance",      inv:"INV-6601", due:"2026-09-01", amount:8400.00},
-  {vendor:"Faithful Cleaning Co.",   inv:"INV-7700", due:"2026-09-30", amount:2100.00}
-];
-var APF_BANDS=[
-  {id:"overdue",label:"Overdue",        glyph:"warning"},
-  {id:"week",   label:"Due this week",  glyph:"event"},
-  {id:"month",  label:"Due this month", glyph:"calendar_month"},
-  {id:"later",  label:"Due later",      glyph:"schedule"}
-];
-/* the owner addition. days=null means no horizon at all. */
-var APF_HORIZONS=[
-  {id:"all", days:null, chip:"All outstanding",    pick:"All outstanding"},
-  {id:"h7",  days:7,    chip:"Due within 7 days",  pick:"Next 7 days"},
-  {id:"h30", days:30,   chip:"Due within 30 days", pick:"Next 30 days"},
-  {id:"h60", days:60,   chip:"Due within 60 days", pick:"Next 60 days"},
-  {id:"h90", days:90,   chip:"Due within 90 days", pick:"Next 90 days"}
-];
-var APF_ABOUT="Every supplier invoice that is posted, has a due date, and still has money owing on it, grouped by how close that due date is, so you can see how much cash is needed and when. Fully paid invoices, invoices with no due date, and unposted invoices never appear here.";
-var APF_POP=null,APF_DUE_QUERY="";
-/* the ONLY fetch: a due-filter or a horizon change, 800ms, matching her own
-   loading behaviour. Sort changes never come through here. */
-function apFLoad(w){w.apFLoading=true;clearTimeout(timers["apF-"+w.id]);timers["apF-"+w.id]=setTimeout(function(){w.apFLoading=false;w.updated="just now";render();},800);}
-/* (2) HELPERS. Every name carries the doubled F: apFFmtLong is ours, her own
-   long-date helper is hers, and the two never meet. */
-function apFEsc(s){return String(s).replace(/"/g,"&quot;");}
-function apFMoney(n){return "$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
-var APF_M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-function apFParse(iso){var p=String(iso).split("-");return new Date(+p[0],+p[1]-1,+p[2]);}
-function apFFmtLong(iso){var d=apFParse(iso);return APF_M[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();}
-function apFFmtShort(iso){var d=apFParse(iso),s=d.getDate()+" "+APF_M[d.getMonth()];if(d.getFullYear()!==apFParse(APF_TODAY).getFullYear())s+=" "+d.getFullYear();return s;}
-function apFDiffDays(iso){return Math.round((apFParse(iso)-apFParse(APF_TODAY))/86400000);}
-function apFIsOverdue(iso){return apFDiffDays(iso)<0;}
-function apFDaysLabel(iso){var n=apFDiffDays(iso);if(n<0)return "Overdue by "+(-n)+" day"+((-n)===1?"":"s");if(n===0)return "Due today";return "Due in "+n+" day"+(n===1?"":"s");}
-function apFBandOf(iso){var n=apFDiffDays(iso);if(n<0)return "overdue";if(n<=7)return "week";if(n<=30)return "month";return "later";}
-function apFBase(w){return (w&&(w.dataset==="none"||w.state==="empty"))?[]:APF_INVOICES;}
-function apFHorizonDef(w){var id=(w&&w.apFHz)||"all";for(var i=0;i<APF_HORIZONS.length;i++)if(APF_HORIZONS[i].id===id)return APF_HORIZONS[i];return APF_HORIZONS[0];}
-/* THE horizon-scoped working set. Everything downstream computes from this one
-   function, which is what makes the filtering widget-wide rather than
-   table-only. OVERDUE IS ALWAYS INCLUDED whatever the horizon. */
-function apFData(w){var h=apFHorizonDef(w);if(h.days==null)return apFBase(w);return apFBase(w).filter(function(x){var d=apFDiffDays(x.due);return d<0||d<=h.days;});}
-function apFDueDates(w){var seen={},out=[];apFData(w).forEach(function(x){if(!seen[x.due]){seen[x.due]=1;out.push(x.due);}});out.sort(function(a,b){return apFParse(a)-apFParse(b);});return out;}
-function apFByDate(w){return apFDueDates(w).map(function(iso){var inv=apFData(w).filter(function(x){return x.due===iso;});var tot=inv.reduce(function(s,x){return s+x.amount;},0);return {iso:iso,total:tot,count:inv.length,overdue:apFIsOverdue(iso)};});}
-function apFBandData(w){var res={overdue:{total:0,count:0},week:{total:0,count:0},month:{total:0,count:0},later:{total:0,count:0}};apFData(w).forEach(function(x){var b=apFBandOf(x.due);res[b].total+=x.amount;res[b].count++;});return res;}
-function apFTotalDue(w){return apFData(w).reduce(function(s,x){return s+x.amount;},0);}
-function apFOverdueTotal(w){return apFData(w).filter(function(x){return apFIsOverdue(x.due);}).reduce(function(s,x){return s+x.amount;},0);}
-function apFOverdueCount(w){return apFData(w).filter(function(x){return apFIsOverdue(x.due);}).length;}
-function apFVendors(w){var m={},order=[];apFData(w).forEach(function(x){if(!m[x.vendor]){m[x.vendor]={vendor:x.vendor,total:0,count:0,over:0};order.push(x.vendor);}var e=m[x.vendor];e.total+=x.amount;e.count++;if(apFIsOverdue(x.due))e.over+=x.amount;});var arr=order.map(function(k){return m[k];});arr.sort(function(a,b){return b.total-a.total;});return arr;}
-/* current due selection: "total", a band id, or an ISO date, always validated
-   against the horizon-scoped set so an out-of-range value reads as "total". */
-function apFIsBand(v){return v==="overdue"||v==="week"||v==="month"||v==="later";}
-function apFSelDue(w){var v=w&&w.apFDue;if(v==null||v==="total")return "total";if(apFIsBand(v))return v;return apFDueDates(w).indexOf(v)>-1?v:"total";}
-function apFSelLabel(w){var s=apFSelDue(w);if(s==="total")return "All due dates";if(apFIsBand(s)){for(var i=0;i<APF_BANDS.length;i++)if(APF_BANDS[i].id===s)return APF_BANDS[i].label;}return "Due "+apFFmtLong(s);}
-function apFRows(w){var sel=apFSelDue(w),list=apFData(w).slice();
-  if(apFIsBand(sel))list=list.filter(function(x){return apFBandOf(x.due)===sel;});
-  else if(sel!=="total")list=list.filter(function(x){return x.due===sel;});
-  var sk=(w.apFSort||"due-asc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
-  list.sort(function(a,b){
-    if(key==="vendor")return dir*a.vendor.localeCompare(b.vendor);
-    if(key==="inv")return dir*a.inv.localeCompare(b.inv);
-    if(key==="due"){var dd=apFParse(a.due)-apFParse(b.due);return dir*(dd||(b.amount-a.amount));}
-    return dir*(a.amount-b.amount);
-  });
-  return list;}
-/* (3) CONTROLS. Both chips are her .filter-chip secondary fill with her leading
-   filter glyph and trailing chevron; the spinner is her .bgt-spin, shown on
-   whichever chip started the fetch. */
-function apFDueChip(w){var spin=(w.apFLoading&&w.apFLast!=="horizon")?'<span class="bgt-spin" aria-hidden="true"></span>':"";
-  return '<button class="filter-chip ap-due-chip" data-apf="apF-due" data-id="'+w.id+'" aria-haspopup="listbox" aria-expanded="'+(APF_POP&&APF_POP.type==="due"&&APF_POP.id===w.id?"true":"false")+'" aria-label="Filter by due date, currently '+apFEsc(apFSelLabel(w))+'"><span class="fc-label">'+spin+apFSelLabel(w)+'</span>'+ICON("expand_more")+'</button>';}
-function apFHorizonChip(w){var h=apFHorizonDef(w),spin=(w.apFLoading&&w.apFLast==="horizon")?'<span class="bgt-spin" aria-hidden="true"></span>':"";
-  return '<button class="filter-chip apf-hz-chip" data-apf="apF-horizon" data-id="'+w.id+'" aria-haspopup="listbox" aria-expanded="'+(APF_POP&&APF_POP.type==="horizon"&&APF_POP.id===w.id?"true":"false")+'" aria-label="Due-date horizon, currently '+apFEsc(h.chip)+', overdue invoices always included"><span class="fc-label">'+spin+h.chip+'</span>'+ICON("expand_more")+'</button>';}
-/* the overdue pill: money plus a warning glyph plus the words, so colour is
-   never the only signal, or a positive "Nothing overdue". Reuses her tooltip
-   plumbing (delegated on the data-tip attribute), not a native title. */
-function apFBadge(w){var od=apFOverdueTotal(w);
-  if(od>0){var n=apFOverdueCount(w);return '<span class="ap-pill warn" data-tip="'+apFEsc(apFMoney(od)+" across "+n+" invoice"+(n===1?"":"s")+" is past its due date.")+'" data-tip-plain>'+ICON("warning")+apFMoney(od)+' overdue</span>';}
-  return '<span class="ap-pill pos" data-tip="No outstanding invoice is past its due date." data-tip-plain>'+ICON("check_circle")+'Nothing overdue</span>';}
-/* (4) HEADER. Her two-row .dep-hd: row 1 the two filter chips on the LEFT with
-   an empty toggle slot on the right (there is no view switch), row 2 the total
-   payable and the overdue pill on the LEFT with one quiet context line under. */
-function apFHeaderBlock(w,mode){
-  var numInner,ctx="";
-  if(mode==="loading"){
-    numInner='<div class="dep-hd-kpigrp"><span class="sk" style="width:120px;height:22px;border-radius:6px"></span><span class="sk" style="width:110px;height:20px;border-radius:999px"></span></div>';
-    ctx='<div class="apf-ctx">Updating outstanding invoices...</div>';
-  }else{
-    var h=apFHorizonDef(w),n=apFData(w).length;
-    numInner='<div class="dep-hd-kpigrp"><span class="metric-value">'+apFMoney(apFTotalDue(w))+'</span>'+apFBadge(w)+'</div>';
-    ctx='<div class="apf-ctx">'+n+' invoice'+(n===1?"":"s")+' outstanding'+((h.days==null)?"":", due within "+h.days+" days plus everything overdue")+'</div>';
-  }
-  return '<div class="dep-hd">'+
-    '<div class="dep-hd-top"><div class="apf-ctlrow">'+apFDueChip(w)+apFHorizonChip(w)+'</div><div class="dep-hd-toggle"></div></div>'+
-    '<div class="dep-hd-num"><div class="bank-numwrap">'+numInner+ctx+'</div></div>'+
-    '</div>';}
-/* (5) THE HERO: her dense invoice table, grouped under tinted aging-band
-   subheaders while the due filter is All due dates. Picking a band or a specific
-   date flattens the grouping. Four columns, no Status column, no row click. */
-function apFRowHTML(x){var od=apFIsOverdue(x.due),n=apFDiffDays(x.due);
-  var daysIcon=od?"warning":(n===0?"today":"schedule");
-  return '<div class="wt-row" data-acct="'+apFEsc(x.vendor+" "+x.inv)+'">'+
-    '<span class="lr-main">'+x.vendor+'</span>'+
-    '<span class="ap-c-inv">'+x.inv+'</span>'+
-    '<span class="ap-c-due"><span class="ap-due-d">'+apFFmtShort(x.due)+'</span><span class="ap-due-days'+(od?" over":"")+'">'+ICON(daysIcon)+apFDaysLabel(x.due)+'</span></span>'+
-    '<span class="wt-c2">'+apFMoney(x.amount)+'</span></div>';}
-function apFTable(w){
-  var sel=apFSelDue(w),rows=apFRows(w);
-  var sk=(w.apFSort||"due-asc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
-  function sb(k,label){var on=key===k,ic=on?(dir<0?"arrow_downward":"arrow_upward"):"unfold_more";
-    return '<button class="wt-sort'+(on?" on":"")+'" data-apf="apF-sort" data-id="'+w.id+'" data-k="'+k+'" aria-label="Sort by '+apFEsc(label.toLowerCase())+(on?(dir<0?", currently descending":", currently ascending"):"")+'">'+label+' '+ICON(ic)+'</button>';}
-  var head='<div class="wt-row wt-head"><span class="lr-main">'+sb("vendor","Vendor")+'</span><span class="ap-c-inv">'+sb("inv","Invoice")+'</span><span class="ap-c-due">'+sb("due","Due date")+'</span><span class="wt-c2">'+sb("amt","Amount")+'</span></div>';
-  var body;
-  if(sel==="total"){
-    /* one subheader per non-empty band, with its count and its subtotal. Rows
-       keep the current sort inside each band. The subtotals add up to the
-       footer total to the cent, because both read the same row list. */
-    body=APF_BANDS.map(function(b){
-      var br=rows.filter(function(x){return apFBandOf(x.due)===b.id;});
-      if(!br.length)return "";
-      var st=br.reduce(function(s,x){return s+x.amount;},0),over=(b.id==="overdue");
-      var gh='<div class="wt-row ap-grp"><span class="ap-grp-nm'+(over?" over":"")+'">'+ICON(b.glyph)+b.label+' <span class="ap-grp-ct">'+br.length+' invoice'+(br.length===1?"":"s")+'</span></span><span class="ap-grp-amt'+(over?" over":"")+'">'+apFMoney(st)+'</span></div>';
-      return gh+br.map(apFRowHTML).join("");
-    }).join("");
-  }else{
-    body=rows.map(apFRowHTML).join("");
-  }
-  var tot=rows.reduce(function(s,x){return s+x.amount;},0);
-  var footLbl=apFSelLabel(w)+' ('+rows.length+' invoice'+(rows.length===1?"":"s")+')';
-  /* no vendor filter chip in the Final: past 6 rows a plain vendor search
-     appears above the table and filters rows inside this one card. */
-  var search=(rows.length>6)?'<div class="tbl-search"><div class="dep-search">'+ICON("search")+'<input class="dep-q" placeholder="Search vendors or invoices" aria-label="Search vendors or invoices"></div></div>':'';
-  return search+'<div class="scroll">'+head+body+'</div><div class="dep-total"><span>'+footLbl+'</span><span>'+apFMoney(tot)+'</span></div>';
-}
-/* (6) DETAIL side panel: Cash requirements plus Top vendors owed. The All row
-   and the four band rows double as the due filter, which is the standard
-   aging-bucket interaction realised as selector rows rather than chart segments.
-   The share bars are aria-hidden magnitude cues beside text values, never the
-   sole signal. A band with nothing in it is a disabled row, not a hidden one. */
-function apFMiniBar(frac,cls){var pct=Math.max(3,Math.round(frac*100));return '<span class="ap-sum-track" aria-hidden="true"><span class="ap-sum-fill'+(cls?" "+cls:"")+'" style="width:'+pct+'%"></span></span>';}
-function apFPanel(w){
-  var sel=apFSelDue(w),grand=apFTotalDue(w),bd=apFBandData(w),n=apFData(w).length;
-  var out='<div class="ap-panel">';
-  out+='<div class="ap-sum-sub">How much cash is needed, and when. Pick a band to filter the invoice list.</div>';
-  var allSel=(sel==="total");
-  out+='<button class="ap-sum-row ap-sum-all'+(allSel?" sel":"")+'" data-apf="apF-set-due" data-due="total" data-id="'+w.id+'" aria-pressed="'+allSel+'"><span class="ap-sum-main"><span class="ap-sum-lbl">'+ICON("account_balance_wallet")+'All due dates</span><span class="ap-sum-meta">'+n+' invoice'+(n===1?"":"s")+' outstanding</span></span><span class="ap-sum-val">'+apFMoney(grand)+'</span></button>';
-  APF_BANDS.forEach(function(b){var d=bd[b.id],over=(b.id==="overdue"),has=d.count>0,frac=grand>0?d.total/grand:0,isSel=(sel===b.id);
-    out+='<button class="ap-sum-row'+(isSel?" sel":"")+(has?"":" ap-static")+'"'+(has?' data-apf="apF-set-due" data-due="'+b.id+'" data-id="'+w.id+'" aria-pressed="'+isSel+'"':' disabled aria-disabled="true"')+'>'+
-      '<span class="ap-sum-main">'+
-        '<span class="ap-sum-lbl'+(over&&has?" over":"")+'">'+ICON(b.glyph)+b.label+'</span>'+
-        apFMiniBar(frac,(over?"over":"")+(has?"":" zero"))+
-        '<span class="ap-sum-meta">'+(has?(d.count+' invoice'+(d.count===1?"":"s")+', '+Math.round(frac*100)+'% of total'):'nothing due')+'</span>'+
-      '</span>'+
-      '<span class="ap-sum-val'+(over&&has?" over":"")+'">'+apFMoney(d.total)+'</span></button>';
-  });
-  var vend=apFVendors(w).slice(0,5),vmax=vend.length?vend[0].total:1;
-  out+='<div class="ap-sum-sep"></div><div class="dep-col-h ap-sum-h">Top vendors owed</div>';
-  vend.forEach(function(v){var frac=vmax>0?v.total/vmax:0;
-    out+='<div class="ap-sum-row ap-static"><span class="ap-sum-main"><span class="ap-sum-lbl">'+v.vendor+'</span>'+
-      apFMiniBar(frac,"")+
-      '<span class="ap-sum-meta">'+v.count+' invoice'+(v.count===1?"":"s")+(v.over>0?', <span class="ap-over">'+apFMoney(v.over)+' overdue</span>':'')+'</span></span>'+
-      '<span class="ap-sum-val">'+apFMoney(v.total)+'</span></div>';
-  });
-  return out+'</div>';
-}
-function apFFull(w){
-  return '<div class="dep-full">'+
-    '<div class="dep-col"><div class="dep-col-h">Outstanding invoices</div>'+apFTable(w)+'</div>'+
-    '<div class="dep-col ap-col-cash"><div class="dep-col-h">Cash requirements</div>'+apFPanel(w)+'</div>'+
-    '</div>';}
-/* (7) GLANCE. Scope chip, total payable, one pill. NO filters and no switch at
-   this tier, but the figure is still horizon-scoped rather than unconditional,
-   so a Glance card configured to a horizon agrees with an Explore card on it. */
-function apFGlance(w){
-  return '<div class="kpi-row"><div class="kpi-num">'+
-    '<span class="scope-chip" style="cursor:default"><span class="sc-nm">Accounts payable</span></span>'+
-    '<div class="metric-value">'+apFMoney(apFTotalDue(w))+'</div>'+
-    '<div class="gl-sub">'+apFBadge(w)+'</div>'+
-    '<span class="sr-only">Total accounts payable outstanding: '+apFMoney(apFTotalDue(w))+'.</span>'+
-    '</div></div>';}
-/* (8) STATES. One positive empty state, short at Glance. Loading is a header
-   skeleton plus five skeleton rows, and only ever on a data fetch. */
-function apFEmptyState(w){
-  if(w.size==="kpi")return '<div class="state" data-kind="empty">'+ICON("task_alt")+'<div class="state-title">Nothing outstanding</div></div>';
-  return '<div class="state" data-kind="empty">'+ICON("task_alt")+'<div class="state-title">Nothing outstanding</div><div class="state-sub">All supplier invoices are paid. Nothing is due right now.</div></div>';}
-function apFSkeleton(){var rows="";[82,58,70,48,64].forEach(function(wd){rows+='<div class="ap-sk-row"><span class="sk" style="flex:1;height:12px;border-radius:4px"></span><span class="sk" style="width:72px;height:12px;border-radius:4px"></span><span class="sk" style="width:'+wd+'px;height:12px;border-radius:4px"></span></div>';});return '<div class="ap-skel" aria-busy="true">'+rows+'</div>';}
-/* (9) THE SINGLE ENTRY POINT. Glance / Explore / Detail onto her kpi / wide /
-   xwide, with no fourth tier and no view branch. */
-function apFContent(w){
-  if(!apFBase(w).length)return apFEmptyState(w);
-  if(w.size==="kpi")return '<div class="apf-root apf-w" data-tier="kpi">'+apFGlance(w)+'</div>';
-  var inner;
-  if(w.apFLoading)inner=apFHeaderBlock(w,"loading")+apFSkeleton();
-  else if(w.size==="xwide")inner=apFHeaderBlock(w)+apFFull(w);
-  else inner=apFHeaderBlock(w)+'<div class="apf-body">'+apFTable(w)+'</div>';
-  return '<div class="apf-root apf-w" data-tier="'+(w.size==="xwide"?"xwide":"wide")+'">'+inner+'</div>';
-}
-/* (10) POPOVERS, body-mounted and .apf- scoped. The due-date filter lists All
-   due dates, then only the non-empty aging bands, then every distinct due date
-   earliest first with its own total and an Overdue tag; a search input appears
-   past 8 distinct dates and filters all three sections. */
-function apFPopContent(w){
-  var sel=apFSelDue(w),q=(APF_DUE_QUERY||"").toLowerCase();
-  var grand=apFTotalDue(w),bd=apFBandData(w),dates=apFByDate(w);
-  var showSearch=dates.length>8;
-  var out=(showSearch?'<div class="dd-search">'+ICON("search")+'<input class="dd-input" id="apfq" placeholder="Search due dates" aria-label="Search due dates" value="'+apFEsc(APF_DUE_QUERY||"")+'" autocomplete="off"></div>':'')+'<div class="menu-scroll" role="listbox" aria-label="Due date filter">';
-  if(!q||"all due dates total".indexOf(q)>-1){var aOn=(sel==="total");out+='<button class="mi'+(aOn?" check":"")+'" role="option" aria-selected="'+aOn+'" data-apf="apF-set-due" data-due="total" data-id="'+w.id+'">'+(aOn?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm">All due dates</span><span class="ap-mi-amt">'+apFMoney(grand)+'</span></button>';}
-  var bMatch=APF_BANDS.filter(function(b){return bd[b.id].count>0&&(!q||b.label.toLowerCase().indexOf(q)>-1);});
-  if(bMatch.length){out+='<div class="cap">By aging</div>'+bMatch.map(function(b){var d=bd[b.id],on=sel===b.id,over=(b.id==="overdue");
-    return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-apf="apF-set-due" data-due="'+b.id+'" data-id="'+w.id+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm-stack"><span class="mi-nm">'+b.label+'</span><span class="mi-acctno'+(over?" ap-over":"")+'">'+d.count+' invoice'+(d.count===1?"":"s")+'</span></span>'+(over?'<span class="bank-tag-over">Overdue</span>':'')+'<span class="ap-mi-amt'+(over?" ap-over":"")+'">'+apFMoney(d.total)+'</span></button>';}).join("");}
-  var dMatch=dates.filter(function(d){return !q||apFFmtLong(d.iso).toLowerCase().indexOf(q)>-1;});
-  if(dMatch.length){out+='<div class="cap">By specific date, earliest first</div>'+dMatch.map(function(d){var on=sel===d.iso;
-    return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-apf="apF-set-due" data-due="'+d.iso+'" data-id="'+w.id+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm-stack"><span class="mi-nm">Due '+apFFmtLong(d.iso)+'</span><span class="mi-acctno'+(d.overdue?" ap-over":"")+'">'+apFDaysLabel(d.iso)+', '+d.count+' invoice'+(d.count===1?"":"s")+'</span></span>'+(d.overdue?'<span class="bank-tag-over">Overdue</span>':'')+'<span class="ap-mi-amt'+(d.overdue?" ap-over":"")+'">'+apFMoney(d.total)+'</span></button>';}).join("");}
-  if(showSearch&&q&&!bMatch.length&&!dMatch.length&&"all due dates total".indexOf(q)<0)out+='<div class="mi-note" style="color:var(--txt-subtle);padding:8px 10px">No due dates match "'+apFEsc(APF_DUE_QUERY||"")+'"</div>';
-  return out+'</div>';
-}
-/* the horizon picker, in the standard chip-and-listbox pattern. Each scoped
-   option restates that overdue invoices stay in the set. */
-function apFHorizonPopContent(w){
-  var cur=(w.apFHz||"all");
-  return '<div class="cap">Due-date horizon</div><div class="menu-scroll" role="listbox" aria-label="Due-date horizon">'+APF_HORIZONS.map(function(h){var on=cur===h.id;
-    return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-apf="apF-set-horizon" data-h="'+h.id+'" data-id="'+w.id+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm-stack"><span class="mi-nm">'+h.pick+'</span>'+(h.days!=null?'<span class="mi-acctno">overdue always included</span>':'')+'</span></button>';}).join("")+'</div>';
-}
-function apFOpenPop(type,id,anchor){
-  var w=find(id);if(!w)return;
-  APF_POP={type:type,id:id};
-  var el=document.getElementById("apfPop");
-  if(!el){el=document.createElement("div");el.id="apfPop";document.body.appendChild(el);}
-  el.setAttribute("data-apf","apF-stop");
-  el.className="apf-root apf-pop";
-  el.innerHTML=(type==="horizon")?apFHorizonPopContent(w):apFPopContent(w);
-  var r=anchor.getBoundingClientRect(),M=8;
-  el.style.visibility="hidden";el.style.left="0px";el.style.top="0px";
-  var bw=el.offsetWidth,bh=el.offsetHeight;
-  var left=Math.min(Math.max(M,r.left),window.innerWidth-bw-M);
-  var top=r.bottom+6;if(top+bh>window.innerHeight-M)top=Math.max(M,r.top-bh-6);
-  el.style.left=left+"px";el.style.top=top+"px";el.style.visibility="";
-}
-function apFClosePop(){APF_POP=null;var el=document.getElementById("apfPop");if(el)el.remove();}
-/* (11) STATE SETTERS. Choosing a due filter or a horizon is the ONLY fetch. */
-function apFSetDue(w,nv){if(nv!==apFSelDue(w)){w.apFDue=nv;w.apFLast="due";apFLoad(w);}}
-/* Horizon change. Overdue stays in the set; then, if the current due filter is a
-   band that just went empty or a specific date that just left the set, the due
-   filter snaps back to All due dates rather than showing an empty table. */
-function apFSetHorizon(w,id){
-  if((w.apFHz||"all")===id)return;
-  w.apFHz=id;
-  var cur=w.apFDue;
-  if(cur&&cur!=="total"){
-    if(apFIsBand(cur)){if(apFBandData(w)[cur].count===0)w.apFDue="total";}
-    else if(apFDueDates(w).indexOf(cur)===-1){w.apFDue="total";}
-  }
-  w.apFLast="horizon";
-  apFLoad(w);
-}
-/* (12) DELEGATED HANDLERS, keyed to data-apf inside .apf-root, so nothing here
-   can be reached by her dispatcher and nothing of hers can reach this. */
-function apFHandleClick(e){
-  var t=e.target.closest?e.target.closest("[data-apf]"):null;
-  if(!t){if(APF_POP&&!(e.target.closest&&e.target.closest("#apfPop"))){apFClosePop();render();}return;}
-  if(!t.closest(".apf-root"))return;
-  var a=t.getAttribute("data-apf"),id=t.getAttribute("data-id"),w=id?find(id):null;
-  if(a==="apF-due"){APF_DUE_QUERY="";var wasDue=(APF_POP&&APF_POP.type==="due"&&APF_POP.id===id);apFClosePop();if(!wasDue)apFOpenPop("due",id,t);render();return;}
-  if(a==="apF-horizon"){var wasHz=(APF_POP&&APF_POP.type==="horizon"&&APF_POP.id===id);apFClosePop();if(!wasHz)apFOpenPop("horizon",id,t);render();return;}
-  if(a==="apF-set-due"){if(w)apFSetDue(w,t.getAttribute("data-due"));apFClosePop();render();return;}
-  if(a==="apF-set-horizon"){if(w)apFSetHorizon(w,t.getAttribute("data-h"));apFClosePop();render();return;}
-  /* sort is a pure client re-render: it must never set the loading flag. */
-  if(a==="apF-sort"){if(w){var k=t.getAttribute("data-k"),cs=(w.apFSort||"due-asc").split("-");w.apFSort=(cs[0]===k)?(k+"-"+(cs[1]==="asc"?"desc":"asc")):(k+"-"+((k==="vendor"||k==="inv"||k==="due")?"asc":"desc"));}render();return;}
-  /* the popover's own stop marker, and anything unmatched, is a deliberate no-op */
-}
-/* vendor search past 6 rows: a client-side row filter inside the one card, with
-   no re-render, and a band subheader hides when none of its rows match. */
-function apFVendorFilter(inp){
-  var card=inp.closest(".apf-root");if(!card)return;
-  var q=(inp.value||"").toLowerCase();
-  card.querySelectorAll(".wt-row[data-acct]").forEach(function(r){
-    r.style.display=(r.getAttribute("data-acct")||"").toLowerCase().indexOf(q)>-1?"":"none";
-  });
-  card.querySelectorAll(".wt-row.ap-grp").forEach(function(g){
-    var any=false,nx=g.nextElementSibling;
-    while(nx&&!(nx.classList&&nx.classList.contains("ap-grp"))){if(nx.hasAttribute&&nx.hasAttribute("data-acct")&&nx.style.display!=="none")any=true;nx=nx.nextElementSibling;}
-    g.style.display=any?"":"none";
-  });
-}
-var APF_WIRED=false;
-(function(){
-  if(APF_WIRED)return;APF_WIRED=true;
-  document.addEventListener("click",apFHandleClick);
-  document.addEventListener("keydown",function(e){if(e.key==="Escape"&&APF_POP){apFClosePop();render();}});
-  document.addEventListener("input",function(e){
-    var t=e.target;if(!t)return;
-    if(t.id==="apfq"){
-      /* due-date search: re-render the popover only, keeping the caret */
-      APF_DUE_QUERY=t.value;
-      var el=document.getElementById("apfPop"),pw=APF_POP?find(APF_POP.id):null;
-      if(el&&pw&&APF_POP.type==="due"){
-        el.innerHTML=apFPopContent(pw);
-        var qi=document.getElementById("apfq");
-        if(qi){qi.focus();try{qi.setSelectionRange(qi.value.length,qi.value.length);}catch(err){}}
-      }
-      return;
-    }
-    if(t.classList&&t.classList.contains("dep-q")&&t.closest&&t.closest(".apf-root"))apFVendorFilter(t);
-  });
-})();
-/* ===== end W16 Accounts Payable By Due Date V2 ===== */
+  /* Registered so the shell (and the review viewer) find her block through WIDGETS; her click, pop and trigger hooks stay as they are. */
+  WIDGETS.register("payables",{content:apContent});
+
 /* =====================================================================
    W17 Gifts Pledges V2 registry, prefix gpF / GPF_, kind "gifts-mb"
    =====================================================================
@@ -12375,7 +12020,7 @@ function fkpRender(){
    It began as an absolutely positioned child of the cash tile and was
    clipped by our own .fkp-root overflow:hidden, and would in any case have
    been cut by her .appmain overflow:auto. Body mounting at position:fixed is
-   how .faf-pop, .apf-pop and .gpf-pop already solve this in this
+   how .faf-pop, .gpf-pop already solve this in this
    file, so it is the house answer rather than a new one, and it lets
    .fkp-root keep the overflow:hidden of her real .widget rule. */
 function fkpClosePop(){

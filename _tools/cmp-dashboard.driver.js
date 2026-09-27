@@ -128,7 +128,8 @@ A.eq(EX.dashboards[2].widgets.length, 0, "her No widgets dashboard is still empt
      structural: her live widgets still render (section 3), every kind registers
      at most once, and no top-level function is defined twice. */
   const oL = old.split("\r\n"), cL = cur.split("\r\n");
-  A.ok(cL.length - oL.length > 3000, "the edit added our blocks (" + (cL.length - oL.length) + " lines)");
+  /* as widgets finalise on Jo's version our blocks leave the file, so the net line delta shrinks; what matters is that the script is not the untouched baseline */
+  A.ok(cL.length !== oL.length, "the script differs from the a548419 baseline (" + (cL.length - oL.length) + " lines net)");
   const regs = (cur.match(/WIDGETS\.register\("([a-z0-9-]+)"/g) || []).map(function (m) { return /"([a-z0-9-]+)"/.exec(m)[1]; });
   A.ok(regs.length >= 2, "widgets register through WIDGETS.register (" + regs.join(", ") + ")");
   A.eq(new Set(regs).size, regs.length, "no kind is registered twice");
@@ -426,7 +427,7 @@ function liveRows(text, kind) {
   /* the tab's cards are BUILT, not typed as registry literals, which is what
      keeps every other widget's registry line count where it was */
   A.eq(S.split('kind:"gifts"').length - 1, 12, "no new kind:\"gifts\" literal was introduced");
-  A.eq((S.match(/,kind:"payables",/g) || []).length, 6, "her six payables registry lines are still six");
+  A.eq((S.match(/,kind:"payables",/g) || []).length, (MAPW.W16 && MAPW.W16.decided) ? 3 : 6, "her payables registry lines: six while undecided, the three sizes once decided (W16 decided 2026-09-27)");
   A.eq((S.match(/kind:"bank"/g) || []).length, (MAPW.W15 && MAPW.W15.decided) ? 3 : 5, "her bank registry lines: five while undecided, the three sizes once decided (W15 decided 2026-09-27)");
   /* Every widget's own registry row count is unmoved, measured against the
      pre-edit snapshot rather than against a hardcoded number, so this holds

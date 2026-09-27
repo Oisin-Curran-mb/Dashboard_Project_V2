@@ -408,26 +408,26 @@
     },
     "W16": {
       "name": "Accounts Payable By Due Date",
-      "driver": "w16-payables-mb.driver.js",
-      "ours": {
-        "kind": "payables-mb",
-        "prefix": "apF",
-        "css": {
-          "grep": [
-            ".apf-"
-          ]
-        },
-        "js": {
-          "start": "/* ===== W16 Accounts Payable By Due Date V2 JS , prefix apF , kind \"payables-mb\" =",
-          "end": "/* ===== end W16 Accounts Payable By Due Date V2 ===== */"
-        },
-        "registry": {
-          "grep": [
-            "kind:\"payables-mb\""
-          ]
-        }
-      },
-      "jo": {
+      "driver": "w16-payables.driver.js",
+      "decided": "2026-09-27 Jo (owner: take Jo version; ours deleted)",
+      "removed": [
+        "payables-mb"
+      ],
+      "baselineDrop": [
+        "{id:\"ap_k\",",
+        "{id:\"ap_x\",",
+        "{id:\"ap2\",",
+        "{id:\"ap3\",",
+        "{id:\"ap4\",",
+        "{id:\"apF\"",
+        "{id:\"apF_k\"",
+        "{id:\"apF_x\"",
+        "{id:\"apF2\"",
+        "{id:\"apF3\"",
+        "{id:\"apF4\""
+      ],
+      "baselineNote": "ap_k and ap_x are retitled 'Accounts Payable By Due Date' (owner), so they leave the line-for-line baseline check like her removed fixtures",
+      "final": {
         "kind": "payables",
         "prefix": "ap",
         "css": {
@@ -437,12 +437,15 @@
           ]
         },
         "js": {
+          "start": "   Accounts Payable By Due Date  (ap, kind:\"payables\")  ,  v2 redesign",
+          "end": "  /* ===== Receivable Invoices Outstanding"
+        },
+        "registry": {
           "grep": [
-            "function ap",
-            "AP_",
             "kind:\"payables\""
           ]
-        }
+        },
+        "note": "Jo's block kept with its shell hooks (click, pop, trigger); content registered via WIDGETS.register so the viewer lists it"
       }
     },
     "W17": {

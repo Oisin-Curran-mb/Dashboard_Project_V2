@@ -681,8 +681,9 @@ A.cssDeclares(shell.css, [
   A.ok(iFallback > -1, "the generic empty fallback was located");
   A.ok(iDisp < iFallback, "our dispatch sits BEFORE the generic empty fallback");
   /* and it sits at the END of the mb chain, after the newest sibling */
-  const iPrev = shell.script.indexOf('if(w.kind==="payables-mb")return apFContent(w);');
-  A.ok(iPrev > -1 && iPrev < iDisp, "our dispatch is appended AFTER the previous mb entry");
+  /* the payables-mb sibling left the file on 2026-09-27 (owner took Jo's W16); what still matters is that no other -mb dispatch follows ours */
+  const between = shell.script.slice(iDisp + 1, iFallback);
+  A.ok(!/if(w.kind==="[a-z]+-mb")return/.test(between), "our dispatch is the last mb entry before the fallback");
   /* a filter that narrows to nothing says so rather than rendering a blank */
   const none = ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "table", gpFCamp: "NOSUCH: Campaign" }));
   A.contains(none, "No gift or pledge campaigns", "a filter matching nothing renders a stated empty state");
