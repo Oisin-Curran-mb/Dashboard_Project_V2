@@ -1,6 +1,6 @@
 # W15 Bank Balances: review pack
 
-Generated 2026-09-25 by `_tools/review-pack.js`. Three sources, verbatim, in their own sections. Nothing here is a decision; the owner's ruling goes in `docs/decisions/W15.md`.
+Generated 2026-09-27 by `_tools/review-pack.js`. Three sources, verbatim, in their own sections. Nothing here is a decision; the owner's ruling goes in `docs/decisions/W15.md`.
 
 | Source | Where | As of |
 |---|---|---|
