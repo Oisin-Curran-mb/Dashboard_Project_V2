@@ -671,7 +671,7 @@
   .modal-f{display:flex;justify-content:flex-end;gap:8px;padding:0 16px 16px;}
   /* ===== W14 Main Content Tasks V2 CSS ===== */
   .mct-head{flex:0 0 auto;display:flex;flex-direction:column;gap:12px;padding:12px 16px 10px;background:var(--surface-widget);border-bottom:1px solid var(--stroke-widget);}
-.mct-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:12px 16px 8px;display:flex;flex-direction:column;gap:16px;}
+.mct-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:12px 16px 8px;display:flex;flex-direction:column;gap:12px;}
   .mct-search{display:flex;align-items:center;gap:6px;background:var(--wn-100);border:1px solid var(--wn-300);border-radius:9px;padding:8px 11px;transition:border-color var(--dur),box-shadow var(--dur),background var(--dur);}
   .mct-search:focus-within{background:var(--surface-widget);border-color:var(--brand-100);box-shadow:0 0 0 3px var(--brand-10);}
   .mct-q{flex:1;min-width:0;border:0;background:transparent;font-family:inherit;font-size:13.5px;color:var(--txt-primary);outline:none;}
@@ -679,7 +679,12 @@
   .mct-q-clear{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border:none;background:transparent;border-radius:6px;cursor:pointer;color:var(--txt-subtle);flex:0 0 auto;}
   .mct-q-clear:hover{background:var(--wn-300);color:var(--txt-primary);}
   .mct-q-clear .material-symbols-rounded{font-size:17px;}
-  .mct-sec{display:flex;flex-direction:column;gap:7px;}
+  .mct-sec{display:flex;flex-direction:column;gap:7px;padding:10px 10px 8px;border-radius:12px;}
+  /* Section tints (owner, 27 Sep): design-system tokens, distinct from each other and from every badge tint. */
+  .mct-sec-recent{background:var(--cn-30);}
+  .mct-sec-my{background:var(--wn-250);}
+  .mct-sec-content{background:var(--surface-widget);border:1px solid var(--stroke-widget);}
+  .mct-sec-recent .mct-sec-h,.mct-sec-my .mct-sec-h{color:var(--txt-secondary);}
   .mct-sec-head{display:flex;align-items:center;justify-content:space-between;gap:8px;}
   .mct-sec-h{font-size:12px;font-weight:600;color:var(--txt-subtle);}
   .mct-sec-empty{font-size:12px;color:var(--txt-subtle);padding:2px 2px 4px;}
@@ -3888,9 +3893,9 @@ function mysPopContent(){
   function mctItile(w,t){var a=mctApp(t.app);var badge=(mctCtx(w)==="home")?'<span class="mct-itile-badge" data-app="'+a.id+'" aria-hidden="true">'+a.code+'</span>':"";var aria=(t.label+", "+a.name+", opens "+t.dest).replace(/"/g,"&quot;");return '<button class="mct-itile" data-action="mct-open" data-id="'+w.id+'" data-t="'+t.id+'" aria-label="'+aria+'" data-tip="'+(t.label+" ("+a.name+")").replace(/"/g,"&quot;")+'" data-tip-plain>'+ICON(t.icon)+badge+'<span class="sr-only">'+t.label+", "+a.name+'</span></button>';}
   function mctSearch(w){var q=w.mctQ||"";var clr=q?'<button class="mct-q-clear" data-action="mct-clearq" data-id="'+w.id+'" aria-label="Clear search">'+ICON("close")+'</button>':'';return '<div class="mct-search"><input class="mct-q" id="mctq-'+w.id+'" placeholder="Search tasks" value="'+q.replace(/"/g,"&quot;")+'" aria-label="Search tasks across all applications" autocomplete="off">'+clr+'</div>';}
   function mctFilterChip(w){var f=mctFilter(w),lbl=f==="all"?"All applications":(mctApp(f)?mctApp(f).name:"All applications");return '<button class="filter-chip mct-filter" data-action="mct-appfilter" data-id="'+w.id+'" aria-haspopup="listbox" aria-label="Filter tasks by application, currently '+lbl+'"><span class="fc-label">'+lbl+'</span>'+ICON("expand_more")+'</button>';}
-  function mctRecentSection(w){var list=mctRecentTasks(w);if(!list.length)return "";return '<div class="mct-sec"><div class="mct-sec-h">Recent Tasks</div><div class="mct-list">'+list.map(function(t){return mctRow(w,t);}).join("")+'</div></div>';}
-  function mctMySection(w){var list=mctMyTasks(w);if(!list.length)return "";return '<div class="mct-sec"><div class="mct-sec-h">My Tasks</div><div class="mct-list">'+list.map(function(t){return mctRow(w,t);}).join("")+'</div></div>';}
-  function mctStandardSection(w){var list=mctStandardTasks(w);if(!list.length){var msg=(mctCtx(w)==="home"&&mctFilter(w)!=="all")?("No more "+mctApp(mctFilter(w)).name+" content tasks to add."):"All content tasks are already in My Tasks.";return '<div class="mct-sec"><div class="mct-sec-h">Content Tasks</div><div class="mct-sec-empty">'+msg+'</div></div>';}return '<div class="mct-sec"><div class="mct-sec-h">Content Tasks</div><div class="mct-list">'+list.map(function(t){return mctRow(w,t);}).join("")+'</div></div>';}
+  function mctRecentSection(w){var list=mctRecentTasks(w);if(!list.length)return "";return '<div class="mct-sec mct-sec-recent"><div class="mct-sec-h">Recent Tasks</div><div class="mct-list">'+list.map(function(t){return mctRow(w,t);}).join("")+'</div></div>';}
+  function mctMySection(w){var list=mctMyTasks(w);if(!list.length)return "";return '<div class="mct-sec mct-sec-my"><div class="mct-sec-h">My Tasks</div><div class="mct-list">'+list.map(function(t){return mctRow(w,t);}).join("")+'</div></div>';}
+  function mctStandardSection(w){var list=mctStandardTasks(w);if(!list.length){var msg=(mctCtx(w)==="home"&&mctFilter(w)!=="all")?("No more "+mctApp(mctFilter(w)).name+" content tasks to add."):"All content tasks are already in My Tasks.";return '<div class="mct-sec mct-sec-content"><div class="mct-sec-h">Content Tasks</div><div class="mct-sec-empty">'+msg+'</div></div>';}return '<div class="mct-sec mct-sec-content"><div class="mct-sec-h">Content Tasks</div><div class="mct-list">'+list.map(function(t){return mctRow(w,t);}).join("")+'</div></div>';}
   function mctResults(w){var res=mctSearchList(w),q=(w.mctQ||"").trim();if(!res.length)return '<div class="mct-sec"><div class="mct-noresult">No tasks match "'+q.replace(/"/g,"&quot;")+'". Try another word, like "check" or "deposit".</div></div>';return '<div class="mct-sec"><div class="mct-sec-h">'+res.length+' result'+(res.length>1?"s":"")+' across all applications</div><div class="mct-list">'+res.map(function(r){return mctRow(w,r.t,true);}).join("")+'</div></div>';}
   function mctGlanceTasks(w){var seen={},out=[];function add(l){l.forEach(function(t){if(t&&!seen[t.id]){seen[t.id]=1;out.push(t);}});}add(mctRecentTasks(w));add(mctMyTasks(w));return out;}
   function mctGlance(w){var q=(w.mctQ||"").trim(),body;if(q){var res=mctSearchList(w);body=res.length?('<div class="mct-carousel"><div class="mct-irow">'+res.slice(0,12).map(function(r){return mctItile(w,r.t);}).join("")+'</div></div>'):'<div class="mct-glance-empty">No matches</div>';}else{var list=mctGlanceTasks(w);body=list.length?('<div class="mct-carousel"><div class="mct-irow">'+list.map(function(t){return mctItile(w,t);}).join("")+'</div></div>'):'<div class="mct-glance-empty">No recent or saved tasks yet</div>';}return '<div class="mct-glance">'+mctSearch(w)+body+'</div>';}
