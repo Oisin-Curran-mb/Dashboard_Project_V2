@@ -10493,13 +10493,16 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
      Voids, Checks, Withdrawals, EFT, to Ending). Not a time axis: the sequence of
      movements since the last reconciliation. Endpoints are Beginning and Ending,
      and Ending equals the KPI. */
-  function bankRunning(w){var sel=bankSelected(w),cats;
-    if(sel){cats=sel.a.slice();}
-    else{cats=[0,0,0,0,0,0];bankAccounts(w).forEach(function(a){for(var i=0;i<6;i++)cats[i]+=(a.a[i]||0);});}
-    var run=[],acc=0,i;for(i=0;i<cats.length;i++){acc+=cats[i];run.push(acc);}return run;}
-  function bankSpark(w){var run=bankRunning(w),mx=Math.max.apply(null,run),mn=Math.min.apply(null,run);
+  /* Glance sparkline (owner, 27 Sep): month-end total balance over the last twelve months, all accounts (or the
+     selected account). Demo data: earlier months walk back deterministically from the ending balance; the backend
+     would supply real month-end balances. The hover reads the month and the amount. */
+  function bankMonthLabels(){var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],out=[],i;for(i=11;i>=0;i--){var d=new Date(2026,7-i,1);out.push(M[d.getMonth()]+" "+d.getFullYear());}return out;}
+  function bankHistory(w){var sel=bankSelected(w),end=sel?bankEnding(sel):bankTotal(w),seed=sel?(sel.name.length*7+sel.acct.length):11,out=[],v=end,i;
+    for(i=11;i>=0;i--){out[i]=Math.round(v);var f=1+Math.sin(seed*1.7+i*1.31)*0.055-0.008;v=v/f;}return out;}
+  function bankSpark(w){var run=bankHistory(w),mx=Math.max.apply(null,run),mn=Math.min.apply(null,run);
     if(run.length<2||mx===mn)return "";
-    return depSparkHTML({s:run,labs:["Beginning balance","Deposits","Voids","Checks","Withdrawals","Ending balance"]},"bank-spark","Balance since the last reconciliation, beginning to ending. Hover to read a point");}
+    var sel=bankSelected(w),who=sel?sel.name:"all bank accounts";
+    return depSparkHTML({s:run,labs:bankMonthLabels()},"bank-spark","Month-end balance of "+who+" over the last twelve months. Hover to read a month and its amount");}
   function bankAcctChip(w){var sel=bankSelected(w);var spin=w.bkloading?'<span class="bgt-spin" aria-hidden="true"></span>':"";var lbl=sel?(sel.name+" "+sel.acct):"All Bank Accounts";return '<button class="filter-chip bank-acct-chip" data-action="bank-acct" data-id="'+w.id+'" aria-haspopup="listbox" aria-label="Bank account, tap to change the view"><span class="fc-label">'+spin+lbl+'</span>'+ICON("expand_more")+'</button>';}
   function bankViewToggle(w){var v=w.bkview||"table";var opts=[["table","Table","table_rows"],["chart","Bars","bar_chart"]];return '<div class="vtoggle" role="group" aria-label="View">'+opts.map(function(o){return '<button class="vt'+(v===o[0]?" on":"")+'" data-action="bank-view" data-id="'+w.id+'" data-v="'+o[0]+'" aria-pressed="'+(v===o[0])+'">'+ICON(o[2])+o[1]+'</button>';}).join("")+'</div>';}
   function bankHeaderBlock(w,mode){
