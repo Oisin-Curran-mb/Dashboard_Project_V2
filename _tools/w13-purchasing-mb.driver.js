@@ -152,6 +152,39 @@ A.contains(bw, "grid-template-columns:repeat(4,minmax(180px,1fr)) 96px", "Explor
 A.contains(bx, "grid-template-columns:repeat(4,1fr) 0.6fr", "Detail: unchanged fluid tracks");
 A.contains(css, '.purf-root[data-tier="wide"] .purf-board{overflow-x:auto;overflow-y:hidden', "Explore board scrolls sideways only, never up and down");
 
+/* ---------- 4d. Encumbrances view (owner, 27 Sep) ----------------------- */
+reset();
+A.contains(C("purFViewToggle", wide), 'data-v="enc"', "toggle offers Encumbrances"); A.contains(C("purFViewToggle", wide), ">Encumbrances<", "segment label");
+wide.purfView = "enc"; xw.purfView = "enc"; wide.purfPath = null; xw.purfPath = null;
+A.eq(C("purFViewCur", wide), "enc", "view resolves to enc");
+const encRows = C("purFEncRows", wide), all = env.get("PURF_POS");
+A.ok(encRows.length > 0, "there are open encumbrances");
+A.ok(encRows.every(function (p) { return (p.stage === "Pending" || p.stage === "Approved") && !p.paid && p.pay !== "paid" && !(p.appr || []).some(function (a) { return a.state === "rejected"; }); }), "open = pending or approved, unpaid, no rejected row (GLAccountRepository.cs:2220)");
+A.eq(all.filter(function (p) { return p.stage === "Closed" || p.stage === "Voided" || p.paid; }).filter(function (p) { return encRows.indexOf(p) > -1; }).length, 0, "closed, voided and paid orders never encumber");
+A.ok(encRows.some(function (p) { return p.hold; }), "held orders still count (no legacy hold exclusion)");
+A.eq(C("purFEncTotal", wide), encRows.reduce(function (s, p) { return s + p.amt; }, 0), "total = sum of open order totals");
+const pers = C("purFEncPeriods", wide);
+A.ok(pers.length > 1, "more than one accounting period"); A.eq(pers.map(function (r) { return r.key; }).join(","), pers.map(function (r) { return r.key; }).sort().join(","), "periods in chronological order");
+A.eq(pers.reduce(function (s, r) { return s + r.n; }, 0), encRows.length, "every open order lands in exactly one period");
+A.ok(/^[A-Z][a-z]{2} 20\d\d$/.test(pers[0].label), "period label is Mon YYYY");
+const hdE = C("purFHeaderBlock", wide);
+A.contains(hdE, "encumbered, not yet paid", "headline is the encumbered total"); A.absent(hdE, 'data-purf="status"', "status chip hidden in the Encumbrances view");
+A.contains(hdE, 'data-purf="path"', "approval path chip stays"); A.contains(hdE, "open order", "context line counts open orders");
+const encW = C("purFEncView", wide), encX = C("purFEncView", xw);
+A.contains(encW, 'data-purf="enc-view"', "Explore: chart or table sub-toggle"); A.contains(encW, "purf-enc-col", "Explore: chart bars");
+A.eq((encW.match(/purf-enc-col"/g) || []).length, pers.length, "one bar per period");
+A.contains(encX, "purf-enc-split", "Detail: chart and table side by side"); A.contains(encX, "Total encumbered, not yet paid", "Detail: table total row");
+A.absent(encX, 'data-purf="enc-view"', "Detail has no sub-toggle");
+wide.purfEncView = "table"; const encT = C("purFEncView", wide); A.contains(encT, "purf-enc-tbl", "Explore table on demand");
+A.eq((encT.match(/purf-enc-trow/g) || []).length, pers.length, "one table row per period");
+env.get("PURF_POP"); C("purFClosePop");
+/* bar pop-up lists the orders behind a period with their lane */
+const body = C("purFBody", wide); A.contains(body, "purf-enc", "body renders the view");
+xw.purfView = "table"; wide.purfView = "kanban"; wide.purfEncView = null;
+A.contains(C("purFLegendHTML", wide), "Encumbrances view", "legend explains the view");
+A.contains(css, ".purf-root .purf-enc-bar{", "chart CSS copied as purf-enc-*"); A.absent(block, ".pur-bar", "no dependency on her .pur-bar class");
+reset();
+
 /* ---------- 5. hygiene --------------------------------------------------- */
 A.noEmDash(block.replace(/\/\*[\s\S]*?\*\//g, ""), "block code");
 A.contains(css, ".purf-turn-next", "turn badge CSS"); A.contains(css, ".purf-turnline", "turn line CSS");

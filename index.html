@@ -2253,6 +2253,50 @@
   .purf-root .purf-lg-card{display:inline-flex;align-items:center;justify-self:stretch;font-size:11px;font-weight:600;padding:6px 8px;border:1px solid var(--stroke-widget);border-radius:8px;cursor:default;}
   .purf-root .purf-lg-age{font-size:11px;}
   .purf-root .purf-lg-rules{padding:4px 10px 6px;}
+  /* Encumbrances view: chart (her .pur-* chart copied as purf-enc-*), period table, split at Detail. */
+  .purf-root .purf-enc{flex:1;min-height:0;display:flex;flex-direction:column;}
+  .purf-root .purf-enc-sub{display:flex;justify-content:flex-end;padding:2px 14px 6px;}
+  .purf-root .purf-enc-chart{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 0 4px;}
+  .purf-root .purf-enc-plot{flex:1;min-height:150px;display:flex;gap:8px;padding:0 16px;}
+  .purf-root .purf-enc-yax{flex:0 0 44px;display:flex;flex-direction:column;justify-content:space-between;font-size:11px;color:var(--txt-subtle);text-align:right;font-variant-numeric:tabular-nums;padding:2px 0;}
+  .purf-root .purf-enc-canvas{flex:1;min-width:0;position:relative;border-bottom:1px solid var(--stroke-widget);overflow-x:auto;overflow-y:hidden;}
+  .purf-root .purf-enc-gl{position:absolute;left:0;right:0;bottom:50%;border-top:1px dashed var(--stroke-widget);opacity:.5;}
+  .purf-root .purf-enc-cols{position:absolute;inset:0;display:flex;align-items:flex-end;gap:12px;padding:0 6px;}
+  .purf-root .purf-enc-cols.many{position:relative;min-width:max-content;height:100%;}
+  .purf-root .purf-enc-cols.many .purf-enc-col{flex:0 0 46px;}
+  .purf-root .purf-enc-col{flex:1 1 0;min-width:0;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;border:0;background:transparent;padding:0;font-family:inherit;cursor:pointer;border-radius:6px;transition:background var(--dur,.15s) ease;}
+  .purf-root .purf-enc-col:hover,.purf-root .purf-enc-col:focus-visible{background:var(--wn-300);outline:none;}
+  .purf-root .purf-enc-val{font-size:10px;line-height:1.3;color:var(--txt-subtle);font-variant-numeric:tabular-nums;margin-bottom:3px;white-space:nowrap;}
+  .purf-root .purf-enc-col:hover .purf-enc-val{color:var(--txt-secondary);}
+  .purf-root .purf-enc-bar{display:block;width:58%;max-width:44px;min-height:2px;border-radius:3px 3px 0 0;background:var(--am-600);transition:background var(--dur,.15s) ease;}
+  .purf-root .purf-enc-col:hover .purf-enc-bar{background:var(--am-700);}
+  .purf-root .purf-enc-xrow{display:flex;gap:8px;padding:6px 16px 0;}
+  .purf-root .purf-enc-yaxsp{flex:0 0 44px;}
+  .purf-root .purf-enc-xcols{flex:1;min-width:0;display:flex;gap:12px;padding:0 6px;}
+  .purf-root .purf-enc-xcols.many{min-width:max-content;}
+  .purf-root .purf-enc-xcols.many .purf-enc-xcol{flex:0 0 46px;}
+  .purf-root .purf-enc-xcol{flex:1 1 0;min-width:0;display:flex;justify-content:center;}
+  .purf-root .purf-enc-xlbl{font-size:11px;color:var(--txt-secondary);white-space:nowrap;}
+  .purf-root .purf-enc-cap{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--txt-subtle);padding:9px 16px 4px;}
+  .purf-root .purf-enc-cap .material-symbols-rounded{font-size:14px;flex:0 0 auto;}
+  .purf-root .purf-enc-none{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:34px 24px;color:var(--txt-subtle);}
+  .purf-root .purf-enc-none-t{font-size:13px;font-weight:600;color:var(--txt-secondary);}
+  .purf-root .purf-enc-none-s{font-size:12px;}
+  .purf-root .purf-enc-tbl{flex:1;min-height:0;overflow-y:auto;}
+  .purf-root .purf-enc-row{display:grid;grid-template-columns:1fr 64px 120px;gap:10px;align-items:center;text-align:left;}
+  .purf-root .purf-enc-row .lr-main,.purf-root .purf-enc-row .wt-c2,.purf-root .purf-enc-row .purf-enc-c{text-align:left;}
+  .purf-root .purf-enc-c{font-size:12.5px;font-variant-numeric:tabular-nums;}
+  .purf-root .purf-enc-trow{width:100%;border:0;border-top:1px solid var(--stroke-widget);background:transparent;font:inherit;color:inherit;cursor:pointer;}
+  .purf-root .purf-enc-trow:hover,.purf-root .purf-enc-trow:focus-visible{background:var(--wn-100);outline:none;}
+  .purf-root .purf-enc-dim{color:var(--txt-subtle);}
+  .purf-root .purf-enc-split{flex-direction:row;gap:16px;padding:4px 16px 8px;}
+  .purf-root .purf-enc-half{flex:1 1 0;min-width:0;min-height:0;display:flex;flex-direction:column;}
+  .purf-root .purf-enc-split .purf-enc-plot,.purf-root .purf-enc-split .purf-enc-xrow{padding-left:0;padding-right:0;}
+  .purf-root .purf-enc-split .purf-enc-cap{padding-left:0;padding-right:0;}
+  .purf-root .purf-enc-mi{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;}
+  .purf-root .purf-enc-mi-l{display:flex;flex-direction:column;min-width:0;}
+  .purf-root .purf-enc-mi-s{font-size:10.5px;font-weight:600;}
+  .purf-root .purf-enc-mi-a{font-size:12px;font-variant-numeric:tabular-nums;flex:0 0 auto;}
 /* ===== end W13 Purchasing Management V2 CSS ===== */
   /* ===== W15 Bank Balances V2 CSS , prefix bkF , kind "bank-mb" ===== */
 
@@ -10685,7 +10729,7 @@ function purFRejectStep(w,po,reason){var live=purFLivePath(po);if(!live)return f
 function purFClearReject(po){var live=purFLivePath(po);if(!live)return false;var n=live.acted.length;for(var i=n-1;i>=0;i--)if(live.acted[i].state==="rejected")live.acted.splice(i,1);return live.acted.length!==n;}
 
 function purFTier(w){var s=w.size;if(s==="kpi")return "kpi";if(s==="xwide"||s==="large")return "xwide";return "wide";}
-function purFViewCur(w){return (w.purfView==="table")?"table":"kanban";}
+function purFViewCur(w){return (w.purfView==="table")?"table":((w.purfView==="enc")?"enc":"kanban");}
 function purFStatusVals(w,view){return (view==="table")?["All statuses"].concat(PURF_STAGES,PURF_ARCHIVE):["All statuses"].concat(PURF_LANES);}
 function purFStatusCur(w){
   var view=purFViewCur(w),vals=purFStatusVals(w,view),s=w.purfStatus||"All statuses";
@@ -10780,6 +10824,7 @@ function purFViewToggle(w){
   return '<div class="vtoggle purf-vtoggle" role="group" aria-label="View">'+
     seg("kanban","Kanban","view_kanban","The live approval flow: one column per approval state, longest waiting first, drag a card to action it.")+
     seg("table","Table","table_rows","Every purchase order over time, including closed and voided ones, with the department, year and overdue filters.")+
+    seg("enc","Encumbrances","account_balance_wallet","Budget committed by open purchase orders, by accounting period: pending or approved, unpaid, not rejected.")+
   '</div>';
 }
 function purFHeaderBlock(w){
@@ -10787,7 +10832,7 @@ function purFHeaderBlock(w){
   var mine=purFMineSet(w).length,pending=purFPendingCount(w),outstanding=purFSum(purFPendingSet(w));
   var setRows=(view==="table")?purFTableRows(w):purFBoardRows(w);
   var chips=purFChip(w,"scope",purFScopeCur(w),"Viewer scope, currently "+purFScopeCur(w),false);
-  chips+=purFChip(w,"status","Status: "+purFStatusCur(w),"PO status, currently "+purFStatusCur(w),loading);
+  if(view!=="enc")chips+=purFChip(w,"status","Status: "+purFStatusCur(w),"PO status, currently "+purFStatusCur(w),loading);
   if(purFPathVals(w).length>1)chips+=purFChip(w,"path",purFPathCur(w),"Approval path, currently "+purFPathCur(w),false);
   if(view==="table"&&tier==="xwide"){
     chips+=purFChip(w,"dept",purFDeptCur(w),"Department, Table view only, currently "+purFDeptCur(w),false);
@@ -10796,8 +10841,9 @@ function purFHeaderBlock(w){
   }
   var kpi=loading
     ? '<div class="dep-hd-kpigrp"><span class="sk" style="width:44px;height:24px;border-radius:6px"></span><span class="sk" style="width:150px;height:15px;border-radius:6px"></span></div>'
-    : '<div class="dep-hd-kpigrp"><span class="metric-value">'+mine+'</span><span class="bank-pill">'+(mine===1?"needs":"need")+' your approval</span></div>';
-  var ctx=loading?"":'<div class="purf-ctx">'+pending+' pending approval, '+purFMoney(outstanding)+' outstanding. '+setRows.length+' request'+(setRows.length===1?"":"s")+' in view.</div>';
+    : ((view==="enc")?'<div class="dep-hd-kpigrp"><span class="metric-value">'+purFMoney(purFEncTotal(w))+'</span><span class="bank-pill">encumbered, not yet paid</span></div>'
+    : '<div class="dep-hd-kpigrp"><span class="metric-value">'+mine+'</span><span class="bank-pill">'+(mine===1?"needs":"need")+' your approval</span></div>');
+  var ctx=loading?"":(view==="enc")?'<div class="purf-ctx">'+purFEncCtx(w)+'</div>':'<div class="purf-ctx">'+pending+' pending approval, '+purFMoney(outstanding)+' outstanding. '+setRows.length+' request'+(setRows.length===1?"":"s")+' in view.</div>';
   return '<div class="dep-hd purf-hd">'+
     '<div class="dep-hd-top"><div class="purf-chiprow">'+chips+'</div><div class="dep-hd-toggle">'+purFViewToggle(w)+'</div></div>'+
     '<div class="dep-hd-num"><div class="purf-numwrap">'+kpi+ctx+'</div>'+
@@ -10917,6 +10963,57 @@ function purFEmpty(w,filtered){
     '<div class="state-title">Nothing needs your approval</div>'+
     '<div class="state-sub">There are no purchase requests to review here. When a request is submitted on one of your approval paths, anything that needs you shows up. Copy adapted from Jo Lopez\'s design-sandbox purchasing build, with attribution.</div></div>';
 }
+/* ---- Encumbrances (legacy data panel chart: open order dollars by accounting period) ----------------
+   Open = stage Pending or Approved, unpaid, no rejected request row (GLAccountRepository.cs:2220: Closed
+   false, Status < 2, no RejectedID). Encumbrance = the order total; the demo has no dollars applied per
+   line. Period = the issue month, as the legacy groups by GL period. Held orders count: the legacy has
+   no hold exclusion. */
+var PURF_MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function purFEncOpen(po){return purFActive(po)&&!po.paid&&po.pay!=="paid"&&!(po.appr||[]).some(function(a){return a.state==="rejected";});}
+function purFEncRows(w){var pa=purFPathCur(w);return purFDataset(w).filter(function(p){return purFEncOpen(p)&&(pa==="All approval paths"||p.path===pa);});}
+function purFEncKey(po){return String(po.issued).slice(0,7);}
+function purFEncLabel(key){var p=key.split("-");return PURF_MON[+p[1]-1]+" "+p[0];}
+function purFEncPeriods(w){var map={};purFEncRows(w).forEach(function(p){var k=purFEncKey(p);if(!map[k])map[k]={key:k,label:purFEncLabel(k),amt:0,n:0,orders:[]};map[k].amt+=p.amt;map[k].n++;map[k].orders.push(p);});return Object.keys(map).sort().map(function(k){return map[k];});}
+function purFEncTotal(w){return purFSum(purFEncRows(w));}
+function purFEncCtx(w){var rows=purFEncRows(w),per=purFEncPeriods(w);if(!rows.length)return "No open purchase orders on this approval path.";return rows.length+" open order"+(rows.length===1?"":"s")+" across "+per.length+" accounting period"+(per.length===1?"":"s")+". Pending or approved, unpaid, not rejected.";}
+function purFEncViewCur(w){return (w.purfEncView==="table")?"table":"chart";}
+function purFAxis(n){if(n>=1000)return "$"+(n/1000).toFixed(n>=10000?0:1).replace(/\.0$/,"")+"k";return "$"+Math.round(n);}
+function purFEncChart(w){
+  var data=purFEncPeriods(w);
+  if(!data.length)return '<div class="purf-enc-none">'+purFIcon("insights")+'<div class="purf-enc-none-t">Nothing committed</div><div class="purf-enc-none-s">No open purchase orders, so no budget is encumbered right now.</div></div>';
+  var max=1;data.forEach(function(r){max=Math.max(max,r.amt);});max=max*1.18;
+  var many=data.length>8,cols="",xl="";
+  data.forEach(function(r){var h=Math.max(1,Math.round(r.amt/max*100));
+    var sr=r.label+": "+purFMoney(r.amt)+" encumbered on "+r.n+(r.n===1?" order":" orders")+". Open the list.";
+    cols+='<button class="purf-enc-col" data-purf="enc-pop" data-id="'+w.id+'" data-v="'+r.key+'" aria-label="'+purFEsc(sr)+'"><span class="purf-enc-val" aria-hidden="true">'+purFAxis(r.amt)+'</span><span class="purf-enc-bar" style="height:'+h+'%"></span></button>';
+    xl+='<div class="purf-enc-xcol"><span class="purf-enc-xlbl">'+r.label+'</span></div>';
+  });
+  var yl='<span>'+purFAxis(max)+'</span><span>'+purFAxis(max/2)+'</span><span>$0</span>';
+  return '<div class="purf-enc-chart">'+
+    '<div class="purf-enc-plot"><div class="purf-enc-yax">'+yl+'</div><div class="purf-enc-canvas"><div class="purf-enc-gl"></div><div class="purf-enc-cols'+(many?" many":"")+'">'+cols+'</div></div></div>'+
+    '<div class="purf-enc-xrow"><div class="purf-enc-yaxsp"></div><div class="purf-enc-xcols'+(many?" many":"")+'">'+xl+'</div></div>'+
+    '<div class="purf-enc-cap">'+purFIcon("info")+'Budget reserved by open purchase orders, by accounting period. Click a bar for the orders behind it.</div></div>';
+}
+function purFEncTable(w){
+  var data=purFEncPeriods(w),tot=purFEncTotal(w);
+  var head='<div class="wt-row wt-head purf-enc-row" role="row"><span class="lr-main" role="columnheader">Accounting period</span><span class="purf-enc-c" role="columnheader">Orders</span><span class="wt-c2" role="columnheader">Encumbered</span></div>';
+  var body=data.map(function(r){return '<button class="wt-row purf-enc-row purf-enc-trow" role="row" data-purf="enc-pop" data-id="'+w.id+'" data-v="'+r.key+'" aria-label="'+purFEsc(r.label+": "+r.n+" orders, "+purFMoney(r.amt)+". Open the list.")+'"><span class="lr-main" role="cell">'+r.label+'</span><span class="purf-enc-c" role="cell">'+r.n+'</span><span class="wt-c2" role="cell">'+purFMoney(r.amt)+'</span></button>';}).join("");
+  if(!data.length)body='<div class="wt-row purf-enc-row" role="row"><span class="lr-main purf-enc-dim" role="cell">No open commitments</span><span class="purf-enc-c" role="cell">0</span><span class="wt-c2" role="cell">'+purFMoney(0)+'</span></div>';
+  return '<div class="purf-enc-tbl" role="table" aria-label="Encumbrances by accounting period">'+head+body+'</div><div class="dep-total purf-enc-tot"><span>Total encumbered, not yet paid</span><span>'+purFMoney(tot)+'</span></div>';
+}
+function purFEncView(w){
+  var tier=purFTier(w),v=purFEncViewCur(w);
+  if(tier==="xwide")return '<div class="purf-enc purf-enc-split"><div class="purf-enc-half">'+purFEncChart(w)+'</div><div class="purf-enc-half">'+purFEncTable(w)+'</div></div>';
+  var tog='<div class="purf-enc-sub"><div class="vtoggle" role="group" aria-label="Encumbrance display">'+[["chart","Chart","bar_chart"],["table","Table","table_rows"]].map(function(o){return '<button class="vt'+(v===o[0]?" on":"")+'" data-purf="enc-view" data-id="'+w.id+'" data-v="'+o[0]+'" aria-pressed="'+(v===o[0])+'">'+purFIcon(o[2])+o[1]+'</button>';}).join("")+'</div></div>';
+  return '<div class="purf-enc">'+tog+((v==="table")?purFEncTable(w):purFEncChart(w))+'</div>';
+}
+/* Bar or row pop-up: the orders behind one period, each with its lane, so the figure ties back to the board. */
+function purFEncPopHTML(w){
+  var key=PURF_POP.v,per=purFEncPeriods(w).filter(function(r){return r.key===key;})[0];
+  if(!per)return '<div class="mi-note purf-popnote">No open orders in this period.</div>';
+  var rows=purFOldestFirst(per.orders).map(function(p){return '<button class="mi purf-enc-mi" data-purf="open" data-purf-ref="'+purFEsc(p.ref)+'" data-id="'+w.id+'"><span class="purf-enc-mi-l"><span class="mi-nm">'+purFEsc(p.ref)+' '+purFEsc(p.vendor)+'</span><span class="purf-enc-mi-s" style="color:'+(PURF_STAGE_TONE[purFLane(p)]||"inherit")+'">'+purFLane(p)+(p.hold?", on hold":"")+'</span></span><span class="purf-enc-mi-a">'+purFMoney(p.amt)+'</span></button>';}).join("");
+  return '<div class="cap">'+per.label+': '+purFMoney(per.amt)+' encumbered</div>'+rows+'<div class="mi-note purf-popnote">'+per.n+(per.n===1?" open order":" open orders")+' issued in '+per.label+'. Open one to see its record.</div>';
+}
 function purFBody(w){
   if(w.state==="empty"||!purFDataset(w).length)return purFEmpty(w,false);
   if(purFTier(w)==="kpi")return purFGlance(w);
@@ -10924,7 +11021,7 @@ function purFBody(w){
   var view=purFViewCur(w);
   var rows=(view==="table")?purFTableRows(w):purFBoardRows(w);
   if(!rows.length&&view==="kanban")return purFHeaderBlock(w)+purFEmpty(w,true);
-  return purFHeaderBlock(w)+'<div class="purf-body">'+((view==="table")?purFTable(w):purFBoard(w))+'</div>';
+  return purFHeaderBlock(w)+'<div class="purf-body">'+((view==="table")?purFTable(w):(view==="enc")?purFEncView(w):purFBoard(w))+'</div>';
 }
 /* Single entry point, dispatched by w.kind==="purchasing-mb". */
 function purFContent(w){
@@ -10937,6 +11034,7 @@ function purFPopContent(){
   var w=find(PURF_POP.id);if(!w)return "";
   var t=PURF_POP.type;
   if(t==="legend")return purFLegendHTML(w);
+  if(t==="enc")return purFEncPopHTML(w);
   function row(act,val,label,on,ic){
     return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-purf="'+act+'" data-id="'+w.id+'" data-v="'+purFEsc(val)+'">'+
       (on?purFIcon("check"):'<span class="mi-gap"></span>')+(ic?'<span class="mi-ic material-symbols-rounded" aria-hidden="true">'+ic+'</span>':"")+
@@ -10996,6 +11094,7 @@ function purFLegendHTML(w){
   var cards=[["purf-card-next","Your turn","Amber edge: you can act on this card now."],["purf-card-ok","Ready to pay","Grey: payment approved, waiting on the check."],["purf-card-paid","Paid","Green: check posted."],["purf-card-hold","On hold","Cream: parked, not draggable."],["purf-card-rej","Rejected","Red tint: rejected, not draggable until cleared."]];
   out+='<div class="cap">Card colours</div>'+cards.map(function(c){return '<div class="purf-lg-row"><span class="pur-kcard purf-card purf-lg-card '+c[0]+'">'+c[1]+'</span><span class="purf-lg-txt">'+c[2]+'</span></div>';}).join("");
   out+='<div class="purf-lg-row"><span class="purf-card-age purf-age-hot purf-lg-age">'+purFIcon("schedule")+'overdue</span><span class="purf-lg-txt">Red clock: past its due date.</span></div>';
+  out+='<div class="cap">Encumbrances view</div><div class="mi-note purf-popnote purf-lg-rules">Budget reserved by open purchase orders, grouped by the accounting period they were issued in. Open means pending or approved, unpaid and not rejected. Closed, voided and paid orders release their encumbrance.</div>';
   out+='<div class="cap">Moving a card</div><div class="mi-note purf-popnote purf-lg-rules">Dragging a card to the next lane records your approval. One lane at a time, forward only. Only paid orders can be closed; a paid order cannot be voided here. A card on hold moves only to Void.</div>';
   return out;
 }
@@ -11325,6 +11424,8 @@ function purFHandleClick(e){
   }
   if(a==="ov"){if(w){w.purfOv=!w.purfOv;purFLoad(w);}purFClosePop();render();return;}
   /* The view toggle is a local re-render: it must never show loading. */
+  if(a==="enc-view"){if(w)w.purfEncView=v;purFClosePop();render();return;}
+  if(a==="enc-pop"){if(PURF_POP&&PURF_POP.type==="enc"&&PURF_POP.id===id&&PURF_POP.v===v){purFClosePop();return;}PURF_POP={type:"enc",id:id,v:v};PURF_Q="";purFRenderPop(t);return;}
   if(a==="view"){if(w)w.purfView=v;purFClosePop();render();return;}
   if(a==="more"){if(w)w.purfView="table";purFClosePop();render();return;}
   if(a==="open"){if(w&&ref)purFOpenPO(w,ref);return;}
