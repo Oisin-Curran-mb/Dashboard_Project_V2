@@ -153,6 +153,7 @@ const css = [
   "  .purf-root .purf-enc-mi-l{display:flex;flex-direction:column;min-width:0;}",
   "  .purf-root .purf-enc-mi-s{font-size:10.5px;font-weight:600;}",
   "  .purf-root .purf-enc-mi-a{font-size:12px;font-variant-numeric:tabular-nums;flex:0 0 auto;}",
+  "  .purf-root .purf-enc-tot{margin-top:auto;}",
   ""].join(NL);
 t = t.replace(CEND, css + CEND);
 console.log("edited: encumbrance CSS");

@@ -67,6 +67,8 @@ A.eq(C("purFMineSet", wide).length, 10, "ten requests await me (next or later, i
 A.eq(C("purFPendingCount", wide), 13, "thirteen requests pending approval");
 
 /* ---------- 2. render ---------------------------------------------------- */
+/* The table is the default view since 27 Sep; the board sections opt into Kanban at Detail explicitly. */
+xw.purfView = "kanban";
 [wide, kpi, xw].forEach(function (w) { const h = C("purFContent", w); A.ok(h && h.length > 800, w.id + " (" + w.size + ") renders (" + h.length + " bytes)"); A.noEmDash(h, w.id); if (/wt-head/.test(h)) A.headMatchesBody(h, w.id + " table (D12)"); });
 let h = C("purFContent", xw);
 A.contains(h, '<span class="metric-value">10</span><span class="bank-pill">need your approval</span>', "Detail headline: requests awaiting me");
@@ -131,7 +133,7 @@ mh = openTab("PO-2899"); A.contains(mh, "Skipped: below every minimum on this le
 A.absent(mh, "Rejected requests do not enter", "rejected copy keyed on the row, not a stage");
 
 /* ---------- 4b. legend (owner, 27 Sep): info icon top right, Explore and Detail only ---- */
-const hdWide = C("purFHeaderBlock", wide), hdX = C("purFHeaderBlock", xw), glance = C("purFContent", kpi);
+xw.purfView = "kanban"; const hdWide = C("purFHeaderBlock", wide), hdX = C("purFHeaderBlock", xw), glance = C("purFContent", kpi);
 A.contains(hdWide, 'data-purf="legend"', "Explore header carries the legend icon"); A.contains(hdX, 'data-purf="legend"', "Detail header carries the legend icon");
 A.absent(glance, 'data-purf="legend"', "Glance has no legend icon");
 A.ok(hdX.indexOf("dep-hd-num") < hdX.indexOf('data-purf="legend"'), "the icon sits in the headline row, one line below the toggle (owner, 27 Sep)");
@@ -181,9 +183,25 @@ env.get("PURF_POP"); C("purFClosePop");
 /* bar pop-up lists the orders behind a period with their lane */
 const body = C("purFBody", wide); A.contains(body, "purf-enc", "body renders the view");
 xw.purfView = "table"; wide.purfView = "kanban"; wide.purfEncView = null;
-A.contains(C("purFLegendHTML", wide), "Encumbrances view", "legend explains the view");
+A.absent(C("purFLegendHTML", wide), "Encumbrances view", "legend carries no Encumbrances note (icon is hidden in that view)");
 A.contains(css, ".purf-root .purf-enc-bar{", "chart CSS copied as purf-enc-*"); A.absent(block, ".pur-bar", "no dependency on her .pur-bar class");
 reset();
+
+/* ---------- 4e. legend by view, no Kanban at Explore (owner, 27 Sep) ------ */
+reset(); wide.purfView = null; xw.purfView = null; wide.purfEncView = null;
+A.absent(C("purFViewToggle", wide), 'data-v="kanban"', "Explore toggle has no Kanban"); A.contains(C("purFViewToggle", wide), 'data-v="table"', "Explore offers Table"); A.contains(C("purFViewToggle", wide), 'data-v="enc"', "Explore offers Encumbrances");
+A.contains(C("purFViewToggle", xw), 'data-v="kanban"', "Detail keeps Kanban");
+A.eq(C("purFViewCur", wide), "table", "Explore default view is the table"); A.eq(C("purFViewCur", xw), "table", "Detail default view is the table too (owner, 27 Sep)"); xw.purfView = "kanban"; A.eq(C("purFViewCur", xw), "kanban", "Kanban stays an explicit choice at Detail"); xw.purfView = null;
+wide.purfView = "kanban"; A.eq(C("purFViewCur", wide), "table", "a stored kanban view resolves to table at Explore"); wide.purfView = null;
+xw.purfView = "enc"; A.absent(C("purFHeaderBlock", xw), 'data-purf="legend"', "no legend icon in the Encumbrances view"); xw.purfView = "table";
+A.contains(C("purFHeaderBlock", xw), 'data-purf="legend"', "legend icon in the Table view");
+C("purFOpenPop", "legend", xw.id, null); const lgT = C("purFPopContent"); C("purFClosePop");
+A.contains(lgT, '<div class="cap">Status</div>', "table legend: Status section"); A.contains(lgT, ">Closed</span>", "table legend names Closed"); A.contains(lgT, ">Voided</span>", "table legend names Voided");
+A.contains(lgT, "purf-ovflag", "table legend shows the Overdue flag"); A.contains(lgT, "purf-turn purf-turn-next", "table legend keeps the badges");
+["purf-card-", "purf-fin-close", "Moving a card", "Drag the card", "Encumbrances view", "purf-age-hot"].forEach(function (k) { A.absent(lgT, k, "table legend has no board-only item " + k); });
+xw.purfView = "kanban"; C("purFOpenPop", "legend", xw.id, null); const lgK = C("purFPopContent"); C("purFClosePop");
+A.contains(lgK, '<div class="cap">Lanes</div>', "board legend: Lanes"); A.contains(lgK, "purf-card-next", "board legend: card colours"); A.contains(lgK, "Moving a card", "board legend: move rules"); A.absent(lgK, ">Closed</span>", "board legend has no Closed chip");
+xw.purfView = null; reset();
 
 /* ---------- 5. hygiene --------------------------------------------------- */
 A.noEmDash(block.replace(/\/\*[\s\S]*?\*\//g, ""), "block code");

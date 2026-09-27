@@ -2297,6 +2297,8 @@
   .purf-root .purf-enc-mi-l{display:flex;flex-direction:column;min-width:0;}
   .purf-root .purf-enc-mi-s{font-size:10.5px;font-weight:600;}
   .purf-root .purf-enc-mi-a{font-size:12px;font-variant-numeric:tabular-nums;flex:0 0 auto;}
+  .purf-root .purf-lg-ov{justify-self:start;font-size:11px;}
+  .purf-root .purf-enc-tot{margin-top:auto;}
 /* ===== end W13 Purchasing Management V2 CSS ===== */
   /* ===== W15 Bank Balances V2 CSS , prefix bkF , kind "bank-mb" ===== */
 
@@ -9003,7 +9005,7 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
   };
   /* number, display name, HER kind + her state, OUR kind + our state */
   var CMP_ROWS=[
-    ["W13","Purchasing Management","purchasing",{admin:true,pstatus:"mine",ppath:null,purview:"queue",encview:"chart",psort:"age-desc"},"purchasing-mb",{purfView:"kanban",purfStatus:"All statuses",purfPath:null,purfDept:null,purfYear:null,purfOv:false,updated:"just now"}],
+    ["W13","Purchasing Management","purchasing",{admin:true,pstatus:"mine",ppath:null,purview:"queue",encview:"chart",psort:"age-desc"},"purchasing-mb",{purfView:"table",purfStatus:"All statuses",purfPath:null,purfOv:false,updated:"just now"}],
     ["W15","Bank Balances","bank",{bkacct:null,bkview:"table",bksort:"bal-desc"},"bank-mb",{bkFAcct:null,bkFView:"table",bkFPage:0,bkFOver:false,bkFSort:"nm-asc"}],
     ["W16","Accounts Payable By Due Date","payables",{apview:"table",apDue:"total",apsort:"due-asc",updated:"just now"},"payables-mb",{apFDue:"total",apFSort:"due-asc",apFHz:"all",updated:"just now"}],
     ["W17","Gifts Pledges","gifts",{gftView:"progress",gftSort:"fulfilled-asc",gftPurpose:"All purposes"},"gifts-mb",{gpFView:"goal",gpFCamp:"All Campaigns",gpFRange:"year",gpFExp:{},gpFPage:{},gpFPlExp:{},updated:"just now"}],
@@ -9161,12 +9163,12 @@ function gftTriggerSelector(){if(pop.type==="gft-date")return '[data-action="gft
       {id:"faF5", title:"Fixed Asset Values",        kind:"fixedassets",size:"wide", tiers:["kpi","wide","xwide"],goto:false,state:"unspecified",faFDim:"cls",faFMeasure:"net",faFSort:"tag-asc",faFPage:0,updated:"just now"}
       */
       /* ===== W13 Purchasing Management V2 registry, prefix purF, kind "purchasing-mb". Six ===== */
-      ,{id:"purF",  title:"Purchasing Management (OC)",                        kind:"purchasing-mb",size:"wide", tiers:["kpi","wide","xwide"],purfView:"kanban",purfStatus:"All statuses",purfPath:null,purfDept:null,purfYear:null,purfOv:false,updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]}
-      ,{id:"purF_k",title:"Purchasing Management (OC, Glance)",                kind:"purchasing-mb",size:"kpi",  tiers:["kpi","wide","xwide"],purfView:"kanban",purfStatus:"All statuses",purfPath:null,purfDept:null,purfYear:null,purfOv:false,updated:"just now"}
-      ,{id:"purF_x",title:"Purchasing Management (OC, Detail)",                kind:"purchasing-mb",size:"xwide",tiers:["kpi","wide","xwide"],purfView:"kanban",purfStatus:"All statuses",purfPath:null,purfDept:null,purfYear:null,purfOv:false,updated:"just now"}
-      ,{id:"purF2", title:"Purchasing Management (OC, PO Table)",              kind:"purchasing-mb",size:"xwide",tiers:["kpi","wide","xwide"],purfView:"table", purfStatus:"All statuses",purfPath:null,purfDept:null,purfYear:null,purfOv:false,updated:"just now"}
-      ,{id:"purF3", title:"Purchasing Management (OC, Pending only)",          kind:"purchasing-mb",size:"wide", tiers:["kpi","wide","xwide"],purfView:"kanban",purfStatus:"Pending",      purfPath:null,purfDept:null,purfYear:null,purfOv:false,updated:"just now"}
-      ,{id:"purF4", title:"Purchasing Management (OC, nothing to approve)",    kind:"purchasing-mb",size:"wide", tiers:["kpi","wide","xwide"],dataset:"empty",purfView:"kanban",purfStatus:"All statuses",purfPath:null,purfDept:null,purfYear:null,purfOv:false,updated:"just now"}
+      ,{id:"purF",  title:"Purchasing Management (OC)",                        kind:"purchasing-mb",size:"wide", tiers:["kpi","wide","xwide"],purfView:"table",purfStatus:"All statuses",purfPath:null,purfOv:false,updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]}
+      ,{id:"purF_k",title:"Purchasing Management (OC, Glance)",                kind:"purchasing-mb",size:"kpi",  tiers:["kpi","wide","xwide"],purfView:"table",purfStatus:"All statuses",purfPath:null,purfOv:false,updated:"just now"}
+      ,{id:"purF_x",title:"Purchasing Management (OC, Detail)",                kind:"purchasing-mb",size:"xwide",tiers:["kpi","wide","xwide"],purfView:"table",purfStatus:"All statuses",purfPath:null,purfOv:false,updated:"just now"}
+      ,{id:"purF2", title:"Purchasing Management (OC, PO Table)",              kind:"purchasing-mb",size:"xwide",tiers:["kpi","wide","xwide"],purfView:"table", purfStatus:"All statuses",purfPath:null,purfOv:false,updated:"just now"}
+      ,{id:"purF3", title:"Purchasing Management (OC, Pending only)",          kind:"purchasing-mb",size:"wide", tiers:["kpi","wide","xwide"],purfView:"table",purfStatus:"Pending",      purfPath:null,purfOv:false,updated:"just now"}
+      ,{id:"purF4", title:"Purchasing Management (OC, nothing to approve)",    kind:"purchasing-mb",size:"wide", tiers:["kpi","wide","xwide"],dataset:"empty",purfView:"table",purfStatus:"All statuses",purfPath:null,purfOv:false,updated:"just now"}
       /* ===== W15 Bank Balances V2 registry, prefix bkF, kind "bank-mb". Seven registry ===== */
       ,{id:"bkF",   title:"Bank Balances (OC)",                        kind:"bank-mb",size:"wide", tiers:["kpi","wide","xwide"],bkFAcct:null,      bkFView:"table",bkFPage:0,bkFOver:false,bkFSort:"nm-asc"}
       ,{id:"bkF_k", title:"Bank Balances (OC, Glance)",                kind:"bank-mb",size:"kpi",  tiers:["kpi","wide","xwide"],bkFAcct:null,      bkFView:"table",bkFPage:0,bkFOver:false,bkFSort:"nm-asc"}
@@ -10618,8 +10620,6 @@ var PURF_POS=[
 var PURF_POS_EMPTY=[];
 /* Rule 11 filter value lists. Both are unconfirmed fields; the lists are the
    Final's own, and each drops entirely if the field turns out not to be real. */
-var PURF_DEPTS=["Finance","Admin","Ministry","Facilities","IT"];
-var PURF_YEARS=["FY 2026","FY 2025"];
 var PURF_VENDOR_META={
   "Acme Paper Supply":{a:"3003 Airways Blvd, Memphis, TN 38131-0117",t:"0/29/30"},
   "A-1 Advertising":{a:"214 Union Ave, Memphis, TN 38103",t:"Net 30"},
@@ -10729,7 +10729,9 @@ function purFRejectStep(w,po,reason){var live=purFLivePath(po);if(!live)return f
 function purFClearReject(po){var live=purFLivePath(po);if(!live)return false;var n=live.acted.length;for(var i=n-1;i>=0;i--)if(live.acted[i].state==="rejected")live.acted.splice(i,1);return live.acted.length!==n;}
 
 function purFTier(w){var s=w.size;if(s==="kpi")return "kpi";if(s==="xwide"||s==="large")return "xwide";return "wide";}
-function purFViewCur(w){return (w.purfView==="table")?"table":((w.purfView==="enc")?"enc":"kanban");}
+/* Explore (wide) has no Kanban: a stored kanban view resolves to the table there (owner, 27 Sep). */
+/* Default view is the table at every tier (owner, 27 Sep); Kanban is an explicit choice at Detail only. */
+function purFViewCur(w){if(w.purfView==="enc")return "enc";if(w.purfView==="kanban"&&purFTier(w)!=="wide")return "kanban";return "table";}
 function purFStatusVals(w,view){return (view==="table")?["All statuses"].concat(PURF_STAGES,PURF_ARCHIVE):["All statuses"].concat(PURF_LANES);}
 function purFStatusCur(w){
   var view=purFViewCur(w),vals=purFStatusVals(w,view),s=w.purfStatus||"All statuses";
@@ -10746,8 +10748,6 @@ function purFPathVals(w){
   return out;
 }
 function purFPathCur(w){var vals=purFPathVals(w);return (w.purfPath&&vals.indexOf(w.purfPath)>-1)?w.purfPath:"All approval paths";}
-function purFDeptCur(w){return (w.purfDept&&PURF_DEPTS.indexOf(w.purfDept)>-1)?w.purfDept:"All Departments";}
-function purFYearCur(w){return (w.purfYear&&PURF_YEARS.indexOf(w.purfYear)>-1)?w.purfYear:"All years";}
 function purFOvOnly(w){return !!w.purfOv;}
 /* The two global filters, applied for every view. */
 /* The global filters, applied for every view: status (lane or record status), path, and the viewer scope. */
@@ -10765,10 +10765,8 @@ function purFOldestFirst(list){return list.slice().sort(function(a,b){return pur
 function purFBoardRows(w){return purFOldestFirst(purFRows(w).filter(purFActive));}
 /* The table adds the three Rule 11 filters and keeps the archive. */
 function purFTableRows(w){
-  var dp=purFDeptCur(w),yr=purFYearCur(w),ov=purFOvOnly(w);
+  var ov=purFOvOnly(w);
   return purFOldestFirst(purFRows(w).filter(function(p){
-    if(dp!=="All Departments"&&p.dept!==dp)return false;
-    if(yr!=="All years"&&p.fy!==yr)return false;
     if(ov&&!purFOverdue(p))return false;
     return true;
   }));
@@ -10822,7 +10820,7 @@ function purFViewToggle(w){
     return '<button class="vt'+(v===val?" on":"")+'" data-purf="view" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(v===val)+'" title="'+purFEsc(tip)+'">'+purFIcon(ic)+lbl+'</button>';
   }
   return '<div class="vtoggle purf-vtoggle" role="group" aria-label="View">'+
-    seg("kanban","Kanban","view_kanban","The live approval flow: one column per approval state, longest waiting first, drag a card to action it.")+
+    ((purFTier(w)==="wide")?"":seg("kanban","Kanban","view_kanban","The live approval flow: one column per approval state, longest waiting first, drag a card to action it."))+
     seg("table","Table","table_rows","Every purchase order over time, including closed and voided ones, with the department, year and overdue filters.")+
     seg("enc","Encumbrances","account_balance_wallet","Budget committed by open purchase orders, by accounting period: pending or approved, unpaid, not rejected.")+
   '</div>';
@@ -10835,8 +10833,6 @@ function purFHeaderBlock(w){
   if(view!=="enc")chips+=purFChip(w,"status","Status: "+purFStatusCur(w),"PO status, currently "+purFStatusCur(w),loading);
   if(purFPathVals(w).length>1)chips+=purFChip(w,"path",purFPathCur(w),"Approval path, currently "+purFPathCur(w),false);
   if(view==="table"&&tier==="xwide"){
-    chips+=purFChip(w,"dept",purFDeptCur(w),"Department, Table view only, currently "+purFDeptCur(w),false);
-    chips+=purFChip(w,"year",purFYearCur(w),"Year, Table view only, currently "+purFYearCur(w),false);
     chips+=purFOvChip(w);
   }
   var kpi=loading
@@ -10847,7 +10843,7 @@ function purFHeaderBlock(w){
   return '<div class="dep-hd purf-hd">'+
     '<div class="dep-hd-top"><div class="purf-chiprow">'+chips+'</div><div class="dep-hd-toggle">'+purFViewToggle(w)+'</div></div>'+
     '<div class="dep-hd-num"><div class="purf-numwrap">'+kpi+ctx+'</div>'+
-      '<button class="purf-lgbtn" data-purf="legend" data-id="'+w.id+'" aria-haspopup="dialog" aria-label="Legend: what the lanes, badges and colours mean" data-tip="Legend">'+purFIcon("info")+'</button>'+
+      ((view==="enc")?"":'<button class="purf-lgbtn" data-purf="legend" data-id="'+w.id+'" aria-haspopup="dialog" aria-label="Legend: what the lanes, badges and colours mean" data-tip="Legend">'+purFIcon("info")+'</button>')+
     '</div>'+
   '</div>';
 }
@@ -11059,18 +11055,6 @@ function purFPopContent(){
     if(!list.length&&q&&"all approval paths".indexOf(q)<0)out+='<div class="mi-note purf-popnote">No approval paths match "'+purFEsc(PURF_Q)+'"</div>';
     return out+'</div>';
   }
-  if(t==="dept"){
-    var cd=purFDeptCur(w);
-    return '<div class="cap">Department</div>'+row("set-dept","all","All Departments",cd==="All Departments","")+
-      PURF_DEPTS.map(function(d){return row("set-dept",d,d,cd===d,"");}).join("")+
-      '<div class="mi-note purf-popnote">Table view only. Department is not confirmed to exist as a field on purchasing records.</div>';
-  }
-  if(t==="year"){
-    var cy=purFYearCur(w);
-    return '<div class="cap">Year</div>'+row("set-year","all","All years",cy==="All years","")+
-      PURF_YEARS.map(function(y){return row("set-year",y,y,cy===y,"");}).join("")+
-      '<div class="mi-note purf-popnote">Table view only. Year is not confirmed to exist as a field on purchasing records.</div>';
-  }
   return "";
 }
 function purFClosePop(){PURF_POP=null;PURF_Q="";var p=document.getElementById("purfPop");if(p){p.innerHTML="";if(p.remove)p.remove();else if(p.parentNode)p.parentNode.removeChild(p);}}
@@ -11085,16 +11069,24 @@ function purFPositionPop(el,anchor){
 /* Legend. Every sample is the board's own markup (lane tone, .purf-turn-*, .purf-card-*), so what the
    legend shows is what the board draws. */
 function purFLegendHTML(w){
-  var lanes=[["Pending approval","Request path open. Approvers act in level order."],["Payment approval","Approved. Payment path open, one per invoice."],["Ready to pay","Payment approved. Waiting on the check."],["Paid","Check posted. Drag to Close when done."]];
-  var out='<div class="cap">Lanes</div>'+lanes.map(function(l){return '<div class="purf-lg-row"><span class="purf-chip-st purf-lg-lane" style="color:'+PURF_STAGE_TONE[l[0]]+'">'+l[0]+'</span><span class="purf-lg-txt">'+l[1]+'</span></div>';}).join("");
-  out+='<div class="purf-lg-row"><span class="purf-lg-fin purf-fin-close">Close</span><span class="purf-lg-txt">Finish column: paid orders only. Leaves the board, stays in the Table.</span></div>';
-  out+='<div class="purf-lg-row"><span class="purf-lg-fin purf-fin-void">Void</span><span class="purf-lg-txt">Finish column: unpaid orders only. Leaves the board, stays in the Table.</span></div>';
-  var badges=[["next","how_to_reg","Your approval next","Your level is the next one. Drag the card on, or approve on the Approvals tab."],["mine","schedule","Your approval later","You are on the path, someone else is first. You may still approve; that also satisfies the lower levels."],["waiting","hourglass_top","Waiting on","Someone else's turn. You cannot move the card."],["rejected","block","Rejected by","An approver rejected it with a reason. Clear the rejection on the Approvals tab to resume."],["hold","lock","On hold","Parked with a reason. Remove the hold before it moves."],["next","how_to_reg","No approver required","The amount is under every minimum on the path. Approve to release it."]];
+  var view=purFViewCur(w),table=(view==="table");
+  var lanes=[["Pending approval","Request path open. Approvers act in level order."],["Payment approval","Approved. Payment path open, one per invoice."],["Ready to pay","Payment approved. Waiting on the check."],["Paid",table?"Check posted.":"Check posted. Drag to Close when done."]];
+  if(table)lanes=lanes.concat([["Closed","Final. Archive state, listed in the Table only."],["Voided","Cancelled. Archive state, listed in the Table only."]]);
+  var out='<div class="cap">'+(table?"Status":"Lanes")+'</div>'+lanes.map(function(l){return '<div class="purf-lg-row"><span class="purf-chip-st purf-lg-lane" style="color:'+PURF_STAGE_TONE[l[0]]+'">'+l[0]+'</span><span class="purf-lg-txt">'+l[1]+'</span></div>';}).join("");
+  if(!table){
+    out+='<div class="purf-lg-row"><span class="purf-lg-fin purf-fin-close">Close</span><span class="purf-lg-txt">Finish column: paid orders only. Leaves the board, stays in the Table.</span></div>';
+    out+='<div class="purf-lg-row"><span class="purf-lg-fin purf-fin-void">Void</span><span class="purf-lg-txt">Finish column: unpaid orders only. Leaves the board, stays in the Table.</span></div>';
+  }
+  var act=table?"Approve on the Approvals tab of the record.":"Drag the card on, or approve on the Approvals tab.";
+  var badges=[["next","how_to_reg","Your approval next","Your level is the next one. "+act],["mine","schedule","Your approval later","You are on the path, someone else is first. You may still approve; that also satisfies the lower levels."],["waiting","hourglass_top","Waiting on","Someone else's turn."+(table?"":" You cannot move the card.")],["rejected","block","Rejected by","An approver rejected it with a reason. Clear the rejection on the Approvals tab to resume."],["hold","lock","On hold","Parked with a reason. Remove the hold before it moves."],["next","how_to_reg","No approver required","The amount is under every minimum on the path. Approve to release it."]];
   out+='<div class="cap">Badges: whose turn it is</div>'+badges.map(function(b){return '<div class="purf-lg-row"><span class="purf-turn purf-turn-'+b[0]+'">'+purFIcon(b[1])+b[2]+'</span><span class="purf-lg-txt">'+b[3]+'</span></div>';}).join("");
+  if(table){
+    out+='<div class="cap">Issued column</div><div class="purf-lg-row"><span class="purf-ovflag purf-lg-ov">'+purFIcon("warning")+'Overdue</span><span class="purf-lg-txt">Past its expected-by date and not yet approved.</span></div>';
+    return out;
+  }
   var cards=[["purf-card-next","Your turn","Amber edge: you can act on this card now."],["purf-card-ok","Ready to pay","Grey: payment approved, waiting on the check."],["purf-card-paid","Paid","Green: check posted."],["purf-card-hold","On hold","Cream: parked, not draggable."],["purf-card-rej","Rejected","Red tint: rejected, not draggable until cleared."]];
   out+='<div class="cap">Card colours</div>'+cards.map(function(c){return '<div class="purf-lg-row"><span class="pur-kcard purf-card purf-lg-card '+c[0]+'">'+c[1]+'</span><span class="purf-lg-txt">'+c[2]+'</span></div>';}).join("");
   out+='<div class="purf-lg-row"><span class="purf-card-age purf-age-hot purf-lg-age">'+purFIcon("schedule")+'overdue</span><span class="purf-lg-txt">Red clock: past its due date.</span></div>';
-  out+='<div class="cap">Encumbrances view</div><div class="mi-note purf-popnote purf-lg-rules">Budget reserved by open purchase orders, grouped by the accounting period they were issued in. Open means pending or approved, unpaid and not rejected. Closed, voided and paid orders release their encumbrance.</div>';
   out+='<div class="cap">Moving a card</div><div class="mi-note purf-popnote purf-lg-rules">Dragging a card to the next lane records your approval. One lane at a time, forward only. Only paid orders can be closed; a paid order cannot be voided here. A card on hold moves only to Void.</div>';
   return out;
 }
@@ -11404,7 +11396,7 @@ function purFHandleClick(e){
   var a=t.getAttribute("data-purf"),id=t.getAttribute("data-id"),ref=t.getAttribute("data-purf-ref"),v=t.getAttribute("data-v");
   if(a==="stop")return;
   var w=id?find(id):null;
-  if(a==="status"||a==="path"||a==="dept"||a==="year"||a==="scope"||a==="legend"){purFOpenPop(a,id,t);return;}
+  if(a==="status"||a==="path"||a==="scope"||a==="legend"){purFOpenPop(a,id,t);return;}
   if(a==="set-scope"){if(w&&purFScopeCur(w)!==v){w.purfScope=v;}purFClosePop();render();return;}
   if(a==="set-status"){
     if(w&&purFStatusCur(w)!==v){w.purfStatus=v;w.purfPath=null;purFLoad(w);}
@@ -11412,14 +11404,6 @@ function purFHandleClick(e){
   }
   if(a==="set-path"){
     if(w){var np=(v==="all"||!v)?null:v;if((w.purfPath||null)!==np){w.purfPath=np;purFLoad(w);}}
-    purFClosePop();render();return;
-  }
-  if(a==="set-dept"){
-    if(w){var nd=(v==="all"||!v)?null:v;if((w.purfDept||null)!==nd){w.purfDept=nd;purFLoad(w);}}
-    purFClosePop();render();return;
-  }
-  if(a==="set-year"){
-    if(w){var ny=(v==="all"||!v)?null:v;if((w.purfYear||null)!==ny){w.purfYear=ny;purFLoad(w);}}
     purFClosePop();render();return;
   }
   if(a==="ov"){if(w){w.purfOv=!w.purfOv;purFLoad(w);}purFClosePop();render();return;}
