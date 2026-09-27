@@ -19,7 +19,9 @@ const fn = [
   "  function bankSpark(w){var run=bankHistory(w),mx=Math.max.apply(null,run),mn=Math.min.apply(null,run);",
   "    if(run.length<2||mx===mn)return \"\";",
   "    var sel=bankSelected(w),who=sel?sel.name:\"all bank accounts\";",
-  "    return depSparkHTML({s:run,labs:bankMonthLabels()},\"bank-spark\",\"Month-end balance of \"+who+\" over the last twelve months. Hover to read a month and its amount\");}",
+  "    var lbl=\"Month-end balance of \"+who+\" over the last twelve months. Hover to read a month and its amount\";",
+  "    /* depSparkHTML hard-codes the Deposits aria text, so the label is set here */",
+  "    return depSparkHTML({s:run,labs:bankMonthLabels()},\"bank-spark\",lbl).replace(/aria-label=\"[^\"]*\"/,'aria-label=\"'+lbl.replace(/\"/g,\"&quot;\")+'\"');}",
   ""].join(NL);
 t = t.slice(0, s) + fn + t.slice(e);
 console.log("edited: 12-month sparkline");
