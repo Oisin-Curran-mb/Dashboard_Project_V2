@@ -852,4 +852,6 @@ A.ok(registry.some(function (w) { return w.state === "empty"; }), "an empty-stat
   A.eq(stray.length, 0, "the block leaks no non-namespaced global (" + stray.join(", ") + ")");
 })();
 
+/* 2026-09-28: the modal's donor-row expand must redraw the body-mounted modal, not just the widgets (owner: 'OC pop up used to work') */
+A.contains(shell.script, "if(a==='gopen'){if(!w)return;var gid=t.getAttribute('data-plid');w.gpFPlExp=w.gpFPlExp||{};w.gpFPlExp[gid]=!w.gpFPlExp[gid];gpFClosePop();render();if(GPF_MODAL)gpFRenderModal();return;}", "gopen redraws the modal when it is open");
 process.exit(A.report());
