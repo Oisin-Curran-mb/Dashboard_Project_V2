@@ -110,5 +110,5 @@ A.contains(css, ".mct-sec{display:flex;flex-direction:column;gap:7px;padding:10p
   const g = EX.contentHTML(wk); A.contains(g, 'class="mct-gsec mct-gsec-recent"', "Recent bubble"); A.contains(g, 'class="mct-gsec mct-gsec-my"', "My Tasks bubble"); A.ok(g.indexOf("mct-gsec-recent") < g.indexOf("mct-gsec-my"), "Recent first, My Tasks second, as before");
   const tiles = (g.match(/class="mct-itile/g) || []).length; A.eq(tiles, EX.mctGlanceTasks ? EX.mctGlanceTasks(wk).length : tiles, "tile count unchanged (Recent, then saved tasks not already recent)"); A.contains(g, "mct-search", "search box kept");
   wk.mctQ = "check"; const r = EX.contentHTML(wk); A.contains(r, 'class="mct-gsec mct-gsec-results"', "search matches sit in one bubble"); A.absent(r, "mct-gsec-recent", "no group bubbles while searching"); wk.mctQ = ""; })();
-A.contains(css, ".mct-gsec{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;padding:6px;border-radius:12px;background:var(--wn-250);}", "bubble uses the section panel token");
+A.contains(css, ".mct-gsec{display:inline-flex;align-items:center;gap:8px;flex:0 0 auto;padding:2px 6px;border-radius:12px;background:var(--wn-250);}", "bubble uses the section panel token");
 process.exit(A.report());
