@@ -313,38 +313,32 @@
     },
     "W13": {
       "name": "Purchasing Management",
-      "driver": "w13-purchasing-mb.driver.js",
-      "ours": {
-        "kind": "purchasing-mb",
+      "driver": "w13-purchasing.driver.js",
+      "decided": "2026-09-27 OC (rebuilt on the legacy approval model; record pop-up = Requests/Update page)",
+      "removed": [
+        "purchasing-mb"
+      ],
+      "baselineDrop": [
+        "{id:\"pur\",",
+        "{id:\"pur_k\",",
+        "{id:\"pur2\",",
+        "{id:\"pur3\",",
+        "{id:\"pur4\",",
+        "{id:\"pur5\","
+      ],
+      "final": {
+        "kind": "purchasing",
         "prefix": "purF",
         "css": {
-          "grep": [
-            ".purf-"
-          ]
+          "start": "/* ===== W13 Purchasing Management V2 CSS ===== */",
+          "end": "/* ===== end W13 Purchasing Management V2 CSS ===== */"
         },
         "js": {
-          "start": "var PURF_TODAY=new Date(2026,7,19);",
+          "start": "/* ===== W13 Purchasing Management V2 JS , prefix purF , kind \"purchasing\" ===== */",
           "end": "/* ===== end W13 Purchasing Management V2 ===== */"
         },
         "registry": {
           "grep": [
-            "kind:\"purchasing-mb\""
-          ]
-        }
-      },
-      "jo": {
-        "kind": "purchasing",
-        "prefix": "pur",
-        "css": {
-          "grep": [
-            ".pur-",
-            ".po-"
-          ]
-        },
-        "js": {
-          "grep": [
-            "function pur",
-            "PUR_",
             "kind:\"purchasing\""
           ]
         }

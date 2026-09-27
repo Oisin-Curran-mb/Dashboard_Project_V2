@@ -1,7 +1,7 @@
 /* =====================================================================
-   w13-purchasing-mb.driver.js , W13 Purchasing Management, OUR block
-   (prefix purF, kind "purchasing-mb"), rebuilt 2026-09-26 on the legacy
-   approval model (docs/decisions/W13.md). Jo's "purchasing" block is
+   w13-purchasing.driver.js , W13 Purchasing Management, OUR block
+   (prefix purF, kind "purchasing"), rebuilt 2026-09-26 on the legacy
+   approval model (docs/decisions/W13.md). Jo's block was deleted on 27 Sep 2026 (finalised); this
    untouched and still compared on the cmp tab; this driver covers ours.
 
    Proves: one status vocabulary (Pending / Approved + archive); ordered
@@ -18,10 +18,13 @@ const H = require("./jo-port-driver.js");
 const START = "var PURF_TODAY=new Date(2026,7,19);", END = "/* ===== end W13 Purchasing Management V2 ===== */";
 const CSS_START = "/* ===== W13 Purchasing Management V2 CSS =====", CSS_END = "/* ===== end W13 Purchasing Management V2 CSS ===== */";
 const shell = H.loadShell();
-const block = H.extractRegion(shell.script, START, END), css = H.extractRegion(shell.css, CSS_START, CSS_END);
-const registry = H.extractRegistry(shell.script, "purchasing-mb");
+const blockRaw = H.extractRegion(shell.script, START, END), css = H.extractRegion(shell.css, CSS_START, CSS_END);
+/* finished widgets register themselves; the shim has no WIDGETS, so the register line is checked here and stripped before the block runs */
+if (blockRaw.indexOf('WIDGETS.register("purchasing",{content:purFContent,about:') < 0) throw new Error("W13 block does not register kind purchasing");
+const block = blockRaw.split(/\r?\n/).filter(function (l) { return l.indexOf('WIDGETS.register("purchasing",') !== 0; }).join("\r\n");
+const registry = H.extractRegistry(shell.script, "purchasing");
 const env = H.runBlock(block, { registry: registry, dataAttr: "data-purf" });
-const A = new H.Assert("W13 purchasing-mb (approval-path model)");
+const A = new H.Assert("W13 purchasing (approval-path model)");
 const POS = env.get("PURF_POS"), PATHS = env.get("PURF_PATHS"), ME = env.get("PURF_ME");
 const W = function (id) { for (const w of registry) if (w.id === id) return w; throw new Error("no widget " + id); };
 const C = function () { return env.call.apply(null, arguments); };
@@ -84,7 +87,7 @@ A.contains(hk, ">My approval<", "tile: Awaiting my approval next"); A.contains(h
 A.contains(hk, 'title="Awaiting my approval next: 9 requests where your level is the next one to act."', "tile hover: full meaning with the count"); A.contains(hk, 'title="Awaiting my approval: 1 request on a path you are on', "tile hover: later"); A.contains(hk, 'title="Ready to pay: 1 order with payment approval complete', "tile hover: to be paid");
 A.absent(hk, " pending, ", "caption is the outstanding figure only"); A.contains(hk, "$14,397.50 outstanding</span>", "caption: outstanding dollars"); A.absent(hk, "need your approval", "old headline gone");
 /* scope filter */
-xw.purfScope = "Awaiting my approval next"; h = C("purFContent", xw); A.eq((h.match(/purf-turn-next/g) || []).length, (h.match(/class="pur-kcard/g) || []).length, "'Awaiting my approval next' shows only next-turn cards"); A.absent(h, "purf-turn-waiting", "no waiting cards under 'next'");
+xw.purfScope = "Awaiting my approval next"; h = C("purFContent", xw); A.eq((h.match(/purf-turn-next/g) || []).length, (h.match(/class="purf-kcard/g) || []).length, "'Awaiting my approval next' shows only next-turn cards (cards now carry our purf-kcard class)"); A.absent(h, "purf-turn-waiting", "no waiting cards under 'next'");
 xw.purfScope = "Awaiting my approval"; h = C("purFContent", xw); A.ok(/purf-turn-mine/.test(h) && !/purf-turn-waiting/.test(h), "'Awaiting my approval' adds my later levels, still no waiting cards");
 xw.purfScope = "All requests";
 /* status chip means the lane on the board */
