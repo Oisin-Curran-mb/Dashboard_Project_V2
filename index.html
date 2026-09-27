@@ -2253,7 +2253,7 @@
   .purf-root .purf-lg-rules{padding:4px 10px 6px;}
   /* Encumbrances view: chart (her .pur-* chart copied as purf-enc-*), period table, split at Detail. */
   .purf-root .purf-enc{flex:1;min-height:0;display:flex;flex-direction:column;}
-  .purf-root .purf-enc-sub{display:flex;justify-content:flex-end;padding:2px 14px 6px;}
+  .purf-root .purf-enc-sub{justify-self:end;align-self:start;}
   .purf-root .purf-enc-chart{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 0 4px;}
   .purf-root .purf-enc-plot{flex:1;min-height:150px;display:flex;gap:8px;padding:0 16px;}
   .purf-root .purf-enc-yax{flex:0 0 44px;display:flex;flex-direction:column;justify-content:space-between;font-size:11px;color:var(--txt-subtle);text-align:right;font-variant-numeric:tabular-nums;padding:2px 0;}
@@ -10881,7 +10881,7 @@ function purFHeaderBlock(w){
   var lg=(view==="enc")?"":'<button class="purf-lgbtn" data-purf="legend" data-id="'+w.id+'" aria-haspopup="dialog" aria-label="Legend: what the lanes, badges and colours mean" data-tip="Legend">'+purFIcon("info")+'</button>';
   return '<div class="dep-hd purf-hd">'+
     '<div class="dep-hd-top"><div class="purf-chiprow">'+chips+'</div><div class="dep-hd-toggle">'+purFViewToggle(w)+'</div></div>'+
-    '<div class="dep-hd-num"><div class="purf-numwrap">'+kpi+ctx+'</div>'+lg+'</div>'+
+    '<div class="dep-hd-num"><div class="purf-numwrap">'+kpi+ctx+'</div>'+((view==="enc"&&tier==="wide")?purFEncSubToggle(w):lg)+'</div>'+
   '</div>';
 }
 function purFSkeleton(){
@@ -11035,11 +11035,12 @@ function purFEncTable(w){
   if(!data.length)body='<div class="wt-row purf-enc-row" role="row"><span class="lr-main purf-enc-dim" role="cell">No open commitments</span><span class="purf-enc-c" role="cell">0</span><span class="wt-c2" role="cell">'+purFMoney(0)+'</span></div>';
   return '<div class="purf-enc-tbl" role="table" aria-label="Encumbrances by accounting period">'+head+body+'</div><div class="dep-total purf-enc-tot"><span>Total encumbered, not yet paid</span><span>'+purFMoney(tot)+'</span></div>';
 }
+/* Explore's Chart / Table sub-toggle sits on the headline row, level with the encumbered total (owner, 27 Sep). */
+function purFEncSubToggle(w){var v=purFEncViewCur(w);return '<div class="vtoggle purf-enc-sub" role="group" aria-label="Encumbrance display">'+[["chart","Chart","bar_chart"],["table","Table","table_rows"]].map(function(o){return '<button class="vt'+(v===o[0]?" on":"")+'" data-purf="enc-view" data-id="'+w.id+'" data-v="'+o[0]+'" aria-pressed="'+(v===o[0])+'">'+purFIcon(o[2])+o[1]+'</button>';}).join("")+'</div>';}
 function purFEncView(w){
   var tier=purFTier(w),v=purFEncViewCur(w);
   if(tier==="xwide")return '<div class="purf-enc purf-enc-split"><div class="purf-enc-half">'+purFEncChart(w)+'</div><div class="purf-enc-half">'+purFEncTable(w)+'</div></div>';
-  var tog='<div class="purf-enc-sub"><div class="vtoggle" role="group" aria-label="Encumbrance display">'+[["chart","Chart","bar_chart"],["table","Table","table_rows"]].map(function(o){return '<button class="vt'+(v===o[0]?" on":"")+'" data-purf="enc-view" data-id="'+w.id+'" data-v="'+o[0]+'" aria-pressed="'+(v===o[0])+'">'+purFIcon(o[2])+o[1]+'</button>';}).join("")+'</div></div>';
-  return '<div class="purf-enc">'+tog+((v==="table")?purFEncTable(w):purFEncChart(w))+'</div>';
+  return '<div class="purf-enc">'+((v==="table")?purFEncTable(w):purFEncChart(w))+'</div>';
 }
 /* Bar or row pop-up: the orders behind one period, each with its lane, so the figure ties back to the board. */
 function purFEncPopHTML(w){

@@ -218,7 +218,7 @@ const hdE = C("purFHeaderBlock", wide);
 A.contains(hdE, "encumbered, not yet paid", "headline is the encumbered total"); A.absent(hdE, 'data-purf="status"', "status chip hidden in the Encumbrances view");
 A.contains(hdE, 'data-purf="path"', "approval path chip stays"); A.contains(hdE, "open order", "context line counts open orders");
 const encW = C("purFEncView", wide), encX = C("purFEncView", xw);
-A.contains(encW, 'data-purf="enc-view"', "Explore: chart or table sub-toggle"); A.contains(encW, "purf-enc-col", "Explore: chart bars");
+A.absent(encW, 'data-purf="enc-view"', "Explore: the Chart / Table sub-toggle is not in the body"); A.contains(C("purFHeaderBlock", wide), 'data-purf="enc-view"', "Explore: the sub-toggle sits on the headline row, level with the total (owner, 27 Sep)"); A.absent(C("purFHeaderBlock", xw), 'data-purf="enc-view"', "Detail header has no sub-toggle"); A.contains(encW, "purf-enc-col", "Explore: chart bars");
 A.eq((encW.match(/purf-enc-col"/g) || []).length, pers.length, "one bar per period");
 A.contains(encX, "purf-enc-split", "Detail: chart and table side by side"); A.contains(encX, "Total encumbered, not yet paid", "Detail: table total row");
 A.absent(encX, 'data-purf="enc-view"', "Detail has no sub-toggle");
