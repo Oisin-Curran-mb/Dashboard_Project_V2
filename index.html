@@ -2083,7 +2083,7 @@
   /* Board. The column count is set inline because it varies with the status
      filter and with whether the split Finish column is showing. */
   .purf-root .purf-board{flex:1;min-height:0;align-items:stretch;}
-  .purf-root[data-tier="wide"] .purf-board{overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;padding-bottom:10px;}
+  .purf-root[data-tier="wide"] .purf-board{overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scrollbar-width:thin;padding-bottom:10px;}
   .purf-root[data-tier="wide"] .purf-col,.purf-root[data-tier="wide"] .purf-finish{min-width:0;}
   .purf-root .purf-col{min-height:0;}
   .purf-root .purf-colb{min-height:64px;border-radius:10px;padding:2px;transition:background var(--dur,.15s) ease,box-shadow var(--dur,.15s) ease;}
@@ -10852,7 +10852,7 @@ function purFBoard(w){
       '</div>'
     : "";
   /* Explore: lanes keep a readable minimum and the board scrolls sideways (owner, 27 Sep). */
-  var gtc=(tier==="wide")?("repeat("+lanes.length+",minmax(150px,1fr))"+(finish?" 96px":"")):("repeat("+lanes.length+",1fr)"+(finish?" 0.6fr":""));
+  var gtc=(tier==="wide")?("repeat("+lanes.length+",minmax(180px,1fr))"+(finish?" 96px":"")):("repeat("+lanes.length+",1fr)"+(finish?" 0.6fr":""));
   return '<div class="pur-kanban purf-board" data-purf-tier="'+tier+'" style="grid-template-columns:'+gtc+'">'+cols+fin+'</div>';
 }
 /* The PO Table, on her .wt-row primitives with the ARIA table roles so the

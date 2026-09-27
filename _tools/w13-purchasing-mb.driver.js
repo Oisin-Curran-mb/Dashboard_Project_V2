@@ -148,9 +148,9 @@ C("purFClosePop"); A.eq(env.get("PURF_POP"), null, "legend closes");
 /* ---------- 4c. Explore board scrolls sideways (owner, 27 Sep) ------------ */
 wide.purfView = "kanban"; wide.purfStatus = null;
 const bw = C("purFBoard", wide), bx = C("purFBoard", xw);
-A.contains(bw, "grid-template-columns:repeat(4,minmax(150px,1fr)) 96px", "Explore: four lanes keep a 150px minimum and Finish is a fixed track");
+A.contains(bw, "grid-template-columns:repeat(4,minmax(180px,1fr)) 96px", "Explore: four lanes keep a 180px minimum and Finish is a fixed track");
 A.contains(bx, "grid-template-columns:repeat(4,1fr) 0.6fr", "Detail: unchanged fluid tracks");
-A.contains(css, '.purf-root[data-tier="wide"] .purf-board{overflow-x:auto', "Explore board has horizontal overflow");
+A.contains(css, '.purf-root[data-tier="wide"] .purf-board{overflow-x:auto;overflow-y:hidden', "Explore board scrolls sideways only, never up and down");
 
 /* ---------- 5. hygiene --------------------------------------------------- */
 A.noEmDash(block.replace(/\/\*[\s\S]*?\*\//g, ""), "block code");
