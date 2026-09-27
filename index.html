@@ -22,6 +22,8 @@
     --am-700:#463f7f;--am-600:#4f4890;--am-500:#5951a0;--am-400:#7a72ba;--am-300:#9c95cf;--am-200:#c3bee6;--am-100:#e8e6f5;--am-50:#f4f2fa;
     --chart:var(--am-500);--chart-strong:var(--am-700);--chart-soft:var(--am-200);--chart-fill:var(--am-500);--brand-fill:var(--am-500);
     --dur:150ms;--dur2:300ms;--ease:cubic-bezier(.4,0,.2,1);--dec:cubic-bezier(0,0,.2,1);--r:12px;
+    /* Spacing step from the design system (owner, 27 Sep): xtight. Add further steps here as they are needed. */
+    --space-xtight:4px;
   }
   *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
   body{background:var(--surface-canvas);font-family:'Red Hat Text',sans-serif;color:var(--txt-primary);}
@@ -861,7 +863,7 @@
   /* Glance: interactive chip row (account picker + overdrawn drill) */
   .bank-gl-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;}
   /* Glance (owner, 27 Sep): chip; amount + sparkline side by side; pills in one row underneath. */
-  .bank-glrow{flex-direction:column;gap:4px;padding:8px 8px;}
+  .bank-glrow{flex-direction:column;gap:var(--space-xtight);padding:8px 8px calc(8px + var(--space-xtight));}
   .bank-glrow .bank-gl-top{margin-bottom:0;}
   .bank-glrow .bank-gl-mid{display:flex;align-items:center;gap:10px;min-width:0;}
   .bank-glrow .bank-gl-amt{flex:0 0 auto;}
