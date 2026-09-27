@@ -130,6 +130,21 @@ mh = openTab("PO-2872"); A.contains(mh, "Payment Approval Path: Administration",
 mh = openTab("PO-2899"); A.contains(mh, "Skipped: below every minimum on this level", "a skipped level says so (Jim or Lanette at $640)"); A.contains(mh, "Alfred Johnson (from $500.00)", "each approver shows their own minimum"); A.contains(mh, "Jim AndersonAndMoreLetters (from $2,000.00) or Lanette Stewart (from $2,000.00)", "an Or level lists both approvers with minimums"); C("purFCloseModal");
 A.absent(mh, "Rejected requests do not enter", "rejected copy keyed on the row, not a stage");
 
+/* ---------- 4b. legend (owner, 27 Sep): info icon top right, Explore and Detail only ---- */
+const hdWide = C("purFHeaderBlock", wide), hdX = C("purFHeaderBlock", xw), glance = C("purFContent", kpi);
+A.contains(hdWide, 'data-purf="legend"', "Explore header carries the legend icon"); A.contains(hdX, 'data-purf="legend"', "Detail header carries the legend icon");
+A.absent(glance, 'data-purf="legend"', "Glance has no legend icon");
+A.ok(hdX.indexOf('data-purf="legend"') > hdX.indexOf('data-purf="view"'), "the icon sits after the view toggle, top right");
+C("purFOpenPop", "legend", xw.id, null); A.eq(env.get("PURF_POP").type, "legend", "the icon opens the legend pop-up");
+const lg = C("purFPopContent");
+["Lanes", "Badges: whose turn it is", "Card colours", "Moving a card"].forEach(function (c) { A.contains(lg, '<div class="cap">' + c + "</div>", "legend section " + c); });
+env.get("PURF_LANES").forEach(function (l) { A.contains(lg, ">" + l + "</span>", "legend names lane " + l); });
+["next", "mine", "waiting", "rejected", "hold"].forEach(function (k) { A.contains(lg, "purf-turn purf-turn-" + k, "legend shows the " + k + " badge with its real class"); });
+["purf-card-next", "purf-card-ok", "purf-card-paid", "purf-card-hold", "purf-card-rej"].forEach(function (k) { A.contains(lg, k, "legend shows card colour " + k); });
+A.contains(lg, "purf-fin-close", "legend shows the Close zone"); A.contains(lg, "purf-fin-void", "legend shows the Void zone"); A.contains(lg, "purf-age-hot", "legend shows the overdue clock");
+A.contains(lg, "One lane at a time", "legend states the move rules"); A.noEmDash(lg, "legend");
+C("purFClosePop"); A.eq(env.get("PURF_POP"), null, "legend closes");
+
 /* ---------- 5. hygiene --------------------------------------------------- */
 A.noEmDash(block.replace(/\/\*[\s\S]*?\*\//g, ""), "block code");
 A.contains(css, ".purf-turn-next", "turn badge CSS"); A.contains(css, ".purf-turnline", "turn line CSS");

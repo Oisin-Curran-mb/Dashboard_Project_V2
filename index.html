@@ -2238,6 +2238,20 @@
   .purf-root .purf-ap-skip{opacity:.55;}
   .purf-root .purf-ap-me{background:var(--am-50,var(--wn-100));}
   .purf-root .purf-apgrid+.purf-flbl{margin-top:14px;}
+  /* Legend: header info icon (plain, no circle, no border) and the legend pop-up rows. */
+  .purf-root .purf-hd-acts{display:flex;align-items:center;gap:4px;}
+  .purf-root .purf-lgbtn{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border:0;background:transparent;color:var(--txt-subtle);border-radius:8px;cursor:pointer;padding:0;}
+  .purf-root .purf-lgbtn .material-symbols-rounded{font-size:19px;}
+  .purf-root .purf-lgbtn:hover{color:var(--txt-primary);}
+  .purf-pop-lg{min-width:300px;max-width:360px;max-height:min(78vh,640px);overflow-y:auto;}
+  .purf-root .purf-lg-row{display:grid;grid-template-columns:118px 1fr;gap:8px;align-items:center;padding:3px 10px;}
+  .purf-root .purf-lg-txt{font-size:11px;color:var(--txt-secondary);line-height:1.35;}
+  .purf-root .purf-lg-lane{font-size:11px;font-weight:700;}
+  .purf-root .purf-lg-fin{display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;border:1.5px dashed;border-radius:8px;padding:4px 6px;}
+  .purf-root .purf-lg-row .purf-turn{justify-self:start;}
+  .purf-root .purf-lg-card{display:inline-flex;align-items:center;justify-self:stretch;font-size:11px;font-weight:600;padding:6px 8px;border:1px solid var(--stroke-widget);border-radius:8px;cursor:default;}
+  .purf-root .purf-lg-age{font-size:11px;}
+  .purf-root .purf-lg-rules{padding:4px 10px 6px;}
 /* ===== end W13 Purchasing Management V2 CSS ===== */
   /* ===== W15 Bank Balances V2 CSS , prefix bkF , kind "bank-mb" ===== */
 
@@ -10784,7 +10798,8 @@ function purFHeaderBlock(w){
     : '<div class="dep-hd-kpigrp"><span class="metric-value">'+mine+'</span><span class="bank-pill">'+(mine===1?"needs":"need")+' your approval</span></div>';
   var ctx=loading?"":'<div class="purf-ctx">'+pending+' pending approval, '+purFMoney(outstanding)+' outstanding. '+setRows.length+' request'+(setRows.length===1?"":"s")+' in view.</div>';
   return '<div class="dep-hd purf-hd">'+
-    '<div class="dep-hd-top"><div class="purf-chiprow">'+chips+'</div><div class="dep-hd-toggle">'+purFViewToggle(w)+'</div></div>'+
+    '<div class="dep-hd-top"><div class="purf-chiprow">'+chips+'</div><div class="dep-hd-toggle purf-hd-acts">'+purFViewToggle(w)+
+      '<button class="purf-lgbtn" data-purf="legend" data-id="'+w.id+'" aria-haspopup="dialog" aria-label="Legend: what the lanes, badges and colours mean" data-tip="Legend">'+purFIcon("info")+'</button></div></div>'+
     '<div class="dep-hd-num"><div class="purf-numwrap">'+kpi+ctx+'</div></div>'+
   '</div>';
 }
@@ -10918,6 +10933,7 @@ function purFPopContent(){
   if(!PURF_POP)return "";
   var w=find(PURF_POP.id);if(!w)return "";
   var t=PURF_POP.type;
+  if(t==="legend")return purFLegendHTML(w);
   function row(act,val,label,on,ic){
     return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-purf="'+act+'" data-id="'+w.id+'" data-v="'+purFEsc(val)+'">'+
       (on?purFIcon("check"):'<span class="mi-gap"></span>')+(ic?'<span class="mi-ic material-symbols-rounded" aria-hidden="true">'+ic+'</span>':"")+
@@ -10965,10 +10981,26 @@ function purFPositionPop(el,anchor){
   var top=r.bottom+6;if(top+bh>window.innerHeight-M)top=Math.max(M,r.top-bh-6);
   el.style.left=left+"px";el.style.top=top+"px";el.style.visibility="";
 }
+/* Legend. Every sample is the board's own markup (lane tone, .purf-turn-*, .purf-card-*), so what the
+   legend shows is what the board draws. */
+function purFLegendHTML(w){
+  var lanes=[["Pending approval","Request path open. Approvers act in level order."],["Payment approval","Approved. Payment path open, one per invoice."],["Ready to pay","Payment approved. Waiting on the check."],["Paid","Check posted. Drag to Close when done."]];
+  var out='<div class="cap">Lanes</div>'+lanes.map(function(l){return '<div class="purf-lg-row"><span class="purf-chip-st purf-lg-lane" style="color:'+PURF_STAGE_TONE[l[0]]+'">'+l[0]+'</span><span class="purf-lg-txt">'+l[1]+'</span></div>';}).join("");
+  out+='<div class="purf-lg-row"><span class="purf-lg-fin purf-fin-close">Close</span><span class="purf-lg-txt">Finish column: paid orders only. Leaves the board, stays in the Table.</span></div>';
+  out+='<div class="purf-lg-row"><span class="purf-lg-fin purf-fin-void">Void</span><span class="purf-lg-txt">Finish column: unpaid orders only. Leaves the board, stays in the Table.</span></div>';
+  var badges=[["next","how_to_reg","Your approval next","Your level is the next one. Drag the card on, or approve on the Approvals tab."],["mine","schedule","Your approval later","You are on the path, someone else is first. You may still approve; that also satisfies the lower levels."],["waiting","hourglass_top","Waiting on","Someone else's turn. You cannot move the card."],["rejected","block","Rejected by","An approver rejected it with a reason. Clear the rejection on the Approvals tab to resume."],["hold","lock","On hold","Parked with a reason. Remove the hold before it moves."],["next","how_to_reg","No approver required","The amount is under every minimum on the path. Approve to release it."]];
+  out+='<div class="cap">Badges: whose turn it is</div>'+badges.map(function(b){return '<div class="purf-lg-row"><span class="purf-turn purf-turn-'+b[0]+'">'+purFIcon(b[1])+b[2]+'</span><span class="purf-lg-txt">'+b[3]+'</span></div>';}).join("");
+  var cards=[["purf-card-next","Your turn","Amber edge: you can act on this card now."],["purf-card-ok","Ready to pay","Grey: payment approved, waiting on the check."],["purf-card-paid","Paid","Green: check posted."],["purf-card-hold","On hold","Cream: parked, not draggable."],["purf-card-rej","Rejected","Red tint: rejected, not draggable until cleared."]];
+  out+='<div class="cap">Card colours</div>'+cards.map(function(c){return '<div class="purf-lg-row"><span class="pur-kcard purf-card purf-lg-card '+c[0]+'">'+c[1]+'</span><span class="purf-lg-txt">'+c[2]+'</span></div>';}).join("");
+  out+='<div class="purf-lg-row"><span class="purf-card-age purf-age-hot purf-lg-age">'+purFIcon("schedule")+'overdue</span><span class="purf-lg-txt">Red clock: past its due date.</span></div>';
+  out+='<div class="cap">Moving a card</div><div class="mi-note purf-popnote purf-lg-rules">Dragging a card to the next lane records your approval. One lane at a time, forward only. Only paid orders can be closed; a paid order cannot be voided here. A card on hold moves only to Void.</div>';
+  return out;
+}
 function purFRenderPop(anchor){
   var el=document.getElementById("purfPop");
   if(!PURF_POP){if(el){el.innerHTML="";if(el.remove)el.remove();else if(el.parentNode)el.parentNode.removeChild(el);}return;}
-  if(!el){el=document.createElement("div");el.id="purfPop";el.className="pop purf-root purf-pop";document.body.appendChild(el);}
+  if(!el){el=document.createElement("div");el.id="purfPop";document.body.appendChild(el);}
+  el.className="pop purf-root purf-pop"+(PURF_POP.type==="legend"?" purf-pop-lg":"");el.setAttribute("role",PURF_POP.type==="legend"?"dialog":"");
   el.innerHTML=purFPopContent();
   if(anchor)purFPositionPop(el,anchor);
 }
@@ -11270,7 +11302,7 @@ function purFHandleClick(e){
   var a=t.getAttribute("data-purf"),id=t.getAttribute("data-id"),ref=t.getAttribute("data-purf-ref"),v=t.getAttribute("data-v");
   if(a==="stop")return;
   var w=id?find(id):null;
-  if(a==="status"||a==="path"||a==="dept"||a==="year"||a==="scope"){purFOpenPop(a,id,t);return;}
+  if(a==="status"||a==="path"||a==="dept"||a==="year"||a==="scope"||a==="legend"){purFOpenPop(a,id,t);return;}
   if(a==="set-scope"){if(w&&purFScopeCur(w)!==v){w.purfScope=v;}purFClosePop();render();return;}
   if(a==="set-status"){
     if(w&&purFStatusCur(w)!==v){w.purfStatus=v;w.purfPath=null;purFLoad(w);}
