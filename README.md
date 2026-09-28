@@ -30,6 +30,7 @@ served at https://oisin-curran-mb.github.io/Dashboard_Project_V2/.
 | `_ref/aditya/` | Aditya's `Demo V2.html` (a fork of the shell carrying W18 Variants A-D) and his v5 KPI design spec. |
 | `Correction doc.xlsx` | Review log for the demo: one row per widget, with Defects and Changes columns. For a second team to record bad wording and defects they find while working through the live demo. Owner's document; filled in as the review runs. |
 | `docs/review/` | One review pack per widget: Jo's rulings, what she implemented, our differences, reconciliation matrix. |
+| `docs/handover/` | **Start here if you are new to a widget.** One document per widget: the model, where the code is, the decisions not to undo, the traps that already cost time, and what is still open. Currently W13 and W17. |
 | `docs/decisions/` | One decision record per widget, filled during the review. Source for the final documents. |
 | `docs/SHARED.md` | What the widgets share, which widget uses each piece, and what stays duplicated and why. |
 
