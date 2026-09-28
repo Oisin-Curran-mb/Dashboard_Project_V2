@@ -11,7 +11,8 @@
    ===================================================================== */
 "use strict";
 const H = require("./jo-port-driver.js");
-const A = new H.Assert("W04 Remittance Pledges (final)");
+const META = H.meta("W04");   /* number, name, kind, prefix and tags from _tools/widget-map.json */
+const A = new H.Assert(META.label + " (final)");
 const shell = H.loadShell(); const S = shell.script, raw = shell.html;
 
 /* ---------- 1. structure ---------------------------------------------- */
@@ -49,16 +50,13 @@ A.contains(outside, ".w04-scroll,", "the shell's scroll-container list follows t
 A.noEmDash(js.replace(/\/\*[\s\S]*?\*\//g, ""), "W04 block code (comments excluded)");
 
 /* ---------- 2. host ---------------------------------------------------- */
-const TAIL = "\r\n  render();\r\n})();\r\n";
+const TAIL = H.TAIL;   /* the shell's closing lines, shared */
 const EXPORTS = "\r\n  __EX={WIDGETS:WIDGETS,contentHTML:contentHTML,popContent:popContent,triggerSelector:triggerSelector,aboutOf:aboutOf,find:find,dashboards:dashboards," +
   "setPop:function(p){pop=p;},getPop:function(){return pop;},setModal:function(m){modal=m;},getModal:function(){return modal;},modalHTML:function(){return WIDGETS.modal();}," +
   "fireChange:function(target){var ev={target:target};(document.__changeListeners||[]).forEach(function(f){f(ev);});}," +
   "stubRender:function(){render=function(){};renderModal=function(){};renderOverlay=function(){};showModal=function(){};setStatus=function(){};}};\r\n" +
   "  try{render();}catch(e){__EX.renderErr=String(e&&e.message);}\r\n})();\r\n";
-const env = H.runBlock(S.slice(0, -TAIL.length) + EXPORTS, { dataAttr: "data-action", globals: {
-  __EX: null, Boolean: Boolean, RegExp: RegExp, Intl: Intl, Set: Set, Map: Map, Error: Error, encodeURIComponent: encodeURIComponent, decodeURIComponent: decodeURIComponent,
-  setInterval: function () { return 1; }, clearInterval: function () {}, navigator: { userAgent: "node" }, location: { href: "about:blank", hash: "" }, alert: function () {}, innerWidth: 1440, innerHeight: 900,
-  performance: { now: function () { return 0; } }, localStorage: { getItem: function () { return null; }, setItem: function () {}, removeItem: function () {} }, getComputedStyle: function () { return { getPropertyValue: function () { return ""; } }; } } });
+const env = H.runBlock(S.slice(0, -TAIL.length) + EXPORTS, { dataAttr: "data-action", globals: H.NODE_GLOBALS() });
 const EX = env.ctx.__EX; A.ok(EX && EX.WIDGETS, "shell loaded; WIDGETS reachable"); EX.stubRender();
 
 /* ---------- 3. registration + render ---------------------------------- */

@@ -29,6 +29,7 @@ Remote: `Dashboard_Project_V2` on GitHub, private, branch `main`.
 | `_ref/aditya/` | Aditya's `Demo V2.html` (a fork of the shell carrying W18 Variants A-D) and his v5 KPI design spec. |
 | `docs/review/` | One review pack per widget: Jo's rulings, what she implemented, our differences, reconciliation matrix. |
 | `docs/decisions/` | One decision record per widget, filled during the review. Source for the final documents. |
+| `docs/SHARED.md` | What the widgets share, which widget uses each piece, and what stays duplicated and why. |
 
 ## Verify
 
@@ -41,8 +42,20 @@ node _tools/verify.js
 Runs the syntax gate (`node --check` on the shell script, CRLF purity, IIFE
 tail), then every `_tools/*.driver.js` (real handlers executed in a DOM shim,
 thousands of assertions), then the design-defect lint as a report. Exit 1 on
-any driver failure. `node _tools/verify.js w05` runs one widget's driver;
-`node _tools/lint.js` runs the lint alone.
+any driver failure. `node _tools/lint.js` runs the lint alone.
+
+To run less than everything:
+
+```bash
+node _tools/verify.js w05            # substring on the file name
+node _tools/verify.js --widget=W10   # exact, validated against the widget map
+node _tools/verify.js --kind=loans   # the widget serving that kind
+node _tools/verify.js --tag=uses:parseISO   # every widget that shared helper affects
+node _tools/verify.js --list         # the widgets, their kinds and their tags
+```
+
+What is shared between widgets, which widget uses what, and what was left
+duplicated on purpose: `docs/SHARED.md`.
 
 ## Rules
 

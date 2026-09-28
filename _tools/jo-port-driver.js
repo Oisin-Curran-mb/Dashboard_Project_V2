@@ -235,6 +235,26 @@ function makeShim(opts) {
 }
 
 /* ---------- 4. run the extracted block in that shim ------------------- */
+/* ---------- 4b. the shell's shared helper package ---------------------
+   One implementation of the helpers every widget used to write out for itself.
+   Lifted out of index.html on demand and cached, so drivers never carry a copy
+   that could drift from the build. Added 2026-09-28. */
+const PKG_START = "     Shell: shared widget helpers (the common package)";
+const PKG_END = "  /* ===== end Shell: shared widget helpers ===== */";
+let _pkg = null;
+function sharedPackage() {
+  if (_pkg !== null) return _pkg;
+  const shell = loadShell();
+  const hit = shell.script.indexOf(PKG_START);
+  const b = shell.script.indexOf(PKG_END);
+  if (hit < 0 || b < 0) { _pkg = ""; return _pkg; }
+  /* back up to the comment opener on the line above the banner title */
+  const a = shell.script.lastIndexOf("/* ====", hit);
+  if (a < 0) { _pkg = ""; return _pkg; }
+  _pkg = shell.script.slice(a, b + PKG_END.length);
+  return _pkg;
+}
+
 function runBlock(block, opts) {
   opts = opts || {};
   const shim = makeShim(opts);
@@ -265,10 +285,88 @@ function runBlock(block, opts) {
   };
   Object.assign(sandbox, opts.globals || {});
   const ctx = vm.createContext(sandbox);
+  /* The shell's shared helper package (escAttr, escText, parseISO, MONTHS,
+     fmtDateLong, moneyFull, bandFromDays) is evaluated first, so a driver that
+     runs its widget's block alone still has the helpers the block now calls.
+     Lifted from index.html at run time rather than copied here, so there stays
+     exactly one implementation. Added 2026-09-28 with the package itself. */
+  if (opts.sharedPackage !== false) {
+    const pkg = sharedPackage();
+    if (pkg) vm.runInContext(pkg, ctx, { filename: "shared-package.js" });
+  }
   vm.runInContext(block, ctx, { filename: "ported-block.js" });
   return { ctx: ctx, shim: shim, registry: registry, log: log,
            get: function (n) { return ctx[n]; },
            call: function (n) { return ctx[n].apply(null, Array.prototype.slice.call(arguments, 1)); } };
+}
+
+/* ---------- 4c. the shared test library -------------------------------
+   The pieces fourteen drivers were each writing out for themselves. Additive:
+   nothing here changes how a driver that has not adopted it behaves. Added
+   2026-09-28 with the build-side shared package.
+
+   Adopting `hostShell` across the fourteen drivers that splice TAIL/EXPORTS by
+   hand is a mechanical but wide change, deliberately left for a reviewed pass
+   rather than done unsupervised: it touches every driver at once, and the
+   drivers are the only thing that proves the build. */
+
+/* the shell script's own closing lines, which a driver must cut before it can
+   splice its export bag in. Duplicated verbatim in fourteen drivers and in
+   syntax-check.js. */
+const TAIL = "\r\n  render();\r\n})();\r\n";
+
+/* the Node-side globals the shell touches but the shim does not provide. */
+function NODE_GLOBALS() {
+  return {
+    __EX: null, Boolean: Boolean, RegExp: RegExp, Intl: Intl, Set: Set, Map: Map, Error: Error,
+    encodeURIComponent: encodeURIComponent, decodeURIComponent: decodeURIComponent,
+    setInterval: function () { return 1; }, clearInterval: function () {},
+    navigator: { userAgent: "node" }, location: { href: "about:blank", hash: "" },
+    alert: function () {}, innerWidth: 1440, innerHeight: 900,
+    performance: { now: function () { return 0; } },
+    localStorage: { getItem: function () { return null; }, setItem: function () {}, removeItem: function () {} },
+    getComputedStyle: function () { return { getPropertyValue: function () { return ""; } }; }
+  };
+}
+
+/* strip block comments, so an assertion about CODE is not satisfied by prose.
+   Four drivers named this helper and twelve more inlined the regex. */
+function code(s) { return String(s).replace(/\/\*[\s\S]*?\*\//g, ""); }
+
+/* a widget's identity, from the map rather than transcribed into the driver.
+   This is what keeps a driver's label, its kind and its tags in one place. */
+let _map = null;
+function widgetMap() {
+  if (!_map) _map = JSON.parse(fs.readFileSync(path.join(__dirname, "widget-map.json"), "utf8"));
+  return _map;
+}
+function meta(wnn) {
+  const m = widgetMap().widgets[String(wnn).toUpperCase()];
+  if (!m) throw new Error("no such widget in widget-map.json: " + wnn);
+  const f = m.final || m.ours || {};
+  return {
+    n: String(wnn).toUpperCase(), name: m.name, kind: f.kind || null, prefix: f.prefix || null,
+    driver: m.driver, tags: (m.tags || []).slice(), decided: m.decided || null,
+    label: String(wnn).toUpperCase() + " " + m.name
+  };
+}
+
+/* every marker must appear exactly once, or a region slice is meaningless.
+   Hand-rolled in eighteen places. */
+function assertMarkersUnique(raw, markers, A) {
+  markers.forEach(function (mk) {
+    const n = raw.split(mk).length - 1;
+    A.eq(n, 1, "exactly one " + mk.slice(0, 52));
+  });
+}
+
+/* the shell with one widget's own region removed, which is what "nothing of
+   ours leaked outside its block" assertions measure against. */
+function outside(shell, regions) {
+  let js = shell.script, css = shell.css;
+  (regions.js || []).forEach(function (r) { js = js.replace(r, ""); });
+  (regions.css || []).forEach(function (r) { css = css.replace(r, ""); });
+  return { script: js, css: css };
 }
 
 /* ---------- 5. assertions -------------------------------------------- */
@@ -344,4 +442,5 @@ class Assert {
   }
 }
 
-module.exports = { SHELL, BASELINE_DIR, baselineFiles, baseline, loadShell, extractRegion, extractRegistry, makeShim, runBlock, Assert, EM_DASH };
+module.exports = { SHELL, BASELINE_DIR, baselineFiles, baseline, loadShell, extractRegion, extractRegistry, makeShim, runBlock, sharedPackage,
+                   TAIL, NODE_GLOBALS, code, widgetMap, meta, assertMarkersUnique, outside, Assert, EM_DASH };

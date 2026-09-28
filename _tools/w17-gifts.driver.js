@@ -50,7 +50,8 @@ const blockRaw = H.extractRegion(shell.script, "var GPF_TODAY=", END);
 if (blockRaw.indexOf('WIDGETS.register("gifts",{content:gpFContentRoot,about:') < 0) throw new Error("the W17 block does not register kind gifts");
 const block = blockRaw.split(/\r?\n/).filter(function (l) { return l.indexOf('WIDGETS.register("gifts",') !== 0; }).join("\r\n");
 const registry = H.extractRegistry(shell.script, "gifts");
-const A = new H.Assert("W17 gifts");
+const META = H.meta("W17");   /* number, name, kind, prefix and tags from _tools/widget-map.json */
+const A = new H.Assert(META.label + " (final, rebuilt 28 Sep)");
 
 const env = H.runBlock(block, { registry: registry, dataAttr: "data-gpf" });
 const ctx = env.ctx;

@@ -10,7 +10,8 @@
 "use strict";
 const H = require("./jo-port-driver.js");
 
-const A = new H.Assert("W14 Main Content Tasks (final)");
+const META = H.meta("W14");   /* number, name, kind, prefix and tags from _tools/widget-map.json */
+const A = new H.Assert(META.label + " (final)");
 const shell = H.loadShell();
 const S = shell.script, raw = shell.html;
 
@@ -33,19 +34,12 @@ A.contains(outside, "/* W14 Main Content Tasks */", "and are labelled");
 A.absent(shell.css.replace(css, ""), ".mct-", "no .mct- rule outside the region");
 
 /* ---------- 2. host the shell ----------------------------------------- */
-const TAIL = "\r\n  render();\r\n})();\r\n";
+const TAIL = H.TAIL;   /* the shell's closing lines, shared */
 const EXPORTS = "\r\n  __EX={WIDGETS:WIDGETS,contentHTML:contentHTML,popContent:popContent,triggerSelector:triggerSelector,find:find,dashboards:dashboards," +
   "setPop:function(p){pop=p;},getPop:function(){return pop;},getModal:function(){return modal;},setModal:function(m){modal=m;}," +
   "stubRender:function(){render=function(){};renderModal=function(){};renderOverlay=function(){};showModal=function(){};setStatus=function(){};}};\r\n" +
   "  try{render();}catch(e){__EX.renderErr=String(e&&e.message);}\r\n})();\r\n";
-const env = H.runBlock(S.slice(0, -TAIL.length) + EXPORTS, { dataAttr: "data-action", globals: {
-  __EX: null, Boolean: Boolean, RegExp: RegExp, Intl: Intl, Set: Set, Map: Map, Error: Error,
-  encodeURIComponent: encodeURIComponent, decodeURIComponent: decodeURIComponent,
-  setInterval: function () { return 1; }, clearInterval: function () {},
-  navigator: { userAgent: "node" }, location: { href: "about:blank", hash: "" }, alert: function () {},
-  performance: { now: function () { return 0; } },
-  localStorage: { getItem: function () { return null; }, setItem: function () {}, removeItem: function () {} },
-  getComputedStyle: function () { return { getPropertyValue: function () { return ""; } }; } } });
+const env = H.runBlock(S.slice(0, -TAIL.length) + EXPORTS, { dataAttr: "data-action", globals: H.NODE_GLOBALS() });
 const EX = env.ctx.__EX;
 A.ok(EX && EX.WIDGETS, "shell loaded; WIDGETS reachable");
 EX.stubRender();

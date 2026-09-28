@@ -7,7 +7,8 @@
     "review pack is built. Kinds: W01-W07 Jo live = -mb, ours = -oc; W09-W17 Jo live = plain, ours = -mb.",
     "Drivers anchor on the same banner strings: change a marker here AND in the driver AND in index.html together.",
     "A decided widget has a single `final` side (in index.html) and a `decided` date; its ours/jo sides are removed.",
-    "`removed`: kinds that left the file when the widget was decided."
+    "`removed`: kinds that left the file when the widget was decided.",
+    "`tags`: derived from the build by _tools/one-off/build-test-lib-2026-09-28.js, not typed. `uses:<helper>` means the widget's own region calls that helper from the shell's shared package; the rest describe the shape of the widget, and so of its tests. Select with `node _tools/verify.js --tag=<tag>`."
   ],
   "widgets": {
     "W01": {
@@ -34,7 +35,16 @@
             "kind:\"budget\""
           ]
         }
-      }
+      },
+      "tags": [
+        "table",
+        "sort",
+        "modal",
+        "popover",
+        "skeleton",
+        "chart",
+        "filter"
+      ]
     },
     "W02": {
       "name": "Pension Plans",
@@ -60,7 +70,17 @@
             "kind:\"pension\""
           ]
         }
-      }
+      },
+      "tags": [
+        "uses:escAttr",
+        "uses:moneyFull",
+        "table",
+        "sort",
+        "modal",
+        "skeleton",
+        "chart",
+        "filter"
+      ]
     },
     "W03": {
       "name": "Payroll Distributions",
@@ -86,7 +106,16 @@
             "kind:\"payroll\""
           ]
         }
-      }
+      },
+      "tags": [
+        "uses:escAttr",
+        "uses:parseISO",
+        "table",
+        "sort",
+        "skeleton",
+        "chart",
+        "filter"
+      ]
     },
     "W04": {
       "name": "Remittance Pledges",
@@ -112,7 +141,20 @@
             "kind:\"remittance\""
           ]
         }
-      }
+      },
+      "tags": [
+        "uses:escAttr",
+        "uses:parseISO",
+        "uses:fmtDateLong",
+        "uses:MONTHS",
+        "uses:bandFromDays",
+        "table",
+        "sort",
+        "pager",
+        "modal",
+        "skeleton",
+        "filter"
+      ]
     },
     "W05": {
       "name": "Receivable Invoices Outstanding",
@@ -138,7 +180,18 @@
             "kind:\"receivables\""
           ]
         }
-      }
+      },
+      "tags": [
+        "uses:escAttr",
+        "uses:fmtDateLong",
+        "table",
+        "pager",
+        "modal",
+        "popover",
+        "skeleton",
+        "chart",
+        "filter"
+      ]
     },
     "W06": {
       "name": "Insurance Billing Plans",
@@ -164,7 +217,15 @@
             "kind:\"insurance\""
           ]
         }
-      }
+      },
+      "tags": [
+        "uses:escAttr",
+        "table",
+        "sort",
+        "skeleton",
+        "chart",
+        "filter"
+      ]
     },
     "W07": {
       "name": "Deposits on Hand",
@@ -190,7 +251,18 @@
             "kind:\"deposits\""
           ]
         }
-      }
+      },
+      "tags": [
+        "table",
+        "sort",
+        "pager",
+        "modal",
+        "popover",
+        "skeleton",
+        "chart",
+        "search",
+        "filter"
+      ]
     },
     "W08": {
       "name": "My Status",
@@ -212,7 +284,12 @@
             "kind:\"mystatus\""
           ]
         }
-      }
+      },
+      "tags": [
+        "table",
+        "modal",
+        "search"
+      ]
     },
     "W09": {
       "name": "Payroll Scheduled Time Off",
@@ -244,6 +321,13 @@
         "{id:\"pto2\",",
         "{id:\"pto3\",",
         "{id:\"pto4\","
+      ],
+      "tags": [
+        "uses:escText",
+        "table",
+        "modal",
+        "popover",
+        "filter"
       ]
     },
     "W10": {
@@ -278,7 +362,20 @@
             "kind:\"loans\""
           ]
         }
-      }
+      },
+      "tags": [
+        "uses:escAttr",
+        "uses:parseISO",
+        "uses:fmtDateLong",
+        "uses:moneyFull",
+        "table",
+        "sort",
+        "modal",
+        "popover",
+        "skeleton",
+        "chart",
+        "filter"
+      ]
     },
     "W11": {
       "name": "Fixed Asset Values",
@@ -309,7 +406,17 @@
             "kind:\"fixedassets\""
           ]
         }
-      }
+      },
+      "tags": [
+        "uses:escText",
+        "table",
+        "sort",
+        "pager",
+        "modal",
+        "popover",
+        "chart",
+        "filter"
+      ]
     },
     "W13": {
       "name": "Purchasing Management",
@@ -342,7 +449,21 @@
             "kind:\"purchasing\""
           ]
         }
-      }
+      },
+      "tags": [
+        "uses:escText",
+        "uses:parseISO",
+        "uses:fmtDateLong",
+        "uses:MONTHS",
+        "uses:moneyFull",
+        "table",
+        "modal",
+        "popover",
+        "skeleton",
+        "search",
+        "filter",
+        "checklist"
+      ]
     },
     "W14": {
       "name": "Main Content Tasks",
@@ -364,7 +485,11 @@
             "kind:\"tasks\""
           ]
         }
-      }
+      },
+      "tags": [
+        "search",
+        "filter"
+      ]
     },
     "W15": {
       "name": "Bank Balances",
@@ -404,7 +529,17 @@
         },
         "note": "Jo's block kept with its shell hooks (contentHTML, popContent, renderModal, click), not converted to WIDGETS.register"
       },
-      "baselineNote": "bank_k and bank_x are retitled 'Bank Balances' (owner), so they leave the line-for-line baseline check like her removed fixtures"
+      "baselineNote": "bank_k and bank_x are retitled 'Bank Balances' (owner), so they leave the line-for-line baseline check like her removed fixtures",
+      "tags": [
+        "table",
+        "sort",
+        "pager",
+        "modal",
+        "skeleton",
+        "chart",
+        "search",
+        "filter"
+      ]
     },
     "W16": {
       "name": "Accounts Payable By Due Date",
@@ -438,7 +573,7 @@
         },
         "js": {
           "start": "   Accounts Payable By Due Date  (ap, kind:\"payables\")  ,  v2 redesign",
-          "end": "  /* ===== Receivable Invoices Outstanding"
+          "end": "WIDGETS.register(\"payables\",{content:apContent});"
         },
         "registry": {
           "grep": [
@@ -446,7 +581,21 @@
           ]
         },
         "note": "Jo's block kept with its shell hooks (click, pop, trigger); content registered via WIDGETS.register so the viewer lists it"
-      }
+      },
+      "tags": [
+        "uses:escAttr",
+        "uses:parseISO",
+        "uses:MONTHS",
+        "uses:moneyFull",
+        "table",
+        "sort",
+        "modal",
+        "popover",
+        "skeleton",
+        "chart",
+        "search",
+        "filter"
+      ]
     },
     "W17": {
       "name": "Gifts Pledges",
@@ -484,7 +633,21 @@
             "kind:\"gifts\""
           ]
         }
-      }
+      },
+      "tags": [
+        "uses:escAttr",
+        "uses:parseISO",
+        "uses:fmtDateLong",
+        "uses:MONTHS",
+        "uses:bandFromDays",
+        "table",
+        "pager",
+        "modal",
+        "popover",
+        "skeleton",
+        "search",
+        "filter"
+      ]
     },
     "W18": {
       "name": "Financial KPI",
@@ -529,7 +692,12 @@
             "fkpActiveV"
           ]
         }
-      }
+      },
+      "tags": [
+        "uses:escText",
+        "popover",
+        "skeleton"
+      ]
     }
   },
   "shell": {

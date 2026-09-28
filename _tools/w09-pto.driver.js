@@ -11,7 +11,8 @@
    ===================================================================== */
 "use strict";
 const H = require("./jo-port-driver.js");
-const A = new H.Assert("W09 Payroll Scheduled Time Off (final)");
+const META = H.meta("W09");   /* number, name, kind, prefix and tags from _tools/widget-map.json */
+const A = new H.Assert(META.label + " (final)");
 const shell = H.loadShell(); const S = shell.script, raw = shell.html;
 
 /* ---------- 1. structure ---------------------------------------------- */
@@ -22,7 +23,7 @@ const css = H.extractRegion(shell.css, CSS_START, CSS_END), js = H.extractRegion
 A.ok(css.length > 8000, "CSS region has substance (" + css.length + " bytes)"); A.ok(js.length > 40000, "JS region has substance (" + js.length + " bytes)");
 A.ok(S.indexOf(JS_END) < S.indexOf("  var dashboards=["), "the block sits before the registry literal");
 A.contains(js, 'WIDGETS.register("pto",{', "registers itself"); A.contains(js, "var PTOF_ABOUT=", "info text lives in the block");
-const outside = S.replace(js, ""), code = function (s) { return s.replace(/\/\*[\s\S]*?\*\//g, ""); };
+const outside = S.replace(js, ""), code = H.code;   /* strip block comments, shared */
 ["function ptoContent(", "var PTO_DEPTS_MAIN=", 'kind:"pto-mb"', "ptoConfirmModalHTML", 'pop.type==="pto-year"', 'a==="pto-approve-day"', "ptoFContent(w); //"].forEach(function (n) { A.absent(code(outside), n, "gone from the shell: " + n); });
 A.eq((shell.css.match(/\.pto-[a-z0-9-]+/g) || []).length, 0, "no .pto- rule anywhere"); A.absent(shell.css.replace(css, ""), ".w09-", "no .w09- rule outside the block"); A.absent(shell.css.replace(css, ""), ".ptof-", "no .ptof- rule outside the block");
 A.eq((code(js).match(/(?<![\w-])pto-[a-z0-9-]+(?=["' ])/g) || []).filter(function (c) { return /^pto-(abtn|actioncol|appr-chip|caption|colhead|count-badge|ctx|datecol|dept-nm|emp-meta|emp-nm|hrcol|l1|l2|numwrap|pill|undo)/.test(c); }).length, 0, "block code names no shared pto- class");
@@ -30,16 +31,13 @@ A.eq((code(js).match(/(?<![\w-])pto-[a-z0-9-]+(?=["' ])/g) || []).filter(functio
 A.noEmDash(code(js), "W09 block code (comments excluded)");
 
 /* ---------- 2. host ---------------------------------------------------- */
-const TAIL = "\r\n  render();\r\n})();\r\n";
+const TAIL = H.TAIL;   /* the shell's closing lines, shared */
 const EXPORTS = "\r\n  __EX={WIDGETS:WIDGETS,contentHTML:contentHTML,popContent:popContent,triggerSelector:triggerSelector,aboutOf:aboutOf,find:find,dashboards:dashboards," +
   "setPop:function(p){pop=p;},getPop:function(){return pop;},setModal:function(m){modal=m;},getModal:function(){return modal;},modalHTML:function(){return WIDGETS.modal();}," +
   "pto:{click:ptoFHandleClick,calStep:ptoFCalStep,closeOverlay:ptoFCloseOverlay,closePop:ptoFClosePop,info:function(id,pk){PTOF_INFO={id:id,pk:pk};var h=ptoFInfoPanelHTML();PTOF_INFO=null;return h;}}," +
   "stubRender:function(){render=function(){};renderModal=function(){};renderOverlay=function(){};showModal=function(){};setStatus=function(){};}};\r\n" +
   "  try{render();}catch(e){__EX.renderErr=String(e&&e.message);}\r\n})();\r\n";
-const env = H.runBlock(S.slice(0, -TAIL.length) + EXPORTS, { dataAttr: "data-action", globals: {
-  __EX: null, Boolean: Boolean, RegExp: RegExp, Intl: Intl, Set: Set, Map: Map, Error: Error, encodeURIComponent: encodeURIComponent, decodeURIComponent: decodeURIComponent,
-  setInterval: function () { return 1; }, clearInterval: function () {}, navigator: { userAgent: "node" }, location: { href: "about:blank", hash: "" }, alert: function () {}, innerWidth: 1440, innerHeight: 900,
-  performance: { now: function () { return 0; } }, localStorage: { getItem: function () { return null; }, setItem: function () {}, removeItem: function () {} }, getComputedStyle: function () { return { getPropertyValue: function () { return ""; } }; } } });
+const env = H.runBlock(S.slice(0, -TAIL.length) + EXPORTS, { dataAttr: "data-action", globals: H.NODE_GLOBALS() });
 const EX = env.ctx.__EX; A.ok(EX && EX.WIDGETS, "shell loaded; WIDGETS reachable"); EX.stubRender();
 
 /* ---------- 3. registration + render ---------------------------------- */

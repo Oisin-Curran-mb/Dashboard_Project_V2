@@ -19,7 +19,7 @@ const { spawnSync } = require("child_process");
 const ROOT = path.join(__dirname, "..");
 const FILE = path.join(ROOT, "index.html");
 const TMP = path.join(__dirname, ".tmp");
-const TAIL = "\r\n  render();\r\n})();\r\n";
+const TAIL = require("./jo-port-driver.js").TAIL;   /* the one definition, shared */
 
 let bad = 0;
 function check(ok, msg) { console.log((ok ? "  ok    " : "  FAIL  ") + msg); if (!ok) bad++; }

@@ -24,7 +24,8 @@ if (blockRaw.indexOf('WIDGETS.register("purchasing",{content:purFContent,about:'
 const block = blockRaw.split(/\r?\n/).filter(function (l) { return l.indexOf('WIDGETS.register("purchasing",') !== 0; }).join("\r\n");
 const registry = H.extractRegistry(shell.script, "purchasing");
 const env = H.runBlock(block, { registry: registry, dataAttr: "data-purf" });
-const A = new H.Assert("W13 purchasing (approval-path model)");
+const META = H.meta("W13");   /* number, name, kind, prefix and tags from _tools/widget-map.json */
+const A = new H.Assert(META.label + " (final, rebuilt on the legacy approval model)");
 const POS = env.get("PURF_POS"), PATHS = env.get("PURF_PATHS"), ME = env.get("PURF_ME");
 const W = function (id) { for (const w of registry) if (w.id === id) return w; throw new Error("no widget " + id); };
 const C = function () { return env.call.apply(null, arguments); };

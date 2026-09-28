@@ -3207,6 +3207,49 @@
     pop:function(){var p=pop&&this.pops[pop.type];return p&&p.content?p.content():null;},
     trigger:function(){var p=pop&&this.pops[pop.type];return p&&p.trigger?p.trigger():null;},
     modal:function(){var m=modal&&this.modals[modal.type];return m?m():null;}};
+  /* =====================================================================
+     Shell: shared widget helpers (the common package)
+     =====================================================================
+     Added 2026-09-28. Every widget was built self-contained, on purpose, so
+     that editing one could not affect another. The cost was the same helper
+     written out once per widget: eight identical attribute escapers, six
+     identical ISO date parsers, four identical month tables.
+
+     This is the one implementation of each. A widget keeps its own named
+     helper, now a one-line alias, so no call site anywhere moved and any
+     widget can still take its own body back if it needs to diverge.
+
+     Who uses what is recorded in docs/SHARED.md and tagged per widget in
+     _tools/widget-map.json, so a single widget's tests still run alone.
+
+     NOT here, deliberately: the compact axis formatters, the severity
+     ladders, the day-difference helpers and the two sign-aware money
+     formatters. Those copies differ in ways that are visible on screen
+     (rounding tiers, band counts, midnight normalisation, and one uses a
+     true minus sign where the other uses a hyphen). Unifying them is a
+     design decision, not a refactor.
+  ===================================================================== */
+  /* attribute-safe: the eight-copy family. Quote only, which is all that is
+     needed inside a double-quoted attribute. */
+  function escAttr(s){return String(s).replace(/"/g,"&quot;");}
+  /* text-safe: the four-copy family. Ampersand first, or the later
+     replacements would double-escape it. Null-guarded, which W09 alone did
+     and which is strictly safer for the other three. */
+  function escText(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+  /* a date-only ISO string to a LOCAL midnight Date. new Date("2026-08-19")
+     would parse as UTC and shift behind the date line, which is why every
+     widget hand-rolled this rather than using the constructor. */
+  function parseISO(iso){var p=String(iso).split("-");return new Date(+p[0],(+p[1])-1,+p[2]);}
+  var MONTHS=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  /* "Aug 19, 2026". Returns the input untouched when it is not a date-only
+     ISO string, so a label already in prose passes through. */
+  function fmtDateLong(iso){var p=String(iso).split("-");if(p.length!==3)return iso;return MONTHS[(+p[1])-1]+" "+(+p[2])+", "+p[0];}
+  /* money at two decimals. Number(n||0) tolerates null, which W13 alone did. */
+  function moneyFull(n){return "$"+Number(n||0).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
+  /* pace band from days ahead of, or behind, schedule. Shared by W04
+     Remittance Pledges and W17 Gifts Pledges, which pace on the same rule. */
+  function bandFromDays(d){if(d>=30)return "ahead";if(d>=-30)return "onpace";if(d>=-60)return "behind";return "farbehind";}
+  /* ===== end Shell: shared widget helpers ===== */
   /* ===== Shell: single-widget viewer (review aid) =====
      index.html#k=mystatus,tasks   the current tab filtered to these kinds
      Change the hash to move to the next widget; no reload needed. */
@@ -4034,8 +4077,8 @@ var PENO_APPTS=[
 ];
 var PENO_APPTS_EMPTY=[];
 
-function penOEsc(s){return String(s).replace(/"/g,"&quot;");}
-function penOMoney(n){return "$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
+function penOEsc(s){return escAttr(s);}
+function penOMoney(n){return moneyFull(n);}
 function penODataset(w){return (w&&w.dataset==="none")?PENO_APPTS_EMPTY:PENO_APPTS;}
 function penODist(w){return (w&&w.penDist)||"All Districts";}
 function penOFiltered(w){var d=penODist(w);return penODataset(w).filter(function(a){return d==="All Districts"||a.dist===d;});}
@@ -4389,7 +4432,7 @@ function penOPopContent(){
   /* Local-midnight ISO parse (carried from our built Final; Jo's verbatim new Date(iso)
      parses as UTC and drops a boundary run at positive-offset timezones, e.g. this widget
      losing the 1st-of-month run under IST/UTC+1). Namespaced, prO-only. */
-  function prOParseISO(s){var p=String(s).split("-");return new Date(+p[0],(+p[1])-1,+p[2]);}
+  function prOParseISO(s){return parseISO(s);}
   function prOPeriodBounds(w){var b=prORangeBoundsFor(w.range||"TM",w);return {start:prOParseISO(b.begin),end:prOParseISO(b.end)};}
   function prORunsInRange(w){var b=prOPeriodBounds(w);return PRO_RUNS.filter(function(x){return x.date>=b.start&&x.date<=b.end;});}
   function prOPeriodLabel(w){var r=w.range||"TM";if(r==="CUSTOM")return "Custom";var m=PRO_PRESETS.filter(function(o){return o[0]===r;})[0];return m?m[1]:"This month";}
@@ -4503,7 +4546,7 @@ function penOPopContent(){
   function prORng(seed){var q=seed>>>0;return function(){q=q+0x6D2B79F5|0;var t=Math.imul(q^q>>>15,1|q);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
   function prODistSeed(distId){var h=0;for(var i=0;i<distId.length;i++)h=(h*31+distId.charCodeAt(i))|0;return Math.abs(h)+7919;}
   function prOMoney(n){var c=Math.round(n*100);return "$"+(c%100===0?(c/100).toLocaleString("en-US"):(c/100).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}));}
-  function prOEsc(x){return String(x).replace(/"/g,"&quot;");}
+  function prOEsc(x){return escAttr(x);}
   function prOPTFilter(w){var p=w.prPT||"all";if(p==="all")return null;for(var i=0;i<PRO_PT.length;i++)if(PRO_PT[i].id===p)return p;return null;}
   function prOPTList(w){var f=prOPTFilter(w);return f?PRO_PT.filter(function(p){return p.id===f;}):PRO_PT;}
   function prOEmployeesFor(w,distId){
@@ -4623,7 +4666,7 @@ function penOPopContent(){
 /* Fixed as-of anchor so the pacing maths are deterministic (project end-of-July
    convention). Calendar year 2026 (365 days, not a leap year). */
 var REMO_TODAY=new Date(2026,6,31); /* 31 Jul 2026 */
-var REMO_MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+var REMO_MON=MONTHS.slice();
 /* One row per remittance pledge, in conference order (seq). PER-PLEDGE TERM MATH
    (dev-confirmed 2026-07-28): every pledge carries its OWN term (begin to end),
    plus Frequency (payments per year) and Duration (payment periods) to mirror
@@ -4657,12 +4700,12 @@ var REMO_ACTIVITIES=[
 ];
 
 // ===== RENDER ===================================================
-function remOEsc(s){return String(s).replace(/"/g,"&quot;");}
+function remOEsc(s){return escAttr(s);}
 function remOData(w){if(w.state==="empty"||w.state==="noscope")return [];return REMO_ACTIVITIES;}
 /* ---- date helpers (leap-aware) ---------------------------------- */
-function remOParse(iso){var p=String(iso).split("-");return new Date(+p[0],+p[1]-1,+p[2]);}
+function remOParse(iso){return parseISO(iso);}
 function remOISO(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
-function remOFmtDate(iso){var d=remOParse(iso);return REMO_MON[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();}
+function remOFmtDate(iso){return fmtDateLong(iso);}
 function remOEndOfLastMonth(base){var d=new Date(base.getFullYear(),base.getMonth(),1);return remOISO(new Date(d-86400000));}
 function remOThru(w){return w.remThru||remOISO(REMO_TODAY);}
 function remOPct(x){return Math.round(x*100)+"%";}
@@ -4672,7 +4715,7 @@ function remOPaid(act,iso){return (act.payments||[]).filter(function(p){return p
    here once; the SAME band colours the % Paid cell, the status chip and the bar
    FILL. The class names (remO-ahead/onpace/behind/farbehind/neutral) are the only
    selection surface, so nothing else needs to know the numbers. ---- */
-function remOBandFromDays(d){if(d>=30)return 'ahead';if(d>=-30)return 'onpace';if(d>=-60)return 'behind';return 'farbehind';}
+function remOBandFromDays(d){return bandFromDays(d);}
 function remOStatus(r){if(r.total<=0)return 'neutral';if(r.outstanding<=0)return 'full';return remOBandFromDays(r.daysAhead);}
 function remOStatusLabel(s){return {neutral:'No pledge',full:'Paid in full',ahead:'30+ days ahead',onpace:'On track',behind:'About a month behind',farbehind:'60+ days behind'}[s]||'';}
 /* Plain-language day-count phrase for the hover card + drill note (accompanies the
@@ -5548,8 +5591,8 @@ var ARO_INV_SINGLE=[
 ];
 
 /* (2) RENDER ----------------------------------------------------------- */
-function arOEsc(s){return String(s).replace(/"/g,"&quot;");}
-function arOFmtDate(iso){var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];var p=String(iso).split("-");if(p.length!==3)return iso;return M[(+p[1])-1]+" "+(+p[2])+", "+p[0];}
+function arOEsc(s){return escAttr(s);}
+function arOFmtDate(iso){return fmtDateLong(iso);}
 function arODataset(w){if(w.dataset==="current")return ARO_INV_CURRENT;if(w.dataset==="single")return ARO_INV_SINGLE;return ARO_INV;}
 function arOFiltered(w){var rc=w.arORc||"All",src=w.arOSource||"All";return arODataset(w).filter(function(x){return (rc==="All"||x.rc===rc)&&(src==="All"||x.source===src);});}
 function arOSevOf(days){for(var i=0;i<ARO_BUCKETS.length;i++){if(days<=ARO_BUCKETS[i].hi)return ARO_BUCKETS[i].sev;}return 5;} /* v2.1: 6 bands, worst sev is 5 */
@@ -5908,7 +5951,7 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
   var INSO_COLORS=["--am-600","--am-500","--am-400","--am-300","--am-200"];
 
   /* (2) HELPERS */
-  function insOEsc(s){return String(s).replace(/"/g,"&quot;");}
+  function insOEsc(s){return escAttr(s);}
   function insONum(n){return Number(n).toLocaleString();}
   function insOMoney(n){return "$"+Number(n).toLocaleString();}
   function insOCost(p){return (p.enroll||0)*(p.rate||0);}
@@ -6413,7 +6456,7 @@ var PTOF_GROUPS=[
 ];
 
 /* (2) RENDER ----------------------------------------------------------- */
-function ptoFEsc(s){return String(s==null?"":s).replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function ptoFEsc(s){return escText(s);}
 function ptoFView(w){return w.ptofView||"queue";}
 function ptoFStatus(w){return w.ptofStatus||"pending";}
 function ptoFQueueGroup(w){return w.ptofQueueGroup||"dept";}
@@ -6921,10 +6964,10 @@ var LONF_LOANS_SINGLE=[
 ];
 
 /* (2) RENDER ----------------------------------------------------------- */
-function lonFEsc(s){return String(s).replace(/"/g,"&quot;");}
-function lonFMoney(n){return "$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
-function lonFFmtDate(iso){var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];var p=String(iso).split("-");if(p.length!==3)return iso;return M[(+p[1])-1]+" "+(+p[2])+", "+p[0];}
-function lonFParse(iso){var p=String(iso).split("-");return new Date(+p[0],(+p[1])-1,+p[2]);}
+function lonFEsc(s){return escAttr(s);}
+function lonFMoney(n){return moneyFull(n);}
+function lonFFmtDate(iso){return fmtDateLong(iso);}
+function lonFParse(iso){return parseISO(iso);}
 function lonFDaysSincePay(iso){if(!iso)return null;var t=lonFParse(LONF_TODAY);return Math.round((t-lonFParse(iso))/86400000);}
 function lonFIsDormant(x){var d=lonFDaysSincePay(x.lastPay);return d!=null&&d>90;}
 function lonFDataset(w){if(w.dataset==="current")return LONF_LOANS_CURRENT;if(w.dataset==="single")return LONF_LOANS_SINGLE;if(w.dataset==="none")return [];return LONF_LOANS;}
@@ -7407,7 +7450,7 @@ function faFPageN(w){return w.faFPage||0;}
 
 /* (3) HELPERS. money() and ICON() are the shell's own. */
 function faFIcon(n){return '<span class="material-symbols-rounded" aria-hidden="true">'+n+'</span>';}
-function faFEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function faFEsc(s){return escText(s);}
 /* The full unshortened figure: what every title and aria-label carries. */
 function faFMoneyFull(n){return money(Math.round(Number(n)||0));}
 /* The shortened display figure, computed in the FRONT END from the same values.
@@ -8019,10 +8062,10 @@ var PURF_POP=null,PURF_MODAL=null,PURF_MOVE=null,PURF_HOLD=null,PURF_DRAG=null,P
 
 /* (2) DERIVATIONS ------------------------------------------------------ */
 function purFIcon(n){return '<span class="material-symbols-rounded" aria-hidden="true">'+n+'</span>';}
-function purFEsc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
-function purFMoney(n){return "$"+Number(n||0).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
-function purFParse(iso){var p=String(iso).split("-");return new Date(+p[0],+p[1]-1,+p[2]);}
-function purFFmtDate(iso){var M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],d=purFParse(iso);return M[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();}
+function purFEsc(s){return escText(s);}
+function purFMoney(n){return moneyFull(n);}
+function purFParse(iso){return parseISO(iso);}
+function purFFmtDate(iso){return fmtDateLong(iso);}
 function purFAge(po){return Math.max(0,Math.round((PURF_TODAY-purFParse(po.issued))/86400000));}
 function purFAgeLabel(po){var a=purFAge(po);return (po.stage==="Pending")?("waiting "+a+(a===1?" day":" days")):("issued "+a+(a===1?" day":" days")+" ago");}
 /* Overdue = an expected-by date in the past on a not-yet-approved order. Rule 11:
@@ -8352,7 +8395,7 @@ function purFEmpty(w,filtered){
    false, Status < 2, no RejectedID). Encumbrance = the order total; the demo has no dollars applied per
    line. Period = the issue month, as the legacy groups by GL period. Held orders count: the legacy has
    no hold exclusion. */
-var PURF_MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+var PURF_MON=MONTHS.slice();
 function purFEncOpen(po){return purFActive(po)&&!po.paid&&po.pay!=="paid"&&!(po.appr||[]).some(function(a){return a.state==="rejected";});}
 function purFEncRows(w){var pa=purFPathCur(w);return purFDataset(w).filter(function(p){return purFEncOpen(p)&&(pa==="All approval paths"||p.path===pa);});}
 function purFEncKey(po){return String(po.issued).slice(0,7);}
@@ -9146,7 +9189,7 @@ WIDGETS.register("purchasing",{content:purFContent,about:function(w){return {h:w
 
 // ===== DATA ==========================================================
 var GPF_TODAY=new Date(2026,7,19); /* 19 Aug 2026, the deterministic as-of anchor */
-var GPF_MON=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+var GPF_MON=MONTHS.slice();
 var GPF_PAGE_SIZE=20; /* Step 4: the donor breakdown pages at 20 per page */
 var GPF_ABOUT="How each gift and pledge purpose is tracking against its goal, and how much of what was pledged is still due, as of the end of the chosen date range. Received counts gifts applied to a pledge. Open a purpose to see the donor pledges behind it, and a pledge to see the individual gifts applied to it.";
 /* Donor names in "Last, First" form (CorePerson.DisplayNameLastFirst), matching the
@@ -9194,16 +9237,16 @@ function gpFRefFor(media,rng){
 var GPF_POP=null,GPF_MODAL=null,GPF_FOCUS_ID=null;
 
 /* ---- helpers ------------------------------------------------------- */
-function gpFEsc(s){return String(s).replace(/"/g,"&quot;");}
+function gpFEsc(s){return escAttr(s);}
 function gpFMoney(n){var neg=n<0,v=Math.abs(n);var s="$"+v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});return neg?("-"+s):s;}
 function gpFMoney0(n){var neg=n<0,v=Math.abs(Math.round(n));var s="$"+v.toLocaleString("en-US");return neg?("-"+s):s;}
 /* Over-received (a negative Due Remaining) renders parenthesised and is FAVOURABLE. */
 function gpFDueCell(n){if(n<-0.005)return '<span class="gpf-fav">('+gpFMoney(Math.abs(n))+')</span>';return gpFMoney(n);}
 function gpFPct(x){if(x==null)return "n/a";return (Math.round(x*10000)/100).toFixed(2)+"%";}
 function gpFPctCell(x){if(x==null)return '<span class="gpf-muted">n/a</span>';var cls=(x<-0.005)?'gpf-fav':(x>=0.75?'gpf-over':'');return '<span class="'+cls+'">'+gpFPct(x)+'</span>';}
-function gpFParse(iso){var p=String(iso).split("-");return new Date(+p[0],+p[1]-1,+p[2]);}
+function gpFParse(iso){return parseISO(iso);}
 function gpFISO(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
-function gpFFmtDate(iso){var d=gpFParse(iso);return GPF_MON[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();}
+function gpFFmtDate(iso){return fmtDateLong(iso);}
 /* One window governs every figure. The default preset has NO start, so the widget reproduces
    the legacy panel exactly (full pledge amounts, gifts inception-to-date) and can still be
    reconciled against it. Narrower presets set a start, and then every figure is windowed:
@@ -9250,7 +9293,7 @@ function gpFStatusLabelRow(s){return {funded:'Fully funded',ontrack:'On track',b
   gifts:'Gifts only, no pledge',none:'Nothing pledged'}[s]||'';}
 
 /* ---- per-pledge pacing bands: paired text, never colour alone ---- */
-function gpFBandFromDays(d){if(d>=30)return 'ahead';if(d>=-30)return 'onpace';if(d>=-60)return 'behind';return 'farbehind';}
+function gpFBandFromDays(d){return bandFromDays(d);}
 function gpFStatusLabel(s){return {neutral:'No pledge',funded:'Fully paid',current:'Up to date',full:'Up to date',ahead:'30+ days ahead',onpace:'On track',behind:'About a month behind',farbehind:'60+ days behind'}[s]||'';}
 /* deterministic PRNG (mulberry32) so a purpose always seeds the same donor set */
 function gpFRng(seed){var s=seed>>>0;return function(){s=s+0x6D2B79F5|0;var t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
@@ -10613,9 +10656,9 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
   ];
 
   /* ---- helpers ------------------------------------------------------- */
-  function apMoney(n){return "$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
-  var AP_M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-  function apParse(iso){var p=iso.split("-");return new Date(+p[0],+p[1]-1,+p[2]);}
+  function apMoney(n){return moneyFull(n);}
+  var AP_M=MONTHS.slice();
+  function apParse(iso){return parseISO(iso);}
   function apFmtLong(iso){var d=apParse(iso);return AP_M[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();}
   function apDiffDays(iso){var d=apParse(iso),t=new Date(AP_TODAY.getFullYear(),AP_TODAY.getMonth(),AP_TODAY.getDate());return Math.round((d-t)/86400000);}
   function apIsOverdue(iso){return apDiffDays(iso)<0;}
@@ -10623,7 +10666,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
 function apDaysShort(iso){var n=apDiffDays(iso);if(n<0)return "Overdue "+(-n)+"d";if(n===0)return "Due today";return "Due "+n+"d";}
 function apFmtShort(iso){var d=apParse(iso),s=d.getDate()+" "+AP_M[d.getMonth()];if(d.getFullYear()!==AP_TODAY.getFullYear())s+=" "+d.getFullYear();return s;}
   function apBandOf(iso){var n=apDiffDays(iso);if(n<0)return "overdue";if(n<=7)return "week";if(n<=30)return "month";return "later";}
-  function apEsc(s){return String(s).replace(/"/g,"&quot;");}
+  function apEsc(s){return escAttr(s);}
 
   function apDueDates(w){var seen={},out=[];apData(w).forEach(function(x){if(!seen[x.due]){seen[x.due]=1;out.push(x.due);}});out.sort(function(a,b){return apParse(a)-apParse(b);});return out;}
   function apByDate(w){var dates=apDueDates(w);return dates.map(function(iso){var inv=apData(w).filter(function(x){return x.due===iso;});var tot=inv.reduce(function(s,x){return s+x.amount;},0);return {iso:iso,total:tot,count:inv.length,overdue:apIsOverdue(iso)};});}
@@ -11141,9 +11184,7 @@ var FKP_DEMO=[
 var FKP_STATE={demo:0,accts:1,popOpen:false,loading:false,updated:"just now"};
 
 /* (2) RENDER ----------------------------------------------------------- */
-function fkpEsc(s){
-  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-}
+function fkpEsc(s){return escText(s);}
 
 function fkpTileHTML(t){
   if(FKP_STATE.loading)return '<div class="fkp-tile"><div class="fkp-skel lbl"></div><div class="fkp-skel val"></div><div class="fkp-skel meta"></div></div>';

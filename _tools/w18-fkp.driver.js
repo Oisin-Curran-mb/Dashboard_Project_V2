@@ -19,7 +19,8 @@ const fs = require("fs");
 const path = require("path");
 const H = require("./jo-port-driver.js");
 
-const A = new H.Assert("W18 Financial KPI");
+const META = H.meta("W18");   /* number, name, kind, prefix and tags from _tools/widget-map.json */
+const A = new H.Assert(META.label + "");
 const DIR = path.join(__dirname, "..");
 const FILE = path.join(DIR, "index.html");
 const raw = fs.readFileSync(FILE, { encoding: "utf-8" });

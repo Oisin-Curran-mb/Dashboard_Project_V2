@@ -11,7 +11,8 @@
    ===================================================================== */
 "use strict";
 const H = require("./jo-port-driver.js");
-const A = new H.Assert("W11 Fixed Asset Values (final)");
+const META = H.meta("W11");   /* number, name, kind, prefix and tags from _tools/widget-map.json */
+const A = new H.Assert(META.label + " (final)");
 const shell = H.loadShell(); const S = shell.script, raw = shell.html;
 
 /* ---------- 1. structure ---------------------------------------------- */
@@ -22,23 +23,20 @@ const css = H.extractRegion(shell.css, CSS_START, CSS_END), js = H.extractRegion
 A.ok(css.length > 5000, "CSS region has substance (" + css.length + " bytes)"); A.ok(js.length > 30000, "JS region has substance (" + js.length + " bytes)");
 A.ok(S.indexOf(JS_END) < S.indexOf("  var dashboards=["), "the block sits before the registry literal");
 A.contains(js, 'WIDGETS.register("fixedassets",{', "registers itself"); A.contains(js, "var FAF_ABOUT=", "info text lives in the block");
-const outside = S.replace(js, ""), code = function (s) { return s.replace(/\/\*[\s\S]*?\*\//g, ""); };
+const outside = S.replace(js, ""), code = H.code;   /* strip block comments, shared */
 ["function faContent(", "var FA_ASSETS=", "function faHandleClick(", 'kind:"fixedassets-mb"', 'pop.type==="fa-groupby"', 'modal.type==="fafTable"', "faFContent(w); //"].forEach(function (n) { A.absent(code(outside), n, "gone from the shell: " + n); });
 A.eq((shell.css.match(/\.fa-[a-z0-9-]+/g) || []).length, 0, "no .fa- rule anywhere"); A.absent(shell.css.replace(css, ""), ".faf-", "no .faf- rule outside the block");
 A.eq((code(js).match(/(?<![\w-])fa-[a-z0-9-]+/g) || []).length, 0, "block code names no fa- class");
 A.noEmDash(code(js), "W11 block code (comments excluded)");
 
 /* ---------- 2. host ---------------------------------------------------- */
-const TAIL = "\r\n  render();\r\n})();\r\n";
+const TAIL = H.TAIL;   /* the shell's closing lines, shared */
 const EXPORTS = "\r\n  __EX={WIDGETS:WIDGETS,contentHTML:contentHTML,popContent:popContent,triggerSelector:triggerSelector,aboutOf:aboutOf,find:find,dashboards:dashboards," +
   "setPop:function(p){pop=p;},getPop:function(){return pop;},setModal:function(m){modal=m;},getModal:function(){return modal;},modalHTML:function(){return WIDGETS.modal();}," +
   "faf:{click:faFHandleClick,pop:function(){return FAF_POP;}}," +
   "stubRender:function(){render=function(){};renderModal=function(){};renderOverlay=function(){};showModal=function(){};setStatus=function(){};}};\r\n" +
   "  try{render();}catch(e){__EX.renderErr=String(e&&e.message);}\r\n})();\r\n";
-const env = H.runBlock(S.slice(0, -TAIL.length) + EXPORTS, { dataAttr: "data-action", globals: {
-  __EX: null, Boolean: Boolean, RegExp: RegExp, Intl: Intl, Set: Set, Map: Map, Error: Error, encodeURIComponent: encodeURIComponent, decodeURIComponent: decodeURIComponent,
-  setInterval: function () { return 1; }, clearInterval: function () {}, navigator: { userAgent: "node" }, location: { href: "about:blank", hash: "" }, alert: function () {}, innerWidth: 1440, innerHeight: 900,
-  performance: { now: function () { return 0; } }, localStorage: { getItem: function () { return null; }, setItem: function () {}, removeItem: function () {} }, getComputedStyle: function () { return { getPropertyValue: function () { return ""; } }; } } });
+const env = H.runBlock(S.slice(0, -TAIL.length) + EXPORTS, { dataAttr: "data-action", globals: H.NODE_GLOBALS() });
 const EX = env.ctx.__EX; A.ok(EX && EX.WIDGETS, "shell loaded; WIDGETS reachable"); EX.stubRender();
 
 /* ---------- 3. registration + render ---------------------------------- */
