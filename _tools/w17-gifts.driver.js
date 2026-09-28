@@ -1130,19 +1130,31 @@ A.eq((shell.script.match(/gpFRange:"thru"/g) || []).length, 3,
   });
   A.absent(gTable, "Last gift", "and no Last gift column (owner, 28 Sep)");
   A.absent(gTable, "lastGift", "with nothing left in the model feeding one");
-  /* OWNER OVERRIDE OF D12: headers centred, data left. headMatchesBody cannot be used here,
-     because it compares whole class sets and the alignment classes now differ by design. The
-     WIDTH classes must still match cell for cell, which is what keeps the columns lined up. */
-  const gHeadCells = (/<div class="wt-row wt-head[^"]*">([\s\S]*?)<\/div>\s*$/.exec(
-    /<div class="wt-row wt-head[\s\S]*?(?=<div class="wt-row gpf-trow)/.exec(gTable)[0]) || [, ""])[1];
+  /* OWNER OVERRIDE OF D12, which puts counts and amounts on the right: this table reads from
+     the left throughout, header and data alike (owner, 28 Sep, after asking for centred
+     headers first and then changing it). Header and body carry identical classes again, so
+     headMatchesBody applies to this table once more. */
+  const gHeadCells = (/<div class="wt-row wt-head[\s\S]*?(?=<div class="wt-row gpf-trow)/.exec(gTable) || [""])[0];
   const gRowCells = /<div class="wt-row gpf-trow[\s\S]*?(?=<div class="wt-row gpf-trow|$)/.exec(gTable)[0];
-  A.eq((gHeadCells.match(/gpf-c-ctr/g) || []).length, 4, "every Gifts header cell is centred");
-  A.eq((gRowCells.match(/gpf-c-lft/g) || []).length, 3, "and every data cell reads from the left");
-  A.absent(gHeadCells, "gpf-c-lft", "the header takes no left-align class");
-  A.absent(gRowCells, "gpf-c-ctr", "and the row takes no centre class");
+  A.eq((gHeadCells.match(/gpf-c-lft/g) || []).length, 4, "every Gifts header cell reads from the left");
+  A.eq((gRowCells.match(/gpf-c-lft/g) || []).length, 4, "and so does every cell of a row");
+  A.absent(gTable, "gpf-c-ctr", "nothing in this table is centred any more");
+  A.absent(shell.css, "gpf-c-ctr", "and the centring rule went with it");
+  A.headMatchesBody(gTable, "the Gifts header cells carry their column's own classes (D12 shape)");
+  /* the three data cells are still the same width slots as the header's */
   const widths = function (h) { return (h.match(/gpf-c-nm|gpf-c-n(?![a-z])/g) || []).join(","); };
   A.eq(widths(gHeadCells), widths(gRowCells),
-    "header and body still share their width classes, so the columns line up  (" + widths(gHeadCells) + ")");
+    "header and body share their width classes, so the columns line up  (" + widths(gHeadCells) + ")");
+  /* the middle bar segment is a token neutral, not the card's own white: on a white card,
+     white read as a hole rather than as the share still expected (owner, 28 Sep) */
+  A.contains(shell.css, ".gpf-root .gpf-seg-exp{background:var(--wn-400)",
+    "the still-expected segment takes a token grey");
+  A.absent(shell.css, "gpf-seg-exp{background:var(--surface-widget)", "and not the card's white");
+  /* the toggle line spans the header grid, or right-aligning it stops at the middle of the card */
+  A.contains(shell.css, ".gpf-root .gpf-tblrow{grid-column:1/-1;display:flex;justify-content:flex-end;}",
+    "the toggle line spans the header grid and aligns to the card's right edge");
+  A.contains(shell.css, ".dep-hd{display:grid;grid-template-columns:1fr auto",
+    "which is only correct while the header is that two-column grid");
   const gTot = ctx.gpFSumRows(gRows);
   A.contains(gTable, ctx.gpFMoney(gTot.other), "the totals row sums the unpledged money");
   A.eq(gTot.giftN, gRows.reduce(function (n, r) { return n + r.giftN; }, 0), "gift counts add up");

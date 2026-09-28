@@ -2085,16 +2085,18 @@
   .gpf-root .gpf-modal .gpf-ldr-drawer .gpf-drawer-h:first-child{margin-top:0;}
 
 
-    /* The Pledges / Gifts toggle sits on its own line under the view toggle, right aligned
-       under it, on the block's own 14px inset. */
-    .gpf-root .gpf-tblrow{display:flex;justify-content:flex-end;padding:0 14px 6px;}
-    /* The Gifts table centres its headers and reads its data from the left (owner override of
-       D12, which is otherwise in force across the build). */
-    .gpf-root .gpf-c-ctr{text-align:center;}
+    /* The Pledges / Gifts toggle sits on its own line under the view toggle. It must SPAN the
+       header grid's two columns: in column 1 alone, its right edge is the start of the toggle's
+       own column, which reads as the middle of the card. The grid's 16px inset is what lines it
+       up under the view toggle, so it adds none of its own. */
+    .gpf-root .gpf-tblrow{grid-column:1/-1;display:flex;justify-content:flex-end;}
+    /* The Gifts table reads from the left, header and data alike (owner override of D12, which
+       puts counts and amounts on the right; it is in force everywhere else in the build). */
     .gpf-root .gpf-c-lft{text-align:left;}
-    /* The white middle of the bar: what is still expected against the pledges. */
-    .gpf-root .gpf-seg-exp{background:var(--surface-widget);position:absolute;top:0;bottom:0;border-radius:0;}
-    .gpf-root .gpf-lg-sw.gpf-seg-exp{position:static;border-radius:3px;box-shadow:inset 0 0 0 1px var(--cn-30);}
+    /* The middle of the bar: what is still expected against the pledges. A neutral from the
+       tokens, not the card's own white, or it reads as a hole rather than a share. */
+    .gpf-root .gpf-seg-exp{background:var(--wn-400);position:absolute;top:0;bottom:0;border-radius:0;}
+    .gpf-root .gpf-lg-sw.gpf-seg-exp{position:static;border-radius:3px;}
     /* The last line sits on the card's bottom edge. The 10px of white beneath it is
        .wcontent's own padding, which every widget shares, so it is cancelled here rather than
        there, and only on the tiers that have a last line to pin. */
@@ -9684,14 +9686,14 @@ function gpFPledgesTable(w,trim){
 /* GIFTS: gift lines with no pledge behind them, per purpose, over the whole window. The
    columns are the Purpose List report's own: how many gifts, how many donors, the last one
    and the total. */
-/* Header centred, body left, on the owner's instruction of 28 Sep. The width classes are
-   the same on both, so the columns line up; only the alignment differs. */
+/* Left aligned throughout, header and data, on the owner's instruction of 28 Sep. Header and
+   body carry identical classes, so the columns line up cell for cell. */
 function gpFGiftsHead(){
   return '<div class="wt-row wt-head gpf-trow">'+
-    '<span class="gpf-c-nm gpf-c-ctr">Purpose</span>'+
-    '<span class="gpf-c-n gpf-c-ctr">Gifts</span>'+
-    '<span class="gpf-c-n gpf-c-ctr">Donors</span>'+
-    '<span class="gpf-c-n gpf-c-ctr">Total</span>'+
+    '<span class="gpf-c-nm gpf-c-lft">Purpose</span>'+
+    '<span class="gpf-c-n gpf-c-lft">Gifts</span>'+
+    '<span class="gpf-c-n gpf-c-lft">Donors</span>'+
+    '<span class="gpf-c-n gpf-c-lft">Total</span>'+
   '</div>';
 }
 function gpFGiftsRow(w,r){
@@ -9699,7 +9701,7 @@ function gpFGiftsRow(w,r){
   var sub=r.hasPledges?'Also has pledges':'No pledges';
   var sr=r.label+', '+r.giftN+' gift'+(r.giftN===1?'':'s')+' with no pledge, from '+r.giftDonors+' donor'+(r.giftDonors===1?'':'s')+', '+gpFMoney(r.other)+' in total. Open every gift and pledge behind this purpose.';
   return '<div class="wt-row gpf-trow gpf-clickable gpf-sumrow" data-gpf="baropen" data-id="'+w.id+'" data-c="'+gpFEsc(r.label)+'" data-f="gifts" role="button" tabindex="0" aria-haspopup="dialog" aria-label="'+gpFEsc(sr)+'">'+
-    '<span class="gpf-c-nm"><span class="gpf-caret" aria-hidden="true">'+ICON('chevron_right')+'</span><span class="gpf-nmtxt"><span class="gpf-nm">'+r.label+badge+'</span><span class="gpf-nmsub">'+sub+'</span></span></span>'+
+    '<span class="gpf-c-nm gpf-c-lft"><span class="gpf-caret" aria-hidden="true">'+ICON('chevron_right')+'</span><span class="gpf-nmtxt"><span class="gpf-nm">'+r.label+badge+'</span><span class="gpf-nmsub">'+sub+'</span></span></span>'+
     '<span class="gpf-c-n gpf-c-lft">'+r.giftN+'</span>'+
     '<span class="gpf-c-n gpf-c-lft">'+r.giftDonors+'</span>'+
     '<span class="gpf-c-n gpf-c-lft">'+gpFMoney(r.other)+'</span>'+
@@ -9713,7 +9715,7 @@ function gpFGiftsTable(w,trim){
   var t=gpFSumRows(rows);
   var body=rows.map(function(r){return gpFGiftsRow(w,r);}).join("");
   var tot=trim?'':('<div class="wt-row gpf-trow gpf-total-row gpf-sumtotal">'+
-    '<span class="gpf-c-nm">Total ('+t.count+' purpose'+(t.count===1?'':'s')+')</span>'+
+    '<span class="gpf-c-nm gpf-c-lft">Total ('+t.count+' purpose'+(t.count===1?'':'s')+')</span>'+
     '<span class="gpf-c-n gpf-c-lft">'+t.giftN+'</span>'+
     '<span class="gpf-c-n gpf-c-lft">'+t.giftDonors+'</span>'+
     '<span class="gpf-c-n gpf-c-lft">'+gpFMoney(t.other)+'</span>'+

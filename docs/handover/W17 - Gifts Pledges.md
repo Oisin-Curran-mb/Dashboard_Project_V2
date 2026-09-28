@@ -22,17 +22,17 @@ how far behind are the pledges?**
   shown. This money is tracked for tax; a number a reader cannot trace back to a
   purpose has no business on this widget.
 - **Giving shows all the money given to a purpose.** The bar has THREE segments:
-  pledge payments (dark), what is still expected against those pledges (white),
-  and the gifts that sit beyond the pledge (light). They always fill the track, so
+  pledge payments (dark), what is still expected against those pledges (a token
+  grey, `--wn-400`, never the card's white), and the gifts beyond the pledge (light). They always fill the track, so
   the bar shows composition, not reach; the dark share is the progress. The line
   under it states all four figures in words. **No percentage appears on a Giving
   row** (owner, 28 Sep) - the row states the money given.
 - **The table shows one read at a time**, switched by the Pledges / Gifts toggle
   on its own line under the view toggle. *Pledges* is the shipped panel, one to
   one. *Gifts* is money given to the purpose that answers to no pledge. Neither
-  borrows a figure from the other. The Gifts table centres its headers and reads
-  its data from the left, which is an owner override of D12 and applies to that
-  table alone.
+  borrows a figure from the other. The Gifts table reads from the left throughout,
+  header and data, which is an owner override of D12 and applies to that table
+  alone; the Pledges table keeps its money on the right as the panel does.
 - **A pledge's position is read to the thru date; gift transactions obey the
   window.** A pledge is a cumulative promise, so nothing about it is ever
   re-scoped by a window start.
@@ -47,7 +47,7 @@ kind `gifts`.
 |---|---|
 | Prefix | `gpF` (JS), `gpf-` (CSS), `data-gpf` (actions) |
 | Kind | `gifts`, registered through `WIDGETS.register("gifts", …)` |
-| Driver | `_tools/w17-gifts.driver.js`, 836 assertions |
+| Driver | `_tools/w17-gifts.driver.js`, 841 assertions |
 | Decision record | `docs/decisions/W17.md` — 200 lines, the authority for every ruling |
 | Review pack | `docs/review/W17 - Gifts Pledges.md` |
 
@@ -144,7 +144,7 @@ node _tools/verify.js
 node _tools/lint.js
 ```
 
-The full suite is 2,736 assertions across 17 drivers and must stay green. The
+The full suite is 2,741 assertions across 17 drivers and must stay green. The
 lint is a report, not a gate; its current findings are pre-existing and listed
 in §7.
 
