@@ -1957,11 +1957,9 @@
      this only lays out the icon, the sentence and the trailing button. */
   .gpf-root .gpf-cap{display:flex;align-items:flex-start;gap:7px;padding:8px 14px 6px;line-height:1.45;}
   .gpf-root .gpf-cap .material-symbols-rounded{font-size:15px;color:var(--am-500);flex:0 0 auto;margin-top:1px;}
-  .gpf-root .gpf-cap .gpf-export{margin-left:auto;flex:0 0 auto;}
   /* THE DECOUPLED EXPORT BUTTON. It carries no styling of its own beyond this
      alignment nudge: everything visual comes from the shell's global button
      family, which is exactly why the W04 root could be dropped. */
-  .gpf-root .gpf-export{align-self:flex-start;}
   /* SUMMARY TABLE. Her row grid and cells do all the column work; this only
      gives the table a scrolling body with the totals row pinned below it. */
   .gpf-root .gpf-tblwrap{flex:1;min-height:0;display:flex;flex-direction:column;min-width:0;}
@@ -9223,7 +9221,7 @@ WIDGETS.register("purchasing",{content:purFContent,about:function(w){return {h:w
 // ===== DATA ==========================================================
 var GPF_TODAY=new Date(2026,7,19); /* 19 Aug 2026, the deterministic as-of anchor */
 var GPF_MON=MONTHS.slice();
-var GPF_ABOUT="How each gift and pledge purpose is tracking against its goal, and how much of what was pledged is still due, as of the end of the chosen date range. Received counts gifts applied to a pledge. Open a purpose to see the donor pledges behind it, and a pledge to see the individual gifts applied to it.";
+var GPF_ABOUT="What each purpose has received, and how much of what was pledged is still due, over the dates you choose. Received counts both payments against a pledge and gifts given to the purpose with no pledge behind them, shown separately in the bar. Open a purpose to see every gift and pledge behind it, and open one of those to see its history: a pledge shows its schedule and the payments against it, a gift shows how it arrived and what prompted it.";
 /* Donor names in "Last, First" form (CorePerson.DisplayNameLastFirst), matching the
    legacy Gifts and Pledges donor column. Shared pool; each purpose's donor SET is
    its own deterministically-seeded slice. */
@@ -9577,7 +9575,7 @@ function gpFViewToggle(w){
   var v=gpFView(w);
   function seg(val,lbl,ic,tip){return '<button class="vt'+(v===val?" on":"")+'" data-gpf="view" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(v===val)+'" data-tip="'+gpFEsc(tip)+'" data-tip-plain>'+ICON(ic)+lbl+'</button>';}
   return '<div class="vtoggle" role="group" aria-label="View">'+
-    seg("goal","Giving","volunteer_activism","What each purpose has received, most received first, with pledge payments and other gifts shown separately.")+
+    seg("goal","Giving","volunteer_activism","What each purpose has received, most received first, with pledge payments and gifts shown separately.")+
     seg("table","Summary Table","table_rows","The baseline table: Pledge Total, Pledge Due, Received, Due Remaining and Percent Due for every purpose.")+
   '</div>';
 }
@@ -9596,7 +9594,7 @@ function gpFSplitLine(r){
   if(!(r.received>0))return 'Nothing received in this window';
   if(!(r.fromPledges>0))return gpFMoney0(r.other)+' from gifts, none against a pledge';
   if(!(r.other>0))return gpFMoney0(r.fromPledges)+' all from pledge payments';
-  return gpFMoney0(r.fromPledges)+' from pledges, '+gpFMoney0(r.other)+' from other gifts';
+  return gpFMoney0(r.fromPledges)+' from pledges, '+gpFMoney0(r.other)+' from gifts';
 }
 /* Two-tone bar: pledge payments then other gifts, both against what was pledged. Widths are
    shares of the pledged amount, so an over-funded purpose fills the track and the overspill is
@@ -9607,7 +9605,7 @@ function gpFSplitBar(r,small){
   var o=base>0?Math.max(0,Math.min(100-p,r.other/base*100)):0;
   return '<div class="gpf-track'+(small?' gpf-track-sm':'')+'">'+
     '<span class="gpf-fill gpf-seg-pledge" style="width:'+p.toFixed(1)+'%" data-tip="'+gpFEsc('Pledge payments: '+gpFMoney0(r.fromPledges))+'" data-tip-plain></span>'+
-    '<span class="gpf-fill gpf-seg-other" style="width:'+o.toFixed(1)+'%;left:'+p.toFixed(1)+'%" data-tip="'+gpFEsc('Other gifts: '+gpFMoney0(r.other))+'" data-tip-plain></span>'+
+    '<span class="gpf-fill gpf-seg-other" style="width:'+o.toFixed(1)+'%;left:'+p.toFixed(1)+'%" data-tip="'+gpFEsc('Gifts: '+gpFMoney0(r.other))+'" data-tip-plain></span>'+
   '</div>';
 }
 function gpFHeaderBlock(w,mode){
@@ -9664,11 +9662,10 @@ function gpFGivingBars(w){
   var t=gpFTotals(w);
   var legend='<div class="gpf-bars-legend gpf-legend">'+
     '<span class="gpf-lg-i"><span class="gpf-lg-sw gpf-seg-pledge"></span>Pledge payments<b class="gpf-lg-n">'+gpFMoney0(t.fromPledges)+'</b></span>'+
-    '<span class="gpf-lg-i"><span class="gpf-lg-sw gpf-seg-other"></span>Other gifts<b class="gpf-lg-n">'+gpFMoney0(t.other)+'</b></span>'+
+    '<span class="gpf-lg-i"><span class="gpf-lg-sw gpf-seg-other"></span>Gifts<b class="gpf-lg-n">'+gpFMoney0(t.other)+'</b></span>'+
     '<span class="gpf-lg-i gpf-lg-rem">Still to arrive against pledges: <b>'+gpFMoney0(Math.max(0,t.pledgeTotal-t.fromPledges))+'</b></span>'+
   '</div>';
-  var cap='<div class="gpf-ctx gpf-cap">'+ICON("volunteer_activism")+'<span>What each purpose has received, most received first. The bar shows pledge payments and other gifts separately. Select one to see every gift and pledge behind it.</span></div>';
-  return '<div class="gpf-goalwrap">'+cap+'<div class="gpf-bars gpf-barscroll">'+body+'</div>'+legend+'</div>';
+  return '<div class="gpf-goalwrap"><div class="gpf-bars gpf-barscroll">'+body+'</div>'+legend+'</div>';
 }
 function gpFGoalBars(w){return gpFGivingBars(w);}
 
@@ -9970,7 +9967,7 @@ function gpFLedgerModalHTML(){
     '<span class="gpf-dsum-i"><span class="gpf-dsum-k">Pledge Total</span><span class="gpf-dsum-v">'+gpFMoney(comp.pledgeTotal)+'</span></span>'+
     '<span class="gpf-dsum-i"><span class="gpf-dsum-k">Pledge Due</span><span class="gpf-dsum-v">'+gpFMoney(comp.pledgeDue)+'</span></span>'+
     '<span class="gpf-dsum-i"><span class="gpf-dsum-k">Pledge payments</span><span class="gpf-dsum-v">'+gpFMoney(comp.fromPledges)+'</span></span>'+
-    '<span class="gpf-dsum-i"><span class="gpf-dsum-k">Other gifts</span><span class="gpf-dsum-v">'+gpFMoney(comp.other)+'</span></span>'+
+    '<span class="gpf-dsum-i"><span class="gpf-dsum-k">Gifts</span><span class="gpf-dsum-v">'+gpFMoney(comp.other)+'</span></span>'+
     '<span class="gpf-dsum-i"><span class="gpf-dsum-k">Received</span><span class="gpf-dsum-v">'+gpFMoney(comp.received)+'</span></span>'+
     '<span class="gpf-dsum-i"><span class="gpf-badge" style="color:'+col+';border-color:'+col+'">'+ICON(comp.status==='funded'?'check_circle':'flag')+gpFStatusLabelRow(comp.status)+'</span></span>'+
   '</div>';

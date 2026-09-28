@@ -139,9 +139,12 @@ A.eq(CAMPS[6].pledgeTotal, 0, "Memorial Gifts has no pledge"); A.ok(CAMPS[6].oth
       /* the VISIBLE caption is the compact form; the screen-reader line below it
          keeps the full wording on purpose, so this reads the caption alone */
       const capTxt = html.slice(html.indexOf("gpf-glance-cap")).split("</span>")[0];
-      A.absent(capTxt, "from other gifts", "the visible Glance caption is the compact form (" + v + ")");
+      /* both forms say "gifts" since 28 Sep, so the discriminator is the
+         phrasing: the full line reads "from pledges", the compact "pledged," */
+      A.absent(capTxt, "from pledges", "the visible Glance caption is the compact form (" + v + ")");
+      A.contains(capTxt, "pledged,", "which reads pledged rather than from pledges (" + v + ")");
       A.contains(capTxt, "gifts", "and still names both parts (" + v + ")");
-      A.contains(html.slice(html.indexOf("sr-only")), "from other gifts",
+      A.contains(html.slice(html.indexOf("sr-only")), "from gifts",
         "while the screen-reader line keeps the full wording (" + v + ")");
     } else {
       A.contains(html, 'data-gpf="view"', "view toggle present at " + sz + "/" + v);
@@ -384,7 +387,7 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   A.contains(m, 'id="gpfLedgerQ"', "the ledger carries a search box");
   /* the campaign summary cells, on the copied summary-cell primitives */
   A.contains(m, "gpf-dsum", "the modal summary uses the copied summary-cell primitive");
-  ["Pledge Total", "Pledge Due", "Received", "Due Remaining", "Pledge payments", "Other gifts"].forEach(function (k) {
+  ["Pledge Total", "Pledge Due", "Received", "Due Remaining", "Pledge payments", "Gifts"].forEach(function (k) {
     A.contains(m, ">" + k + "<", "modal summary cell: " + k);
   });
   /* The ledger lists EVERYTHING that came in for the purpose. It replaced the
@@ -707,7 +710,7 @@ A.cssDeclares(shell.css, [
 A.cssDeclares(shell.css, [
   "gpf-root", "gpf-body", "gpf-pill", "gpf-badge", "gpf-closed", "gpf-fav", "gpf-over", "gpf-muted",
   "gpf-goalwrap", "gpf-barscroll", "gpf-legend", "gpf-lg-i", "gpf-lg-sw", "gpf-lg-n", "gpf-lg-rem",
-  "gpf-cap", "gpf-export", "gpf-tblwrap", "gpf-scroll", "gpf-sumrow", "gpf-sumtotal", "gpf-caret",
+  "gpf-cap", "gpf-tblwrap", "gpf-scroll", "gpf-sumrow", "gpf-sumtotal", "gpf-caret",
   "gpf-nmtxt", "gpf-nm", "gpf-nmsub", "gpf-drill-tbl", "gpf-drawer",
   "gpf-grow", "gpf-gref", "gpf-giftfoot", 
   "gpf-pop", "gpf-dates", "gpf-modal", "gpf-panel", "gpf-panel-h", "gpf-panel-big", "gpf-dot"
@@ -903,7 +906,8 @@ A.eq((shell.script.match(/gpFRange:"thru"/g) || []).length, 3,
   [ctx.gpFMoney0(tot.fromPledges), ctx.gpFMoney0(tot.other)].forEach(function (n) {
     A.contains(shortLine, n, "the compact caption still carries " + n);
   });
-  A.contains(fullLine, "from other gifts", "the full wording survives for the wider tiers");
+  A.contains(fullLine, "from gifts", "the full wording survives for the wider tiers");
+  A.contains(fullLine, "from pledges", "and names both sides the long way");
   /* every branch of the compact line is real prose, not a truncation */
   [{ received: 0 }, { received: 5, fromPledges: 0, other: 5 }, { received: 5, fromPledges: 5, other: 0 }]
     .forEach(function (r, i) {
@@ -935,7 +939,7 @@ A.eq((shell.script.match(/gpFRange:"thru"/g) || []).length, 3,
   A.contains(bar, "gpf-seg-other", "and an other-gifts segment");
   A.contains(bar, 'data-tip="Pledge payments: ' + ctx.gpFMoney0(barRow.fromPledges) + '"',
     "the pledge segment names its own amount on hover");
-  A.contains(bar, 'data-tip="Other gifts: ' + ctx.gpFMoney0(barRow.other) + '"',
+  A.contains(bar, 'data-tip="Gifts: ' + ctx.gpFMoney0(barRow.other) + '"',
     "and the gifts segment names its own amount");
   A.eq((bar.match(/data-tip-plain/g) || []).length, 2, "both are plain-text tips");
   /* the amounts on the bar agree with the line printed under it */
