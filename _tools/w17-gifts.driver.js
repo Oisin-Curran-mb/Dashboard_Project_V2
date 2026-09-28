@@ -484,6 +484,34 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   const gRow = ctx.gpFLedgerRowHTML(giftRow, gw, win);
   A.absent(gRow, "Pledge schedule", "an other gift shows no schedule; nothing was promised behind it");
   A.contains(gRow, "Gift date", "it shows its own detail instead");
+
+  /* "Prompted by" was dropped on 28 Sep (owner: "until we know it is wanted or
+     needed"). The legacy field is real, GFHistory.MotivationID, but it sits on
+     the GIFT and not on the gift LINE, and a motivation belongs to at most one
+     purpose while the picker offers every motivation in the company. So in a
+     pop-up scoped to one purpose it could print a motivation belonging
+     elsewhere. The MODEL keeps the field, so restoring the column is markup. */
+  const giftCols = ["Gift date", "Arrived by", "Reference", "Amount"];
+  [gRow, ctx.gpFPledgeHistory(pledgeRow.pledge, win)].forEach(function (h, i) {
+    A.absent(h, "Prompted by", "no motivation column, view " + i);
+    giftCols.forEach(function (c) { A.contains(h, ">" + c + "<", "gift column " + c + ", view " + i); });
+  });
+  A.ok(Array.isArray(ctx.GPF_MOTIVATIONS) && ctx.GPF_MOTIVATIONS.length > 0,
+    "the model still carries motivations, so the column can come back without a data change");
+  A.ok(ctx.gpFOtherGiftsFor(purpose).every(function (g) { return !!g.motive; }),
+    "and every gift still has one seeded");
+  /* the search matches only what is on screen: media yes, motivation no */
+  const anyMotive = ctx.GPF_MOTIVATIONS[0].name.toLowerCase();
+  const byMotive = ctx.gpFLedgerRows(w, purpose, win);
+  A.ok(byMotive.every(function (it) { return String(it.refs || "").toLowerCase().indexOf(anyMotive) < 0; }),
+    "the motivation is out of the search haystack, so the search matches only visible text");
+  A.ok(ctx.gpFOtherGiftsFor(purpose).length === 0 ||
+       byMotive.filter(function (it) { return it.kind === "gift"; })
+               .every(function (it) { return String(it.refs).indexOf(it.gift.media) > -1; }),
+    "while how a gift arrived stays searchable, because it is still shown");
+  /* both gift grids are four columns wide now */
+  A.eq((shell.css.match(/grid-template-columns:1fr 1fr 1\.2fr auto/g) || []).length, 2,
+    "both gift grids were narrowed from five columns to four");
   /* Escape closes it, and so does the close control */
   gkey("Escape", {});
   A.eq(shim.captured["gpfModalRoot"], "", "Escape closes the modal");

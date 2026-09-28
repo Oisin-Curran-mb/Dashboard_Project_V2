@@ -2071,11 +2071,11 @@
   .gpf-root .gpf-modal .gpf-ldr-sub .material-symbols-rounded{font-size:13px;}
   .gpf-root .gpf-modal .gpf-tag{display:inline-flex;align-items:center;font-size:10.5px;font-weight:600;border-radius:5px;padding:2px 6px;background:var(--am-100);color:var(--am-700);}
   .gpf-root .gpf-modal .gpf-ldr-gift .gpf-dc0 .gpf-ldr-sub{color:var(--am-700);}
-  .gpf-root .gpf-modal .gpf-ldr-exp .gpf-grow{display:grid;grid-template-columns:1fr 1fr 1.4fr 1fr auto;gap:10px;}
+  .gpf-root .gpf-modal .gpf-ldr-exp .gpf-grow{display:grid;grid-template-columns:1fr 1fr 1.2fr auto;gap:10px;}
   /* Declared: both were used by our markup and never had a rule (found 28 Sep). */
   .gpf-root .gpf-empty{padding:18px 16px;font-size:13px;color:var(--txt-subtle);text-align:center;}
   .gpf-root .gpf-date-input{font-family:inherit;font-size:12.5px;padding:5px 7px;border:1px solid var(--stroke-widget);border-radius:7px;background:var(--surface-widget);color:var(--txt-primary);}
-  .gpf-root .gpf-ldr-hist,.gpf-modal .gpf-ldr-hist{display:grid;grid-template-columns:1fr 1fr 1.4fr 1fr auto;gap:10px;}
+  .gpf-root .gpf-ldr-hist,.gpf-modal .gpf-ldr-hist{display:grid;grid-template-columns:1fr 1fr 1.2fr auto;gap:10px;}
   /* the pledge schedule, shown above the payments in the ledger */
   .gpf-root .gpf-modal .gpf-sched-row{display:grid;grid-template-columns:1fr 1.2fr 1fr auto;gap:10px;}
   .gpf-root .gpf-modal .gpf-sched-lead{font-size:11.5px;color:var(--txt-secondary);padding:0 0 6px;line-height:1.45;}
@@ -9797,9 +9797,9 @@ function gpFGiftPanel(pl,iso,win,inner){
     if(inner)return emptyBody;
     return '<div class="gpf-drawer gpf-drawer" role="region" aria-label="'+gpFEsc('Gifts applied to the '+pl.donor+' pledge')+'">'+emptyBody+'</div>';
   }
-  var body='<div class="gpf-grow gpf-ghead gpf-ldr-hist"><span>Gift date</span><span>Arrived by</span><span>Prompted by</span><span>Reference</span><span class="gpf-ga">Amount</span></div>';
+  var body='<div class="gpf-grow gpf-ghead gpf-ldr-hist"><span>Gift date</span><span>Arrived by</span><span>Reference</span><span class="gpf-ga">Amount</span></div>';
   gifts.forEach(function(g){
-    body+='<div class="gpf-grow gpf-ldr-hist"><span>'+gpFFmtDate(g.date)+'</span><span>'+gpFEsc(g.media||'')+'</span><span>'+gpFEsc(g.motive||'')+(g.motiveCode?(' ('+g.motiveCode+')'):'')+'</span><span>'+gpFEsc(g.ref)+'</span><span class="gpf-ga">'+gpFMoney(g.amount)+'</span></div>';
+    body+='<div class="gpf-grow gpf-ldr-hist"><span>'+gpFFmtDate(g.date)+'</span><span>'+gpFEsc(g.media||'')+'</span><span>'+gpFEsc(g.ref)+'</span><span class="gpf-ga">'+gpFMoney(g.amount)+'</span></div>';
   });
   var fullBody=head+'<div class="gpf-gifts">'+body+'</div>'+
     '<div class="gpf-giftfoot">Total received: '+gpFMoney(sum)+' across '+gifts.length+' gift'+(gifts.length===1?'':'s')+' applied to this pledge</div>';
@@ -9920,7 +9920,7 @@ function gpFLedgerRows(w,p,win){
   if(f!=='pledges'){
     gpFOtherGiftsFor(p).forEach(function(g){
       if(!gpFInWindow(g.date,win))return;
-      out.push({kind:'gift',id:g.id,donor:g.donor,gift:g,amount:g.amount,date:g.date,refs:g.ref+' '+g.media+' '+g.motive});
+      out.push({kind:'gift',id:g.id,donor:g.donor,gift:g,amount:g.amount,date:g.date,refs:g.ref+' '+g.media});
     });
   }
   if(q)out=out.filter(function(it){
@@ -9944,7 +9944,7 @@ function gpFLedgerRowHTML(it,w,win){
     '</button>'+(exp?gpFPledgeHistory(it.pledge,win):'');
   }
   var g=it.gift;
-  var sr2=it.donor+', gift of '+gpFMoney(g.amount)+' on '+gpFFmtDate(g.date)+' by '+g.media+', '+g.motive+', reference '+g.ref+'.';
+  var sr2=it.donor+', gift of '+gpFMoney(g.amount)+' on '+gpFFmtDate(g.date)+' by '+g.media+', reference '+g.ref+'.';
   return '<button class="gpf-drow gpf-clickable gpf-ldr-row gpf-ldr-gift" data-gpf="gopen" data-id="'+w.id+'" data-plid="'+gpFEsc(it.id)+'" aria-expanded="'+exp+'" aria-label="'+gpFEsc(sr2)+'">'+
     '<span class="gpf-dexp">'+ICON(exp?'expand_more':'chevron_right')+'</span>'+
     '<span class="gpf-dc gpf-dc0"><span class="gpf-ldr-nm">'+it.donor+'</span><span class="gpf-ldr-sub">'+ICON('redeem')+'No pledge</span></span>'+
@@ -9952,8 +9952,8 @@ function gpFLedgerRowHTML(it,w,win){
     '<span class="gpf-dc gpf-dc2">'+gpFMoney(g.amount)+'</span>'+
     '<span class="gpf-dc gpf-dc3 gpf-muted">n/a</span>'+
     '<span class="gpf-dstat-h"><span class="gpf-tag gpf-seg-other-tag">Gift</span></span>'+
-  '</button>'+(exp?('<div class="gpf-gifts gpf-ldr-exp"><div class="gpf-grow gpf-ghead"><span>Gift date</span><span>Arrived by</span><span>Prompted by</span><span>Reference</span><span class="gpf-ga">Amount</span></div>'+
-    '<div class="gpf-grow"><span>'+gpFFmtDate(g.date)+'</span><span>'+g.media+'</span><span>'+g.motive+' ('+g.motiveCode+')</span><span>'+g.ref+'</span><span class="gpf-ga">'+gpFMoney(g.amount)+'</span></div></div>'):'');
+  '</button>'+(exp?('<div class="gpf-gifts gpf-ldr-exp"><div class="gpf-grow gpf-ghead"><span>Gift date</span><span>Arrived by</span><span>Reference</span><span class="gpf-ga">Amount</span></div>'+
+    '<div class="gpf-grow"><span>'+gpFFmtDate(g.date)+'</span><span>'+g.media+'</span><span>'+g.ref+'</span><span class="gpf-ga">'+gpFMoney(g.amount)+'</span></div></div>'):'');
 }
 function gpFLedgerModalHTML(){
   if(!GPF_MODAL)return '';
