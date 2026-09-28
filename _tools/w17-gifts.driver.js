@@ -971,12 +971,27 @@ A.eq((shell.script.match(/gpFRange:"thru"/g) || []).length, 3,
   const barRow = ctx.gpFTotals(fresh("gpF", { gpFRange: "thru", gpFEnd: "2026-08-19" }));
   const bar = ctx.gpFSplitBar(barRow);
   A.contains(bar, "gpf-seg-pledge", "the bar has a pledge-payments segment");
-  A.contains(bar, "gpf-seg-other", "and an other-gifts segment");
+  A.contains(bar, "gpf-seg-exp", "a white still-expected segment in the middle");
+  A.contains(bar, "gpf-seg-other", "and a gifts segment beyond the pledge");
   A.contains(bar, 'data-tip="Pledge payments: ' + ctx.gpFMoney0(barRow.fromPledges) + '"',
     "the pledge segment names its own amount on hover");
+  A.contains(bar, 'data-tip="Still expected: ' + ctx.gpFMoney0(ctx.gpFStillExpected(barRow)) + '"',
+    "the white segment names what is still expected");
   A.contains(bar, 'data-tip="Gifts: ' + ctx.gpFMoney0(barRow.other) + '"',
     "and the gifts segment names its own amount");
-  A.eq((bar.match(/data-tip-plain/g) || []).length, 2, "both are plain-text tips");
+  A.eq((bar.match(/data-tip-plain/g) || []).length, 3, "all three are plain-text tips");
+  /* the three shares fill the track and never overflow it, which is what the scale is for */
+  const segW = (bar.match(/width:([\d.]+)%/g) || []).map(function (m3) { return parseFloat(/([\d.]+)/.exec(m3)[1]); });
+  A.eq(segW.length, 3, "three widths are set");
+  A.ok(Math.abs(segW.reduce(function (n, v) { return n + v; }, 0) - 100) < 0.4,
+    "and they account for the whole track  (" + segW.join(" + ") + ")");
+  /* an over-paid pledge is the case that used to run off the end */
+  const over = ctx.gpFPurposeCompute(fresh("gpF", { size: "xwide" }))
+    .filter(function (r) { return r.fromPledges > r.pledgeTotal && r.pledgeTotal > 0; })[0];
+  A.ok(!!over, "the fixture holds an over-paid purpose");
+  const oW = (ctx.gpFSplitBar(over).match(/width:([\d.]+)%/g) || []).map(function (m3) { return parseFloat(/([\d.]+)/.exec(m3)[1]); });
+  A.ok(oW.reduce(function (n, v) { return n + v; }, 0) <= 100.4, "and its segments still fit the track  (" + oW.join(" + ") + ")");
+  A.eq(oW[1], 0, "with nothing still expected against it");
   /* the amounts on the bar agree with the line printed under it */
   A.contains(ctx.gpFSplitLine(barRow), ctx.gpFMoney0(barRow.fromPledges), "the hover and the printed line agree on pledge payments");
   A.contains(ctx.gpFSplitLine(barRow), ctx.gpFMoney0(barRow.other), "and on other gifts");
@@ -1022,8 +1037,14 @@ A.eq((shell.script.match(/gpFRange:"thru"/g) || []).length, 3,
   A.eq(ctx.gpFTblMode(tw), "pledges", "the table opens on Pledges, the read the panel gives today");
   A.eq(ctx.gpFTblMode(fresh("gpF", { gpFTbl: "gifts" })), "gifts", "and remembers the Gifts choice");
   const tHtml = ctx.gpFContent(tw);
-  A.contains(tHtml, '<div class="dep-hd-toggle"><div class="gpf-toggles">',
-    "both toggles share the header's right-hand cluster");
+  /* The view toggle is alone in the corner, as it was before the split; the Pledges / Gifts
+     toggle takes the line below it (owner, 28 Sep). */
+  A.contains(tHtml, '<div class="dep-hd-toggle">' + ctx.gpFViewToggle(tw) + '</div>',
+    "the view toggle is alone in the corner");
+  A.contains(tHtml, '<div class="gpf-tblrow">', "and the table toggle has its own line");
+  A.ok(tHtml.indexOf('<div class="gpf-tblrow">') > tHtml.indexOf('class="dep-hd-toggle"'),
+    "which sits below it, not beside it");
+  A.absent(tHtml, "gpf-toggles", "the cluster that held both is gone");
   A.contains(tHtml, 'data-gpf="tbl" data-id="gpF" data-v="pledges"', "the Pledges segment is there");
   A.contains(tHtml, 'data-gpf="tbl" data-id="gpF" data-v="gifts"', "and the Gifts segment beside it");
   A.contains(tHtml, 'data-v="pledges" aria-pressed="true"', "with the live one pressed");
@@ -1104,10 +1125,24 @@ A.eq((shell.script.match(/gpFRange:"thru"/g) || []).length, 3,
   ["Pledge Total", "Pledge Due", "Due Remaining", "Percent Due"].forEach(function (h) {
     A.absent(gTable, h, "no pledge column in the Gifts table: " + h);
   });
-  ["Gifts", "Donors", "Last gift", "Total"].forEach(function (h) {
+  ["Gifts", "Donors", "Total"].forEach(function (h) {
     A.contains(gTable, ">" + h + "<", "the Gifts table has its " + h + " column");
   });
-  A.headMatchesBody(gTable, "the Gifts header cells sit over their columns (D12)");
+  A.absent(gTable, "Last gift", "and no Last gift column (owner, 28 Sep)");
+  A.absent(gTable, "lastGift", "with nothing left in the model feeding one");
+  /* OWNER OVERRIDE OF D12: headers centred, data left. headMatchesBody cannot be used here,
+     because it compares whole class sets and the alignment classes now differ by design. The
+     WIDTH classes must still match cell for cell, which is what keeps the columns lined up. */
+  const gHeadCells = (/<div class="wt-row wt-head[^"]*">([\s\S]*?)<\/div>\s*$/.exec(
+    /<div class="wt-row wt-head[\s\S]*?(?=<div class="wt-row gpf-trow)/.exec(gTable)[0]) || [, ""])[1];
+  const gRowCells = /<div class="wt-row gpf-trow[\s\S]*?(?=<div class="wt-row gpf-trow|$)/.exec(gTable)[0];
+  A.eq((gHeadCells.match(/gpf-c-ctr/g) || []).length, 4, "every Gifts header cell is centred");
+  A.eq((gRowCells.match(/gpf-c-lft/g) || []).length, 3, "and every data cell reads from the left");
+  A.absent(gHeadCells, "gpf-c-lft", "the header takes no left-align class");
+  A.absent(gRowCells, "gpf-c-ctr", "and the row takes no centre class");
+  const widths = function (h) { return (h.match(/gpf-c-nm|gpf-c-n(?![a-z])/g) || []).join(","); };
+  A.eq(widths(gHeadCells), widths(gRowCells),
+    "header and body still share their width classes, so the columns line up  (" + widths(gHeadCells) + ")");
   const gTot = ctx.gpFSumRows(gRows);
   A.contains(gTable, ctx.gpFMoney(gTot.other), "the totals row sums the unpledged money");
   A.eq(gTot.giftN, gRows.reduce(function (n, r) { return n + r.giftN; }, 0), "gift counts add up");
@@ -1147,31 +1182,55 @@ A.eq((shell.script.match(/gpFRange:"thru"/g) || []).length, 3,
 })();
 
 
-/* ------------------------------- 16. the percent says what it measures (28 Sep, after Edd)
+/* ------------------------- 16. what a Giving row states, and the table's own lines (owner)
 
-   Un-blending Received left the Giving row's percent measuring the dark segment alone while
-   the foot line beside it still states the whole purpose's giving. Measured in the browser:
-   82.00% over "$236,500 received of $250,000 pledged", where 82.00% is $205,000 of $250,000.
-   A bare percent there is a figure a treasurer cannot reconcile from what is on screen. */
+   The owner, after seeing the split build: "the percentage number should go and just show how
+   much has currently been given to a purpose", and "what below of the purpose giving bars to
+   be: total given to a purpose, how much from pledges, how much from gifts, and then how much
+   more is expected". So a row carries money and nothing else: no share of anything. */
 (function () {
   const w = fresh("gpF", { size: "xwide", gpFView: "goal" });
   const bars = ctx.gpFGivingBars(w);
   const row = ctx.gpFPurposeCompute(w).filter(function (r) { return r.pledgeTotal > 0 && r.other > 0; })[0];
   A.ok(!!row, "a purpose with both a pledge and unpledged gifts was found");
-  A.contains(bars, ctx.gpFPct(row.fulfilled) + " paid", "the percent says what it measures");
-  A.absent(bars, ">" + ctx.gpFPct(row.fulfilled) + "<", "and is never printed bare");
-  A.contains(bars, ctx.gpFMoney0(row.fromPledgesThru) + " paid against " + ctx.gpFMoney0(row.pledgeTotal) + " pledged",
-    "its tooltip gives both amounts behind it");
-  A.contains(bars, "count in the total, not here", "and says where the gifts went instead");
-  /* the percent is pledge payments over the pledge, NOT the purpose's giving over it */
-  A.near(row.fulfilled, row.fromPledgesThru / row.pledgeTotal, 0.0001, "the percent is pledge payments over the pledge");
-  A.ok(Math.abs(row.fulfilled - row.totalIn / row.pledgeTotal) > 0.0001,
-    "which is a different number from the blended one, so the label is doing real work");
-  /* on a windowed preset there is no percent to justify, so none is shown */
-  const ytdBars = ctx.gpFGivingBars(fresh("gpF", { size: "xwide", gpFView: "goal", gpFRange: "ytd" }));
-  A.absent(ytdBars, " paid<", "a windowed preset shows no percentage of pledged");
-  A.absent(ytdBars, "paid against", "and no tooltip claiming one");
-  A.contains(ytdBars, "received of", "while the amounts themselves still read");
+  /* no percentage anywhere on the bars, at any preset */
+  A.ok(!/\d%/.test(bars.replace(/width:[\d.]+%|left:[\d.]+%/g, "")),
+    "no percentage is printed on a Giving row");
+  A.absent(bars, "% paid", "the old labelled percent is gone");
+  A.absent(bars, "paid against", "and its tooltip with it");
+  /* the row states the money given, top right, where the percent used to be */
+  A.contains(bars, '<span class="gpf-p-pct" style="color:', "the row keeps its right-hand slot");
+  A.contains(bars, ctx.gpFMoney0(row.totalIn), "and states the money given to the purpose");
+  /* the line under the bar accounts for that money in the owner's own order */
+  const foot = ctx.gpFBarFoot(row);
+  A.contains(foot, ctx.gpFMoney0(row.totalIn) + " given", "the foot line opens with the total given");
+  A.contains(foot, ctx.gpFMoney0(row.fromPledges) + " from pledges", "then what came through pledges");
+  A.contains(foot, ctx.gpFMoney0(row.other) + " from gifts", "then what came as gifts");
+  A.contains(foot, ctx.gpFMoney0(ctx.gpFStillExpected(row)) + " still expected", "then what is still expected");
+  A.ok(foot.indexOf("given") < foot.indexOf("from pledges") &&
+       foot.indexOf("from pledges") < foot.indexOf("from gifts") &&
+       foot.indexOf("from gifts") < foot.indexOf("still expected"), "in that order");
+  A.contains(bars, foot, "and the row renders exactly that line");
+  /* the parts account for the whole: given is pledges plus gifts */
+  A.near(row.fromPledges + row.other, row.totalIn, 0.02, "the two sources sum to the money given");
+  A.near(ctx.gpFStillExpected(row), Math.max(0, row.pledgeTotal - row.fromPledges), 0.02,
+    "and still expected is the pledge less what it has brought in, never below zero");
+  const overPaid = ctx.gpFPurposeCompute(w).filter(function (r) { return r.fromPledges > r.pledgeTotal && r.pledgeTotal > 0; })[0];
+  A.eq(ctx.gpFStillExpected(overPaid), 0,
+    "an over-paid pledge expects nothing more, rather than a negative figure");
+  /* a purpose with no pledge says so rather than showing a zero it cannot justify */
+  const giftsOnlyRow = ctx.gpFPurposeCompute(w).filter(function (r) { return !r.hasPledges; })[0];
+  A.contains(ctx.gpFBarFoot(giftsOnlyRow), "no pledge on this purpose",
+    "a purpose with no pledge says so instead of showing nothing still expected");
+  A.absent(ctx.gpFBarFoot(giftsOnlyRow), "still expected", "and claims nothing is owed to it");
+  /* the legend names the three segments the bar draws, and no more */
+  const t16 = ctx.gpFTotals(w);
+  ["Pledge payments", "Still expected", "Gifts"].forEach(function (n) {
+    A.contains(bars, ">" + n + "<", "the legend names " + n);
+  });
+  A.contains(bars, ctx.gpFMoney0(ctx.gpFStillExpected(t16)), "and totals what is still expected");
+  A.absent(bars, "Still to arrive against pledges", "the old wording is gone");
+
   /* THE PLEDGES ROW HAS NO SUB-LINE. Measured: the name cell is 81px there, its sub-line
      had about 57px of usable width, and the shortest honest wording needed 68px. It also put
      a second percentage beside Percent Due, two numbers about one pledge. The panel's own row

@@ -1941,8 +1941,9 @@
   .gpf-root[data-tier="kpi"] .gpf-glance-cap{flex-wrap:nowrap;white-space:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;}
   .gpf-root[data-tier="kpi"] .gpf-glance-cap::-webkit-scrollbar{display:none;}
   .gpf-root[data-tier="kpi"] .gpf-glance-read{margin-top:var(--space-xtight,4px);gap:var(--space-xtight,4px);}
-  .gpf-root[data-tier="wide"] .gpf-barscroll{max-height:236px;}
-  .gpf-root[data-tier="xwide"] .gpf-barscroll{max-height:none;}
+  /* No cap: the container is flex:1 inside a fixed-height card, so it takes the room it
+     has and the legend stays on the bottom edge (owner, 28 Sep). */
+  .gpf-root .gpf-barscroll{max-height:none;}
   /* EXCEPTION 1 of 3: her legend shell is a single non-wrapping row of plain
      items; ours wraps and each band carries a count, so the layout is restated
      under our root only. */
@@ -2084,13 +2085,20 @@
   .gpf-root .gpf-modal .gpf-ldr-drawer .gpf-drawer-h:first-child{margin-top:0;}
 
 
-    /* The header's right-hand cluster holds the view toggle and, in the table view, the
-       Pledges / Gifts toggle. Both are her .vtoggle; this only lays them out. */
-    .gpf-root .gpf-toggles{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap;}
-    /* The Pledges / Gifts toggle keeps its width when the two share the row. */
-    .gpf-root .gpf-tbltoggle{flex:0 0 auto;}
-    /* A date sits in a wider slot than a money figure and reads from the left. */
-    .gpf-root .gpf-c-dt{width:104px;text-align:left;}
+    /* The Pledges / Gifts toggle sits on its own line under the view toggle, right aligned
+       under it, on the block's own 14px inset. */
+    .gpf-root .gpf-tblrow{display:flex;justify-content:flex-end;padding:0 14px 6px;}
+    /* The Gifts table centres its headers and reads its data from the left (owner override of
+       D12, which is otherwise in force across the build). */
+    .gpf-root .gpf-c-ctr{text-align:center;}
+    .gpf-root .gpf-c-lft{text-align:left;}
+    /* The white middle of the bar: what is still expected against the pledges. */
+    .gpf-root .gpf-seg-exp{background:var(--surface-widget);position:absolute;top:0;bottom:0;border-radius:0;}
+    .gpf-root .gpf-lg-sw.gpf-seg-exp{position:static;border-radius:3px;box-shadow:inset 0 0 0 1px var(--cn-30);}
+    /* The last line sits on the card's bottom edge. The 10px of white beneath it is
+       .wcontent's own padding, which every widget shares, so it is cancelled here rather than
+       there, and only on the tiers that have a last line to pin. */
+    .gpf-root[data-tier="wide"],.gpf-root[data-tier="xwide"]{margin-bottom:-10px;}
   /* ===== end W17 Gifts Pledges V2 CSS ===== */
 /* ===== W01 Budget Compared to Actual V2 CSS ===== */
   /* Stand-alone copies of the shared .bgt-* shell rules this widget uses (w01- prefix). Shared originals stay for the other widgets. Classes: bgt-bar-actual2 bgt-bar-budget2 bgt-bar2 bgt-barpair2 bgt-canvas2 bgt-caption bgt-chart-wrap2 bgt-col-h bgt-col2 bgt-cols2 bgt-ctlrow bgt-dd-field bgt-dd-lbl bgt-dd-menu bgt-dd-meta bgt-dd-trigger bgt-dd-val bgt-explore bgt-explore-col bgt-gl2 bgt-gl2-base bgt-inner2 bgt-kpi-iv bgt-legend bgt-legend-under bgt-lg bgt-lg-items bgt-notrend bgt-notrend-s bgt-notrend-t bgt-numwrap bgt-panel-hd bgt-plotrow2 bgt-pop bgt-pop- bgt-pop-div bgt-pop-fav bgt-pop-h bgt-pop-lbl bgt-pop-note bgt-pop-r bgt-pop-sw bgt-pop-v bgt-pop-var bgt-repctx bgt-rm- bgt-rm-b bgt-rm-fields bgt-rm-modal bgt-rm-preview bgt-rm-tag bgt-scope-chip bgt-scrollx bgt-sk-bar bgt-sk-col bgt-skel bgt-skel-cap bgt-skel-plot bgt-slicer bgt-special-edit bgt-special-lbl bgt-special-mi bgt-special-nm bgt-special-sub bgt-spin bgt-sw bgt-sw-actual bgt-sw-budget-line bgt-tbar bgt-tscroll bgt-varcol bgt-vartot bgt-viewbar-l bgt-viewbar-r bgt-vv bgt-xaxrow2 bgt-xcol2 bgt-xcols2 bgt-xlbl2 bgt-xvar2 bgt-yax2 bgt-yax2sp bgt-ytd-wrap */
@@ -9393,11 +9401,10 @@ function gpFPurposeCompute(w){
       var r=gpFDonorPace(pl,asOf,win.end,win);
       due+=r.due;fromPledges+=r.received;fromPledgesThru+=r.receivedThru;pledged+=r.pledged;
     });
-    var other=0,giftN=0,lastGift=null,donors={},donorN=0;
+    var other=0,giftN=0,donors={},donorN=0;
     gpFOtherGiftsFor(p).forEach(function(g){
       if(!gpFCounts(g,win))return;
       other+=g.amount;giftN++;
-      if(!lastGift||g.date>lastGift)lastGift=g.date;
       if(!donors[g.donor]){donors[g.donor]=1;donorN++;}
     });
     due=Math.round(due*100)/100;fromPledges=Math.round(fromPledges*100)/100;
@@ -9407,7 +9414,7 @@ function gpFPurposeCompute(w){
     var dueRem=Math.round((due-fromPledgesThru)*100)/100;
     return {code:p.code,name:p.name,label:p.code+": "+p.name,
       pledgeTotal:pledged,pledgeDue:due,fromPledges:fromPledges,fromPledgesThru:fromPledgesThru,
-      other:other,totalIn:totalIn,giftN:giftN,giftDonors:donorN,giftDonorList:Object.keys(donors),lastGift:lastGift,
+      other:other,totalIn:totalIn,giftN:giftN,giftDonors:donorN,giftDonorList:Object.keys(donors),
       dueRem:dueRem,percentDue:(due>0?dueRem/due:null),
       fulfilled:(pledged>0?fromPledgesThru/pledged:null),windowed:!!win.start,
       hasPledges:gpFDonorsFor(p).length>0,
@@ -9421,15 +9428,14 @@ function gpFCampCompute(w){return gpFPurposeCompute(w);}
    donors inside the window, unioned, because a donor who gives to two purposes is one
    donor and a donor outside the window is not there at all. */
 function gpFSumRows(rows,windowed){
-  var pt=0,pd=0,fp=0,fpt=0,ot=0,ti=0,gn=0,dset={},dn=0,last=null;
+  var pt=0,pd=0,fp=0,fpt=0,ot=0,ti=0,gn=0,dset={},dn=0;
   rows.forEach(function(r){
     pt+=r.pledgeTotal;pd+=r.pledgeDue;fp+=r.fromPledges;fpt+=r.fromPledgesThru;
     ot+=r.other;ti+=r.totalIn;gn+=r.giftN;
-    if(r.lastGift&&(!last||r.lastGift>last))last=r.lastGift;
     (r.giftDonorList||[]).forEach(function(d){if(!dset[d]){dset[d]=1;dn++;}});
   });
   return {pledgeTotal:pt,pledgeDue:pd,fromPledges:fp,fromPledgesThru:fpt,other:ot,totalIn:ti,
-    giftN:gn,giftDonors:dn,lastGift:last,dueRem:Math.round((pd-fpt)*100)/100,
+    giftN:gn,giftDonors:dn,dueRem:Math.round((pd-fpt)*100)/100,
     fulfilled:(pt>0?fpt/pt:null),windowed:!!windowed,
     status:gpFRowStatus(pt,pd,fpt,ti),count:rows.length,rows:rows};
 }
@@ -9473,7 +9479,7 @@ function gpFTableToggle(w){
   function seg(val,lbl,tip){
     return '<button class="vt'+(m===val?" on":"")+'" data-gpf="tbl" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(m===val)+'" data-tip="'+gpFEsc(tip)+'" data-tip-plain>'+lbl+'</button>';
   }
-  return '<div class="vtoggle gpf-tbltoggle" role="group" aria-label="Table">'+
+  return '<div class="vtoggle" role="group" aria-label="Table">'+
     seg('pledges','Pledges','The pledged position for every purpose that has an active pledge: Pledge Total, Pledge Due, Received against those pledges, Due Remaining and Percent Due. One to one with the Gifts and Pledges panel.')+
     seg('gifts','Gifts','Money given to a purpose that is not against any pledge, by purpose, over the dates you choose.')+
   '</div>';
@@ -9497,6 +9503,17 @@ function gpFSplitLineShort(r){
   if(!(r.other>0))return gpFMoney0(r.fromPledges)+' all pledged';
   return gpFMoney0(r.fromPledges)+' pledged, '+gpFMoney0(r.other)+' gifts';
 }
+/* The line under a bar, in the order the owner listed it: the total given to the purpose,
+   then where it came from, then what is still expected against the pledges. A purpose with no
+   pledge says so instead of showing a zero. */
+function gpFBarFoot(r){
+  var parts=[gpFMoney0(r.totalIn)+' given'];
+  if(r.fromPledges>0)parts.push(gpFMoney0(r.fromPledges)+' from pledges');
+  if(r.other>0)parts.push(gpFMoney0(r.other)+' from gifts');
+  if(r.pledgeTotal>0)parts.push(gpFMoney0(gpFStillExpected(r))+' still expected');
+  else parts.push('no pledge on this purpose');
+  return parts.join(' \u00b7 ');
+}
 function gpFSplitLine(r){
   if(!(r.totalIn>0))return 'Nothing received in this window';
   if(!(r.fromPledges>0))return gpFMoney0(r.other)+' from gifts, none against a pledge';
@@ -9506,19 +9523,28 @@ function gpFSplitLine(r){
 /* Two-tone bar: pledge payments then gifts, both as shares of what was pledged, so an
    over-funded purpose fills the track and the overspill is stated in text rather than drawn.
    The track is the full pledge; a purpose with no pledge takes its own total instead. */
+/* Three segments, in the order the owner drew them: what the pledges have brought in, the
+   white gap of what is still expected against them, and the gifts that sit beyond the pledge
+   as part of the total but separate from it. The scale is the larger of pledged and paid, plus
+   the gifts, so an over-paid pledge cannot run off the end of the track. */
+function gpFStillExpected(r){return Math.max(0,r.pledgeTotal-r.fromPledges);}
 function gpFSplitBar(r,small){
-  var base=r.pledgeTotal>0?r.pledgeTotal:r.totalIn;
-  var p=base>0?Math.max(0,Math.min(100,r.fromPledges/base*100)):0;
-  var o=base>0?Math.max(0,Math.min(100-p,r.other/base*100)):0;
+  var paid=Math.max(0,r.fromPledges),gifts=Math.max(0,r.other),exp=gpFStillExpected(r);
+  var base=Math.max(r.pledgeTotal,paid)+gifts;
+  var p=base>0?paid/base*100:0,e=base>0?exp/base*100:0,g=base>0?gifts/base*100:0;
   return '<div class="gpf-track'+(small?' gpf-track-sm':'')+'">'+
-    '<span class="gpf-fill gpf-seg-pledge" style="width:'+p.toFixed(1)+'%" data-tip="'+gpFEsc('Pledge payments: '+gpFMoney0(r.fromPledges))+'" data-tip-plain></span>'+
-    '<span class="gpf-fill gpf-seg-other" style="width:'+o.toFixed(1)+'%;left:'+p.toFixed(1)+'%" data-tip="'+gpFEsc('Gifts: '+gpFMoney0(r.other))+'" data-tip-plain></span>'+
+    '<span class="gpf-fill gpf-seg-pledge" style="width:'+p.toFixed(1)+'%" data-tip="'+gpFEsc('Pledge payments: '+gpFMoney0(paid))+'" data-tip-plain></span>'+
+    '<span class="gpf-fill gpf-seg-exp" style="width:'+e.toFixed(1)+'%;left:'+p.toFixed(1)+'%" data-tip="'+gpFEsc('Still expected: '+gpFMoney0(exp))+'" data-tip-plain></span>'+
+    '<span class="gpf-fill gpf-seg-other" style="width:'+g.toFixed(1)+'%;left:'+(p+e).toFixed(1)+'%" data-tip="'+gpFEsc('Gifts: '+gpFMoney0(gifts))+'" data-tip-plain></span>'+
   '</div>';
 }
 function gpFHeaderBlock(w,mode){
   var t=gpFTotals(w);
-  var toggle='<div class="dep-hd-toggle"><div class="gpf-toggles">'+gpFViewToggle(w)+((gpFView(w)==="table"&&mode!=="loading")?gpFTableToggle(w):'')+'</div></div>';
-  var top='<div class="dep-hd-top"><div class="gpf-ctlrow">'+gpFCampChip(w)+gpFRangeChip(w)+'</div>'+toggle+'</div>';
+  var toggle='<div class="dep-hd-toggle">'+gpFViewToggle(w)+'</div>';
+  /* The Pledges / Gifts toggle takes its own line under the view toggle, which keeps the
+     corner as it was (owner, 28 Sep). It is there only while the table view is up. */
+  var tblrow=(gpFView(w)==="table"&&mode!=="loading")?('<div class="gpf-tblrow">'+gpFTableToggle(w)+'</div>'):'';
+  var top='<div class="dep-hd-top"><div class="gpf-ctlrow">'+gpFCampChip(w)+gpFRangeChip(w)+'</div>'+toggle+'</div>'+tblrow;
   if(mode==="loading"){
     var sk='<div class="dep-hd-kpigrp"><span class="sk" style="width:110px;height:22px;border-radius:6px"></span><span class="sk" style="width:130px;height:20px;border-radius:999px"></span></div>';
     return '<div class="dep-hd gpf-hd">'+top+'<div class="dep-hd-num"><div class="gpf-numwrap">'+sk+'</div></div></div>';
@@ -9570,26 +9596,23 @@ function gpFGivingBars(w){
   rows.sort(function(a,b){return b.totalIn-a.totalIn;});
   var body=rows.map(function(r){
     var col=gpFStatusColor(r.status),lbl=gpFStatusLabelRow(r.status);
-    /* The percent measures the DARK segment against the track: pledge payments over the
-       amount pledged. It is not the whole purpose's giving over the pledge, which is what
-       the foot line states, so it says "paid" and carries the arithmetic in its tooltip. */
-    var pctTxt=(r.pledgeTotal>0)?(r.windowed?'':(gpFPct(r.fulfilled)+' paid')):'gifts only';
-    var pctTip=(r.pledgeTotal>0&&!r.windowed)?(gpFMoney0(r.fromPledgesThru)+' paid against '+gpFMoney0(r.pledgeTotal)+' pledged. Gifts with no pledge behind them count in the total, not here.'):'';
-    var target=(r.pledgeTotal>0)?(' of '+gpFMoney0(r.pledgeTotal)+' pledged'):'';
-    var sr=r.label+', '+gpFMoney0(r.totalIn)+' received'+target+'. '+gpFSplitLine(r)+'.'+(pctTip?(' '+pctTip):'')+' '+lbl+'.';
+    /* No percentage: the row states the money given, and the line under it accounts for it
+       (owner, 28 Sep). A share of a pledge was a second basis on a bar that now carries
+       three. */
+    var given=gpFMoney0(r.totalIn);
+    var sr=r.label+', '+given+' given. '+gpFBarFoot(r)+' '+lbl+'.';
     return '<div class="gpf-prow gpf-clickable" data-gpf="baropen" data-id="'+w.id+'" data-c="'+gpFEsc(r.label)+'" role="button" tabindex="0" aria-haspopup="dialog" aria-label="'+gpFEsc(sr+' Open every gift and pledge behind this purpose.')+'">'+
-      '<div class="gpf-prow-top"><span class="gpf-p-nm">'+r.label+(r.closed?'<span class="gpf-closed">Closed</span>':'')+'</span><span class="gpf-p-pct" style="color:'+col+'"'+(pctTip?(' data-tip="'+gpFEsc(pctTip)+'" data-tip-plain'):'')+'>'+pctTxt+'</span></div>'+
+      '<div class="gpf-prow-top"><span class="gpf-p-nm">'+r.label+(r.closed?'<span class="gpf-closed">Closed</span>':'')+'</span><span class="gpf-p-pct" style="color:'+col+'">'+given+'</span></div>'+
       gpFSplitBar(r)+
-      '<div class="gpf-prow-foot"><span class="gpf-p-amt">'+gpFMoney0(r.totalIn)+' received'+target+'</span>'+
-        '<span class="gpf-split">'+gpFSplitLine(r)+'</span></div>'+
+      '<div class="gpf-prow-foot"><span class="gpf-split">'+gpFBarFoot(r)+'</span></div>'+
       '<span class="sr-only">'+gpFEsc(sr)+'</span>'+
     '</div>';
   }).join('');
   var t=gpFTotals(w);
   var legend='<div class="gpf-bars-legend gpf-legend">'+
     '<span class="gpf-lg-i"><span class="gpf-lg-sw gpf-seg-pledge"></span>Pledge payments<b class="gpf-lg-n">'+gpFMoney0(t.fromPledges)+'</b></span>'+
+    '<span class="gpf-lg-i"><span class="gpf-lg-sw gpf-seg-exp"></span>Still expected<b class="gpf-lg-n">'+gpFMoney0(gpFStillExpected(t))+'</b></span>'+
     '<span class="gpf-lg-i"><span class="gpf-lg-sw gpf-seg-other"></span>Gifts<b class="gpf-lg-n">'+gpFMoney0(t.other)+'</b></span>'+
-    '<span class="gpf-lg-i gpf-lg-rem">Still to arrive against pledges: <b>'+gpFMoney0(Math.max(0,t.pledgeTotal-t.fromPledges))+'</b></span>'+
   '</div>';
   return '<div class="gpf-goalwrap"><div class="gpf-bars gpf-barscroll">'+body+'</div>'+legend+'</div>';
 }
@@ -9661,25 +9684,25 @@ function gpFPledgesTable(w,trim){
 /* GIFTS: gift lines with no pledge behind them, per purpose, over the whole window. The
    columns are the Purpose List report's own: how many gifts, how many donors, the last one
    and the total. */
+/* Header centred, body left, on the owner's instruction of 28 Sep. The width classes are
+   the same on both, so the columns line up; only the alignment differs. */
 function gpFGiftsHead(){
   return '<div class="wt-row wt-head gpf-trow">'+
-    '<span class="gpf-c-nm">Purpose</span>'+
-    '<span class="gpf-c-n">Gifts</span>'+
-    '<span class="gpf-c-n">Donors</span>'+
-    '<span class="gpf-c-n gpf-c-dt">Last gift</span>'+
-    '<span class="gpf-c-n">Total</span>'+
+    '<span class="gpf-c-nm gpf-c-ctr">Purpose</span>'+
+    '<span class="gpf-c-n gpf-c-ctr">Gifts</span>'+
+    '<span class="gpf-c-n gpf-c-ctr">Donors</span>'+
+    '<span class="gpf-c-n gpf-c-ctr">Total</span>'+
   '</div>';
 }
 function gpFGiftsRow(w,r){
   var badge=r.closed?'<span class="gpf-closed">Closed</span>':'';
   var sub=r.hasPledges?'Also has pledges':'No pledges';
-  var sr=r.label+', '+r.giftN+' gift'+(r.giftN===1?'':'s')+' with no pledge, from '+r.giftDonors+' donor'+(r.giftDonors===1?'':'s')+', last on '+gpFFmtDate(r.lastGift)+', '+gpFMoney(r.other)+' in total. Open every gift and pledge behind this purpose.';
+  var sr=r.label+', '+r.giftN+' gift'+(r.giftN===1?'':'s')+' with no pledge, from '+r.giftDonors+' donor'+(r.giftDonors===1?'':'s')+', '+gpFMoney(r.other)+' in total. Open every gift and pledge behind this purpose.';
   return '<div class="wt-row gpf-trow gpf-clickable gpf-sumrow" data-gpf="baropen" data-id="'+w.id+'" data-c="'+gpFEsc(r.label)+'" data-f="gifts" role="button" tabindex="0" aria-haspopup="dialog" aria-label="'+gpFEsc(sr)+'">'+
     '<span class="gpf-c-nm"><span class="gpf-caret" aria-hidden="true">'+ICON('chevron_right')+'</span><span class="gpf-nmtxt"><span class="gpf-nm">'+r.label+badge+'</span><span class="gpf-nmsub">'+sub+'</span></span></span>'+
-    '<span class="gpf-c-n">'+r.giftN+'</span>'+
-    '<span class="gpf-c-n">'+r.giftDonors+'</span>'+
-    '<span class="gpf-c-n gpf-c-dt">'+gpFFmtDate(r.lastGift)+'</span>'+
-    '<span class="gpf-c-n">'+gpFMoney(r.other)+'</span>'+
+    '<span class="gpf-c-n gpf-c-lft">'+r.giftN+'</span>'+
+    '<span class="gpf-c-n gpf-c-lft">'+r.giftDonors+'</span>'+
+    '<span class="gpf-c-n gpf-c-lft">'+gpFMoney(r.other)+'</span>'+
   '</div>';
 }
 function gpFGiftsTable(w,trim){
@@ -9691,10 +9714,9 @@ function gpFGiftsTable(w,trim){
   var body=rows.map(function(r){return gpFGiftsRow(w,r);}).join("");
   var tot=trim?'':('<div class="wt-row gpf-trow gpf-total-row gpf-sumtotal">'+
     '<span class="gpf-c-nm">Total ('+t.count+' purpose'+(t.count===1?'':'s')+')</span>'+
-    '<span class="gpf-c-n">'+t.giftN+'</span>'+
-    '<span class="gpf-c-n">'+t.giftDonors+'</span>'+
-    '<span class="gpf-c-n gpf-c-dt">'+gpFFmtDate(t.lastGift)+'</span>'+
-    '<span class="gpf-c-n">'+gpFMoney(t.other)+'</span>'+
+    '<span class="gpf-c-n gpf-c-lft">'+t.giftN+'</span>'+
+    '<span class="gpf-c-n gpf-c-lft">'+t.giftDonors+'</span>'+
+    '<span class="gpf-c-n gpf-c-lft">'+gpFMoney(t.other)+'</span>'+
   '</div>');
   var cap='<div class="gpf-ctx gpf-cap"><span>Money given to a purpose that is not against any pledge. A purpose appears here whether or not it also has pledges, and its pledged position is under Pledges. Donors are counted once each.'+(trim?' Largest first.':'')+'</span></div>';
   return '<div class="gpf-tblwrap">'+cap+'<div class="scroll gpf-scroll">'+gpFGiftsHead()+body+'</div>'+tot+'</div>';

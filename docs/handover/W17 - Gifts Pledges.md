@@ -21,12 +21,18 @@ how far behind are the pledges?**
   from one of exactly two purpose-keyed queries (§4) and nothing else is ever
   shown. This money is tracked for tax; a number a reader cannot trace back to a
   purpose has no business on this widget.
-- **Giving shows all the money given to a purpose**: pledge payments and gifts
-  with no pledge behind them, as the two segments of one bar.
-- **The table shows one read at a time**, switched by a second toggle in the
-  header's top right. *Pledges* is the shipped panel, one to one. *Gifts* is money
-  given to the purpose that answers to no pledge. Neither borrows a figure from
-  the other.
+- **Giving shows all the money given to a purpose.** The bar has THREE segments:
+  pledge payments (dark), what is still expected against those pledges (white),
+  and the gifts that sit beyond the pledge (light). They always fill the track, so
+  the bar shows composition, not reach; the dark share is the progress. The line
+  under it states all four figures in words. **No percentage appears on a Giving
+  row** (owner, 28 Sep) - the row states the money given.
+- **The table shows one read at a time**, switched by the Pledges / Gifts toggle
+  on its own line under the view toggle. *Pledges* is the shipped panel, one to
+  one. *Gifts* is money given to the purpose that answers to no pledge. Neither
+  borrows a figure from the other. The Gifts table centres its headers and reads
+  its data from the left, which is an owner override of D12 and applies to that
+  table alone.
 - **A pledge's position is read to the thru date; gift transactions obey the
   window.** A pledge is a cumulative promise, so nothing about it is ever
   re-scoped by a window start.
@@ -41,7 +47,7 @@ kind `gifts`.
 |---|---|
 | Prefix | `gpF` (JS), `gpf-` (CSS), `data-gpf` (actions) |
 | Kind | `gifts`, registered through `WIDGETS.register("gifts", …)` |
-| Driver | `_tools/w17-gifts.driver.js`, 809 assertions |
+| Driver | `_tools/w17-gifts.driver.js`, 836 assertions |
 | Decision record | `docs/decisions/W17.md` — 200 lines, the authority for every ruling |
 | Review pack | `docs/review/W17 - Gifts Pledges.md` |
 
@@ -86,6 +92,10 @@ $200 included. Every sum in this block goes through these two functions.
 
 **The two tables** — `gpFTblMode`, `gpFTableToggle`, `gpFPledgesTable`,
 `gpFGiftsTable`, `gpFGiftsHead`, `gpFGiftsRow`, `gpFWidePct`.
+
+**The bar and its line** — `gpFSplitBar` (three segments), `gpFStillExpected`,
+`gpFBarFoot`. The bar's scale is `max(pledged, paid) + gifts`: change it and an
+over-paid pledge runs off the end of the track.
 
 **The date window** — `gpFWindow`, `gpFRangeBounds`, `gpFInWindow`,
 `gpFRangeShort` (the chip's short label), `gpFRangePhrase` (the full sentence,
@@ -134,7 +144,7 @@ node _tools/verify.js
 node _tools/lint.js
 ```
 
-The full suite is 2,709 assertions across 17 drivers and must stay green. The
+The full suite is 2,736 assertions across 17 drivers and must stay green. The
 lint is a report, not a gate; its current findings are pre-existing and listed
 in §7.
 
@@ -274,6 +284,20 @@ two columns in the same row and stays in every row's screen-reader line at all
 sizes. Do not narrow the money columns to bring it back: a clipped money figure on
 a tax-tracked table is the worse defect, and real data holds larger amounts than
 this fixture.
+
+**No percentage appears on a Giving row.** The owner struck it on 28 September.
+Both the bare percent and the labelled "82.00% paid" that replaced it are gone;
+the row states the money given. Do not reintroduce a share of anything there.
+
+**Both views end on the card's bottom edge**, and each got there a different way:
+the table cancels `.wcontent`'s 10px padding inside this root only, because that
+padding is the shell's and all seventeen widgets share it; Giving had a
+`max-height:236px` cap on its bar list at Explore, now removed. If either view
+grows white space at the bottom again, check those two things first.
+
+**`lastGift` is not in the model.** The Gifts table had a Last gift column; the
+owner removed it, so the field went too rather than stay as data only a test
+reads. Bringing the column back means putting the field back.
 
 **The default date preset has no start date.** "Gifts received through <date>".
 This is what keeps the default reconciling with the shipped legacy panel, figure

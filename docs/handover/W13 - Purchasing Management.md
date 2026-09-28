@@ -126,7 +126,7 @@ node _tools/verify.js
 node _tools/lint.js
 ```
 
-The full suite is 2,709 assertions across 17 drivers and must stay green.
+The full suite is 2,736 assertions across 17 drivers and must stay green.
 
 ### Look at it in a browser
 
