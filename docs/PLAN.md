@@ -81,6 +81,27 @@ From `docs/decisions/`: V1 -> V2 changes for Value Labs (baseline `_ref/v1-main-
 ### Phase 6: publish
 New GitHub repo (account, name, visibility confirmed with the owner first); optional Pages; hand-off to Value Labs.
 
+
+## 28 Sep: where this stands
+
+**Phase 2 is complete.** All seventeen widgets are decided and finalised. W17 Gifts Pledges was the last: rebuilt on the owner's three rulings, then finalised on the OC version with Jo's block deleted.
+
+**Phase 4 is largely done, ahead of its place in this plan**, because the cleanups it lists only became possible once the last widget was decided:
+- the comparison tab, `CMP_ROWS`, `CMPNOTE_`, `cmpCards` and `cmpnote-mb` are gone, with their CSS and their driver
+- the losing copy of every widget is gone; no `-mb` or `-oc` kind survives
+- the `(OC)` titles are gone; every widget carries its plain product name
+- 50 unreferenced declarations and 227 orphan CSS rules removed; index.html went 12,409 to 11,463 lines
+- four undeclared CSS tokens fixed, two of which were live rendering defects
+- the shared `.pbar` pacing bar and the shared `.rem-*` run deleted once nothing used them
+
+Still open from Phase 4: eleven widgets carry review fixtures beyond three sizes on the non-primary dashboard tabs; the `.w01-*` versus `.bgt-*` duplication (89 identical rule bodies); 56 duplicate selectors, of which 9 are cross-block name collisions that change specificity for several widgets at once.
+
+**Release gate, still open.** The single-widget review viewer (`viewOnly`, `viewOnlySelectHTML`, the `hashchange` listener and the `viewOnly(` call in `render()`) is live code and lint T6 reports it. It stays until the owner has finished reviewing.
+
+**New since this plan was written.** A shared helper package in the shell and a shared test library in the harness, with per-widget tags so one widget's tests still run alone. Recorded in `docs/SHARED.md`.
+
+**Phase 6 is done for the repository part.** `Dashboard_Project_V2` on GitHub, private, branch `main`. Everything after the initial push is held locally for the owner to review first.
+
 ## Working rules
 - No edit to `index.html` without an owner decision behind it, except lint-class defects (logged).
 - `node _tools/verify.js` green before any commit.
