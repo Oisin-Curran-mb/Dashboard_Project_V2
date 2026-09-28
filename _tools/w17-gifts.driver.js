@@ -234,7 +234,7 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   const tOne = ctx.gpFTotals(fresh("gpF", { size: "xwide", gpFCamp: LABELS[2] }));
   A.eq(tAll.count, 7, "totals count over all purposes");
   A.eq(tOne.count, 1, "totals count under the filter");
-  A.ok(tOne.received < tAll.received, "the received total recomputes under the filter");
+  A.ok(tOne.totalIn < tAll.totalIn, "the giving total recomputes under the filter");
   A.ok(tOne.pledgeTotal < tAll.pledgeTotal, "the pledged total recomputes under the filter");
   /* every view narrows, not just the table */
   const barsAll = ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" }));
@@ -243,10 +243,10 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   A.eq((barsOne.match(/data-gpf="baropen"/g) || []).length, 1, "one bar under the filter");
   const rowsAll = ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "table" }));
   const rowsOne = ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "table", gpFCamp: LABELS[2] }));
-  A.eq((rowsAll.match(/gpf-sumrow/g) || []).length, 7, "seven table rows unfiltered");
+  A.eq((rowsAll.match(/gpf-sumrow/g) || []).length, 6, "six rows in the Pledges table: the gifts-only purpose has no active pledge and is absent, exactly as it is absent from the panel");
   A.eq((rowsOne.match(/gpf-sumrow/g) || []).length, 1, "one table row under the filter");
   /* the totals row wording follows the narrowed count, including the singular */
-  A.contains(rowsAll, "Total (7 purposes)", "totals row names the unfiltered count");
+  A.contains(rowsAll, "Total (6 purposes)", "the Pledges totals row counts only the rows it shows");
   A.contains(rowsOne, "Total (1 purpose)", "totals row goes singular under the filter");
   /* NO highlight treatment exists anywhere: the narrowed row must be styled
      exactly as it is when unfiltered */
@@ -315,15 +315,18 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   /* the range END is the as-of cutoff; an earlier To drops later gifts */
   const late = ctx.gpFTotals(Object.assign(fresh("gpF"), { gpFRange: "custom", gpFStart: "2026-01-01", gpFEnd: "2026-08-19" }));
   const early = ctx.gpFTotals(Object.assign(fresh("gpF"), { gpFRange: "custom", gpFStart: "2026-01-01", gpFEnd: "2024-01-01" }));
-  A.ok(early.received < late.received, "an earlier range end scopes Received down (the end is the cutoff)");
+  A.ok(early.totalIn < late.totalIn, "an earlier range end scopes the giving down (the end is the cutoff)");
   /* the range START frames the chip only and windows no figure (Step 5 v2) */
   /* the START now windows every figure; a wider start takes in more (owner ruling, 28 Sep) */
   const wideStart = ctx.gpFTotals(Object.assign(fresh("gpF"), { gpFRange: "custom", gpFStart: "2000-01-01", gpFEnd: "2026-08-19" }));
-  A.ok(wideStart.received > late.received, "a wider start takes in more; the START is no longer cosmetic");
+  A.ok(wideStart.totalIn > late.totalIn, "a wider start takes in more giving; the START is not cosmetic");
   const thru = ctx.gpFTotals(Object.assign(fresh("gpF"), { gpFRange: "thru", gpFEnd: "2026-08-19" }));
-  A.eq(thru.received, wideStart.received, "the default through-date preset has no start, so it matches an all-time window");
-  A.ok(thru.fromPledges > 0 && thru.other > 0, "Received carries BOTH pledge payments and other gifts (owner ruling, 28 Sep)");
-  A.eq(Math.round((thru.fromPledges + thru.other) * 100) / 100, thru.received, "the two parts sum to Received");
+  A.eq(thru.totalIn, wideStart.totalIn, "the default through-date preset has no start, so it matches an all-time window");
+  A.ok(thru.fromPledges > 0 && thru.other > 0, "the model carries both parts: pledge payments and gifts with no pledge");
+  A.eq(Math.round((thru.fromPledges + thru.other) * 100) / 100, thru.totalIn, "the two parts sum to the purpose total, which is what Giving shows");
+  /* the pledged side never moves with the window START (owner, 28 Sep, after Edd) */
+  A.eq(thru.pledgeTotal, late.pledgeTotal, "Pledge Total is the full active pledge whatever the preset");
+  A.eq(thru.fromPledgesThru, late.fromPledgesThru, "and the legacy Received reads to the thru date, not the window start");
   /* read the default phrase off a CLEAN widget: this block has just fired
      set-range custom, so the shared registry entry is no longer at default. */
   /* The CHIP shows only the dates since 28 Sep (owner: "just the dates ... so
@@ -604,14 +607,14 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   });
   A.near(sumRec, comp.fromPledges, 0.02, "the pledges' received sums to the purpose's pledge payments");
   A.near(sumDue, comp.pledgeDue, 0.02, "and their due sums to the purpose's Pledge Due");
-  A.near(comp.fromPledges + comp.other, comp.received, 0.02, "the two parts still sum to Received");
+  A.near(comp.fromPledges + comp.other, comp.totalIn, 0.02, "the two parts still sum to the purpose total");
   /* every one of those pledges is reachable in the ledger, which is the point
      of replacing a paged drill with one scrolling list */
   const ledger = ctx.gpFLedgerRows(row, purpose, win);
   const pledgeEntries = ledger.filter(function (it) { return it.kind === "pledge"; });
   const withActivity = pledges.filter(function (pl) {
     const r = ctx.gpFDonorPace(pl, ctx.gpFParse(win.end), win.end, win);
-    return r.pledgedIn > 0 || r.received > 0;
+    return r.pledged > 0 || r.receivedThru > 0;
   });
   A.eq(pledgeEntries.length, withActivity.length, "every pledge with activity appears in the ledger, unpaged");
   gfire("detail-close", { "data-id": "gpF" });
@@ -623,11 +626,11 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   const w = fresh("gpF", { size: "xwide", gpFView: "goal" });
   /* bars: MOST RECEIVED FIRST since the 28 Sep rebuild (was goal progress,
      and there is no per-purpose goal any more). */
-  const byRecv = ctx.gpFPurposeCompute(w).slice().sort(function (a2, b2) { return b2.received - a2.received; });
+  const byRecv = ctx.gpFPurposeCompute(w).slice().sort(function (a2, b2) { return b2.totalIn - a2.totalIn; });
   const shown = (ctx.gpFGivingBars(w).match(/data-c="([^"]+)"/g) || []).map(function (m2) { return /data-c="([^"]+)"/.exec(m2)[1]; });
   A.eq(shown.join("|"), byRecv.map(function (r) { return r.label; }).join("|"),
     "bars are ordered most received first");
-  A.ok(byRecv[0].received > byRecv[byRecv.length - 1].received,
+  A.ok(byRecv[0].totalIn > byRecv[byRecv.length - 1].totalIn,
     "the fixture genuinely has a spread, so the order is meaningful");
   /* The drill ordered most behind pace first. It was replaced by the ledger on
      28 Sep, which orders by amount received, largest first, because it lists
@@ -639,11 +642,15 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   A.ok(led[0].amount > led[led.length - 1].amount, "and the spread is real");
   A.ok(led.some(function (it) { return it.kind === "gift"; }) && led.some(function (it) { return it.kind === "pledge"; }),
     "it interleaves both kinds, which is why amount is the ordering and not pace");
-  /* table: the DATA'S OWN ORDER, which is the fixture order */
+  /* table: the LEGACY ORDER. GFPledgeRepository.GetWidgetData ends
+     .OrderByDescending(p => p.PledgeTotal), so the Pledges table does too. It is not a
+     user control, so the widget still offers no ordering of its own. */
   const tw = fresh("gpF", { size: "xwide", gpFView: "table" });
   const tOrder = (ctx.gpFContent(tw).match(/data-gpf="baropen" data-id="[^"]*" data-c="([^"]+)"/g) || [])
     .map(function (s) { return /data-c="([^"]+)"/.exec(s)[1]; });
-  A.eq(tOrder.join("|"), LABELS.join("|"), "the summary table renders in the data's own order");
+  const byPledged = ctx.gpFPurposeCompute(tw).filter(function (r) { return r.hasPledges; })
+    .sort(function (a2, b2) { return b2.pledgeTotal - a2.pledgeTotal; }).map(function (r) { return r.label; });
+  A.eq(tOrder.join("|"), byPledged.join("|"), "the Pledges table renders largest pledge first, as the legacy query orders it");
   A.ok(tOrder.join("|") !== LABELS.slice().sort().join("|"),
     "and that order is demonstrably NOT alphabetical");
   /* NO alphabetical sort, and no sort control, anywhere */
@@ -993,6 +1000,205 @@ A.eq((shell.script.match(/gpFRange:"thru"/g) || []).length, 3,
   A.contains(gBar, 'left:0.0%', "its gifts segment starts at the track's left edge");
   const track = /\.gpf-root \.gpf-track\{([^}]*)\}/.exec(shell.css);
   A.contains(track[1], "overflow:hidden", "and the track clips, so that end still reads as rounded");
+})();
+
+
+/* ------------------------------------- 15. the table splits in two (28 Sep, after Edd)
+
+   Owner: "keep the old system exactly as it is, but have a toggle to see the pledges to a
+   purpose and then the gifts to a purpose ... one being pledges which is exactly one to one
+   with the old pledges currently in the system, and then gifts with money given to a purpose
+   but not associated to a pledge." And: "PurposeID is the most important thing ... no other
+   number can ever be shown, as for tax reasons this money is very carefully tracked."
+
+   So this section proves three things: the control exists and switches; the Pledges table is
+   reproducible from GFPledgeRepository.GetWidgetData's own formulas and holds no gift money;
+   and money the legacy repository excludes reaches no figure anywhere. */
+(function () {
+  const tw = fresh("gpF", { size: "xwide", gpFView: "table" });
+  const win = ctx.gpFWindow(tw);
+
+  /* ---- the control, in the header's top right, table view only ---- */
+  A.eq(ctx.gpFTblMode(tw), "pledges", "the table opens on Pledges, the read the panel gives today");
+  A.eq(ctx.gpFTblMode(fresh("gpF", { gpFTbl: "gifts" })), "gifts", "and remembers the Gifts choice");
+  const tHtml = ctx.gpFContent(tw);
+  A.contains(tHtml, '<div class="dep-hd-toggle"><div class="gpf-toggles">',
+    "both toggles share the header's right-hand cluster");
+  A.contains(tHtml, 'data-gpf="tbl" data-id="gpF" data-v="pledges"', "the Pledges segment is there");
+  A.contains(tHtml, 'data-gpf="tbl" data-id="gpF" data-v="gifts"', "and the Gifts segment beside it");
+  A.contains(tHtml, 'data-v="pledges" aria-pressed="true"', "with the live one pressed");
+  A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), 'data-gpf="tbl"',
+    "the Giving view has no table toggle: nothing to switch there");
+  A.absent(ctx.gpFContent(fresh("gpF", { size: "kpi" })), 'data-gpf="tbl"', "and Glance has no controls at all");
+  /* the live registry object is shared, so its state is put back */
+  const wlive = W("gpF"), view0 = wlive.gpFView, tbl0 = wlive.gpFTbl;
+  wlive.gpFView = "table";
+  gfire("tbl", { "data-id": "gpF", "data-v": "gifts" });
+  A.eq(wlive.gpFTbl, "gifts", "the toggle switches the table read");
+  gfire("tbl", { "data-id": "gpF", "data-v": "pledges" });
+  A.eq(wlive.gpFTbl, "pledges", "and switches back");
+  wlive.gpFView = view0; wlive.gpFTbl = tbl0;
+
+  /* ---- PLEDGES: one to one with GFPledgeRepository.GetWidgetData ---- */
+  const rows = ctx.gpFPurposeCompute(tw).filter(function (r) { return r.hasPledges; });
+  A.eq(rows.length, 6, "six of the seven purposes have an active pledge");
+  rows.forEach(function (r) {
+    const pls = ctx.gpFDonorsFor(r.purpose);
+    let pt = 0, rec = 0;
+    pls.forEach(function (pl) {
+      pt += pl.pledge;
+      (pl.gifts || []).forEach(function (g) {
+        if (g.posted !== false && g.undone !== true && g.date <= win.end) rec += g.amount;
+      });
+    });
+    A.near(r.pledgeTotal, pt, 0.02, r.code + ": Pledge Total is Sum(Pledge) over the active pledges");
+    A.near(r.fromPledgesThru, rec, 0.02, r.code + ": Received is the posted, not-undone, pledge-linked money to the thru date");
+    A.near(r.dueRem, r.pledgeDue - r.fromPledgesThru, 0.02, r.code + ": Due Remaining is Pledge Due minus Received");
+    A.near(r.percentDue, r.dueRem / r.pledgeDue, 0.0001, r.code + ": Percent Due is Due Remaining over Pledge Due");
+    /* the legacy routine returns the whole pledge once the date is past EndDate */
+    pls.filter(function (pl) { return pl.end <= win.end; }).slice(0, 3).forEach(function (pl) {
+      const pace = ctx.gpFDonorPace(pl, ctx.gpFParse(win.end), win.end, win);
+      A.near(pace.due, pl.pledge, 0.01, r.code + ": a pledge past its end date is fully due");
+    });
+  });
+  /* the pledged side is blind to the window START, which is what keeps the mode one to one */
+  const ytd = fresh("gpF", { size: "xwide", gpFView: "table", gpFRange: "ytd" });
+  const ytdRows = ctx.gpFPurposeCompute(ytd).filter(function (r) { return r.hasPledges; });
+  ytdRows.forEach(function (r, i) {
+    A.eq(r.pledgeTotal, rows[i] && rows[i].pledgeTotal, r.code + ": Pledge Total is the same under Year to date");
+    A.eq(r.fromPledgesThru, rows[i] && rows[i].fromPledgesThru, r.code + ": and so is the legacy Received");
+  });
+  A.ok(ytdRows.some(function (r, i) { return rows[i] && r.fromPledges < rows[i].fromPledges; }),
+    "while the windowed figure Giving reads DOES narrow, so the two are genuinely different reads");
+
+  /* ---- no gift money anywhere in the Pledges table ---- */
+  const pTable = ctx.gpFPledgesTable(tw, false);
+  const giftsOnly = ctx.gpFPurposeCompute(tw).filter(function (r) { return !r.hasPledges; })[0];
+  A.ok(!!giftsOnly && giftsOnly.other > 0, "the fixture holds a purpose with gifts and no pledge");
+  /* it mirrors the real dev database, where the equivalent row PERMITS pledges and simply has
+     none active. The AllowPledges column is honoured too, which nothing in the fixture needs,
+     so it is exercised directly rather than left to be assumed. */
+  A.ok(giftsOnly.purpose.allowPledges !== false,
+    "and it permits pledges, which is the shape the real data holds: no ACTIVE pledge, not a ban on pledging");
+  A.eq(ctx.gpFDonorsFor({ code: "NOPLEDGE", allowPledges: false, pledgeTotal: 50000 }).length, 0,
+    "a purpose whose AllowPledges is false has no pledge set at all");
+  A.absent(pTable, giftsOnly.label,
+    "it cannot appear in the Pledges table, exactly as it cannot appear in the panel");
+  rows.forEach(function (r) {
+    if (r.other > 0 && r.totalIn !== r.fromPledgesThru) {
+      A.absent(pTable, ctx.gpFMoney(r.totalIn), r.code + ": no blended figure in the Pledges table");
+    }
+  });
+  const pTot = ctx.gpFSumRows(rows);
+  A.contains(pTable, ctx.gpFMoney(pTot.fromPledgesThru), "the totals row sums the pledge-linked money");
+  A.contains(pTable, "Total (6 purposes)", "and counts only the rows it shows");
+  A.headMatchesBody(pTable, "the Pledges header cells sit over their columns (D12)");
+
+  /* ---- GIFTS: the money with no pledge behind it ---- */
+  const gw = fresh("gpF", { size: "xwide", gpFView: "table", gpFTbl: "gifts" });
+  const gRows = ctx.gpFPurposeCompute(gw).filter(function (r) { return r.giftN > 0; });
+  const gTable = ctx.gpFGiftsTable(gw, false);
+  A.eq((gTable.match(/gpf-sumrow/g) || []).length, gRows.length, "one row per purpose with unpledged gifts");
+  A.ok(gRows.some(function (r) { return !r.hasPledges; }), "including the purpose that takes no pledges");
+  A.ok(gRows.some(function (r) { return r.hasPledges; }), "and purposes that take pledges as well");
+  ["Pledge Total", "Pledge Due", "Due Remaining", "Percent Due"].forEach(function (h) {
+    A.absent(gTable, h, "no pledge column in the Gifts table: " + h);
+  });
+  ["Gifts", "Donors", "Last gift", "Total"].forEach(function (h) {
+    A.contains(gTable, ">" + h + "<", "the Gifts table has its " + h + " column");
+  });
+  A.headMatchesBody(gTable, "the Gifts header cells sit over their columns (D12)");
+  const gTot = ctx.gpFSumRows(gRows);
+  A.contains(gTable, ctx.gpFMoney(gTot.other), "the totals row sums the unpledged money");
+  A.eq(gTot.giftN, gRows.reduce(function (n, r) { return n + r.giftN; }, 0), "gift counts add up");
+  A.ok(gTot.giftDonors > 0 && gTot.giftDonors <= gRows.reduce(function (n, r) { return n + r.giftDonors; }, 0),
+    "donors are counted once each across purposes, so the total is no larger than the sum of the rows");
+  A.contains(gTable, 'data-f="gifts"', "a Gifts row opens the ledger already filtered to gifts");
+  gfire("baropen", { "data-id": "gpF", "data-c": gRows[0].label, "data-f": "gifts" });
+  const gModal = shim.captured["gpfModalRoot"] || "";
+  A.ok(gModal.length > 0, "and the pop-up opens from a Gifts row");
+  A.contains(gModal, 'data-v="gifts" aria-pressed="true"',
+    "with the ledger's own Gifts filter already applied");
+  gfire("detail-close", { "data-id": "gpF" });
+
+  /* ---- the money the legacy repository excludes reaches no figure ---- */
+  const purpose = ctx.gpFCampByLabel(tw, LABELS[2]);
+  const allGifts = ctx.gpFOtherGiftsFor(purpose);
+  const unposted = allGifts.filter(function (g) { return g.posted === false; });
+  const undone = allGifts.filter(function (g) { return g.undone === true; });
+  const future = allGifts.filter(function (g) { return g.date > win.end; });
+  A.eq(unposted.length, 1, "the fixture seeds an unposted gift");
+  A.eq(undone.length, 1, "and an undone gift");
+  A.eq(future.length, 1, "and one dated past the as-of anchor");
+  const row2 = ctx.gpFPurposeCompute(tw).filter(function (r) { return r.label === LABELS[2]; })[0];
+  const counted = allGifts.filter(function (g) { return ctx.gpFCounts(g, win); });
+  A.eq(counted.length, allGifts.length - 3, "exactly those three are excluded by the counting rule");
+  A.near(row2.other, counted.reduce(function (n, g) { return n + g.amount; }, 0), 0.02,
+    "the purpose's gift figure counts only the countable lines");
+  A.eq(row2.giftN, counted.length, "and so does its gift count");
+  const led2 = ctx.gpFLedgerRows(tw, purpose, win);
+  [unposted[0], undone[0], future[0]].forEach(function (g) {
+    A.ok(!ctx.gpFCounts(g, win), "excluded from every figure: " + g.id);
+    A.ok(led2.every(function (it) { return it.id !== g.id; }), "and unreachable in the ledger: " + g.id);
+  });
+  /* the countable gifts still tie to the fixture's own figure, which is what proves the
+     excluded lines are extra money rather than a re-slicing of the same money */
+  A.near(row2.other, purpose.otherGifts, 0.02, "the countable gifts sum to the purpose's seeded gift total");
+})();
+
+
+/* ------------------------------- 16. the percent says what it measures (28 Sep, after Edd)
+
+   Un-blending Received left the Giving row's percent measuring the dark segment alone while
+   the foot line beside it still states the whole purpose's giving. Measured in the browser:
+   82.00% over "$236,500 received of $250,000 pledged", where 82.00% is $205,000 of $250,000.
+   A bare percent there is a figure a treasurer cannot reconcile from what is on screen. */
+(function () {
+  const w = fresh("gpF", { size: "xwide", gpFView: "goal" });
+  const bars = ctx.gpFGivingBars(w);
+  const row = ctx.gpFPurposeCompute(w).filter(function (r) { return r.pledgeTotal > 0 && r.other > 0; })[0];
+  A.ok(!!row, "a purpose with both a pledge and unpledged gifts was found");
+  A.contains(bars, ctx.gpFPct(row.fulfilled) + " paid", "the percent says what it measures");
+  A.absent(bars, ">" + ctx.gpFPct(row.fulfilled) + "<", "and is never printed bare");
+  A.contains(bars, ctx.gpFMoney0(row.fromPledgesThru) + " paid against " + ctx.gpFMoney0(row.pledgeTotal) + " pledged",
+    "its tooltip gives both amounts behind it");
+  A.contains(bars, "count in the total, not here", "and says where the gifts went instead");
+  /* the percent is pledge payments over the pledge, NOT the purpose's giving over it */
+  A.near(row.fulfilled, row.fromPledgesThru / row.pledgeTotal, 0.0001, "the percent is pledge payments over the pledge");
+  A.ok(Math.abs(row.fulfilled - row.totalIn / row.pledgeTotal) > 0.0001,
+    "which is a different number from the blended one, so the label is doing real work");
+  /* on a windowed preset there is no percent to justify, so none is shown */
+  const ytdBars = ctx.gpFGivingBars(fresh("gpF", { size: "xwide", gpFView: "goal", gpFRange: "ytd" }));
+  A.absent(ytdBars, " paid<", "a windowed preset shows no percentage of pledged");
+  A.absent(ytdBars, "paid against", "and no tooltip claiming one");
+  A.contains(ytdBars, "received of", "while the amounts themselves still read");
+  /* THE PLEDGES ROW HAS NO SUB-LINE. Measured: the name cell is 81px there, its sub-line
+     had about 57px of usable width, and the shortest honest wording needed 68px. It also put
+     a second percentage beside Percent Due, two numbers about one pledge. The panel's own row
+     has none either, and this mode exists to match it. */
+  const pTbl = ctx.gpFPledgesTable(fresh("gpF", { size: "xwide", gpFView: "table" }), false);
+  A.absent(pTbl, "gpf-nmsub", "the Pledges row carries no sub-line");
+  A.contains(pTbl, "gpf-nm\">", "only the purpose name, which has the cell to itself");
+  A.eq((pTbl.match(/class="gpf-c-n gpf-c-pct"/g) || []).length, 8,
+    "and exactly one percent cell per row plus the header and the totals line, so Percent Due stands alone");
+  /* PERCENT DUE IS A DETAIL COLUMN. Measured: with it at Explore the purpose name had 57px
+     of the 166px it needs. It is derivable from two columns in the same row, and it stays in
+     every row's screen-reader line at every size, so nothing is lost, only moved. */
+  const pWide = ctx.gpFPledgesTable(fresh("gpF", { size: "wide", gpFView: "table" }), false);
+  A.absent(pWide, "Percent Due", "Explore drops the Percent Due column");
+  A.absent(pWide, "gpf-c-pct", "and its cells with it, header, rows and totals alike");
+  A.contains(pWide, "percent due ", "while every row still says it to a screen reader");
+  A.contains(pTbl, "Percent Due", "Detail keeps the column");
+  ["Pledge Total", "Pledge Due", "Received", "Due Remaining"].forEach(function (h) {
+    A.contains(pWide, ">" + h + "<", "and Explore keeps every money column: " + h);
+  });
+  A.headMatchesBody(pWide, "the header still sits over its columns with one fewer of them (D12)");
+
+  /* the Gifts row keeps its own, which fits: measured 114px of text in a 114px slot */
+  const gSub = /gpf-nmsub">([^<]*)</.exec(ctx.gpFGiftsTable(fresh("gpF", { size: "xwide", gpFView: "table", gpFTbl: "gifts" }), false));
+  A.ok(!!gSub && gSub[1].length <= 20, "the Gifts sub-line is short enough for its cell  (" + (gSub && gSub[1]) + ")");
+  A.ok(["Also has pledges", "No pledges"].indexOf(gSub[1]) > -1,
+    "and says the one thing the Gifts columns do not  (" + gSub[1] + ")");
 })();
 
 

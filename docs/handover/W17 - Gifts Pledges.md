@@ -17,22 +17,31 @@ how far behind are the pledges?**
 
 - **The row unit is the PURPOSE**, not the campaign. This matters and is easy to
   get wrong; see §4.
-- **Received has two parts**: money that arrived against a pledge (*Pledge
-  payments*) and money that arrived with no pledge behind it (*Gifts*). The bar
-  shows them as two segments. Both count.
-- **Every money figure obeys a date window.** The default preset has no start
-  date, only an end.
+- **`PurposeID` is the guiding light, and the rule is strict.** Every figure comes
+  from one of exactly two purpose-keyed queries (§4) and nothing else is ever
+  shown. This money is tracked for tax; a number a reader cannot trace back to a
+  purpose has no business on this widget.
+- **Giving shows all the money given to a purpose**: pledge payments and gifts
+  with no pledge behind them, as the two segments of one bar.
+- **The table shows one read at a time**, switched by a second toggle in the
+  header's top right. *Pledges* is the shipped panel, one to one. *Gifts* is money
+  given to the purpose that answers to no pledge. Neither borrows a figure from
+  the other.
+- **A pledge's position is read to the thru date; gift transactions obey the
+  window.** A pledge is a cumulative promise, so nothing about it is ever
+  re-scoped by a window start.
 - **There is no per-purpose goal.** There used to be. It was invented and has
   been retired. Do not add one back.
 
-Status: **finalised on our version, 28 September 2026.** Jo's rival block is
-deleted. Ours owns kind `gifts`.
+Status: **finalised on our version, 28 September 2026**, and corrected the same
+day after the owner spoke to Edward Eoff. Jo's rival block is deleted. Ours owns
+kind `gifts`.
 
 | | |
 |---|---|
 | Prefix | `gpF` (JS), `gpf-` (CSS), `data-gpf` (actions) |
 | Kind | `gifts`, registered through `WIDGETS.register("gifts", …)` |
-| Driver | `_tools/w17-gifts.driver.js`, 674 assertions |
+| Driver | `_tools/w17-gifts.driver.js`, 809 assertions |
 | Decision record | `docs/decisions/W17.md` — 200 lines, the authority for every ruling |
 | Review pack | `docs/review/W17 - Gifts Pledges.md` |
 
@@ -66,8 +75,17 @@ Roughly 70 `gpF*` functions. The ones worth knowing first:
 
 **Model and arithmetic** — change these and every number on screen moves.
 `gpFData` (the fixture), `gpFMakeGifts`, `gpFOtherGiftsFor`, `gpFDonorsFor`,
-`gpFCycles`, `gpFPledgedIn` (steps a pledge's instalments; the schedule panel
-must step identically), `gpFDonorPace`, `gpFPurposeCompute`, `gpFTotals`.
+`gpFCycles`, `gpFScheduleRows` (steps a pledge's instalments for the schedule
+panel), `gpFDonorPace`, `gpFPurposeCompute`, `gpFSumRows`, `gpFTotals`.
+
+**The counting rule** — `gpFCounts` and `gpFCountsThru`. Posted and not-undone are
+part of the DEFINITION of every money figure, not a filter detail: the legacy
+repository tests `GFBatch.Posted` and `GFHistory.UnDoJournalID` before it sums
+anything. On the owner's own dev database the excluded money was $30,192 against
+$200 included. Every sum in this block goes through these two functions.
+
+**The two tables** — `gpFTblMode`, `gpFTableToggle`, `gpFPledgesTable`,
+`gpFGiftsTable`, `gpFGiftsHead`, `gpFGiftsRow`, `gpFWidePct`.
 
 **The date window** — `gpFWindow`, `gpFRangeBounds`, `gpFInWindow`,
 `gpFRangeShort` (the chip's short label), `gpFRangePhrase` (the full sentence,
@@ -116,7 +134,7 @@ node _tools/verify.js
 node _tools/lint.js
 ```
 
-The full suite is 2,574 assertions across 17 drivers and must stay green. The
+The full suite is 2,709 assertions across 17 drivers and must stay green. The
 lint is a report, not a gate; its current findings are pre-existing and listed
 in §7.
 
@@ -163,7 +181,52 @@ understanding before you touch the arithmetic.
 
 Our build had blended the two: a campaign-style goal measured against
 pledge-linked receipts only. **The data does not support that.** The owner ruled
-that both parts count, which resolves it.
+that both parts count. Then, later the same day, that they must count
+**separately** — which is the shape the widget has now.
+
+### The two queries, and nothing else
+
+**Q1, the purpose's gift lines.** `GFHistoryDetail` where `PurposeID` is the row's
+purpose, `GFHistory.GFBatch.Posted` is true, `GFHistory.UnDoJournalID` is null and
+`GiftDate` falls in the window. Split once, on `PledgeID`: not null is a **pledge
+payment**, null is a **gift**.
+
+**Q2, the purpose's pledges.** `GFPledge` where `PurposeID` is the row's purpose
+and `Active` is true. Pledge Total is `Sum(Pledge)`; Pledge Due is
+`Sum(PledgeDue(true, thru))`.
+
+That is the whole basis. No campaign anything: `CampaignID` and
+`GFCampaignDetail.Goal` stay out, and the Campaign screen's figures are never
+copied here because that screen omits the posted and not-undone tests.
+
+### Confirmed on real data, 28 September
+
+The owner queried `A90911DB` on `ssdevdevsql01` rather than let this rest on
+inference:
+
+- unpledged gifts to a purpose exist: `2022 GIF`, $200.00 over two lines, no
+  pledge payments at all;
+- that purpose has **no active pledge** while its `AllowPledges` is **1** — it
+  permits pledging and simply has none, which is the shape the fixture models;
+- $30,192.00 over five lines sits in unposted batches, money that must never
+  count.
+
+### The row shape
+
+`gpFPurposeCompute` returns named figures and **no blended one**. There is no
+`received` property; reaching for one is the mistake this shape exists to prevent.
+
+| Figure | Means |
+|---|---|
+| `fromPledgesThru` | pledge payments to the thru date: the legacy panel's Received |
+| `fromPledges` | the same money narrowed to the window: what Giving shows |
+| `other` | gifts with no pledge, inside the window |
+| `totalIn` | both: all the money given to the purpose |
+| `pledgeTotal` | the full active pledge, never re-scoped |
+| `pledgeDue` | the legacy proration on the thru date |
+| `dueRem`, `percentDue`, `fulfilled` | the legacy formulas, all off `fromPledgesThru` |
+| `windowed` | true when the preset has a start date |
+| `hasPledges`, `giftN`, `giftDonors`, `giftDonorList`, `lastGift` | what each table mode needs |
 
 ### The gift data shape (from MBAccounting, read-only)
 
@@ -187,11 +250,34 @@ not a refactor.
 its colours. No such field exists per purpose. A newcomer looking at the bars
 will want to add a target line. Don't.
 
+**Nothing blends pledge payments with gifts into one figure.** They are two named
+figures and a named total (§4). Putting them back into a single Received column is
+what the 28 September correction undid, and it is the one thing the owner has said
+most plainly: no number that cannot be traced to a purpose-keyed query.
+
+**Nothing re-scopes Pledge Total to a window.** `gpFPledgedIn` existed to do that
+and was deleted. A prorated pledge is not a figure the data holds.
+
+**A preset's start date does not act in the Pledges table.** That is what keeps
+the mode one to one with the panel, which has only a thru date. Making the start
+act there would compare this window's receipts against a whole term's Pledge Due
+and show a fully paid old pledge as catastrophically behind.
+
+**On a windowed preset, Giving shows no percentage of pledged.** The money on
+screen is the window's and the pledge behind it is the whole promise; a ratio
+across the two dates is not a number the data holds. The pledged amount still
+shows. Do not "restore" the percentage.
+
+**Percent Due is a Detail column.** Measured: with it at Explore the purpose name
+had 57px of the 166px it needs and every row read "BLDGF...". It is derivable from
+two columns in the same row and stays in every row's screen-reader line at all
+sizes. Do not narrow the money columns to bring it back: a clipped money figure on
+a tax-tracked table is the worse defect, and real data holds larger amounts than
+this fixture.
+
 **The default date preset has no start date.** "Gifts received through <date>".
-This was the one call made on the owner's behalf, and it is deliberate: a start
-date combined with an unwindowed Pledge Due makes a fully paid old pledge look
-catastrophically behind. It is also what keeps the default reconciling with the
-shipped legacy panel, figure for figure, on the pledge-payments subtotal.
+This is what keeps the default reconciling with the shipped legacy panel, figure
+for figure, on the pledge-payments subtotal.
 
 **Pledge Total, Pledge Due, Due Remaining and Percent Due are unchanged from the
 legacy formulas.** All four already matched. Keeping them is what lets the table
@@ -332,10 +418,16 @@ the build uses **"All purposes"**, not "All campaigns".
 
 ## 7. Open, and awaiting the owner
 
-- **The Summary Table's own caption.** It explains how Pledge Due and Percent
-  Due are derived. Left alone when the Giving caption was struck out, because it
-  is reference rather than instruction and sits on the view the owner was not
-  looking at. He has been asked; no answer yet.
+- **The Summary Table's captions.** Both are shorter since the split, and the
+  Pledges one no longer repeats the date that sits in the chip beside it. Whether
+  they are wanted at all is still unanswered.
+- **The purpose name ellipsises at Explore**, 136px of the 166px it needs. Inherent
+  to five money columns in a 568px card. The code prefix keeps rows identifiable
+  and Detail shows names in full.
+- **Percent Due when Pledge Due is zero.** The legacy POCO divides by 1 there,
+  printing the negative of Received as a percentage. This shows "n/a". No fixture
+  row hits it; on real data a purpose whose pledges all begin in the future
+  would.
 - **The real campaign goal.** Needs a campaign-period row unit. Not started.
 - **W04's pacing basis differs from the legacy monthly step.** Recorded in Part
   10 of the review document.
