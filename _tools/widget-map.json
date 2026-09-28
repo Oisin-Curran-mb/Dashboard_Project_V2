@@ -450,14 +450,30 @@
     },
     "W17": {
       "name": "Gifts Pledges",
-      "driver": "w17-gifts-mb.driver.js",
-      "ours": {
-        "kind": "gifts-mb",
+      "driver": "w17-gifts.driver.js",
+      "decided": "2026-09-28 OC (rebuilt on the owner's rulings: Received carries both pledge payments and other gifts, every figure obeys the date window, the pop-up is a giving ledger; Jo's block deleted)",
+      "removed": [
+        "gifts-mb"
+      ],
+      "baselineDrop": [
+        "{id:\"gft\",",
+        "{id:\"gft_k\",",
+        "{id:\"gft2\",",
+        "{id:\"gft3\",",
+        "{id:\"gft4\",",
+        "{id:\"gft5\",",
+        "{id:\"gpF2\",",
+        "{id:\"gpF3\",",
+        "{id:\"gpF4\",",
+        "{id:\"gpF5\","
+      ],
+      "baselineNote": "The block keeps prefix gpF and takes over kind gifts. The sixty gft-* classes it used to borrow were copied into its own CSS as gpf-* before her block was deleted, so it declares everything it draws with.",
+      "final": {
+        "kind": "gifts",
         "prefix": "gpF",
         "css": {
-          "grep": [
-            ".gpf-"
-          ]
+          "start": "/* ===== W17 Gifts Pledges V2 CSS , prefix gpF , kind \"gifts\" ===== */",
+          "end": "/* ===== end W17 Gifts Pledges V2 CSS ===== */"
         },
         "js": {
           "start": "var GPF_TODAY=",
@@ -465,22 +481,6 @@
         },
         "registry": {
           "grep": [
-            "kind:\"gifts-mb\""
-          ]
-        }
-      },
-      "jo": {
-        "kind": "gifts",
-        "prefix": "gft",
-        "css": {
-          "grep": [
-            ".gft-"
-          ]
-        },
-        "js": {
-          "grep": [
-            "function gft",
-            "GFT_",
             "kind:\"gifts\""
           ]
         }

@@ -1,6 +1,6 @@
 # W18 Financial KPI: review pack
 
-Generated 2026-09-25 by `_tools/review-pack.js`. Three sources, verbatim, in their own sections. Nothing here is a decision; the owner's ruling goes in `docs/decisions/W18.md`.
+Generated 2026-09-28 by `_tools/review-pack.js`. Three sources, verbatim, in their own sections. Nothing here is a decision; the owner's ruling goes in `docs/decisions/W18.md`.
 
 | Source | Where | As of |
 |---|---|---|

@@ -81,6 +81,9 @@ function dump(side, spec, file) {
   Object.keys(spec).forEach(function (k) {
     if (["kind", "prefix", "file"].indexOf(k) > -1) return;
     const r = spec[k];
+    /* prose keys such as `note` sit beside the region specs; they are not
+       regions and used to crash on r.grep.join. Fixed 2026-09-28. */
+    if (!r || typeof r !== "object" || (!r.start && !r.grep)) return;
     out.push("\n---- " + k + (r.start ? "  (" + r.start.slice(0, 50) + " .. " + r.end.slice(0, 40) + ")" : "  grep " + r.grep.join(" | ")) + " ----");
     out.push(r.start ? sliceRegion(p, r, k) : grepRegion(p, r));
   });
@@ -88,7 +91,15 @@ function dump(side, spec, file) {
 }
 
 const entry = id === "SHELL" ? MAP.shell : MAP.widgets[id];
-const sides = sideArg ? [sideArg] : Object.keys(entry).filter(function (k) { return k.charAt(0) !== "_" && entry[k] && typeof entry[k] === "object" && k !== "name"; });
+/* A side is a region spec, which means an object that names a source file, its
+   own or one of the four known ones. Bookkeeping arrays on the entry (removed,
+   baselineDrop) are objects too, and taking them for sides was crashing every
+   finalised widget on path.join(undefined). Fixed 2026-09-28. */
+const sides = sideArg ? [sideArg] : Object.keys(entry).filter(function (k) {
+  const v = entry[k];
+  return k.charAt(0) !== "_" && v && typeof v === "object" && !Array.isArray(v)
+    && k !== "name" && (v.file || FILES[k]);
+});
 const TMP = path.join(__dirname, ".tmp");
 if (!fs.existsSync(TMP)) fs.mkdirSync(TMP);
 

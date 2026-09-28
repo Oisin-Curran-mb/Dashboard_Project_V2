@@ -153,4 +153,14 @@ function build(wnn) {
 const arg = (process.argv[2] || "").toUpperCase();
 if (!arg) { console.log("usage: node _tools/review-pack.js <Wnn|all>"); process.exit(1); }
 const targets = arg === "ALL" ? Object.keys(MAP.widgets).filter(function (k) { const w = MAP.widgets[k]; return !w.decided && (w.ours || w.jo); }) : [arg];
+/* A decided widget's pack is a record of the comparison that produced the
+   ruling. Regenerating it after the losing side is deleted only strips the
+   pack of the very thing it documents, so a named target is refused too
+   unless --force says otherwise. Added 2026-09-28. */
+if (arg !== "ALL" && MAP.widgets[arg] && MAP.widgets[arg].decided && process.argv.indexOf("--force") < 0) {
+  console.log(arg + " is decided (" + MAP.widgets[arg].decided + ").");
+  console.log("Its pack records the comparison that produced that ruling and is left alone.");
+  console.log("Pass --force to regenerate it anyway.");
+  process.exit(0);
+}
 targets.forEach(function (wnn) { const r = build(wnn); console.log(wnn.padEnd(5) + r.file.padEnd(58) + r.lines + " lines  review:" + (r.review ? "y" : "-") + " notes:" + String(r.notes).padStart(3) + " diff:" + (r.diff ? "y" : "-") + " sheet:" + (r.sheet ? "y" : "-")); });
