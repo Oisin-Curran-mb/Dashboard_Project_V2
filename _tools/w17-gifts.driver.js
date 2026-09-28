@@ -18,8 +18,9 @@
      3  the purpose filter NARROWS and does not highlight
      4  a bar click opens the giving ledger, uncapped, filtered and
         searchable, and the type filter PARTITIONS the whole list
-     5  a row expands the donor breakdown at 20 per page, totals invariant
-     6  a pledge click expands its gifts, with media and motivation
+     5  a table row opens the pop-up (it expanded in place until 28 Sep), and
+        the purpose's figures agree with the pledges behind it
+     6  (merged into 4 and 5: the gift level lives in the pop-up now)
      7  ordering: bars most-received-first, ledger largest-first, drill
         most-behind-first, table in data order, no alphabetical sort
      8  the block's buttons style from the GLOBAL button family, and our
@@ -95,7 +96,7 @@ function gkey(key, attrs) {
 function W(id) { return registry.filter(function (w) { return w.id === id; })[0]; }
 function fresh(id, over) {
   const base = W(id);
-  const w = Object.assign({}, base, { gpFExp: {}, gpFPage: {}, gpFPlExp: {} }, over || {});
+  const w = Object.assign({}, base, { gpFPlExp: {} }, over || {});
   return w;
 }
 const CAMPS = ctx.GPF_PURPOSES; /* the row unit is the PURPOSE since 28 Sep */
@@ -104,7 +105,7 @@ const LABELS = CAMPS.map(function (c) { return c.code + ": " + c.name; });
 /* ---------------------------------------------------------------- 0. shape */
 A.eq(registry.length, 3, "three gifts registry entries: Glance, Explore, Detail");
 A.eq(typeof ctx.gpFContentRoot, "function", "gpFContentRoot entry point defined");
-A.eq(ctx.GPF_PAGE_SIZE, 20, "donor breakdown page size is 20 (Step 4)");
+A.eq(ctx.GPF_PAGE_SIZE, undefined, "the drill's page size went with the drill (28 Sep)");
 A.eq(CAMPS.length, 7, "seven purposes in the fixture (Memorial Gifts added 28 Sep: gifts, no pledge)");
 A.eq(ctx.GPF_V12_LAYOUT, undefined, "the v1.2 layout flag is retired (28 Sep)");
 /* the two live-screenshot rows, the numeric proof cited in Step 4 */
@@ -161,7 +162,9 @@ A.eq(CAMPS[6].pledgeTotal, 0, "Memorial Gifts has no pledge"); A.ok(CAMPS[6].oth
         A.contains(html, "gpf-tblwrap", "the table wrapper is the body at " + sz + "/table");
         A.contains(html, "gpf-sumrow", "the table renders campaign rows at " + sz + "/table");
         A.contains(html, "Percent Due", "the table renders the Percent Due column at " + sz);
-        A.absent(html, 'data-gpf="baropen"', "Summary Table renders NO bars at " + sz);
+        /* the table's own rows carry baropen since 28 Sep, so the check is that
+           it renders no BAR markup, not that it never opens the pop-up */
+        A.absent(html, "gpf-prow", "Summary Table renders NO bars at " + sz);
         A.absent(html, "gpf-goalwrap", "Summary Table renders no goal-bars wrapper at " + sz);
       }
     }
@@ -237,8 +240,8 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   A.eq((barsOne.match(/data-gpf="baropen"/g) || []).length, 1, "one bar under the filter");
   const rowsAll = ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "table" }));
   const rowsOne = ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "table", gpFCamp: LABELS[2] }));
-  A.eq((rowsAll.match(/data-gpf="open"/g) || []).length, 7, "seven table rows unfiltered");
-  A.eq((rowsOne.match(/data-gpf="open"/g) || []).length, 1, "one table row under the filter");
+  A.eq((rowsAll.match(/gpf-sumrow/g) || []).length, 7, "seven table rows unfiltered");
+  A.eq((rowsOne.match(/gpf-sumrow/g) || []).length, 1, "one table row under the filter");
   /* the totals row wording follows the narrowed count, including the singular */
   A.contains(rowsAll, "Total (7 purposes)", "totals row names the unfiltered count");
   A.contains(rowsOne, "Total (1 purpose)", "totals row goes singular under the filter");
@@ -268,8 +271,7 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   A.contains(ctx.gpFContent(w), "gpf-skel", "and the skeleton renders while loading");
   A.contains(ctx.gpFContent(w), "Loading purpose giving", "loading is explained, not a bare skeleton");
   /* selecting a campaign resets the drills, so no stale expansion survives */
-  A.eq(Object.keys(w.gpFExp).length, 0, "a campaign change clears expanded campaigns");
-  A.eq(Object.keys(w.gpFPage).length, 0, "a campaign change clears drill paging");
+  A.eq(Object.keys(w.gpFPlExp).length, 0, "a purpose change clears the ledger's expanded rows");
   w.gpFLoading = false;
   const t1 = env.log.timers;
   gfire("view", { "data-id": "gpF", "data-v": "table" });
@@ -277,7 +279,7 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   A.eq(w.gpFLoading, false, "a view switch does NOT fetch");
   A.eq(env.log.timers, t1, "a view switch scheduled no load timer");
   /* restore */
-  w.gpFCamp = "All purposes"; w.gpFView = "goal"; w.gpFExp = {}; w.gpFPage = {}; w.gpFPlExp = {};
+  w.gpFCamp = "All purposes"; w.gpFView = "goal"; w.gpFPlExp = {};
 })();
 /* the campaign popover lists All plus every campaign, and marks the current one */
 (function () {
@@ -505,148 +507,67 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   })();
 })();
 
-/* --------------- 5. a row expands the donor breakdown at 20 per page */
+/* ------- 5. a table row opens the pop-up; it no longer expands in place ----
+   The owner replaced the inline donor drill with the giving ledger on 28 Sep,
+   so a purpose behaves the same way whether it is selected from a bar or from
+   a table row. */
 (function () {
-  const w = W("gpF");
-  w.gpFView = "table";
-  const closed = ctx.gpFContent(w);
-  A.absent(closed, "gpf-drill", "no donor breakdown before a row is expanded");
-  gfire("open", { "data-id": "gpF", "data-c": LABELS[2] });
-  A.eq(w.gpFExp[LABELS[2]], true, "the row is marked expanded");
-  A.eq(w.gpFPage[LABELS[2]], 1, "the drill opens on page 1");
-  const open1 = ctx.gpFContent(w);
-  A.contains(open1, "gpf-drill", "the donor breakdown rendered inline");
-  A.contains(open1, "gpf-drow", "the drill reuses the copied donor-row grid");
-  ["Name", "Begin date", "End date", "Pledge", "Received", "Due Remaining", "Status"]
-    .forEach(function (c) { A.contains(open1, ">" + c + "<", "drill column: " + c); });
-  const camp = ctx.gpFCampByLabel(w, LABELS[2]);
-  const all = ctx.gpFDonorRows(w, camp);
-  const pages = Math.ceil(all.length / 20);
-  A.ok(all.length > 40, "the campaign has enough donor pledges for several pages (" + all.length + ")");
-  A.eq((open1.match(/data-gpf="gopen"/g) || []).length, 20, "page 1 shows exactly 20 donor pledges");
-  A.contains(open1, "page 1 of " + pages, "the pager states page 1 of " + pages);
-  A.contains(open1, all.length + " donor pledges", "the pager states the full donor count");
-  /* page through, and prove the figures ABOVE the pager never move */
-  function figuresOf(html) {
-    const i = html.indexOf('data-c="' + LABELS[2] + '"');
-    const row = html.slice(html.lastIndexOf('<div class="wt-row', i), html.indexOf("gpf-drill", i));
-    const tot = html.slice(html.indexOf("gpf-sumtotal"));
-    return { row: row, tot: tot };
-  }
-  const f1 = figuresOf(open1);
-  gfire("ppage", { "data-id": "gpF", "data-c": LABELS[2], "data-p": "2" });
-  A.eq(w.gpFPage[LABELS[2]], 2, "the pager moved to page 2");
-  const open2 = ctx.gpFContent(w);
-  A.contains(open2, "page 2 of " + pages, "page 2 is rendered");
-  A.eq((open2.match(/data-gpf="gopen"/g) || []).length, 20, "page 2 also shows 20 donor pledges");
-  const f2 = figuresOf(open2);
-  A.eq(f2.row, f1.row, "the campaign row's figures are unchanged by paging");
-  A.eq(f2.tot, f1.tot, "the totals row is unchanged by paging");
-  A.contains(open2, all.length + " donor pledges", "the donor count is unchanged by paging");
-  /* the page shows DIFFERENT donors, so paging really paged */
-  A.changed(open1.slice(open1.indexOf("gpf-drill-tbl")), open2.slice(open2.indexOf("gpf-drill-tbl")),
-    "paging changed which donor pledges are listed");
-  /* last page holds the remainder, and the page index is clamped both ways */
-  gfire("ppage", { "data-id": "gpF", "data-c": LABELS[2], "data-p": String(pages) });
-  const openL = ctx.gpFContent(w);
-  A.eq((openL.match(/data-gpf="gopen"/g) || []).length, all.length - 20 * (pages - 1),
-    "the last page holds the remainder");
-  /* Out-of-range paging, asserted as the build actually behaves. A page index
-     past the end is STORED but clamped at render time, so the view is always
-     valid; a page index below 1 is refused outright and the stored value is
-     left alone. Clamping on write would be tidier, but the built Final clamps
-     on read, and the port follows the build. */
-  gfire("ppage", { "data-id": "gpF", "data-c": LABELS[2], "data-p": String(pages + 9) });
-  A.contains(ctx.gpFContent(w), "page " + pages + " of " + pages, "a page index past the end is clamped down on render");
-  A.eq((ctx.gpFContent(w).match(/data-gpf="gopen"/g) || []).length, all.length - 20 * (pages - 1),
-    "and the clamped page shows the last page's rows");
-  const stored = w.gpFPage[LABELS[2]];
-  gfire("ppage", { "data-id": "gpF", "data-c": LABELS[2], "data-p": "0" });
-  A.eq(w.gpFPage[LABELS[2]], stored, "a page index below 1 is REFUSED and the stored page is untouched");
-  gfire("ppage", { "data-id": "gpF", "data-c": LABELS[2], "data-p": "-3" });
-  A.eq(w.gpFPage[LABELS[2]], stored, "a negative page index is refused too");
-  A.contains(ctx.gpFContent(w), "page " + pages + " of " + pages, "the render stays clamped and valid throughout");
-  /* paging does not fetch */
-  const t0 = env.log.timers;
-  gfire("ppage", { "data-id": "gpF", "data-c": LABELS[2], "data-p": "1" });
-  A.eq(env.log.timers, t0, "paging scheduled no load timer");
-  /* each campaign pages independently */
-  gfire("open", { "data-id": "gpF", "data-c": LABELS[3] });
-  gfire("ppage", { "data-id": "gpF", "data-c": LABELS[3], "data-p": "2" });
-  A.eq(w.gpFPage[LABELS[2]], 1, "one campaign's page is unaffected by another's");
-  A.eq(w.gpFPage[LABELS[3]], 2, "the second campaign paged independently");
-  /* collapse */
-  gfire("open", { "data-id": "gpF", "data-c": LABELS[3] });
-  A.eq(w.gpFExp[LABELS[3]], false, "clicking an expanded row collapses it");
-  A.eq((ctx.gpFContent(w).match(/gpf-drill"/g) || []).length, 1, "only the still-open campaign shows a drill");
-  /* the drill sums roll up to the campaign row (no disagreement between levels) */
-  const comp = ctx.gpFCampCompute(w).filter(function (r) { return r.label === LABELS[2]; })[0];
-  let sumRec = 0, sumDue = 0;
-  all.forEach(function (it) { sumRec += it.p.received; sumDue += it.p.due; });
-  /* The drill lists PLEDGES, so it rolls up to the pledge-payments part of
-     Received, not to Received itself, which now also carries other gifts. */
-  A.near(sumRec, comp.fromPledges, 0.02, "donor received rolls up to the purpose's pledge payments");
-  A.near(sumDue, comp.pledgeDue, 0.02, "donor pledge due rolls up to the purpose row");
-  A.near(comp.fromPledges + comp.other, comp.received, 0.02,
-    "and the two parts sum to Received, so the split is pinned from both ends");
-  A.ok(comp.other > 0, "this purpose really does have other gifts, so the distinction is exercised");
-  /* the drill has its own campaign-scoped export (the second v1.3 export point) */
-  const openNow = ctx.gpFContent(w);
-  A.contains(openNow, 'data-gpf="export-donors"', "the drill carries its own campaign-scoped export");
-  A.contains(openNow, 'data-c="' + LABELS[2] + '"', "and it is scoped to that campaign");
-})();
+  const w = fresh("gpF", { size: "xwide", gpFView: "table" });
+  const html = ctx.gpFContent(w);
+  /* the row is a pop-up trigger, not a disclosure */
+  A.contains(html, 'data-gpf="baropen"', "a table row opens the pop-up");
+  A.contains(html, 'aria-haspopup="dialog"', "and says so");
+  A.absent(html, 'data-gpf="open"', "the expand action is gone");
+  /* the header chips are still disclosure controls, so this reads the row alone */
+  const rowAt = html.indexOf('data-gpf="baropen"');
+  const rowTag = html.slice(Math.max(0, rowAt - 120), rowAt + 220);
+  A.absent(rowTag, "aria-expanded", "a table row is no longer a disclosure control");
+  A.contains(rowTag, "gpf-sumrow", "and the tag read really is the table row");
+  A.absent(html, "gpf-drill", "and nothing expands inside the card");
+  A.absent(html, "so there is no in-card pager");
+  A.eq(typeof ctx.gpFDonorPanel, "undefined", "the inline drill builder is deleted, not merely unused");
+  A.eq(typeof ctx.gpFPager, "undefined", "the pager builder too");
+  A.eq(typeof ctx.GPF_PAGE_SIZE, "undefined", "and the page size with them");
+  /* the row still carries the caret, which now means it opens something */
+  A.contains(html, "gpf-caret", "the row keeps its affordance");
+  A.absent(shell.css, ".gpf-root .is-exp>.gpf-caret", "but not the rotation, since nothing expands");
 
-/* -------------------------------- 6. a pledge click expands its gifts */
-(function () {
-  const w = W("gpF");
-  const camp = ctx.gpFCampByLabel(w, LABELS[2]);
-  const rows = ctx.gpFDonorRows(w, camp);
-  const paid = rows.filter(function (it) { return it.p.received > 0; })[0];
-  A.ok(!!paid, "the fixture has a donor pledge with gifts applied");
-  const before = ctx.gpFContent(w);
-  A.absent(before, "Gifts applied to this pledge", "no gift level before a pledge is clicked");
-  gfire("gopen", { "data-id": "gpF", "data-plid": paid.pl.id });
-  A.eq(w.gpFPlExp[paid.pl.id], true, "the pledge is marked expanded");
-  const after = ctx.gpFContent(w);
-  A.contains(after, "Gifts applied to this pledge", "the pledge expanded to its gift transactions");
-  A.contains(after, "gpf-gifts", "the gift list reuses the copied gift-list primitive");
-  A.contains(after, "gpf-drawer", "the gift level sits in the copied expanded drawer");
-  ["Gift date", "Arrived by", "Prompted by", "Reference", "Amount"].forEach(function (c) {
-    A.contains(after, ">" + c + "<", "gift column: " + c);
-  });
-  /* the deepest level is unmistakably GIFTS, not more pledges */
-  A.absent(after.slice(after.indexOf("Gifts applied to this pledge")), "Begin date",
-    "the gift level lists gifts, not another pledge table");
-  /* the gifts total EXACTLY equals the pledge's displayed Received */
-  /* gpFThru was retired with the window rebuild: every figure now reads the
-     window, and Received sums gift LINES inside it rather than taking a
-     pledge's whole paid amount all or nothing (28 Sep). */
-  const win = ctx.gpFWindow(w);
-  const gp = ctx.gpFGiftPanel(paid.pl, win.end, win);
-  let gsum = 0;
-  (paid.pl.gifts || []).forEach(function (g) { if (ctx.gpFInWindow(g.date, win)) gsum += g.amount; });
-  gsum = Math.round(gsum * 100) / 100;
-  A.eq(gsum, paid.p.received, "the gifts sum EXACTLY to the pledge's Received");
-  A.contains(gp, ctx.gpFMoney(gsum), "the gift footer states that same total");
-  A.contains(gp, "applied to this pledge", "the gift footer names the basis");
-  /* a pledge with nothing received yet gets the empty gift line, not a blank */
-  const none = ctx.gpFGiftPanel({ donor: "Test, Donor", giftDate: "2026-08-19", gifts: [] }, "2020-01-01");
-  A.contains(none, "No gifts have been applied", "a pledge with no gifts in range says so");
-  A.contains(none, "gpf-tab-empty", "and uses her empty-line primitive");
-  /* clicking again collapses; expanding does not fetch */
-  const t0 = env.log.timers;
-  gfire("gopen", { "data-id": "gpF", "data-plid": paid.pl.id });
-  A.eq(w.gpFPlExp[paid.pl.id], false, "clicking an expanded pledge collapses it");
-  A.eq(env.log.timers, t0, "expanding a pledge scheduled no load timer");
-  /* the modal's rows carry the same expand affordance, with the arity fixed */
+  /* clicking a row opens the ledger for THAT purpose */
+  const row = W("gpF");
+  row.gpFView = "table";
   gfire("baropen", { "data-id": "gpF", "data-c": LABELS[2] });
   const m = shim.captured["gpfModalRoot"];
-  A.contains(m, 'data-gpf="gopen"', "modal rows carry the pledge-expand action");
-  A.contains(m, 'data-id="gpF"', "modal rows carry the widget id (the arity fix)");
-  A.absent(m, 'data-id="0"', "no row was handed an array index as its widget id");
-  A.absent(m, 'data-id="undefined"', "no row lost its widget id");
+  A.ok(m && m.length > 200, "the row opened the ledger");
+  A.contains(m, LABELS[2], "and it is the ledger for the row's own purpose");
+  A.contains(m, "every gift and pledge", "which is the same pop-up a bar opens");
+
+  /* WHAT THE RETIRED DRILL PROVED, asserted against the pop-up instead: the
+     purpose's own figures agree with the pledges behind it. */
+  const win = ctx.gpFWindow(row);
+  const purpose = ctx.gpFCampByLabel(row, LABELS[2]);
+  const comp = ctx.gpFCampCompute(row).filter(function (r) { return r.label === LABELS[2]; })[0];
+  A.ok(!!comp, "the purpose row was located");
+  const pledges = ctx.gpFDonorsFor(purpose);
+  A.ok(pledges.length > 40, "the purpose has a real pledge set behind it (" + pledges.length + ")");
+  let sumRec = 0, sumDue = 0;
+  pledges.forEach(function (pl) {
+    const pace = ctx.gpFDonorPace(pl, ctx.gpFParse(win.end), win.end, win);
+    sumRec += pace.received; sumDue += pace.due;
+  });
+  A.near(sumRec, comp.fromPledges, 0.02, "the pledges' received sums to the purpose's pledge payments");
+  A.near(sumDue, comp.pledgeDue, 0.02, "and their due sums to the purpose's Pledge Due");
+  A.near(comp.fromPledges + comp.other, comp.received, 0.02, "the two parts still sum to Received");
+  /* every one of those pledges is reachable in the ledger, which is the point
+     of replacing a paged drill with one scrolling list */
+  const ledger = ctx.gpFLedgerRows(row, purpose, win);
+  const pledgeEntries = ledger.filter(function (it) { return it.kind === "pledge"; });
+  const withActivity = pledges.filter(function (pl) {
+    const r = ctx.gpFDonorPace(pl, ctx.gpFParse(win.end), win.end, win);
+    return r.pledgedIn > 0 || r.received > 0;
+  });
+  A.eq(pledgeEntries.length, withActivity.length, "every pledge with activity appears in the ledger, unpaged");
   gfire("detail-close", { "data-id": "gpF" });
-  w.gpFExp = {}; w.gpFPage = {}; w.gpFPlExp = {}; w.gpFView = "goal";
+  A.eq(shim.captured["gpfModalRoot"], "", "and the pop-up closes");
 })();
 
 /* ------------------------------------------------------- 7. ordering rules */
@@ -660,15 +581,19 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
     "bars are ordered most received first");
   A.ok(byRecv[0].received > byRecv[byRecv.length - 1].received,
     "the fixture genuinely has a spread, so the order is meaningful");
-  /* drill: MOST BEHIND FIRST, the opposite end of the same measure */
+  /* The drill ordered most behind pace first. It was replaced by the ledger on
+     28 Sep, which orders by amount received, largest first, because it lists
+     gifts and pledges together and "behind pace" means nothing for a gift. */
   const camp = ctx.gpFCampByLabel(w, LABELS[2]);
-  const drill = ctx.gpFDonorRows(w, camp);
-  A.ok(drill.every(function (it, i) { return i === 0 || it.p.dueRem <= drill[i - 1].p.dueRem; }),
-    "the donor drill is ordered most behind pace FIRST");
-  A.ok(drill[0].p.dueRem > drill[drill.length - 1].p.dueRem, "and the drill spread is real");
+  const led = ctx.gpFLedgerRows(w, camp, ctx.gpFWindow(w));
+  A.ok(led.every(function (it, i) { return i === 0 || led[i - 1].amount >= it.amount; }),
+    "the ledger is ordered largest first");
+  A.ok(led[0].amount > led[led.length - 1].amount, "and the spread is real");
+  A.ok(led.some(function (it) { return it.kind === "gift"; }) && led.some(function (it) { return it.kind === "pledge"; }),
+    "it interleaves both kinds, which is why amount is the ordering and not pace");
   /* table: the DATA'S OWN ORDER, which is the fixture order */
   const tw = fresh("gpF", { size: "xwide", gpFView: "table" });
-  const tOrder = (ctx.gpFContent(tw).match(/data-gpf="open" data-id="[^"]*" data-c="([^"]+)"/g) || [])
+  const tOrder = (ctx.gpFContent(tw).match(/data-gpf="baropen" data-id="[^"]*" data-c="([^"]+)"/g) || [])
     .map(function (s) { return /data-c="([^"]+)"/.exec(s)[1]; });
   A.eq(tOrder.join("|"), LABELS.join("|"), "the summary table renders in the data's own order");
   A.ok(tOrder.join("|") !== LABELS.slice().sort().join("|"),
@@ -677,7 +602,7 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   A.absent(block, "localeCompare", "the block contains no locale-aware string comparison");
   A.absent(block, ".sort(function(a,b){return a.label", "no label-alphabetical sort in the block");
   const everything = ["goal", "table"].map(function (v) {
-    return ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: v, gpFExp: { [LABELS[2]]: true } }));
+    return ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: v }));
   }).join("") + shim.captured["gpfModalRoot"];
   ["wt-sort", 'data-gpf="sort"', "unfold_more", "arrow_upward", "arrow_downward"].forEach(function (s) {
     A.absent(everything, s, "no sort control anywhere: " + s);
@@ -766,8 +691,8 @@ A.cssDeclares(shell.css, [
   "gpf-root", "gpf-body", "gpf-pill", "gpf-badge", "gpf-closed", "gpf-fav", "gpf-over", "gpf-muted",
   "gpf-goalwrap", "gpf-barscroll", "gpf-legend", "gpf-lg-i", "gpf-lg-sw", "gpf-lg-n", "gpf-lg-rem",
   "gpf-cap", "gpf-export", "gpf-tblwrap", "gpf-scroll", "gpf-sumrow", "gpf-sumtotal", "gpf-caret",
-  "gpf-nmtxt", "gpf-nm", "gpf-nmsub", "gpf-drill", "gpf-drill-tbl", "gpf-plrow", "gpf-drawer",
-  "gpf-grow", "gpf-gref", "gpf-giftfoot", "gpf-pager", "gpf-pgcount", "gpf-pages", "gpf-pgbtn",
+  "gpf-nmtxt", "gpf-nm", "gpf-nmsub", "gpf-drill-tbl", "gpf-drawer",
+  "gpf-grow", "gpf-gref", "gpf-giftfoot", 
   "gpf-pop", "gpf-dates", "gpf-modal", "gpf-panel", "gpf-panel-h", "gpf-panel-big", "gpf-dot"
 ], "every gpf- class our markup uses is declared");
 
@@ -789,15 +714,17 @@ A.cssDeclares(shell.css, [
   /* The header export went on 28 Sep (owner). The drill keeps its own
      purpose-scoped export, and it is still a labelled stub. */
   const n1 = env.log.status.length;
+  /* Both export stubs are gone: the header one on 28 Sep at the owner's
+     request, the drill's when the drill was replaced by the pop-up. There is
+     no export control left on this widget. */
   gfire("export-donors", { "data-id": "gpF", "data-c": LABELS[2] });
-  A.contains(env.log.status[env.log.status.length - 1], LABELS[2], "the donor export is purpose-scoped");
-  A.contains(env.log.status[env.log.status.length - 1], "stub", "the donor export is a labelled stub");
-  A.eq(env.log.status.length, n1 + 1, "it reported exactly once");
+  A.eq(env.log.status.length, n1, "the retired drill export reports nothing, because it is gone");
+  A.absent(shell.script, 'data-gpf="export', "no export action survives in the block");
   A.eq(typeof ctx.gpFExportBtn, "undefined", "the header export builder is deleted, not merely unused");
   /* NO invented workflow action anywhere on the card (the standing constraint) */
   const surfaces = ["kpi", "wide", "xwide"].map(function (sz) {
     return ["goal", "table"].map(function (v) {
-      return ctx.gpFContentRoot(fresh("gpF", { size: sz, gpFView: v, gpFExp: { [LABELS[2]]: true } }));
+      return ctx.gpFContentRoot(fresh("gpF", { size: sz, gpFView: v }));
     }).join("");
   }).join("") + shim.captured["gpfModalRoot"];
   ["Approve", "approve", "Post ", "Write off", "Write-off", "Waive", "Pay ", "Schedule ", "Delete", "Void", "Reject"]
@@ -815,7 +742,7 @@ A.cssDeclares(shell.css, [
   A.contains(wide, 'data-kind="empty"', "and is marked as an empty state");
   A.absent(wide, "Deposits", "the empty state is OURS, not the generic Deposits copy");
   A.absent(wide, 'data-gpf="view"', "no view toggle on the empty card");
-  A.absent(wide, "gpf-pager", "no pager on the empty card");
+  A.absent(wide, "no pager on the empty card");
   const kpi = ctx.gpFContentRoot(Object.assign({}, e, { size: "kpi" }));
   A.contains(kpi, "None set up", "the Glance empty variant is the short one");
   A.contains(kpi, "no purposes to show yet", "and explains itself");
@@ -863,10 +790,10 @@ A.cssDeclares(shell.css, [
         if (comp.length) {
           const lab = comp[0].label;
           const camp = ctx.gpFCampByLabel(w, lab);
-          /* a gifts-only purpose has no donor pledges to drill into */
-          const dr = ctx.gpFDonorRows(w, camp);
-          const pid = dr.length ? dr[0].pl.id : "none";
-          const w2 = fresh("gpF", { size: sz, gpFView: v, gpFCamp: c, gpFExp: { [lab]: true }, gpFPlExp: { [pid]: true } });
+          /* a gifts-only purpose has no pledges behind it */
+          const dr = ctx.gpFDonorsFor(camp);
+          const pid = dr.length ? dr[0].id : "none";
+          const w2 = fresh("gpF", { size: sz, gpFView: v, gpFCamp: c, gpFPlExp: { [pid]: true } });
           A.noEmDash(ctx.gpFContentRoot(w2), sz + " / " + c + " / " + v + " / drilled"); n++;
         }
         /* and while loading */
@@ -881,8 +808,8 @@ A.cssDeclares(shell.css, [
     const wAll = fresh("gpF", { size: "xwide", gpFView: "goal" });
     const giftsOnly = ctx.gpFPurposeCompute(wAll).filter(function (r) { return r.pledgeTotal <= 0 && r.other > 0; });
     A.eq(giftsOnly.length, 1, "exactly one purpose in the fixture has gifts and no pledge");
-    A.eq(ctx.gpFDonorRows(wAll, ctx.gpFCampByLabel(wAll, giftsOnly[0].label)).length, 0,
-      "and it genuinely has no donor pledges to drill into");
+    A.eq(ctx.gpFDonorsFor(ctx.gpFCampByLabel(wAll, giftsOnly[0].label)).length, 0,
+      "and it genuinely has no pledges behind it");
     A.noEmDash(ctx.gpFContentRoot(fresh("gpF", { size: "xwide", gpFView: "goal", gpFCamp: giftsOnly[0].label })),
       "the gifts-only purpose, filtered to itself");
   })();
@@ -981,6 +908,42 @@ A.eq((shell.script.match(/gpFRange:"thru"/g) || []).length, 3,
   A.contains(lab[1], "flex:0 0 auto", "the date label does not shrink into an ellipsis");
   /* the stray pseudo-element that printed the word "event" is gone */
   A.absent(shell.css, ".gpf-datechip::before", "the chip no longer adds a text-only pseudo-element");
+
+  /* THE TWO SEGMENTS (owner, 28 Sep): the gifts part is straight where it meets
+     the pledge payments and curved at the open end, and each part says its own
+     amount on hover through the shell's delegated [data-tip]. */
+  const barRow = ctx.gpFTotals(fresh("gpF", { gpFRange: "thru", gpFEnd: "2026-08-19" }));
+  const bar = ctx.gpFSplitBar(barRow);
+  A.contains(bar, "gpf-seg-pledge", "the bar has a pledge-payments segment");
+  A.contains(bar, "gpf-seg-other", "and an other-gifts segment");
+  A.contains(bar, 'data-tip="Pledge payments: ' + ctx.gpFMoney0(barRow.fromPledges) + '"',
+    "the pledge segment names its own amount on hover");
+  A.contains(bar, 'data-tip="Other gifts: ' + ctx.gpFMoney0(barRow.other) + '"',
+    "and the gifts segment names its own amount");
+  A.eq((bar.match(/data-tip-plain/g) || []).length, 2, "both are plain-text tips");
+  /* the amounts on the bar agree with the line printed under it */
+  A.contains(ctx.gpFSplitLine(barRow), ctx.gpFMoney0(barRow.fromPledges), "the hover and the printed line agree on pledge payments");
+  A.contains(ctx.gpFSplitLine(barRow), ctx.gpFMoney0(barRow.other), "and on other gifts");
+  /* the shapes, read off the rules rather than guessed */
+  const segOther = /\.gpf-root \.gpf-seg-other\{([^}]*)\}/.exec(shell.css);
+  A.ok(!!segOther, "the gifts segment's rule was located");
+  A.contains(segOther[1], "border-radius:0 7px 7px 0", "straight on the left, curved on the right");
+  const fill = /\.gpf-root \.gpf-fill\{([^}]*)\}/.exec(shell.css);
+  A.ok(!!fill, "the base fill rule was located");
+  A.contains(fill[1], "border-radius:7px 0 0 7px", "which the pledge segment inherits, curved left and straight right");
+  /* the legend swatches take the same classes and must stay square */
+  const sw = /\.gpf-root \.gpf-lg-sw\.gpf-seg-pledge,\.gpf-root \.gpf-lg-sw\.gpf-seg-other\{([^}]*)\}/.exec(shell.css);
+  A.ok(!!sw, "the legend swatch rule was located");
+  A.contains(sw[1], "border-radius:3px", "the legend swatches do not inherit the bar's asymmetric corners");
+  /* a gifts-only purpose starts its gift segment at zero; the track clips the
+     corner, so no special case is needed and none is pretended */
+  const giftsOnlyRow = ctx.gpFPurposeCompute(fresh("gpF", { size: "xwide" }))
+    .filter(function (r) { return r.pledgeTotal <= 0 && r.other > 0; })[0];
+  A.ok(!!giftsOnlyRow, "the fixture has a gifts-only purpose");
+  const gBar = ctx.gpFSplitBar(giftsOnlyRow);
+  A.contains(gBar, 'left:0.0%', "its gifts segment starts at the track's left edge");
+  const track = /\.gpf-root \.gpf-track\{([^}]*)\}/.exec(shell.css);
+  A.contains(track[1], "overflow:hidden", "and the track clips, so that end still reads as rounded");
 })();
 
 
