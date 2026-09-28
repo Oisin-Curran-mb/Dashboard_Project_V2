@@ -22,7 +22,7 @@
      6  a pledge click expands its gifts, with media and motivation
      7  ordering: bars most-received-first, ledger largest-first, drill
         most-behind-first, table in data order, no alphabetical sort
-     8  the export button styles from the GLOBAL button family, and our
+     8  the block's buttons style from the GLOBAL button family, and our
         root carries no W04 root class (the deliberate decoupling)
      9  the Rule 11 navigation stub is present and labelled as a stub
     10  the empty states
@@ -129,6 +129,19 @@ A.eq(CAMPS[6].pledgeTotal, 0, "Memorial Gifts has no pledge"); A.ok(CAMPS[6].oth
       A.absent(html, 'data-gpf="view"', "no view toggle at Glance (" + v + ")");
       A.absent(html, 'data-gpf="camp"', "no campaign chip at Glance (" + v + ")");
       A.absent(html, 'data-gpf="export"', "no export at Glance (" + v + ")");
+      A.absent(html, "Gifts and Pledges", "Glance does not repeat the card title inside itself (owner, 28 Sep)");
+      A.absent(html, "scope-chip", "and carries no scope chip at all (" + v + ")");
+      /* Glance clips at 137px with overflow hidden, so its stack has to fit. The
+         pill row and the caption are each held to one line and scroll sideways
+         rather than wrapping, which is the pattern W15 settled on. */
+      A.contains(html, "gpf-glance-cap", "Glance carries the split caption (" + v + ")");
+      /* the VISIBLE caption is the compact form; the screen-reader line below it
+         keeps the full wording on purpose, so this reads the caption alone */
+      const capTxt = html.slice(html.indexOf("gpf-glance-cap")).split("</span>")[0];
+      A.absent(capTxt, "from other gifts", "the visible Glance caption is the compact form (" + v + ")");
+      A.contains(capTxt, "gifts", "and still names both parts (" + v + ")");
+      A.contains(html.slice(html.indexOf("sr-only")), "from other gifts",
+        "while the screen-reader line keeps the full wording (" + v + ")");
     } else {
       A.contains(html, 'data-gpf="view"', "view toggle present at " + sz + "/" + v);
       A.contains(html, 'data-gpf="camp"', "campaign chip present at " + sz + "/" + v);
@@ -308,9 +321,18 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   A.eq(Math.round((thru.fromPledges + thru.other) * 100) / 100, thru.received, "the two parts sum to Received");
   /* read the default phrase off a CLEAN widget: this block has just fired
      set-range custom, so the shared registry entry is no longer at default. */
-  A.contains(ctx.gpFRangePhrase(Object.assign(fresh("gpF"), { gpFRange: "thru", gpFEnd: "2026-08-19" })),
-    "Gifts received through", "the default chip reads Gifts received through X");
-  A.contains(ctx.gpFRangePhrase(Object.assign(fresh("gpF"), { gpFRange: "ytd" })), "Gifts from", "a windowed chip reads Gifts from X to Y");
+  /* The CHIP shows only the dates since 28 Sep (owner: "just the dates ... so
+     it is smaller and fit better"). The full sentence stays in the aria-label
+     and in the ledger's subtitle, where there is room for it. */
+  const cleanThru = Object.assign(fresh("gpF"), { gpFRange: "thru", gpFEnd: "2026-08-19" });
+  A.eq(ctx.gpFRangeShort(cleanThru), "Aug 19, 2026", "the default chip shows the date alone");
+  A.eq(ctx.gpFRangeShort(Object.assign(fresh("gpF"), { gpFRange: "ytd" })), "Jan 1 to Aug 19, 2026",
+    "a windowed chip shows the two dates alone");
+  A.contains(ctx.gpFRangePhrase(cleanThru), "Gifts received through", "the full sentence survives for the aria-label");
+  A.contains(ctx.gpFRangePhrase(Object.assign(fresh("gpF"), { gpFRange: "ytd" })), "Gifts from", "and for a windowed range");
+  const chip = ctx.gpFRangeChip(cleanThru);
+  A.contains(chip, 'aria-label="Gifts received through Aug 19, 2026, tap to change the dates"', "the chip's aria-label carries the meaning");
+  A.contains(chip, '<span class="fc-label">Aug 19, 2026</span>', "and its visible label carries only the date");
   /* choosing a non-custom preset closes the popover on its own... */
   gfire("set-range", { "data-id": "gpF", "data-r": "year" });
   A.eq(shim.document.getElementById("gpfPop"), null, "choosing a preset closes the range popover");
@@ -384,6 +406,62 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   A.eq(grows(miss), 0, "a term matching nothing lists no rows");
   A.contains(miss, "Nothing matches", "and the ledger says so rather than going blank");
   A.eq(grows(gtype("")), rows, "clearing the search restores every entry");
+  /* THE LIST MUST SCROLL. It inherits .gpf-drill-tbl from the in-card drill,
+     which is paged at twenty rows and clips to keep its corners. The ledger is
+     not paged: on 28 Sep it was measured at 5,786px of rows inside a 410px box
+     with overflow hidden, so 48 of 58 entries could not be reached. Counting
+     the rows in the markup found 58 and missed it entirely, which is why this
+     asserts the scroll container and its rule, not the row count. */
+  A.contains(m, 'class="gpf-drill-tbl gpf-ldr-list"', "the ledger list carries its own scroll container");
+  A.cssDeclares(shell.css, ["gpf-ldr-list"], "and that container is declared");
+  const listRule = /\.gpf-root \.gpf-modal \.gpf-ldr-list\{([^}]*)\}/.exec(shell.css);
+  A.ok(!!listRule, "the scroll container's rule was located");
+  A.contains(listRule[1], "overflow-y:auto", "the ledger list scrolls");
+  A.contains(listRule[1], "min-height:150px", "and keeps a floor so it cannot collapse to nothing");
+  A.contains(shell.css, ".gpf-root .gpf-modal .gpf-ldr-list .wt-head{position:sticky",
+    "the column header sticks, so a long ledger stays labelled");
+
+  /* A PLEDGE SHOWS ITS SCHEDULE, then its payments. The rebuild plan called for
+     both; only the payments were built, so a pledge behind pace showed what had
+     arrived with nothing to compare it against. */
+  const pledgeRow = ctx.gpFLedgerRows(w, purpose, win).filter(function (it) { return it.kind === "pledge"; })[0];
+  A.ok(!!pledgeRow, "the ledger has a pledge entry to open");
+  const hist = ctx.gpFPledgeHistory(pledgeRow.pledge, win);
+  A.contains(hist, "Pledge schedule", "a pledge's history opens with its schedule");
+  A.contains(hist, "Gifts applied to this pledge", "and then its payments");
+  A.ok(hist.indexOf("Pledge schedule") < hist.indexOf("Gifts applied to this pledge"),
+    "the promise is shown before what arrived, not after");
+  A.eq((hist.match(/role="region"/g) || []).length, 1, "one region wrapper, not a drawer nested in a drawer");
+  ["Instalment", "Due date", "State", "Amount"].forEach(function (c) {
+    A.contains(hist, ">" + c + "<", "schedule column: " + c);
+  });
+  /* the schedule is stepped the same way the pace arithmetic steps it, so the
+     two cannot disagree: instalments fallen due must sum to Pledge Due */
+  const sched = ctx.gpFScheduleRows(pledgeRow.pledge);
+  A.eq(sched.length, Math.max(1, pledgeRow.pledge.inst || 1), "one row per instalment");
+  A.near(sched.reduce(function (a, r) { return a + r.amount; }, 0), pledgeRow.pledge.pledge, 0.02,
+    "the instalments sum to the pledge");
+  const dueByNow = sched.filter(function (r) { return r.date <= win.end; })
+                        .reduce(function (a, r) { return a + r.amount; }, 0);
+  A.near(dueByNow, pledgeRow.pace.due, 0.02, "the instalments fallen due sum to the row's Pledge Due");
+  /* both states are reachable in the fixture, so neither branch is dead */
+  (function () {
+    let future = 0, past = 0;
+    ctx.GPF_PURPOSES.forEach(function (p) {
+      ctx.gpFDonorsFor(p).forEach(function (pl) {
+        ctx.gpFScheduleRows(pl).forEach(function (r) { if (r.date > win.end) future++; else past++; });
+      });
+    });
+    A.ok(past > 0, "the fixture has instalments already fallen due (" + past + ")");
+    A.ok(future > 0, "and instalments not yet due, so that branch is not dead (" + future + ")");
+  })();
+  /* a gift has no schedule: there is nothing promised behind it */
+  const giftRow = ctx.gpFLedgerRows(w, purpose, win).filter(function (it) { return it.kind === "gift"; })[0];
+  A.ok(!!giftRow, "the ledger has an other-gift entry");
+  const gw = Object.assign(fresh("gpF"), { gpFPlExp: { [giftRow.id]: true } });
+  const gRow = ctx.gpFLedgerRowHTML(giftRow, gw, win);
+  A.absent(gRow, "Pledge schedule", "an other gift shows no schedule; nothing was promised behind it");
+  A.contains(gRow, "Gift date", "it shows its own detail instead");
   /* Escape closes it, and so does the close control */
   gkey("Escape", {});
   A.eq(shim.captured["gpfModalRoot"], "", "Escape closes the modal");
@@ -625,10 +703,16 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   gfire("baropen", { "data-id": "gpF", "data-c": LABELS[0] });
   A.absent(shim.captured["gpfModalRoot"], "remf-", "the modal root carries no W04 class");
   gfire("detail-close", { "data-id": "gpF" });
-  /* (b) the export button asks for the GLOBAL button family and nothing else */
-  const ex = ctx.gpFExportBtn(fresh("gpF", { size: "wide" }));
-  A.contains(ex, 'class="btn naked sm gpf-export"', "export uses the global button classes");
-  A.contains(ex, "Export", "the export button is labelled");
+  /* (b) the block's buttons ask for the GLOBAL button family and nothing else.
+     The header export button was removed on 28 Sep at the owner's request, so
+     the ledger's own footer buttons carry this check now. */
+  gfire("baropen", { "data-id": "gpF", "data-c": LABELS[2] });
+  const ex = shim.captured["gpfModalRoot"];
+  A.contains(ex, 'class="btn naked sm"', "the ledger footer uses the global button classes");
+  A.contains(ex, 'class="btn primary sm"', "and the global primary modifier for Close");
+  gfire("detail-close", { "data-id": "gpF" });
+  A.absent(ctx.gpFContent(fresh("gpF", { size: "wide" })), 'data-gpf="export"', "the header export button is gone (owner, 28 Sep)");
+  A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide" })), "Export", "and its label with it");
   /* (c) that family really is declared GLOBALLY, ahead of every ported block */
   const firstMB = shell.css.search(/\/\* ===== W\d\d /); /* first widget CSS region banner (the old "(MB updated)" markers are gone) */
   A.ok(firstMB > 0, "the stylesheet does contain ported blocks to compare against");
@@ -637,9 +721,9 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
     A.ok(at > -1, "the shell declares " + sel + " globally");
     A.ok(at > -1 && at < firstMB, sel + " is declared BEFORE any ported block (so it is global, not W04's)");
   });
-  A.cssDeclares(shell.css, ["btn", "gpf-export"], "the export button's styling exists");
+  A.cssDeclares(shell.css, ["btn"], "the global button family is declared");
   /* (d) nothing in the file scopes a gpf rule under the W04 root any more */
-  A.absent(shell.css, ".remf-root .gpf-export", "the old W04-scoped export rule is gone");
+  A.absent(shell.css, ".remf-root .gpf-", "the old W04-scoped rules are gone");
   A.absent(shell.css, ".remf-root .gpf-", "no gpf rule is scoped under the W04 root");
   /* (e) our CSS block is self-sufficient: every rule is .gpf-root scoped */
   const ourCSS = shell.css.slice(shell.css.indexOf(CSS_START), shell.css.indexOf(CSS_END) + CSS_END.length);
@@ -702,17 +786,14 @@ A.cssDeclares(shell.css, [
   A.contains(said, "stub", "the stub SAYS it is a stub (Rule 11, no navigation backend)");
   A.contains(said, LABELS[2], "and names the campaign it would open");
   gfire("detail-close", { "data-id": "gpF" });
-  /* export is the only OTHER action; no workflow verb was invented (v1.3) */
+  /* The header export went on 28 Sep (owner). The drill keeps its own
+     purpose-scoped export, and it is still a labelled stub. */
   const n1 = env.log.status.length;
-  gfire("export", { "data-id": "gpF", "data-what": "goal" });
-  A.contains(env.log.status[env.log.status.length - 1], "stub", "the header export is a labelled stub");
   gfire("export-donors", { "data-id": "gpF", "data-c": LABELS[2] });
-  A.contains(env.log.status[env.log.status.length - 1], LABELS[2], "the donor export is campaign-scoped");
+  A.contains(env.log.status[env.log.status.length - 1], LABELS[2], "the donor export is purpose-scoped");
   A.contains(env.log.status[env.log.status.length - 1], "stub", "the donor export is a labelled stub");
-  A.eq(env.log.status.length, n1 + 2, "both exports reported exactly once each");
-  /* the export follows the ACTIVE view */
-  A.contains(ctx.gpFExportBtn(fresh("gpF", { gpFView: "goal" })), 'data-what="goal"', "export scoped to goal progress");
-  A.contains(ctx.gpFExportBtn(fresh("gpF", { gpFView: "table" })), 'data-what="table"', "export scoped to the table");
+  A.eq(env.log.status.length, n1 + 1, "it reported exactly once");
+  A.eq(typeof ctx.gpFExportBtn, "undefined", "the header export builder is deleted, not merely unused");
   /* NO invented workflow action anywhere on the card (the standing constraint) */
   const surfaces = ["kpi", "wide", "xwide"].map(function (sz) {
     return ["goal", "table"].map(function (v) {
@@ -866,6 +947,41 @@ A.eq((shell.script.match(/title:"Gifts Pledges",\s*kind:"gifts"/g) || []).length
   "all three rows are titled Gifts Pledges under kind gifts");
 A.eq((shell.script.match(/gpFRange:"thru"/g) || []).length, 3,
   "all three open on the default through-date basis");
+
+/* ------------------- 14. the owner's 28 Sep header trim, held in place */
+(function () {
+  /* the compact split line says the same thing in fewer words, and the full
+     wording still reaches Explore, Detail and every aria string */
+  const tot = ctx.gpFTotals(fresh("gpF", { gpFRange: "thru", gpFEnd: "2026-08-19" }));
+  const shortLine = ctx.gpFSplitLineShort(tot), fullLine = ctx.gpFSplitLine(tot);
+  A.changed(shortLine, fullLine, "the Glance caption is not the full wording");
+  A.ok(shortLine.length < fullLine.length, "it is shorter (" + shortLine.length + " against " + fullLine.length + ")");
+  [ctx.gpFMoney0(tot.fromPledges), ctx.gpFMoney0(tot.other)].forEach(function (n) {
+    A.contains(shortLine, n, "the compact caption still carries " + n);
+  });
+  A.contains(fullLine, "from other gifts", "the full wording survives for the wider tiers");
+  /* every branch of the compact line is real prose, not a truncation */
+  [{ received: 0 }, { received: 5, fromPledges: 0, other: 5 }, { received: 5, fromPledges: 5, other: 0 }]
+    .forEach(function (r, i) {
+      const line = ctx.gpFSplitLineShort(r);
+      A.ok(line.length > 8, "compact caption branch " + i + " is real prose: " + line);
+      A.noEmDash(line, "compact caption branch " + i);
+    });
+  /* the Glance-only layout rules exist and are scoped to Glance */
+  ['.gpf-root[data-tier="kpi"] .gl-sub{', '.gpf-root[data-tier="kpi"] .gpf-glance-cap{'].forEach(function (sel) {
+    A.contains(shell.css, sel, "the Glance stack rule is declared: " + sel);
+  });
+  const glSub = /\.gpf-root\[data-tier="kpi"\] \.gl-sub\{([^}]*)\}/.exec(shell.css);
+  A.ok(!!glSub, "the Glance pill-row rule was located");
+  A.contains(glSub[1], "flex-wrap:nowrap", "the pill row does not wrap at Glance");
+  A.contains(glSub[1], "overflow-x:auto", "it scrolls sideways instead");
+  /* the date chip's label is allowed its natural width */
+  const lab = /\.gpf-root \.gpf-datechip \.fc-label\{([^}]*)\}/.exec(shell.css);
+  A.ok(!!lab, "the date-chip label rule was located");
+  A.contains(lab[1], "flex:0 0 auto", "the date label does not shrink into an ellipsis");
+  /* the stray pseudo-element that printed the word "event" is gone */
+  A.absent(shell.css, ".gpf-datechip::before", "the chip no longer adds a text-only pseudo-element");
+})();
 
 
 /* ---------------------------------------------------------------- report */

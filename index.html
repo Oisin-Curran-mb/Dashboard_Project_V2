@@ -1828,8 +1828,9 @@
   .gpf-root .gpf-numwrap{display:flex;flex-direction:column;gap:2px;min-width:0;}
   .gpf-root .gpf-ctx{font-size:12px;color:var(--txt-secondary);line-height:1.35;}
   .gpf-root .gpf-ctlrow{display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap;}
-  .gpf-root .gpf-datechip::before{content:'event' !important;}
-  .gpf-root .gpf-datechip .fc-label{font-variant-numeric:tabular-nums;}
+  /* the date is short and fixed, so it does not shrink into an ellipsis for
+     the sake of a pixel, which is what the shared .fc-label was doing */
+  .gpf-root .gpf-datechip .fc-label{font-variant-numeric:tabular-nums;flex:0 0 auto;overflow:visible;text-overflow:clip;white-space:nowrap;}
   .gpf-root .gpf-purpchip{max-width:200px;}
   .gpf-root .gpf-body{display:block;}
   .gpf-root .gpf-bars{display:flex;flex-direction:column;gap:14px;padding:12px 14px 4px;}
@@ -1931,6 +1932,15 @@
      outside the scrolling region. */
   .gpf-root .gpf-goalwrap{flex:1;min-height:0;display:flex;flex-direction:column;min-width:0;}
   .gpf-root .gpf-barscroll{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;}
+  /* GLANCE ONLY: one row each, scrolling sideways rather than wrapping, which
+     is the pattern W15 settled on for the same problem. Glance clips at 137px
+     and the stack needed 133px in a 103px box before this. (28 Sep 2026) */
+  .gpf-root[data-tier="kpi"] .gl-sub{display:flex;flex-wrap:nowrap;align-items:center;gap:6px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;}
+  .gpf-root[data-tier="kpi"] .gl-sub::-webkit-scrollbar{display:none;}
+  .gpf-root[data-tier="kpi"] .gl-sub>*{flex:0 0 auto;}
+  .gpf-root[data-tier="kpi"] .gpf-glance-cap{flex-wrap:nowrap;white-space:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;}
+  .gpf-root[data-tier="kpi"] .gpf-glance-cap::-webkit-scrollbar{display:none;}
+  .gpf-root[data-tier="kpi"] .gpf-glance-read{margin-top:var(--space-xtight,4px);gap:var(--space-xtight,4px);}
   .gpf-root[data-tier="wide"] .gpf-barscroll{max-height:236px;}
   .gpf-root[data-tier="xwide"] .gpf-barscroll{max-height:none;}
   /* EXCEPTION 1 of 3: her legend shell is a single non-wrapping row of plain
@@ -2006,6 +2016,22 @@
   /* the drill modal: her modal shell and her detail header and body do the work,
      so this only lets the long donor list scroll inside the dialog. */
   .gpf-root .gpf-modal .modal-b{max-height:min(70vh,620px);overflow-y:auto;}
+  /* THE LEDGER SCROLLS, the chrome around it does not. The list inherits
+     .gpf-drill-tbl from the in-card drill, which is paged at twenty rows and
+     clips to keep its corners; the ledger is not paged and was losing every
+     row past the fourth. overflow-x stays hidden, so only the entries move,
+     and the column header sticks so they stay labelled. (28 Sep 2026) */
+  .gpf-root .gpf-modal .gpf-ldr-list{flex:1 1 auto;min-height:150px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;}
+  .gpf-root .gpf-modal .gpf-ldr-list .wt-head{position:sticky;top:0;z-index:2;background:var(--surface-widget);padding:8px 11px;}
+  /* The ledger row is a <button>, so it needs the browser's centred text and
+     default border undone. It used to borrow gpf-grow for its padding, which
+     also brought a three-column grid and broke the columns. (28 Sep 2026) */
+  .gpf-root .gpf-modal .gpf-ldr-row{width:100%;text-align:left;font:inherit;color:inherit;background:transparent;border:0;border-bottom:1px solid var(--stroke-widget);padding:8px 11px;cursor:pointer;}
+  .gpf-root .gpf-modal .gpf-ldr-row:last-child{border-bottom:0;}
+  .gpf-root .gpf-modal .gpf-ldr-row:focus-visible{outline:2px solid var(--am-500);outline-offset:-2px;}
+  /* the note above the list must not be squeezed by the list taking the rest */
+  .gpf-root .gpf-modal .gpf-detail-b>.gpf-cap{flex:0 0 auto;}
+  .gpf-root .gpf-modal .gpf-detail-b>.gpf-dsum,.gpf-root .gpf-modal .gpf-detail-b>.gpf-ldr-bar{flex:0 0 auto;}
   .gpf-root .gpf-donutwrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:12px 14px;}
   .gpf-root .gpf-donut{position:relative;width:180px;height:180px;border-radius:50%;flex:0 0 auto;}
   .gpf-root .gpf-donut-hole{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:104px;height:104px;border-radius:50%;background:var(--surface-widget);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;}
@@ -2052,6 +2078,13 @@
   .gpf-root .gpf-empty{padding:18px 16px;font-size:13px;color:var(--txt-subtle);text-align:center;}
   .gpf-root .gpf-date-input{font-family:inherit;font-size:12.5px;padding:5px 7px;border:1px solid var(--stroke-widget);border-radius:7px;background:var(--surface-widget);color:var(--txt-primary);}
   .gpf-root .gpf-ldr-hist,.gpf-modal .gpf-ldr-hist{display:grid;grid-template-columns:1fr 1fr 1.4fr 1fr auto;gap:10px;}
+  /* the pledge schedule, shown above the payments in the ledger */
+  .gpf-root .gpf-modal .gpf-sched-row{display:grid;grid-template-columns:1fr 1.2fr 1fr auto;gap:10px;}
+  .gpf-root .gpf-modal .gpf-sched-lead{font-size:11.5px;color:var(--txt-secondary);padding:0 0 6px;line-height:1.45;}
+  .gpf-root .gpf-modal .gpf-sched-due{color:var(--txt-primary);font-weight:600;}
+  .gpf-root .gpf-modal .gpf-ldr-drawer .gpf-drawer-h{margin-top:8px;}
+  .gpf-root .gpf-modal .gpf-ldr-drawer .gpf-drawer-h:first-child{margin-top:0;}
+
 
   /* ===== end W17 Gifts Pledges V2 CSS ===== */
 /* ===== W01 Budget Compared to Actual V2 CSS ===== */
@@ -9262,6 +9295,17 @@ function gpFWindow(w){
 }
 function gpFRangeBounds(w){return gpFWindow(w);}
 
+/* The chip shows only the dates: the sentence around them is what pushed the
+   chip row into the view toggle at Explore. gpFRangePhrase keeps the full
+   sentence for the aria-label and for the pop-up subtitle. (28 Sep 2026) */
+function gpFRangeShort(w){
+  var b=gpFWindow(w),ed=gpFParse(b.end);
+  var endTxt=GPF_MON[ed.getMonth()]+" "+ed.getDate()+", "+ed.getFullYear();
+  if(!b.start)return endTxt;
+  var sd=gpFParse(b.start);
+  var st=GPF_MON[sd.getMonth()]+" "+sd.getDate();if(sd.getFullYear()!==ed.getFullYear())st+=", "+sd.getFullYear();
+  return st+" to "+endTxt;
+}
 function gpFRangePhrase(w){
   var b=gpFWindow(w),ed=gpFParse(b.end);
   var endTxt=GPF_MON[ed.getMonth()]+" "+ed.getDate()+", "+ed.getFullYear();
@@ -9518,8 +9562,8 @@ function gpFCampByLabel(w,label){var pool=gpFAllPurposes(w);for(var i=0;i<pool.l
    reuses her .gpf-purpchip. No new chip chrome. */
 function gpFRangeChip(w){
   var spin=w.gpFLoading?'<span class="bgt-spin" aria-hidden="true"></span>':'';
-  var phrase=gpFRangePhrase(w);
-  return '<button class="filter-chip gpf-datechip" data-gpf="range" data-id="'+w.id+'" aria-haspopup="dialog" aria-expanded="'+(GPF_POP&&GPF_POP.type==='range'&&GPF_POP.id===w.id?'true':'false')+'" aria-label="'+gpFEsc(phrase)+', tap to change the dates">'+spin+ICON('event')+'<span class="fc-label">'+phrase+'</span>'+ICON('expand_more')+'</button>';
+  var phrase=gpFRangePhrase(w),shown=gpFRangeShort(w);
+  return '<button class="filter-chip gpf-datechip" data-gpf="range" data-id="'+w.id+'" aria-haspopup="dialog" aria-expanded="'+(GPF_POP&&GPF_POP.type==='range'&&GPF_POP.id===w.id?'true':'false')+'" aria-label="'+gpFEsc(phrase)+', tap to change the dates">'+spin+ICON('event')+'<span class="fc-label">'+shown+'</span>'+ICON('expand_more')+'</button>';
 }
 var GPF_RANGES=[
   ['thru','Gifts received through','Every gift up to the date, and the full pledge amounts. This is the shipped widget\u2019s own basis, so the figures reconcile with it.'],
@@ -9544,14 +9588,17 @@ function gpFViewToggle(w){
     seg("table","Summary Table","table_rows","The baseline table: Pledge Total, Pledge Due, Received, Due Remaining and Percent Due for every purpose.")+
   '</div>';
 }
-function gpFExportBtn(w){
-  var v=gpFView(w)==="table"?"table":"goal";
-  var what=(v==="table")?"the purpose summary table":"purpose giving";
-  return '<button class="btn naked sm gpf-export" data-gpf="export" data-id="'+w.id+'" data-what="'+v+'" data-tip="'+gpFEsc("Export "+what+" to Excel.")+'" data-tip-plain>'+ICON("download")+'Export</button>';
-}
 /* Her two-row .dep-hd header grid: controls left and the toggle right on row 1, the
    KPI number plus badge on the LEFT on row 2. */
 /* The split sentence every size shows: what arrived, and how much of it was pledge money. */
+/* The same reading in fewer words, for the one tier with no room to spare.
+   The full wording is kept for Explore, Detail and every aria string. */
+function gpFSplitLineShort(r){
+  if(!(r.received>0))return 'Nothing received';
+  if(!(r.fromPledges>0))return gpFMoney0(r.other)+' gifts, no pledge';
+  if(!(r.other>0))return gpFMoney0(r.fromPledges)+' all pledged';
+  return gpFMoney0(r.fromPledges)+' pledged, '+gpFMoney0(r.other)+' gifts';
+}
 function gpFSplitLine(r){
   if(!(r.received>0))return 'Nothing received in this window';
   if(!(r.fromPledges>0))return gpFMoney0(r.other)+' from gifts, none against a pledge';
@@ -9572,7 +9619,7 @@ function gpFSplitBar(r,small){
 }
 function gpFHeaderBlock(w,mode){
   var t=gpFTotals(w);
-  var toggle='<div class="dep-hd-toggle">'+gpFViewToggle(w)+gpFExportBtn(w)+'</div>';
+  var toggle='<div class="dep-hd-toggle">'+gpFViewToggle(w)+'</div>';
   var top='<div class="dep-hd-top"><div class="gpf-ctlrow">'+gpFCampChip(w)+gpFRangeChip(w)+'</div>'+toggle+'</div>';
   if(mode==="loading"){
     var sk='<div class="dep-hd-kpigrp"><span class="sk" style="width:110px;height:22px;border-radius:6px"></span><span class="sk" style="width:130px;height:20px;border-radius:999px"></span></div>';
@@ -9589,11 +9636,10 @@ function gpFGlance(w){
   var pill=(t.pledgeTotal>0)?('<span class="gpf-pill" style="background:'+col+'">'+ICON(t.status==='funded'?'check_circle':'flag')+gpFPct(t.fulfilled)+'</span><span class="gpf-goalpill">of '+gpFMoney0(t.pledgeTotal)+' pledged</span>')
     :'<span class="gpf-goalpill">no pledges in this window</span>';
   return '<div class="kpi-row"><div class="kpi-num">'+
-    '<span class="scope-chip" style="cursor:default"><span class="sc-nm">Gifts and Pledges</span></span>'+
     '<div class="metric-value">'+gpFMoney0(t.received)+'</div>'+
     '<div class="gl-sub">'+pill+'</div>'+
     '<div class="gpf-glance-read">'+gpFSplitBar(t,true)+
-      '<span class="gpf-glance-cap'+(t.status==='funded'?' gpf-cap-ok':'')+'">'+gpFSplitLine(t)+'</span></div>'+
+      '<span class="gpf-glance-cap'+(t.status==='funded'?' gpf-cap-ok':'')+'">'+gpFSplitLineShort(t)+'</span></div>'+
     '<span class="sr-only">'+gpFMoney0(t.received)+' received across '+t.count+' purpose'+(t.count===1?'':'s')+'. '+gpFSplitLine(t)+'. '+lbl+'.</span>'+
   '</div></div>';
 }
@@ -9712,7 +9758,12 @@ function gpFDayPhrase(p){
    (amethyst, never red); everything else her positive variant. */
 function gpFDonorChip(status){
   var behind=(status==='behind'||status==='farbehind');
-  var ic={neutral:"remove",full:"check_circle",ahead:"trending_up",onpace:"check",behind:"schedule",farbehind:"error"}[status];
+  /* every status gpFDonorPace can return needs an entry here, or ICON() is
+     handed undefined and emits the word. "current" is what an up-to-date pledge
+     gets and was missing; "full" is kept as an alias because saved card state
+     may still carry it. (28 Sep 2026) */
+  var ic={neutral:"remove",current:"check_circle",full:"check_circle",funded:"check_circle",
+          ahead:"trending_up",onpace:"check",behind:"schedule",farbehind:"error"}[status]||"remove";
   return '<span class="gpf-dstatus '+(behind?'gpf-dstatus-behind':'gpf-dstatus-ok')+'" data-tip="'+gpFEsc(gpFStatusLabel(status))+'" data-tip-plain>'+ICON(ic)+gpFStatusLabel(status)+'</span>';
 }
 /* THE GIFT LEVEL, the deepest drill and the level the owner asked for. The gifts shown
@@ -9721,22 +9772,62 @@ function gpFDonorChip(status){
    Received. Reuses her .gpf-gifts gift list, her head and amount cells and her
    .gpf-drawer container; the only addition is a third column for Reference, because
    her own gift list is two columns. */
-function gpFGiftPanel(pl,iso,win){
+/* The pledged instalment schedule, stepped exactly as gpFPledgedIn steps it
+   (monthly, quarterly, else annual from the begin date), so the schedule and
+   the pace figures shown beside it cannot disagree. `inst` is the instalment
+   count the fixture derives from the term and the frequency. */
+var GPF_FREQ_LBL={12:"monthly",6:"every two months",4:"quarterly",2:"every two years",1:"once a year"};
+function gpFScheduleRows(pl){
+  var duration=Math.max(1,pl.inst||1),periodic=pl.pledge/duration;
+  var b=gpFParse(pl.begin),out=[],i;
+  for(i=0;i<duration;i++){
+    var d=new Date(b.getTime());
+    if(pl.freq===12)d.setMonth(d.getMonth()+i);
+    else if(pl.freq===4)d.setMonth(d.getMonth()+i*3);
+    else d.setFullYear(d.getFullYear()+i);
+    out.push({n:i+1,date:gpFISO(d),amount:periodic});
+  }
+  return out;
+}
+function gpFSchedulePanel(pl,win){
+  var rows=gpFScheduleRows(pl),end=win&&win.end?win.end:gpFISO(GPF_TODAY);
+  var due=0,dueN=0;
+  rows.forEach(function(r){if(r.date<=end){due+=r.amount;dueN++;}});
+  var freq=GPF_FREQ_LBL[pl.freq]||("every "+Math.round(12/(pl.freq||1))+" months");
+  var lead='<div class="gpf-sched-lead">'+rows.length+' instalment'+(rows.length===1?'':'s')+' of '+gpFMoney(rows[0].amount)+', '+freq+', '+gpFFmtDate(pl.begin)+' to '+gpFFmtDate(pl.end)+'. '+dueN+' of '+rows.length+' fallen due, '+gpFMoney(due)+'.</div>';
+  var head='<div class="gpf-grow gpf-ghead gpf-sched-row"><span>Instalment</span><span>Due date</span><span>State</span><span class="gpf-ga">Amount</span></div>';
+  var body='';
+  rows.forEach(function(r){
+    var isDue=r.date<=end;
+    body+='<div class="gpf-grow gpf-sched-row"><span>'+r.n+' of '+rows.length+'</span><span>'+gpFFmtDate(r.date)+'</span><span class="'+(isDue?'gpf-sched-due':'gpf-muted')+'">'+(isDue?'Fallen due':'Not yet due')+'</span><span class="gpf-ga">'+gpFMoney(r.amount)+'</span></div>';
+  });
+  return '<div class="gpf-drawer-h">Pledge schedule</div>'+lead+'<div class="gpf-gifts">'+head+body+'</div>';
+}
+/* A pledge's history in the ledger: what was promised, then what arrived. The
+   in-card drill keeps the payments alone, because it is a pace read and the
+   schedule would double its row height at twenty rows to a page. */
+function gpFPledgeHistory(pl,win){
+  return '<div class="gpf-drawer gpf-ldr-drawer" role="region" aria-label="'+gpFEsc('Schedule and gifts for the '+pl.donor+' pledge')+'">'+
+    gpFSchedulePanel(pl,win)+gpFGiftPanel(pl,(win&&win.end)||gpFISO(GPF_TODAY),win,true)+'</div>';
+}
+function gpFGiftPanel(pl,iso,win,inner){
   win=win||{start:null,end:iso};
   var gifts=(pl.gifts||[]).filter(function(g){return gpFInWindow(g.date,win);});
   var sum=0;gifts.forEach(function(g){sum+=g.amount;});
   var head='<div class="gpf-drawer-h">Gifts applied to this pledge</div>';
   if(!gifts.length){
-    return '<div class="gpf-drawer gpf-drawer" role="region" aria-label="'+gpFEsc('Gifts applied to the '+pl.donor+' pledge')+'">'+head+
-      '<div class="gpf-tab-empty">'+ICON('volunteer_activism')+'No gifts have been applied to this pledge inside the current dates.</div></div>';
+    var emptyBody=head+'<div class="gpf-tab-empty">'+ICON('volunteer_activism')+'No gifts have been applied to this pledge inside the current dates.</div>';
+    if(inner)return emptyBody;
+    return '<div class="gpf-drawer gpf-drawer" role="region" aria-label="'+gpFEsc('Gifts applied to the '+pl.donor+' pledge')+'">'+emptyBody+'</div>';
   }
   var body='<div class="gpf-grow gpf-ghead gpf-ldr-hist"><span>Gift date</span><span>Arrived by</span><span>Prompted by</span><span>Reference</span><span class="gpf-ga">Amount</span></div>';
   gifts.forEach(function(g){
     body+='<div class="gpf-grow gpf-ldr-hist"><span>'+gpFFmtDate(g.date)+'</span><span>'+gpFEsc(g.media||'')+'</span><span>'+gpFEsc(g.motive||'')+(g.motiveCode?(' ('+g.motiveCode+')'):'')+'</span><span>'+gpFEsc(g.ref)+'</span><span class="gpf-ga">'+gpFMoney(g.amount)+'</span></div>';
   });
-  return '<div class="gpf-drawer gpf-drawer" role="region" aria-label="'+gpFEsc('Gifts applied to the '+pl.donor+' pledge')+'">'+head+
-    '<div class="gpf-gifts">'+body+'</div>'+
-    '<div class="gpf-giftfoot">Total received: '+gpFMoney(sum)+' across '+gifts.length+' gift'+(gifts.length===1?'':'s')+' applied to this pledge</div></div>';
+  var fullBody=head+'<div class="gpf-gifts">'+body+'</div>'+
+    '<div class="gpf-giftfoot">Total received: '+gpFMoney(sum)+' across '+gifts.length+' gift'+(gifts.length===1?'':'s')+' applied to this pledge</div>';
+  if(inner)return fullBody;
+  return '<div class="gpf-drawer gpf-drawer" role="region" aria-label="'+gpFEsc('Gifts applied to the '+pl.donor+' pledge')+'">'+fullBody+'</div>';
 }
 
 function gpFDonorRowHTML(item,w,iso,win){
@@ -9904,18 +9995,18 @@ function gpFLedgerRowHTML(it,w,win){
   if(it.kind==='pledge'){
     var p=it.pace,chip=gpFDonorChip(p.status);
     var sr=it.donor+', pledge '+it.id+'. Pledged '+gpFMoney(p.pledgedIn)+', received '+gpFMoney(p.received)+', due remaining '+gpFMoney(p.dueRem)+'.';
-    return '<button class="gpf-drow gpf-clickable gpf-grow" data-gpf="gopen" data-id="'+w.id+'" data-plid="'+gpFEsc(it.id)+'" aria-expanded="'+exp+'" aria-label="'+gpFEsc(sr)+'">'+
+    return '<button class="gpf-drow gpf-clickable gpf-ldr-row" data-gpf="gopen" data-id="'+w.id+'" data-plid="'+gpFEsc(it.id)+'" aria-expanded="'+exp+'" aria-label="'+gpFEsc(sr)+'">'+
       '<span class="gpf-dexp">'+ICON(exp?'expand_more':'chevron_right')+'</span>'+
       '<span class="gpf-dc gpf-dc0"><span class="gpf-ldr-nm">'+it.donor+'</span><span class="gpf-ldr-sub">'+ICON('handshake')+'Pledge '+it.id+'</span></span>'+
       '<span class="gpf-dc gpf-dc1">'+gpFMoney(p.pledgedIn)+'</span>'+
       '<span class="gpf-dc gpf-dc2">'+gpFMoney(p.received)+'</span>'+
       '<span class="gpf-dc gpf-dc3">'+gpFDueCell(p.dueRem)+'</span>'+
       '<span class="gpf-dstat-h">'+chip+'</span>'+
-    '</button>'+(exp?gpFGiftPanel(it.pledge,win.end,win):'');
+    '</button>'+(exp?gpFPledgeHistory(it.pledge,win):'');
   }
   var g=it.gift;
   var sr2=it.donor+', gift of '+gpFMoney(g.amount)+' on '+gpFFmtDate(g.date)+' by '+g.media+', '+g.motive+', reference '+g.ref+'.';
-  return '<button class="gpf-drow gpf-clickable gpf-grow gpf-ldr-gift" data-gpf="gopen" data-id="'+w.id+'" data-plid="'+gpFEsc(it.id)+'" aria-expanded="'+exp+'" aria-label="'+gpFEsc(sr2)+'">'+
+  return '<button class="gpf-drow gpf-clickable gpf-ldr-row gpf-ldr-gift" data-gpf="gopen" data-id="'+w.id+'" data-plid="'+gpFEsc(it.id)+'" aria-expanded="'+exp+'" aria-label="'+gpFEsc(sr2)+'">'+
     '<span class="gpf-dexp">'+ICON(exp?'expand_more':'chevron_right')+'</span>'+
     '<span class="gpf-dc gpf-dc0"><span class="gpf-ldr-nm">'+it.donor+'</span><span class="gpf-ldr-sub">'+ICON('redeem')+'Gift, no pledge</span></span>'+
     '<span class="gpf-dc gpf-dc1 gpf-muted">n/a</span>'+
@@ -9952,7 +10043,7 @@ function gpFLedgerModalHTML(){
     '<span class="gpf-dc gpf-dc1">Pledged</span><span class="gpf-dc gpf-dc2">Received</span>'+
     '<span class="gpf-dc gpf-dc3">Due Remaining</span><span class="gpf-dstat-h">Type</span></div>';
   var list=rows.length
-    ? '<div class="gpf-drill-tbl">'+head+rows.map(function(it){return gpFLedgerRowHTML(it,w,win);}).join('')+'</div>'
+    ? '<div class="gpf-drill-tbl gpf-ldr-list">'+head+rows.map(function(it){return gpFLedgerRowHTML(it,w,win);}).join('')+'</div>'
     : '<div class="gpf-tab-empty">'+ICON('search_off')+(q?('Nothing matches "'+gpFEsc(q)+'" in this purpose.'):'Nothing received for this purpose in this window.')+'</div>';
   var note=rows.length?(rows.length+' entr'+(rows.length===1?'y':'ies')+', largest first. Open one to see its history.'):'';
   return '<div class="modal-backdrop" data-gpf="detail-close"><div class="modal modal-wide gpf-detail-modal gpf-modal" data-gpf="stop" role="dialog" aria-modal="true" aria-label="'+gpFEsc(comp.label+', every gift and pledge')+'">'+
@@ -9985,10 +10076,6 @@ function gpFOnClick(e){
   if(a==='set-camp'){if(!w)return;w.gpFCamp=t.getAttribute('data-v');w.gpFExp={};w.gpFPage={};w.gpFPlExp={};gpFClosePop();gpFLoad(w);render();return;}
   if(a==='set-range'){if(!w)return;var rs=t.getAttribute('data-r');gpFSetRange(w,rs);if(rs==='custom')gpFSyncPop();else gpFClosePop();render();return;}
   if(a==='view'){if(!w)return;w.gpFView=t.getAttribute('data-v');render();return;}
-  if(a==='export'){
-    setStatus('Exporting '+(t.getAttribute('data-what')==='table'?'the purpose summary table':'purpose giving')+' to Excel (stub, no export backend in this shell).');
-    return;
-  }
   if(a==='export-donors'){setStatus('Exporting the donor pledges for '+t.getAttribute('data-c')+' to Excel (stub, no export backend in this shell).');return;}
   if(a==='open'){
     if(!w)return;
