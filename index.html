@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard + Widget depth ladder — Pathway (draft v14)</title>
+<title>Shelby Financials Dashboard, Version 2</title>
 <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:wght@400;500;600;700&family=Red+Hat+Display:wght@600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
 <style>
@@ -128,11 +128,6 @@
   .wsubh{font-size:11px;line-height:1.25;color:var(--txt-subtle);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .wtitle--edit{cursor:text;}.wtitle--edit:hover{text-decoration:underline dotted;text-underline-offset:3px;text-decoration-color:var(--cn-110);}
   .wtitle-input{font-family:inherit;font-weight:600;font-size:13px;line-height:18px;width:100%;border:1px solid var(--focus);border-radius:6px;padding:1px 6px;background:#fff;}
-  .weyebrow{display:flex;align-items:center;gap:6px;margin-top:2px;}
-  .wupd{font-size:11px;line-height:16px;color:var(--txt-subtle);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .wrefresh{width:18px;height:18px;border:0;background:transparent;color:var(--txt-subtle);border-radius:5px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;opacity:0;pointer-events:none;transition:opacity .12s ease .3s;}
-  .wrefresh:hover{background:var(--wn-200);color:var(--txt-primary);}
-  .wrefresh .material-symbols-rounded{font-size:14px;}
   @media(hover:hover){.widget:hover .wrefresh{opacity:1;pointer-events:auto;}}
   @media(hover:none){.wrefresh{opacity:1;pointer-events:auto;transition:none;}}
   .wactions{display:flex;align-items:center;gap:0;flex-shrink:0;}
@@ -141,7 +136,6 @@
 
   .cmeta{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px 4px;}
   .kpi{font-family:'Red Hat Display',sans-serif;font-weight:700;font-size:24px;line-height:1;}
-  .ksub{font-size:11px;color:var(--txt-subtle);}
   .trend{display:inline-flex;align-items:center;gap:1px;font-size:12px;font-weight:500;color:var(--txt-pos);}.trend .material-symbols-rounded{font-size:14px;}
   .trend.neg{color:var(--red-130);}
   .tabs{display:inline-flex;gap:2px;background:var(--surface-header);border-radius:8px;padding:2px;flex-shrink:0;}
@@ -184,10 +178,6 @@
   .rtrend{display:inline-flex;align-items:center;gap:1px;justify-content:flex-start;font-weight:600;color:var(--txt-pos);font-variant-numeric:tabular-nums;}
   .rtrend.neg{color:var(--red-100);}
   .rtrend .material-symbols-rounded{font-size:20px;margin:-3px -2px;}
-  .dep-mhead{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:12px 16px 8px;}
-  .dmh-lbl{font-size:10px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;color:var(--txt-subtle);}
-  .dmh-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-  .dmh-row .metric-value{font-size:22px;line-height:1.1;}
   /* Grid, not stacked flex rows: the toggle row and the search/break-toggle row share one right-hand column, so whichever is wider sets the column width and the other stretches to match it exactly — search bar and toolbar always line up, instead of each sizing to its own content. */
   .dep-hd{display:grid;grid-template-columns:1fr auto;align-items:start;column-gap:12px;row-gap:14px;padding:14px 16px 16px;}
   .dep-hd-top,.dep-hd-num{display:contents;}
@@ -198,7 +188,6 @@
   .type-badge .tb-nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .wt-row .dt-type{flex:0 0 180px;min-width:0;overflow:hidden;}
   .wt-row:not(.wt-head) .lr-main{font-weight:500;color:var(--txt-primary);}
-  .scope-chip .sc-ic{font-size:16px;color:var(--txt-subtle);flex:0 0 auto;}
   .scope-chip .sc-nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .dep-hd-top .scope-chip{min-width:0;flex:0 1 auto;align-self:center;justify-self:start;}
   .dep-hd-toggle{display:flex;justify-content:flex-end;align-self:center;}
@@ -220,33 +209,15 @@
   .dep-hd-num .metric-value{font-size:22px;line-height:1.1;}
   /* Visually hidden but present in the DOM — real screen-reader text, not a hover-only tooltip. Used to fix Budget Compared to Actual's confirmed-live gap: amounts/variance existed only as SVG geometry + hover, absent from the accessibility tree. */
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
-/* ===== Shell: shared primitives that began life in the budget widget (.bgt-caption, .bgt-pop*, .bgt-spin, .bgt-skel-cap, .bgt-legend*, .bgt-sw*, .bgt-notrend*, .bgt-varcol, .bgt-tbar, .bgt-tscroll, .bgt-special-*, .bgt-rm-*, .bgt-dd-*). Used by W01 and by the hover cards, captions and spinners of W02 W04 W05 W13 W15 W16. ===== */
+/* ===== Shell: shared primitives that began life in the budget widget (.bgt-caption, .bgt-pop*, .bgt-spin, .bgt-skel-cap, .bgt-legend*, .bgt-sw*, .bgt-notrend*, .bgt-varcol, .bgt-tbar, .bgt-tscroll, .bgt-special-*, .bgt-rm-*, .bgt-dd-*). Thirteen of these survive, used by W01 and by the hover cards, captions and spinners of W02 W04 W05 W13 W15 W16; the rest of the V1 budget stylesheet was deleted 2026-09-28. ===== */
   .bgt-caption{color:var(--txt-subtle);font-weight:400;font-size:11px;}
-  .bgt-info-ic{font-size:16px!important;color:var(--txt-subtle);cursor:default;margin-left:1px;}
-  .bgt-info-ic:hover,.bgt-info-ic:focus-visible{color:var(--txt-primary);}
   /* Controls are real segmented toggles (Account scope, Period) + a Fiscal-year chip. Toggles for the small fixed option sets (2-3 items), a dropdown chip only where the list genuinely grows (fiscal years, special reports). */
   .bgt-ctlrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
   /* Legend row now also carries the M/Q/P/Y interval toggle on its right — the legend items sit left, the interval control right, so "what the bars mean" and "how they're sliced" share one line just above the chart. */
-  .bgt-legend{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px 6px;font-size:12px;color:var(--txt-subtle);flex-wrap:wrap;}
-  .bgt-lg-items{display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
-  .bgt-lg{display:inline-flex;align-items:center;gap:6px;}
   /* Table view's own little toolbar to hold the interval toggle (the table has no legend). */
   .bgt-tbar{display:flex;justify-content:flex-end;padding:6px 14px 10px;}
   /* Variance column in the shared table grid + the no-trend empty state */
-  .wt-c2.bgt-varcol{flex:0 0 130px;}
-  .bgt-vv{display:inline-flex;align-items:center;justify-content:flex-end;gap:2px;font-weight:600;font-variant-numeric:tabular-nums;}
-  .bgt-vv .material-symbols-rounded{font-size:15px;}
-  .bgt-vv.pos{color:var(--txt-pos);}.bgt-vv.neg{color:var(--red-100);}.bgt-vv.neu{color:var(--txt-secondary);}
-  .bgt-vp{font-weight:400;color:var(--txt-subtle);margin-left:6px;font-size:11px;}
-  .bgt-kpi-iv{justify-self:end;align-self:center;}
-  .bgt-legend-under{justify-content:flex-start;padding:8px 16px 2px;}
   .bgt-col-h{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--txt-subtle);padding:8px 12px 4px;}
-  .bgt-gl2-base{opacity:.9;border-top-style:solid;}
-  .dep-total .bgt-vartot{text-align:right;}
-  .bgt-notrend{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:6px;padding:34px 24px;color:var(--txt-subtle);}
-  .bgt-notrend .material-symbols-rounded{font-size:30px;opacity:.5;}
-  .bgt-notrend-t{font-weight:600;color:var(--txt-secondary);font-size:14px;}
-  .bgt-notrend-s{font-size:12px;max-width:300px;line-height:1.5;}
   /* Scope popover: the Special report row */
   .bgt-special-mi{align-items:center;}
   .bgt-special-lbl{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:1px;}
@@ -255,29 +226,6 @@
   .bgt-special-edit{flex:0 0 auto;color:var(--txt-subtle);display:inline-flex;align-items:center;}
   .bgt-special-edit .material-symbols-rounded{font-size:16px;}
   /* Special-report picker dialog: two dependent dropdowns on a scrim. The dialog is deliberately tall (fixed height) so both dropdown menus open fully INSIDE it, with room to spare, and never spill past the edge. */
-  .modal.bgt-rm-modal{width:min(640px,94vw);max-width:none;height:min(560px,88vh);display:flex;flex-direction:column;overflow:hidden;}
-  .bgt-rm-b{flex:1 1 auto;min-height:0;padding:12px 24px 18px;overflow:visible;position:relative;}
-  .bgt-rm-lead{margin:2px 0 22px;font-size:14px;line-height:1.55;color:var(--txt-secondary);}
-  .bgt-rm-fields{display:flex;gap:16px;align-items:flex-start;}
-  .bgt-dd-field{flex:1 1 0;min-width:0;position:relative;}
-  .bgt-dd-lbl{display:block;font-size:11px;font-weight:600;color:var(--txt-subtle);margin:0 0 5px;}
-  .bgt-dd-trigger{display:flex;align-items:center;gap:8px;width:100%;padding:9px 11px;border:1px solid var(--wn-400);border-radius:8px;background:var(--surface-widget);font:inherit;font-size:13px;color:var(--txt-primary);cursor:pointer;text-align:left;transition:border-color var(--dur),box-shadow var(--dur);}
-  .bgt-dd-trigger:hover{border-color:var(--wn-750);}
-  .bgt-dd-trigger.open{border-color:var(--brand-100);box-shadow:0 0 0 3px rgba(0,0,0,.06);}
-  .bgt-dd-trigger[aria-disabled="true"]{background:var(--wn-100);color:var(--txt-subtle);cursor:not-allowed;}
-  .bgt-dd-val{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .bgt-dd-val.ph{color:var(--txt-subtle);}
-  .bgt-dd-trigger>.material-symbols-rounded{font-size:18px;color:var(--txt-subtle);flex:0 0 auto;}
-  .bgt-dd-menu{position:absolute;top:calc(100% + 4px);left:0;right:0;z-index:30;background:var(--surface-widget);border:1px solid var(--stroke-widget);border-radius:10px;box-shadow:0 12px 30px rgba(41,39,36,.18);padding:6px;}
-  .bgt-dd-menu .menu-scroll{max-height:300px;}
-  .bgt-dd-menu .mi{padding:10px 10px;}
-  .bgt-rm-preview{margin:2px 0 20px;padding:14px 16px;border:1px solid var(--stroke-widget);border-radius:10px;background:var(--wn-100);font-size:13px;line-height:1.5;color:var(--txt-secondary);display:flex;align-items:flex-start;gap:9px;}
-  .bgt-rm-preview .material-symbols-rounded{font-size:19px;color:var(--txt-subtle);flex:0 0 auto;margin-top:1px;}
-  .bgt-rm-preview b{color:var(--txt-primary);font-weight:600;}
-  .bgt-dd-meta{flex:0 0 auto;font-size:11px;color:var(--txt-subtle);}
-  .bgt-rm-tag{flex:0 0 auto;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;padding:1px 7px;border-radius:999px;background:var(--wn-200);color:var(--txt-secondary);}
-  .bgt-rm-tag.income{background:rgba(54,161,79,.14);color:#2f7d43;}
-  .bgt-rm-tag.expense{background:rgba(176,58,58,.12);color:#b03a3a;}
   .btn.primary.is-off{background:var(--wn-300);color:var(--txt-subtle);cursor:default;}
   @media(max-width:520px){.bgt-rm-fields{flex-direction:column;}.bgt-dd-field{width:100%;}}
   /* Two chart colours only: light purple Budget (the plan), dark purple Actual (the result). No red — favourability is read from the hover popover and the headline pill, never from the bar colour itself. */
@@ -286,36 +234,14 @@
   .bgt-sw-budget-line{width:12px;height:0;border-top:2px dashed var(--am-300);border-radius:0;display:inline-block;}
   .bgt-chart-wrap2{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 0 8px;}
   .bgt-plotrow2{flex:1;min-height:0;display:flex;gap:8px;padding:0 16px;}
-  .bgt-yax2{flex:0 0 40px;display:flex;flex-direction:column;justify-content:space-between;font-size:11px;color:var(--txt-subtle);text-align:right;font-variant-numeric:tabular-nums;padding:2px 0;}
   .bgt-canvas2{flex:1;min-width:0;position:relative;border-bottom:1px solid var(--stroke-widget);}
-  .bgt-gl2{position:absolute;left:0;right:0;border-top:1px dashed var(--stroke-widget);opacity:.5;}
   .bgt-cols2{position:absolute;inset:0;display:flex;align-items:flex-end;gap:4px;padding:0 2px;}
   .bgt-col2{flex:1 1 0;min-width:0;height:100%;display:flex;align-items:flex-end;justify-content:center;cursor:default;border-radius:6px;transition:background var(--dur,.15s) ease;}
   /* Hover on a set of bars: only the neutral column fill darkens a couple steps so the hovered group is obvious. The bars themselves keep their exact legend colours — never recolour them on hover, or the legend and the bars disagree. */
   .bgt-col2:hover{background:var(--wn-300);}
-  .bgt-barpair2{flex:0 0 auto;display:flex;align-items:flex-end;gap:3px;width:100%;justify-content:center;height:100%;}
-  .bgt-bar2{width:38%;max-width:18px;border-radius:3px 3px 0 0;min-height:2px;}
-  .bgt-bar-budget2{background:var(--am-200);}
-  .bgt-bar-actual2{background:var(--am-600);}
   /* Custom two-line x-axis (period name + its own signed variance) laid out as a second flex row with the same column count/gap as the bars, so alignment is exact by construction. Variance number is a single neutral colour (no red); its sign carries the direction, the popover carries the good/bad reading. */
-  .bgt-xaxrow2{display:flex;gap:8px;padding:6px 16px 0;}
-  .bgt-yax2sp{flex:0 0 40px;}
-  .bgt-xcols2{flex:1;min-width:0;display:flex;gap:4px;padding:0 2px;}
-  .bgt-xcol2{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:1px;}
-  .bgt-xlbl2{font-size:11px;color:var(--txt-subtle);white-space:nowrap;}
-  .bgt-xvar2{font-size:10.5px;font-weight:600;color:var(--txt-secondary);font-variant-numeric:tabular-nums;white-space:nowrap;}
-  .bgt-xvar2.muted{color:var(--txt-subtle);font-weight:400;}
-  .bgt-ytd-wrap{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 0 14px;}
   .bgt-table-wrap{padding:4px 16px 16px;overflow:auto;}
-  .bgt-favcol{flex:0 0 130px;display:flex;align-items:center;}
-  .bgt-vardiv{border-left:1px solid var(--stroke-widget);padding-left:12px;margin-left:2px;}
-  .wt-row .dt-c.dt-tr.bgt-vardiv{flex:0 0 128px;}
-  .bgt-explore{flex:1;min-height:0;display:flex;}
-  .bgt-explore-col{flex:1;min-width:0;display:flex;flex-direction:column;}
-  .bgt-explore-col+.bgt-explore-col{border-left:1px solid var(--stroke-widget);}
   /* The data-view controls (grain + chart/line/table) sit in their own bar directly on top of the chart/table they act on — separate from the account-scope dropdown in the header, so it's obvious they change the view below, not the scope above. */
-  .bgt-viewbar{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:4px 16px 8px;flex-wrap:wrap;}
-  .bgt-viewbar-l,.bgt-viewbar-r{display:flex;align-items:center;gap:8px;}
   /* Explore panels each carry their own view bar so the two charts can be set to different grains (e.g. Month bars beside a YTD line). */
   .bgt-panel-hd{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 16px 2px;flex-wrap:wrap;}
   .bgt-panel-hd .dep-col-h{padding:0;}
@@ -351,15 +277,9 @@
   .mi-nm{display:flex;flex-direction:column;gap:1px;}
   .mi-sub2{font-size:11px;font-weight:400;color:var(--txt-subtle);}
   /* Quiet special-report context line under the KPI number — small, regular weight, muted. Not a headline. */
-  .bgt-numwrap{display:flex;flex-direction:column;gap:2px;min-width:0;}
-  .bgt-repctx{font-size:11.5px;color:var(--txt-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
-  .bgt-back{color:var(--txt-secondary);font-weight:600;}
-  .bgt-back .material-symbols-rounded{font-size:18px;}
   /* Horizontal scroll wrapper for bar charts with many groups; ≤13 groups fill the width with no scroll. */
   .bgt-scrollx{flex:1;min-height:0;min-width:0;display:flex;flex-direction:column;overflow-x:auto;overflow-y:hidden;}
-  .bgt-inner2{flex:1;min-height:0;min-width:100%;display:flex;flex-direction:column;}
   /* Report-line combobox: report names are non-clickable group headings above their selectable lines — a standard grouped-select pattern, all in one popover (no drill-in). */
-  .bgt-optgrp{font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--txt-subtle);padding:9px 10px 3px;}
   .bgt-scope-chip .bgt-spin{margin-right:2px;}
   /* Loading motion — a gentle shimmer sweep + a soft spinner. Reused across widgets; both respect reduced-motion. */
   .bgt-spin{display:inline-block;width:13px;height:13px;border-radius:50%;border:2px solid var(--am-200);border-top-color:var(--am-600);animation:bgtspin .7s linear infinite;flex:0 0 auto;vertical-align:middle;}
@@ -398,7 +318,6 @@
   .lr-link{cursor:pointer;}
   .wt-row:not(.wt-head) .lr-main.lr-link:hover{text-decoration:underline;text-underline-offset:2px;}
   .seg[data-action],.leg[data-action]{cursor:pointer;}
-  text.ax{font-family:'Red Hat Text',sans-serif;font-size:8px;fill:var(--txt-subtle);}
   .tr-plot{flex:1;min-height:0;display:grid;grid-template-columns:46px minmax(0,1fr);grid-template-rows:minmax(0,1fr) 18px;column-gap:10px;padding:8px 16px 6px;}
   .tr-plot.multi{grid-template-columns:46px minmax(0,1fr) 172px;}
   .tr-yax{grid-column:1;grid-row:1;position:relative;}
@@ -451,7 +370,6 @@
   .leg.leg-link:hover{background:var(--wn-100);}
   .glance{display:flex;flex-direction:column;height:100%;min-height:0;padding:12px 16px 12px;}
   .glance .scope-chip{align-self:flex-start;margin:0 0 8px;}
-  .gl-metric{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
   .glance .metric-value{font-size:24px;}
   .delta-pill{display:inline-flex;align-items:center;gap:1px;font-size:12px;font-weight:600;color:var(--txt-pos);background:var(--green-10);border-radius:999px;padding:2px 8px 2px 6px;font-variant-numeric:tabular-nums;}
   .delta-pill .material-symbols-rounded{font-size:14px;font-variation-settings:'wght' 500;}
@@ -497,12 +415,8 @@
   .modal.modal-wide .modal-b{flex:1;min-height:0;display:flex;padding:0 18px 4px;}
   .acct-mw{flex:1;min-height:0;display:flex;flex-direction:column;}
   .acctm .trend-range.static{cursor:default;pointer-events:none;}
-  .kpi-lead{display:flex;flex-direction:column;gap:3px;min-width:0;}
-  .kpi-line{display:flex;align-items:center;gap:12px;min-width:0;flex-wrap:wrap;}
-  .kpi-line .kpi-badge{flex:0 0 auto;}
   .legend-col{flex:1;min-width:0;min-height:0;align-self:stretch;display:flex;flex-direction:column;}
   .legend-hd{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:var(--txt-secondary);padding:1px 0 6px;}
-  .legend-hd .lh-ic{font-size:15px;color:var(--txt-subtle);}
   .dist-lg-title{padding:0 0 6px;}
   .legend-head{padding-bottom:8px;}
   .acctm-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
@@ -536,13 +450,6 @@
   .dep-chead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;padding:9px 16px 5px;border-bottom:1px solid var(--stroke-widget);}
   .dep-chead-title{font-weight:500;font-size:12px;color:var(--txt-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .dep-chead-total{font-family:'Red Hat Display',sans-serif;font-weight:700;font-size:15px;font-variant-numeric:tabular-nums;flex:0 0 auto;}
-  .tr-head{display:flex;align-items:center;justify-content:flex-end;gap:10px;padding:6px 14px 6px;flex-wrap:wrap;}
-  .tr-metric{display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap;}
-  .tr-lbl{font-size:11px;color:var(--txt-subtle);}
-  .tr-val{font-family:'Red Hat Display',sans-serif;font-weight:600;font-size:16px;line-height:1.1;color:var(--txt-primary);font-variant-numeric:tabular-nums;}
-  text.ln-lbl{font-family:'Red Hat Text',sans-serif;font-size:11px;font-weight:600;}
-  .ln-more{align-self:flex-start;margin-top:4px;border:0;background:transparent;font-family:inherit;font-size:12px;color:var(--brand-400);cursor:pointer;padding:2px 0;}
-  .ln-more:hover{text-decoration:underline;}
   .trend-range{display:inline-flex;align-items:center;gap:1px;font-family:inherit;font-size:12px;font-weight:500;color:var(--txt-subtle);background:transparent;border:0;border-radius:7px;padding:4px 5px 4px 5px;min-height:28px;cursor:pointer;vertical-align:middle;}
   .trend-range:hover{background:var(--wn-200);color:var(--txt-primary);}
   .trend-range .material-symbols-rounded{font-size:16px;}
@@ -570,7 +477,6 @@
   .dep-col-h{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--txt-subtle);padding:8px 12px 4px;}
   .dep-col-dist .dist-wrap{padding:8px 12px 12px;}
   .dep-col-dist .pie-wrap.row{gap:16px;align-items:flex-start;}
-  .dep-actions{display:flex;gap:8px;padding:4px 14px 12px;}
 
   .widget[data-manage="true"]{border-style:dashed;cursor:grab;}
   .widget[data-manage="true"] .wdrag{display:inline-flex;}
@@ -605,11 +511,6 @@
   .sep{height:1px;background:var(--stroke-widget);margin:5px 4px;}
   .cap{font-size:11px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--txt-subtle);padding:8px 10px 3px;}
   .filter-row{display:flex;align-items:center;gap:10px;padding:6px 10px 8px;}
-  .fr-label{font-size:13px;color:var(--txt-primary);flex:0 0 auto;}
-  .fr-select{margin-left:auto;display:inline-flex;align-items:center;gap:3px;max-width:210px;border:1px solid var(--stroke-widget);background:var(--surface-widget);border-radius:8px;padding:5px 6px 5px 10px;font-family:inherit;font-size:12px;font-weight:500;color:var(--txt-primary);cursor:pointer;}
-  .fr-select:hover{background:var(--wn-200);}
-  .fr-select .fr-val{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .fr-select .material-symbols-rounded{font-size:18px;color:var(--txt-subtle);flex:0 0 auto;}
   .dd-search{display:flex;align-items:center;gap:6px;padding:7px 10px;border-bottom:1px solid var(--stroke-widget);margin:-6px -6px 4px;}
   /* Toolbar widget finder */
   .wfind-btn .wfind-lbl{margin:0 2px;}
@@ -654,8 +555,6 @@
   .glyph[data-size="xwide"] .gf{flex:1;}
   .depthname{font-size:9px;color:var(--txt-subtle);white-space:nowrap;}
   .dep-select{font-family:inherit;font-size:12px;font-weight:500;height:30px;padding:0 30px 0 10px;border:1px solid var(--stroke-widget);border-radius:8px;color:var(--txt-primary);cursor:pointer;-webkit-appearance:none;appearance:none;max-width:200px;background:var(--surface-widget) url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23606060' stroke-width='2' stroke-linecap='round'><path d='M6 9l6 6 6-6'/></svg>") no-repeat right 8px center;}
-  .dep-bottombar{display:flex;justify-content:flex-start;align-items:center;gap:8px;padding:12px 14px;border-top:1px solid var(--stroke-widget);}
-  .link-title{cursor:pointer;}
   /* Glance: single flat white card, no inner panel */
   .widget[data-size="kpi"]{background:var(--surface-widget);}
   .widget[data-size="kpi"] .wcontent{background:transparent;box-shadow:none;border-radius:0;}
@@ -1070,22 +969,7 @@
 .mi-sub2{margin-left:auto;font-size:11.5px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;padding-left:14px;}
 
 /* narrow: stack the explore panels */
-
-.pbar{position:relative;display:block;width:100%;padding:3px 0;}
-.pbar-track{position:relative;display:block;width:100%;height:9px;border-radius:999px;background:var(--wn-200);overflow:hidden;}
-.pbar-sm .pbar-track{height:6px;}
-.pbar-fill{position:absolute;left:0;top:0;height:100%;border-radius:999px;background:var(--am-500);}
-.pbar-gap{position:absolute;top:0;height:100%;background:var(--am-200);}
-.pbar-mark{position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--am-700);border-radius:1px;}
-.pbar[data-pbar]{cursor:default;}
-.pbar[data-pbar]:hover .pbar-track{box-shadow:0 0 0 1px var(--am-300);}
-.pbar-hd{margin-top:10px;}
-.pbar-lg{display:flex;flex-wrap:wrap;gap:14px;margin-top:6px;font-size:11.5px;color:var(--txt-subtle);}
-.pbar-lg-i{display:inline-flex;align-items:center;gap:5px;}
-.pbar-lg-swatch{width:10px;height:10px;border-radius:3px;display:inline-block;flex:0 0 auto;}
-.pbar-lg-recv{background:var(--am-500);}
-.pbar-lg-exp{background:var(--am-200);border:1px solid var(--am-300);}
-/* ===== Shell: AR-derived bar primitives (.ar-bars .ar-barrow .ar-clickable .ar-barlbl .ar-barlbl-nm .ar-barlbl-sub .ar-bartrack .ar-barfill). Used by W04 Remittance Pledges and W17 Gifts markup. Remove when nothing uses them. ===== */
+/* ===== Shell: AR-derived bar primitives (.ar-bars .ar-barrow .ar-clickable .ar-barlbl .ar-barlbl-nm .ar-barlbl-sub .ar-bartrack .ar-barfill). Used by W04 Remittance Pledges only: W17 Gifts took its own copies on 2026-09-28. Remove when nothing uses them. ===== */
 .ar-bars{display:flex;flex-direction:column;gap:10px;padding:4px 2px 2px;}
 .ar-barrow{display:grid;grid-template-columns:122px 1fr auto;align-items:center;gap:10px;border-radius:8px;padding:5px 6px;}
 .ar-barrow.ar-clickable{cursor:pointer;}
@@ -1099,7 +983,6 @@
 .ar-bartrack{position:relative;height:18px;border-radius:5px;background:var(--wn-200);overflow:hidden;transition:background var(--dur,.15s);}
 .ar-barfill{height:100%;border-radius:5px;min-width:2px;transition:filter var(--dur,.15s);}
 
-/* ===== Shell: remittance-derived shared primitives (.rem-row/.rem-cell/.rem-head table grid, .rem-bars .rem-barrow .rem-bartrack .rem-fill-* .rem-flag-* pacing bars, .rem-st-* .rem-sw-* status chips and legend). Used by W05 Receivables and W17 Gifts (Jo's blocks). Remove when those are decided and nothing uses it. ===== */
 /* =====================================================================
    Remittance Pledges (prefix: rem)  , CSS block
    =====================================================================
@@ -1113,170 +996,45 @@
    ===================================================================== */
 
 /* the "data as of" line sits where the view toggle would (right of chip) */
-.rem-asof{font-size:11px;color:var(--txt-subtle);align-self:center;white-space:nowrap;}
-.rem-thru-chip .fc-label{display:inline-flex;align-items:center;gap:5px;}
 
 /* ---- table (shared by Detail compact + Explore full) --------------- */
-.rem-body{flex:1;min-height:0;display:flex;flex-direction:column;padding:0 6px 6px;}
-.rem-tbl{flex:1;min-height:0;display:flex;flex-direction:column;}
-.rem-scroll{flex:0 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;}
 
 /* one grid template per mode, applied to header, rows and the total so the
    columns line up exactly. Compact: Activity | % Paid | Pacing.
    Full: Activity | Annual | Expected | Paid | Outstanding | % Paid | Pacing. */
-.rem-row{display:grid;grid-template-columns:minmax(0,1fr) 58px 116px;align-items:center;gap:10px;padding:7px 10px;border-bottom:1px solid var(--stroke-widget);font-size:13px;}
-.rem-row.full{grid-template-columns:minmax(130px,1.3fr) 84px 96px 84px 100px 96px;gap:12px;}
-.rem-cell{min-width:0;}
-.rem-num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.rem-pct{text-align:right;}
-.rem-row .rem-cell.rem-pct{display:flex;align-items:center;justify-content:flex-end;gap:6px;}
-.rem-head .rem-cell,.rem-head .wt-sort{font-size:11px;font-weight:600;color:var(--txt-subtle);text-transform:none;letter-spacing:0;}
-.rem-pct-v{font-weight:600;font-variant-numeric:tabular-nums;}
-.rem-nopct{color:var(--txt-subtle);}
-.rem-stat{display:flex;justify-content:flex-end;}
 
 /* header row: quiet, sticky, one sort-control style (.wt-sort) */
-.rem-head{position:sticky;top:0;z-index:1;background:var(--surface-widget);font-size:11px;font-weight:600;color:var(--txt-subtle);border-bottom:1px solid var(--stroke-widget);}
-.rem-head .rem-cell{white-space:nowrap;overflow:visible;}
-.rem-head .rem-num{cursor:default;}
 
 /* activity cell: name, optional paid-of-annual sub, pacing bar */
-.rem-name{display:flex;flex-direction:column;gap:3px;min-width:0;}
-.rem-name-nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500;}
-.rem-name-sub{font-size:11px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
 /* pacing bar: amethyst paid fill on a neutral annual track, with the
    "expected by now" marker. No red. */
-.rem-bar{position:relative;height:8px;border-radius:5px;background:var(--wn-200);overflow:hidden;margin-top:1px;}
-.rem-bar-fill{height:100%;border-radius:5px;min-width:2px;transition:width var(--dur,.15s),filter var(--dur,.15s);}
-.rem-bar-mark{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--txt-secondary);border-radius:2px;transform:translateX(-1px);opacity:.7;}
 
 /* row interactivity: whole row taps through to the payment-history drill */
-.rem-row[role="button"]{cursor:pointer;border-radius:8px;}
-.rem-row[role="button"]:hover{background:var(--wn-100);}
-.rem-row[role="button"]:hover .rem-bar{background:var(--wn-300);}
-.rem-row[role="button"]:hover .rem-bar-fill{filter:brightness(.93);}
-.rem-row[role="button"]:focus-visible{outline:2px solid var(--am-400);outline-offset:-1px;}
 
 /* totals row: reuses the .dep-total weight, kept on the grid */
-.rem-total{border-top:1px solid var(--stroke-widget);border-bottom:none;font-weight:600;padding:9px 10px;background:var(--surface-widget);}
-.rem-total-lead{font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 
 /* per-row "no pledge" chip (rare edge; neutral, never alarming) */
-.rem-chip{display:inline-flex;align-items:center;font-size:12px;font-weight:600;border-radius:999px;padding:2px 9px;}
-.rem-chip-none{color:var(--txt-subtle);background:var(--wn-200);}
 
 /* ---- Glance pacing read -------------------------------------------- */
-.rem-glance-read{display:flex;flex-direction:column;gap:4px;margin-top:2px;}
-.rem-gbar{position:relative;height:9px;border-radius:5px;background:var(--wn-200);overflow:hidden;}
-.rem-gbar .rem-bar-fill{height:100%;border-radius:5px;}
-.rem-gbar .rem-bar-mark{position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--txt-secondary);border-radius:2px;opacity:.7;}
-.rem-glance-cap{font-size:11px;color:var(--txt-subtle);}
 
 /* ---- receipts-through popover -------------------------------------- */
-.rem-mi-date{margin-left:auto;font-size:11px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;}
-.rem-datepick{display:flex;align-items:center;gap:8px;padding:4px 10px 2px;}
-.rem-date-input{flex:1;min-width:0;font-family:inherit;font-size:12px;padding:5px 8px;border:1px solid var(--stroke-widget);border-radius:8px;background:var(--surface-widget);color:var(--txt-primary);}
-.rem-date-input:focus{outline:none;border-color:var(--am-400);box-shadow:0 0 0 2px var(--am-100);}
-.rem-pop-note{font-size:11px;color:var(--txt-subtle);line-height:1.45;padding:6px 10px 8px;max-width:280px;}
 
 /* ---- skeleton (data-fetch only) ------------------------------------ */
-.rem-skel{display:flex;flex-direction:column;gap:12px;padding:14px 16px;}
-.rem-sk-row{display:flex;align-items:center;gap:12px;}
-.rem-sk-bar{height:8px;border-radius:5px;}
 @media(prefers-reduced-motion:reduce){.rem-bar-fill{transition:none;}}
 
 /* ---- payment-history drill (modal) --------------------------------- */
-.rem-detail-h{display:flex;align-items:center;gap:10px;}
-.rem-dsub{font-size:12px;color:var(--txt-subtle);}
-.rem-dh-spacer{flex:1;}
-.rem-detail-b{display:flex;flex-direction:column;gap:14px;}
-.rem-sum{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 18px;padding:12px 14px;border:1px solid var(--stroke-widget);border-radius:10px;background:var(--wn-100);}
-.rem-sum-cell{display:flex;flex-direction:column;gap:2px;min-width:0;}
-.rem-sum-k{font-size:11px;color:var(--txt-subtle);}
-.rem-sum-v{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums;}
-.rem-sum-stat{justify-content:center;align-items:flex-start;}
-.rem-catchup{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;line-height:1.45;color:var(--txt-secondary);background:var(--wn-100);border-radius:10px;padding:10px 12px;}
-.rem-catchup .material-symbols-rounded{font-size:18px;color:var(--am-600);flex:0 0 auto;margin-top:1px;}
-.modal.rem-detail-modal{height:auto;max-height:88vh;}
-.rem-detail-b{display:flex;flex-direction:column;min-height:0;max-height:80vh;overflow:auto;}
-.rem-bars{gap:8px;padding:8px 10px 4px;}
-.rem-barrow{cursor:pointer;grid-template-columns:210px 1fr auto;gap:12px;padding:6px 8px;}
-.rem-barrow:hover{background:var(--wn-100);}
-.rem-bartrack{height:10px;border-radius:999px;background:var(--wn-300);}
-.rem-barval{display:flex;align-items:center;justify-content:flex-end;gap:8px;font-variant-numeric:tabular-nums;}
-.rem-pct{font-size:12.5px;font-weight:600;color:var(--txt-primary);}
-.rem-flag{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;}
-.rem-flag .material-symbols-rounded{font-size:18px;font-variation-settings:'FILL' 1;}
-.rem-flag-ok .material-symbols-rounded{color:#0b6b4c;}
-.rem-flag-ahead .material-symbols-rounded{color:#0b6b4c;}
-.rem-flag-ontrack .material-symbols-rounded{color:var(--am-600);}
-.rem-flag-behind .material-symbols-rounded{color:#7a5300;}
-.rem-flag-none .material-symbols-rounded{color:var(--txt-subtle);}
-.rem-bargap{position:absolute;top:0;height:100%;background:repeating-linear-gradient(45deg,var(--wn-750) 0 1px,transparent 1px 5px);opacity:.55;}
-.rem-bwrap{position:relative;}
-.rem-bwrap .ar-bartrack{width:100%;}
-.rem-barmark{position:absolute;top:50%;transform:translate(-50%,-50%);width:0;height:24px;border-left:2px dashed var(--wn-700);z-index:3;}
 /* status-coloured progress fills */
-.rem-fill-ok{background:#10b981;}
-.rem-fill-ahead{background:#10b981;}
-.rem-fill-ontrack{background:var(--am-500);}
-.rem-fill-behind{background:#f5b301;}
-.rem-fill-none{background:var(--wn-300);}
-.rem-bars-legend{display:flex;flex-wrap:wrap;gap:16px;padding:2px 10px 10px 18px;font-size:11.5px;color:var(--txt-subtle);}
-.rem-bars-legend .rem-lg-i{display:inline-flex;align-items:center;gap:5px;}
-.rem-sw{width:10px;height:10px;border-radius:3px;display:inline-block;}
-.rem-sw-ok{background:#10b981;}
-.rem-sw-behind{background:#f5b301;}
-.rem-tick{display:inline-block;width:0;height:12px;border-left:2px dashed var(--wn-700);}
 /* accessible status pills: colour + icon + text */
-.rem-st{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;border-radius:999px;padding:2px 10px 2px 8px;line-height:1.6;font-variant-numeric:tabular-nums;}
-.rem-st .material-symbols-rounded{font-size:16px;font-variation-settings:'FILL' 1;color:inherit;}
-.rem-st-ok{background:#daf5ea;color:#0b6b4c;}
-.rem-st-behind{background:#fdeeba;color:#7a5300;}
-.rem-st-none{background:var(--wn-200);color:var(--txt-secondary);}
-.rem-quiet{font-size:12px;color:var(--txt-subtle);margin-top:2px;font-variant-numeric:tabular-nums;}
 /* member-church drill table */
-.rem-ch-tbl{border:1px solid var(--stroke-widget);border-radius:10px;overflow:hidden;margin-top:4px;}
-.rem-ch-row{display:grid;grid-template-columns:minmax(150px,1.5fr) 116px 92px 92px 104px 66px 108px;align-items:center;gap:12px;padding:9px 14px;border-bottom:1px solid var(--stroke-widget);font-size:12.5px;font-variant-numeric:tabular-nums;}
-.rem-ch-row:last-child{border-bottom:0;}
-.rem-ch-head{background:var(--wn-100);font-size:11px;font-weight:600;color:var(--txt-subtle);}
-.rem-ch-nm{font-weight:600;color:var(--txt-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.rem-ch-head .rem-ch-nm{font-weight:600;color:var(--txt-subtle);}
-.rem-ch-dist{color:var(--txt-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.rem-ch-n{text-align:right;color:var(--txt-secondary);}
-.rem-ch-pct{text-align:right;font-weight:600;color:var(--txt-primary);}
-.rem-ch-head .rem-ch-pct{color:var(--txt-subtle);font-weight:600;}
-.rem-ch-stat{display:flex;justify-content:flex-end;}
-.rem-ch-foot{padding:10px 4px 2px;font-size:12px;color:var(--txt-secondary);}
-.rem-dsort-tog{transform:scale(.94);transform-origin:right center;}
-.rem-catchup.ok{color:var(--green-120);background:var(--green-10);}
-.rem-catchup.ok .material-symbols-rounded{color:var(--pos-100);}
-.rem-ph-h{font-size:10px;text-transform:uppercase;letter-spacing:.04em;color:var(--txt-subtle);}
-.rem-ph-tbl{border:1px solid var(--stroke-widget);border-radius:10px;overflow:hidden;}
-.rem-ph-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr) 120px;align-items:center;gap:12px;padding:8px 14px;border-bottom:1px solid var(--stroke-widget);font-size:13px;}
-.rem-ph-row:last-child{border-bottom:none;}
-.rem-ph-head{background:var(--surface-header);font-size:11px;font-weight:600;color:var(--txt-subtle);}
-.rem-ph-amt{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;}
-.rem-ph-total{border-radius:0;}
-.rem-tab-empty{display:flex;align-items:center;gap:8px;justify-content:center;padding:20px;color:var(--txt-subtle);font-size:13px;}
-.rem-tab-empty .material-symbols-rounded{font-size:18px;}
 
 @media(max-width:560px){
   .rem-sum{grid-template-columns:repeat(2,minmax(0,1fr));}
 }
-
-.rem-glance-cap{display:flex;align-items:center;flex-wrap:wrap;gap:4px;font-size:11.5px;color:var(--txt-subtle);}
-.rem-glance-cap .pbar-lg-swatch{width:9px;height:9px;border-radius:2px;}
-.rem-glance-cap .pbar-lg-swatch.pbar-lg-exp{margin-left:10px;}
 /* Bounded full-size sections (match other widgets) */
-.rem-col{border:1px solid var(--stroke-widget);border-radius:12px;background:var(--surface-widget);padding:10px 12px 4px;}
-.rem-col .dep-col-h{margin:0 0 4px;}
 /* Gifts drill modal: size to content, no fixed tall empty sheet */
 
 /* ===== Gifts/Remittance rebuild to Deposits pattern ===== */
-.rem-hd .dep-hd-kpigrp{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.rem-glance-read{display:flex;flex-direction:column;gap:5px;margin-top:6px;}
 /* Legend belongs WITH the bars view, never floating over a plain table */
 /* Gifts drill modal: content-height sheet, footer total sits BELOW the table (not beside it) */
 
@@ -2061,6 +1819,96 @@
   .purf-root .purf-kempty{font-size:11.5px;color:var(--txt-subtle);padding:6px 2px;}
 /* ===== end W13 Purchasing Management V2 CSS ===== */
   /* ===== W17 Gifts Pledges V2 CSS , prefix gpF , kind "gifts" ===== */
+  /* ----- W17: the shell classes this widget used to borrow from the retired gft
+     block, copied here as gpf-* on 28 Sep 2026 so the block owns everything it
+     draws with. Declarations are unchanged; only the names and the root scope are.
+     They sit FIRST, in base position, because that is where her cluster sat: the
+     block's own rules below are overrides and must keep winning. ----- */
+  .gpf-root .gpf-total-row{border-top:1.5px solid var(--stroke-widget);font-weight:600;padding-top:9px;margin-top:2px;}
+  .gpf-root .gpf-numwrap{display:flex;flex-direction:column;gap:2px;min-width:0;}
+  .gpf-root .gpf-ctx{font-size:12px;color:var(--txt-secondary);line-height:1.35;}
+  .gpf-root .gpf-ctlrow{display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap;}
+  .gpf-root .gpf-datechip::before{content:'event' !important;}
+  .gpf-root .gpf-datechip .fc-label{font-variant-numeric:tabular-nums;}
+  .gpf-root .gpf-purpchip{max-width:200px;}
+  .gpf-root .gpf-body{display:block;}
+  .gpf-root .gpf-bars{display:flex;flex-direction:column;gap:14px;padding:12px 14px 4px;}
+  .gpf-root .gpf-prow{display:flex;flex-direction:column;gap:6px;border-radius:9px;padding:4px;margin:-4px;}
+  .gpf-root .gpf-clickable{cursor:pointer;transition:background var(--dur,.15s) ease;}
+  .gpf-root .gpf-clickable:hover{background:var(--wn-100);}
+  .gpf-root .gpf-clickable:focus-visible{outline:2px solid var(--am-500);outline-offset:1px;}
+  .gpf-root .gpf-prow-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+  .gpf-root .gpf-p-nm{font-size:13px;font-weight:600;color:var(--txt-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .gpf-root .gpf-p-pct{font-size:13px;font-weight:600;color:var(--txt-primary);font-variant-numeric:tabular-nums;flex:0 0 auto;}
+  .gpf-root .gpf-track{position:relative;height:14px;border-radius:7px;background:var(--wn-200);overflow:hidden;}
+  .gpf-root .gpf-track-sm{height:10px;border-radius:5px;margin-top:2px;}
+  .gpf-root .gpf-fill{position:absolute;left:0;top:0;height:100%;background:var(--am-600);border-radius:7px 0 0 7px;transition:width var(--dur,.15s) ease;}
+  .gpf-root .gpf-prow-foot{display:flex;align-items:center;gap:8px;}
+  .gpf-root .gpf-p-amt{font-size:12px;color:var(--txt-secondary);font-variant-numeric:tabular-nums;flex:0 0 auto;}
+  .gpf-root .gpf-prow-foot .bank-pill,.gpf-root .gpf-prow-foot .delta-pill{margin-left:auto;}
+  .gpf-root .gpf-zeroline{display:flex;align-items:center;gap:7px;padding:14px;color:var(--txt-subtle);font-size:12.5px;}
+  .gpf-root .gpf-zeroline .material-symbols-rounded{font-size:17px;}
+  .gpf-root .gpf-trow{display:flex;align-items:center;gap:10px;}
+  .gpf-root .gpf-c-nm{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;}
+  .gpf-root .gpf-c-n{flex:0 0 auto;width:82px;text-align:right;font-variant-numeric:tabular-nums;}
+  .gpf-root .gpf-c-pct{width:70px;font-weight:650;color:var(--am-700);}
+  .gpf-root .gpf-trow.gpf-clickable:hover{background:var(--wn-100);}
+  .gpf-root .gpf-glance-read{display:flex;flex-direction:column;gap:5px;margin-top:8px;}
+  .gpf-root .gpf-glance-cap{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--txt-secondary);}
+  .gpf-root .gpf-glance-cap.gpf-cap-ok{color:var(--pos-100);}
+  .gpf-root .gpf-glance-cap .material-symbols-rounded{font-size:15px;}
+  .gpf-root .gpf-allset{display:inline-flex;align-items:center;gap:6px;color:var(--txt-secondary);}
+  .gpf-root .gpf-allset .material-symbols-rounded{font-size:22px;color:var(--am-500);}
+  .gpf-root .gpf-skel{padding:14px;}
+  .gpf-root .gpf-skel-rows{display:flex;flex-direction:column;gap:16px;}
+  .gpf-root .gpf-sk-row{display:flex;flex-direction:column;gap:6px;}
+  .gpf-root .gpf-sk-bar{height:14px;border-radius:7px;}
+  .gpf-root .gpf-detail-modal{max-width:860px;}
+  .gpf-root .gpf-detail-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+  .gpf-root .gpf-detail-ic{font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle);}
+  .gpf-root .gpf-dsub{font-size:12px;color:var(--txt-subtle);font-weight:500;}
+  .gpf-root .gpf-dh-spacer{flex:1 1 auto;}
+  .gpf-root .gpf-detail-b{padding:0;}
+  .gpf-root .gpf-drow{display:flex;align-items:center;gap:10px;}
+  .gpf-root .gpf-dexp{flex:0 0 auto;width:20px;display:inline-flex;color:var(--txt-subtle);}
+  .gpf-root .gpf-dexp .material-symbols-rounded{font-size:18px;}
+  .gpf-root .gpf-dc{font-variant-numeric:tabular-nums;}
+  .gpf-root .gpf-dc0{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;}
+  .gpf-root .gpf-dc1,.gpf-root .gpf-dc2,.gpf-root .gpf-dc3,.gpf-root .gpf-dc4{flex:0 0 auto;width:88px;text-align:right;}
+  .gpf-root .gpf-dc3{width:110px;}
+  .gpf-root .gpf-dc5{flex:0 0 auto;width:96px;text-align:right;color:var(--txt-secondary);}
+  .gpf-root .gpf-drow.wt-head .gpf-dc{color:var(--txt-subtle);font-weight:600;font-size:11.5px;}
+  .gpf-root .gpf-dstat-h{flex:0 0 auto;width:80px;display:inline-flex;justify-content:flex-end;}
+  .gpf-root .gpf-dstatus{font-size:11px;font-weight:600;border-radius:999px;padding:2px 8px;}
+  .gpf-root .gpf-dstatus-behind{background:var(--am-100);color:var(--am-700);}
+  .gpf-root .gpf-dstatus-ok{background:var(--green-10,#f0faf1);color:var(--pos-100);}
+  .gpf-root .gpf-drow.gpf-clickable:hover{background:var(--wn-100);}
+  .gpf-root .gpf-drawer{padding:10px 14px 14px 44px;background:var(--wn-100);border-bottom:1px solid var(--stroke-widget);}
+  .gpf-root .gpf-dsum{display:flex;gap:22px;margin-bottom:10px;flex-wrap:wrap;}
+  .gpf-root .gpf-dsum-i{display:flex;flex-direction:column;gap:1px;}
+  .gpf-root .gpf-dsum-k{font-size:11px;color:var(--txt-subtle);text-transform:uppercase;letter-spacing:.04em;}
+  .gpf-root .gpf-dsum-v{font-size:14px;font-weight:600;color:var(--txt-primary);font-variant-numeric:tabular-nums;}
+  .gpf-root .gpf-drawer-h{font-size:11.5px;font-weight:650;color:var(--txt-secondary);margin-bottom:4px;}
+  .gpf-root .gpf-gifts{border:1px solid var(--stroke-widget);border-radius:8px;overflow:hidden;background:var(--surface-widget,#fff);}
+  .gpf-root .gpf-grow{display:flex;justify-content:space-between;gap:12px;padding:6px 11px;font-size:12.5px;border-bottom:1px solid var(--stroke-widget);}
+  .gpf-root .gpf-grow:last-child{border-bottom:0;}
+  .gpf-root .gpf-ghead{background:var(--wn-100);color:var(--txt-subtle);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.04em;}
+  .gpf-root .gpf-ga{font-variant-numeric:tabular-nums;font-weight:600;}
+  .gpf-root .gpf-tab-empty{display:flex;align-items:center;gap:8px;padding:12px;color:var(--txt-subtle);font-size:12.5px;}
+  .gpf-root .gpf-tab-empty .material-symbols-rounded{font-size:18px;}
+  .gpf-root .gpf-glance-cap{display:flex;align-items:center;flex-wrap:wrap;gap:4px;font-size:11.5px;color:var(--txt-subtle);}
+  .gpf-root .modal.gpf-detail-modal{height:auto;max-height:88vh;}
+  .gpf-root .gpf-detail-modal .gpf-detail-b{flex:0 1 auto;}
+  .gpf-root .gpf-goalpill{display:inline-flex;align-items:center;font-size:12px;font-weight:600;color:var(--txt-secondary);background:var(--wn-200);border-radius:999px;padding:2px 9px;font-variant-numeric:tabular-nums;}
+  .gpf-root .gpf-hd .dep-hd-kpigrp{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .gpf-root .gpf-glance-read{display:flex;flex-direction:column;gap:5px;margin-top:8px;}
+  .gpf-root .gpf-bars-legend{display:flex;gap:16px;padding:2px 14px 8px;font-size:11.5px;color:var(--txt-subtle);}
+  .gpf-root .modal.gpf-detail-modal{height:auto;max-height:88vh;}
+  .gpf-root .gpf-detail-b{display:flex;flex-direction:column;min-height:0;padding:0;}
+  .gpf-root .gpf-hd .dep-hd-kpigrp{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  @media (prefers-reduced-motion:reduce){
+    .gpf-root .gpf-fill,.gpf-root .gpf-clickable{transition:none;}
+  }
   .gpf-root{color:var(--txt-primary);display:flex;flex-direction:column;min-height:0;min-width:0;}
   .gpf-root .gpf-body{flex:1;min-height:0;display:flex;flex-direction:column;min-width:0;}
   /* the status pill beside the KPI number, and the per-purpose status badge.
@@ -2205,100 +2053,7 @@
   .gpf-root .gpf-date-input{font-family:inherit;font-size:12.5px;padding:5px 7px;border:1px solid var(--stroke-widget);border-radius:7px;background:var(--surface-widget);color:var(--txt-primary);}
   .gpf-root .gpf-ldr-hist,.gpf-modal .gpf-ldr-hist{display:grid;grid-template-columns:1fr 1fr 1.4fr 1fr auto;gap:10px;}
 
-  /* ----- W17: the shell classes this widget used to borrow from the retired gft
-     block, copied here as gpf-* on 28 Sep 2026 so the block owns everything it
-     draws with. Declarations are unchanged; only the names and the root scope are. ----- */
-  .gpf-root .gpf-total-row{border-top:1.5px solid var(--stroke-widget);font-weight:600;padding-top:9px;margin-top:2px;}
-  .gpf-root .gpf-numwrap{display:flex;flex-direction:column;gap:2px;min-width:0;}
-  .gpf-root .gpf-ctx{font-size:12px;color:var(--txt-secondary);line-height:1.35;}
-  .gpf-root .gpf-ctlrow{display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap;}
-  .gpf-root .gpf-datechip::before{content:'event' !important;}
-  .gpf-root .gpf-datechip .fc-label{font-variant-numeric:tabular-nums;}
-  .gpf-root .gpf-purpchip{max-width:200px;}
-  .gpf-root .gpf-body{display:block;}
-  .gpf-root .gpf-bars{display:flex;flex-direction:column;gap:14px;padding:12px 14px 4px;}
-  .gpf-root .gpf-prow{display:flex;flex-direction:column;gap:6px;border-radius:9px;padding:4px;margin:-4px;}
-  .gpf-root .gpf-clickable{cursor:pointer;transition:background var(--dur,.15s) ease;}
-  .gpf-root .gpf-clickable:hover{background:var(--wn-100);}
-  .gpf-root .gpf-clickable:focus-visible{outline:2px solid var(--am-500);outline-offset:1px;}
-  .gpf-root .gpf-prow-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
-  .gpf-root .gpf-p-nm{font-size:13px;font-weight:600;color:var(--txt-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .gpf-root .gpf-p-pct{font-size:13px;font-weight:600;color:var(--txt-primary);font-variant-numeric:tabular-nums;flex:0 0 auto;}
-  .gpf-root .gpf-track{position:relative;height:14px;border-radius:7px;background:var(--wn-200);overflow:hidden;}
-  .gpf-root .gpf-track-sm{height:10px;border-radius:5px;margin-top:2px;}
-  .gpf-root .gpf-fill{position:absolute;left:0;top:0;height:100%;background:var(--am-600);border-radius:7px 0 0 7px;transition:width var(--dur,.15s) ease;}
-  .gpf-root .gpf-prow-foot{display:flex;align-items:center;gap:8px;}
-  .gpf-root .gpf-p-amt{font-size:12px;color:var(--txt-secondary);font-variant-numeric:tabular-nums;flex:0 0 auto;}
-  .gpf-root .gpf-prow-foot .bank-pill,.gpf-root .gpf-prow-foot .delta-pill{margin-left:auto;}
-  .gpf-root .gpf-zeroline{display:flex;align-items:center;gap:7px;padding:14px;color:var(--txt-subtle);font-size:12.5px;}
-  .gpf-root .gpf-zeroline .material-symbols-rounded{font-size:17px;}
-  .gpf-root .gpf-trow{display:flex;align-items:center;gap:10px;}
-  .gpf-root .gpf-c-nm{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;}
-  .gpf-root .gpf-c-n{flex:0 0 auto;width:82px;text-align:right;font-variant-numeric:tabular-nums;}
-  .gpf-root .gpf-c-pct{width:70px;font-weight:650;color:var(--am-700);}
-  .gpf-root .gpf-trow.gpf-clickable:hover{background:var(--wn-100);}
-  .gpf-root .gpf-glance-read{display:flex;flex-direction:column;gap:5px;margin-top:8px;}
-  .gpf-root .gpf-glance-cap{display:inline-flex;align-items:center;gap:5px;font-size:12px;color:var(--txt-secondary);}
-  .gpf-root .gpf-glance-cap.gpf-cap-ok{color:var(--pos-100);}
-  .gpf-root .gpf-glance-cap .material-symbols-rounded{font-size:15px;}
-  .gpf-root .gpf-allset{display:inline-flex;align-items:center;gap:6px;color:var(--txt-secondary);}
-  .gpf-root .gpf-allset .material-symbols-rounded{font-size:22px;color:var(--am-500);}
-  .gpf-root .gpf-skel{padding:14px;}
-  .gpf-root .gpf-skel-rows{display:flex;flex-direction:column;gap:16px;}
-  .gpf-root .gpf-sk-row{display:flex;flex-direction:column;gap:6px;}
-  .gpf-root .gpf-sk-bar{height:14px;border-radius:7px;}
-  .gpf-root .gpf-detail-modal{max-width:860px;}
-  .gpf-root .gpf-detail-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
-  .gpf-root .gpf-detail-ic{font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle);}
-  .gpf-root .gpf-dsub{font-size:12px;color:var(--txt-subtle);font-weight:500;}
-  .gpf-root .gpf-dh-spacer{flex:1 1 auto;}
-  .gpf-root .gpf-detail-b{padding:0;}
-  .gpf-root .gpf-drow{display:flex;align-items:center;gap:10px;}
-  .gpf-root .gpf-dexp{flex:0 0 auto;width:20px;display:inline-flex;color:var(--txt-subtle);}
-  .gpf-root .gpf-dexp .material-symbols-rounded{font-size:18px;}
-  .gpf-root .gpf-dc{font-variant-numeric:tabular-nums;}
-  .gpf-root .gpf-dc0{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;}
-  .gpf-root .gpf-dc1,.gpf-root .gpf-dc2,.gpf-root .gpf-dc3,.gpf-root .gpf-dc4{flex:0 0 auto;width:88px;text-align:right;}
-  .gpf-root .gpf-dc3{width:110px;}
-  .gpf-root .gpf-dc5{flex:0 0 auto;width:96px;text-align:right;color:var(--txt-secondary);}
-  .gpf-root .gpf-drow.wt-head .gpf-dc{color:var(--txt-subtle);font-weight:600;font-size:11.5px;}
-  .gpf-root .gpf-dstat-h{flex:0 0 auto;width:80px;display:inline-flex;justify-content:flex-end;}
-  .gpf-root .gpf-dstatus{font-size:11px;font-weight:600;border-radius:999px;padding:2px 8px;}
-  .gpf-root .gpf-dstatus-behind{background:var(--am-100);color:var(--am-700);}
-  .gpf-root .gpf-dstatus-ok{background:var(--green-10,#f0faf1);color:var(--pos-100);}
-  .gpf-root .gpf-drow.gpf-clickable:hover{background:var(--wn-100);}
-  .gpf-root .gpf-drawer{padding:10px 14px 14px 44px;background:var(--wn-50,var(--wn-100));border-bottom:1px solid var(--stroke-widget);}
-  .gpf-root .gpf-dsum{display:flex;gap:22px;margin-bottom:10px;flex-wrap:wrap;}
-  .gpf-root .gpf-dsum-i{display:flex;flex-direction:column;gap:1px;}
-  .gpf-root .gpf-dsum-k{font-size:11px;color:var(--txt-subtle);text-transform:uppercase;letter-spacing:.04em;}
-  .gpf-root .gpf-dsum-v{font-size:14px;font-weight:600;color:var(--txt-primary);font-variant-numeric:tabular-nums;}
-  .gpf-root .gpf-drawer-h{font-size:11.5px;font-weight:650;color:var(--txt-secondary);margin-bottom:4px;}
-  .gpf-root .gpf-gifts{border:1px solid var(--stroke-widget);border-radius:8px;overflow:hidden;background:var(--surface-widget,#fff);}
-  .gpf-root .gpf-grow{display:flex;justify-content:space-between;gap:12px;padding:6px 11px;font-size:12.5px;border-bottom:1px solid var(--stroke-widget);}
-  .gpf-root .gpf-grow:last-child{border-bottom:0;}
-  .gpf-root .gpf-ghead{background:var(--wn-100);color:var(--txt-subtle);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.04em;}
-  .gpf-root .gpf-ga{font-variant-numeric:tabular-nums;font-weight:600;}
-  .gpf-root .gpf-tab-empty{display:flex;align-items:center;gap:8px;padding:12px;color:var(--txt-subtle);font-size:12.5px;}
-  .gpf-root .gpf-tab-empty .material-symbols-rounded{font-size:18px;}
-  .gpf-root .gpf-glance-cap{display:flex;align-items:center;flex-wrap:wrap;gap:4px;font-size:11.5px;color:var(--txt-subtle);}
-  .gpf-root .gpf-glance-cap .pbar-lg-swatch{width:9px;height:9px;border-radius:2px;}
-  .gpf-root .modal.gpf-detail-modal{height:auto;max-height:88vh;}
-  .gpf-root .gpf-detail-modal .gpf-detail-b{flex:0 1 auto;}
-  .gpf-root .gpf-goalpill{display:inline-flex;align-items:center;font-size:12px;font-weight:600;color:var(--txt-secondary);background:var(--wn-200);border-radius:999px;padding:2px 9px;font-variant-numeric:tabular-nums;}
-  .gpf-root .gpf-hd .dep-hd-kpigrp{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-  .gpf-root .gpf-glance-read{display:flex;flex-direction:column;gap:5px;margin-top:8px;}
-  .gpf-root .gpf-bars-legend{display:flex;gap:16px;padding:2px 14px 8px;font-size:11.5px;color:var(--txt-subtle);}
-  .gpf-root .gpf-bars-legend .pbar-lg-i{display:inline-flex;align-items:center;gap:5px;}
-  .gpf-root .gpf-bars-legend .pbar-lg-swatch{width:10px;height:10px;border-radius:3px;display:inline-block;}
-  .gpf-root .modal.gpf-detail-modal{height:auto;max-height:88vh;}
-  .gpf-root .gpf-detail-b{display:flex;flex-direction:column;min-height:0;padding:0;}
-  .gpf-root .gpf-hd .dep-hd-kpigrp{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-  @media (prefers-reduced-motion:reduce){
-    .gpf-root .gpf-fill,.gpf-root .gpf-clickable{transition:none;}
-  }
   /* ===== end W17 Gifts Pledges V2 CSS ===== */
-  /* ===== Comparison note V2 CSS ===== */
-  /* ===== end Comparison note V2 CSS ===== */
 /* ===== W01 Budget Compared to Actual V2 CSS ===== */
   /* Stand-alone copies of the shared .bgt-* shell rules this widget uses (w01- prefix). Shared originals stay for the other widgets. Classes: bgt-bar-actual2 bgt-bar-budget2 bgt-bar2 bgt-barpair2 bgt-canvas2 bgt-caption bgt-chart-wrap2 bgt-col-h bgt-col2 bgt-cols2 bgt-ctlrow bgt-dd-field bgt-dd-lbl bgt-dd-menu bgt-dd-meta bgt-dd-trigger bgt-dd-val bgt-explore bgt-explore-col bgt-gl2 bgt-gl2-base bgt-inner2 bgt-kpi-iv bgt-legend bgt-legend-under bgt-lg bgt-lg-items bgt-notrend bgt-notrend-s bgt-notrend-t bgt-numwrap bgt-panel-hd bgt-plotrow2 bgt-pop bgt-pop- bgt-pop-div bgt-pop-fav bgt-pop-h bgt-pop-lbl bgt-pop-note bgt-pop-r bgt-pop-sw bgt-pop-v bgt-pop-var bgt-repctx bgt-rm- bgt-rm-b bgt-rm-fields bgt-rm-modal bgt-rm-preview bgt-rm-tag bgt-scope-chip bgt-scrollx bgt-sk-bar bgt-sk-col bgt-skel bgt-skel-cap bgt-skel-plot bgt-slicer bgt-special-edit bgt-special-lbl bgt-special-mi bgt-special-nm bgt-special-sub bgt-spin bgt-sw bgt-sw-actual bgt-sw-budget-line bgt-tbar bgt-tscroll bgt-varcol bgt-vartot bgt-viewbar-l bgt-viewbar-r bgt-vv bgt-xaxrow2 bgt-xcol2 bgt-xcols2 bgt-xlbl2 bgt-xvar2 bgt-yax2 bgt-yax2sp bgt-ytd-wrap */
   .w01-caption{color:var(--txt-subtle);font-weight:400;font-size:11px;}
@@ -2510,7 +2265,7 @@
   .w03-pop-dates{display:flex;gap:10px;padding:4px 12px 10px 12px;}
   .w03-pop-dates label{display:flex;flex-direction:column;gap:3px;font-size:11px;color:var(--txt-secondary);flex:1 1 0;min-width:118px;}
   .w03-pop-dates input.w03-date-input{font:inherit;font-size:12px;color:var(--txt-primary);border:1px solid var(--stroke-widget);border-radius:6px;padding:4px 6px;background:transparent;width:100%;box-sizing:border-box;}
-  .w03-pop-dates input.w03-date-input:focus-visible{outline:2px solid var(--focus-ring,#2563eb);outline-offset:1px;}
+  .w03-pop-dates input.w03-date-input:focus-visible{outline:2px solid var(--focus);outline-offset:1px;}
   .w03-split{display:flex;gap:24px;align-items:flex-start;min-width:0;}
   .w03-split-table{flex:1 1 0;min-width:0;}
   .w03-split-chart{flex:1 1 0;min-width:0;display:flex;justify-content:center;}
@@ -2553,8 +2308,6 @@
   .w04-thru-chip .fc-label{display:inline-flex;align-items:center;gap:5px;}
   .w04-num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .w04-pct{text-align:right;}
-  .rem-row .rem-cell.w04-pct{display:flex;align-items:center;justify-content:flex-end;gap:6px;}
-  .rem-head .w04-num{cursor:default;}
   .w04-mi-date{margin-left:auto;font-size:11px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;}
   .w04-datepick{display:flex;align-items:center;gap:8px;padding:4px 10px 2px;}
   .w04-date-input{flex:1;min-width:0;font-family:inherit;font-size:12px;padding:5px 8px;border:1px solid var(--stroke-widget);border-radius:8px;background:var(--surface-widget);color:var(--txt-primary);}
@@ -2583,7 +2336,7 @@
   .w04-bargap{position:absolute;top:0;height:100%;background:repeating-linear-gradient(45deg,var(--wn-750) 0 1px,transparent 1px 5px);opacity:.55;}
   .w04-bwrap{position:relative;}
   .w04-bwrap .ar-bartrack{width:100%;}
-  .w04-barmark{position:absolute;top:50%;transform:translate(-50%,-50%);width:0;height:24px;border-left:2px dashed var(--wn-700);z-index:3;}
+  .w04-barmark{position:absolute;top:50%;transform:translate(-50%,-50%);width:0;height:24px;border-left:2px dashed var(--wn-750);z-index:3;}
   .w04-st{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;border-radius:999px;padding:2px 10px 2px 8px;line-height:1.6;font-variant-numeric:tabular-nums;}
   .w04-st .material-symbols-rounded{font-size:16px;font-variation-settings:'FILL' 1;color:inherit;}
   .w04-st-ok{background:#daf5ea;color:#0b6b4c;}
@@ -2611,13 +2364,13 @@
   .w04-mini{position:relative;flex:1;min-width:36px;}
   .w04-mini-track{position:relative;display:block;width:100%;height:8px;border-radius:999px;background:var(--wn-300);overflow:hidden;}
   .w04-mini-fill{position:absolute;left:0;top:0;height:100%;border-radius:999px;}
-  .w04-mini-mark{position:absolute;top:50%;transform:translateY(-50%);height:13px;width:0;border-left:1.5px dashed var(--wn-700);}
+  .w04-mini-mark{position:absolute;top:50%;transform:translateY(-50%);height:13px;width:0;border-left:1.5px dashed var(--wn-750);}
   .w04-mini-pct{font-size:12px;font-variant-numeric:tabular-nums;color:var(--txt-secondary);flex:0 0 auto;}
   /* =====================================================================
      Remittance Pledges V2 (prefix: remO), CSS block.
      Only .remO-* rules are defined here; everything else is inherited from
      the shell (dep-hd family, filter-chip/fc-label, vtoggle/vt, metric-value,
-     kpi-row/kpi-num, gl-sub, scope-chip, gft-goalpill, delta-pill, bank-pill,
+     kpi-row/kpi-num, gl-sub, scope-chip,  delta-pill, bank-pill,
      wt-sort, scroll, state/state-title/state-sub, modal family, sk/bgt-spin,
      cap/mi/sep, rem-datepick/rem-date-input/rem-mi-date, and the rem-detail
      modal classes) plus Pathway tokens. Owner deltas: day-based 4-band colour
@@ -2647,7 +2400,7 @@
   .remO-pbar.remO-behind .remO-pbar-fill{background:#f5b301;}
   .remO-pbar.remO-farbehind .remO-pbar-fill{background:#f5b301;}
   .remO-pbar.remO-neutral .remO-pbar-fill{background:var(--wn-400);}
-  .remO-tick{position:absolute;top:50%;transform:translateY(-50%);height:16px;width:0;margin-left:-1px;border-left:2px dashed var(--wn-700);}
+  .remO-tick{position:absolute;top:50%;transform:translateY(-50%);height:16px;width:0;margin-left:-1px;border-left:2px dashed var(--wn-750);}
   .remO-pbar-sm .remO-tick{height:13px;}
   .remO-pbar[data-remopop]{cursor:default;}
   .remO-pbar[data-remopop]:hover .remO-pbar-track{box-shadow:0 0 0 1px var(--wn-300);}
@@ -2713,7 +2466,7 @@
   .remO-legend{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;padding:8px 14px 4px;border-top:1px solid var(--stroke-widget);font-size:11px;color:var(--txt-subtle);flex-shrink:0;}
   .remO-legend-i{display:inline-flex;align-items:center;gap:5px;}
   .remO-legend-sw{width:11px;height:11px;border-radius:3px;display:inline-block;flex:0 0 auto;}
-  .remO-legend-tick{width:0;height:12px;border-left:2px dashed var(--wn-700);display:inline-block;flex:0 0 auto;}
+  .remO-legend-tick{width:0;height:12px;border-left:2px dashed var(--wn-750);display:inline-block;flex:0 0 auto;}
   /* -- KPI (two-number) + pace filter + slim/mini shared bars -- */
   .remO-kpi2{display:flex;align-items:flex-end;gap:9px;flex-wrap:wrap;}
   .remO-kpi2 .metric-value{font-size:19px;line-height:1.05;}
@@ -2748,7 +2501,7 @@
   .remO-pop-card .remO-pop-div{height:1px;background:var(--stroke-widget);margin:6px 0;}
   .remO-pop-card .remO-pop-fav{font-weight:700;}
   .remO-pop-card .remO-pop-days{margin-top:5px;font-size:11.5px;color:var(--txt-subtle);}
-  .remo-root .w04-plh{margin:4px 0 8px;border:1px solid var(--stroke-widget);border-radius:8px;overflow:hidden;background:var(--wn-050,var(--wn-100));}
+  .remo-root .w04-plh{margin:4px 0 8px;border:1px solid var(--stroke-widget);border-radius:8px;overflow:hidden;background:var(--wn-100);}
   .remo-root .w04-plh-hd{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:7px 10px;font-size:11px;background:var(--wn-100);border-bottom:1px solid var(--stroke-widget);}
   .remo-root .w04-plh-t{font-weight:700;color:var(--txt-primary);text-transform:none;}
   .remo-root .w04-plh-m{color:var(--txt-subtle);font-variant-numeric:tabular-nums;}
@@ -3471,7 +3224,6 @@
   document.addEventListener("change",function(e){if(e.target&&e.target.id==="viewOnlySel"){var v=e.target.value;if(!v){currentId="d1";}if(location.hash===(v?"#"+v:"")){render();}else{location.hash=v?"#"+v:"";}}});
   var ICON=function(n){return '<span class="material-symbols-rounded">'+n+'</span>';};
   var SIZES=["kpi","wide","xwide"];
-  var SIZE_LABEL={kpi:"Glance",wide:"Explore",xwide:"Detail"};
   var DEPTH_LABEL={kpi:"Glance",wide:"Explore",xwide:"Detail"};
 
   var DEP_TYPES=["Checking","Savings","Money Market","Certificate of Deposit","Escrow","Restricted Funds","Endowment","Trust Accounts","Operating Reserve","Payroll Clearing","Grant Funds","Building Fund"];
@@ -3485,7 +3237,6 @@
     out.push({name:"General",type:"Checking",incept:"Sep 2021",acct:"••2916",acctFull:"0044172916",net:88750,trend:"down"});
     out.push({name:"Faith Community Endowment for Children's Ministry and Outreach Programs",type:"Endowment",incept:"Feb 2015",acct:"••5502",acctFull:"0044175502",net:265300,trend:"flat"});
     return out;})();
-  var DEP_TOTAL=DEP.reduce(function(s,a){return s+a.net;},0);
   /* large dataset for the edge-case instance: ~120 accounts across ~20 types, some types with 20–33 accounts */
   var DEP_BIG=(function(){var out=[],seed=99;function r(){seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;}
     var types=DEP_TYPES.concat(["Sweep Account","Lockbox","Investment Pool","Foundation Fund","Scholarship Fund","Cemetery Trust","Debt Service","Capital Reserve"]);
@@ -3498,7 +3249,6 @@
     return out;})();
   var COMPANIES=["Grace Community Church","Grace Community Foundation","Grace Christian School","Grace Missions Intl","Grace Senior Living","Grace Media Ministry","Grace Counseling Center","Grace Childcare","Grace Camp & Retreat","Grace Housing Trust","Grace Cemetery Assn","Grace Benevolence Fund"];
   function depData(w){var co=w&&w.company;if(co==="Grace Community Foundation")return DEP_BIG;return (w&&w.dataset==="big")?DEP_BIG:DEP;}
-  function depTypes(w){var seen={},out=["All types"];depData(w).forEach(function(a){if(!seen[a.type]){seen[a.type]=1;out.push(a.type);}});return out;}
   function money(n){return "$"+n.toLocaleString();}
 
 /* ===== W08 My Status V2 =====
@@ -3699,8 +3449,6 @@ function mysPopContent(){
   function mctCtx(w){return w.appContext||"home";}
   function mctInCtx(t,ctx){return ctx==="home"?true:t.app===ctx;}
   function mctFilter(w){return w.mctFilter||"all";}
-  function mctCtxTasks(w){var ctx=mctCtx(w);return MCT_TASKS.filter(function(t){return mctInCtx(t,ctx);});}
-  function mctCtxName(w){var ctx=mctCtx(w);if(ctx==="home")return "Accounting Home";var a=mctApp(ctx);return a?a.name:"this application";}
   function mctDefaultSaved(w){var ctx=mctCtx(w),out=[];MCT_TASKS.forEach(function(t){if(!mctInCtx(t,ctx))return;if(t.dflt||t.saved)out.push(t.id);});return out;}
   function mctSavedIds(w){if(!w.mctSaved)w.mctSaved=mctDefaultSaved(w);return w.mctSaved;}
   function mctIsSaved(w,t){return mctSavedIds(w).indexOf(t.id)>-1;}
@@ -3738,7 +3486,6 @@ function mysPopContent(){
     out.sort(function(x,y){if(y.matched!==x.matched)return y.matched-x.matched;if(y.score!==x.score)return y.score-x.score;return x.t.label.localeCompare(y.t.label);});
     return out;}
   function mctBadge(appId){var a=mctApp(appId);if(!a)return "";return '<span class="mct-badge" data-app="'+a.id+'" title="'+a.name+'" data-tip="'+a.name+'" data-tip-plain aria-label="'+a.name+'">'+a.code+'</span>';}
-  function mctStarBtn(w,t){var saved=mctIsSaved(w,t),act=saved?"mct-unsave":"mct-save";var lbl=(saved?"Remove "+t.label+" from My tasks":"Add "+t.label+" to My tasks");return '<button class="mct-star'+(saved?" on":"")+'" data-action="'+act+'" data-id="'+w.id+'" data-t="'+t.id+'" aria-pressed="'+saved+'" aria-label="'+lbl+'" data-tip="'+(saved?"In My tasks (remove)":"Add to My tasks")+'" data-tip-plain>'+ICON(saved?"star":"star_border")+'</button>';}
   function mctRow(w,t,force){var a=mctApp(t.app);var badge=(force||mctCtx(w)==="home")?mctBadge(t.app):"";var aria=(t.label+", "+a.name+", opens "+t.dest).replace(/"/g,"&quot;");return '<div class="mct-row"><button class="mct-row-main" data-action="mct-open" data-id="'+w.id+'" data-t="'+t.id+'" aria-label="'+aria+'"><span class="mct-row-ic">'+ICON(t.icon)+'</span><span class="mct-row-tx"><span class="mct-row-lbl">'+t.label+'</span><span class="mct-row-dest">'+t.dest+'</span></span>'+badge+'</button></div>';}
   function mctItile(w,t){var a=mctApp(t.app);var badge=(mctCtx(w)==="home")?'<span class="mct-itile-badge" data-app="'+a.id+'" aria-hidden="true">'+a.code+'</span>':"";var aria=(t.label+", "+a.name+", opens "+t.dest).replace(/"/g,"&quot;");return '<button class="mct-itile" data-action="mct-open" data-id="'+w.id+'" data-t="'+t.id+'" aria-label="'+aria+'" data-tip="'+(t.label+" ("+a.name+")").replace(/"/g,"&quot;")+'" data-tip-plain>'+ICON(t.icon)+badge+'<span class="sr-only">'+t.label+", "+a.name+'</span></button>';}
   function mctSearch(w){var q=w.mctQ||"";var clr=q?'<button class="mct-q-clear" data-action="mct-clearq" data-id="'+w.id+'" aria-label="Clear search">'+ICON("close")+'</button>':'';return '<div class="mct-search"><input class="mct-q" id="mctq-'+w.id+'" placeholder="Search tasks" value="'+q.replace(/"/g,"&quot;")+'" aria-label="Search tasks across all applications" autocomplete="off">'+clr+'</div>';}
@@ -3747,7 +3494,6 @@ function mysPopContent(){
   function mctMySection(w){var list=mctMyTasks(w);if(!list.length)return "";return '<div class="mct-sec mct-sec-my"><div class="mct-sec-h">My Tasks</div><div class="mct-list">'+list.map(function(t){return mctRow(w,t);}).join("")+'</div></div>';}
   function mctStandardSection(w){var list=mctStandardTasks(w);if(!list.length){var msg=(mctCtx(w)==="home"&&mctFilter(w)!=="all")?("No more "+mctApp(mctFilter(w)).name+" content tasks to add."):"All content tasks are already in My Tasks.";return '<div class="mct-sec mct-sec-content"><div class="mct-sec-h">Content Tasks</div><div class="mct-sec-empty">'+msg+'</div></div>';}return '<div class="mct-sec mct-sec-content"><div class="mct-sec-h">Content Tasks</div><div class="mct-list">'+list.map(function(t){return mctRow(w,t);}).join("")+'</div></div>';}
   function mctResults(w){var res=mctSearchList(w),q=(w.mctQ||"").trim();if(!res.length)return '<div class="mct-sec"><div class="mct-noresult">No tasks match "'+q.replace(/"/g,"&quot;")+'". Try another word, like "check" or "deposit".</div></div>';return '<div class="mct-sec"><div class="mct-sec-h">'+res.length+' result'+(res.length>1?"s":"")+' across all applications</div><div class="mct-list">'+res.map(function(r){return mctRow(w,r.t,true);}).join("")+'</div></div>';}
-  function mctGlanceTasks(w){var seen={},out=[];function add(l){l.forEach(function(t){if(t&&!seen[t.id]){seen[t.id]=1;out.push(t);}});}add(mctRecentTasks(w));add(mctMyTasks(w));return out;}
   function mctGlance(w){var q=(w.mctQ||"").trim(),body;if(q){var res=mctSearchList(w);body=res.length?('<div class="mct-carousel"><div class="mct-irow"><div class="mct-gsec mct-gsec-results" role="group" aria-label="Matching tasks">'+res.slice(0,12).map(function(r){return mctItile(w,r.t);}).join("")+'</div></div></div>'):'<div class="mct-glance-empty">No matches</div>';}else{/* two bubbles in the one row: Recent Tasks, then My Tasks not already shown (owner, 27 Sep); order and tiles unchanged */var rec=mctRecentTasks(w),seenG={};rec.forEach(function(t){seenG[t.id]=1;});var mine=mctMyTasks(w).filter(function(t){return !seenG[t.id];});var grp=function(cls,lbl,l){return l.length?('<div class="mct-gsec '+cls+'" role="group" aria-label="'+lbl+'">'+l.map(function(t){return mctItile(w,t);}).join("")+'</div>'):"";};body=(rec.length||mine.length)?('<div class="mct-carousel"><div class="mct-irow">'+grp("mct-gsec-recent","Recent Tasks",rec)+grp("mct-gsec-my","My Tasks",mine)+'</div></div>'):'<div class="mct-glance-empty">No recent or saved tasks yet</div>';}return '<div class="mct-glance">'+mctSearch(w)+body+'</div>';}
   function mctContent(w){if(w.size==="kpi")return mctGlance(w);var q=(w.mctQ||"").trim();var head='<div class="mct-head">'+(mctCtx(w)==="home"?('<div class="mct-filterrow">'+mctFilterChip(w)+'</div>'):"")+mctSearch(w)+'</div>';var body=q?mctResults(w):(mctRecentSection(w)+mctMySection(w)+mctStandardSection(w));return head+'<div class="mct-scroll">'+body+'</div>';}
 
@@ -4097,7 +3843,6 @@ function mysPopContent(){
     var thruR=base.filter(function(r){return r.actual!=null;}),tB=thruR.reduce(function(s,r){return s+r.budget;},0),totalV=thruR.length?bgtOVariance(vt,tB,thruR.reduce(function(s,r){return s+r.actual;},0)):null;
     return (ivHTML?'<div class="w01-tbar">'+ivHTML+'</div>':"")+'<div class="scroll w01-tscroll">'+head+body+'</div><div class="dep-total"><span>Total, posted so far</span><span class="w01-varcol w01-vartot">'+bgtOVarInner(totalV,neutral,tB)+'</span></div>';}
   /* The slicer: span chip LEFT + D W M P Q Y interval toggle RIGHT, kept together just above the chart because they constrain each other. */
-  function bgtOSlicer(w){return '<div class="w01-slicer">'+bgtOSpanChip(w)+bgtOIntervalToggle(w,w.binterval||bgtOIvDefault(w.bspan||"year"),"set-bgtO-interval")+'</div>';}
   function bgtONoTrendState(slic){return '<div class="w01-ytd-wrap"><div class="w01-notrend">'+ICON("show_chart")+'<div class="w01-notrend-t">No trend to show</div><div class="w01-notrend-s">A line chart needs at least two periods. Widen the time span, change the interval, or switch to Bar or Table.</div></div></div>';}
   function bgtOView(w,fmt){
     var av=w.acctview||"income";
@@ -4118,16 +3863,6 @@ function mysPopContent(){
     var _spark=(_ss.length>=2)?depSparkHTML({s:_ss,labs:_sl},null,"Actual by period. Hover to read a point"):'';
     return '<div class="kpi-row"><div class="kpi-num">'+chip+'<div class="metric-value bgtO-hl'+hv.cls+'">'+hv.html+hv.pct+'</div><div class="gl-sub">'+bgtOFavPill(v,neutral)+'<button class="trend-range" data-action="bgtO-span" data-id="'+w.id+'" aria-haspopup="listbox" aria-label="Comparison window, tap to change">'+bgtOSpanLabel(w.bspan||"year")+ICON("expand_more")+'</button></div></div>'+_spark+'</div>';}
   /* One Explore panel: its own interval + shape, so the two panels show different cuts of the SAME window (window + scope stay global up in the header). State per side as iA/fA, iB/fB. */
-  function bgtOPanel(w,side){
-    var interval=w[side==="a"?"iA":"iB"]||bgtOIvDefault(w.bspan||"year");
-    var fmt=w[side==="a"?"fA":"fB"]||(side==="a"?"bar":"line");
-    var wv=Object.assign({},w,{binterval:interval});
-    var iv=bgtOIntervalToggle(w,interval,"set-bgtO-pinterval",' data-panel="'+side+'"');
-    var pRows=bgtOViewRows(wv),pLineOK=pRows.length>=2;
-    var bar='<div class="w01-panel-hd"><div class="w01-viewbar-l"></div><div class="w01-viewbar-r">'+bgtOShapeToggle(w,fmt,"set-bgtO-pshape",' data-panel="'+side+'"',!pLineOK)+'</div></div>';
-    var chart=(fmt==="table")?bgtOTable(wv,iv):(fmt==="line"?(pLineOK?bgtOLine(wv,pRows,iv):bgtONoTrendState(iv)):bgtOBars(wv,pRows,iv));
-    return '<div class="w01-explore-col">'+bar+chart+'</div>';
-  }
   /* Glance = headline only. Wide = header + the chosen view. Explore (largest) = header + two independent panels. Loading only on data-fetch changes (scope, report, window): header controls stay usable while the content area shimmers. */
   function bgtOContent(w){
     if(w.size==="kpi")return bgtOGlance(w);
@@ -4220,34 +3955,6 @@ function mysPopContent(){
 /* ===== end W01 Budget Compared to Actual V2 ===== */
 
 
-  /* ===== Shell: pacing bar (.pbar) with its hover card, shared by W04 Remittance Pledges and W17 Gifts Pledges ===== */
-function pbarHTML(o){
-  var fill=Math.max(0,Math.min(100,o.fill||0));
-  var mark=(o.mark==null)?null:Math.max(0,Math.min(100,o.mark));
-  var shown=fill>0?Math.max(1.5,fill):0;
-  var gap=(mark!=null&&mark>fill)?'<span class="pbar-gap" style="left:'+fill.toFixed(2)+'%;width:'+(mark-fill).toFixed(2)+'%"></span>':"";
-  var marker=(mark!=null)?'<span class="pbar-mark" style="left:'+mark.toFixed(2)+'%"></span>':"";
-  return '<span class="pbar'+(o.sm?" pbar-sm":"")+'"'+(o.pop?(' data-pbar="'+o.pop+'"'):"")+' role="img" aria-label="'+(o.aria||"")+'"><span class="pbar-track"><span class="pbar-fill" style="width:'+shown.toFixed(2)+'%"></span>'+gap+'</span>'+marker+'</span>';
-}
-var pbarPopEl=null;
-function pbarHide(){if(pbarPopEl){pbarPopEl.remove();pbarPopEl=null;}}
-function pbarShow(el,mx,my){
-  var raw=el.getAttribute("data-pbar");if(!raw)return;var p=raw.split("|");
-  if(!pbarPopEl){pbarPopEl=document.createElement("div");pbarPopEl.className="bgt-pop";document.body.appendChild(pbarPopEl);}
-  var pctF=+p[5],pctM=+p[6],st=p[7];
-  var favTxt=st==="behind"?"Behind pace":(st==="full"?"Paid in full":(st==="none"?"No pledge":"On track"));
-  var favCls=st==="behind"?"neg":(st==="none"?"neutral":"");
-  pbarPopEl.innerHTML='<div class="bgt-pop-h">'+p[0]+'</div>'+
-    '<div class="bgt-pop-r"><span class="bgt-pop-lbl">Pledged</span><span class="bgt-pop-v">'+money(+p[1])+'</span></div>'+
-    '<div class="bgt-pop-r"><span class="bgt-pop-lbl">Received</span><span class="bgt-pop-v">'+money(+p[2])+'</span></div>'+
-    '<div class="bgt-pop-r"><span class="bgt-pop-lbl">Expected by now</span><span class="bgt-pop-v">'+money(+p[3])+'</span></div>'+
-    '<div class="bgt-pop-r"><span class="bgt-pop-lbl">Remaining</span><span class="bgt-pop-v">'+money(+p[4])+'</span></div>'+
-    '<div class="bgt-pop-div"></div><div class="bgt-pop-var"><span class="bgt-pop-lbl">'+pctF+'% received, '+pctM+'% expected</span><span class="bgt-pop-fav '+favCls+'">'+favTxt+'</span></div>';
-  var bw=pbarPopEl.offsetWidth,bh=pbarPopEl.offsetHeight,M=10;
-  var left=mx+14,top=my-bh-10;if(left+bw>innerWidth-M)left=mx-bw-14;if(left<M)left=M;if(top<M)top=my+16;
-  pbarPopEl.style.left=left+"px";pbarPopEl.style.top=top+"px";
-}
-document.addEventListener("mousemove",function(e){var el=e.target.closest&&e.target.closest(".pbar[data-pbar]");if(!el){pbarHide();return;}pbarShow(el,e.clientX,e.clientY);});
 
 /* ===== W02 Pension Plans V2 ===== */
 /* =====================================================================
@@ -4692,9 +4399,7 @@ function penOPopContent(){
   function prODistName(id){for(var i=0;i<PRO_DISTS.length;i++)if(PRO_DISTS[i].id===id)return PRO_DISTS[i].name;return id;}
   function prOPTName(id){for(var i=0;i<PRO_PT.length;i++)if(PRO_PT[i].id===id)return PRO_PT[i].name;return id;}
   function prODistTotals(w){var agg=prOAgg(w),keep=prOPTList(w);return PRO_DISTS.map(function(ds){var t=0,c=agg[ds.id]||{};keep.forEach(function(p){if(c[p.id]>0)t+=c[p.id];});return {id:ds.id,name:ds.name,net:t};}).filter(function(x){return x.net>0;});}
-  function prOPTTotals(w){var agg=prOAgg(w),m={};PRO_DISTS.forEach(function(ds){var c=agg[ds.id]||{};Object.keys(c).forEach(function(pt){m[pt]=(m[pt]||0)+c[pt];});});return PRO_PT.filter(function(p){return m[p.id]>0;}).map(function(p){return {id:p.id,name:p.name,net:m[p.id]};});}
   function prODrillRows(w,distId){var agg=prOAgg(w),c=agg[distId]||{};return prOPTList(w).filter(function(p){return c[p.id]>0;}).map(function(p){return {id:p.id,name:p.name,net:c[p.id]};});}
-  function prOPTFlat(w){var agg=prOAgg(w),out=[];PRO_DISTS.forEach(function(ds){var c=agg[ds.id]||{};PRO_PT.forEach(function(p){if(c[p.id]>0)out.push({id:ds.id+"_"+p.id,pt:p.name,ptId:p.id,distId:ds.id,distName:ds.name,net:c[p.id]});});});return out;}
   function prOScopeLabel(w){var sc=w.prScope||"all";if(sc==="all")return "All distributions";if(sc==="pt")return "By pay type";return prODistName(sc);}
   function prOScopeMeta(w){var d=w.prDist||"all",f=prOPTFilter(w),sfx=f?(", "+prOPTName(f)):"";if(d==="all")return {kind:"all",legend:"Distributions"+sfx};return {kind:"distpt",legend:prODistName(d)+": pay types"+sfx,dist:d};}
   function prOSortRows(rows,sort,kind){var sk=(sort||"amt-desc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
@@ -4707,7 +4412,6 @@ function penOPopContent(){
     return rows;}
   function prOTableRows(w){var d=w.prDist||"all";var rows=(d==="all")?prODistTotals(w):prODrillRows(w,d);return prOSortRows(rows,w.prSort||"amt-desc","other");}
   function prOChartRows(w){var d=w.prDist||"all";var rows=(d==="all")?prODistTotals(w):prODrillRows(w,d);return rows.sort(function(a,b){return b.net-a.net;});}
-  function prOScopeChip(w){return '<button class="filter-chip w03-scope-chip" data-action="prO-scope" data-id="'+w.id+'" aria-haspopup="listbox" aria-label="Show, tap to change what the breakdown is grouped by"><span class="fc-label">'+prOScopeLabel(w)+'</span>'+ICON("expand_more")+'</button>';}
   function prOToggle(w){var v=w.view||"table";return tog([["table","Table","table_rows"],["dist","Chart","donut_small"]],v,w);}
   function prODistBadge(distId){var c=PRO_DIST_COLORS[distId]||"#8a8f98";return '<span class="w03-dbadge"><span class="w03-dot" style="background:'+c+'"></span><span class="w03-dbadge-nm">'+prODistName(distId)+'</span></span>';}
   function prOSortBtn(w,k,label){var sk=(w.prSort||"amt-desc").split("-"),on=sk[0]===k,ic=on?(sk[1]==="asc"?"arrow_upward":"arrow_downward"):"unfold_more";return '<button class="wt-sort'+(on?" on":"")+'" data-action="prO-sort" data-id="'+w.id+'" data-k="'+k+'">'+label+' <span class="material-symbols-rounded">'+ic+'</span></button>';}
@@ -4796,7 +4500,6 @@ function penOPopContent(){
     return customRow+'<div class="sep"></div>'+presetRows;}
 
   var PRO_EMP_NAMES=["Whitfield, Dana","Bell, Marcus","Alvarez, Rosa","Nguyen, Thomas","Okafor, Grace","Sullivan, Patrick","Ramirez, Elena","Coleman, Derek","Fitzgerald, Maureen","Patel, Anil","Brooks, Latoya","Hoffman, Greg","Delgado, Carmen","Whitaker, Susan","Osei, Kwame","Lindqvist, Erik","Montoya, Beatriz","Callahan, Sean","Freeman, Cheryl","Barrett, Malcolm","Zhang, Wei","Donovan, Kathleen","Pruitt, Wesley","Amara, Fatima","Reyes, Miguel","Stanton, Gloria","Mercer, Aaron","Boone, Harriet","Schmidt, Karl","Castillo, Diego"];
-  var PRO_PAYROLL_PERM=true;
   function prORng(seed){var q=seed>>>0;return function(){q=q+0x6D2B79F5|0;var t=Math.imul(q^q>>>15,1|q);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
   function prODistSeed(distId){var h=0;for(var i=0;i<distId.length;i++)h=(h*31+distId.charCodeAt(i))|0;return Math.abs(h)+7919;}
   function prOMoney(n){var c=Math.round(n*100);return "$"+(c%100===0?(c/100).toLocaleString("en-US"):(c/100).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2}));}
@@ -4888,7 +4591,7 @@ function penOPopContent(){
    own rem block above (remContent / remTable / remGlance / remDetailModalHTML,
    her receipts-through chip + payment-history drill), reusing her shell
    primitives (dep-hd family, filter-chip/fc-label, vtoggle/vt, metric-value,
-   kpi-row/kpi-num, gl-sub, scope-chip, gft-goalpill, delta-pill, bank-pill,
+   kpi-row/kpi-num, gl-sub, scope-chip,  delta-pill, bank-pill,
    wt-sort, scroll, state, modal family, sk/bgt-spin, cap/mi/sep, w04-datepick/
    w04-date-input/w04-mi-date, and the w04-detail modal classes), Jo's Pathway
    tokens, and Jo's global pop/modal/render/find/timers/setStatus/money/ICON.
@@ -4971,7 +4674,6 @@ function remOPaid(act,iso){return (act.payments||[]).filter(function(p){return p
    selection surface, so nothing else needs to know the numbers. ---- */
 function remOBandFromDays(d){if(d>=30)return 'ahead';if(d>=-30)return 'onpace';if(d>=-60)return 'behind';return 'farbehind';}
 function remOStatus(r){if(r.total<=0)return 'neutral';if(r.outstanding<=0)return 'full';return remOBandFromDays(r.daysAhead);}
-function remOBand(r){var s=remOStatus(r);return s==='full'?'ahead':s;}
 function remOStatusLabel(s){return {neutral:'No pledge',full:'Paid in full',ahead:'30+ days ahead',onpace:'On track',behind:'About a month behind',farbehind:'60+ days behind'}[s]||'';}
 /* Plain-language day-count phrase for the hover card + drill note (accompanies the
    colour, so colour is never the only signal). */
@@ -5010,29 +4712,14 @@ function remOCompute(w){
     return r;
   });
 }
-function remOTotals(w){
-  var rows=remOCompute(w),total=0,paid=0,expected=0,out=0;
-  rows.forEach(function(r){total+=r.total;paid+=r.paid;expected+=r.expected;out+=r.outstanding;});
-  var pctPaid=total>0?paid/total:0,pace=total>0?expected/total:0;
-  var allPaid=rows.length>0&&rows.every(function(r){return r.status==="full";});
-  return {total:total,paid:paid,expected:expected,out:out,pctPaid:pctPaid,pace:pace,
-    shortfall:Math.max(0,expected-paid),status:(allPaid?"full":(paid>=expected?"ontrack":"behind")),
-    allPaid:allPaid,count:rows.length,iso:remOThru(w)};
-}
 function remOFindRow(w,seq){var rows=remOCompute(w);for(var i=0;i<rows.length;i++)if(String(rows[i].seq)===String(seq))return rows[i];return null;}
 function remORowSr(r){return (r.pctPaid==null?"no pledge amount":remOPct(r.pctPaid)+" paid")+". Pledge "+money(r.total)+", expected by now "+money(r.expected)+", paid "+money(r.paid)+", outstanding "+money(r.outstanding)+".";}
 
 /* ---- pacing-bar component (Option B: a flat fill whose width = paid/total,
    band-coloured via a class, plus a thin navy expected TICK that overhangs the
-   track at expected/total). Its own class + data attr so it never collides with
-   Jo's shared .pbar[data-pbar] hover. o={fill,tick,band,pop,aria,sm,tickTip}. */
-function remOPbarHTML(o){
-  var fill=Math.max(0,Math.min(100,o.fill||0));
-  var tick=(o.tick==null)?null:Math.max(0,Math.min(100,o.tick));
-  var shown=fill>0?Math.max(1.5,fill):0;
-  var tk=(tick!=null)?'<span class="remO-tick" style="left:'+tick.toFixed(2)+'%"'+(o.tickTip?(' title="'+o.tickTip+'"'):"")+'></span>':"";
-  return '<span class="remO-pbar'+(o.sm?" remO-pbar-sm":"")+(o.band?(" remO-"+o.band):"")+'"'+(o.pop?(' data-remopop="'+o.pop+'"'):"")+' role="img" aria-label="'+(o.aria||"")+'"><span class="remO-pbar-track"><span class="remO-pbar-fill" style="width:'+shown.toFixed(2)+'%"></span></span>'+tk+'</span>';
-}
+   track at expected/total). Its own class and data attribute, which is why it
+   outlived the shell's shared pacing bar, deleted 2026-09-28 once nothing
+   emitted it. o={fill,tick,band,pop,aria,sm,tickTip}. */
 var remOPopEl=null;
 function remOPbarHide(){if(remOPopEl){remOPopEl.remove();remOPopEl=null;}}
 function remOPbarShow(el,mx,my){
@@ -5054,7 +4741,6 @@ function remOPbarShow(el,mx,my){
 document.addEventListener("mousemove",function(e){var el=e.target.closest&&e.target.closest(".w04-bwrap[data-remopop],.w04-minirow[data-remopop]");if(!el){remOPbarHide();return;}remOPbarShow(el,e.clientX,e.clientY);});
 /* per-activity pbar: pop = "label|pledged|received|expected|remaining|pctFill|pctTick|status|dayPhrase" */
 /* binary pace band for colour (behind = saffron, else emerald), matching Gifts/HQ. */
-function remOOk(r){var s=remOStatus(r);return !(s==="behind"||s==="farbehind");}
 /* pace bucket for the pace filter: behind | ontrack | ahead | neutral(no pledge) */
 function remOPaceBand(r){var s=remOStatus(r);if(s==="neutral")return "neutral";if(s==="ahead"||s==="full")return "ahead";if(s==="onpace")return "ontrack";return "behind";}
 function remOPaceLabel(v){return v==="behind"?"Behind":v==="ontrack"?"On track":v==="ahead"?"Ahead":"All paces";}
@@ -5078,7 +4764,6 @@ function remOMiniBar(r){
   return '<span class="w04-minirow" data-remopop="'+pop+'"><span class="w04-mini"><span class="w04-mini-track"><span class="w04-mini-fill w04-fill-'+st+'" style="width:'+paidPct.toFixed(1)+'%"></span></span><span class="w04-mini-mark" style="left:'+expPct.toFixed(1)+'%"></span></span><span class="w04-mini-pct">'+remOPct(r.pctPaid)+'</span></span>';
 }
 /* Pace filter: a normal top-toolbar dropdown (View all / Behind / On track / Ahead). */
-function remOPaceChip(w){var v=w.remPaceF||"all";return '<button class="filter-chip" data-action="remO-pacef" data-id="'+w.id+'" aria-haspopup="listbox" aria-expanded="'+(pop&&pop.type==="remO-pacef"&&pop.id===w.id?"true":"false")+'" aria-label="Pace filter, tap to change"><span class="fc-label">'+remOPaceLabel(v)+'</span>'+ICON("expand_more")+'</button>';}
 function remOStatusChip(r){
   var s=remOStatus(r);
   if(s==="neutral")return '<span class="w04-st w04-st-none">No pledge</span>';
@@ -5087,12 +4772,6 @@ function remOStatusChip(r){
 }
 /* overall pacing badge (Jo's binary: On track / All pledges paid positive pill;
    Behind pace warn pill), against the blended expected-vs-paid sums over terms. */
-function remOPaceBadge(t){
-  if(t.allPaid)return '<span class="w04-st w04-st-ok" data-tip="Every remittance pledge is fully paid for its term." data-tip-plain>'+ICON("check_circle")+'All pledges paid</span>';
-  if(t.status==="ontrack")return '<span class="w04-st w04-st-ok" data-tip="'+remOEsc(remOPct(t.pctPaid)+' of the total pledged is paid, at or ahead of the '+remOPct(t.pace)+' expected by now (each pledge measured over its own term).')+'" data-tip-plain>'+ICON("check_circle")+'On track</span>';
-  var gapPts=Math.round((t.pace-t.pctPaid)*100);
-  return '<span class="w04-st w04-st-behind" data-tip="'+remOEsc(remOPct(t.pctPaid)+' paid against an expected '+remOPct(t.pace)+' by now (each pledge measured over its own term), about '+money(t.shortfall)+' ('+gapPts+' percentage point'+(gapPts===1?"":"s")+') behind the expected pace.')+'" data-tip-plain>'+ICON("error")+'Behind pace</span>';
-}
 /* ---- sort (seq default = conference order) ---- */
 function remORows(w){
   var rows=remOCompute(w);
@@ -5193,13 +4872,6 @@ function remOBars(w){
   }).join("");
   return '<div class="ar-bars w04-bars scroll">'+body+'</div>';
 }
-function remOLegend(){
-  return '<div class="remO-legend" aria-hidden="true">'+
-    '<span class="remO-legend-i"><span class="remO-legend-sw" style="background:#10b981"></span>On track / ahead</span>'+
-    '<span class="remO-legend-i"><span class="remO-legend-sw" style="background:#f5b301"></span>Behind pace</span>'+
-    '<span class="remO-legend-i"><span class="remO-legend-tick"></span>Expected by now</span>'+
-  '</div>';
-}
 /* ---- controls + header ---- */
 function remOThruChip(w){
   var iso=remOThru(w),spin=w.remLoading?'<span class="bgt-spin" aria-hidden="true"></span>':"";
@@ -5215,19 +4887,6 @@ function remOViewToggle(w){
   '</div>';
 }
 /* KPI: Paid (check) vs Expected-by-now (error, ochre) as two numbers, plus a pace badge. */
-function remOKpiHead(t){
-  var behind=t.paid<t.expected;
-  var pctBehind=t.expected>0?Math.round((t.expected-t.paid)/t.expected*100):0;
-  var badge=behind
-    ?'<span class="w04-st w04-st-behind" data-tip="'+remOEsc(money(t.shortfall)+' behind the total expected by now.')+'" data-tip-plain>'+ICON("error")+pctBehind+'% behind pace</span>'
-    :'<span class="w04-st w04-st-ok" data-tip="'+remOEsc('Paid at or ahead of the total expected by now.')+'" data-tip-plain>'+ICON("check_circle")+'On track</span>';
-  return '<div class="remO-kpi2">'+
-    '<div class="remO-kpi-metric"><span class="remO-kpi-eye remO-eye-ok">'+ICON("check_circle")+'Paid</span><span class="metric-value">'+money(t.paid)+'</span></div>'+
-    '<span class="remO-kpi-vs">vs</span>'+
-    '<div class="remO-kpi-metric"><span class="remO-kpi-eye '+(behind?"remO-eye-behind":"remO-eye-ok")+'">'+ICON(behind?"error":"check_circle")+'Expected by now</span><span class="metric-value'+(behind?" remO-kpi-ochre":"")+'">'+money(t.expected)+'</span></div>'+
-    badge+
-  '</div>';
-}
 /* Per-band stats for the KPI filter cards (count + outstanding). */
 function remOBandStats(w){var rows=remOCompute(w),s={behind:{n:0,out:0},ontrack:{n:0,out:0},ahead:{n:0,out:0}};rows.forEach(function(r){var b=remOPaceBand(r);if(s[b]){s[b].n++;s[b].out+=r.outstanding;}});return s;}
 /* KPI filter cards: Behind / On track / Ahead. Always shown; tap one to filter the
@@ -5287,38 +4946,6 @@ function remOContent(w){
 }
 
 /* ---- drill: payment-history focus overlay (modal.type "remOdetail") ---- */
-function remODetailModalHTML(){
-  var w=find(modal.id);if(!w)return "";
-  var r=remOFindRow(w,modal.seq);if(!r)return "";
-  var s=remOStatus(r);
-  var pays=(r.payments||[]).filter(function(p){return p.date<=remOThru(w);}).slice().sort(function(a,b){return a.date<b.date?1:-1;});
-  var behind=Math.max(0,r.expected-r.paid);
-  var termLine='<div class="remO-term-line">'+ICON("event")+'<span>Pledge term '+remOFmtDate(r.begin)+' to '+remOFmtDate(r.end)+(r.end.slice(0,4)!==r.begin.slice(0,4)?' (multi-year)':'')+'. Expected-to-date reflects '+remOPct(r.pace)+' of this term elapsed.</span></div>';
-  var summary='<div class="w04-sum">'+
-    '<div class="w04-sum-cell"><span class="w04-sum-k">Total pledge</span><span class="w04-sum-v">'+money(r.total)+'</span></div>'+
-    '<div class="w04-sum-cell"><span class="w04-sum-k">Expected by now</span><span class="w04-sum-v">'+money(r.expected)+'</span></div>'+
-    '<div class="w04-sum-cell"><span class="w04-sum-k">Paid to date</span><span class="w04-sum-v">'+money(r.paid)+'</span></div>'+
-    '<div class="w04-sum-cell"><span class="w04-sum-k">Outstanding</span><span class="w04-sum-v">'+money(r.outstanding)+'</span></div>'+
-    '<div class="w04-sum-cell"><span class="w04-sum-k">% Paid</span><span class="w04-sum-v">'+(r.pctPaid==null?"n/a":remOPct(r.pctPaid))+'</span></div>'+
-    '<div class="w04-sum-cell w04-sum-stat">'+remOStatusChip(r)+'</div>'+
-  '</div>';
-  var note=(s==="behind"||s==="farbehind")
-    ? '<div class="w04-catchup">'+ICON("info")+'<span>'+remODayPhrase(r)+' ('+money(behind)+' behind the expected pace). '+money(r.outstanding)+' remains over the term; unpaid amounts carry forward, so catching up before the pledge ends ('+remOFmtDate(r.end)+') avoids a balance rolling into the next period.</span></div>'
-    : (s==="full"
-      ? '<div class="w04-catchup ok">'+ICON("check_circle")+'<span>This pledge is fully paid for its term.</span></div>'
-      : (s==="neutral"
-        ? '<div class="w04-catchup ok">'+ICON("info")+'<span>No pledge amount is set for this activity, so there is nothing to pace against; any receipts are shown for reference.</span></div>'
-        : '<div class="w04-catchup ok">'+ICON("check")+'<span>On track: '+remODayPhrase(r)+'. '+money(r.paid)+' paid against '+money(r.expected)+' expected by now.</span></div>'));
-  var head='<div class="w04-ph-row w04-ph-head"><span>Date</span><span>Reference</span><span class="w04-ph-amt">Amount</span></div>';
-  var body=pays.length
-    ? pays.map(function(p){return '<div class="w04-ph-row"><span>'+remOFmtDate(p.date)+'</span><span>'+p.ref+'</span><span class="w04-ph-amt">'+money(p.amount)+'</span></div>';}).join("")
-    : '<div class="w04-tab-empty">'+ICON("payments")+'No receipts recorded on or before '+remOFmtDate(remOThru(w))+'.</div>';
-  var foot=pays.length?'<div class="dep-total w04-ph-total"><span>'+pays.length+' receipt'+(pays.length===1?"":"s")+' through '+remOFmtDate(remOThru(w))+'</span><span>'+money(r.paid)+'</span></div>':'';
-  return '<div class="modal-backdrop" data-action="remO-detail-close"><div class="modal modal-wide w04-detail-modal" data-action="stop" role="dialog" aria-modal="true" aria-label="Remittance pledge, payment history">'+
-    '<div class="modal-h w04-detail-h"><span class="modal-title"><span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">volunteer_activism</span>'+r.name+'</span><span class="w04-dsub">Payment history</span><span class="w04-dh-spacer"></span><button class="btn naked sm" data-action="remO-export" data-id="'+w.id+'">'+ICON("download")+'Export to Excel</button><button class="iconbtn" data-action="remO-detail-close" aria-label="Close">'+ICON("close")+'</button></div>'+
-    '<div class="modal-b w04-detail-b">'+summary+termLine+note+'<div class="w04-ph-h">Receipts on or before '+remOFmtDate(remOThru(w))+'</div><div class="w04-ph-tbl">'+head+body+'</div>'+foot+'</div>'+
-    '<div class="modal-f"><button class="btn naked sm" data-action="remO-open-record" data-id="'+w.id+'" data-seq="'+r.seq+'">'+ICON("open_in_new")+'Open in Remittance</button><button class="btn primary sm" data-action="remO-detail-close">Close</button></div></div></div>';
-}
 
 // ===== REGISTRY (see the dashboards[0].widgets array; entries appended there) ===
 
@@ -6802,7 +6429,6 @@ function ptoFCalGroupVal(fe,w){return fe.dept;}
 function ptoFStateClass(w,fe){return "ptof-mst-"+ptoFEffState(w,fe).toLowerCase();}
 /* Uncalled: the legend names its own glyphs. Carried because the Final
    carries it. */
-function ptoFStatusGlyph(st){return st==="Approved"?"check_circle":(st==="Outstanding"?"error":"schedule");}
 /* Day-cell PRIORITY: any Outstanding, else any Pending, else all approved;
    no-request days neutral. Uses each entry's effective STATE word. */
 function ptoFDayStatus(hit,w){var hasO=false,hasP=false,hasA=false;hit.forEach(function(fe){var s=ptoFEffState(w,fe);if(s==="Outstanding")hasO=true;else if(s==="Pending")hasP=true;else hasA=true;});return hasO?"outstanding":(hasP?"pending":(hasA?"approved":""));}
@@ -6853,13 +6479,11 @@ function ptoFPendingNotOutstanding(w){return ptoFDistinctDays(ptoFWorkFlat(w).fi
 function ptoFGroupKey(fe,w){return ptoFQueueGroup(w)==="dept"?fe.dept:fe.pg;}
 function ptoFGroupPending(w,key){return ptoFDistinctDays(ptoFWorkFlat(w).filter(function(fe){return ptoFGroupKey(fe,w)===key&&ptoFEff(w,fe)==="Pending";}));}
 function ptoFPersonPending(w,pk){return ptoFDistinctDays(ptoFWorkFlat(w).filter(function(fe){return fe.personKey===pk&&ptoFEff(w,fe)==="Pending";}));}
-function ptoFOutThisWeek(w){var s={};ptoFWorkFlat(w).forEach(function(fe){if(fe.d<=9&&fe.dEnd>=3)s[fe.personKey]=1;});return Object.keys(s).length;}
 function ptoFDistinctOut(all){var s={};all.forEach(function(fe){s[fe.personKey]=1;});return Object.keys(s).length;}
 function ptoFDates(fe){var mn=PTOF_MONTHS[fe.mo].slice(0,3);return mn+" "+fe.d+((fe.dEnd&&fe.dEnd!==fe.d)?(" to "+fe.dEnd):"");}
 function ptoFInitials(n){var p=String(n||"").trim().split(/\s+/).filter(Boolean);if(!p.length)return "";if(p.length===1)return p[0].slice(0,2).toUpperCase();return (p[0].charAt(0)+p[p.length-1].charAt(0)).toUpperCase();}
 /* Uncalled: the leave type is shown in full as text everywhere. Carried
    because the Final carries it. */
-function ptoFAbbrev(t){return t==="Vacation"?"Vac":(t==="Personal"?"Per":t);}
 function ptoFApproverText(w,fe){if(ptoFApprMap(w)[fe._id]==="Approved")return "Approved by "+PTOF_ME+", "+PTOF_TODAY;if(fe.st==="Approved")return "Approved by "+fe.appBy+", "+fe.appDate;return "Approved";}
 /* Each status renders as a chip where COLOUR is always paired with a text
    label AND an icon, never colour alone: Approved green plus check,
@@ -7306,7 +6930,6 @@ function lonFIsDormant(x){var d=lonFDaysSincePay(x.lastPay);return d!=null&&d>90
 function lonFDataset(w){if(w.dataset==="current")return LONF_LOANS_CURRENT;if(w.dataset==="single")return LONF_LOANS_SINGLE;if(w.dataset==="none")return [];return LONF_LOANS;}
 function lonFFiltered(w){var ty=w.lonType||"All";return lonFDataset(w).filter(function(x){return ty==="All"||x.type===ty;});}
 function lonFBucketOf(days){for(var i=0;i<LONF_BUCKETS.length;i++){if(days<=LONF_BUCKETS[i].hi)return LONF_BUCKETS[i].key;}return "b3";}
-function lonFSevOf(days){for(var i=0;i<LONF_BUCKETS.length;i++){if(days<=LONF_BUCKETS[i].hi)return LONF_BUCKETS[i].sev;}return 4;}
 function lonFBucketLabel(key){for(var i=0;i<LONF_BUCKETS.length;i++)if(LONF_BUCKETS[i].key===key)return LONF_BUCKETS[i].label;return key;}
 function lonFColorOf(key){for(var i=0;i<LONF_BUCKETS.length;i++)if(LONF_BUCKETS[i].key===key)return LONF_SEV_COLORS[LONF_BUCKETS[i].sev];return LONF_SEV_COLORS[4];}
 function lonFBuckets(w){
@@ -7400,10 +7023,6 @@ function lonFHeaderBlock(w,mode){
     '<div class="dep-hd-num"><div class="lon-numwrap">'+numInner+'<div class="lon-ctx">'+ctx+'</div></div></div>'+
   '</div>';
 }
-function lonFDaysCell(x){
-  if(x.days<=0)return '<span class="lon-c-days"><span class="lon-notdue">Not due</span></span>';
-  return '<span class="lon-c-days"><span class="lon-days-v over">'+x.days+' day'+(x.days===1?"":"s")+'</span></span>';
-}
 function lonFLastCell(x){
   var dorm=lonFIsDormant(x);
   var flag=dorm?('<span class="lon-dormant" data-tip="No payment received in over 90 days on this loan." data-tip-plain>'+ICON("hourglass_empty")+'</span>'):"";
@@ -7455,21 +7074,6 @@ function lonFAgingPanel(w){
   return out+'</div>';
 }
 
-function lonFRiskPanel(w){
-  var grand=lonFTotal(w),over=lonFPastDue(w),nine=lonF90(w),pct=lonFPct(w);
-  var pctN=grand>0?Math.round(nine/grand*100):0,out="";
-  out+='<div class="lon-panel-sep"></div><div class="lon-panel-h">Portfolio risk</div>';
-  out+='<div class="lon-risk-row"><span class="lon-risk-lbl">Past due</span><span class="lon-risk-v">'+lonFMoney(over)+' <span class="lon-risk-pct">('+pct+'%)</span></span></div>';
-  out+='<div class="lon-risk-row"><span class="lon-risk-lbl">90+ days</span><span class="lon-risk-v">'+lonFMoney(nine)+' <span class="lon-risk-pct">('+pctN+'%)</span></span></div>';
-  var top=lonFTopOverdue(w).slice(0,4);
-  if(top.length){
-    out+='<div class="lon-panel-sep"></div><div class="lon-panel-h">Most overdue</div>';
-    top.forEach(function(x){
-      out+='<button class="lon-worst-row" data-lon="lon-open" data-id="'+w.id+'" data-acct="'+lonFEsc(x.acct)+'" aria-label="'+lonFEsc("Open "+x.name+", "+x.days+" days past due")+'"><span class="lon-worst-main"><span class="lon-worst-nm">'+x.name+'</span><span class="lon-worst-meta">'+x.days+' days past due'+(lonFIsDormant(x)?', dormant':'')+'</span></span><span class="lon-worst-val">'+lonFMoney(x.amount)+'</span></button>';
-    });
-  }
-  return out;
-}
 
 function lonFBandPie(w){
   var all=lonFBuckets(w);
@@ -7926,7 +7530,6 @@ function faFOrgAssetCount(w){return faFDataset(w).length;}
    to the front, and once the measure chip is hidden in the table view that
    reordering would be driven by a control the user cannot see. Columns silently
    moving is worse than columns being in a fixed order. */
-function faFMeasureOrder(){return FAF_MEASURES.slice();}
 var FAF_COMPACT_MEAS=['cost','accum','net'];
 function faFVisibleMeasures(full){
   if(full) return FAF_MEASURES.slice();
@@ -8556,10 +8159,6 @@ function purFTableRows(w){
 function purFPendingSet(w){var pa=purFPathCur(w);return purFDataset(w).filter(function(p){return p.stage==="Pending"&&(pa==="All approval paths"||p.path===pa);});}
 function purFMineSet(w){var pa=purFPathCur(w);return purFDataset(w).filter(function(p){if(pa!=="All approval paths"&&p.path!==pa)return false;var k=purFTurn(p).kind;return k==="next"||k==="mine";});}
 function purFPendingCount(w){return purFPendingSet(w).length;}
-function purFPayBadge(po){
-  if(po.stage!=="Approved"||!po.pay||!PURF_PAY_LBL[po.pay])return "";
-  return '<span class="purf-paybadge '+PURF_PAY_CLS[po.pay]+'">'+PURF_PAY_LBL[po.pay]+'</span>';
-}
 /* Hold applies while something is in progress: Pending, and Approved but unpaid.
    Never on a paid or a rejected request, and never on the archive. */
 function purFCanHold(po){return !po.hold&&(po.stage==="Pending"||(po.stage==="Approved"&&!po.paid&&po.pay!=="paid"));}
@@ -8897,16 +8496,6 @@ function purFOpenPop(type,id,anchor){
 function purFVendorMeta(n){return PURF_VENDOR_META[n]||{a:"Address on file",t:"Net 30"};}
 function purFDeptAcct(d){return PURF_DEPT_ACCT[d]||PURF_DEPT_ACCT["Finance"];}
 /* The record screen's own status vocabulary, which is not the board's. */
-function purFRecordStatus(po){
-  if(po.stage==="Closed")return "Closed";
-  if(po.stage==="Voided")return "Voided";
-  return (po.stage==="Approved")?"Approved":"Unapproved";
-}
-function purFApprUpdatedBy(po){
-  var last=null;(po.log||[]).forEach(function(l){if(l.to==="Approved"||l.to==="Rejected"||l.to==="Pending")last=l;});
-  if(last)return last.by+" "+purFFmtDate(last.d);
-  return (po.stage==="Approved")?"Nitzi Wright Jul 30, 2026":"";
-}
 function purFF(po,k,d){return (po.f&&typeof po.f[k]==="string"&&po.f[k]!=="")?po.f[k]:(d||"");}
 function purFFieldSet(po,k,v){po.f=po.f||{};po.f[k]=(typeof v==="string")?v:"";}
 function purFInvoices(po){
@@ -9515,8 +9104,9 @@ WIDGETS.register("purchasing",{content:purFContent,about:function(w){return {h:w
    above was replaced with one of Jo's own, never redeclared here. Four
    of those selectors turned out never to have been declared ANYWHERE in
    this file, so our mockup was already relying on styling that does not
-   exist; those are gone too, replaced with her .gft-ctlrow, her .state,
-   her .vtoggle and her .modal-backdrop.
+   exist; those are gone too, replaced with the control row this block now
+   declares itself as .gpf-ctlrow, plus the shell's own .state, .vtoggle and
+   .modal-backdrop.
 
    SHELL CONFORMANCE (not design changes). The Final's global GPF_STATE
    singleton becomes PER-WIDGET registry state (gpFView / gpFCamp /
@@ -9629,7 +9219,6 @@ function gpFWindow(w){
 }
 function gpFRangeBounds(w){return gpFWindow(w);}
 
-function gpFThru(w){return gpFRangeBounds(w).end;}
 function gpFRangePhrase(w){
   var b=gpFWindow(w),ed=gpFParse(b.end);
   var endTxt=GPF_MON[ed.getMonth()]+" "+ed.getDate()+", "+ed.getFullYear();
@@ -9650,18 +9239,15 @@ function gpFRowStatus(pledged,due,fromPledges,received){
   if(fromPledges>=due)return 'ontrack';
   return 'behind';
 }
-function gpFGoalStatus(pct){return pct==null?'none':(pct>=1?'funded':'behind');}
 
 /* blue and green are shell tokens (the brand token IS the Final's blue exactly);
    the middle band has no token anywhere in this shell, so it stays a hex, the same
    way Jo hard-codes her own saffron for her behind-schedule fill. */
 function gpFStatusColor(s){return {funded:'var(--pos-100)',ontrack:'var(--brand-100)',behind:'#e0952b',
   gifts:'var(--am-500)',none:'var(--txt-subtle)'}[s]||'var(--txt-subtle)';}
-function gpFGoalColor(s){return gpFStatusColor(s);}
 
 function gpFStatusLabelRow(s){return {funded:'Fully funded',ontrack:'On track',behind:'Behind',
   gifts:'Gifts only, no pledge',none:'Nothing pledged'}[s]||'';}
-function gpFGoalLabel(s){return gpFStatusLabelRow(s);}
 
 /* ---- per-pledge pacing bands: paired text, never colour alone ---- */
 function gpFBandFromDays(d){if(d>=30)return 'ahead';if(d>=-30)return 'onpace';if(d>=-60)return 'behind';return 'farbehind';}
@@ -10434,7 +10020,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       /* W14 Main Content Tasks */
       {id:"mct", title:"Main Content Tasks", kind:"tasks", size:"wide",  tiers:["kpi","wide","xwide"], appContext:"home", goto:false},
       {id:"mct2",title:"Main Content Tasks (Detail view)", kind:"tasks", size:"xwide", tiers:["kpi","wide","xwide"], appContext:"home", goto:false},
-      {id:"mct3",title:"Main Content Tasks (new user — content tasks only)", kind:"tasks", size:"wide", tiers:["kpi","wide","xwide"], appContext:"home", mctSaved:[], mctRecent:[], goto:false},
+      {id:"mct3",title:"Main Content Tasks (new user, content tasks only)", kind:"tasks", size:"wide", tiers:["kpi","wide","xwide"], appContext:"home", mctSaved:[], mctRecent:[], goto:false},
       {id:"mct4",title:"Main Content Tasks (Glance)", kind:"tasks", size:"kpi", tiers:["kpi","wide","xwide"], appContext:"home", goto:false},
       /* W07 Deposits on Hand */
       {id:"depO", title:"Deposits on Hand",                     kind:"deposits",size:"wide", tiers:["kpi","wide","xwide"],filter:"All types",view:"table",range:"Q",bd:"group",tpage:1,tsort:"net-desc",trIso:null,actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
@@ -10578,7 +10164,6 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
   var RANGE_BARS={W:[40,55,48,62,58,70,66],M:[52,60,45,68,72,64,80,76],Q:[52,68,45,80,62,90,70,84],F:[50,64,58,74,66,86,78,90],Y:[60,64,70,66,78,72,85,80,88,84,92,96]};
   var RANGE_X={W:["Mon","Sun"],M:["Wk1","Wk4"],Q:["Jan","Mar"],F:["P1","P12"],Y:["Jan","Dec"]};
   function rangeTabs(w){var r=w.range||"Q";return '<div class="tabs" role="tablist">'+["W","M","Q","Y"].map(function(t){return '<button role="tab" class="tab" aria-selected="'+(r===t)+'" data-action="range-set" data-id="'+w.id+'" data-r="'+t+'">'+t+'</button>';}).join("")+'</div>';}
-  var SPARK='<div class="spark"><svg viewBox="0 0 300 50" preserveAspectRatio="none"><path d="M0,40 C40,36 60,16 100,18 C140,20 160,36 200,30 C240,24 270,10 300,14 L300,50 L0,50 Z" fill="rgba(45,72,137,.10)"/><path d="M0,40 C40,36 60,16 100,18 C140,20 160,36 200,30 C240,24 270,10 300,14" fill="none" stroke="var(--brand-fill)" stroke-width="2.5" stroke-linecap="round"/></svg></div>';
   function sparkMini(){return '<div class="kpi-spark"><svg viewBox="0 0 120 40" preserveAspectRatio="none" aria-hidden="true"><path d="M2,32 C18,28 26,13 42,15 C58,17 66,28 82,24 C98,20 110,10 118,12" fill="none" stroke="var(--brand-fill)" stroke-width="2.5" stroke-linecap="round"/></svg></div>';}
   function trendRangeBtn(w){return '<button class="trend-range" data-action="rangemenu" data-id="'+w.id+'">vs '+periodLbl(w)+ICON("expand_more")+'</button>';}
   function glance(value,delta,w){var ref=w?trendRangeBtn(w):'';return '<div class="kpi-row"><div class="kpi-num"><div class="metric-value">'+value+'</div><div class="gl-sub"><span class="delta-pill">'+ICON("north_east")+delta+'</span>'+ref+'</div></div>'+sparkMini()+'</div>';}
@@ -10587,18 +10172,15 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
   function chartHTML(w){if(w.size==="kpi")return glance("$1.24M","8.4%",w);return '<div class="cmeta"><div><span class="kpi">$1.24M</span> <span class="trend">'+ICON("trending_up")+'8.4%</span></div>'+rangeTabs(w)+'</div>'+barChart(w);}
   function statusHTML(){return '<div class="pad"><div class="metric-value" style="font-size:20px;display:flex;align-items:center;gap:8px;color:var(--txt-pos)">'+ICON("check_circle")+'All synced</div><div class="metric-delta" style="color:var(--txt-subtle)">Last sync 3 min ago</div></div>';}
   /* ---- generic breakdown content, shared by Deposit Accounts + Spend by fund ---- */
-  var TYPES=["All types"].concat(DEP_TYPES);
   var FUND=[{name:"General",net:12400},{name:"Building",net:6200},{name:"Missions",net:3100},{name:"Payroll",net:8800},{name:"Utilities",net:1450},{name:"Software",net:980}];
   /* single-hue blue ramp, dark→light, evenly stepped so slices read at a glance (biggest = darkest). Red is reserved for negative/declining only. */
   /* brand-blue ramp, dark→light (8 steps); slices sorted big→small, contiguous arcs (no gaps). Red reserved for negative/declining. */
   var PIE_COLORS=["#22376b","#2d4889","#3a5aaa","#4b6ec3","#6e8bd4","#8fa9de","#b0c4ea","#d3e0f6"];
   var OTHERS_COLOR="#c8cdd7";
-  var LINE_COLORS=["#2d4889","#4b6ec3","#6e8bd4","#3a5aaa","#5475c6","#8aa2dd"];
   /* real blue scale: hold hue+saturation constant, step the LIGHTNESS (HSL) so every step stays a saturated blue and never fades to grey. Sized to the slice count so steps are always well spread. */
   /* Exact same hue AND saturation as the original (249°, 40% — the muted amethyst) — only the lightness range is wider, so steps spread further apart without changing the color's character at all. */
   function blueRamp(n){var H=249,S=40,Lmin=18,Lmax=88,out=[];for(var i=0;i<n;i++){out.push('hsl('+H+','+S+'%,'+Math.round(Lmin+(Lmax-Lmin)*(n>1?i/(n-1):0))+'%)');}return out;}
   /* filter narrows the TABLE only; default sort = Name, Balance column is sortable (desc/asc) */
-  function depRows(w){var f=w.filter||"All types";var rows=depData(w).filter(function(a){return f.indexOf("All")===0||a.type===f;}).slice();var bs=w.balSort;if(bs==="desc")rows.sort(function(a,b){return b.net-a.net;});else if(bs==="asc")rows.sort(function(a,b){return a.net-b.net;});else rows.sort(function(a,b){return a.name.localeCompare(b.name);});return rows;}
   function depByType(w){var m={},order=[];depData(w).forEach(function(a){if(m[a.type]===undefined){m[a.type]=0;order.push(a.type);}m[a.type]+=a.net;});return order.map(function(t){return {name:t,net:m[t]};});}
   /* helpers for working charts */
   function fmtAxis(v){if(v>=1e6)return "$"+(v/1e6).toFixed(1).replace(/\.0$/,"")+"M";if(v>=1e3)return "$"+Math.round(v/1e3)+"k";return "$"+v;}
@@ -10622,22 +10204,16 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     if(range==="F"){for(i=0;i<n;i++)out.push("P"+(i+1));return out;}
     for(i=n-1;i>=0;i--)out.push(M[(((now-i)%12)+12)%12]); // Y (calendar year) and any other range: real trailing month names ending at "today"
     return out;}
-  function filterBtn(w){var f=w.filter||"All types",allT=f.indexOf("All")===0;return '<button class="filter-chip" data-action="depfilter" data-id="'+w.id+'"><span class="fc-label">'+(allT?"All account types":f)+'</span>'+ICON("expand_more")+'</button>';}
   /* Two accounts can share a name (9.x elsewhere) so once scoped to one, the chip carries its last-2-digit suffix too — otherwise "Account: General" alone can't tell you which of several "General" accounts you're actually looking at. */
   function typeLabel(w){if(w.acct){var suf=w.acctNo?w.acctNo.slice(-2):"";return "Account: "+w.acct+(suf?" **"+suf:"");}var f=w.filter||"All types";return f.indexOf("All")===0?"All Accounts":"Account Type: "+f;}
   function scopeChip(w){var lb=typeLabel(w);return '<button class="scope-chip" data-action="depfilter" data-id="'+w.id+'" aria-haspopup="listbox" aria-label="Scope, tap to change" title="'+lb.replace(/"/g,"&quot;")+'"><span class="sc-nm">'+lb+'</span>'+ICON("expand_more")+'</button>';}
   function periodLbl(w){return {W:"week",M:"month",Q:"quarter",F:"fiscal year",Y:"calendar year"}[w.range||"Q"];}
-  function secHead(t){return '<div class="dep-col-h" style="padding:8px 16px 4px">'+t+'</div>';}
   function tableHTML(rows,vlabel,wide){var tot=rows.reduce(function(s,a){return s+a.net;},0);
     var head='<div class="wt-row wt-head"><span class="lr-main">Name</span>'+(wide?'<span class="wt-type">Type</span>':'')+'<span class="wt-c2">'+vlabel+'</span></div>';
     var body=rows.map(function(a){return '<div class="wt-row"><span class="lr-main">'+a.name+((!wide&&a.type)?' <span class="lr-meta">· '+a.type+'</span>':'')+'</span>'+(wide?'<span class="wt-type">'+(a.type||"–")+'</span>':'')+'<span class="wt-c2">'+money(a.net)+'</span></div>';}).join("");
     var search='<div class="tbl-search"><div class="dep-search"><span class="material-symbols-rounded">search</span><input class="dep-q" placeholder="Search accounts" aria-label="Search accounts"></div></div>';
     return search+'<div class="scroll">'+head+body+'</div><div class="dep-total"><span>Total</span><span>'+money(tot)+'</span></div>';}
   function pie(rows,sz,layout){sz=sz||120;layout=layout||"col";var tot=rows.reduce(function(s,a){return s+a.net;},0),R=52,C=2*Math.PI*R,off=0,segs="",legend="";rows.forEach(function(a,i){var frac=tot?a.net/tot:0,len=frac*C,c=PIE_COLORS[i%PIE_COLORS.length];segs+='<circle class="seg" data-seg="'+i+'" cx="70" cy="70" r="'+R+'" fill="none" stroke="'+c+'" stroke-width="20" stroke-dasharray="'+Math.min(len+0.9,C).toFixed(2)+' '+Math.max(0,C-len-0.9).toFixed(2)+'" stroke-dashoffset="'+(-off).toFixed(2)+'" transform="rotate(-90 70 70)"></circle>';off+=len;legend+='<div class="leg" data-seg="'+i+'"><span class="dot" style="background:'+c+'"></span><span class="lg-main">'+a.name+'</span><span class="lg-meta">'+Math.round(frac*100)+'%</span></div>';});return '<div class="pie-wrap '+layout+'"><svg class="donut" viewBox="0 0 140 140" width="'+sz+'" height="'+sz+'" aria-hidden="true">'+segs+'<text x="70" y="66" text-anchor="middle" class="donut-c1">'+money(tot)+'</text><text x="70" y="85" text-anchor="middle" class="donut-c2">total</text></svg><div class="legend">'+legend+'</div></div>';}
-  function sideBySide(rows,vlabel,leftLabel){return '<div class="dep-full"><div class="dep-col"><div class="dep-col-h">'+leftLabel+'</div>'+tableHTML(rows,vlabel)+'</div><div class="dep-col"><div class="dep-col-h">Distribution</div>'+pie(rows,150,"col")+'</div></div>';}
-  function exportBtn(w){return '<button class="iconbtn" data-action="expmenu" data-id="'+w.id+'" aria-haspopup="menu" data-tip="Export this view" aria-label="Export this view">'+ICON("download")+'</button>';}
-  function depTop(w,o){return '<div class="dep-controls"><div class="dep-left"></div><div class="dep-right">'+((o&&o.toggle)?depToggle(w):"")+overflowBtn(w)+'</div></div>';}
-  function advFilterBtn(w){var open=!!(pop&&pop.type==="advfilter"&&pop.id===w.id);var dirty=(w.sort&&w.sort!=="net-desc")||w.f_active||w.f_funded;return '<button class="iconbtn'+(dirty?" on":"")+'" data-action="advfilter" data-id="'+w.id+'" aria-haspopup="menu" aria-expanded="'+open+'" aria-label="Filter and sort"><span class="material-symbols-rounded">'+(dirty?"filter_alt":"filter_list")+'</span></button>';}
   function tog(opts,cur,w){return '<div class="vtoggle" role="group" aria-label="View">'+opts.map(function(o){return '<button class="vt'+(cur===o[0]?" on":"")+'" data-action="dep-view" data-id="'+w.id+'" data-v="'+o[0]+'" aria-pressed="'+(cur===o[0])+'">'+(o[2]?ICON(o[2]):"")+o[1]+'</button>';}).join("")+'</div>';}
   function simpleToggle(w){var v=w.view||"table";return tog([["table","List"],["chart","Distribution"]],v,w);}
   function depToggle(w){var v=w.view||"table";if(w.size==="xwide")return tog([["balances","Balances","table_rows"],["trend","Trend","show_chart"]],(v==="trend"?"trend":"balances"),w);if(w.acct||w.leaf)return tog([["table","Table","table_rows"],["trend","Trend","show_chart"]],(v==="dist"?"trend":v),w);return tog([["table","Table","table_rows"],["dist","Distribution","donut_small"],["trend","Trend","show_chart"]],v,w);}
@@ -10647,7 +10223,6 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     return "";}
   function tog2(opts,cur,w){return '<div class="vtoggle" role="group" aria-label="Break down by">'+opts.map(function(o){return '<button class="vt'+(cur===o[0]?" on":"")+'" data-action="set-dist" data-id="'+w.id+'" data-d="'+o[0]+'" aria-pressed="'+(cur===o[0])+'">'+(o[2]?'<span class="material-symbols-rounded">'+o[2]+'</span>':'')+o[1]+'</button>';}).join("")+'</div>';}
   /* Deposit table — Oisin columns; full = Name·Inception·Account#·Balance, compact = Name·Balance; totals = account count + combined */
-  function balHead(w){var bs=w.balSort,ic=bs==="desc"?"arrow_downward":bs==="asc"?"arrow_upward":"unfold_more";return '<button class="wt-sort'+(bs?" on":"")+'" data-action="sort-bal" data-id="'+w.id+'" aria-label="Sort by balance"'+(bs?' aria-sort="'+(bs==="desc"?"descending":"ascending")+'"':'')+'>Balance <span class="material-symbols-rounded">'+ic+'</span></button>';}
   function depTable(w,full){var rng=w.range||"Q";
     function trendPct(a){var s=acctSeries(a,rng);return ((s[s.length-1]-s[0])/(s[0]||1))*100;}
     var rows=depScope(w).slice();
@@ -10703,33 +10278,6 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     var lgSearch='';
     return '<div class="dist-wrap">'+title+'<div class="pie-wrap row"><svg class="donut" viewBox="0 0 140 140" width="'+DS+'" height="'+DS+'" aria-hidden="true">'+arcs+'<text x="70" y="67" text-anchor="middle" class="donut-c1">'+fmtAxis(tot)+'</text><text x="70" y="86" text-anchor="middle" class="donut-c2">total</text></svg><div class="legend-col"><div class="legend-head">'+lgHead+'</div>'+lgSearch+'<div class="legend" style="max-height:'+DS+'px">'+legend+'</div></div></div></div>';}
   function depFull(w){if(w.acct)return '<div class="dep-full one"><div class="dep-col"><div class="dep-col-h">Balances</div>'+depTable(w,true)+'</div></div>';return '<div class="dep-full"><div class="dep-col"><div class="dep-col-h">Balances</div>'+depTable(w,true)+'</div><div class="dep-col dep-col-dist"><div class="dep-col-h">Distribution</div>'+donutChart(w,true)+'</div></div>';}
-  function acctModalBody(m){var w=find(m.wid);if(!w)return "";var a=depData(w).filter(function(x){return x.name===m.aname&&(!m.atype||x.type===m.atype);})[0];if(!a)return "";
-    var range=w.range||"Q",mv=m.mview||"trend";var s=acctSeries(a,range),n=s.length;
-    var latest=s[n-1],first=s[0],dpct=((latest-first)/(first||1))*100,neg=dpct<0;
-    var toggle='<div class="vtoggle" role="group" aria-label="View">'
-      +'<button class="vt'+(mv==="trend"?" on":"")+'" data-action="acct-view" data-v="trend" aria-pressed="'+(mv==="trend")+'">'+ICON("show_chart")+'Trend</button>'
-      +'<button class="vt'+(mv==="table"?" on":"")+'" data-action="acct-view" data-v="table" aria-pressed="'+(mv==="table")+'">'+ICON("table_rows")+'Table</button></div>';
-    var head='<div class="acctm-bar"><span class="type-badge tb-static"><span class="tb-ic material-symbols-rounded">category</span><span class="tb-nm">'+a.type+'</span></span>'+toggle+'</div>'
-      +'<div class="acctm-kpi"><span class="metric-value">'+money(latest)+'</span><span class="delta-grp">'+depDelta({dpct:dpct,neg:neg})+'<span class="trend-range static">vs '+periodLbl(w)+'</span></span></div>';
-    var content;
-    if(mv==="table"){var tp=dpct,tn=neg;
-      content='<div class="acctm-tbl"><div class="wt-row wt-head"><span class="lr-main">Name</span><span class="dt-c dt-type">Type</span><span class="dt-c dt-tr">Trend</span><span class="wt-c2">Balance</span></div>'
-        +'<div class="wt-row"><span class="lr-main">'+a.name+'</span><span class="dt-c dt-type"><span class="type-badge"><span class="material-symbols-rounded tb-ic">category</span><span class="tb-nm">'+a.type+'</span></span></span><span class="dt-c dt-tr"><span class="rtrend'+(tn?" neg":"")+'"><span class="material-symbols-rounded">'+(tn?"arrow_drop_down":"arrow_drop_up")+'</span>'+Math.abs(tp).toFixed(1)+'%</span></span><span class="wt-c2">'+money(a.net)+'</span></div>'
-        +'<div class="dep-total"><span>Total</span><span>'+money(a.net)+'</span></div></div>';
-    }else{
-      var lo=Math.min.apply(null,s),hi=Math.max.apply(null,s),sp=(hi-lo)||Math.abs(hi)||1;lo=Math.max(0,lo-sp*0.18);hi=hi+sp*0.18;var dom=(hi-lo)||1;
-      function px(i){return n>1?(i/(n-1)*100):50;}function py(v){return (1-(v-lo)/dom)*100;}
-      var pts=s.map(function(v,i){return px(i).toFixed(2)+','+py(v).toFixed(2);}).join(" ");
-      var grid="";[0,50,100].forEach(function(gy){grid+='<line x1="0" y1="'+gy+'" x2="100" y2="'+gy+'" stroke="var(--stroke-widget)" stroke-width="1" vector-effect="non-scaling-stroke"'+(gy===100?'':' stroke-dasharray="2 4" opacity="0.5"')+'/>';});
-      var area='<polygon fill="url(#tafm)" points="0,100 '+pts+' 100,100"/>';
-      var line='<polyline fill="none" stroke="var(--chart)" stroke-width="1.7" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" points="'+pts+'"/>';
-      var svg='<svg class="ln" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="tafm" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--chart)" stop-opacity="0.16"/><stop offset="100%" stop-color="var(--chart)" stop-opacity="0"/></linearGradient></defs>'+grid+area+line+'</svg>';
-      var yl='<span style="top:0%">'+fmtAxis(hi)+'</span><span style="top:50%">'+fmtAxis((hi+lo)/2)+'</span><span style="top:100%">'+fmtAxis(lo)+'</span>';
-      var months=rangeMonths(range,n),tk=(n<=1)?[0]:(n<=3)?[0,n-1]:[0,Math.round((n-1)/3),Math.round((n-1)*2/3),n-1];tk=tk.filter(function(v,i,arr){return arr.indexOf(v)===i;});
-      var xl=tk.map(function(i){return '<span style="left:'+px(i)+'%;transform:translateX('+(i===0?"0":(i===n-1?"-100%":"-50%"))+')">'+months[i]+'</span>';}).join("");
-      content='<div class="acctm-chart tr-plot"><div class="tr-yax">'+yl+'</div><div class="tr-canvas">'+svg+'</div><div class="tr-xax">'+xl+'</div></div>';
-    }
-    return '<div class="acctm">'+head+content+'</div>';}
   function openAcct(w,name,type,acctNo){var a=acctNo?depData(w).filter(function(x){return x.acct===acctNo;})[0]:depData(w).filter(function(x){return x.name===name&&(!type||x.type===type);})[0];if(!a)return;var mw=Object.assign({},w,{id:"__acctmodal",acct:a.name,acctType:a.type,acctNo:a.acct,size:"wide",view:"trend",trmode:"total",trIso:null,state:"ready",leaf:true});modal={t:a.name,glyph:"account_balance_wallet",scoped:true,mw:mw};modalMounted=false;pop=null;render();}
   function openType(w,typeName){var mw=Object.assign({},w,{id:"__acctmodal",filter:typeName,acct:null,acctType:null,size:"wide",view:"trend",trmode:"total",trIso:null,state:"ready",leaf:true});modal={t:typeName,glyph:"category",scoped:true,mw:mw};modalMounted=false;pop=null;render();}
   function overflowBtn(w){return "";}
@@ -11068,7 +10616,6 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
   function apMoney(n){return "$"+Number(n).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});}
   var AP_M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   function apParse(iso){var p=iso.split("-");return new Date(+p[0],+p[1]-1,+p[2]);}
-  function apISO(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
   function apFmtLong(iso){var d=apParse(iso);return AP_M[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();}
   function apDiffDays(iso){var d=apParse(iso),t=new Date(AP_TODAY.getFullYear(),AP_TODAY.getMonth(),AP_TODAY.getDate());return Math.round((d-t)/86400000);}
   function apIsOverdue(iso){return apDiffDays(iso)<0;}
@@ -11084,7 +10631,6 @@ function apFmtShort(iso){var d=apParse(iso),s=d.getDate()+" "+AP_M[d.getMonth()]
   function apTotalDue(w){return apData(w).reduce(function(s,x){return s+x.amount;},0);}
   function apOverdueTotal(w){return apData(w).filter(function(x){return apIsOverdue(x.due);}).reduce(function(s,x){return s+x.amount;},0);}
   function apOverdueCount(w){return apData(w).filter(function(x){return apIsOverdue(x.due);}).length;}
-  function apDueWithin(w,lo,hi){return apData(w).filter(function(x){var d=apDiffDays(x.due);return d>=lo&&d<=hi;}).reduce(function(s,x){return s+x.amount;},0);}
   function apVendors(w){var m={},order=[];apData(w).forEach(function(x){if(!m[x.vendor]){m[x.vendor]={vendor:x.vendor,total:0,count:0,over:0};order.push(x.vendor);}var e=m[x.vendor];e.total+=x.amount;e.count++;if(apIsOverdue(x.due))e.over+=x.amount;});var arr=order.map(function(k){return m[k];});arr.sort(function(a,b){return b.total-a.total;});return arr;}
 
   /* current selection: "total" | band id | ISO date. Defaults to Total. */

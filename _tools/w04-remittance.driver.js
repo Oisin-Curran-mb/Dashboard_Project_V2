@@ -28,15 +28,21 @@ A.eq((outside.match(/remO[A-Z]\w*\s*\(/g) || []).length, 0, "no W04 function is 
 ["REMO_", 'a==="remO-', 'pop.type==="remO-', 'a.indexOf("remO-")', 'modal.type==="remO', "remo-date-input"].forEach(function (n) { A.absent(outside, n, "no W04 code outside the block: " + n); });
 ["function remContent(", "function remFContent(", "function remHandleInput(", "function remFCommitThru(", "var REM_ACTIVITIES", "var REMF_", 'kind:"remittance-mb"', 'kind:"remittance-oc"', "remittance-mb", "remittance-oc", 'a==="rem-', 'a==="remF-', 'pop.type==="rem-thru"', 'pop.type==="remF-', 'modal.type==="remdetail"', 'modal.type==="remF']
   .forEach(function (n) { A.absent(raw, n, "Jo's remittance versions are gone: " + n); });
-["function pbarHTML(", "function pbarShow(", "function pbarHide("].forEach(function (n) { A.contains(outside, n, "shared pacing bar kept in the shell: " + n); });
+/* W04 has its own remO-pbar with its own scoped listener; the shell's shared
+   .pbar was deleted on 2026-09-28 once nothing emitted it. */
+["pbarHTML", "pbarShow", "pbarHide"].forEach(function (n) { A.absent(outside, n, "the retired shared pacing bar kept in the shell: " + n); });
 A.contains(outside, 'kind:"remittance"', "registry rows stay in the registry"); A.contains(outside, "/* W04 Remittance Pledges */", "and are labelled");
 ["Remittance Pledges (OC", "Remittance Pledges (Glance)", "Remittance Pledges (Detail view)", "Remittance Pledges (MB updated"].forEach(function (n) { A.absent(raw, n, "no (OC) / size / MB words in W04 titles: " + n); });
 const remInMarkup = [...new Set(js.match(/(?<![\w-])rem[fF]?-[a-z0-9-]+/g) || [])].filter(function (c) { return !/-$/.test(c); });
 A.eq(remInMarkup.length, 0, "block markup references no shared rem- / remF- class" + (remInMarkup.length ? " (" + remInMarkup.slice(0, 6).join(" ") + ")" : ""));
 A.absent(shell.css.replace(css, ""), ".w04-", "no w04- rule outside the region"); A.absent(shell.css.replace(css, ""), ".remO-", "no remO- rule outside the region");
 A.absent(shell.css, ".remF-", "Jo's .remF-* rules are gone");
-/* Jo's v1 .rem-* block turned out to be shared (W05 Receivables and W17 Gifts use its pacing-bar and status classes): it stays in the shell, labelled, until those are decided */
-A.contains(shell.css, "Shell: remittance-derived shared primitives", "Jo's v1 .rem-* block is kept in the shell and labelled as shared with W05 / W17");
+/* Jo's v1 .rem-* block was kept in the shell while W05 Receivables and W17 Gifts
+   still leaned on its pacing-bar and status classes. Both are decided now and own
+   their own vocabulary, so the whole run was deleted on 2026-09-28. */
+A.absent(shell.css, "Shell: remittance-derived shared primitives", "the shared .rem-* run went once nothing used it");
+A.absent(shell.css, ".rem-row", "and its rules with it");
+A.absent(shell.css, ".rem-flag", "including the status classes");
 A.absent(js, "rem-fill-'+", "W04 no longer builds rem-fill-* names dynamically"); A.absent(js, "rem-flag-'+", "W04 no longer builds rem-flag-* names dynamically");
 ["w04-fill-ontrack", "w04-fill-behind", "w04-fill-ahead", "w04-flag-behind"].forEach(function (c) { A.contains(css, "." + c, "W04 declares its own " + c); });
 A.contains(outside, ".w04-scroll,", "the shell's scroll-container list follows the renamed class");

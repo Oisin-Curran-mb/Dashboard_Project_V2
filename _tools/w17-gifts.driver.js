@@ -539,10 +539,14 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   A.absent(after.slice(after.indexOf("Gifts applied to this pledge")), "Begin date",
     "the gift level lists gifts, not another pledge table");
   /* the gifts total EXACTLY equals the pledge's displayed Received */
-  const iso = ctx.gpFThru(w);
-  const gp = ctx.gpFGiftPanel(paid.pl, iso);
+  /* gpFThru was retired with the window rebuild: every figure now reads the
+     window, and Received sums gift LINES inside it rather than taking a
+     pledge's whole paid amount all or nothing (28 Sep). */
+  const win = ctx.gpFWindow(w);
+  const gp = ctx.gpFGiftPanel(paid.pl, win.end, win);
   let gsum = 0;
-  (paid.pl.giftDate <= iso ? paid.pl.gifts : []).forEach(function (g) { gsum += g.amount; });
+  (paid.pl.gifts || []).forEach(function (g) { if (ctx.gpFInWindow(g.date, win)) gsum += g.amount; });
+  gsum = Math.round(gsum * 100) / 100;
   A.eq(gsum, paid.p.received, "the gifts sum EXACTLY to the pledge's Received");
   A.contains(gp, ctx.gpFMoney(gsum), "the gift footer states that same total");
   A.contains(gp, "applied to this pledge", "the gift footer names the basis");

@@ -5,7 +5,7 @@
    Whole-shell hosting (see w08-mystatus.driver.js). Proves: one CSS region
    (w02- copies + its own rules) and one JS region before the registry;
    plugged in only via WIDGETS.register("pension"); nothing of Jo's two
-   pension versions remains while the shared .pbar component she kept inside
+   pension versions remains; the shared .pbar component she kept inside
    her block is still in the shell; renders at three sizes; the district
    popover, sort, view/chart toggles and the Appointees drill modal work
    through the registration; the owner's three items: Glance caption
@@ -37,8 +37,11 @@ A.eq((outside.match(/penO[A-Z]\w*\s*\(/g) || []).length, 0, "no W02 function is 
 /* Jo's two versions are gone; the shared pacing bar she kept inside her block is still in the shell */
 ["function penContent(", "function penFContent(", "function penDetailModalHTML(", "function penFDetailModalHTML(", "var PEN_APPTS", "var PENF_APPTS", 'kind:"pension-mb"', 'kind:"pension-oc"', "pension-mb", "pension-oc", 'a==="pen-', 'a==="penF-', 'pop.type==="pen-dist"', 'pop.type==="penF-dist"']
   .forEach(function (n) { A.absent(raw, n, "Jo's pension versions are gone: " + n); });
-["function pbarHTML(", "function pbarShow(", "function pbarHide(", ".pbar[data-pbar]"].forEach(function (n) { A.contains(outside, n, "shared pacing bar kept in the shell: " + n); });
-A.contains(outside, "Shell: pacing bar (.pbar)", "and labelled as shared");
+/* The shared .pbar pacing bar was DELETED on 2026-09-28: its last caller was
+   Jo's gifts block, and nothing emitted its markup after that block went. What
+   matters here is that no trace of it is left behind. */
+["pbarHTML", "pbarShow", "pbarHide", "pbarPopEl", ".pbar[data-pbar]", "Shell: pacing bar"].forEach(function (n) { A.absent(outside, n, "the retired shared pacing bar kept in the shell: " + n); });
+A.absent(outside, ".pbar-lg", "and its legend swatches went with it");
 A.contains(outside, 'kind:"pension"', "registry rows stay in the registry"); A.contains(outside, "/* W02 Pension Plans */", "and are labelled");
 ["Pension Plans (OC", "Pension Plans (Glance)", "Pension Plans (Detail view)", "Pension Plans (MB updated"].forEach(function (n) { A.absent(raw, n, "no (OC) / size / MB words in W02 titles: " + n); });
 /* stand-alone CSS */
