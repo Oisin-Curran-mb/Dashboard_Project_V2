@@ -4,6 +4,17 @@ The single-file dashboard demo (`index.html`) being finalised for release to
 Value Labs, plus the tooling that verifies it and the reference material the
 review is made against. Owner: Oisin Curran. Plan: `docs/PLAN.md`.
 
+## Status, 28 September 2026
+
+Every widget is decided and finalised: W01 to W11 and W13 to W17 as dashboard
+cards, plus W18 Financial KPI, which is a page section rather than a card and so
+has no widget kind. W12 is an empty slot. Each card is a self-contained block
+registered through `WIDGETS.register`, and each widget has a driver and a
+decision record. The side-by-side comparison tab was retired with W17, the last
+undecided widget, since there is nothing left to compare.
+
+Remote: `Dashboard_Project_V2` on GitHub, private, branch `main`.
+
 ## Layout
 
 | Path | What it is |
