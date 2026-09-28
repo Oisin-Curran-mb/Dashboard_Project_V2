@@ -13,7 +13,8 @@ registered through `WIDGETS.register`, and each widget has a driver and a
 decision record. The side-by-side comparison tab was retired with W17, the last
 undecided widget, since there is nothing left to compare.
 
-Remote: `Dashboard_Project_V2` on GitHub, private, branch `main`.
+Remote: `Dashboard_Project_V2` on GitHub, public, branch `main`. The build is
+served at https://oisin-curran-mb.github.io/Dashboard_Project_V2/.
 
 ## Layout
 
@@ -27,6 +28,7 @@ Remote: `Dashboard_Project_V2` on GitHub, private, branch `main`.
 | `_ref/v1-main-e0a04c5.html` | The Phase 1 demo Value Labs already received (`main`, 19 Aug). Baseline for the V1 -> V2 change document. |
 | `_ref/oisin-docs/` | Our Design Differences doc (+ Confluence HTML) and the per-widget Build Sheet, as of PR #3. |
 | `_ref/aditya/` | Aditya's `Demo V2.html` (a fork of the shell carrying W18 Variants A-D) and his v5 KPI design spec. |
+| `Correction doc.xlsx` | Review log for the demo: one row per widget, with Defects and Changes columns. For a second team to record bad wording and defects they find while working through the live demo. Owner's document; filled in as the review runs. |
 | `docs/review/` | One review pack per widget: Jo's rulings, what she implemented, our differences, reconciliation matrix. |
 | `docs/decisions/` | One decision record per widget, filled during the review. Source for the final documents. |
 | `docs/SHARED.md` | What the widgets share, which widget uses each piece, and what stays duplicated and why. |
