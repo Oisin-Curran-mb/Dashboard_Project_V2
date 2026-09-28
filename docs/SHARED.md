@@ -147,7 +147,7 @@ shape of its tests: `table`, `sort`, `pager`, `modal`, `popover`, `skeleton`,
 | W15 Bank Balances | bank | table sort pager modal skeleton chart search filter |
 | W16 Accounts Payable By Due Date | payables | uses:escAttr uses:parseISO uses:MONTHS uses:moneyFull table sort modal popover skeleton chart search filter |
 | W17 Gifts Pledges | gifts | uses:escAttr uses:parseISO uses:fmtDateLong uses:MONTHS uses:bandFromDays table pager modal popover skeleton search filter |
-| W18 Financial KPI | none, it is a page section | uses:escText popover skeleton |
+| W18 Financial KPI | none, it is a page section | uses:escText skeleton |
 
 W14 carries no shared helper and none of the table, modal or chart shapes. That
 is accurate: it is a task list with sections and checkboxes.

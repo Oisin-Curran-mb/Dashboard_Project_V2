@@ -65,8 +65,8 @@ Placement rules learned: `WIDGETS` inside the IIFE; finished blocks before `var 
 ### Phase 2: review + finalise, one widget at a time (D9)
 Owner rules per item. Claude applies, runs lint (auto-fixing defects), runs `verify.js`, records in `docs/decisions/Wnn.md`. Where Jo's version of a widget wins, her latest block is ported from `_ref/jo-phase2-8958e49.html` over the 08 Sep copy already in the file (converted to CRLF), per widget, per commit. Her shell-wide changes (size step-down, container/sheet styling, Add-widget dialog, finder, title-tap swap) are reviewed as their own batch under G1-G12.
 
-### Phase 3: W18 / Aditya
-Owner picks which of Variants A-D ship. Port the chosen B/C/D blocks (CSS, mount divs, `fkpSolo*/fkpC*/fkpD*` JS) from `_ref/aditya/Demo V2.html`; fix `fkpActiveV`; rule on the `wfind-fkp` finder hook (edits Jo's code); resolve Variant D's invented "Current runway"; strip the prototype-only demo chip for release. Update `w18-fkp.driver.js`. `docs/decisions/W18.md`.
+### Phase 3: W18 / Aditya (28 Sep, done)
+Owner took **Variant A only**, at Aditya's own latest (`c0359df`, `c016583`, both 25 Sep): three equidistant cards, no Cash Position tile, no prototype cycle chip. Variants B, C and D do not ship, so the `fkpSolo*/fkpC*/fkpD*` blocks, the `fkpActiveV` bug, the `wfind-fkp` finder hook that edits Jo's code, and Variant D's invented "Current runway" are all moot and were never ported; the driver asserts none of them reached the build. The prototype demo chip went with the Cash Position tile rather than needing a separate release-gate strip. The reconciliation warning subsystem was deleted with the tile on the owner's instruction, not kept dormant. `_tools/one-off/build-w18-aditya-latest-2026-09-28.js`; `w18-fkp.driver.js` rev 3, 296 assertions; `docs/decisions/W18.md`.
 
 ### Release gate (before v2.0-rc1)
 - Remove the TEMPORARY review aid: the `viewOnly` filter, the `hashchange` listener, `viewOnlySelectHTML` and its `change` listener, and `viewOnly(` in `render()` (all in the "Shell: single-widget viewer" block). Lint rule T6 reports it while present.

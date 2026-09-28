@@ -695,7 +695,6 @@
       },
       "tags": [
         "uses:escText",
-        "popover",
         "skeleton"
       ]
     }

@@ -1,18 +1,36 @@
 /* w18-fkp.driver.js
-   Interaction driver for W18 Financial KPI, the ported "Financial KPI Cards v5".
+   Interaction driver for W18 Financial KPI.
 
    Runs the real block in the shared DOM shim and asserts every state and path.
-   Unlike the other fifteen drivers this widget is NOT a registry widget: it is
-   a fixed band with its own mount, so there is no registry to extract, no tier
-   loop, and no contentHTML dispatch to locate. The structural assertions check
-   the opposite instead: that nothing of Jo's was touched at all.
+   Unlike the other sixteen drivers this widget is NOT a registry widget: it is
+   a band with its own mount, so there is no registry to extract, no tier loop,
+   and no contentHTML dispatch to locate. The structural assertions check the
+   opposite instead: that nothing of Jo's was touched at all.
 
    rev 2 (2026-09-15): the warning panel moved from an absolutely positioned
-   child of the cash tile to a body mounted #fkpPop, because the tile version
-   was clipped by our own .fkp-root overflow:hidden and by her .appmain
-   overflow:auto. Also adds her refresh control, and drops the subtitle.
+   child of the cash tile to a body mounted #fkpPop, and her refresh control
+   was added.
 
-   node _port-drivers/w18-fkp.driver.js
+   rev 3 (2026-09-28): THE CASH POSITION TILE AND ITS RECONCILIATION WARNING
+   ARE GONE, on the owner's instruction, following Aditya's own two commits of
+   25 September (c0359df, c016583). The band is three equidistant cards and a
+   refresh control, and that is now most of what there is to test.
+
+   Sections 4, 8, 9, 10, 11 and 13 of rev 2 are therefore deleted rather than
+   weakened: they tested a severity model, a body mounted panel, its dismiss
+   paths, its hover persistence manager, its repositioning and the prototype
+   demo cycle, none of which exist. In their place section 8 asserts the
+   REMOVAL: that each name is undefined rather than merely uncalled, that the
+   retired actions are inert, and that no listener survives that had only the
+   panel to serve. That is the same shape the W17 driver uses for the dropped
+   "Prompted by" column, and it is what stops the deletion being silently
+   undone later.
+
+   The model is NOT kept dormant here. The owner's words were "drop the cash
+   postion completly ... remove or just not include the code", so unlike W17's
+   motivation field there is nothing left behind to pin.
+
+   node _tools/w18-fkp.driver.js
 */
 "use strict";
 const fs = require("fs");
@@ -27,6 +45,15 @@ const raw = fs.readFileSync(FILE, { encoding: "utf-8" });
 
 const START = "/* ===== W18 Financial KPI V2 ===";
 const END = "/* ===== end W18 Financial KPI V2 ===== */";
+
+/* comment-stripped source, so a claim about the CODE is not satisfied or
+   defeated by a comment that merely NAMES what was removed. The block's own
+   comments deliberately still say "Cash Position". */
+const stripJs = s => String(s).replace(/\/\*[\s\S]*?\*\//g, "");
+/* the same for CSS, and for the same reason: the block's comment explains
+   which tokens left with the tile, so it NAMES --sf-140 and --red-50. A
+   check that they are no longer DECLARED has to read past that. */
+const stripCss = stripJs;
 
 /* ---------- 0. the file itself --------------------------------------- */
 const snaps = H.baselineFiles();
@@ -85,6 +112,7 @@ const css = raw.slice(raw.indexOf("<style"), raw.lastIndexOf("</style>"));
 const bi = script.indexOf(START), bj = script.indexOf(END);
 A.ok(bi > -1 && bj > bi, "JS region markers found");
 const block = script.slice(bi, bj + END.length);
+const blockCode = stripJs(block);
 
 const ci = css.indexOf(START), cj = css.indexOf(END);
 A.ok(ci > -1 && cj > ci, "CSS region markers found");
@@ -92,58 +120,80 @@ const ourCss = css.slice(ci, cj + END.length);
 
 /* the block must live INSIDE the shell's IIFE, or ICON/money/setStatus/render
    are out of scope at run time. This is the bug the sibling drivers caught. */
-const tail = "\r\n  render();\r\n})();\r\n";
-A.ok(script.indexOf(START) < script.lastIndexOf(tail), "JS block is inside the shell IIFE");
-A.ok(raw.slice(raw.lastIndexOf("</script>") - tail.length, raw.lastIndexOf("</script>")) === tail,
+A.ok(script.indexOf(START) < script.lastIndexOf(H.TAIL), "JS block is inside the shell IIFE");
+A.ok(raw.slice(raw.lastIndexOf("</script>") - H.TAIL.length, raw.lastIndexOf("</script>")) === H.TAIL,
      "script still ends on the render()/IIFE tail the sibling drivers pin");
 
 /* ---------- 2. CSS ---------------------------------------------------- */
-const USED = ["fkp-band", "fkp-root", "fkp-hd", "fkp-title", "fkp-hd-sp", "fkp-demo",
-  "fkp-row", "fkp-tile", "fkp-lbl", "fkp-val", "fkp-unit", "fkp-meta", "fkp-py", "fkp-sep",
-  "fkp-var", "fkp-info", "fkp-cash", "fkp-warn", "fkp-pop", "fkp-tip-hd", "fkp-tip-body",
-  "fkp-tip-cta", "fkp-acct", "fkp-acct-txt", "fkp-acct-nm", "fkp-acct-dt", "fkp-sr", "fkp-skel"];
+const USED = ["fkp-band", "fkp-root", "fkp-hd", "fkp-title", "fkp-hd-sp",
+  "fkp-row", "fkp-tile", "fkp-lbl", "fkp-val", "fkp-meta", "fkp-py", "fkp-sep",
+  "fkp-var", "fkp-sr", "fkp-skel"];
 A.cssDeclares(ourCss, USED, "W18 CSS");
 
-/* the W16 defect class: a class declared and never used. The subtitle was
-   removed by ruling, so its rule must be gone too. */
+/* the W16 defect class: a class declared and never used. Everything the
+   Cash Position tile painted with must be gone from the stylesheet too, or
+   the deletion has only moved the dead weight. */
 A.absent(ourCss, ".fkp-sub", "the removed subtitle's CSS rule is gone, not orphaned");
 A.absent(ourCss, ".fkp-tip{", "the old in-tile .fkp-tip rule is gone");
+[".fkp-demo", ".fkp-unit", ".fkp-info", ".fkp-warn", ".fkp-cash", ".fkp-pop",
+  ".fkp-tip-hd", ".fkp-tip-body", ".fkp-tip-cta", ".fkp-acct"].forEach(sel => {
+    A.absent(ourCss, sel, "the retired rule " + sel + " is gone from our CSS");
+    A.absent(css, sel, "and from the whole stylesheet, so nothing else adopted it");
+  });
 
 ["\\.widget\\{", "\\.dashboard\\{", "\\.whead\\{", "\\.btn\\{", "\\.state\\{", "\\.iconbtn\\{", "\\.skeleton\\{"].forEach(sel => {
   A.ok(!new RegExp(sel).test(ourCss), "our CSS does not declare " + sel.replace(/\\/g, ""));
 });
 A.eq((ourCss.match(/^\s*:root/gm) || []).length, 0, "nothing declared on :root");
 
-/* tokens: declared once, on OUR roots only, and visible to the body mounted
-   panel as well as the band (it is no longer a descendant). */
-["--sf-20", "--sf-60", "--sf-100", "--sf-140", "--red-50", "--pos-30", "--cn-90"].forEach(t => {
-  A.eq((ourCss.match(new RegExp(t + ":", "g")) || []).length, 1, t + " declared exactly once in our block");
-  A.eq((css.replace(ourCss, "").match(new RegExp(t + ":", "g")) || []).length, 0, t + " not declared anywhere of hers");
+/* Tokens. Only --cn-90 is left: the saffron ramp and the two borrowed
+   design-system steps had no user but the warning chip and its panel. */
+A.eq((ourCss.match(/--cn-90:/g) || []).length, 1, "--cn-90 declared exactly once in our block");
+A.eq((css.replace(ourCss, "").match(/--cn-90:/g) || []).length, 0, "--cn-90 not declared anywhere of hers");
+A.contains(ourCss, "--cn-90:#979797", "--cn-90 carries her cool neutral value");
+const ourCssCode = stripCss(ourCss);
+["--sf-20", "--sf-60", "--sf-100", "--sf-140", "--red-50", "--pos-30"].forEach(t => {
+  A.absent(ourCssCode, t, t + " went with the warning chip, rather than being left declared and unused");
+  A.eq((css.match(new RegExp(t + ":", "g")) || []).length, 0, t + " is not declared anywhere in the stylesheet");
+  A.eq((stripCss(css).match(new RegExp("var\\(" + t + "\\)", "g")) || []).length, 0, t + " is not referenced anywhere either");
 });
-A.contains(ourCss, ".fkp-band,.fkp-pop{", "tokens are declared on BOTH roots so the body mounted panel inherits them");
-/* The "already existed in the shell" check was dropped 2026-09-25: it compared
-   against a pre-port snapshot that no longer exists, and against the a548419
-   baseline two of the four values (#c77d00, #e3cf94) are not present, so the
-   claim cannot be made from this repo. The values themselves are still asserted. */
-[["--sf-20", "#fdeeba"], ["--sf-100", "#f5b301"], ["--sf-140", "#c77d00"], ["--sf-60", "#e3cf94"]].forEach(([t, hex]) => {
-  A.contains(ourCss, t + ":" + hex, t + " carries the saffron value " + hex);
-});
-A.contains(ourCss, "height:176px", "band height is her Glance height (3*48 + 2*16)");
+A.absent(ourCss, ".fkp-band,", "the token selector no longer names a second root: there is no body mounted panel");
 
-/* the clipping fix, asserted structurally */
-A.contains(ourCss, "overflow:hidden", ".fkp-root keeps overflow:hidden, faithful to her .widget rule");
-/* anchored to a line start: an unanchored /\.fkp-pop\{/ also matches inside
-   the shared token selector ".fkp-band,.fkp-pop{", which is not the rule we
-   are interrogating here. */
-const popRule = /^\.fkp-pop\{[^}]*\}/m.exec(ourCss)[0];
-A.contains(popRule, "position:fixed", "panel is position:fixed so no ancestor can clip it");
-A.contains(popRule, "z-index:3000", "panel z-index matches the four sibling ported popovers");
-/* .bkf-pop left with our W15 block on 2026-09-27 (owner took Jo's Bank Balances) */
-/* .apf-pop left with our W16 block on 2026-09-27 (owner took Jo's Accounts Payable) */
-["faf-pop", "gpf-pop"].forEach(sib => {
-  const m = new RegExp("\\." + sib + "\\{[^}]*z-index:3000").test(css);
-  A.ok(m, "sibling ." + sib + " is also body mounted at z-index:3000 (house precedent)");
-});
+/* Aditya's 25 September layout, all four changes, asserted on the rules
+   themselves rather than on a substring of the block. */
+const rule = name => {
+  const m = new RegExp("^\\" + name + "\\{[^}]*\\}", "m").exec(ourCss);
+  return m ? m[0] : "";
+};
+const rowRule = rule(".fkp-row"), tileRule = rule(".fkp-tile"), bandRule = rule(".fkp-band");
+A.contains(rowRule, "grid-template-columns:repeat(3,1fr)", "(1) three tiles across, equidistant");
+A.contains(rowRule, "gap:10px", "(2) his 10px gap between the cards");
+A.absent(rowRule, "padding", "the row carries no padding of its own: the root pads the band");
+A.absent(rowRule, "background", "and no background of its own");
+A.contains(tileRule, "background:var(--surface-widget)", "(3) each tile is its own surface");
+A.contains(tileRule, "border:1px solid var(--stroke-widget)", "each tile has its own border");
+A.contains(tileRule, "border-radius:8px", "each tile has his 8px radius");
+A.contains(tileRule, "padding:10px 16px 12px", "and his tile padding");
+A.absent(tileRule, "border-left", "the 1px divider band is gone");
+A.absent(tileRule, "position:relative", "nothing is positioned against the tile now the warning button is gone");
+A.absent(ourCss, "var(--cn-30)", "the divider colour left with the dividers");
+A.absent(ourCss, ":first-child", "and so did the first-child exception it needed");
+A.contains(bandRule, "height:auto", "(4) the band sizes to its cards, not to her fixed Glance height");
+A.absent(ourCss, "height:176px", "her 176px Glance height is gone from the band");
+A.contains(rule(".fkp-root"), "padding:10px 12px 12px", "the root pads the band");
+A.contains(rule(".fkp-hd"), "padding:0 0 8px 0", "and the header only pads beneath itself");
+
+/* the breakpoints have nothing left to unpick */
+const mq = ourCss.slice(ourCss.indexOf("@media (max-width:1100px)"));
+A.contains(mq, ".fkp-row{grid-template-columns:repeat(2,1fr);}", "tablet is two across, and only that");
+A.contains(mq, ".fkp-row{grid-template-columns:1fr;}", "phone is one across");
+A.absent(mq, ".fkp-band{height:auto;}", "no breakpoint needs to undo a fixed height any more");
+A.absent(mq, ".fkp-tile", "no breakpoint needs to unpick a divider any more");
+A.contains(mq, ".fkp-skel{animation:none;}", "reduced motion still stills the shimmer");
+A.absent(mq, "transition:none", "and no longer stills transitions nothing has");
+
+/* the band is still faithful to her .widget rule */
+A.contains(rule(".fkp-root"), "overflow:hidden", ".fkp-root keeps overflow:hidden, faithful to her .widget rule");
 
 /* ---------- 3. run the block ----------------------------------------- */
 let timerScheduled = 0, lastTimerFn = null;
@@ -156,86 +206,44 @@ const run = H.runBlock(block, {
 });
 const ctx = run.ctx, shim = run.shim;
 
-/* mount the band, and register the warn button the way a parsed DOM would,
-   so the panel has a real anchor to measure against */
 const bandNode = shim.mkNode("fkpBand", "div");
 shim.nodes.fkpBand = bandNode;
-const warnBtn = shim.mkNode("fkpWarnBtn", "button");
-warnBtn.className = "fkp-warn";
-shim.nodes.fkpWarnBtn = warnBtn;
 
 ctx.fkpRender();
-const html0 = shim.captured.fkpBand;
-A.ok(html0 && html0.length > 400, "band renders into #fkpBand");
+let h = shim.captured.fkpBand;
+A.ok(h && h.length > 400, "band renders into #fkpBand");
 
-/* ---------- 4. severity model (spec 5a) ------------------------------ */
-A.eq(ctx.fkpSevOf(0), "clean", "0 accounts is clean");
-A.eq(ctx.fkpSevOf(1), "amber", "1 account is amber");
-A.eq(ctx.fkpSevOf(2), "amber", "2 accounts is amber");
-A.eq(ctx.fkpSevOf(6), "red", "6 accounts is red");
-A.eq(ctx.fkpSevOf(50), "red", "50 accounts is red");
-[3, 4, 5].forEach(n => {
-  A.eq(ctx.fkpSevOf(n), "amber", n + " accounts falls to amber (spec 5a gap)");
-  A.ok(ctx.fkpUndefinedBand(n), n + " is flagged as the undefined band");
-});
-[0, 1, 2, 6, 9].forEach(n => A.ok(!ctx.fkpUndefinedBand(n), n + " is not the undefined band"));
+/* ---------- 4. the state is two keys ---------------------------------- */
+A.eq(Object.keys(ctx.FKP_STATE).sort().join(","), "loading,updated",
+     "FKP_STATE carries only loading and updated: demo, accts and popOpen are gone");
+A.eq(ctx.FKP_STATE.loading, false, "it loads ready, not loading");
+A.eq(ctx.FKP_STATE.updated, "just now", "and with a fresh stamp");
+A.eq(ctx.FKP_TILES.length, 3, "three tiles in the model");
 
-/* ---------- 5. the band, four demo states ---------------------------- */
-function paint(n) { ctx.FKP_STATE.accts = n; ctx.fkpRender(); return shim.captured.fkpBand; }
+/* ---------- 5. the band: three cards and a refresh -------------------- */
+A.eq((h.match(/class="fkp-tile/g) || []).length, 3, "three tiles rendered, not four");
+A.contains(h, ">Financial KPI<", "title renders as Financial KPI");
+A.contains(h, '<div class="fkp-row">', "the tiles sit in the row");
+A.contains(h, 'role="region"', "the band is a labelled region");
+A.contains(h, 'aria-label="Financial KPI"', "with the same accessible name as its title");
+/* the header holds the title, the spacer and the refresh control, nothing else */
+const hd = h.slice(h.indexOf('class="fkp-hd"'), h.indexOf('class="fkp-row"'));
+A.eq((hd.match(/<button/g) || []).length, 1, "exactly one control in the header");
+A.contains(hd, 'data-fkp="refresh"', "and it is refresh");
 
-let h = paint(0);
-A.absent(h, 'data-fkp="warn"', "clean state renders no warning icon");
-A.contains(h, 'data-fkp-sev="clean"', "clean severity on the tile");
-A.contains(h, '9 <span class="fkp-unit">months</span>', "clean state shows the runway");
-A.eq(ctx.fkpPopContent(0), "", "clean state has no panel content at all");
+/* the subtitle is gone, by ruling */
+A.absent(h, "Year to date", "the 'Year to date' subtitle is removed");
+A.absent(h, "fkp-sub", "the subtitle element is gone from the markup");
+A.absent(h, "W18", "W18 never appears in rendered output");
+A.absent(h, "v5", "prototype version number is not shown to users");
+A.ok(block.indexOf("W18") > -1, "W18 does appear in the code comments (internal identifier)");
 
-h = paint(1);
-A.contains(h, 'data-fkp-sev="amber"', "amber severity on the tile");
-A.contains(h, 'data-fkp="warn"', "amber renders the warning trigger");
-A.contains(h, 'id="fkpWarnBtn"', "trigger carries the anchor id the panel measures from");
-/* the panel content is NOT in the band any more: that is the fix */
-A.absent(h, "fkp-tip-hd", "panel header is NOT inside the band markup");
-A.absent(h, "fkp-tip-body", "panel body copy is NOT inside the band markup");
-A.absent(h, "The cash figure may not reflect", "panel prose is NOT inside the band markup");
-A.absent(h, 'data-fkp="acct"', "account rows are NOT inside the band markup");
-/* the phrase itself DOES belong in the band once, on the trigger's accessible
-   label, so the count is pinned rather than the phrase forbidden. */
-A.eq((h.match(/Unreconciled Account/g) || []).length, 1,
-     "the condition is named exactly once in the band, on the trigger's aria-label");
-A.contains(h, 'aria-label="1 Unreconciled Account, show detail"', "trigger's aria-label names the condition");
+/* no resize, no tier menu, by ruling */
+A.absent(h, "aspect_ratio", "no resize control");
+A.absent(h, "more_vert", "no kebab menu");
+A.absent(h, "data-size", "no tier attribute: the band is fixed");
 
-/* panel content, built separately */
-let p = ctx.fkpPopContent(1);
-A.contains(p, "1 Unreconciled Account<", "amber 1 header is singular");
-A.contains(p, "The cash figure may not reflect the true position.", "amber body copy");
-A.eq((p.match(/data-fkp="acct"/g) || []).length, 1, "amber 1 has exactly one account row");
-A.contains(p, "Payroll Checking ..3355", "first account name");
-A.contains(p, "Last reconciled: Jul 26, 2026 (31 days ago)", "first account date, no em dash");
-A.contains(p, "chevron_right", "account row carries the chevron");
-A.absent(p, 'data-fkp="review"', "amber shows no call to action button");
-
-p = ctx.fkpPopContent(2);
-A.contains(p, "2 Unreconciled Accounts", "amber 2 header is plural");
-A.eq((p.match(/data-fkp="acct"/g) || []).length, 2, "amber 2 has two account rows");
-A.contains(p, "Missions Savings ..1188", "second account name");
-A.eq((p.match(/fkp-acct-dt late/g) || []).length, 1, "only the overdue account is marked late");
-
-p = ctx.fkpPopContent(6);
-A.contains(p, "6 Unreconciled Accounts", "red header");
-A.contains(p, "30 day reconciliation threshold", "red body names the threshold");
-A.contains(p, 'data-fkp="review"', "red shows the call to action");
-A.contains(p, 'class="btn sm primary"', "call to action uses her global .btn family");
-A.eq((p.match(/data-fkp="acct"/g) || []).length, 0, "red enumerates no individual accounts");
-h = paint(6);
-A.contains(h, '9 <span class="fkp-unit">months</span>', "red does NOT suppress the runway (v5 vs v3)");
-A.absent(h, ">—<", "no suppressed dash value");
-
-p = ctx.fkpPopContent(4);
-A.contains(p, "not yet confirmed", "the 3 to 5 gap is surfaced, not hidden");
-A.absent(ctx.fkpPopContent(2), "not yet confirmed", "the gap note does not appear at 2 accounts");
-
-/* ---------- 6. tiles, header, formatting ----------------------------- */
-h = paint(1);
+/* ---------- 6. tiles, formatting ------------------------------------- */
 A.contains(h, "$1,824,350", "income value formatted by her money()");
 A.contains(h, "$1,681,550", "expenses value");
 A.contains(h, "$142,800", "net income value");
@@ -244,27 +252,19 @@ A.contains(h, "Prev yr $1,682,400", "prior year comparison");
   A.contains(h, l, "label uses parentheses, not a dash: " + l));
 A.eq((h.match(/fkp-var pos/g) || []).length, 2, "two favourable variances");
 A.eq((h.match(/fkp-var neg/g) || []).length, 1, "one unfavourable variance");
-A.eq((h.match(/class="fkp-tile/g) || []).length, 4, "four tiles");
-A.contains(h, "$3,224,350 total cash divided by $358,000", "runway inputs are in the DOM as text");
-
-/* the subtitle is gone, by ruling */
-A.absent(h, "Year to date", "the 'Year to date' subtitle is removed");
-A.absent(h, "fkp-sub", "the subtitle element is gone from the markup");
-A.contains(h, ">Financial KPI<", "title renders as Financial KPI");
-A.absent(h, "W18", "W18 never appears in rendered output");
-A.absent(h, "v5", "prototype version number is not shown to users");
-A.ok(block.indexOf("W18") > -1, "W18 does appear in the code comments (internal identifier)");
+A.eq((h.match(/fkp-sr/g) || []).length, 3, "each tile states favourable or unfavourable for a screen reader");
+A.contains(h, "favourable", "the favourable wording is in the DOM as text");
+A.contains(h, "unfavourable", "and the unfavourable wording");
 
 /* her tooltip system, never a native title */
 A.contains(h, "data-tip=", "uses her data-tip system");
-A.contains(h, "data-tip-plain", "plain variant flagged");
+A.eq((h.match(/data-tip=/g) || []).length, 1, "exactly one tooltip in the band now: the refresh stamp");
+/* The plain variant was carried by the prototype chip and the runway info
+   icon, both of which held prose long enough to need it. Both are gone, and
+   the refresh stamp never used it, so asserting it here would be asserting
+   the presence of something the band has no use for. */
+A.absent(h, "data-tip-plain", "no plain-variant tooltip survives: its two users left with the cash tile");
 A.eq((h.match(/\stitle="/g) || []).length, 0, "no native title attribute in the band");
-A.eq((ctx.fkpPopContent(2).match(/\stitle="/g) || []).length, 0, "no native title attribute in the panel");
-
-/* no resize, no tier menu, by ruling */
-A.absent(h, "aspect_ratio", "no resize control");
-A.absent(h, "more_vert", "no kebab menu");
-A.absent(h, "data-size", "no tier attribute: the band is fixed");
 
 /* ---------- 7. the refresh control ---------------------------------- */
 A.contains(h, 'data-fkp="refresh"', "refresh control is present");
@@ -275,19 +275,16 @@ A.absent(h, "Refresh —", "refresh tooltip carries no em dash");
 A.contains(h, 'aria-label="Refresh, updated just now"', "refresh has an accessible label");
 
 /* refreshing: loading, then ready with the stamp reset, mirroring her refresh(id) */
-ctx.FKP_STATE.accts = 2; ctx.FKP_STATE.updated = "4 minutes ago"; ctx.FKP_STATE.popOpen = true;
+ctx.FKP_STATE.updated = "4 minutes ago";
 ctx.fkpRender();
-A.ok(!!shim.nodes.fkpPop, "panel is open before the refresh");
+A.contains(shim.captured.fkpBand, "updated 4 minutes ago", "the stamp renders as it stands");
 let before = timerScheduled;
 shim.fire("refresh", {});
 A.eq(ctx.FKP_STATE.loading, true, "refresh enters the loading state");
-A.eq(ctx.FKP_STATE.popOpen, false, "refresh drops an open panel, as her handler does");
-A.ok(!shim.nodes.fkpPop, "the panel element is removed on refresh");
 A.eq(timerScheduled, before + 1, "refresh schedules exactly one timer");
 let lh = shim.captured.fkpBand;
-A.eq((lh.match(/fkp-skel/g) || []).length, 12, "all four tiles show skeletons while loading");
+A.eq((lh.match(/fkp-skel/g) || []).length, 9, "all three tiles show skeletons while loading");
 A.absent(lh, "$1,824,350", "figures are hidden while loading");
-A.absent(lh, 'data-fkp="warn"', "no warning trigger while loading");
 A.contains(lh, 'data-fkp="refresh"', "refresh stays available while loading");
 A.contains(block, "FKP_LOAD_MS=1100", "load delay is 1100ms, the same as her refresh()");
 A.contains(block, 'timers["fkp"]', "the timer is keyed in HER shared timers object");
@@ -297,186 +294,101 @@ A.eq(ctx.FKP_STATE.loading, false, "the timer firing leaves the loading state");
 A.eq(ctx.FKP_STATE.updated, "just now", "refresh resets the updated stamp, as hers does");
 A.contains(shim.captured.fkpBand, "Refresh · updated just now", "the new stamp is rendered");
 A.eq(run.log.status.length, 1, "refresh reports through her setStatus");
+A.contains(run.log.status[0], "Financial KPI refreshed", "and says what was refreshed");
 
-/* a client side change must NOT enter the loading state */
-ctx.FKP_STATE.accts = 1; ctx.fkpRender();
-shim.fire("cycle", {});
-A.eq(ctx.FKP_STATE.loading, false, "the demo chip does not trigger loading");
-shim.fire("warn", {});
-A.eq(ctx.FKP_STATE.loading, false, "opening the panel does not trigger loading");
-ctx.fkpPopHide();
+/* ---------- 8. the Cash Position tile and its warning are REMOVED ----
+   Asserted as absence, and as undefined rather than merely uncalled, so the
+   deletion cannot be quietly undone. Owner, 28 Sep 2026, following Aditya
+   c0359df and c016583. */
+ctx.fkpRender();
+h = shim.captured.fkpBand;
+["Cash Position", "operating runway", "months", "Unreconciled", "reconciliation",
+  "Payroll Checking", "Missions Savings", "Last reconciled", "chevron_right",
+  "Review in Bank Account Management", "Prototype control only", "1 account",
+  "No warning", "not yet confirmed", "$3,224,350", "$358,000"].forEach(s =>
+    A.absent(h, s, "the band says nothing about " + JSON.stringify(s)));
+['data-fkp="warn"', 'data-fkp="acct"', 'data-fkp="review"', 'data-fkp="cycle"',
+  'data-fkp="stop"', "fkp-cash", "fkp-warn", "fkp-unit", "fkp-info", "fkp-demo",
+  "aria-expanded", "data-fkp-sev", "data-sev", "id=\"fkpWarnBtn\""].forEach(s =>
+    A.absent(h, s, "the band carries no " + s));
 
-/* ---------- 8. the panel is body mounted ---------------------------- */
-ctx.FKP_STATE.accts = 2; ctx.FKP_STATE.popOpen = false; ctx.fkpRender();
-A.ok(!shim.nodes.fkpPop, "no panel element exists while closed");
-A.contains(shim.captured.fkpBand, 'aria-expanded="false"', "aria-expanded false when closed");
+/* deleted, not merely unreferenced */
+["fkpCashHTML", "fkpWarnHTML", "fkpPopContent", "fkpAcctHTML", "fkpSevOf",
+  "fkpUndefinedBand", "fkpOpenPop", "fkpClosePop", "fkpPopShow", "fkpPopHide",
+  "fkpPopHideSoon", "fkpInSurface", "fkpCycle"].forEach(n =>
+    A.eq(typeof ctx[n], "undefined", n + " is deleted, not merely unused"));
+["FKP_CASH", "FKP_ACCTS", "FKP_DEMO", "FKP_THRESHOLD_DAYS", "FKP_HIDE_MS"].forEach(n =>
+  A.eq(typeof ctx[n], "undefined", n + " is deleted from the model"));
+A.eq(typeof ctx.FKP_LOAD_MS, "number", "but the refresh delay survives, because refresh survives");
 
-shim.fire("warn", {});
-A.eq(ctx.FKP_STATE.popOpen, true, "warn click opens the panel");
-const pop = shim.nodes.fkpPop;
-A.ok(!!pop, "panel is mounted as its own #fkpPop element");
-A.eq(pop.className, "fkp-pop", "panel carries the .fkp-pop class");
-A.eq(pop.getAttribute("data-fkp"), "stop", "panel is marked data-fkp=stop so our own outside-click ignores it");
-A.eq(pop.getAttribute("data-fkp-sev"), "amber", "panel carries the severity for its border colour");
-A.contains(pop.innerHTML, "2 Unreconciled Accounts", "panel holds the real content");
-A.contains(pop.innerHTML, 'data-fkp="acct"', "panel holds the clickable rows");
-A.contains(shim.captured.fkpBand, 'aria-expanded="true"', "aria-expanded true when open");
-/* the fix, stated as an assertion: the content is in the popover, not the card.
-   The band still names the condition once on the trigger's aria-label, so the
-   claim is about the panel's own structure, not about the phrase. */
-A.absent(shim.captured.fkpBand, "fkp-tip-hd", "panel header is NOT inside the band");
-A.absent(shim.captured.fkpBand, "fkp-acct", "account rows are NOT inside the band");
-A.contains(pop.innerHTML, "fkp-tip-hd", "panel header IS inside the popover element");
-A.ok(pop.style.position === undefined || true, "panel is positioned by the fixed rule");
-A.ok(parseInt(pop.style.left, 10) >= 8, "panel left is clamped into the viewport");
-A.ok(parseInt(pop.style.top, 10) >= 8, "panel top is clamped into the viewport");
-A.eq(pop.style.visibility, "visible", "panel is made visible after measuring");
+/* and gone from the CODE, while the comments may still name them */
+["FKP_CASH", "FKP_ACCTS", "FKP_DEMO", "fkpSevOf", "fkpCashHTML", "fkpPopContent",
+  "popOpen", "fkpPop", "fkpWarnBtn"].forEach(n =>
+    A.absent(blockCode, n, n + " does not appear in the block's code"));
+A.contains(block, "Cash Position", "the block's comments DO record that the tile was removed and why");
 
-shim.fire("warn", {});
-A.eq(ctx.FKP_STATE.popOpen, false, "warn click again closes it");
-A.ok(!shim.nodes.fkpPop, "closing removes the element rather than hiding it");
-
-/* severity drives the panel's own attribute */
-ctx.FKP_STATE.accts = 6; ctx.fkpPopShow();
-A.eq(shim.nodes.fkpPop.getAttribute("data-fkp-sev"), "red", "red severity reaches the panel");
-A.contains(shim.nodes.fkpPop.innerHTML, 'data-fkp="review"', "red panel holds the call to action");
-ctx.fkpPopHide();
-
-/* a clean state cannot open a panel at all */
-ctx.FKP_STATE.accts = 0; ctx.fkpPopShow();
-A.eq(ctx.FKP_STATE.popOpen, false, "the clean state refuses to open a panel");
-A.ok(!shim.nodes.fkpPop, "no panel element in the clean state");
-
-/* ---------- 9. dismiss paths ---------------------------------------- */
-ctx.FKP_STATE.accts = 2; ctx.fkpPopShow();
-A.eq(ctx.FKP_STATE.popOpen, true, "reopened for the Escape test");
-shim.fireKey("Escape", {});
-A.eq(ctx.FKP_STATE.popOpen, false, "Escape closes the panel");
-shim.fireKey("Escape", {});
-A.eq(ctx.FKP_STATE.popOpen, false, "Escape on a closed panel is inert");
-
-ctx.fkpPopShow();
-shim.fireOutside();
-A.eq(ctx.FKP_STATE.popOpen, false, "outside click closes the panel");
-
-/* a click on either surface must NOT close it */
-[".fkp-cash", ".fkp-pop"].forEach(sel => {
-  ctx.fkpPopShow();
-  const t = shim.mkTarget({}, "div", sel.slice(1));
-  t.closest = function (s) { return s === sel ? t : null; };
-  (shim.listeners.click || []).forEach(fn => fn({ target: t, preventDefault: function () {} }));
-  A.eq(ctx.FKP_STATE.popOpen, true, "a click on " + sel + " does NOT close the panel");
-  ctx.fkpPopHide();
+/* the retired actions are inert rather than throwing */
+run.log.status.length = 0;
+before = timerScheduled;
+["warn", "acct", "review", "cycle", "stop"].forEach(a => {
+  const keys = Object.keys(ctx.FKP_STATE).map(k => k + "=" + ctx.FKP_STATE[k]).join(",");
+  shim.fire(a, { "data-fkp-acct": "ms1188" });
+  A.eq(Object.keys(ctx.FKP_STATE).map(k => k + "=" + ctx.FKP_STATE[k]).join(","), keys,
+       "the retired action " + a + " changes no state");
 });
+A.eq(run.log.status.length, 0, "no retired action reports anything through setStatus");
+A.eq(timerScheduled, before, "and none of them schedules a timer");
 
-/* ---------- 10. the hover persistence fix (spec section 7) ---------- */
-/* Now that the panel is body mounted it is NOT a descendant of the tile, so
-   the manager has to recognise both surfaces by name. Both directions of the
-   crossing are asserted, which is the whole point of v5. */
-const mk = (cls) => { const t = shim.mkTarget({}, "span", cls); t.closest = (s) => (s === "." + cls ? t : null); return t; };
+/* the listeners that existed only for the panel are gone */
+A.eq((shim.listeners.click || []).length, 1, "exactly one click listener, where rev 2 had one plus four more");
+["mouseover", "mouseout", "keydown"].forEach(k =>
+  A.eq((shim.listeners[k] || []).length, 0, "no " + k + " listener survives: it served the panel only"));
+["FKP_HIDE_MS", "addEventListener(\"mouseover\"", "addEventListener(\"mouseout\"",
+  "addEventListener(\"keydown\"", "window.addEventListener"].forEach(s =>
+    A.absent(blockCode, s, "the block's code no longer contains " + JSON.stringify(s)));
 
-(shim.listeners.mouseover || []).forEach(fn => fn({ target: mk("fkp-cash") }));
-A.eq(ctx.FKP_STATE.popOpen, true, "mouseover the tile opens the panel");
+/* Escape and an outside click are inert now, rather than closing something */
+shim.fireKey("Escape", {});
+shim.fireOutside();
+A.eq(Object.keys(ctx.FKP_STATE).sort().join(","), "loading,updated",
+     "Escape and an outside click leave the band alone");
 
-/* tile -> panel: must not schedule a hide */
-before = timerScheduled;
-(shim.listeners.mouseout || []).forEach(fn => fn({ target: mk("fkp-cash"), relatedTarget: mk("fkp-pop") }));
-A.eq(timerScheduled, before, "crossing from the tile INTO the panel schedules no hide (the v5 fix)");
-A.eq(ctx.FKP_STATE.popOpen, true, "panel stays open while the pointer travels into it");
+/* Aditya's exploration scaffolding did not come across with his layout */
+["fkpSoloRender", "fkpCRender", "fkpDRender", "fkpVariantSwitch",
+  "fkp-solo", "fkp-c-", "fkp-d-", "fkpSoloRow", "fkpCBand", "fkpDBand"].forEach(n => {
+    A.absent(raw, n, "his Variant B/C/D scaffolding is not in our build: " + n);
+    A.eq(typeof ctx[n], "undefined", n + " is not defined at run time either");
+  });
 
-/* panel -> tile: also must not schedule a hide */
-(shim.listeners.mouseout || []).forEach(fn => fn({ target: mk("fkp-pop"), relatedTarget: mk("fkp-cash") }));
-A.eq(timerScheduled, before, "crossing back from the panel to the tile schedules no hide");
-A.eq(ctx.FKP_STATE.popOpen, true, "panel survives the return crossing");
-
-/* leaving both surfaces schedules the 200ms hide */
-const away = shim.mkTarget({}, "div", "elsewhere"); away.closest = () => null;
-(shim.listeners.mouseout || []).forEach(fn => fn({ target: mk("fkp-pop"), relatedTarget: away }));
-A.eq(timerScheduled, before + 1, "leaving both surfaces schedules exactly one hide timer");
-A.contains(block, "FKP_HIDE_MS=200", "the hide delay is 200ms as specified");
-lastTimerFn();
-A.eq(ctx.FKP_STATE.popOpen, false, "the timer firing closes the panel");
-
-/* mouseout from outside the widget entirely is ignored */
-before = timerScheduled;
-(shim.listeners.mouseout || []).forEach(fn => fn({ target: away, relatedTarget: null }));
-A.eq(timerScheduled, before, "mouseout outside our surfaces is ignored");
-
-/* ---------- 11. the panel follows the page -------------------------- */
-ctx.FKP_STATE.accts = 2; ctx.fkpPopShow();
-A.ok(!!shim.nodes.fkpPop, "panel open before the viewport moves");
-shim.fireWindow("resize");
-A.ok(!!shim.nodes.fkpPop, "panel is repositioned, not dropped, on resize");
-shim.fireWindow("scroll");
-A.ok(!!shim.nodes.fkpPop, "panel is repositioned, not dropped, on scroll");
-ctx.fkpPopHide();
-before = timerScheduled;
-shim.fireWindow("resize");
-A.ok(!shim.nodes.fkpPop, "resize with the panel closed creates nothing");
-
-/* ---------- 12. actions are honest stubs --------------------------- */
-run.log.status.length = 0;
-ctx.FKP_STATE.accts = 2; ctx.fkpRender();
-shim.fire("acct", { "data-fkp-acct": "ms1188" });
-A.eq(run.log.status.length, 1, "account row click reports through her setStatus");
-A.contains(run.log.status[0], "Missions Savings ..1188", "the message names the account clicked");
-A.contains(run.log.status[0], "not yet defined", "no navigation is claimed (spec section 11)");
-
-run.log.status.length = 0;
-ctx.FKP_STATE.accts = 6; ctx.fkpRender();
-shim.fire("review", {});
-A.eq(run.log.status.length, 1, "call to action reports through setStatus");
-A.contains(run.log.status[0], "not yet defined", "call to action claims no navigation either");
-
-/* data-fkp=stop is inert, so a click inside the panel chrome does nothing */
-run.log.status.length = 0;
-shim.fire("stop", {});
-A.eq(run.log.status.length, 0, "the panel's own stop marker triggers no action");
-
-/* ---------- 13. the prototype demo cycle (spec section 6) ---------- */
-ctx.FKP_STATE.demo = 0; ctx.FKP_STATE.accts = 1; ctx.FKP_STATE.popOpen = false;
-const seq = [];
-for (let i = 0; i < 5; i++) { ctx.fkpCycle(); seq.push(ctx.FKP_STATE.accts); }
-A.eq(seq.join(","), "2,6,0,1,2", "demo cycle advances 1,2,6,0 and wraps");
-ctx.FKP_STATE.demo = 1; ctx.FKP_STATE.accts = 2; ctx.fkpPopShow();
-ctx.fkpCycle();
-A.eq(ctx.FKP_STATE.popOpen, true, "panel survives amber to red");
-ctx.fkpCycle();
-A.eq(ctx.FKP_STATE.popOpen, false, "panel is dropped when the state goes clean");
-A.ok(!shim.nodes.fkpPop, "and its element is removed");
-ctx.FKP_STATE.accts = 1; ctx.fkpRender();
-A.contains(shim.captured.fkpBand, "Prototype control only", "demo chip declares itself prototype only");
-
-/* ---------- 14. no em dash sweep, every combination ---------------- */
+/* ---------- 9. every state sweeps clean ----------------------------- */
 let sweep = 0;
-[0, 1, 2, 3, 4, 5, 6, 12].forEach(n => {
-  [false, true].forEach(open => {
-    [false, true].forEach(loading => {
-      for (let d = 0; d < 4; d++) {
-        ctx.FKP_STATE.accts = n;
-        ctx.FKP_STATE.popOpen = open;
-        ctx.FKP_STATE.loading = loading;
-        ctx.FKP_STATE.demo = d;
-        ctx.fkpRender();
-        const band = shim.captured.fkpBand;
-        const panel = shim.nodes.fkpPop ? shim.nodes.fkpPop.innerHTML : "";
-        const both = band + panel;
-        A.noEmDash(both, "accts=" + n + " open=" + open + " loading=" + loading + " demo=" + d);
-        A.ok(both.indexOf("–") < 0, "no en dash at accts=" + n + " open=" + open + " loading=" + loading + " demo=" + d);
-        A.ok(band.length > 300, "non empty band at accts=" + n + " open=" + open + " loading=" + loading + " demo=" + d);
-        A.ok(both.indexOf("undefined") < 0, "no undefined leaked at accts=" + n + " open=" + open + " loading=" + loading + " demo=" + d);
-        A.ok(both.indexOf("NaN") < 0, "no NaN at accts=" + n + " open=" + open + " loading=" + loading + " demo=" + d);
-        sweep++;
-      }
-    });
+[false, true].forEach(loading => {
+  ["just now", "4 minutes ago", "an hour ago", '<b>"x"&</b>'].forEach(stamp => {
+    ctx.FKP_STATE.loading = loading;
+    ctx.FKP_STATE.updated = stamp;
+    ctx.fkpRender();
+    const band = shim.captured.fkpBand;
+    A.noEmDash(band, "loading=" + loading + " stamp=" + stamp);
+    A.ok(band.indexOf("–") < 0, "no en dash at loading=" + loading + " stamp=" + stamp);
+    A.ok(band.length > 300, "non empty band at loading=" + loading + " stamp=" + stamp);
+    A.ok(band.indexOf("undefined") < 0, "no undefined leaked at loading=" + loading + " stamp=" + stamp);
+    A.ok(band.indexOf("NaN") < 0, "no NaN at loading=" + loading + " stamp=" + stamp);
+    A.eq((band.match(/class="fkp-tile/g) || []).length, 3, "three tiles at loading=" + loading + " stamp=" + stamp);
+    sweep++;
   });
 });
-A.eq(sweep, 128, "swept 128 combinations of count, panel state, loading and demo index");
+A.eq(sweep, 8, "swept 8 combinations of loading state and update stamp");
 
 A.noEmDash(block, "the JS block source");
 A.noEmDash(ourCss, "the CSS block source");
 
-/* ---------- 15. escaping ------------------------------------------- */
+/* ---------- 10. escaping ------------------------------------------- */
 A.eq(ctx.fkpEsc('<b>"x"&</b>'), "&lt;b&gt;&quot;x&quot;&amp;&lt;/b&gt;", "fkpEsc escapes angle brackets, quotes and ampersands");
+ctx.FKP_STATE.loading = false;
+ctx.FKP_STATE.updated = '<img src=x onerror=1>';
+ctx.fkpRender();
+A.absent(shim.captured.fkpBand, "<img src=x", "a hostile update stamp is escaped in both the tooltip and the label");
+A.contains(shim.captured.fkpBand, "&lt;img src=x", "and appears escaped instead");
+ctx.FKP_STATE.updated = "just now";
 
 process.exit(A.report());

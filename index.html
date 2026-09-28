@@ -2877,19 +2877,17 @@
 
 /* ===== W18 Financial KPI V2 ===== */
 
-.fkp-band,.fkp-pop{
-  --sf-20:#fdeeba;
-  --sf-60:#e3cf94;
-  --sf-100:#f5b301;
-  --sf-140:#c77d00;
-  /* missing steps in ramps she already declares, from pathway-ds-main */
-  --red-50:#e29f9f;
-  --pos-30:#c9edce;
-  --cn-90:#979797;
-}
-
+/* The saffron ramp and the borrowed --red-50 / --pos-30 steps left with the
+   Cash Position tile on 28 Sep 2026: its warning chip, its panel and its
+   account rows were the only things that painted with them. --cn-90 stays,
+   because the tile label and the middle dot separator still use it. The
+   selector no longer names a second root either, there being no body mounted
+   panel to hand the tokens to. */
 .fkp-band{
-  height:176px;
+  --cn-90:#979797;
+  /* height:auto, not her fixed 176px Glance height: the three tiles are
+     their own cards now and size themselves (Aditya, 25 Sep 2026). */
+  height:auto;
   margin:0 0 16px;
   box-sizing:border-box;
 }
@@ -2905,18 +2903,21 @@
   border:1px solid var(--stroke-widget);
   border-radius:var(--r);
   box-shadow:0 1px 2px rgba(41,39,36,.04),0 2px 8px rgba(41,39,36,.05);
+  /* the band pads itself now that the tiles are cards, rather than the
+     header and the row each carrying their own asymmetric padding */
+  padding:10px 12px 12px;
 }
 
 /* Header. Deliberately carries no resize control and no tier menu: the band
    is fixed by ruling, so offering either would imply an action that does not
    exist. Refresh is her own .iconbtn with her own refresh glyph and her own
-   "updated" wording. The demo chip is prototype only (spec section 6) and
-   says so in its own tooltip. */
+   "updated" wording, and is now the only control in the header: the
+   prototype state chip went with the Cash Position tile. */
 .fkp-hd{
   display:flex;
   align-items:center;
   gap:8px;
-  padding:7px 10px 0 14px;
+  padding:0 0 8px 0;
   flex:0 0 auto;
 }
 .fkp-title{
@@ -2927,53 +2928,30 @@
 }
 .fkp-hd-sp{flex:1 1 auto;}
 
-/* Prototype state chip. Colour follows the current severity. */
-.fkp-demo{
-  display:inline-flex;
-  align-items:center;
-  gap:4px;
-  height:26px;
-  padding:0 9px;
-  border:1px solid var(--sf-60);
-  border-radius:6px;
-  background:var(--sf-20);
-  font:inherit;
-  font-size:11px;
-  font-weight:600;
-  color:var(--sf-140);
-  cursor:pointer;
-  white-space:nowrap;
-  transition:background var(--dur),border-color var(--dur);
-}
-.fkp-demo:hover{background:var(--sf-60);}
-.fkp-demo .material-symbols-rounded{font-size:14px;line-height:1;}
-.fkp-demo[data-sev="clean"]{border-color:var(--pos-30);background:var(--pos-10);color:var(--green-120);}
-.fkp-demo[data-sev="clean"]:hover{background:var(--pos-30);}
-.fkp-demo[data-sev="red"]{border-color:var(--red-50);background:var(--red-10);color:var(--red-130);}
-.fkp-demo[data-sev="red"]:hover{background:var(--red-50);}
-
-/* Four tiles across at every width down to tablet, then two by two. The band
-   is fixed height, so the row takes the remaining space and never scrolls. */
+/* Three tiles across down to tablet, then two by two. Each tile is its own
+   card with its own surface, border and radius, which is Aditya's 25 Sep
+   layout (c016583): the 1px divider band it replaces made sense when a
+   fourth tile carried a warning that had to sit visually inside the band.
+   position:relative is NOT kept, though his file keeps it: it existed only
+   to anchor the warning button, and there is nothing absolute here now. */
 .fkp-row{
   flex:1 1 auto;
   display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:1px;
-  padding:6px 14px 12px;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
   min-height:0;
-  background:transparent;
 }
 .fkp-tile{
-  position:relative;
   display:flex;
   flex-direction:column;
   justify-content:center;
-  gap:3px;
+  gap:4px;
   min-width:0;
-  padding:0 14px;
-  border-left:1px solid var(--cn-30);
+  padding:10px 16px 12px;
+  background:var(--surface-widget);
+  border:1px solid var(--stroke-widget);
+  border-radius:8px;
 }
-.fkp-tile:first-child{border-left:0;padding-left:0;}
 
 .fkp-lbl{
   font-size:10px;
@@ -2992,12 +2970,6 @@
   line-height:1.15;
   white-space:nowrap;
 }
-.fkp-unit{
-  font-size:13px;
-  font-weight:500;
-  color:var(--txt-secondary);
-  letter-spacing:0;
-}
 .fkp-meta{
   display:flex;
   align-items:center;
@@ -3012,22 +2984,9 @@
 .fkp-var.pos{color:var(--pos-100);}
 .fkp-var.neg{color:var(--red-100);}
 
-/* Info affordance next to the runway wording. Uses her delegated data-tip
-   system, so there is no native title attribute anywhere in this block. */
-.fkp-info{
-  display:inline-flex;
-  align-items:center;
-  color:var(--cn-90);
-  cursor:help;
-  flex:0 0 auto;
-}
-.fkp-info .material-symbols-rounded{font-size:14px;line-height:1;}
-.fkp-info:hover{color:var(--txt-secondary);}
-
-/* Loading. A refresh is a data fetch, so it gets her shimmer treatment; the
-   demo chip and the warning panel do not, because they change nothing that
-   has to be fetched. Her .skeleton is a flex column built for a whole card
-   body, so the band uses its own per-tile bars on her same token and timing. */
+/* Loading. A refresh is a data fetch, so it gets her shimmer treatment. Her
+   .skeleton is a flex column built for a whole card body, so the band uses
+   its own per-tile bars on her same token and timing. */
 .fkp-skel{
   border-radius:5px;
   background:linear-gradient(90deg,var(--wn-200) 25%,var(--wn-300) 37%,var(--wn-200) 63%);
@@ -3038,115 +2997,6 @@
 .fkp-skel.val{width:82%;height:21px;}
 .fkp-skel.meta{width:72%;height:11px;}
 @keyframes fkpShimmer{0%{background-position:100% 0;}100%{background-position:0 0;}}
-
-/* ---- Cash Position tile: the reconciliation warning ---- */
-.fkp-warn{
-  position:absolute;
-  top:0;
-  right:8px;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:22px;
-  height:22px;
-  border:0;
-  padding:0;
-  background:transparent;
-  border-radius:4px;
-  cursor:pointer;
-  color:var(--sf-100);
-}
-.fkp-warn:focus-visible{outline:2px solid var(--focus);outline-offset:1px;}
-.fkp-warn .material-symbols-rounded{font-size:19px;line-height:1;font-variation-settings:'FILL' 1;}
-.fkp-cash[data-fkp-sev="red"] .fkp-warn{color:var(--red-100);}
-
-/* The warning panel, body mounted at position:fixed so no ancestor can clip
-   it. It holds interactive rows and a button, which her text-only data-tip
-   cannot, and it is shown and hidden by our own 200ms manager (spec section
-   7) so the pointer can travel from the icon into the panel without it
-   closing, which is the whole point of v5. Shadow and z-index match the four
-   sibling ported popovers in this file. */
-.fkp-pop{
-  position:fixed;
-  z-index:3000;
-  width:274px;
-  max-width:calc(100vw - 16px);
-  padding:10px 11px;
-  box-sizing:border-box;
-  background:var(--surface-widget);
-  border:1px solid var(--sf-60);
-  border-radius:10px;
-  box-shadow:0 14px 36px rgba(41,39,36,.24),0 3px 10px rgba(41,39,36,.14);
-  text-align:left;
-}
-.fkp-pop[data-fkp-sev="red"]{border-color:var(--red-50);}
-
-.fkp-tip-hd{
-  display:flex;
-  align-items:center;
-  gap:5px;
-  font-size:11px;
-  font-weight:700;
-  text-transform:uppercase;
-  letter-spacing:.4px;
-  color:var(--sf-140);
-  margin-bottom:5px;
-}
-.fkp-tip-hd .material-symbols-rounded{font-size:15px;line-height:1;font-variation-settings:'FILL' 1;}
-.fkp-pop[data-fkp-sev="red"] .fkp-tip-hd{color:var(--red-130);}
-
-.fkp-tip-body{
-  font-size:12px;
-  line-height:1.45;
-  color:var(--txt-secondary);
-  margin-bottom:7px;
-}
-
-/* Clickable account row. Chevron is flex-shrink:0 so it never wraps or
-   disappears, and the name block truncates instead (spec section 8). */
-.fkp-acct{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:6px;
-  width:100%;
-  box-sizing:border-box;
-  padding:6px 8px;
-  border:1px solid var(--sf-60);
-  border-radius:6px;
-  background:var(--sf-20);
-  cursor:pointer;
-  text-align:left;
-  font:inherit;
-  transition:background var(--dur),border-color var(--dur);
-}
-.fkp-acct + .fkp-acct{margin-top:4px;}
-.fkp-acct:hover{background:var(--sf-60);border-color:var(--sf-100);}
-.fkp-acct:focus-visible{outline:2px solid var(--focus);outline-offset:1px;}
-.fkp-acct-txt{flex:1 1 auto;min-width:0;}
-.fkp-acct-nm{
-  display:block;
-  font-size:12px;
-  font-weight:600;
-  color:var(--txt-primary);
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-.fkp-acct-dt{
-  display:block;
-  font-size:11px;
-  color:var(--sf-140);
-  overflow:hidden;
-  text-overflow:ellipsis;
-  white-space:nowrap;
-}
-.fkp-acct-dt.late{color:var(--red-100);}
-.fkp-acct .material-symbols-rounded{font-size:16px;line-height:1;color:var(--sf-140);flex:0 0 auto;}
-
-/* Red state shows a single call to action instead of enumerating accounts.
-   The button itself is her global .btn family, not new chrome. */
-.fkp-tip-cta{margin-top:2px;}
 
 /* Screen reader only, for the values that must be in the DOM as text. */
 .fkp-sr{
@@ -3159,17 +3009,15 @@
   border:0;
 }
 
+/* The band is height:auto at every width now, and the tiles are cards rather
+   than divided columns, so the breakpoints only restate the column count. */
 @media (max-width:1100px){
-  .fkp-band{height:auto;}
-  .fkp-row{grid-template-columns:repeat(2,1fr);gap:10px 1px;padding-bottom:14px;}
-  .fkp-tile:nth-child(3){border-left:0;padding-left:0;}
+  .fkp-row{grid-template-columns:repeat(2,1fr);}
 }
 @media (max-width:620px){
   .fkp-row{grid-template-columns:1fr;}
-  .fkp-tile{border-left:0;padding-left:0;}
 }
 @media (prefers-reduced-motion:reduce){
-  .fkp-demo,.fkp-acct{transition:none;}
   .fkp-skel{animation:none;}
 }
 /* ===== end W18 Financial KPI V2 ===== */
@@ -11163,43 +11011,18 @@ var FKP_TILES=[
   {lbl:"Net Income (YTD)",     val:142800,  prev:84200,   chg:"69.6%", dir:"up", fav:true}
 ];
 
-/* Runway: total cash divided by average monthly operating expenses.
-   3224350 / 358000 = 9.01, shown as 9 months (spec 4a). The averaging window
-   is a fixture here; the spec records it as configurable in production. */
-var FKP_CASH={cash:3224350,opex:358000,months:9,window:"May to Jul 2026",windowMonths:3};
+/* THE CASH POSITION TILE AND ITS RECONCILIATION WARNING WERE REMOVED on
+   28 Sep 2026 (owner, following Aditya c0359df and c016583). Deleted with
+   them: FKP_CASH, FKP_THRESHOLD_DAYS, FKP_ACCTS, FKP_DEMO, fkpSevOf,
+   fkpUndefinedBand, and the demo, accts and popOpen state keys. The whole
+   subsystem hung off a tile that no longer exists, and the prototype chip
+   was the only way to reach its other states, so nothing could have shown
+   it. Spec sections 5, 6, 7, 8, 10 and 11 therefore no longer apply to this
+   block; they are recorded in docs/decisions/W18.md against the day the
+   tile was dropped, so the reasoning survives the code.
 
-/* Reconciliation threshold in days. Hardcoded in the prototype and recorded
-   in spec section 11 as an admin setting in production. */
-var FKP_THRESHOLD_DAYS=30;
-
-/* The two accounts the amber states enumerate. "late" drives the red date
-   text on a significantly overdue account (spec 5c). */
-var FKP_ACCTS=[
-  {id:"pc3355",name:"Payroll Checking ..3355", last:"Jul 26, 2026", days:31, late:false},
-  {id:"ms1188",name:"Missions Savings ..1188", last:"Jun 25, 2026", days:62, late:true}
-];
-
-/* Severity is 2 colour by account count (spec 5a): amber under 3, red over 5.
-   THE 3 TO 5 BAND IS UNDEFINED IN THE SPEC. Section 5a flags it as needing
-   product confirmation and says the prototype treats it as amber. That is
-   what fkpSevOf does, and the gap is surfaced on screen in the panel
-   rather than hidden, per the placeholder rule. */
-function fkpSevOf(n){
-  if(!n)return "clean";
-  return n>5?"red":"amber";
-}
-function fkpUndefinedBand(n){return n>=3&&n<=5;}
-
-/* Prototype only demo cycle, spec section 6. Loads at 1 account so the
-   clickable row with its chevron is visible without pressing anything. */
-var FKP_DEMO=[
-  {accts:1,lbl:"1 account",   ic:"warning"},
-  {accts:2,lbl:"2 accounts",  ic:"warning"},
-  {accts:6,lbl:"6 accounts",  ic:"error"},
-  {accts:0,lbl:"No warning",  ic:"check_circle"}
-];
-
-var FKP_STATE={demo:0,accts:1,popOpen:false,loading:false,updated:"just now"};
+   What is left is three tiles and a refresh. */
+var FKP_STATE={loading:false,updated:"just now"};
 
 /* (2) RENDER ----------------------------------------------------------- */
 function fkpEsc(s){return escText(s);}
@@ -11220,70 +11043,7 @@ function fkpTileHTML(t){
   '</div>';
 }
 
-function fkpAcctHTML(a){
-  return '<button type="button" class="fkp-acct" data-fkp="acct" data-fkp-acct="'+fkpEsc(a.id)+'">'+
-    '<span class="fkp-acct-txt">'+
-      '<span class="fkp-acct-nm">'+fkpEsc(a.name)+'</span>'+
-      '<span class="fkp-acct-dt'+(a.late?" late":"")+'">Last reconciled: '+fkpEsc(a.last)+' ('+a.days+' days ago)</span>'+
-    '</span>'+
-    ICON("chevron_right")+
-  '</button>';
-}
-
-/* The warning panel's CONTENT. Amber enumerates the accounts as clickable
-   rows; red shows one call to action instead, because six rows is too many to
-   list (spec 5d). Red does NOT suppress the runway figure: that is the
-   deliberate v5 departure from v3, recorded in spec section 10. */
-function fkpPopContent(n){
-  var sev=fkpSevOf(n);
-  if(sev==="clean")return "";
-  var red=sev==="red";
-  var hd=n+" Unreconciled Account"+(n===1?"":"s");
-  var body=red
-    ? "A significant number of accounts exceed the "+FKP_THRESHOLD_DAYS+" day reconciliation threshold. The cash position shown may be inaccurate."
-    : "The cash figure may not reflect the true position.";
-  var out='<div class="fkp-tip-hd">'+ICON(red?"error":"warning")+'<span>'+hd+'</span></div>'+
-    '<div class="fkp-tip-body">'+body+'</div>';
-  if(red){
-    out+='<div class="fkp-tip-cta"><button type="button" class="btn sm primary" data-fkp="review">Review in Bank Account Management</button></div>';
-  }else{
-    out+=FKP_ACCTS.slice(0,n).map(fkpAcctHTML).join("");
-    /* Spec 5a leaves 3 to 5 accounts undefined. Say so on screen rather than
-       let an unconfirmed rule look decided. */
-    if(fkpUndefinedBand(n))out+='<div class="fkp-tip-body" style="margin:6px 0 0">Showing the first '+FKP_ACCTS.length+'. The treatment of 3 to 5 unreconciled accounts is not yet confirmed.</div>';
-  }
-  return out;
-}
-
-/* Only the trigger lives in the tile now. The panel itself is body mounted,
-   see fkpOpenPop. */
-function fkpWarnHTML(n){
-  var sev=fkpSevOf(n);
-  if(sev==="clean")return "";
-  var hd=n+" Unreconciled Account"+(n===1?"":"s");
-  return '<button type="button" class="fkp-warn" id="fkpWarnBtn" data-fkp="warn" aria-expanded="'+(FKP_STATE.popOpen?"true":"false")+'" aria-label="'+fkpEsc(hd)+', show detail">'+
-    ICON(sev==="red"?"error":"warning")+
-  '</button>';
-}
-
-function fkpCashHTML(){
-  if(FKP_STATE.loading)return '<div class="fkp-tile fkp-cash" data-fkp-sev="clean"><div class="fkp-skel lbl"></div><div class="fkp-skel val"></div><div class="fkp-skel meta"></div></div>';
-  var n=FKP_STATE.accts,sev=fkpSevOf(n);
-  return '<div class="fkp-tile fkp-cash" data-fkp-sev="'+sev+'">'+
-    '<div class="fkp-lbl">Cash Position</div>'+
-    fkpWarnHTML(n)+
-    '<div class="fkp-val">'+FKP_CASH.months+' <span class="fkp-unit">months</span></div>'+
-    '<div class="fkp-meta">'+
-      '<span class="fkp-py">of operating runway</span>'+
-      '<span class="fkp-info" data-tip="Average monthly operating expenses calculated using '+FKP_CASH.window+' ('+FKP_CASH.windowMonths+' months)." data-tip-plain>'+ICON("info")+'</span>'+
-    '</div>'+
-    '<span class="fkp-sr">'+money(FKP_CASH.cash)+' total cash divided by '+money(FKP_CASH.opex)+' average monthly operating expenses'+
-      (sev==="clean"?"":", "+n+" account"+(n===1?"":"s")+" not reconciled in the last "+FKP_THRESHOLD_DAYS+" days")+'</span>'+
-  '</div>';
-}
-
 function fkpBandHTML(){
-  var d=FKP_DEMO[FKP_STATE.demo],sev=fkpSevOf(FKP_STATE.accts);
   /* Her own refresh affordance: her .iconbtn, her refresh glyph, her
      "Refresh, updated X" wording, and her middle dot rather than a dash. */
   var refresh='<button type="button" class="iconbtn" data-fkp="refresh" data-tip="Refresh · updated '+fkpEsc(FKP_STATE.updated)+'" aria-label="Refresh, updated '+fkpEsc(FKP_STATE.updated)+'">'+ICON("refresh")+'</button>';
@@ -11291,14 +11051,10 @@ function fkpBandHTML(){
     '<div class="fkp-hd">'+
       '<span class="fkp-title">Financial KPI</span>'+
       '<span class="fkp-hd-sp"></span>'+
-      '<button type="button" class="fkp-demo" data-fkp="cycle" data-sev="'+sev+'" data-tip="Prototype control only. Cycles the reconciliation warning through its four states so reviewers can see each one. It does not exist in production." data-tip-plain>'+
-        ICON(d.ic)+'<span>'+fkpEsc(d.lbl)+'</span>'+
-      '</button>'+
       refresh+
     '</div>'+
     '<div class="fkp-row">'+
       FKP_TILES.map(fkpTileHTML).join("")+
-      fkpCashHTML()+
     '</div>'+
   '</div>';
 }
@@ -11307,92 +11063,22 @@ function fkpRender(){
   var el=document.getElementById("fkpBand");
   if(!el)return;
   el.innerHTML=fkpBandHTML();
-  /* keep the body mounted panel in step with the state that just rendered */
-  if(FKP_STATE.popOpen&&fkpSevOf(FKP_STATE.accts)!=="clean")fkpOpenPop();else fkpClosePop();
 }
 
-/* (3) THE WARNING PANEL, own #fkpPop, body mounted -------------------
-   It began as an absolutely positioned child of the cash tile and was
-   clipped by our own .fkp-root overflow:hidden, and would in any case have
-   been cut by her .appmain overflow:auto. Body mounting at position:fixed is
-   how .faf-pop, .gpf-pop already solve this in this
-   file, so it is the house answer rather than a new one, and it lets
-   .fkp-root keep the overflow:hidden of her real .widget rule. */
-function fkpClosePop(){
-  var el=document.getElementById("fkpPop");
-  if(el&&el.remove)el.remove();
-}
-
-function fkpOpenPop(){
-  var anchor=document.getElementById("fkpWarnBtn");
-  if(!anchor)return;
-  var el=document.getElementById("fkpPop");
-  if(!el){el=document.createElement("div");el.id="fkpPop";document.body.appendChild(el);}
-  el.className="fkp-pop";
-  el.setAttribute("data-fkp","stop");
-  el.setAttribute("data-fkp-sev",fkpSevOf(FKP_STATE.accts));
-  el.setAttribute("role","group");
-  el.setAttribute("aria-label","Unreconciled accounts");
-  el.innerHTML=fkpPopContent(FKP_STATE.accts);
-  /* Right aligned under the icon, clamped into the viewport on both axes and
-     flipped above the icon when there is not room below, the same geometry
-     the sibling popovers use. */
-  var r=anchor.getBoundingClientRect&&anchor.getBoundingClientRect(),M=8;
-  if(!r)return;
-  el.style.visibility="hidden";el.style.left="0px";el.style.top="0px";
-  var pw=el.offsetWidth||274,ph=el.offsetHeight||150;
-  var vw=(window.innerWidth||1440),vh=(window.innerHeight||900);
-  var left=Math.min(Math.max(M,r.right-pw),Math.max(M,vw-pw-M));
-  var below=r.bottom+6,top=below;
-  if(below+ph>vh-M&&r.top-6-ph>M)top=r.top-6-ph;
-  else top=Math.min(below,Math.max(M,vh-ph-M));
-  el.style.left=left+"px";
-  el.style.top=top+"px";
-  el.style.visibility="visible";
-}
-
+/* (3) STATE ----------------------------------------------------------
+   The body mounted #fkpPop, its 200ms hover persistence manager
+   (fkpInSurface / fkpPopShow / fkpPopHide / fkpPopHideSoon) and the demo
+   cycle were deleted with the Cash Position tile on 28 Sep 2026. They were
+   the answer to a clipping problem on a tile that no longer exists. The
+   house answer they followed is still in the file, in .faf-pop and
+   .gpf-pop, if a popover is ever wanted here again. */
 var FKP_WIRED=false;
-var FKP_HIDE_MS=200;
 var FKP_LOAD_MS=1100;
-var _fkpHideT=null;
-
-/* true when the pointer is over either surface that should keep it open */
-function fkpInSurface(node){
-  if(!node||!node.closest)return false;
-  return !!(node.closest(".fkp-cash")||node.closest(".fkp-pop"));
-}
-
-function fkpPopShow(){
-  if(_fkpHideT){clearTimeout(_fkpHideT);_fkpHideT=null;}
-  if(FKP_STATE.popOpen)return;
-  if(fkpSevOf(FKP_STATE.accts)==="clean")return;
-  FKP_STATE.popOpen=true;
-  fkpRender();
-}
-function fkpPopHide(){
-  if(_fkpHideT){clearTimeout(_fkpHideT);_fkpHideT=null;}
-  if(!FKP_STATE.popOpen)return;
-  FKP_STATE.popOpen=false;
-  fkpRender();
-}
-function fkpPopHideSoon(){
-  if(_fkpHideT)clearTimeout(_fkpHideT);
-  _fkpHideT=setTimeout(function(){_fkpHideT=null;fkpPopHide();},FKP_HIDE_MS);
-}
-
-function fkpCycle(){
-  FKP_STATE.demo=(FKP_STATE.demo+1)%FKP_DEMO.length;
-  FKP_STATE.accts=FKP_DEMO[FKP_STATE.demo].accts;
-  /* A state with no warning has nothing to keep open. */
-  if(fkpSevOf(FKP_STATE.accts)==="clean")FKP_STATE.popOpen=false;
-  fkpRender();
-}
 
 /* Mirrors her own refresh(id): loading state, render, one timer in her shared
-   timers object, then ready with the stamp reset. An open panel is dropped
-   first, exactly as her handler does pop=null before calling refresh. */
+   timers object, then ready with the stamp reset. It no longer drops an open
+   panel first, there being no panel to drop since 28 Sep 2026. */
 function fkpRefresh(){
-  FKP_STATE.popOpen=false;
   FKP_STATE.loading=true;
   fkpRender();
   clearTimeout(timers["fkp"]);
@@ -11404,65 +11090,19 @@ function fkpRefresh(){
   },FKP_LOAD_MS);
 }
 
+/* (4) WIRING ---------------------------------------------------------
+   One delegated click listener with one action. It was five listeners and
+   six actions until 28 Sep 2026: the outside-click branch, the mouseover,
+   mouseout and keydown handlers and the resize and scroll repositioning
+   all existed for the warning panel, and warn, acct, review, cycle and
+   stop were its actions. Refresh is what is left. */
 function fkpWire(){
   if(FKP_WIRED)return;FKP_WIRED=true;
-
-  /* ONE click listener, not two. An earlier draft used a second listener for
-     the outside click, and because both ran on the same event the first could
-     open the panel and the second close it again in the same tick. The
-     outside close is the else branch here, so the two can never race. */
   document.addEventListener("click",function(e){
-    var t=e.target.closest&&e.target.closest("[data-fkp]");
-    if(!t){
-      /* a click on anything that is not one of our controls, and not on
-         either of our two surfaces, dismisses the panel */
-      if(FKP_STATE.popOpen&&!fkpInSurface(e.target))fkpPopHide();
-      return;
-    }
-    var a=t.getAttribute("data-fkp");
-    if(a==="stop")return;
-    if(a==="refresh"){fkpRefresh();return;}
-    if(a==="cycle"){fkpCycle();return;}
-    if(a==="warn"){
-      if(FKP_STATE.popOpen)fkpPopHide();else fkpPopShow();
-      return;
-    }
-    if(a==="acct"){
-      /* Spec section 11: in production this navigates to Bank Account
-         Management filtered to this account. There is no verified target or
-         url pattern, so nothing is navigated and the intent is stated. */
-      var id=t.getAttribute("data-fkp-acct"),nm=id;
-      for(var i=0;i<FKP_ACCTS.length;i++)if(FKP_ACCTS[i].id===id)nm=FKP_ACCTS[i].name;
-      setStatus("Would open "+nm+" in Bank Account Management. Navigation target not yet defined.");
-      return;
-    }
-    if(a==="review"){
-      setStatus("Would open the unreconciled accounts list in Bank Account Management. Navigation target not yet defined.");
-      return;
-    }
+    var n=e.target.closest&&e.target.closest("[data-fkp]");
+    if(!n)return;
+    if(n.getAttribute("data-fkp")==="refresh")fkpRefresh();
   });
-
-  document.addEventListener("mouseover",function(e){
-    if(fkpInSurface(e.target))fkpPopShow();
-  });
-  document.addEventListener("mouseout",function(e){
-    if(!fkpInSurface(e.target))return;
-    /* moving to the other surface, or deeper into the same one, is not
-       leaving: that is the whole v5 fix */
-    if(e.relatedTarget&&fkpInSurface(e.relatedTarget))return;
-    fkpPopHideSoon();
-  });
-
-  document.addEventListener("keydown",function(e){
-    if(e.key==="Escape"&&FKP_STATE.popOpen){fkpPopHide();return;}
-    /* Enter and Space on a row are handled natively: the rows, the icon, the
-       refresh control and the demo chip are real buttons, not divs with
-       role=button as in the prototype. */
-  });
-
-  /* A fixed panel must not float away from its icon while the page moves. */
-  window.addEventListener("resize",function(){if(FKP_STATE.popOpen)fkpOpenPop();});
-  window.addEventListener("scroll",function(){if(FKP_STATE.popOpen)fkpOpenPop();},true);
 }
 
 /* (5) MOUNT -----------------------------------------------------------
