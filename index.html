@@ -2055,6 +2055,13 @@
   .gpf-root .gpf-track-sm .gpf-seg-other{border-radius:0 5px 5px 0;}
   .gpf-root .gpf-lg-sw.gpf-seg-pledge,.gpf-root .gpf-lg-sw.gpf-seg-other{position:static;border-radius:3px;}
   .gpf-root .gpf-seg-other-tag{background:var(--am-200);color:var(--am-700);}
+  /* the pledge tag takes the bar's pledge-payments tone, the gift tag its
+     other-gifts tone, so the Type column and the bar agree by colour */
+  .gpf-root .gpf-seg-pledge-tag{background:var(--am-500);color:#fff;}
+  /* the pace status moved off the Type column and sits with the reference */
+  .gpf-root .gpf-modal .gpf-ldr-stat{margin-left:6px;}
+  .gpf-root .gpf-modal .gpf-ldr-stat .gpf-dstatus{font-size:10px;padding:1px 6px;}
+
   .gpf-root .gpf-split{font-size:11px;color:var(--txt-subtle);}
   /* The giving ledger: type filter, search, and a row per pledge or gift. */
   .gpf-root .gpf-ldr-bar,.gpf-modal .gpf-ldr-bar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:2px 0 8px;}
@@ -9929,25 +9936,25 @@ function gpFLedgerRowHTML(it,w,win){
   var exp=!!(w.gpFPlExp&&w.gpFPlExp[it.id]);
   if(it.kind==='pledge'){
     var p=it.pace,chip=gpFDonorChip(p.status);
-    var sr=it.donor+', pledge '+it.id+'. Pledged '+gpFMoney(p.pledgedIn)+', received '+gpFMoney(p.received)+', due remaining '+gpFMoney(p.dueRem)+'.';
+    var sr=it.donor+', pledge '+it.id+'. Pledged '+gpFMoney(p.pledgedIn)+', received '+gpFMoney(p.received)+', due remaining '+gpFMoney(p.dueRem)+'. '+gpFStatusLabel(p.status)+'.';
     return '<button class="gpf-drow gpf-clickable gpf-ldr-row" data-gpf="gopen" data-id="'+w.id+'" data-plid="'+gpFEsc(it.id)+'" aria-expanded="'+exp+'" aria-label="'+gpFEsc(sr)+'">'+
       '<span class="gpf-dexp">'+ICON(exp?'expand_more':'chevron_right')+'</span>'+
-      '<span class="gpf-dc gpf-dc0"><span class="gpf-ldr-nm">'+it.donor+'</span><span class="gpf-ldr-sub">'+ICON('handshake')+'Pledge '+it.id+'</span></span>'+
+      '<span class="gpf-dc gpf-dc0"><span class="gpf-ldr-nm">'+it.donor+'</span><span class="gpf-ldr-sub">'+ICON('handshake')+it.id+'<span class="gpf-ldr-stat">'+chip+'</span></span></span>'+
       '<span class="gpf-dc gpf-dc1">'+gpFMoney(p.pledgedIn)+'</span>'+
       '<span class="gpf-dc gpf-dc2">'+gpFMoney(p.received)+'</span>'+
       '<span class="gpf-dc gpf-dc3">'+gpFDueCell(p.dueRem)+'</span>'+
-      '<span class="gpf-dstat-h">'+chip+'</span>'+
+      '<span class="gpf-dstat-h"><span class="gpf-tag gpf-seg-pledge-tag">Pledge</span></span>'+
     '</button>'+(exp?gpFPledgeHistory(it.pledge,win):'');
   }
   var g=it.gift;
   var sr2=it.donor+', gift of '+gpFMoney(g.amount)+' on '+gpFFmtDate(g.date)+' by '+g.media+', '+g.motive+', reference '+g.ref+'.';
   return '<button class="gpf-drow gpf-clickable gpf-ldr-row gpf-ldr-gift" data-gpf="gopen" data-id="'+w.id+'" data-plid="'+gpFEsc(it.id)+'" aria-expanded="'+exp+'" aria-label="'+gpFEsc(sr2)+'">'+
     '<span class="gpf-dexp">'+ICON(exp?'expand_more':'chevron_right')+'</span>'+
-    '<span class="gpf-dc gpf-dc0"><span class="gpf-ldr-nm">'+it.donor+'</span><span class="gpf-ldr-sub">'+ICON('redeem')+'Gift, no pledge</span></span>'+
+    '<span class="gpf-dc gpf-dc0"><span class="gpf-ldr-nm">'+it.donor+'</span><span class="gpf-ldr-sub">'+ICON('redeem')+'No pledge</span></span>'+
     '<span class="gpf-dc gpf-dc1 gpf-muted">n/a</span>'+
     '<span class="gpf-dc gpf-dc2">'+gpFMoney(g.amount)+'</span>'+
     '<span class="gpf-dc gpf-dc3 gpf-muted">n/a</span>'+
-    '<span class="gpf-dstat-h"><span class="gpf-tag gpf-seg-other-tag">Other gift</span></span>'+
+    '<span class="gpf-dstat-h"><span class="gpf-tag gpf-seg-other-tag">Gift</span></span>'+
   '</button>'+(exp?('<div class="gpf-gifts gpf-ldr-exp"><div class="gpf-grow gpf-ghead"><span>Gift date</span><span>Arrived by</span><span>Prompted by</span><span>Reference</span><span class="gpf-ga">Amount</span></div>'+
     '<div class="gpf-grow"><span>'+gpFFmtDate(g.date)+'</span><span>'+g.media+'</span><span>'+g.motive+' ('+g.motiveCode+')</span><span>'+g.ref+'</span><span class="gpf-ga">'+gpFMoney(g.amount)+'</span></div></div>'):'');
 }
@@ -9968,7 +9975,9 @@ function gpFLedgerModalHTML(){
     '<span class="gpf-dsum-i"><span class="gpf-badge" style="color:'+col+';border-color:'+col+'">'+ICON(comp.status==='funded'?'check_circle':'flag')+gpFStatusLabelRow(comp.status)+'</span></span>'+
   '</div>';
   var f=(GPF_MODAL.filter)||'all',q=GPF_MODAL.q||'';
-  var tabs=[['all','All'],['pledges','Pledge payments'],['gifts','Other gifts']].map(function(o){
+  /* the labels name row TYPES; the summary strip above names money figures and
+     keeps its own wording (owner, 28 Sep) */
+  var tabs=[['all','All'],['pledges','Pledges'],['gifts','Gifts']].map(function(o){
     return '<button class="vt'+(f===o[0]?' on':'')+'" data-gpf="ledger-filter" data-v="'+o[0]+'" aria-pressed="'+(f===o[0])+'">'+o[1]+'</button>';
   }).join('');
   var search='<div class="gpf-ldr-search">'+ICON('search')+'<input type="text" id="gpfLedgerQ" class="gpf-ldr-input" placeholder="Search donor, pledge or reference" value="'+gpFEsc(q)+'" aria-label="Search this purpose"></div>';

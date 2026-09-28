@@ -362,8 +362,25 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   A.contains(m, LABELS[2], "the modal names the clicked purpose");
   A.contains(m, "every gift and pledge", "the modal is the giving ledger, not the old most-behind list");
   A.contains(m, 'data-gpf="ledger-filter"', "the ledger carries the type filter");
-  A.contains(m, "Pledge payments", "filter: pledge payments");
-  A.contains(m, "Other gifts", "filter: other gifts");
+  /* The filter names row TYPES: All, Pledges, Gifts (owner, 28 Sep). Read the
+     tabs themselves, not the modal: "Pledge payments" and "Other gifts" still
+     appear in the summary strip above, where they name money figures, so a
+     whole-modal contains() would pass whatever the tabs said. */
+  const tabLabels = [];
+  const tabRe = /data-gpf="ledger-filter"[^>]*>([^<]*)</g;
+  let tm;
+  while ((tm = tabRe.exec(m)) !== null) tabLabels.push(tm[1]);
+  A.eq(tabLabels.join(" | "), "All | Pledges | Gifts", "the filter reads All, Pledges, Gifts");
+  ["all", "pledges", "gifts"].forEach(function (v) {
+    A.contains(m, 'data-gpf="ledger-filter" data-v="' + v + '"', "and its values are unchanged: " + v);
+  });
+  /* the Type column carries a TYPE, for both kinds of row. It used to show a
+     pledge's pace status, which is not a type. */
+  A.contains(m, 'class="gpf-tag gpf-seg-pledge-tag">Pledge<', "a pledge row's Type says Pledge");
+  A.absent(m, "Other gift<", "and a gift row no longer says Other gift");
+  /* the pace status is moved, not dropped */
+  A.contains(m, "gpf-ldr-stat", "the pace status sits with the pledge reference now");
+  A.contains(m, "gpf-dstatus", "and is still the same status chip");
   A.contains(m, 'id="gpfLedgerQ"', "the ledger carries a search box");
   /* the campaign summary cells, on the copied summary-cell primitives */
   A.contains(m, "gpf-dsum", "the modal summary uses the copied summary-cell primitive");
