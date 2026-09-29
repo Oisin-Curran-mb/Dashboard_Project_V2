@@ -97,6 +97,13 @@ A.eq(w.begin, "2026-02-01", "the From date lands on the widget"); A.eq(w.range, 
 /* fixtures */
 const fx = H.extractRegistry(S, "payroll"); ["prO2", "prO3", "prO4"].forEach(function (id) { const r = fx.filter(function (x) { return x.id === id; })[0]; A.ok(!!r, "fixture " + id + " readable"); if (r) { const h = EX.contentHTML(r); A.ok(h.length > 200, id + " renders (" + h.length + " bytes)"); } });
 
+/* owner 29 Sep: the distribution pop-up is about one distribution: no "All distributions" in its filter, and the title follows the chosen distribution */
+if (dd) { EX.WIDGETS.click("prO-drilldist", w.id, T({ "data-dist": dd }), {}); const mw = (EX.getModal() || {}).mw;
+  if (mw) { EX.setPop({ type: "prO-scope", id: mw.id }); const pc = EX.popContent() || ""; A.absent(pc, 'data-s="all"', "pop-up distribution filter has no All distributions");
+    const other = (pc.match(/data-action="prO-set-dist"[^>]*data-s="([a-z]+)"/g) || []).map(function (m) { return /data-s="([a-z]+)"/.exec(m)[1]; }).filter(function (x) { return x !== dd; })[0];
+    if (other) { EX.WIDGETS.click("prO-set-dist", mw.id, T({ "data-s": other }), {}); A.eq(mw.prDist, other, "pop-up switches distribution"); A.ok(EX.getModal().t.indexOf("Payroll Distributions: ") === 0 && EX.getModal().t !== "Payroll Distributions: " , "pop-up title follows the distribution (" + EX.getModal().t + ")"); }
+    EX.WIDGETS.click("prO-set-dist", mw.id, T({ "data-s": "all" }), {}); A.ok(mw.prDist !== "all", "All is ignored inside the pop-up"); EX.setPop(null); }
+  EX.setModal(null); }
 /* owner rules 29 Sep: Employee Break Down sorts by name A-Z by default, or by total pay; the pop-up's upper table has no sort buttons and is always Amount, largest first */
 if (dd) {
   EX.WIDGETS.click("prO-drilldist", w.id, T({ "data-dist": dd }), {}); const mw = (EX.getModal() || {}).mw;

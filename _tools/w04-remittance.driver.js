@@ -80,7 +80,7 @@ rows.forEach(function (w) {
   if (w.size === "wide") A.absent(h, " outstanding</span>", w.id + ": Explore card sub-text is the amount only");
 });
 /* owner (25 Sep): every table column left-aligned, headers included */
-[".remO-num{text-align:left;", ".remO-pct{text-align:left;", ".remO-num .wt-sort,.remO-pct .wt-sort{justify-content:flex-start;", ".w04-minirow{display:flex;align-items:center;gap:8px;justify-content:flex-start;", ".remO-total{position:sticky;bottom:0;"].forEach(function (r) { A.ok(shell.css.indexOf(r) > -1, "CSS rule present: " + r); });
+[".remO-num{text-align:left;", ".remO-pct{text-align:left;", ".remO-num .wt-sort,.remO-pct .wt-sort{justify-content:flex-start;", ".w04-minirow{display:flex;align-items:center;gap:var(--gap-tight);justify-content:flex-start;", ".remO-total{position:sticky;bottom:0;"].forEach(function (r) { A.ok(shell.css.indexOf(r) > -1, "CSS rule present: " + r); });
 const w = rows.filter(function (x) { return x.size === "wide"; })[0], T = function (a) { return env.shim.mkTarget(a || {}, "button"); };
 const settle = function () { w.loading = false; w.bloading = false; w.remLoading = false; };
 
