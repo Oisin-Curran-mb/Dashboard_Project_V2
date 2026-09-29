@@ -97,4 +97,24 @@ A.eq(w.begin, "2026-02-01", "the From date lands on the widget"); A.eq(w.range, 
 /* fixtures */
 const fx = H.extractRegistry(S, "payroll"); ["prO2", "prO3", "prO4"].forEach(function (id) { const r = fx.filter(function (x) { return x.id === id; })[0]; A.ok(!!r, "fixture " + id + " readable"); if (r) { const h = EX.contentHTML(r); A.ok(h.length > 200, id + " renders (" + h.length + " bytes)"); } });
 
+/* owner rules 29 Sep: Employee Break Down sorts by name A-Z by default, or by total pay; the pop-up's upper table has no sort buttons and is always Amount, largest first */
+if (dd) {
+  EX.WIDGETS.click("prO-drilldist", w.id, T({ "data-dist": dd }), {}); const mw = (EX.getModal() || {}).mw;
+  A.ok(!!mw, "pop-up opens for the sort checks");
+  if (mw) {
+    const emps = function () { const h = EX.contentHTML(mw), out = [], re = /class="pro-caret[^"]*"[^>]*>(?:<[^>]+>[^<]*<\/[^>]+>)?<\/span>([^<]+)<\/span><span class="wt-c2">([^<]+)</g; let m; while ((m = re.exec(h))) out.push({ n: m[1], v: Number(m[2].replace(/[^0-9.\-]/g, "")) }); return out; };
+    const ordered = function (a, f) { for (let i = 1; i < a.length; i++) if (f(a[i - 1], a[i]) > 0) return false; return true; };
+    let e = emps(); A.ok(e.length >= 2, "pop-up lists employees (" + e.length + ")");
+    A.ok(ordered(e, function (a, b) { return a.n.localeCompare(b.n); }), "Employee Break Down default: name A-Z");
+    A.eq(EX.WIDGETS.click("prO-empsort", mw.id, T({ "data-k": "amt" }), {}), true, "Total pay sort handled inside the pop-up");
+    e = emps(); A.ok(ordered(e, function (a, b) { return b.v - a.v; }), "Total pay: largest first");
+    EX.WIDGETS.click("prO-empsort", mw.id, T({ "data-k": "amt" }), {}); e = emps(); A.ok(ordered(e, function (a, b) { return a.v - b.v; }), "second click on Total pay: smallest first");
+    EX.WIDGETS.click("prO-empsort", mw.id, T({ "data-k": "name" }), {}); e = emps(); A.ok(ordered(e, function (a, b) { return a.n.localeCompare(b.n); }), "Employee: back to name A-Z");
+    const mh = EX.contentHTML(mw); A.absent(mh, 'data-action="prO-sort"', "pop-up upper table has no sort buttons");
+    const amts = []; mh.split("pro-emps")[0].replace(/<span class="wt-c2">(\$[0-9,.]+)<\/span><\/div>/g, function (_, v) { amts.push(Number(v.replace(/[^0-9.]/g, ""))); });
+    A.ok(amts.length >= 2 && ordered(amts, function (a, b) { return b - a; }), "pop-up upper table: Amount, largest first (" + amts.join(", ") + ")");
+  }
+  EX.setModal(null);
+}
+
 process.exit(A.report());

@@ -35,6 +35,15 @@ const reset = function () { POS.length = 0; JSON.parse(JSON.stringify(pristine))
 const wide = W("purF"), kpi = W("purF_k"), xw = W("purF_x");
 ["purF", "purF_k", "purF_x"].forEach(function (id) { const w = W(id); w.purfLoading = false; });
 
+/* PURF_USE_PAY models PO_Company.UsePaymentApprovalProcess, whose DB default is 0 (off), and the widget
+   ships with it off (owner, 28 Sep). Sections 1 to 4g below describe the payment process ON: the four
+   lanes, the payment chain, the payment legend and the Payment Approval tab. They are asserted unchanged,
+   with the flag forced on, because that behaviour is still reachable by flipping the constant. Section 6
+   at the end covers the shipped default: the approval-path board. */
+const payOn = function (on) { env.ctx.PURF_USE_PAY = !!on; };
+A.eq(env.get("PURF_USE_PAY"), false, "the payment approval process ships off, as PO_Company.UsePaymentApprovalProcess defaults to 0");
+payOn(true);
+
 /* ---------- 1. model ---------------------------------------------------- */
 A.eq(env.get("PURF_STAGES").join(","), "Pending,Approved", "record status vocabulary is Pending / Approved (Rejected is not a status)");
 A.eq(env.get("PURF_LANES").join("|"), "Pending approval|Payment approval|Ready to pay|Paid", "the four derived lanes");
@@ -282,4 +291,142 @@ wide.purfView = "enc"; A.absent(C("purFHeaderBlock", wide), 'data-purf="legend"'
 A.noEmDash(block.replace(/\/\*[\s\S]*?\*\//g, ""), "block code");
 A.contains(css, ".purf-turn-next", "turn badge CSS"); A.contains(css, ".purf-turnline", "turn line CSS");
 A.absent(block.replace(/\/\*[\s\S]*?\*\//g, ""), 'stage==="Rejected"', "no code tests for a Rejected stage");
+A.contains(css, ".purf-kcol-sub", "threshold sub-line CSS"); A.contains(css, ".purf-kcol-dim", "dimmed column CSS");
+A.absent(css, ".purf-paybadge", "the dead pay badge CSS is gone"); A.absent(css, ".purf-holdflag", "and the dead hold flag CSS");
+
+/* ---------- 6. the shipped default: the approval-path board (owner, 2026-09-28) ------
+   PURF_USE_PAY off is how the widget ships, and how a company with PO_Company
+   .UsePaymentApprovalProcess = 0 sees it. The board stops being payment lanes and becomes the approval
+   path itself: one column per level of the selected path, then Approved. Everything above this line
+   describes the same widget with the constant flipped on. */
+payOn(false); reset();
+xw.purfView = "kanban"; xw.purfPath = null; xw.purfScope = null; xw.purfStatus = null;
+const col = function (ref) { return C("purFColOf", po(ref)); };
+const chk6 = function (ref, to) { return C("purFMoveCheck", po(ref), to); };
+
+/* 6a. one path, and no status axis of its own */
+A.eq(C("purFPathVals", xw).join("|"), "Administration|Education Ministry|Everyone|QA Path", "the board offers every approval path, not only the ones with rows, so a quiet path still shows its levels");
+A.eq(C("purFPathCur", xw), "Administration", "and defaults to the first path");
+xw.purfStatus = "Payment approval";
+A.eq(C("purFStatusVals", xw, "kanban").join("|"), "All statuses", "the columns are the status axis, so the chip has nothing to offer");
+A.eq(C("purFStatusCur", xw), "All statuses", "a stored payment lane falls back instead of emptying the board");
+xw.purfStatus = null;
+const h6 = C("purFHeaderBlock", xw);
+A.absent(h6, 'data-purf="status"', "no status chip on the path board");
+A.contains(h6, 'data-purf="path"', "the path chip is always shown, because the board needs one path");
+C("purFOpenPop", "path", xw.id, null); const pp6 = C("purFPopContent"); C("purFClosePop");
+A.absent(pp6, ">All approval paths<", "the path popover drops All approval paths on the board");
+A.contains(pp6, "draws its columns from one approval path", "and says why");
+
+/* 6b. the columns are the path's levels */
+let bd = C("purFBoard", xw);
+A.eq((bd.match(/data-purf-drop="[^"]*"/g) || []).join(" "), 'data-purf-drop="Level 1" data-purf-drop="Level 2" data-purf-drop="Approved" data-purf-drop="Closed" data-purf-drop="Voided"', "Administration: two levels, Approved, and the Finish column");
+["Payment approval", "Ready to pay", "Paid"].forEach(function (l) { A.absent(bd, 'data-purf-drop="' + l + '"', "no " + l + " column exists"); });
+A.contains(bd, 'class="purf-finish"', "the Finish column always shows, there being no status filter to hide it");
+A.contains(bd, ">any open order</span>", "Void is no longer unpaid-only: nothing is paid when the process is off");
+A.contains(bd, "grid-template-columns:repeat(3,1fr) 0.6fr", "the track count follows the path, not a fixed four");
+A.contains(bd, ">Nitzi Wright</span>", "level 1 is titled with its approver");
+A.contains(bd, ">Oisin Curran (you)</span>", "and my own level says so");
+/* measured in the browser: every column header is one height, so the cards start on the same line */
+A.contains(bd, "purf-pathboard", "the board carries its own class, so one header height applies to every column");
+A.contains(css, ".purf-root .purf-pathboard .purf-kcol-h{min-height:46px;align-items:flex-start;}", "one header height across the path board (the four bodies started at four heights before this)");
+A.contains(css, "-webkit-line-clamp:2", "the title clamps to two lines so a narrow column cannot make the row ragged again");
+A.contains(bd, 'title="Starts with Nitzi Wright', "a clamped title is readable on hover, not only to a screen reader");
+xw.purfPath = "Everyone";
+A.contains(C("purFBoard", xw), "grid-template-columns:repeat(2,1fr) 0.6fr", "a one-level path draws two columns");
+A.eq(C("purFCols", xw)[0].aria, "Ends with Oisin Curran (you). Any one approver on a level satisfies it.", "a one-level path reads Ends with, as the legacy rewrite does (POOrder.cs:154-166)");
+
+/* 6c. thresholds: the sub-line, the legacy wording, and the dimmed column */
+xw.purfPath = "Education Ministry";
+const cs6 = C("purFCols", xw);
+A.eq(cs6.map(function (c) { return c.key; }).join("|"), "Level 1|Level 2|Level 3|Approved", "three levels and Approved");
+A.eq(cs6.map(function (c) { return c.sub; }).join("|"), "from $500|from $2,000|from $5,000|", "each level shows its own dollar minimum, and Approved has none");
+A.eq(cs6[0].aria, "Starts with Alfred Johnson from $500. Any one approver on a level satisfies it.", "level 1 carries the legacy Starts with wording");
+A.eq(cs6[1].aria, "Then Lanette Stewart or Jim AndersonAndMoreLetters from $2,000. Any one approver on a level satisfies it.", "an Or level is Then, with both approvers named");
+A.eq(cs6[2].aria, "Ends with Pastor Bob from $5,000. Any one approver on a level satisfies it.", "the last level is Ends with");
+bd = C("purFBoard", xw);
+A.contains(bd, '<span class="purf-kcol-sub">from $5,000</span>', "the threshold renders as the header sub-line");
+A.eq((bd.match(/purf-kcol-dim/g) || []).length, 1, "exactly one column is unreachable at these amounts");
+A.contains(bd, ">Not required under $5,000<", "and it says why rather than looking merely empty");
+A.absent(bd, "Nothing at this level", "so the generic empty text is not used for it");
+
+/* 6d. every card sits in the column of the level that has to act next */
+A.eq(col("PO-2893"), "Level 2", "PO-2893: Nitzi approved level 1, so it waits at my level 2");
+A.eq(col("PO-2888"), "Level 1", "PO-2888: nobody has acted, so it sits at level 1 even though my level is 2");
+A.eq(col("PO-2899"), "Level 1", "PO-2899 ($640): Alfred's level is the only one the amount reaches");
+A.eq(col("PO-2891"), "Level 2", "PO-2891 ($3,150) is held at Lanette's level 2, NOT parked in Pastor Bob's $5,000 column");
+A.eq(col("PO-2902"), "Level 2", "a rejected request stays in the column it was rejected at");
+A.eq(col("PO-2907"), "Level 1", "PO-2907 ($430): no level applies, so it sits in the first column");
+A.eq(col("PO-2633"), "Approved", "PO-2633 was released and is out of the flow");
+A.eq(col("PO-2864"), "Approved", "a paid fixture reads simply as Approved: nothing reads the pay fields");
+A.contains(C("purFBoard", xw), "No approver required at $430.00", "the release case keeps its own badge on the board");
+
+/* 6e. a drop is still an act on the path, forward only */
+xw.purfPath = "Administration";
+A.eq(chk6("PO-2893", "Approved").ok, true, "my level can be approved onto Approved");
+A.eq(chk6("PO-2888", "Level 2").ok, true, "and onto a later level");
+A.eq(chk6("PO-2893", "Level 1").ok, false, "a leftward drop is refused");
+A.contains(chk6("PO-2893", "Level 1").msg, "Approval moves forward only", "and says so");
+A.eq(chk6("PO-2902", "Approved").ok, false, "a rejected request cannot be approved");
+A.contains(chk6("PO-2899", "Level 2").msg, "Not your approval", "someone else's turn is refused by name");
+A.eq(chk6("PO-2891", "Level 3").ok, false, "a held request does not move forward");
+A.eq(chk6("PO-2891", "Closed").ok, true, "but Close is offered from any column, on hold or not (owner, 27 Sep)");
+A.eq(chk6("PO-2891", "Voided").ok, true, "and so is Void");
+A.eq(chk6("PO-2861", "Voided").ok, true, "an approved order can still be voided: with no payment process nothing is paid");
+A.eq(C("purFLandCol", po("PO-2893")), "Approved", "the confirm dialog can name where the card will land");
+A.eq(C("purFLandCol", po("PO-2888")), "Approved", "including when approving my later level satisfies the whole path");
+
+/* 6f. the write: no payment path is opened, and the drop stores what Save stores */
+reset(); A.eq(C("purFApplyMove", xw, "PO-2893", "Approved", ""), true, "approving my level");
+A.eq(po("PO-2893").stage, "Approved", "completes the request path");
+A.eq(col("PO-2893"), "Approved", "and the card lands in Approved");
+A.ok(po("PO-2893").pay === undefined && po("PO-2893").payPath === undefined && po("PO-2893").payAppr === undefined, "no payment path is seeded, as the legacy leaves PaymentApprovalID null");
+reset(); C("purFApplyMove", xw, "PO-2888", "Level 2", "");
+A.eq(po("PO-2888").stage, "Approved", "approving my later level implies the lower one (POOrderRepository.cs:1754)");
+A.ok(po("PO-2888").appr.some(function (a) { return a.user === "Nitzi Wright" && a.by === ME; }), "and the drop stores the cascaded row exactly as Save does");
+reset(); xw.purfPath = "Education Ministry";
+A.eq(C("purFApplyMove", xw, "PO-2907", "Approved", ""), true, "the release case is approved without an approver");
+A.eq(po("PO-2907").stage, "Approved", "and goes straight to Approved");
+A.ok(po("PO-2907").pay === undefined, "again with no payment path");
+reset();
+
+/* 6g. the rest of the widget follows, as the legacy page does */
+xw.purfView = "table";
+A.contains(C("purFTable", xw), ">Pending approval</span>", "the table status cell still names the derived state");
+A.absent(C("purFTable", xw), ">Payment approval</span>", "but never a payment one");
+kpi.purfLoading = false; const gl6 = C("purFGlance", kpi);
+A.contains(gl6, ">Waiting on others<", "Glance's third tile replaces To be paid, which has no meaning here");
+A.absent(gl6, ">To be paid<", "so the payment tile is gone");
+A.contains(gl6, "still on an approval path.", "and the headline hover says what it counts");
+env.ctx.PURF_MODAL = { id: xw.id, ref: "PO-2861", tab: "detail", draft: C("purFRecordDraft", po("PO-2861")) };
+const rm6 = C("purFModalHTML");
+A.absent(rm6, 'data-v="payment"', "the record pop-up has no Payment Approval tab (Requests/Update.aspx:93)");
+A.absent(rm6, "Payment Approval Path", "and no payment-path dropdown");
+A.contains(rm6, 'data-v="approvals"', "the Approvals tab is untouched");
+env.ctx.PURF_MODAL = null;
+A.contains(C("purFAbout"), "one column per approval level", "the about text describes the board it draws");
+
+/* 6h. the legend cannot drift from the board */
+xw.purfView = "kanban"; xw.purfPath = "Education Ministry";
+C("purFOpenPop", "legend", xw.id, null); const lg6 = C("purFPopContent"); C("purFClosePop");
+A.contains(lg6, '<div class="cap">Columns</div>', "the board legend leads with Columns, not Lanes");
+C("purFCols", xw).forEach(function (c) { A.contains(lg6, ">" + c.title + "</span>", "legend covers the " + c.key + " column (" + c.title + ")"); });
+A.contains(lg6, '<span class="purf-kcol-sub purf-lg-lane">from $500</span>', "and explains the threshold with the board's own sub-line");
+A.contains(lg6, "below it the level is skipped", "in the path editor's own terms");
+["purf-card-next", "purf-card-hold", "purf-card-rej"].forEach(function (c) { A.contains(lg6, "purf-lg-card " + c, "card colour " + c + " is covered"); });
+["purf-card-ok", "purf-card-paid"].forEach(function (c) { A.absent(lg6, "purf-lg-card " + c, "the payment card colour " + c + " cannot occur, so it is not shown"); });
+["Ready to pay", "Payment approval", "the check"].forEach(function (s) { A.absent(lg6, s, "the board legend never mentions " + s); });
+A.contains(lg6, "can pass more than one column", "the move rules explain the implied lower levels");
+xw.purfView = "table"; C("purFOpenPop", "legend", xw.id, null); const lt6 = C("purFPopContent"); C("purFClosePop");
+A.contains(lt6, '<div class="cap">Status</div>', "the table legend keeps its Status section");
+A.contains(lt6, ">Approved</span>", "naming Approved");
+A.contains(lt6, ">Voided</span>", "and the archive states");
+A.absent(lt6, ">Ready to pay</span>", "with no payment lanes");
+
+/* 6i. Encumbrances is deliberately unchanged: the legacy rule never mentioned the payment process */
+xw.purfView = "enc"; xw.purfPath = null;
+const encOff = C("purFEncTotal", xw); payOn(true); const encOn = C("purFEncTotal", xw); payOn(false);
+A.eq(encOff, encOn, "the encumbrance total is the same either way (GLAccountRepository.cs:2220 keys off Status, not payment)");
+xw.purfView = null; xw.purfPath = null; reset();
+
 process.exit(A.report());

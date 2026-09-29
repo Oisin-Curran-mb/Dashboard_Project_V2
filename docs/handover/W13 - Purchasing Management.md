@@ -28,13 +28,21 @@ acted on it.
 Status: **finalised on our version, 27 September 2026.** Jo's rival block is
 deleted. Ours owns kind `purchasing`.
 
+**And the second thing, added 28 September 2026:** the payment approval process
+is a **company setting that is off by default**, so the board is not the
+payment lifecycle. It is the approval path itself.
+
+> **`PURF_USE_PAY` is `false`.** One column per level of the selected approval
+> path, then Approved. Flip the constant to `true` and the four payment lanes
+> come back, unchanged. Both boards live in the file.
+
 | | |
 |---|---|
 | Prefix | `purF` (JS), `purf-` (CSS), `data-purf` (actions) |
 | Kind | `purchasing`, registered through `WIDGETS.register("purchasing", …)` |
-| Driver | `_tools/w13-purchasing.driver.js`, 317 assertions |
+| Driver | `_tools/w13-purchasing.driver.js`, 414 assertions |
 | Decision record | `docs/decisions/W13.md` — the authority for every ruling |
-| Flow document | `docs/logic/W13-approval-flow.md` — the model, with legacy line references and four Lucid diagrams |
+| Flow document | `docs/logic/W13-approval-flow.md` — the model, with legacy line references and four Lucid diagrams; §5c is the company setting and the path board |
 | Review pack | `docs/review/W13 - Purchasing Management.md` |
 
 Three views: **Table** (the default), **Kanban** (Detail only), **Encumbrances**.
@@ -68,9 +76,20 @@ functions. The record pop-up alone is a screen.
 ### The code map
 
 **The model — read these first, they are the whole widget.**
-`purFLivePath` (the path as it currently stands), `purFPathDone`, `purFTurn`
-(whose turn it is), `purFNeedsMe`, `purFLane` (derives the board lane),
-`purFMyLevel`, `purFStepUsers`, `purFSteps`, `purFApproveStep`.
+`purFLivePath` (the path as it currently stands, **and the only switch between
+the request and the payment path**, which is why gating the payment process
+there was a small change), `purFPathDone`, `purFTurn` (whose turn it is),
+`purFNeedsMe`, `purFLane` (the lifecycle lane; collapses to Pending approval /
+Approved when the payment process is off), `purFMyLevel`, `purFStepUsers`,
+`purFSteps`, `purFApproveStep`, `purFSeedPayment` (opens the payment path only
+when the process is on).
+
+**The columns** — `purFCols` (the column list: payment lanes as objects whose
+markup is byte-identical to before, or the selected path's levels plus
+Approved), `purFColOf` (which column a record sits in), `purFOpenLevel` (the
+level next to act; **walks the levels the amount reaches**, see §6),
+`purFColNo`, `purFLandCol` (where an approval will land, named in the confirm
+dialog), `purFPathReq` (the board needs one concrete path).
 
 **Scopes and filters** — `purFScopeCur`, `purFPendingSet`, `purFMineSet`,
 `purFMatchStatus`, `purFPathCur`, `purFOvOnly`, `purFRows`.
@@ -88,14 +107,23 @@ Modal source also lives in `_tools/one-off/w13-record-screen.part.js`.
 **Drag and drop** — `purFCanDrag`, `purFDragStart`, `purFDragOver`, `purFDrop`,
 `purFMoveCheck` (rules on the drop and names the refusal), `purFApplyMove`.
 
-**Legend** — `purFLegendHTML`. Every sample is the board's own markup, so the
-legend cannot drift from the board.
+**Legend** — `purFLegendHTML` (payment) and `purFLegendNoPay` (the path board).
+Two functions so the payment legend the owner signed off is never touched.
+Every sample is the board's own markup, and the path board's Columns section is
+built from `purFCols`, so the legend cannot drift from the board.
 
 **Data constants** — `PURF_TODAY` (19 Aug 2026 anchor), `PURF_STAGES`
-(`["Pending","Approved"]` — only two stored), `PURF_LANES` (the four *derived*
-lanes), `PURF_ME` (`"Oisin Curran"`, the demo viewer), `PURF_SCOPES`,
+(`["Pending","Approved"]` — only two stored), **`PURF_USE_PAY`** (the company
+setting `PO_Company.UsePaymentApprovalProcess`, **off**, whose DB default is
+also 0), `PURF_LANES` (the four *derived* lanes, used only when it is on),
+`PURF_ME` (`"Oisin Curran"`, the demo viewer), `PURF_SCOPES`,
 `PURF_PATHS`, `PURF_PATH_APPROVERS`, `PURF_POS` (the requests),
-`PURF_OVERRIDE` (the approval-override right, **off**).
+`PURF_OVERRIDE` (the approval-override right, **off**), `PURF_ABOUT` /
+`PURF_ABOUT_NOPAY` via `purFAbout()`.
+
+The fixtures still carry `pay`, `payPath`, `payAppr`, `payDone` and `paid`.
+**Leave them.** Nothing reads them while the process is off, and they are what
+lets the constant be flipped back.
 
 ---
 
@@ -126,7 +154,12 @@ node _tools/verify.js
 node _tools/lint.js
 ```
 
-The full suite is 2,741 assertions across 17 drivers and must stay green.
+The full suite is 2,838 assertions across 17 drivers and must stay green.
+
+W13 itself is 414. Sections 1 to 4g of its driver force `PURF_USE_PAY` on
+(`env.ctx.PURF_USE_PAY = true`, since the shim exposes the context) and assert
+the payment board exactly as it was signed off; section 6 covers the shipped
+default, the path board. **If you change the board, keep both alive.**
 
 ### Look at it in a browser
 
@@ -220,10 +253,30 @@ behaviour; it is not ours to fix without a ruling.
 
 ## 5. Decisions already made — do not quietly undo these
 
-**Lanes are derived, never the raw status.** Pending approval (Unapproved) |
-Payment approval (Approved, payment path open) | Ready to pay (payment approved,
-no check) | Paid (check posted). Closed and Voided stay in the table and the
-Finish column, **not** as lanes. Rejected is **not** a lane.
+**The payment approval process is a company setting, and it is off** (owner,
+28 Sep). `PURF_USE_PAY = false`, matching the real DB default of
+`PO_Company.UsePaymentApprovalProcess`. With it off there is no payment path, no
+payment lanes, no Payment Approval tab and no payment-path dropdown — exactly
+what `Requests/Update.aspx:93` hides — and an approved request goes straight to
+Accounts Payable. **Both boards stay in the file behind the constant.** Do not
+delete the payment board: flipping the constant is how the other behaviour is
+demonstrated, and it is what keeps roughly 150 driver assertions meaningful.
+
+**With the process off, the board is the approval path.** One column per level
+of the **selected** path, in Sequence order, then Approved, then the Finish
+column. The path chip is required there and offers no "All approval paths"; the
+status chip is not offered at all, because the columns are the status axis.
+Column titles are approver names; the threshold shows as a sub-line, as the
+column's accessible name and hover, and as a **dimmed column reading "Not
+required under $5,000"** when no request on the board can reach that level.
+Forward is any later level or Approved, and `purFLandCol` names where the card
+will actually land, because approving at a level implies the ones below it.
+
+**Lanes are derived, never the raw status.** With the payment process on:
+Pending approval (Unapproved) | Payment approval (Approved, payment path open) |
+Ready to pay (payment approved, no check) | Paid (check posted). Closed and
+Voided stay in the table and the Finish column, **not** as lanes. Rejected is
+**not** a lane.
 
 **A drop is an act on the live path**, not a status write. Pending → Payment
 approval records my approval (and sets Approved only when every applicable level
@@ -270,6 +323,9 @@ ruling. Glance has no header block, so no icon.
 **Glance shows what is waiting for *someone* to act**, not just me. Headline =
 Pending approval + Payment approval + Ready to pay, pill "waiting for action".
 Tiles: My approval / Coming to me / To be paid. Caption = "$X outstanding" only.
+With the payment process off the third tile is **Waiting on others** instead,
+"To be paid" having no meaning — the one place the 28 Sep work amends this
+27 Sep ruling, and it is **flagged for the owner at review**.
 
 **Only the three sizes remain.** The review-era fixtures were removed; the
 driver builds those states itself.
@@ -278,7 +334,11 @@ driver builds those states itself.
 row. Encumbrance = the order total (no line-level dollars in the demo). Period =
 issue month. **Held orders count** — the legacy has no hold exclusion. Closed,
 voided and paid release. The status chip is hidden in this view because
-encumbrance *is* the open set by definition.
+encumbrance *is* the open set by definition. **Unchanged by the payment
+setting**, deliberately: the legacy rule keys off `Status`, never the payment
+process, and paid-ness is still real when the process is off because AP enters
+and pays the invoice by hand. A driver assertion pins the total as identical
+either way, so the owner's signed-off figures cannot move by accident.
 
 ---
 
@@ -309,6 +369,26 @@ glyph, and the stretch so the toggle can never cover the chips again.
 **Lesson:** a layout fix the owner has not seen is a proposal, not a fix. And
 short labels at Explore only — aria-labels keep the full legacy wording, and
 Detail is unchanged.
+
+It happened a third time on 28 Sep, and again only measuring caught it: each
+path-board column header sized itself to its own title, so the four card bodies
+started at **524 / 539 / 524 / 511px** and the cards read as a ragged row rather
+than a board. `.purf-pathboard .purf-kcol-h` now pins one header height and the
+title clamps to two lines, so a narrower column cannot make it ragged again.
+Measure `getBoundingClientRect().top` on every `.purf-colb` after any header
+change; they must all be equal.
+
+### Place a card by the levels its amount reaches, never the raw path
+
+The columns are the **whole** path, but a card's column is chosen from the
+levels its own **amount** reaches (`purFSteps`), then mapped back to a position
+in the full path. Get this wrong and the board contradicts itself: the first
+version of `purFOpenLevel` walked the raw step list, so PO-2891 ($3,150, held by
+Lanette) was placed in Pastor Bob's $5,000 column while the same board greyed
+that column out as "Not required under $5,000".
+
+This is the §6 trap above wearing different clothes. The threshold is part of
+the model, not decoration, so every placement decision has to consult it.
 
 ### The legend is built from the board's own markup
 
@@ -355,6 +435,12 @@ largest gap between the demo and a shippable widget.
 - The **approval override right** is modelled as `PURF_OVERRIDE`, off. The Reset
   button from the legacy page was not carried.
 - `purFRejectStep` / `purFClearReject` need a UI decision (above).
+- **Glance’s third tile** is "Waiting on others" with the payment process off,
+  replacing "To be paid" from the 27 Sep Glance ruling. Substituted on reasoning,
+  not on a ruling, so the owner still has to see it.
+- **The approval path itself** is the next piece of work (owner, 28 Sep: "after
+  we will look into the approval path"). Nothing here touches how paths are
+  built, displayed or edited; the board only reads `PURF_PATHS`.
 - **W06 and W09 define the same named check with different strictness**;
   consolidating will change one driver's result. Not W13's, but it is in the
   same neighbourhood.

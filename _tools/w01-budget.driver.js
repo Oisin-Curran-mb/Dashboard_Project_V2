@@ -160,4 +160,7 @@ const noBudget = fixtureRows.filter(function (r) { return r.id === "bgtO3"; })[0
 A.ok(!!noBudget, "state fixture bgtO3 is still readable by the harness");
 if (noBudget) { const eh = EX.contentHTML(noBudget); A.ok(/No [a-z ]*budget set up/.test(eh), "no-budget state renders its empty state (\"No <scope> budget set up\")"); A.contains(eh, 'data-action="add-budget"', "with the add-budget action, handled by the block"); A.eq(EX.WIDGETS.click("add-budget", noBudget.id, T(), {}), true, "add-budget handled through WIDGETS.click"); }
 
+/* owner rule 29 Sep: no budget set up = no percent anywhere (every size) */
+["bgtO3","bgtO4"].forEach(function (id) { const r = fixtureRows.filter(function (x) { return x.id === id; })[0]; A.ok(!!r, "state fixture " + id + " readable"); if (!r) return; ["kpi","wide","xwide"].forEach(function (sz) { const h = EX.contentHTML(Object.assign({}, r, { size: sz })); A.absent(h, "bgtO-hl-pct", id + " (" + sz + "): no budget, so no percent"); }); });
+
 process.exit(A.report());

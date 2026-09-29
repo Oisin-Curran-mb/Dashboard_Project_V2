@@ -30,7 +30,7 @@ Three things people read as statuses are derived, not stored:
 - **On hold** = an acted row with `HoldReason` (POR:1858). Demo: `hold` flag plus a `state:"hold"` row.
 - **Paid** = the linked AP invoice has `JournalID` set and `UndoJournalID` null (POR:428-436). Demo: `paid` flag, check number `CHK-nnnn`.
 
-Legacy note: the manual Status list lets a user pick Closed from any status ("Closed enabled in all cases" in `POApprovalsGrid.js`). The demo is stricter: only a Paid card can be closed (`purFMoveCheck`). This is a deliberate tightening, logged in `docs/decisions/W13.md`.
+Legacy note: the manual Status list lets a user pick Closed from any status ("Closed enabled in all cases" in `POApprovalsGrid.js`), and the demo follows it: Close is offered from every lane or column, on hold or not (`purFMoveCheck`). An earlier build was stricter, allowing Close only from Paid; the owner reversed that on 27 Sep 2026 ("follow the rules that page follow as it how it need to work, so close at any time is possible") and `docs/decisions/W13.md` carries the ruling.
 
 ## 2. Approval paths: what the organisation can build
 
@@ -60,6 +60,8 @@ Acted rows (`PO_OrderApproval`) exist only when someone acts. Approved = a row w
 
 ## 4. Payment path (diagram 3)
 
+> **This whole section applies only when the company has the payment approval process switched on.** It is off by default: see §5c for `PO_Company.UsePaymentApprovalProcess`, what the legacy skips when it is off, and the approval-path board the widget shows instead. The demo ships with it off (`PURF_USE_PAY = false`).
+
 Approved → `PO_OrderInvoice` per vendor invoice → Payment Approval Path rows `PO_OrderInvoiceApproval` (they carry an explicit `Approved` bit) → `ApprovedForPayment` when no row is unapproved → AP invoice created when the preference is on → check posted (`JournalID`) = Paid → the AP post with `PurchaseOrderStatus = 3` closes the order; undoing the post reopens it.
 
 Demo gates: `purFPaySubmit` refuses until `payDone` ("payment approval must finish before a payment is entered") and while on hold; a Paid card cannot be voided ("Reverse the check in Accounts Payable first").
@@ -87,7 +89,7 @@ Encumbrance (`GL/GLAccountRepository.cs:2220`): open detail dollars while Status
 - Ready to pay → Paid = enter the payment (`purFPaySubmit`).
 - Paid → Closed. Any unpaid lane → Voided (allowed even on hold).
 
-**Gates** (`purFMoveCheck`, `purFCanDrag`): Closed and Voided are final; hold blocks every move except Void; rejected blocks approval until cleared on the Approvals tab; one lane at a time, forward only; only Paid can Close; Paid cannot Void; draggable only when it is my turn (`next` or `mine`), or the card is in Ready to pay or Paid, and never on hold.
+**Gates** (`purFMoveCheck`, `purFCanDrag`): Closed and Voided are final; hold blocks every move except Close and Void; rejected blocks approval until cleared on the Approvals tab; one lane at a time, forward only; Paid cannot Void. **Every card that is not Closed or Voided can be picked up** - `purFMoveCheck` rules on the drop, not the pickup, so a forward move still needs the viewer's turn and refuses by name, while Close and Void are status actions and do not (owner, 27 Sep 2026; this closed the gap where waiting, rejected and held cards could never reach Void).
 
 **Scope chip** (`purFNeedsMe`): "Awaiting my approval next" = `kind === "next"`; "Awaiting my approval" = `next || mine`; "All requests" = everything. The headline count uses the current scope.
 
@@ -111,6 +113,38 @@ Source: `Shelby.Web.Financials/PurchasingManagement/Requests/Update.aspx(.cs)` a
 **Submit for Approval** (Update.aspx:82-125, .cs:391-393, 704-705): shown while Unapproved with nothing approved. Ticking it ticks the first grid row when that row is the viewer's. Saved unticked, the order stores Status -1 (not submitted); the hover text calls that a hold on the approval process. The demo shows it as a hold-style badge.
 
 **Save** (`buttonUpdate_Click`): one postback applies status, header, grid rows and the submit flag; `ApproveOrder` then flips 0 to 1 when no row is unapproved, or 1 back to 0 when one is. The demo's `purFRecordSave` does the same, and the Kanban drop (`purFApproveStep`) uses the same cascade and stores the same rows.
+
+## 5c. The company setting that removes the payment process, and the path board
+
+Added 2026-09-28. **`PO_Company.UsePaymentApprovalProcess`** is `bit NOT NULL DEFAULT 0` - off on a new company (`Plugin/sql/Archive/1045_V810_SchemaUpdate.sql:24`; entity `Shelby.Data/EntityClasses/POCompany.cs:512`; the "Use Payment Approval Process" checkbox on Purchasing Management > Company Information, `CompanyInformation/Default.aspx.cs:46,86`). The demo models it as `PURF_USE_PAY`, default `false`, and §4 above applies only when it is on.
+
+What the legacy does when it is off:
+
+| Off | Legacy |
+|---|---|
+| no payment path can be chosen on a request | `Requests/Update.aspx:93` hides `#pPaymentApprovalPath` and the Payment Approval tab, so `PO_Order.PaymentApprovalID` stays NULL |
+| nothing hydrates | the whole invoice / approval-path block is inside `if (order.PaymentApprovalID != null)` (POR:322-529); `EmailOrderInvoice` returns at POR:1489 |
+| no invoice approvals exist | no `PO_OrderInvoice` rows, so `ApprovedForPayment` is never set and `APInvoiceRepository.CreateFromPO` is never reached (POR:879-881) |
+| AP goes manual | the approved-payment-request dropdown is not loaded and the PM link is shown instead (`AccountsPayable/Transactions/Update.aspx.cs:496,625`) |
+| `CreateInvoiceInAccountsPayable` is forced off | `CompanyInformation/Default.aspx.cs:87` |
+| path admin collapses | only `ForRequest` paths are listed; the For Request / For Payment columns and checkboxes are hidden (`ApprovalPaths/Default.aspx.cs:25-51`) |
+
+An approved PO therefore goes **straight to Accounts Payable**, entered and paid by hand: `ApproveOrder` only walks the request path and sets `Status = 1` (POR:1742-1793); there is no gate after it. Note that the legacy's own Purchasing Management data panel works this way unconditionally - it never reads payment at all (`DataPanelControls/PurchasingManagement.ascx.cs:80-122`).
+
+**So with the flag off the board is the approval path, not the lifecycle.** `purFColOf` replaces `purFLane` as the placement rule, and `purFCols` builds the columns:
+
+| Column | Holds |
+|---|---|
+| one per level of the **selected** path, in Sequence order | requests whose next level to act is that level (`purFOpenLevel`) |
+| Approved | `stage === "Approved"`; the request has left for AP |
+| Finish (Close / Void) | drop target only, always shown |
+
+- `purFOpenLevel` walks the levels the **amount** reaches (`purFSteps`), then maps the chosen Sequence back to its position in the full path, because the columns are the whole path. A level skipped by its threshold is passed over; a request no level applies to sits in the first column with the release badge; a rejected or held request parks at the last applicable level.
+- Column title = the level's approvers joined with "or" (`purFWho`, so the viewer's own level reads "(you)"). Sub-line = "from $N" when the level's minimum is above zero. Accessible name and hover = the legacy "Starts with / Then / Ends with ... from $N" string (`Shelby.Data/EntityClassExtensions/POOrder.cs:120-166`; a one-level path reads "Ends with"). A level whose minimum is above every amount on the board is dimmed and reads "Not required under $5,000".
+- Gates: forward is any later level or Approved, and records my approval at my level; approving at a level implies the ones below it (POR:1754), so the landing column is the model's decision, named by `purFLandCol`. A leftward drop is refused. Close from any column; Void on any open order, since nothing is paid.
+- The path chip is required and offers no "All approval paths"; the status chip is not offered, the columns being the status axis.
+
+Rulings, wording and the defects found while building this are in `docs/decisions/W13.md` under 28 Sep.
 
 ## 6. "Awaiting my approval next" vs "Awaiting my approval"
 

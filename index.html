@@ -1580,11 +1580,6 @@
   .purf-root .purf-card-paid{background:#daf5ea;border-color:#9fe1cb;}
   .purf-root .purf-card-hold{background:#fdf6e3;border-color:#e3cf94;}
   .purf-root .purf-card-rej{background:var(--red-10);border-color:var(--wn-400);}
-  .purf-root .purf-holdflag{display:inline-flex;align-items:center;gap:3px;font-size:10.5px;font-weight:600;color:#7a5300;}
-  .purf-root .purf-holdflag .material-symbols-rounded{font-size:12px;}
-  .purf-root .purf-paybadge{display:inline-block;width:-moz-fit-content;width:fit-content;font-size:10px;font-weight:600;border-radius:8px;padding:1px 7px;border:1px solid;}
-  .purf-root .purf-pay-unpaid{background:var(--am-50);color:#7a5300;border-color:#e8cfae;}
-  .purf-root .purf-pay-paid{background:var(--pos-10);color:#0b6b4c;border-color:#9fe1cb;}
   .purf-root .purf-more{background:none;border:0;font-family:inherit;font-size:11.5px;font-weight:600;color:var(--am-700);cursor:pointer;padding:4px 2px;text-align:left;text-decoration:underline;text-underline-offset:2px;}
   .purf-root .purf-more:hover{color:var(--txt-primary);}
   .purf-root .purf-finish{display:flex;flex-direction:column;gap:8px;min-width:0;min-height:0;padding-top:19px;}
@@ -1817,6 +1812,16 @@
   .purf-root .purf-kc-vendor{font-size:12px;color:var(--txt-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .purf-root .purf-kc-amt{font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--txt-primary);}
   .purf-root .purf-kempty{font-size:11.5px;color:var(--txt-subtle);padding:6px 2px;}
+  .purf-root .purf-kcol-ttl{display:flex;flex-direction:column;gap:1px;min-width:0;}
+  .purf-root .purf-kcol-ttl .purf-kcol-t{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.25;}
+  .purf-root .purf-kcol-sub{font-size:10.5px;font-weight:600;color:var(--txt-subtle);font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .purf-root .purf-kcol-dim{opacity:.62;}
+  .purf-root .purf-kcol-dim .purf-colb{border:1px dashed var(--stroke-widget);}
+  /* One header height for every column, so the cards across the board start on the same line. Tall
+     enough for a two-line title plus the threshold line; the title clamps to two lines so a narrow
+     column cannot push the header taller and make the row ragged again. */
+  .purf-root .purf-pathboard .purf-kcol-h{min-height:46px;align-items:flex-start;}
+  .purf-root .purf-pathboard .purf-kcol-ttl .purf-kcol-t,.purf-root .purf-pathboard .purf-kcol-h>.purf-kcol-t{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-height:30px;}
 /* ===== end W13 Purchasing Management V2 CSS ===== */
   /* ===== W17 Gifts Pledges V2 CSS , prefix gpF , kind "gifts" ===== */
   /* ----- W17: the shell classes this widget used to borrow from the retired gft
@@ -2228,6 +2233,8 @@
   .bgtO-lcol{position:absolute;top:0;bottom:0;pointer-events:auto;cursor:crosshair;}
   .bgtO-lguide{position:absolute;top:0;bottom:0;width:1px;background:var(--am-600);opacity:0;transform:translateX(-0.5px);transition:opacity .12s;}
   .bgtO-lcol:hover .bgtO-lguide{opacity:.55;}
+  .kpi-row.w01-gl{flex-wrap:wrap;align-content:center;row-gap:4px;}
+  .kpi-row.w01-gl .w01-gl-sub{flex:0 0 100%;margin-top:6px;}
 /* ===== end W01 Budget Compared to Actual V2 CSS ===== */
 /* ===== W02 Pension Plans V2 CSS ===== */
   /* Stand-alone copies of the pension rules this widget uses (w02- prefix). Classes: pen-body pen-c-cnt pen-c-share pen-c-share-head pen-caption pen-chart-empty pen-chartwrap pen-clickable pen-col pen-col-chart pen-dc pen-dc-amt pen-dc0 pen-dc1 pen-dc2 pen-detail-h pen-detail-modal pen-detail-scroll pen-dh-spacer pen-dhead pen-dot pen-drow pen-dsub pen-dtotal pen-empty pen-full pen-hd pen-leg pen-none pen-numwrap pen-pie pen-plan pen-plan-nm pen-row pen-share pen-share-fill pen-share-head pen-share-pct pen-share-track pen-sk-row pen-skel pen-total pen-tscroll penf-explore-chart penf-gbar penf-gfill penf-ggroup penf-gleg penf-glegend penf-gplot penf-grow penf-gwrap penf-gx penf-gx-d penf-gx-t */
@@ -2307,6 +2314,7 @@
   .modal.modal-wide.w02-detail-modal .modal-b{display:flex;gap:18px;align-items:flex-start;padding:0 18px 6px;}
   .w02-detail-scroll{flex:1 1 auto;min-width:0;}
   .w02-dtotal{flex:0 0 auto;min-width:150px;max-width:220px;display:flex;flex-direction:column;align-items:flex-start;gap:2px;border-top:none;margin-top:2px;padding:8px 0 0 6px;}
+  .w02-gl-filter{margin-top:8px;}
 /* ===== end W02 Pension Plans V2 CSS ===== */
 /* ===== W03 Payroll Distributions V2 CSS ===== */
   /* Stand-alone copies of the payroll rules this widget uses (w03- prefix). Classes: pr-date-input pr-dbadge pr-dbadge-nm pr-distcol pr-dot pr-fchip pr-pop-dates pr-scope-chip pr-split pr-split-chart pr-split-table pr-tools */
@@ -2350,6 +2358,11 @@
   .pro-gcap .pro-gdot{width:8px;height:8px;border-radius:50%;flex:0 0 auto;}
   .pro-gcap .pro-gname{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
   .pro-gcap .pro-gpct{margin-left:auto;color:var(--txt-subtle);flex:0 0 auto;}
+  /* expanded employee: the pay-type lines and their total read as one dropdown group */
+  .pro-emp-panel{background:var(--wn-100);}
+  .pro-emp-panel .w03-ptline .lr-main{padding-left:26px;color:var(--txt-secondary);}
+  .w03-pttotal .w03-pttotal-l{color:var(--txt-secondary);font-weight:600;white-space:nowrap;}
+  .w03-pttotal .wt-c2:last-child{font-weight:700;color:var(--txt-primary);}
 /* ===== end W03 Payroll Distributions V2 CSS ===== */
 /* ===== W04 Remittance Pledges V2 CSS ===== */
   /* Stand-alone copies of the remittance rules this widget uses (w04- prefix). Classes: rem-bar-slim rem-bargap rem-barmark rem-barrow rem-bars rem-bartrack rem-barval rem-bwrap rem-caret rem-catchup rem-date-input rem-datepick rem-detail-b rem-detail-h rem-detail-modal rem-dh-spacer rem-drill-b rem-drill-modal rem-dsub rem-flag rem-hd rem-mi-date rem-mini rem-mini-fill rem-mini-mark rem-mini-pct rem-mini-track rem-minirow rem-num rem-pct rem-ph-amt rem-ph-h rem-ph-head rem-ph-row rem-ph-tbl rem-ph-total rem-pl-cell rem-pl-count rem-pl-date rem-pl-head rem-pl-nm rem-pl-pager rem-pl-pages rem-pl-pgbtn rem-pl-row rem-pl-scroll rem-pl-sortbtn rem-pl-stat rem-pl-tbl rem-pledge-panel rem-plh rem-plh-flag rem-plh-foot rem-plh-hd rem-plh-head rem-plh-m rem-plh-num rem-plh-ok rem-plh-row rem-plh-st rem-plh-t rem-sk-row rem-skel rem-st rem-st-behind rem-st-none rem-st-ok rem-sum rem-sum-cell rem-sum-k rem-sum-stat rem-sum-v rem-tab-empty rem-thru-chip */
@@ -2463,7 +2476,7 @@
   .remO-cap-sort:hover{background:var(--wn-200);}
   .remO-cap-sort.on{color:var(--txt-primary);border-color:var(--am-400);}
   .remO-cap-sort .material-symbols-rounded{font-size:14px;}
-  .remO-row{display:grid;grid-template-columns:minmax(0,1fr) 96px 60px 68px;align-items:center;gap:6px;padding:7px 8px;border-bottom:1px solid var(--stroke-widget);font-size:13px;}
+  .remO-row{display:grid;grid-template-columns:minmax(0,1fr) 112px 72px 88px 68px 76px 68px;align-items:center;gap:6px;padding:7px 8px;border-bottom:1px solid var(--stroke-widget);font-size:13px;}
   .remO-row>.remO-name{padding-right:10px;}
   .remO-cards{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:2px 0 0;}
   .remO-card{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:9px 11px;border:1px solid var(--stroke-widget);border-radius:10px;background:var(--surface-widget);cursor:pointer;text-align:left;font-family:inherit;min-width:0;transition:background .12s,border-color .12s;}
@@ -2478,6 +2491,7 @@
   .remO-card-n{font-size:22px;font-weight:700;line-height:1;color:var(--txt-primary);font-variant-numeric:tabular-nums;}
   .remO-card-sub{font-size:11px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
   .w04-hd .dep-hd-top{display:flex;flex-wrap:wrap;align-items:center;gap:8px;}
+  .w04-hd .dep-hd-top .dep-hd-toggle{margin-left:auto;}
   .remO-card.on{border-width:2px;padding:8px 10px;}
   .remO-card-behind.on{border-color:#f5b301;background:#fdeeba;}
   .remO-card-ontrack.on{border-color:var(--am-400);background:var(--am-100);}
@@ -2644,6 +2658,8 @@
   .w04-fill-ontrack{background:var(--am-500);}
   .w04-fill-behind{background:#f5b301;}
   .w04-fill-none{background:var(--wn-300);}
+  .w04-pl-more{display:flex;justify-content:center;padding:10px 0;border-top:1px solid var(--stroke-widget);}
+  .w04-basis-info{margin-right:2px;}
 /* ===== end W04 Remittance Pledges V2 CSS ===== */
 /* ===== W05 Receivable Invoices Outstanding V2 CSS ===== */
 
@@ -3792,15 +3808,18 @@ function mysPopContent(){
     return (fmt==="line")?bgtOLine(w,rows,""):bgtOBars(w,rows,"");
   }
   /* Glance (KPI size): interactive. The scope chip is the same control as the bigger sizes (opens the scope popover; Special report opens the dialog), the "vs. budget, [window]" caption opens the five-window picker, and the big number carries the same arrow/sign/percent as the header headline. */
+  /* Glance sparkline step, same rule as W07 Deposits on Hand: a month-long window plots weekly, anything a quarter or longer plots monthly. */
+  function bgtOSparkIv(span){return (span==="month"||span==="period")?"week":"month";}
   function bgtOGlance(w){
     var bs=bgtOBasis(w),vt=bs.type,neutral=bs.neutral;
     var rows=bgtOSet(w),label=(w.acctview==="special")?bgtOScopeContext(w).replace(/^Special report: /,""):bgtOScopeShort(w);
     var chip='<button class="scope-chip" data-action="bgtO-scope" data-id="'+w.id+'" aria-haspopup="menu" aria-label="Account scope, tap to change"><span class="sc-nm">'+label+'</span>'+ICON("expand_more")+'</button>';
     if(!bgtOHasBudget(rows))return '<div class="kpi-row"><div class="kpi-num">'+chip+'<div class="metric-value" style="font-size:15px;color:var(--txt-subtle);font-weight:600">No budget set up</div></div></div>';
     var sv=bgtOSpanVariance(w,vt),v=sv.v,hv=bgtOHeadlineInner(v,neutral,sv.sumB);
-    var _sr=bgtOViewRows(w).filter(function(r){return r.actual!=null;}),_ss=_sr.map(function(r){return r.actual;}),_sl=_sr.map(function(r){return r.period;});
+    var _sr=bgtOViewRows(Object.assign({},w,{binterval:bgtOSparkIv(w.bspan||"year")})).filter(function(r){return r.actual!=null;}),_ss=_sr.map(function(r){return r.actual;}),_sl=_sr.map(function(r){return r.period;});
     var _spark=(_ss.length>=2)?depSparkHTML({s:_ss,labs:_sl},null,"Actual by period. Hover to read a point"):'';
-    return '<div class="kpi-row"><div class="kpi-num">'+chip+'<div class="metric-value bgtO-hl'+hv.cls+'">'+hv.html+hv.pct+'</div><div class="gl-sub">'+bgtOFavPill(v,neutral)+'<button class="trend-range" data-action="bgtO-span" data-id="'+w.id+'" aria-haspopup="listbox" aria-label="Comparison window, tap to change">'+bgtOSpanLabel(w.bspan||"year")+ICON("expand_more")+'</button></div></div>'+_spark+'</div>';}
+    /* V1 caption row ("Favourable  vs. budget, [window]") runs the full card width on its own line, as in V1; the sparkline sits top-right beside the chip + number only. */
+    return '<div class="kpi-row w01-gl"><div class="kpi-num">'+chip+'<div class="metric-value bgtO-hl'+hv.cls+'">'+hv.html+hv.pct+'</div></div>'+_spark+'<div class="gl-sub w01-gl-sub">'+bgtOFavPill(v,neutral)+'<button class="w01-caption bgtO-cap-btn" data-action="bgtO-span" data-id="'+w.id+'" aria-haspopup="listbox" aria-label="Comparison window, tap to change">vs. budget, '+bgtOSpanLabel(w.bspan||"year")+ICON("expand_more")+'</button></div></div>';}
   /* One Explore panel: its own interval + shape, so the two panels show different cuts of the SAME window (window + scope stay global up in the header). State per side as iA/fA, iB/fB. */
   /* Glance = headline only. Wide = header + the chosen view. Explore (largest) = header + two independent panels. Loading only on data-fetch changes (scope, report, window): header controls stay usable while the content area shimmers. */
   function bgtOContent(w){
@@ -4160,6 +4179,7 @@ function penOGlance(w){
   return '<div class="kpi-row"><div class="kpi-num">'+
     '<div class="dep-hd-kpigrp"><span class="metric-value">'+penOMoney(tot)+'</span>'+penOBadge(w)+'</div>'+
     '<div class="gl-sub"><span class="w02-caption">per year across '+np+' plan'+(np===1?"":"s")+', '+lead+'</span></div>'+
+    '<div class="w02-gl-filter">'+penODistChip(w)+'</div>'+
     '<span class="sr-only">Annual pension contribution '+penOMoney(tot)+' across '+np+' plans and '+na+' active appointees, '+lead+'.</span>'+
   '</div></div>';
 }
@@ -4349,11 +4369,11 @@ function penOPopContent(){
       if(key==="name")return dir*a.name.localeCompare(b.name);
       return b.net-a.net;});
     return rows;}
-  function prOTableRows(w){var d=w.prDist||"all";var rows=(d==="all")?prODistTotals(w):prODrillRows(w,d);return prOSortRows(rows,w.prSort||"amt-desc","other");}
+  function prOTableRows(w){var d=w.prDist||"all";var rows=(d==="all")?prODistTotals(w):prODrillRows(w,d);return prOSortRows(rows,w.prODrill?"amt-desc":(w.prSort||"amt-desc"),"other");}
   function prOChartRows(w){var d=w.prDist||"all";var rows=(d==="all")?prODistTotals(w):prODrillRows(w,d);return rows.sort(function(a,b){return b.net-a.net;});}
   function prOToggle(w){var v=w.view||"table";return tog([["table","Table","table_rows"],["dist","Chart","donut_small"]],v,w);}
   function prODistBadge(distId){var c=PRO_DIST_COLORS[distId]||"#8a8f98";return '<span class="w03-dbadge"><span class="w03-dot" style="background:'+c+'"></span><span class="w03-dbadge-nm">'+prODistName(distId)+'</span></span>';}
-  function prOSortBtn(w,k,label){var sk=(w.prSort||"amt-desc").split("-"),on=sk[0]===k,ic=on?(sk[1]==="asc"?"arrow_upward":"arrow_downward"):"unfold_more";return '<button class="wt-sort'+(on?" on":"")+'" data-action="prO-sort" data-id="'+w.id+'" data-k="'+k+'">'+label+' <span class="material-symbols-rounded">'+ic+'</span></button>';}
+  function prOSortBtn(w,k,label){if(w.prODrill)return '<span class="wt-sort-static">'+label+'</span>';var sk=(w.prSort||"amt-desc").split("-"),on=sk[0]===k,ic=on?(sk[1]==="asc"?"arrow_upward":"arrow_downward"):"unfold_more";return '<button class="wt-sort'+(on?" on":"")+'" data-action="prO-sort" data-id="'+w.id+'" data-k="'+k+'">'+label+' <span class="material-symbols-rounded">'+ic+'</span></button>';}
   function prOTableHTML(w){var meta=prOScopeMeta(w),rows=prOTableRows(w),tot=rows.reduce(function(s,a){return s+a.net;},0);
     if(meta.kind==="pt"){
       var head='<div class="wt-row wt-head"><span class="lr-main">'+prOSortBtn(w,"pt","Pay type")+'</span><span class="w03-distcol">'+prOSortBtn(w,"dist","Distribution")+'</span><span class="wt-c2 wt-pctcol">% of total</span><span class="wt-c2">'+prOSortBtn(w,"amt","Amount")+'</span></div>';
@@ -4377,9 +4397,7 @@ function penOPopContent(){
   function prOGlanceComp(w){var rows=prODistTotals(w).slice().sort(function(a,b){return b.net-a.net;}),tot=rows.reduce(function(s,a){return s+a.net;},0);
     if(!tot||!rows.length)return "";
     var segs=rows.map(function(a){var pct=a.net/tot*100;return '<span class="pro-gseg" style="width:'+pct.toFixed(2)+'%;background:'+(PRO_DIST_COLORS[a.id]||"#8a8f98")+'" data-tip="'+a.name+': '+money(a.net)+', '+Math.round(pct)+'% of payroll this period" data-tip-plain></span>';}).join("");
-    var top=rows[0],tp=Math.round(top.net/tot*100);
-    return '<div class="pro-gcomp"><div class="pro-gbar" role="img" aria-label="Payroll split across '+rows.length+' distributions this period">'+segs+'</div>'+
-      '<div class="pro-gcap"><span class="pro-gdot" style="background:'+(PRO_DIST_COLORS[top.id]||"#8a8f98")+'"></span><span class="pro-gname">'+top.name+'</span><span class="pro-gpct">'+tp+'%</span></div></div>';}
+    return '<div class="pro-gcomp"><div class="pro-gbar" role="img" aria-label="Payroll split across '+rows.length+' distributions this period">'+segs+'</div></div>';}
   function prOGlance(w){var tot=prODistTotals(w).reduce(function(s,a){return s+a.net;},0);
     if(!tot)return '<div class="kpi-row"><div class="kpi-num">'+prOPeriodChip(w)+'<div class="metric-value" style="font-size:16px;color:var(--txt-subtle)">No payroll this period</div></div></div>';
     return '<div class="kpi-row"><div class="kpi-num" style="flex:1 1 100%">'+prOPeriodChip(w)+'<div class="metric-value">'+money(tot)+'</div>'+prOGlanceComp(w)+'</div></div>';}
@@ -4404,7 +4422,7 @@ function penOPopContent(){
      (Jo's standard: drill = focus overlay always). Reuses the scoped mini-widget
      mechanism (like Deposits' openAcct): a clone scoped to the distribution,
      rendered xwide so the table + synced donut show together. */
-  function prOOpenDist(w,distId){if(!w)return;var mw=Object.assign({},w,{id:"__prodrill",prDist:distId,size:"xwide",view:"table",state:"ready",prODrill:true,prEmpOpen:{}});
+  function prOOpenDist(w,distId){if(!w)return;var mw=Object.assign({},w,{id:"__prodrill",prDist:distId,size:"xwide",view:"table",state:"ready",prODrill:true,prEmpOpen:{},prEmpSort:"name-asc"});
     modal={t:"Payroll Distributions: "+prODistName(distId),glyph:"payments",scoped:true,mw:mw};modalMounted=false;pop=null;render();}
   function prOHandleClick(a,id,t){
     if(a==="prO-emp-open"){var weo=find(id)||((modal&&modal.mw&&modal.mw.id===id)?modal.mw:null);if(!weo)return true;var ek=t.getAttribute("data-e");weo.prEmpOpen=weo.prEmpOpen||{};if(weo.prEmpOpen[ek]){delete weo.prEmpOpen[ek];}else{weo.prEmpOpen[ek]=true;}render();return true;}
@@ -4414,6 +4432,7 @@ function penOPopContent(){
     if(a==="prO-set-dist"){var wsd=find(id)||((modal&&modal.mw&&modal.mw.id===id)?modal.mw:null);if(wsd){wsd.prDist=t.getAttribute("data-s");wsd.prEmpOpen={};}pop=null;render();return true;}
     if(a==="prO-pt"){pop=(pop&&pop.type==="prO-pt"&&pop.id===id)?null:{type:"prO-pt",id:id};render();return true;}
     if(a==="prO-set-pt"){var wsp=find(id)||((modal&&modal.mw&&modal.mw.id===id)?modal.mw:null);if(wsp){wsp.prPT=t.getAttribute("data-s");wsp.prEmpOpen={};}pop=null;render();return true;}
+    if(a==="prO-empsort"){var wes=find(id)||((modal&&modal.mw&&modal.mw.id===id)?modal.mw:null);if(!wes)return true;var ek2=t.getAttribute("data-k"),ce=(wes.prEmpSort||"name-asc").split("-");wes.prEmpSort=(ce[0]===ek2)?(ek2+"-"+(ce[1]==="asc"?"desc":"asc")):(ek2+"-"+(ek2==="amt"?"desc":"asc"));render();return true;}
     if(a==="prO-sort"){var wsr=find(id),k=t.getAttribute("data-k");if(wsr){var cs=(wsr.prSort||"amt-desc").split("-");wsr.prSort=(cs[0]===k)?(k+"-"+(cs[1]==="asc"?"desc":"asc")):(k+"-"+((k==="amt")?"desc":"asc"));}render();return true;}
     if(a==="prO-range-set"){var wprr=find(id),rset=t.getAttribute("data-r");if(wprr){wprr.range=rset;if(rset==="CUSTOM"&&!wprr.begin){var b0=prORangeBoundsFor("TM",wprr);wprr.begin=b0.begin;wprr.end=b0.end;}}if(rset!=="CUSTOM")pop=null;render();return true;}
     return false;}
@@ -4478,12 +4497,14 @@ function penOPopContent(){
       pts.forEach(function(p){if(e.pay[p.id]>0){pay[p.id]=e.pay[p.id];tot+=e.pay[p.id];}});
       if(tot>0)out.push({name:e.name,dist:e.dist,pay:pay,total:tot});
     });
-    return out.sort(function(a,b){return b.total-a.total;});
+    /* Employee Break Down sort, its own setting (not the main table's): name A-Z by default, or total pay. */
+    var es=(w.prEmpSort||"name-asc").split("-"),dir=es[1]==="desc"?-1:1;
+    return out.sort(function(a,b){var c=(es[0]==="amt")?(a.total-b.total):a.name.localeCompare(b.name);if(!c)c=a.name.localeCompare(b.name);return c*dir;});
   }
   function prOEmpKey(e){return e.dist+"|"+e.name;}
   function prOEmpBlock(w,e,nested){
     var open=w.prEmpOpen||{},key=prOEmpKey(e),isOpen=!!open[key];
-    var pts=PRO_PT.filter(function(p){return e.pay[p.id]>0;});
+    var pts=PRO_PT.filter(function(p){return e.pay[p.id]>0;}).sort(function(a,b){return e.pay[b.id]-e.pay[a.id];});
     var lbl=e.name+", "+prOMoney(e.total)+" total in "+prODistName(e.dist)+". "+(isOpen?"Hide":"Show")+" this person's pay types.";
     var row='<div class="wt-row wt-rowh w03-emprow'+(nested?' w03-empnest':'')+(isOpen?' is-open':'')+'" data-action="prO-emp-open" data-id="'+w.id+'" data-e="'+prOEsc(key)+'" role="button" tabindex="0" aria-expanded="'+isOpen+'" aria-label="'+prOEsc(lbl)+'">'+
       '<span class="lr-main"><span class="pro-caret'+(isOpen?' on':'')+'" aria-hidden="true">'+ICON("chevron_right")+'</span>'+e.name+'</span>'+
@@ -4495,14 +4516,15 @@ function penOPopContent(){
         '<span class="wt-c2 wt-pctcol"><span class="pct-bar" role="img" aria-label="'+pct+'% of this person\'s pay"><span class="pct-fill" style="width:'+pct+'%"></span></span><span class="pct-num">'+pct+'%</span></span>'+
         '<span class="wt-c2">'+prOMoney(e.pay[p.id])+'</span></div>';
     }).join("");
-    var foot='<div class="pro-foot"><span>'+e.name+', '+prOMoney(e.total)+' across '+pts.length+' pay type'+(pts.length===1?'':'s')+'</span></div>';
+    var foot='<div class="wt-row w03-ptline w03-pttotal'+(nested?' w03-ptnest':'')+'"><span class="lr-main"></span><span class="wt-c2 wt-pctcol w03-pttotal-l">Total, '+pts.length+' pay type'+(pts.length===1?'':'s')+'</span><span class="wt-c2">'+prOMoney(e.total)+'</span></div>';
     return row+'<div class="pro-emp-panel" role="region" aria-label="'+prOEsc("Pay types for "+e.name)+'">'+lines+foot+'</div>';
   }
+  function prOEmpSortBtn(w,k,label){var sk=(w.prEmpSort||"name-asc").split("-"),on=sk[0]===k,ic=on?(sk[1]==="asc"?"arrow_upward":"arrow_downward"):"unfold_more";return '<button class="wt-sort'+(on?" on":"")+'" data-action="prO-empsort" data-id="'+w.id+'" data-k="'+k+'" aria-label="Sort employees by '+(k==="amt"?"total pay":"name")+'">'+label+' <span class="material-symbols-rounded">'+ic+'</span></button>';}
   function prOEmpTable(w,distId){
     var rows=prOEmpFiltered(w,distId);
     if(!rows.length)return '<div class="pro-emps">'+'<h4 class="pro-panel-h">'+ICON("groups")+'Employee Break Down</h4>'+'<div class="wt-row w03-empnest"><span class="lr-main">No employees paid in this period</span></div></div>';
     var tot=rows.reduce(function(s,e){return s+e.total;},0);
-    var head='<div class="wt-row wt-head"><span class="lr-main">'+prOSortBtn(w,"name","Employee")+'</span><span class="wt-c2">'+prOSortBtn(w,"amt","Total pay")+'</span></div>';
+    var head='<div class="wt-row wt-head"><span class="lr-main">'+prOEmpSortBtn(w,"name","Employee")+'</span><span class="wt-c2">'+prOEmpSortBtn(w,"amt","Total pay")+'</span></div>';
     var body=rows.map(function(e){return prOEmpBlock(w,e,false);}).join("");
     return '<div class="pro-emps">'+
       '<h4 class="pro-panel-h">'+ICON("groups")+'Employee Break Down</h4>'+
@@ -4735,7 +4757,7 @@ function remOSortBtn(w,k,label,tip){
   var ic=on?(dir<0?"arrow_downward":"arrow_upward"):"unfold_more";
   return '<button class="wt-sort'+(on?" on":"")+'" data-action="remO-sort" data-id="'+w.id+'" data-k="'+k+'"'+(tip?' data-tip="'+remOEsc(tip)+'" data-tip-plain':'')+'>'+label+' '+ICON(ic)+'</button>';
 }
-/* ---- activity table. Explore: Activity | Outstanding | Paid | % Paid. Detail adds Seq,
+/* ---- activity table. Explore: Activity | Pledges behind | Pledge | Outstanding | Paid | Expected | % Paid. Detail adds Seq,
    Pledges behind (instalment count), Pledge and Expected (term pacing). ---- */
 function remOFull(w){return w.size==="xwide";}
 function remOHead(w){
@@ -4743,11 +4765,11 @@ function remOHead(w){
   return '<div class="remO-row remO-head wt-head'+(full?" remO-full":"")+'">'+
     (full?'<span class="remO-cell remO-seq">'+remOSortBtn(w,"seq","Seq.")+'</span>':'')+
     '<span class="remO-cell remO-name">'+remOSortBtn(w,"name","Activity")+'</span>'+
-    (full?'<span class="remO-cell remO-num">'+remOSortBtn(w,"behind","Pledges behind","How many pledges behind this activity have at least one payment unpaid for more than "+REMO_GRACE_DAYS+" days. Payments still inside their grace period count as at risk, not behind, and are shown when you open the activity.")+'</span>'+
-          '<span class="remO-cell remO-num">'+remOSortBtn(w,"annual","Pledge","Total pledged over each pledge's own term (start to end date). A multi-year pledge counts in full, not one year's share.")+'</span>':'')+
+    ('<span class="remO-cell remO-num">'+remOSortBtn(w,"behind","Pledges behind","How many pledges behind this activity have at least one payment unpaid for more than "+REMO_GRACE_DAYS+" days. Payments still inside their grace period count as in grace period, not behind, and are shown when you open the activity.")+'</span>')+
+    '<span class="remO-cell remO-num">'+remOSortBtn(w,"annual","Pledge","Total pledged over each pledge's own term (start to end date). A multi-year pledge counts in full, not one year's share.")+'</span>'+
     '<span class="remO-cell remO-num">'+remOSortBtn(w,"outstanding","Outstanding")+'</span>'+
     '<span class="remO-cell remO-num">'+remOSortBtn(w,"paidamt","Paid","Every receipt recorded against this activity up to the Receipts through date. Cumulative over the pledge term, not year-to-date.")+'</span>'+
-    (full?'<span class="remO-cell remO-num">'+remOSortBtn(w,"expected","Expected","Amount that should have been paid by now, from the share of each pledge's own term (start to end date) elapsed. Not a calendar-year figure.")+'</span>':'')+
+    '<span class="remO-cell remO-num">'+remOSortBtn(w,"expected","Expected","Amount that should have been paid by now, from the share of each pledge's own term (start to end date) elapsed. Not a calendar-year figure.")+'</span>'+
     '<span class="remO-cell remO-pct">'+remOSortBtn(w,"pct","% Paid")+'</span>'+
   '</div>';
 }
@@ -4765,11 +4787,11 @@ function remORow(w,r){
   return '<div class="remO-row'+(full?" remO-full":"")+'" data-action="remO-open" data-id="'+w.id+'" data-seq="'+r.seq+'" role="button" tabindex="0" aria-label="'+remOEsc(r.name+", "+remORowSr(r)+" "+remOStatusLabel(remOStatus(r))+". Open the member churches behind this fund.")+'">'+
     (full?'<span class="remO-cell remO-seq">'+r.seq+'</span>':'')+
     '<div class="remO-cell remO-name"><span class="remO-name-nm">'+r.name+'</span></div>'+
-    (full?'<span class="remO-cell remO-num">'+remOBehindCell(w,r)+'</span>'+
-          '<span class="remO-cell remO-num">'+money(r.total)+'</span>':'')+
+    '<span class="remO-cell remO-num">'+remOBehindCell(w,r)+'</span>'+
+    '<span class="remO-cell remO-num">'+money(r.total)+'</span>'+
     '<span class="remO-cell remO-num">'+money(r.outstanding)+'</span>'+
     '<span class="remO-cell remO-num">'+money(r.paid)+'</span>'+
-    (full?'<span class="remO-cell remO-num">'+money(r.expected)+'</span>':'')+
+    '<span class="remO-cell remO-num">'+money(r.expected)+'</span>'+
     '<span class="remO-cell remO-pct">'+remOMiniBar(r)+'</span>'+
     '<span class="sr-only">'+remORowSr(r)+' '+remOStatusLabel(remOStatus(r))+'.</span>'+
   '</div>';
@@ -4786,11 +4808,11 @@ function remOTable(w){
   var tot='<div class="remO-row remO-total'+(full?" remO-full":"")+'">'+
     (full?'<span class="remO-cell remO-seq"></span>':'')+
     '<span class="remO-cell remO-name remO-total-lead">Total ('+tt.count+' activit'+(tt.count===1?"y":"ies")+')</span>'+
-    (full?'<span class="remO-cell remO-num">'+tt.behind+'</span>'+
-          '<span class="remO-cell remO-num">'+money(tt.total)+'</span>':'')+
+    '<span class="remO-cell remO-num">'+tt.behind+'</span>'+
+    '<span class="remO-cell remO-num">'+money(tt.total)+'</span>'+
     '<span class="remO-cell remO-num">'+money(tt.out)+'</span>'+
     '<span class="remO-cell remO-num">'+money(tt.paid)+'</span>'+
-    (full?'<span class="remO-cell remO-num">'+money(tt.expected)+'</span>':'')+
+    '<span class="remO-cell remO-num">'+money(tt.expected)+'</span>'+
     '<span class="remO-cell remO-pct">'+totMini+'</span>'+
   '</div>';
   return '<div class="remO-tbl"><div class="scroll remO-scroll">'+remOHead(w)+body+tot+'</div></div>';
@@ -4814,7 +4836,7 @@ function remOBars(w){
 /* ---- controls + header ---- */
 function remOThruChip(w){
   var iso=remOThru(w),spin=w.remLoading?'<span class="bgt-spin" aria-hidden="true"></span>':"";
-  return '<button class="filter-chip w04-thru-chip" data-action="remO-thru" data-id="'+w.id+'" aria-haspopup="dialog" aria-expanded="'+(pop&&pop.type==="remO-thru"&&pop.id===w.id?"true":"false")+'" aria-label="Receipts through '+remOEsc(remOFmtDate(iso))+', tap to change"><span class="fc-label">'+spin+(w.size==="kpi"?'Thru ':'Receipts through ')+remOFmtDate(iso)+'</span>'+ICON("expand_more")+'</button>';
+  return '<button class="filter-chip w04-thru-chip" data-action="remO-thru" data-id="'+w.id+'" aria-haspopup="dialog" aria-expanded="'+(pop&&pop.type==="remO-thru"&&pop.id===w.id?"true":"false")+'" aria-label="Receipts through '+remOEsc(remOFmtDate(iso))+', tap to change"><span class="fc-label">'+spin+'Receipts through '+remOFmtDate(iso)+'</span>'+ICON("expand_more")+'</button>';
 }
 /* View toggle: 2-way Table (default) / Pacing bars, shown at Explore and Detail. */
 function remOViewToggle(w){
@@ -4935,6 +4957,7 @@ function remOPopContent(){
 var REMO_ABOUT="How each remittance pledge is pacing against its own term: what has come in so far versus what was expected by now over the pledge's start-to-end dates, and what is still outstanding. Behind or ahead is measured in days against each pledge's own schedule, not the calendar year.";
 
 var REMO_PAGE_SIZE=8;
+var REMO_BASIS_NOTE="These figures check each pledge against its own instalment due dates, so they show what is actually owed so far and who has missed a payment. Expected and Behind can differ slightly from the card, which paces the activity evenly over its term. Pledged, Paid and Outstanding always match the card.";
 var REMO_GRACE_DAYS=7; /* W04-T13: grace runs from the day AFTER the due date */
 var REMO_CHURCHES=["Whitfield, Dana","Bell, Marcus","Alvarez, Rosa","Nguyen, Thomas","Okafor, Grace","Sullivan, Patrick","Ramirez, Elena","Coleman, Derek","Fitzgerald, Maureen","Patel, Anil","Brooks, Latoya","Hoffman, Greg","Delgado, Carmen","Whitaker, Susan","Osei, Kwame","Lindqvist, Erik","Montoya, Beatriz","Callahan, Sean","Iverson, Dana","Freeman, Cheryl","Barrett, Malcolm","Zhang, Wei","Donovan, Claire","Ashworth, Peter","Guerrero, Sofia","Pruitt, Wesley","Fairchild, Nora","Waverly, Nathaniel","Kowalski, Irene","Abrams, Sidney"];
 
@@ -5163,8 +5186,8 @@ function remOPlLabel(p){
   if(p.status==="neutral")return "No pledge";
   if(p.status==="full")return "Paid in full";
   if(p.status==="ended")return "Term ended, unpaid";
-  if(p.status==="ahead")return "Prepaid";
-  if(p.status==="atrisk")return "At risk";
+  if(p.status==="ahead")return "Paid ahead";
+  if(p.status==="atrisk")return "In grace period";
   if(p.status==="onpace")return "On track";
   if(p.shortCount===1)return "1 payment behind";
   return p.shortCount+" payments behind";
@@ -5174,9 +5197,9 @@ function remOPlPhrase(p){
   if(p.status==="full")return "Paid in full for its term";
   if(p.status==="ended")return "Term ended with "+remOMoney(p.outstanding)+" never paid";
   if(p.status==="ahead")return "Paid beyond what has fallen due";
-  if(p.status==="atrisk")return p.atRiskCount+" payment"+(p.atRiskCount===1?"":"s")+" unpaid but still inside the "+REMO_GRACE_DAYS+" day grace period, "+remOMoney(p.atRiskAmt)+" at risk";
+  if(p.status==="atrisk")return p.atRiskCount+" payment"+(p.atRiskCount===1?"":"s")+" unpaid but still inside the "+REMO_GRACE_DAYS+" day grace period ("+remOMoney(p.atRiskAmt)+")";
   if(p.status==="onpace")return "Every instalment due has been paid";
-  return p.shortCount+" instalment"+(p.shortCount===1?"":"s")+" due and unfunded, "+remOMoney(p.unfunded)+" behind";
+  return p.shortCount+" instalment"+(p.shortCount===1?"":"s")+" due and unpaid, "+remOMoney(p.unfunded)+" behind";
 }
 function remOPlChip(p){
   var band=(p.status==="full"?"ahead":p.status);
@@ -5188,7 +5211,7 @@ var REMO_SORTS={
   name:{lbl:"Name",cmp:function(a,b){return a.pl.donor<b.pl.donor?-1:(a.pl.donor>b.pl.donor?1:0);}},
   begin:{lbl:"Begin date",cmp:function(a,b){return a.pl.begin<b.pl.begin?-1:(a.pl.begin>b.pl.begin?1:0);}},
   end:{lbl:"End date",cmp:function(a,b){return a.pl.end<b.pl.end?-1:(a.pl.end>b.pl.end?1:0);}},
-  goal:{lbl:"Goal",cmp:function(a,b){return a.pl.goal-b.pl.goal;}},
+  goal:{lbl:"Pledged amount",cmp:function(a,b){return a.pl.goal-b.pl.goal;}},
   paid:{lbl:"Paid",cmp:function(a,b){return a.pl.paid-b.pl.paid;}},
   outstanding:{lbl:"Outstanding",cmp:function(a,b){return a.p.outstanding-b.p.outstanding;}},
   status:{lbl:"Status",cmp:function(a,b){return (a.p.shortCount-b.p.shortCount)||(a.p.unfunded-b.p.unfunded);}}
@@ -5232,12 +5255,12 @@ function remOSchStatusCell(st){
 function remOPledgeHistoryHTML(w,act,item){
   var pl=item.pl,p=item.p,s=p.sum,sch=p.sch;
   var flag=s.shortCount
-    ? '<span class="w04-plh-flag">'+s.shortCount+' unfunded, '+remOMoney(s.missedAmt)+'</span>'
+    ? '<span class="w04-plh-flag">'+s.shortCount+' unpaid, '+remOMoney(s.missedAmt)+'</span>'
     : '<span class="w04-plh-ok">'+remOIcon('check')+'Nothing skipped</span>';
   var hd='<div class="w04-plh-hd"><span class="w04-plh-t">'+remOEsc(pl.donor)+'</span>'+
     '<span class="w04-plh-m">pledged '+remOMoney(pl.goal)+' over '+remOFmtDate(pl.begin)+' to '+remOFmtDate(pl.end)+'</span>'+
-    '<span class="w04-plh-m">'+s.paid.length+' of '+s.dueCount+' due payments received</span>'+flag+'</div>';
-  var head='<div class="w04-plh-row w04-plh-head"><span>Due date</span><span class="w04-plh-num">Amount due</span><span class="w04-plh-num">Received</span><span>Status</span></div>';
+    '<span class="w04-plh-m">'+s.paid.length+' of '+s.dueCount+' due payments paid</span>'+flag+'</div>';
+  var head='<div class="w04-plh-row w04-plh-head"><span>Due date</span><span class="w04-plh-num">Amount due</span><span class="w04-plh-num">Paid</span><span>Status</span></div>';
   var body=sch.map(function(x){
     return '<div class="w04-plh-row'+(x.status==='missed'?' is-missed':'')+'">'+
       '<span>'+remOFmtDate(x.due)+'</span>'+
@@ -5247,15 +5270,15 @@ function remOPledgeHistoryHTML(w,act,item){
     '</div>';
   }).join("");
   var foot='<div class="w04-plh-foot">'+
-    (s.firstMissed?('First skipped payment: '+remOFmtDate(s.firstMissed)+'. '):'')+
+    (s.firstMissed?('First missed payment: '+remOFmtDate(s.firstMissed)+'. '):'')+
     (p.termEnded?('This term ended '+remOFmtDate(pl.end)+', so the unpaid balance cannot be caught up inside it. '):'')+
-    'Receipts are applied oldest first, so a gap shows as the earliest unfunded instalment. Totals here reconcile to '+remOMoney(pl.paid)+' received on this pledge.</div>';
+    'Payments are applied to the oldest instalment first, so a gap shows as the earliest unpaid instalment. '+remOMoney(pl.paid)+' paid on this pledge.</div>';
   return '<div class="w04-plh" role="region" aria-label="'+remOEsc('Payment schedule for '+pl.donor)+'">'+hd+head+body+foot+'</div>';
 }
 
 function remOPledgeRowHTML(item,w,act){
   var pl=item.pl,p=item.p;
-  var sr="Pledge from "+pl.donor+". Goal "+remOMoney(pl.goal)+", paid "+remOMoney(pl.paid)+", outstanding "+remOMoney(p.outstanding)+". Term "+remOFmtDate(pl.begin)+" to "+remOFmtDate(pl.end)+". "+remOPlPhrase(p)+".";
+  var sr="Pledge from "+pl.donor+". Pledged amount "+remOMoney(pl.goal)+", paid "+remOMoney(pl.paid)+", outstanding "+remOMoney(p.outstanding)+". Term "+remOFmtDate(pl.begin)+" to "+remOFmtDate(pl.end)+". "+remOPlPhrase(p)+".";
   var pid=pl.id,exp=!!(w&&w.plOpen&&w.plOpen[pid]);
   var caret='<span class="w04-caret'+(exp?' on':'')+'" aria-hidden="true">'+remOIcon('chevron_right')+'</span>';
   var hist=exp?remOPledgeHistoryHTML(w,act,item):"";
@@ -5323,19 +5346,18 @@ function remOActStrip(w,r,agg){
   return '<div class="w04-sum">'+
     cell("Total pledged",remOMoney(agg.goal))+
     cell("Expected by instalments due",remOMoney(agg.dueAmt))+
-    cell("Received to date",remOMoney(agg.paid))+
+    cell("Paid to date",remOMoney(agg.paid))+
     cell("Outstanding",remOMoney(agg.outstanding))+
     cell("% Paid",pct==null?"n/a":remOPct(pct))+
     cell("Pledges behind",agg.shortPledges+" of "+agg.n)+
-    cell("Pledges at risk",agg.atRiskPledges+" of "+agg.n)+
+    cell("Pledges in grace period",agg.atRiskPledges+" of "+agg.n)+
   '</div>';
 }
 
 function remOActTermLine(agg){
   if(!agg.n)return "";
   return '<div class="remO-term-line">'+remOIcon("event")+'<span>'+agg.n+' pledge'+(agg.n===1?"":"s")+
-    ', terms running '+remOFmtDate(agg.minBegin)+' to '+remOFmtDate(agg.maxEnd)+
-    '. Each is paced on its own term, so the activity has no single term of its own.</span></div>';
+    ', terms running '+remOFmtDate(agg.minBegin)+' to '+remOFmtDate(agg.maxEnd)+'.</span></div>';
 }
 
 var REMO_DRILL_COUNTS_NOTE=false;
@@ -5347,7 +5369,7 @@ function remOActNote(w,r,agg){
      add up - expected minus received does not reach the unfunded figure, because the
      at-risk money sits between the two (W04-T16). */
   var riskBit=agg.atRiskInstalments?(' A further '+agg.atRiskInstalments+' instalment'+(agg.atRiskInstalments===1?"":"s")+
-    ' worth '+remOMoney(agg.atRiskAmt)+' is unpaid but still inside its '+REMO_GRACE_DAYS+' day grace period, so it is at risk rather than behind.'):'';
+    ' worth '+remOMoney(agg.atRiskAmt)+' is unpaid but still inside its '+REMO_GRACE_DAYS+' day grace period, so it is in its grace period rather than behind.'):'';
   var endedBit=agg.ended?(' '+agg.ended+' pledge'+(agg.ended===1?" has":"s have")+' already reached the end of its term with money still unpaid, so that balance cannot be caught up.'):'';
   if(agg.shortInstalments===0)return '<div class="w04-catchup ok">'+remOIcon("check")+'<span>Every instalment that has fallen due on these '+agg.n+' pledges has been paid.'+riskBit+'</span></div>';
   if(!REMO_DRILL_COUNTS_NOTE)return "";
@@ -5362,15 +5384,16 @@ function remOPledgePanel(w,r,agg){
   var act=remOActBySeq(r.seq);if(!act)return "";
   var rows=agg.rows,total=rows.length;
   if(!total)return '<div class="w04-tab-empty">'+remOIcon("volunteer_activism")+'No pledges recorded against this activity.</div>';
-  var pages=Math.max(1,Math.ceil(total/REMO_PAGE_SIZE));
-  var pg=Math.min(pages,Math.max(1,(w.plPage&&w.plPage[r.seq])||1));
-  var start=(pg-1)*REMO_PAGE_SIZE,slice=rows.slice(start,start+REMO_PAGE_SIZE);
+  var shown=Math.min(total,Math.max(REMO_PAGE_SIZE,(w.plShown&&w.plShown[r.seq])||REMO_PAGE_SIZE));
+  var slice=rows.slice(0,shown);
   var body=slice.map(function(it){return remOPledgeRowHTML(it,w,act);}).join("");
+  /* lazy loading: the next batch comes in when the reader reaches the end of the list and taps Load more */
+  if(shown<total)body+='<div class="w04-pl-more"><button class="btn naked sm" data-action="remO-plmore" data-id="'+w.id+'" data-seq="'+r.seq+'">Load more ('+Math.min(REMO_PAGE_SIZE,total-shown)+' of '+(total-shown)+' remaining)</button></div>';
   /* W04-T1: the head row sticks and everything under it scrolls, including any
      expanded schedule, so the dialog never grows and the pager stays put. */
   return '<div class="w04-pledge-panel" role="region" aria-label="'+remOEsc("Pledges for "+r.name)+'">'+
     '<div class="w04-pl-tbl"><div class="scroll w04-pl-scroll">'+remOPledgeHead(w,r.seq)+body+'</div></div>'+
-    remOPager(w,r.seq,pg,pages,total)+'</div>';
+    '</div>';
 }
 
 function remOPledgeModalBody(w,r){
@@ -5383,7 +5406,7 @@ function remOPledgeModalHTML(){
   var w=modal?find(modal.id):null;if(!w)return "";
   var r=remOFindRow(w,modal.seq);if(!r)return "";
   return '<div class="modal-backdrop" data-action="remO-detail-close"><div class="modal modal-wide w04-drill-modal remo-root" data-action="stop" role="dialog" aria-modal="true" aria-label="'+remOEsc("Pledges for "+r.name)+'">'+
-    '<div class="modal-h w04-detail-h"><span class="modal-title"><span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">volunteer_activism</span>'+r.name+'</span><span class="w04-dsub">Pledges and instalments</span><span class="w04-dh-spacer"></span><button class="btn naked sm" data-action="remO-export-drill" data-id="'+w.id+'" data-seq="'+r.seq+'" title="'+remOEsc("Export the pledges and instalments for "+r.name+" to Excel")+'">'+remOIcon("download")+'Export to Excel</button><button class="iconbtn" data-action="remO-detail-close" aria-label="Close">'+remOIcon("close")+'</button></div>'+
+    '<div class="modal-h w04-detail-h"><span class="modal-title"><span class="material-symbols-rounded" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">volunteer_activism</span>'+r.name+'</span><span class="w04-dsub">Pledges and instalments</span><span class="w04-dh-spacer"></span><button class="iconbtn w04-basis-info" type="button" aria-label="How these figures are worked out" data-tip="'+remOEsc(REMO_BASIS_NOTE)+'" data-tip-plain>'+remOIcon("info")+'</button><button class="btn naked sm" data-action="remO-export-drill" data-id="'+w.id+'" data-seq="'+r.seq+'" title="'+remOEsc("Export the pledges and instalments for "+r.name+" to Excel")+'">'+remOIcon("download")+'Export to Excel</button><button class="iconbtn" data-action="remO-detail-close" aria-label="Close">'+remOIcon("close")+'</button></div>'+
     '<div class="modal-b w04-drill-b">'+remOPledgeModalBody(w,r)+'</div>'+
     '<div class="modal-f"><button class="btn naked sm" data-action="remO-open-record" data-id="'+w.id+'" data-seq="'+r.seq+'">'+remOIcon("open_in_new")+'Open in Remittance</button><button class="btn primary sm" data-action="remO-detail-close">Close</button></div></div></div>';
 }
@@ -5394,6 +5417,11 @@ function remOHandleClickOC(a,id,t){
     var pid=t.getAttribute("data-pl");wo.plOpen=wo.plOpen||{};
     if(wo.plOpen[pid])delete wo.plOpen[pid];else wo.plOpen[pid]=true;
     render();return true;
+  }
+  if(a==="remO-plmore"){
+    var wm=(modal?find(modal.id):null)||find(id);
+    if(wm){var sqm=t.getAttribute("data-seq");wm.plShown=wm.plShown||{};wm.plShown[sqm]=((wm.plShown[sqm])||REMO_PAGE_SIZE)+REMO_PAGE_SIZE;render();}
+    return true;
   }
   if(a==="remO-ppage"){
     var wp=(modal?find(modal.id):null)||find(id);
@@ -5406,7 +5434,7 @@ function remOHandleClickOC(a,id,t){
     var k=t.getAttribute("data-k"),seq2=t.getAttribute("data-seq");
     if(ws.plSort===k)ws.plDir=((ws.plDir||-1)<0)?1:-1;
     else{ws.plSort=k;ws.plDir=-1;}
-    ws.plPage=ws.plPage||{};ws.plPage[seq2]=1; /* a sort change must not leave the reader on a page that no longer means anything */
+    ws.plPage=ws.plPage||{};ws.plPage[seq2]=1;ws.plShown=ws.plShown||{};ws.plShown[seq2]=REMO_PAGE_SIZE; /* a sort change must not leave the reader on a page that no longer means anything */
     render();return true;
   }
   if(a==="remO-export-drill")return true; /* display-only, as every export in this build is */
@@ -7871,6 +7899,15 @@ var PURF_LANES=["Pending approval","Payment approval","Ready to pay","Paid"];
 var PURF_ME="Oisin Curran";
 var PURF_SCOPES=["Awaiting my approval next","Awaiting my approval","All requests"];
 var PURF_ARCHIVE=["Closed","Voided"];
+/* PO_Company.UsePaymentApprovalProcess, bit NOT NULL DEFAULT 0, so off on a new company
+   (1045_V810_SchemaUpdate.sql:24; the checkbox at CompanyInformation/Default.aspx.cs:46). Off: no
+   payment path is selectable so PO_Order.PaymentApprovalID stays null and the whole invoice-approval
+   block is skipped (Requests/Update.aspx:93; POOrderRepository.cs:322), no PO_OrderInvoice rows are
+   created, ApprovedForPayment is never set, and an approved request goes straight to Accounts Payable
+   to be entered and paid by hand. The legacy Purchasing Management data panel models the request path
+   only, the same way (PurchasingManagement.ascx.cs:80). Flip this to true and the payment board,
+   the payment lanes and the Payment Approval tab all come back. */
+var PURF_USE_PAY=false;
 /* Stage colour comes from the shell's tokens, and every use of it is paired with
    the stage NAME in text, so colour is never the only signal. Pending borrows the
    amethyst action tone Jo uses for her own action lane; Approved reuses the exact
@@ -7949,17 +7986,20 @@ var PURF_DEPT_ACCT={
   "IT":{fund:"1 Church",dept:"150 Information Technology",acct:"50610 Computer Supplies"}
 };
 var PURF_PAY_LBL={unpaid:"Payment: not paid",paid:"Payment: paid"};
-var PURF_PAY_CLS={unpaid:"purf-pay-unpaid",paid:"purf-pay-paid"};
 var PURF_CAP_BOARD_WIDE=2;
 var PURF_CAP_TABLE_WIDE=5;
 var PURF_CAP_TABLE_XWIDE=10;
 var PURF_ABOUT="Purchase requests moving through approval to payment. Lanes follow the record: pending approval on its approval path, payment approval on its payment path, ready to pay, paid; closed and voided orders stay in the table. Each card says whose approval is next; drag a request you can act on to the next lane, or open it for the record.";
+var PURF_ABOUT_NOPAY="Purchase requests moving along their approval path. The board is the path itself: one column per approval level, in order, and a request sits in the column of the level that has to act next; a level whose dollar minimum the request does not reach is skipped. Approved requests leave the flow to Accounts Payable, and closed and voided orders stay in the table. Each card says whose approval is next; drag a request you can act on forward to record your approval, or open it for the record.";
+function purFAbout(){return PURF_USE_PAY?PURF_ABOUT:PURF_ABOUT_NOPAY;}
 var PURF_POP=null,PURF_MODAL=null,PURF_MOVE=null,PURF_HOLD=null,PURF_DRAG=null,PURF_Q="";
 
 /* (2) DERIVATIONS ------------------------------------------------------ */
 function purFIcon(n){return '<span class="material-symbols-rounded" aria-hidden="true">'+n+'</span>';}
 function purFEsc(s){return escText(s);}
 function purFMoney(n){return moneyFull(n);}
+/* Thresholds read as whole dollars in a column header; every other figure keeps two decimals. */
+function purFMoneyShort(n){return money(n);}
 function purFParse(iso){return parseISO(iso);}
 function purFFmtDate(iso){return fmtDateLong(iso);}
 function purFAge(po){return Math.max(0,Math.round((PURF_TODAY-purFParse(po.issued))/86400000));}
@@ -7984,7 +8024,7 @@ function purFStepUsers(s,amt){return s.users.filter(function(u,i){var m=(s.mins&
 function purFSteps(pathName,amt){var p=PURF_PATHS[pathName];if(!p)return [];var out=[];p.steps.forEach(function(s){var us=purFStepUsers(s,amt);if(us.length)out.push({seq:s.seq,users:us,all:s});});return out;}
 function purFLivePath(po){
   if(po.stage==="Pending")return {kind:"request",path:po.path,acted:po.appr||[]};
-  if(po.stage==="Approved"&&!po.payDone&&!po.paid)return {kind:"payment",path:po.payPath||po.path,acted:po.payAppr||[]};
+  if(PURF_USE_PAY&&po.stage==="Approved"&&!po.payDone&&!po.paid)return {kind:"payment",path:po.payPath||po.path,acted:po.payAppr||[]};
   return null;
 }
 function purFPathDone(pathName,amt,acted){var steps=purFSteps(pathName,amt);if(!steps.length)return true;var ok=acted.filter(function(a){return a.state==="approved";});if(!ok.length)return false;if(acted.some(function(a){return a.state==="rejected";}))return false;var maxSeq=Math.max.apply(null,ok.map(function(a){return a.seq;}));return steps.every(function(s){return s.seq<=maxSeq;});}
@@ -8013,9 +8053,63 @@ function purFNeedsMe(po,scope){var tk=purFTurn(po).kind;if(scope==="Awaiting my 
 function purFLane(po){
   if(po.stage==="Closed"||po.stage==="Voided")return po.stage;
   if(po.stage==="Pending")return "Pending approval";
+  /* With the payment process off there is nothing after approval to track: the pay, payDone and paid
+     fields stay on the fixtures so the constant can be flipped, but nothing reads them. */
+  if(!PURF_USE_PAY)return "Approved";
   if(po.paid||po.pay==="paid")return "Paid";
   if(po.payDone)return "Ready to pay";
   return "Payment approval";
+}
+/* The level that has to act next on the request path, read straight off the acted rows so it is
+   defined even for a rejected or held card (purFTurn returns those kinds before it gets this far).
+   The walk is over the levels this AMOUNT reaches, never the raw path, so a card is never placed in a
+   column its own total cannot require; the chosen Sequence is then mapped back to its position in the
+   full path, because the columns are the whole path. A request that no level applies to sits at the
+   first column with its release badge, and one whose applicable levels have all been acted on but is
+   still Pending (rejected, or held) parks at the last applicable level. */
+function purFOpenLevel(po){
+  var p=PURF_PATHS[po.path];if(!p||!p.steps.length)return null;
+  var ap=purFSteps(po.path,po.amt);
+  var acted=po.appr||[],maxSeq=acted.length?Math.max.apply(null,acted.map(function(a){return a.seq;})):0;
+  var seq=null,i;
+  for(i=0;i<ap.length;i++)if(ap[i].seq>maxSeq){seq=ap[i].seq;break;}
+  if(seq===null)seq=ap.length?ap[ap.length-1].seq:p.steps[0].seq;
+  for(i=0;i<p.steps.length;i++)if(p.steps[i].seq===seq)return {no:i+1,step:p.steps[i]};
+  return {no:1,step:p.steps[0]};
+}
+/* Which column a record sits in: the lane with the payment process on, otherwise the open level of
+   the record's OWN path (the board shows one path, so there is no ambiguity) and Approved once the
+   path is complete, because with no payment process the request leaves for Accounts Payable. */
+function purFColOf(po){
+  if(PURF_USE_PAY)return purFLane(po);
+  if(po.stage!=="Pending")return "Approved";
+  var L=purFOpenLevel(po);
+  return "Level "+(L?L.no:1);
+}
+function purFColNo(key){return (key==="Approved")?9999:(/^Level [0-9]+$/.test(key)?+key.slice(6):0);}
+/* The board columns. Payment lanes keep their exact markup; path levels add the threshold sub-line
+   and carry the legacy "Starts with / Then / Ends with" wording as their accessible name. */
+function purFCols(w){
+  if(PURF_USE_PAY){
+    var st=purFStatusCur(w);
+    var empty={"Pending approval":"Nothing awaiting approval","Payment approval":"Nothing awaiting payment approval","Ready to pay":"Nothing ready to pay","Paid":"Nothing paid yet"};
+    return ((st==="All statuses")?PURF_LANES:[st]).map(function(s){
+      return {key:s,title:s,sub:"",tone:PURF_STAGE_TONE[s]||"inherit",empty:empty[s]||"None",aria:"",min:0};
+    });
+  }
+  var p=PURF_PATHS[purFPathCur(w)],out=[];
+  if(p)p.steps.forEach(function(s,i){
+    var mins=s.users.map(function(u,k){return (s.mins&&s.mins[k]!=null)?s.mins[k]:(s.min||0);});
+    var lo=Math.min.apply(null,mins),hi=Math.max.apply(null,mins);
+    var names=s.users.map(purFWho).join(" or ");
+    var lead=(i===p.steps.length-1)?"Ends with ":((i===0)?"Starts with ":"Then ");
+    var mny=(lo>0)?(" from "+purFMoneyShort(lo)+((hi>lo)?" or more, depending on the approver":"")):"";
+    out.push({key:"Level "+(i+1),title:names,sub:(lo>0)?("from "+purFMoneyShort(lo)+((hi>lo)?"+":"")):"",
+      tone:PURF_STAGE_TONE["Pending approval"],empty:"Nothing at this level",aria:lead+names+mny+". Any one approver on a level satisfies it.",min:lo});
+  });
+  out.push({key:"Approved",title:"Approved",sub:"",tone:PURF_STAGE_TONE["Approved"],empty:"Nothing approved yet",
+    aria:"Approved: the approval path is complete. The invoice is entered in Accounts Payable.",min:0});
+  return out;
 }
 function purFScopeCur(w){return (w.purfScope&&PURF_SCOPES.indexOf(w.purfScope)>-1)?w.purfScope:"All requests";}
 function purFTurnBadge(po){var tn=purFTurn(po);if(tn.kind==="none"||tn.kind==="complete")return "";var ic={next:"how_to_reg",mine:"schedule",waiting:"hourglass_top",rejected:"block",hold:"lock"}[tn.kind]||"info";return '<span class="purf-turn purf-turn-'+tn.kind+'">'+purFIcon(ic)+purFEsc(tn.label)+'</span>';}
@@ -8025,11 +8119,14 @@ function purFTurnBadge(po){var tn=purFTurn(po);if(tn.kind==="none"||tn.kind==="c
 function purFMyLevel(po){var tn=purFTurn(po);if(tn.kind!=="next"&&tn.kind!=="mine")return null;var live=tn.live,steps=purFSteps(live.path,po.amt);if(tn.none)return {live:live,step:{seq:0,users:[PURF_ME]},release:true};var mine=steps.filter(function(s){return s.users.indexOf(PURF_ME)>-1&&!live.acted.some(function(a){return a.seq===s.seq&&a.state==="approved";});})[0];return mine?{live:live,step:mine}:null;}
 /* A drop on the board is my approval at my level, applied with the record screen's cascade (levels at or below
    mine tick too) and stored as the same rows Save writes, so the board and the record cannot disagree. */
+/* Completing the request path opens the payment path only when the process is on; the legacy leaves
+   PO_Order.PaymentApprovalID null otherwise. */
+function purFSeedPayment(po){if(!PURF_USE_PAY)return;po.pay="unpaid";po.payPath=po.payPath||po.path;po.payAppr=po.payAppr||[];}
 function purFApproveStep(w,po,note){
   var m=purFMyLevel(po);if(!m)return false;
   var live=m.live;po.log=po.log||[];
   if(m.release){
-    if(live.kind==="request"){po.stage="Approved";po.pay="unpaid";po.payPath=po.payPath||po.path;po.payAppr=po.payAppr||[];po.submitted=true;po.log.push({d:"2026-08-19",by:purFWho(PURF_ME),to:"Approved",note:"Released: no approver required at this amount"+(note?". "+note:"")});}
+    if(live.kind==="request"){po.stage="Approved";purFSeedPayment(po);po.submitted=true;po.log.push({d:"2026-08-19",by:purFWho(PURF_ME),to:"Approved",note:"Released: no approver required at this amount"+(note?". "+note:"")});}
     else{po.payDone=true;po.log.push({d:"2026-08-19",by:purFWho(PURF_ME),to:"Approved for payment",note:"Released: no approver required at this amount"+(note?". "+note:"")});}
     return true;
   }
@@ -8041,7 +8138,7 @@ function purFApproveStep(w,po,note){
   if(live.kind==="request"){po.appr=acted;po.submitted=true;}else po.payAppr=acted;
   po.hold=acted.some(function(a){return a.state==="hold";});
   if(purFPathDone(live.path,po.amt,acted)){
-    if(live.kind==="request"){po.stage="Approved";po.pay="unpaid";po.payPath=po.payPath||po.path;po.payAppr=po.payAppr||[];po.log.push({d:"2026-08-19",by:purFWho(PURF_ME),to:"Approved",note:note||""});}
+    if(live.kind==="request"){po.stage="Approved";purFSeedPayment(po);po.log.push({d:"2026-08-19",by:purFWho(PURF_ME),to:"Approved",note:note||""});}
     else{po.payDone=true;po.log.push({d:"2026-08-19",by:purFWho(PURF_ME),to:"Approved for payment",note:note||""});}
   }else po.log.push({d:"2026-08-19",by:purFWho(PURF_ME),to:(live.kind==="request"?"Approved level "+m.step.seq:"Payment approved level "+m.step.seq),note:note||""});
   return true;
@@ -8053,14 +8150,21 @@ function purFTier(w){var s=w.size;if(s==="kpi")return "kpi";if(s==="xwide"||s===
 /* Explore (wide) has no Kanban: a stored kanban view resolves to the table there (owner, 27 Sep). */
 /* Default view is the table at every tier (owner, 27 Sep); Kanban is an explicit choice at Detail only. */
 function purFViewCur(w){if(w.purfView==="enc")return "enc";if(w.purfView==="kanban"&&purFTier(w)!=="wide")return "kanban";return "table";}
-function purFStatusVals(w,view){return (view==="table")?["All statuses"].concat(PURF_STAGES,PURF_ARCHIVE):["All statuses"].concat(PURF_LANES);}
+/* The path board has no status axis of its own: its columns ARE the status, so only "All statuses"
+   is available there, which hides the chip and lets a stored lane fall back through purFStatusCur. */
+function purFStatusVals(w,view){if(view==="kanban"&&!PURF_USE_PAY)return ["All statuses"];return (view==="table")?["All statuses"].concat(PURF_STAGES,PURF_ARCHIVE):["All statuses"].concat(PURF_LANES);}
 function purFStatusCur(w){
   var view=purFViewCur(w),vals=purFStatusVals(w,view),s=w.purfStatus||"All statuses";
   return (vals.indexOf(s)>-1)?s:"All statuses";
 }
 /* The status chip means the lane on the board and the record status in the table. */
 function purFMatchStatus(w,p,st){if(st==="All statuses")return true;return (purFViewCur(w)==="table")?(p.stage===st):(purFLane(p)===st);}
+/* The path board draws its columns from one path, so it offers every path and no "All approval
+   paths" (owner, 28 Sep). Listing all of them, not just the ones with rows, means selecting a quiet
+   path still shows its levels. */
+function purFPathReq(w){return !PURF_USE_PAY&&purFTier(w)!=="kpi"&&purFViewCur(w)==="kanban";}
 function purFPathVals(w){
+  if(purFPathReq(w))return Object.keys(PURF_PATHS);
   var st=purFStatusCur(w),seen={},out=[];
   purFDataset(w).forEach(function(p){
     if(!purFMatchStatus(w,p,st))return;
@@ -8068,7 +8172,10 @@ function purFPathVals(w){
   });
   return out;
 }
-function purFPathCur(w){var vals=purFPathVals(w);return (w.purfPath&&vals.indexOf(w.purfPath)>-1)?w.purfPath:"All approval paths";}
+function purFPathCur(w){
+  if(purFPathReq(w))return (w.purfPath&&PURF_PATHS[w.purfPath])?w.purfPath:Object.keys(PURF_PATHS)[0];
+  var vals=purFPathVals(w);return (w.purfPath&&vals.indexOf(w.purfPath)>-1)?w.purfPath:"All approval paths";
+}
 function purFOvOnly(w){return !!w.purfOv;}
 /* The two global filters, applied for every view. */
 /* The global filters, applied for every view: status (lane or record status), path, and the viewer scope. */
@@ -8150,8 +8257,8 @@ function purFHeaderBlock(w){
   /* Explore shortens the chip labels so all three fit beside the view toggle (owner, 27 Sep). */
   var sh=(tier==="wide"),sc=purFScopeCur(w),st=purFStatusCur(w),pa=purFPathCur(w);
   var chips=purFChip(w,"scope",sh?purFShortScope(sc):sc,"Viewer scope, currently "+sc,false);
-  if(view!=="enc")chips+=purFChip(w,"status",sh?st:("Status: "+st),"PO status, currently "+st,loading);
-  if(purFPathVals(w).length>1)chips+=purFChip(w,"path",(sh&&pa==="All approval paths")?"All paths":pa,"Approval path, currently "+pa,false);
+  if(view!=="enc"&&purFStatusVals(w,view).length>1)chips+=purFChip(w,"status",sh?st:("Status: "+st),"PO status, currently "+st,loading);
+  if(purFPathReq(w)||purFPathVals(w).length>1)chips+=purFChip(w,"path",(sh&&pa==="All approval paths")?"All paths":pa,"Approval path, currently "+pa,false);
   if(view==="table"&&tier==="xwide"){
     chips+=purFOvChip(w);
   }
@@ -8194,28 +8301,36 @@ function purFCard(w,po){
 /* The board. Lanes are the lifecycle stages derived from the record status and the live approval path;
    the status filter shows one lane. The split Finish column (Close / Void) appears only at "All statuses". */
 function purFBoard(w){
-  var rows=purFBoardRows(w),st=purFStatusCur(w),tier=purFTier(w);
-  var lanes=(st==="All statuses")?PURF_LANES:[st];
+  var rows=purFBoardRows(w),tier=purFTier(w),cols=purFCols(w);
   var cap=(tier==="wide")?PURF_CAP_BOARD_WIDE:9999;
-  var finish=(st==="All statuses");
-  var empty={"Pending approval":"Nothing awaiting approval","Payment approval":"Nothing awaiting payment approval","Ready to pay":"Nothing ready to pay","Paid":"Nothing paid yet"};
-  var cols=lanes.map(function(s){
-    var sp=rows.filter(function(p){return purFLane(p)===s;});
+  /* The payment board hides the Finish column when the status chip selects one lane, because closing or
+     voiding is a move out of the whole flow. The path board always shows the whole flow. */
+  var finish=PURF_USE_PAY?(purFStatusCur(w)==="All statuses"):true;
+  /* A level whose minimum is above every amount on the board cannot receive a card, so it says so
+     instead of looking merely empty: the skip rule made visible (POOrderRepository.cs:1760). */
+  var top=rows.reduce(function(m,p){return Math.max(m,p.amt);},0);
+  var cs=cols.map(function(c){
+    var sp=rows.filter(function(p){return purFColOf(p)===c.key;});
+    var dim=(c.min>0&&c.min>top);
     var cards=sp.slice(0,cap).map(function(po){return purFCard(w,po);}).join("");
-    if(!sp.length)cards='<div class="purf-kempty">'+(empty[s]||"None")+'</div>';
+    if(!sp.length)cards='<div class="purf-kempty">'+(dim?("Not required under "+purFMoneyShort(c.min)):c.empty)+'</div>';
     else if(sp.length>cap)cards+='<button class="purf-more" data-purf="more" data-id="'+w.id+'">+'+(sp.length-cap)+' more, view in the PO Table</button>';
-    return '<div class="purf-kcol purf-col"><div class="purf-kcol-h"><span class="purf-kcol-t" style="color:'+(PURF_STAGE_TONE[s]||"inherit")+'">'+s+'</span><span class="purf-kcol-n">'+sp.length+'</span></div>'+
-      '<div class="purf-kcol-b purf-colb" data-purf-drop="'+s+'" data-id="'+w.id+'">'+cards+'</div></div>';
+    var ttl='<span class="purf-kcol-t" style="color:'+c.tone+'"'+(c.aria?' title="'+purFEsc(c.aria)+'"':"")+'>'+purFEsc(c.title)+'</span>';
+    var head=c.sub
+      ? '<div class="purf-kcol-h"><span class="purf-kcol-ttl">'+ttl+'<span class="purf-kcol-sub">'+purFEsc(c.sub)+'</span></span><span class="purf-kcol-n">'+sp.length+'</span></div>'
+      : '<div class="purf-kcol-h">'+ttl+'<span class="purf-kcol-n">'+sp.length+'</span></div>';
+    return '<div class="purf-kcol purf-col'+(dim?" purf-kcol-dim":"")+'"'+(c.aria?' role="group" aria-label="'+purFEsc(c.aria)+'"':"")+'>'+head+
+      '<div class="purf-kcol-b purf-colb" data-purf-drop="'+purFEsc(c.key)+'" data-id="'+w.id+'">'+cards+'</div></div>';
   }).join("");
   var fin=finish
     ? '<div class="purf-finish" role="group" aria-label="Finish: drop a card here to close or void it">'+
         '<div class="purf-fin-half purf-fin-close" data-purf-drop="Closed" data-id="'+w.id+'">'+purFIcon("task_alt")+'<span class="purf-fin-t">Close</span><span class="purf-fin-s">any status</span></div>'+
-        '<div class="purf-fin-half purf-fin-void" data-purf-drop="Voided" data-id="'+w.id+'">'+purFIcon("block")+'<span class="purf-fin-t">Void</span><span class="purf-fin-s">unpaid only</span></div>'+
+        '<div class="purf-fin-half purf-fin-void" data-purf-drop="Voided" data-id="'+w.id+'">'+purFIcon("block")+'<span class="purf-fin-t">Void</span><span class="purf-fin-s">'+(PURF_USE_PAY?"unpaid only":"any open order")+'</span></div>'+
       '</div>'
     : "";
-  /* Explore: lanes keep a readable minimum and the board scrolls sideways (owner, 27 Sep). */
-  var gtc=(tier==="wide")?("repeat("+lanes.length+",minmax(180px,1fr))"+(finish?" 96px":"")):("repeat("+lanes.length+",1fr)"+(finish?" 0.6fr":""));
-  return '<div class="purf-kanban purf-board" data-purf-tier="'+tier+'" style="grid-template-columns:'+gtc+'">'+cols+fin+'</div>';
+  /* Explore: columns keep a readable minimum and the board scrolls sideways (owner, 27 Sep). */
+  var gtc=(tier==="wide")?("repeat("+cols.length+",minmax(180px,1fr))"+(finish?" 96px":"")):("repeat("+cols.length+",1fr)"+(finish?" 0.6fr":""));
+  return '<div class="purf-kanban purf-board'+(PURF_USE_PAY?"":" purf-pathboard")+'" data-purf-tier="'+tier+'" style="grid-template-columns:'+gtc+'">'+cs+fin+'</div>';
 }
 /* The PO Table, on her .wt-row primitives with the ARIA table roles so the
    semantics survive the swap from a real table element. Fixed oldest-first order
@@ -8236,7 +8351,7 @@ function purFTable(w){
     var ov=purFOverdue(po),hr=purFHoldReason(po);
     var sr='<span class="sr-only">'+po.ref+", "+po.vendor+", "+purFMoney(po.amt)+", "+po.dept+", "+po.stage+
       (po.hold?", on hold"+(hr?" because "+purFEsc(hr):""):"")+
-      ((po.stage==="Approved"&&po.pay)?", "+PURF_PAY_LBL[po.pay]:"")+
+      ((PURF_USE_PAY&&po.stage==="Approved"&&po.pay)?", "+PURF_PAY_LBL[po.pay]:"")+
       ", issued "+purFFmtDate(po.issued)+(ov?", overdue":"")+". Opens the purchase order record.</span>";
     return '<div class="wt-row purf-trow purf-rowclick'+(ov?" purf-ovrow":"")+'" role="row" tabindex="0" data-purf="open" data-purf-ref="'+purFEsc(po.ref)+'" data-id="'+w.id+'" aria-label="'+purFEsc(po.ref+", "+po.vendor+", open the purchase order record")+'">'+
       '<span class="purf-c-num" role="cell">'+po.ref+'</span>'+
@@ -8264,14 +8379,19 @@ function purFGlance(w){
   var pa=purFPathCur(w),pos=purFDataset(w).filter(function(p){return pa==="All approval paths"||p.path===pa;});
   var open=pos.filter(function(p){var l=purFLane(p);return l==="Pending approval"||l==="Payment approval"||l==="Ready to pay";});
   var next=pos.filter(function(p){return purFTurn(p).kind==="next";}).length,later=pos.filter(function(p){return purFTurn(p).kind==="mine";}).length,toPay=pos.filter(function(p){return purFLane(p)==="Ready to pay";}).length;
+  var others=pos.filter(function(p){return purFTurn(p).kind==="waiting";}).length;
   var outstanding=purFSum(purFPendingSet(w));
   var tiles=[
     {n:next,lbl:"My approval",tone:PURF_STAGE_TONE["Pending approval"],full:"Awaiting my approval next: "+next+(next===1?" request":" requests")+" where your level is the next one to act."},
     {n:later,lbl:"Coming to me",tone:PURF_STAGE_TONE["Payment approval"],full:"Awaiting my approval: "+later+(later===1?" request":" requests")+" on a path you are on, where an earlier level has to act first."},
-    {n:toPay,lbl:"To be paid",tone:PURF_STAGE_TONE["Ready to pay"],full:"Ready to pay: "+toPay+(toPay===1?" order":" orders")+" with payment approval complete, waiting for the check to be entered."}
+    /* Nothing waits to be paid when the payment process is off, so the third figure completes the
+       set the other way: mine now, mine later, someone else's. */
+    PURF_USE_PAY
+      ? {n:toPay,lbl:"To be paid",tone:PURF_STAGE_TONE["Ready to pay"],full:"Ready to pay: "+toPay+(toPay===1?" order":" orders")+" with payment approval complete, waiting for the check to be entered."}
+      : {n:others,lbl:"Waiting on others",tone:"var(--txt-secondary)",full:"Waiting on someone else: "+others+(others===1?" request":" requests")+" where the open level is someone else's and you are not on a later level."}
   ];
   var cards=tiles.map(function(c){return '<div class="purf-gcard" title="'+purFEsc(c.full)+'" aria-label="'+purFEsc(c.full)+'" tabindex="0"><span class="purf-gnum" style="color:'+c.tone+'">'+c.n+'</span><span class="purf-glbl">'+c.lbl+'</span></div>';}).join("");
-  var headFull="Everything waiting for someone to act: "+open.length+(open.length===1?" open order":" open orders")+" pending approval, in payment approval, or ready to pay.";
+  var headFull="Everything waiting for someone to act: "+open.length+(open.length===1?" open order":" open orders")+(PURF_USE_PAY?" pending approval, in payment approval, or ready to pay.":" still on an approval path.");
   return '<div class="kpi-row"><div class="kpi-num">'+
     '<div class="dep-hd-kpigrp" title="'+purFEsc(headFull)+'" aria-label="'+purFEsc(headFull)+'"><span class="metric-value">'+open.length+'</span><span class="bank-pill">waiting for action</span></div>'+
     '<div class="purf-glance">'+cards+'</div>'+
@@ -8378,10 +8498,12 @@ function purFPopContent(){
     var cp=purFPathCur(w),q=(PURF_Q||"").toLowerCase(),list=purFPathVals(w).filter(function(p){return p.toLowerCase().indexOf(q)>-1;});
     var allOn=(cp==="All approval paths");
     var out='<div class="dd-search">'+purFIcon("search")+'<input class="dd-input" id="purfPathQ" placeholder="Search approval paths" value="'+purFEsc(PURF_Q||"")+'" autocomplete="off"></div><div class="menu-scroll" role="listbox">';
-    if(!q||"all approval paths".indexOf(q)>-1)out+=row("set-path","all","All approval paths",allOn,"");
+    if(!purFPathReq(w)&&(!q||"all approval paths".indexOf(q)>-1))out+=row("set-path","all","All approval paths",allOn,"");
     if(list.length)out+='<div class="cap">Approval paths</div>'+list.map(function(p){return row("set-path",p,p,cp===p,"account_tree");}).join("");
     if(!list.length&&q&&"all approval paths".indexOf(q)<0)out+='<div class="mi-note purf-popnote">No approval paths match "'+purFEsc(PURF_Q)+'"</div>';
-    return out+'</div>';
+    out+='</div>';
+    if(purFPathReq(w))out+='<div class="mi-note purf-popnote">The Kanban draws its columns from one approval path, so every request on the board is on the path selected here. The Table and Encumbrances views still show them all.</div>';
+    return out;
   }
   return "";
 }
@@ -8396,8 +8518,38 @@ function purFPositionPop(el,anchor){
 }
 /* Legend. Every sample is the board's own markup (lane tone, .purf-turn-*, .purf-card-*), so what the
    legend shows is what the board draws. */
+/* With the payment process off the lanes do not exist, so the legend is its own function and the
+   payment legend above is left exactly as the owner signed it off. The Columns section is built from
+   purFCols, so it cannot drift from the board it describes. */
+function purFLegendNoPay(w,table){
+  var out;
+  if(table){
+    var sts=[["Pending approval","On its approval path. Approvers act in level order."],["Approved","Approval path complete. The invoice is entered in Accounts Payable."],["Closed","Final. Archive state, listed in the Table only."],["Voided","Cancelled. Archive state, listed in the Table only."]];
+    out='<div class="cap">Status</div>'+sts.map(function(l){return '<div class="purf-lg-row"><span class="purf-chip-st purf-lg-lane" style="color:'+PURF_STAGE_TONE[l[0]]+'">'+l[0]+'</span><span class="purf-lg-txt">'+l[1]+'</span></div>';}).join("");
+  }else{
+    var cols=purFCols(w),thr=cols.filter(function(c){return c.min>0;})[0];
+    out='<div class="cap">Columns</div>'+cols.map(function(c){return '<div class="purf-lg-row"><span class="purf-chip-st purf-lg-lane" style="color:'+c.tone+'">'+purFEsc(c.title)+'</span><span class="purf-lg-txt">'+purFEsc(c.aria)+'</span></div>';}).join("");
+    out+='<div class="mi-note purf-popnote">The columns are the levels of the approval path selected above, in order. A request sits in the column of the level that has to act next.</div>';
+    if(thr)out+='<div class="purf-lg-row"><span class="purf-kcol-sub purf-lg-lane">'+purFEsc(thr.sub)+'</span><span class="purf-lg-txt">The dollar minimum belongs to the approver, not the level: they have to approve only once the request total reaches it, and below it the level is skipped. A column no request on the board can reach is greyed out.</span></div>';
+    out+='<div class="purf-lg-row"><span class="purf-lg-fin purf-fin-close">Close</span><span class="purf-lg-txt">Finish column: closes an order from any column, as the Status list on the record does. Leaves the board, stays in the Table.</span></div>';
+    out+='<div class="purf-lg-row"><span class="purf-lg-fin purf-fin-void">Void</span><span class="purf-lg-txt">Finish column: cancels an open order. Leaves the board, stays in the Table.</span></div>';
+  }
+  var act=table?"Approve on the Approvals tab of the record.":"Drag the card forward, or approve on the Approvals tab.";
+  var badges=[["next","how_to_reg","Your approval next","Your level is the next one. "+act],["mine","schedule","Your approval later","You are on the path, someone else is first. You may still approve; that also satisfies the lower levels."],["waiting","hourglass_top","Waiting on","Someone else's turn."+(table?"":" You can only drag it to Close or Void.")],["rejected","block","Rejected by","An approver rejected it with a reason. Clear the rejection on the Approvals tab to resume."],["hold","lock","On hold","Parked with a reason. Remove the hold before it moves."],["next","how_to_reg","No approver required","The amount is under every minimum on the path. Approve to release it."]];
+  out+='<div class="cap">Badges: whose turn it is</div>'+badges.map(function(b){return '<div class="purf-lg-row"><span class="purf-turn purf-turn-'+b[0]+'">'+purFIcon(b[1])+b[2]+'</span><span class="purf-lg-txt">'+b[3]+'</span></div>';}).join("");
+  if(table){
+    out+='<div class="cap">Issued column</div><div class="purf-lg-row"><span class="purf-ovflag purf-lg-ov">'+purFIcon("warning")+'Overdue</span><span class="purf-lg-txt">Past its expected-by date and not yet approved.</span></div>';
+    return out;
+  }
+  var cards=[["purf-card-next","Your turn","Amber edge: you can act on this card now."],["purf-card-hold","On hold","Cream: parked. Moves only to Close or Void."],["purf-card-rej","Rejected","Red tint: rejected. Clear it on the Approvals tab to approve; Close or Void still allowed."]];
+  out+='<div class="cap">Card colours</div>'+cards.map(function(c){return '<div class="purf-lg-row"><span class="purf-kcard purf-card purf-lg-card '+c[0]+'">'+c[1]+'</span><span class="purf-lg-txt">'+c[2]+'</span></div>';}).join("");
+  out+='<div class="purf-lg-row"><span class="purf-card-age purf-age-hot purf-lg-age">'+purFIcon("schedule")+'overdue</span><span class="purf-lg-txt">Red clock: past its due date.</span></div>';
+  out+='<div class="cap">Moving a card</div><div class="mi-note purf-popnote purf-lg-rules">Dragging a card onto a later level records your approval, so only your turn can move it forward. Approving at your level also satisfies every level below it, so a card can pass more than one column at once. Any card can be dragged to Close, and any open order to Void, whatever the turn. A card on hold moves only to Close or Void.</div>';
+  return out;
+}
 function purFLegendHTML(w){
   var view=purFViewCur(w),table=(view==="table");
+  if(!PURF_USE_PAY)return purFLegendNoPay(w,table);
   var lanes=[["Pending approval","Request path open. Approvers act in level order."],["Payment approval","Approved. Payment path open, one per invoice."],["Ready to pay","Payment approved. Waiting on the check."],["Paid",table?"Check posted.":"Check posted. Drag to Close when the order is done."]];
   if(table)lanes=lanes.concat([["Closed","Final. Archive state, listed in the Table only."],["Voided","Cancelled. Archive state, listed in the Table only."]]);
   var out='<div class="cap">'+(table?"Status":"Lanes")+'</div>'+lanes.map(function(l){return '<div class="purf-lg-row"><span class="purf-chip-st purf-lg-lane" style="color:'+PURF_STAGE_TONE[l[0]]+'">'+l[0]+'</span><span class="purf-lg-txt">'+l[1]+'</span></div>';}).join("");
@@ -8621,7 +8773,7 @@ function purFModalHTML(){
     '<div class="purf-fld"><span class="purf-flbl">Type</span>'+purFSel(w,"type",dr.type,["Purchase Order","Check Request"],headLocked,"Type")+'</div>'+
     '<div class="purf-fld"><span class="purf-flbl">Status</span>'+purFSel(w,"status",dr.status,purFStatusOptions(po,purFStageToStatus(po),dr.rows),!editEnabled&&po.stage!=="Closed"&&po.stage!=="Voided","Status")+'</div>'+
     '<div class="purf-fld"><span class="purf-flbl"><span class="purf-req">*</span> Approval Path</span>'+purFSel(w,"path",dr.path,Object.keys(PURF_PATHS).filter(function(k){return PURF_PATHS[k].forRequest!==false;}),headLocked,"Approval Path")+'</div>'+
-    (statusIsApproved||po.stage==="Approved"||po.stage==="Closed"?'<div class="purf-fld"><span class="purf-flbl">Payment Approval Path</span>'+purFSel(w,"payPath",dr.payPath,Object.keys(PURF_PATHS).filter(function(k){return PURF_PATHS[k].forPayment!==false;}),!editEnabled||!!po.payDone,"Payment Approval Path")+'</div>':"")+
+    (PURF_USE_PAY&&(statusIsApproved||po.stage==="Approved"||po.stage==="Closed")?'<div class="purf-fld"><span class="purf-flbl">Payment Approval Path</span>'+purFSel(w,"payPath",dr.payPath,Object.keys(PURF_PATHS).filter(function(k){return PURF_PATHS[k].forPayment!==false;}),!editEnabled||!!po.payDone,"Payment Approval Path")+'</div>':"")+
     purFFld(w,po,"Requisition #","reqNo",po.ref.replace("PO-",""),true,"")+
     purFFld(w,po,isCR?"Check Request #":"Purchase Order #","poNo",purFF(po,"poNo",po.stage==="Pending"?"":po.ref.replace("PO-","")),!editEnabled||isCR,"")+
   '</div>';
@@ -8635,7 +8787,8 @@ function purFModalHTML(){
   '</div>';
   var rec='<div class="purf-rec">'+left+right+'</div>';
   var tabs=[["detail","Detail"],["approvals","Approvals"],["attachments","Attachments"],["note","Note"]];
-  if(po.stage==="Approved"||po.stage==="Closed")tabs.push(["payment","Payment Approval"]);
+  /* Requests/Update.aspx:93 hides the Payment Approval tab when the process is off. */
+  if(PURF_USE_PAY&&(po.stage==="Approved"||po.stage==="Closed"))tabs.push(["payment","Payment Approval"]);
   if(!tabs.some(function(t){return t[0]===tab;}))tab="detail";
   var tabRow='<div class="purf-tabs purf-mtabs" role="tablist" aria-label="Record sections">'+tabs.map(function(t){
     return '<button class="purf-tab'+(tab===t[0]?" on":"")+'" role="tab" aria-selected="'+(tab===t[0])+'" data-purf="tab" data-v="'+t[0]+'" data-id="'+w.id+'">'+t[1]+'</button>';
@@ -8708,15 +8861,15 @@ function purFMoveHTML(){
   var w=find(PURF_MOVE.id);if(!w)return "";
   var po=purFPO(w,PURF_MOVE.ref);if(!po)return "";
   var to=PURF_MOVE.to,isCl=(to==="Closed"),isVd=(to==="Voided");
-  var isPay=(to==="Paid"),tn=purFTurn(po);
+  var isPay=(to==="Paid"),tn=purFTurn(po),land=purFLandCol(po);
   var title=isCl?("Close "+po.ref):(isVd?("Void "+po.ref):(isPay?("Submit "+po.ref+" for payment"):("Approve "+po.ref)));
   var btn=isCl?"Close order":(isVd?"Void order":(isPay?"Submit for payment":"Approve"));
   var note=isCl?"A closed order leaves the board and stays in the PO Table under the Closed status filter. This mirrors the record screen's manual Closed status."
     :(isVd?"Voiding cancels the order as if it was never issued. It leaves the board and stays in the PO Table under the Voided status filter. What financial reversal this implies is deliberately not asserted: the treatment of voided requests is unresolved (Feargal Phelan, 2026-08-25, item 5)."
-    :(isPay?"Records the payment entry on the Payment Approval tab; the check number and date come from Accounts Payable.":("Records your approval on "+(tn.live?tn.live.path:po.path)+(tn.level?", level "+(tn.idx+1)+" of "+tn.n:"")+". Any one approver satisfies a level; when every level is satisfied the request moves on. In the real build this calls the approval API, which does not exist yet.")));
+    :(isPay?"Records the payment entry on the Payment Approval tab; the check number and date come from Accounts Payable.":("Records your approval on "+(tn.live?tn.live.path:po.path)+(tn.level?", level "+(tn.idx+1)+" of "+tn.n:"")+". Any one approver satisfies a level, and approving at your level also satisfies the levels below it"+(land?(", so the card moves to "+land):"")+". In the real build this calls the approval API, which does not exist yet.")));
   var ph=isCl?"Why is this order being closed? (optional)":(isVd?"Why is this order being voided?":"Add a note for the record (optional)");
   return '<div class="modal-backdrop" data-purf="move-cancel"><div class="modal purf-confirm" data-purf="stop" role="dialog" aria-modal="true" aria-label="'+purFEsc(title)+'">'+
-    '<div class="modal-h purf-m-hd"><span class="modal-title">'+purFEsc(title)+'<span class="purf-m-sub">'+purFEsc(po.vendor+", "+purFMoney(po.amt)+", "+purFLane(po))+'</span></span>'+
+    '<div class="modal-h purf-m-hd"><span class="modal-title">'+purFEsc(title)+'<span class="purf-m-sub">'+purFEsc(po.vendor+", "+purFMoney(po.amt)+", "+purFColOf(po))+'</span></span>'+
     '<button class="iconbtn" data-purf="move-cancel" aria-label="Close">'+purFIcon("close")+'</button></div>'+
     '<div class="modal-b"><label class="purf-flbl" for="purfMoveNote">Reason or note, recorded on the request</label>'+
     '<textarea id="purfMoveNote" class="purf-note" rows="3" placeholder="'+purFEsc(ph)+'">'+purFEsc(PURF_MOVE.note||"")+'</textarea></div>'+
@@ -8756,22 +8909,43 @@ function purFCloseModal(){PURF_MODAL=null;purFRenderModal();}
 /* (6) ACTIONS (all in-memory: no dashboard write API exists) ------------ */
 /* A lane-to-lane move is an approval act on the live path, a payment entry, or a close / void. purFMoveCheck
    names why a move is refused; purFApplyMove performs it. */
+/* The column a card reaches when I approve my level: the next level the amount still applies to, or
+   Approved when nothing is left. Named in the confirm dialog, because approving at my level also
+   satisfies the levels below it and the card can pass more than one column. */
+function purFLandCol(po){
+  if(PURF_USE_PAY)return "";
+  var m=purFMyLevel(po);if(!m)return "";
+  if(m.release)return "Approved";
+  var rest=purFSteps(po.path,po.amt).filter(function(s){return s.seq>m.step.seq;});
+  if(!rest.length)return "Approved";
+  var p=PURF_PATHS[po.path],no=0;
+  for(var i=0;i<p.steps.length;i++)if(p.steps[i].seq===rest[0].seq)no=i+1;
+  return no?("Level "+no):"Approved";
+}
 function purFMoveCheck(po,to){
-  var from=purFLane(po),tn=purFTurn(po);
+  var from=purFColOf(po),tn=purFTurn(po);
   if(po.stage==="Closed"||po.stage==="Voided")return {ok:false,msg:"Closed and voided orders are final."};
   if(from===to)return {ok:false,msg:""};
   if(to==="Closed")return {ok:true}; /* the page offers Closed from every status */
   if(po.hold&&to!=="Voided")return {ok:false,msg:"On hold: remove the hold on "+po.ref+" before moving it."};
   if(to==="Voided")return (from==="Paid")?{ok:false,msg:"A paid order cannot be voided here. Reverse the check in Accounts Payable first."}:{ok:true};
+  if(!PURF_USE_PAY){
+    /* The path board: forward is any later level, or Approved. */
+    if(purFColNo(to)<=purFColNo(from))return {ok:false,msg:"Approval moves forward only. Drop the card on a later level, or on Approved."};
+    if(tn.kind==="rejected")return {ok:false,msg:po.ref+" is rejected. Clear the rejection on the Approvals tab first."};
+    return (tn.kind==="next"||tn.kind==="mine")?{ok:true}:{ok:false,msg:"Not your approval: "+tn.label+"."};
+  }
   if(from==="Pending approval"&&to==="Payment approval"){if(tn.kind==="rejected")return {ok:false,msg:po.ref+" is rejected. Clear the rejection on the Approvals tab first."};return (tn.kind==="next"||tn.kind==="mine")?{ok:true}:{ok:false,msg:"Not your approval: "+tn.label+"."};}
   if(from==="Payment approval"&&to==="Ready to pay")return (tn.kind==="next"||tn.kind==="mine")?{ok:true}:{ok:false,msg:"Not your payment approval: "+tn.label+"."};
   if(from==="Ready to pay"&&to==="Paid")return {ok:true};
-  return {ok:false,msg:"A request moves one lane at a time: "+from+" to "+PURF_LANES[PURF_LANES.indexOf(from)+1]+"."};
+  /* Defect fix: the index ran off the end of PURF_LANES on a Paid card and printed "to undefined". */
+  var nxt=PURF_LANES[PURF_LANES.indexOf(from)+1];
+  return {ok:false,msg:nxt?("A request moves one lane at a time: "+from+" to "+nxt+"."):("A "+from.toLowerCase()+" order does not move to "+to+".")};
 }
 function purFApplyMove(w,ref,to,note){
   var po=purFPO(w,ref);if(!po)return false;
   var c=purFMoveCheck(po,to);if(!c.ok)return false;
-  var from=purFLane(po);
+  var from=purFColOf(po);
   if(to==="Closed"||to==="Voided"){po.stage=to;po.log=po.log||[];po.log.push({d:"2026-08-19",by:purFWho(PURF_ME),to:to,note:note||""});return true;}
   if(from==="Ready to pay")return purFPaySubmit(w,ref);
   return purFApproveStep(w,po,note);
@@ -8974,7 +9148,7 @@ var PURF_WIRED=false;
     }
   });
 })();
-WIDGETS.register("purchasing",{content:purFContent,about:function(w){return {h:w.title,b:PURF_ABOUT};}});
+WIDGETS.register("purchasing",{content:purFContent,about:function(w){return {h:w.title,b:purFAbout()};}});
 /* ===== end W13 Purchasing Management V2 ===== */
 
 /* =====================================================================

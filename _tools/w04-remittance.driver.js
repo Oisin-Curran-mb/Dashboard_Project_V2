@@ -72,7 +72,7 @@ rows.forEach(function (w) { A.eq(w.title, "Remittance Pledges", w.id + ": plain 
 const headLabels = function (h) { const m = /<div class="remO-row remO-head[^"]*"[^>]*>([\s\S]*?)<\/div>\s*<div class="remO-row/.exec(h); return m ? [...m[1].matchAll(/data-k="[^"]+"[^>]*>([^<]+?)\s*<span/g)].map(function (x) { return x[1].trim(); }) : []; };
 rows.forEach(function (w) {
   const h = EX.contentHTML(w), labels = headLabels(h), info = (h.match(/remO-cardinfo/g) || []).length;
-  if (w.size === "wide") { A.eq(labels.join("|"), "Activity|Outstanding|Paid|% Paid", w.id + ": Explore columns"); A.eq(info, 3, w.id + ": Explore keeps the card info buttons"); }
+  if (w.size === "wide") { A.eq(labels.join("|"), "Activity|Pledges behind|Pledge|Outstanding|Paid|Expected|% Paid" /* owner 29 Sep: Pledge and Expected back on Explore, as in V1, plus Pledges behind */, w.id + ": Explore columns"); A.eq(info, 3, w.id + ": Explore keeps the card info buttons"); }
   if (w.size === "xwide") { A.eq(labels.join("|"), "Seq.|Activity|Pledges behind|Pledge|Outstanding|Paid|Expected|% Paid", w.id + ": Detail columns"); A.absent(h, "remO-alignL", w.id + ": every amount column right-aligned"); A.eq(info, 3, w.id + ": Detail keeps the card info buttons"); }
   if (w.size === "kpi") A.eq(info, 0, w.id + ": no card info button at Glance");
   if (w.size !== "kpi") A.ok(/<div class="remO-row remO-head wt-head/.test(h), w.id + ": header row carries the shell wt-head class");
@@ -107,6 +107,15 @@ if (seq) {
   if (/wt-head/.test(mh)) A.headMatchesBody(mh, "pledge history table (D12)");
   const pg = (mh.match(/data-action="(remO-[a-z-]*page[a-z-]*)"/) || [])[1];
   if (pg) { A.eq(EX.WIDGETS.click(pg, w.id, T({ "data-seq": seq, "data-dir": "next", "data-p": "2" }), {}), true, "pager action handled"); }
+  /* owner 29 Sep: lazy loading (8 at a time, Load more at the end of the list) replaces the pager; the basis note sits behind an info icon in the header */
+  const rowsIn = function (h) { return (h.match(/data-action="remO-plopen"/g) || []).length; };
+  A.contains(mh, 'class="iconbtn w04-basis-info"', "pop-up header has the basis info icon");
+  A.contains(mh, "paces the activity evenly over its term", "info icon carries the basis note");
+  A.absent(mh, "remO-ppage", "no page buttons");
+  const n0 = rowsIn(mh); A.eq(n0, 8, "pop-up shows the first 8 pledges");
+  if (/data-action="remO-plmore"/.test(mh)) { A.eq(EX.WIDGETS.click("remO-plmore", w.id, T({ "data-seq": seq }), {}), true, "Load more handled"); const mh2 = EX.modalHTML(); A.eq(rowsIn(mh2), Math.min(16, n0 + 8 + 99) > 16 ? 16 : rowsIn(mh2), "Load more adds the next batch"); A.ok(rowsIn(mh2) > n0, "Load more shows more pledges (" + rowsIn(mh2) + ")"); A.absent(mh2, "w04-pl-pager", "no page or count line under the list"); }
+  ["Paid to date", "Pledges in grace period", "Pledged amount"].forEach(function (t) { A.contains(mh, t, "pop-up wording: " + t); });
+  ["Received to date", "Pledges at risk", "Prepaid", "unfunded", "no single term"].forEach(function (t) { A.absent(mh, t, "old pop-up wording gone: " + t); });
   A.eq(EX.WIDGETS.click("remO-detail-close", w.id, T(), {}), true, "pop-up close handled"); A.eq(EX.getModal(), null, "pop-up closed");
 }
 /* custom dates: the block's own change handler */
