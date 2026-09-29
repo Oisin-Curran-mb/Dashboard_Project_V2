@@ -2356,6 +2356,7 @@
   .pro-gseg+.pro-gseg{box-shadow:inset 1px 0 0 var(--surface-widget);}
   .pro-gcap{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--txt-secondary);font-variant-numeric:tabular-nums;}
   .pro-gcap .pro-gdot{width:8px;height:8px;border-radius:50%;flex:0 0 auto;}
+  .pro-gcap .pro-gsw{width:9px;height:9px;border-radius:2px;flex:0 0 auto;display:inline-block;}
   .pro-gcap .pro-gname{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}
   .pro-gcap .pro-gpct{margin-left:auto;color:var(--txt-subtle);flex:0 0 auto;}
   /* expanded employee: the pay-type lines and their total read as one dropdown group */
@@ -2586,7 +2587,7 @@
   .remo-root .w04-caret.on .material-symbols-rounded{transform:rotate(90deg);color:var(--am-600);}
   .remo-root .w04-pledge-panel{background:var(--am-50);border-bottom:1px solid var(--stroke-widget);padding:9px 10px 11px;margin:0 0 2px;border-radius:0 0 8px 8px;}
   .remo-root .w04-pl-tbl{background:var(--surface-widget);border:1px solid var(--stroke-widget);border-radius:9px;overflow:hidden;}
-  .remo-root .w04-pl-row{display:grid;grid-template-columns:minmax(120px,1.5fr) 92px 92px 82px 82px 98px minmax(120px,auto);align-items:center;gap:8px;padding:6px 12px;border-bottom:1px solid var(--stroke-widget);font-size:12px;}
+  .remo-root .w04-pl-row{display:grid;grid-template-columns:minmax(120px,1fr) 92px 92px 118px 72px 98px 158px;align-items:center;gap:8px;padding:6px 12px;border-bottom:1px solid var(--stroke-widget);font-size:12px;}
   .remo-root .w04-pl-row:last-child{border-bottom:none;}
   .remo-root .w04-pl-head{background:var(--surface-header);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;color:var(--txt-subtle);position:sticky;top:0;}
   .remo-root .w04-pl-cell{min-width:0;}
@@ -2660,6 +2661,21 @@
   .w04-fill-none{background:var(--wn-300);}
   .w04-pl-more{display:flex;justify-content:center;padding:10px 0;border-top:1px solid var(--stroke-widget);}
   .w04-basis-info{margin-right:2px;}
+  .w04-detail-h .modal-title{flex:0 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .w04-detail-h .w04-dsub{white-space:nowrap;}
+  .remo-root .w04-plh-total{font-weight:700;color:var(--txt-primary);background:var(--wn-100);}
+  /* expanded pledge: the row and its schedule read as one block (one left accent, no separate card) */
+  .remo-root .w04-pl-row.is-exp{background:transparent;box-shadow:inset 3px 0 0 var(--am-500);border-bottom:0;}
+  .remo-root .w04-plh{margin:0;border:0;border-radius:0;overflow:visible;background:transparent;box-shadow:inset 3px 0 0 var(--am-500);padding:0 12px 10px 34px;border-bottom:1px solid var(--stroke-widget);}
+  .remo-root .w04-plh .w04-plh-row{border-top-color:rgba(0,0,0,.06);}
+  .remo-root .w04-plh .w04-plh-total{background:transparent;border-bottom:1px solid var(--stroke-widget);}
+  .remo-root .w04-pledge-panel{background:transparent;padding:0;border-bottom:0;}
+  /* pledge pop-up: every column left-aligned, pledge list and expanded schedule (owner 29 Sep) */
+  .remo-root .w04-pl-row .w04-num,.remo-root .w04-plh-num{text-align:left;}
+  .remo-root .w04-pl-head .w04-num .w04-pl-sortbtn,.remo-root .w04-pl-head .w04-pl-sortbtn{justify-content:flex-start;}
+  .remO-card.remO-card-static{cursor:default;}
+  .remO-card.remO-card-static:hover{background:inherit;border-color:inherit;}
+  .remO-card-sub .remO-card-sub-l{display:block;}
 /* ===== end W04 Remittance Pledges V2 CSS ===== */
 /* ===== W05 Receivable Invoices Outstanding V2 CSS ===== */
 
@@ -2799,6 +2815,49 @@
   .w05-more:hover{background:var(--wn-200);color:var(--txt-primary);border-color:var(--wn-400);}
   .w05-more:focus-visible{outline:2px solid var(--focus);outline-offset:2px;}
   .w05-more-n{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;padding:0 6px;border-radius:999px;background:var(--wn-200);color:var(--txt-subtle);font-size:11px;font-variant-numeric:tabular-nums;}
+.arO-viewbar{display:flex;justify-content:flex-end;padding:2px 0 10px;}
+.arO-panel-hd{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.arO-tbl{min-height:0;}
+.arO-tbl .wt-c2{flex:0 0 92px;}
+.arO-trow .lr-main{display:flex;align-items:center;gap:8px;}
+.arO-trow-nm{display:flex;flex-direction:column;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.arO-trow-sub{font-size:11px;font-weight:400;color:var(--txt-subtle);}
+.arO-trow-zero{opacity:.55;}
+/* tables fit the card: header row pinned, rows scroll, Total outstanding pinned under them (Explore and both Detail halves) */
+.arO-body{flex:1 1 auto;min-height:0;}
+.arO-explore{flex:1 1 auto;min-height:0;grid-template-rows:minmax(0,1fr);align-items:stretch;}
+.arO-explore .arO-panel{min-height:0;overflow:hidden;}
+.arO-body .arO-tbl,.arO-panel .arO-tbl{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;}
+.arO-tbl .wt-head{position:sticky;top:0;z-index:1;background:var(--surface-widget);}
+.arO-tbl+.dep-total{flex:0 0 auto;}
+/* a little tighter so the six aging bands and the total fit Explore without scrolling */
+.dep-hd.arO-hd{padding-bottom:8px;}
+.arO-tbl .wt-row.arO-trow{padding-top:5px;padding-bottom:5px;}
+/* pop-up additions from Jo's phase-2 (subtitle, search + sort, row select, contact line, statements), V2 styling */
+.arO-wl-htext{display:flex;flex-direction:column;gap:3px;min-width:0;}
+.arO-wl-sub{font-size:12px;color:var(--txt-subtle);}
+.arO-wl-controls{display:flex;align-items:center;gap:10px;padding:4px 0 12px;}
+.arO-wl-search{flex:1 1 auto;display:flex;align-items:center;gap:6px;background:var(--surface-widget);border:1px solid var(--stroke-widget);border-radius:8px;padding:6px 10px;min-height:34px;box-sizing:border-box;}
+.arO-wl-search:focus-within{border-color:var(--am-400);}
+.arO-wl-search .material-symbols-rounded{font-size:18px;color:var(--txt-subtle);}
+.arO-wl-q{flex:1;border:0;background:transparent;font:inherit;font-size:13px;outline:none;color:var(--txt-primary);}
+.arO-wl-sort{display:inline-flex;align-items:center;gap:4px;background:transparent;border:1px solid var(--stroke-widget);border-radius:8px;padding:6px 10px;font:inherit;font-size:12px;font-weight:500;color:var(--txt-secondary);cursor:pointer;white-space:nowrap;}
+.arO-wl-sort:hover{background:var(--wn-100);}
+.arO-wl-sort .material-symbols-rounded{font-size:16px;}
+.arO-dchk{flex:0 0 22px;display:inline-flex;align-items:center;justify-content:center;color:var(--txt-subtle);cursor:pointer;}
+.arO-dchk .material-symbols-rounded{font-size:19px;}
+.arO-dchk[aria-checked="true"]{color:var(--am-500);}
+.arO-cp-contact{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--txt-secondary);margin:0 0 10px;}
+.arO-cp-ci,.arO-cp-actline{display:inline-flex;align-items:center;gap:5px;}
+.arO-cp-ci .material-symbols-rounded,.arO-cp-actline .material-symbols-rounded{font-size:15px;color:var(--txt-subtle);}
+.arO-cp-actline{color:var(--txt-subtle);}
+.arO-cp-none{color:#c0392b;}
+/* pop-up body stacks top to bottom: search + sort, the invoice table (scrolls), then the total */
+.modal.modal-wide.arO-detail-modal .modal-b{display:flex;flex-direction:column;overflow:hidden;padding:0 18px 6px;}
+.arO-detail-modal .arO-wl-controls{flex:0 0 auto;}
+.arO-detail-modal .arO-detail-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;}
+.arO-detail-modal .arO-dtotal{flex:0 0 auto;}
+.arO-detail-h .arO-wl-htext{flex:1 1 auto;}
 /* ===== end W05 Receivable Invoices Outstanding V2 CSS ===== */
 
 /* ===== W06 Insurance Billing Plans V2 CSS ===== */
@@ -4397,7 +4456,9 @@ function penOPopContent(){
   function prOGlanceComp(w){var rows=prODistTotals(w).slice().sort(function(a,b){return b.net-a.net;}),tot=rows.reduce(function(s,a){return s+a.net;},0);
     if(!tot||!rows.length)return "";
     var segs=rows.map(function(a){var pct=a.net/tot*100;return '<span class="pro-gseg" style="width:'+pct.toFixed(2)+'%;background:'+(PRO_DIST_COLORS[a.id]||"#8a8f98")+'" data-tip="'+a.name+': '+money(a.net)+', '+Math.round(pct)+'% of payroll this period" data-tip-plain></span>';}).join("");
-    return '<div class="pro-gcomp"><div class="pro-gbar" role="img" aria-label="Payroll split across '+rows.length+' distributions this period">'+segs+'</div></div>';}
+    var top=rows[0],tp=Math.round(top.net/tot*100);
+    return '<div class="pro-gcomp"><div class="pro-gbar" role="img" aria-label="Payroll split across '+rows.length+' distributions this period">'+segs+'</div>'+
+      '<div class="pro-gcap"><span class="pro-gsw" style="background:'+(PRO_DIST_COLORS[top.id]||"#8a8f98")+'"></span><span class="pro-gname">'+money(top.net)+' in '+top.name+', the largest distribution</span></div></div>';}
   function prOGlance(w){var tot=prODistTotals(w).reduce(function(s,a){return s+a.net;},0);
     if(!tot)return '<div class="kpi-row"><div class="kpi-num">'+prOPeriodChip(w)+'<div class="metric-value" style="font-size:16px;color:var(--txt-subtle)">No payroll this period</div></div></div>';
     return '<div class="kpi-row"><div class="kpi-num" style="flex:1 1 100%">'+prOPeriodChip(w)+'<div class="metric-value">'+money(tot)+'</div>'+prOGlanceComp(w)+'</div></div>';}
@@ -4712,9 +4773,8 @@ function remOBar(r){
   var band=remOPaceBand(r),st=(band==="neutral"?"none":band);
   var paidPct=Math.min(100,r.paid/r.total*100),expPct=Math.min(100,r.expected/r.total*100);
   var gap=(expPct>paidPct)?'<span class="w04-bargap" style="left:'+paidPct.toFixed(1)+'%;width:'+(expPct-paidPct).toFixed(1)+'%"></span>':'';
-  var marker='<span class="w04-barmark" style="left:'+Math.min(100,expPct).toFixed(1)+'%"></span>';
   var pop=[r.name,r.total,r.paid,r.expected,r.outstanding,Math.round((r.pctPaid==null?0:r.pctPaid)*100),Math.round(expPct),remOStatus(r),remODayPhrase(r)].join("|").replace(/"/g,"&quot;");
-  return '<div class="w04-bwrap w04-bar-slim" data-remopop="'+pop+'"><div class="ar-bartrack w04-bartrack"><div class="ar-barfill w04-fill-'+st+'" style="width:'+Math.max(2,paidPct).toFixed(1)+'%"></div>'+gap+'</div>'+marker+'</div>';
+  return '<div class="w04-bwrap w04-bar-slim" data-remopop="'+pop+'"><div class="ar-bartrack w04-bartrack"><div class="ar-barfill w04-fill-'+st+'" style="width:'+Math.max(2,paidPct).toFixed(1)+'%"></div>'+gap+'</div></div>';
 }
 /* Mini bar for the % Paid table column (Pension small-bar pattern, shared palette). */
 function remOMiniBar(r){
@@ -4722,7 +4782,7 @@ function remOMiniBar(r){
   var band=remOPaceBand(r),st=(band==="neutral"?"none":band);
   var paidPct=Math.max(0,Math.min(100,r.pctPaid*100)),expPct=(r.total>0)?Math.min(100,r.expected/r.total*100):0;
   var pop=[r.name,r.total,r.paid,r.expected,r.outstanding,Math.round(r.pctPaid*100),Math.round(expPct),remOStatus(r),remODayPhrase(r)].join("|").replace(/"/g,"&quot;");
-  return '<span class="w04-minirow" data-remopop="'+pop+'"><span class="w04-mini"><span class="w04-mini-track"><span class="w04-mini-fill w04-fill-'+st+'" style="width:'+paidPct.toFixed(1)+'%"></span></span><span class="w04-mini-mark" style="left:'+expPct.toFixed(1)+'%"></span></span><span class="w04-mini-pct">'+remOPct(r.pctPaid)+'</span></span>';
+  return '<span class="w04-minirow" data-remopop="'+pop+'"><span class="w04-mini"><span class="w04-mini-track"><span class="w04-mini-fill w04-fill-'+st+'" style="width:'+paidPct.toFixed(1)+'%"></span></span></span><span class="w04-mini-pct">'+remOPct(r.pctPaid)+'</span></span>';
 }
 /* Pace filter: a normal top-toolbar dropdown (View all / Behind / On track / Ahead). */
 function remOStatusChip(r){
@@ -4803,7 +4863,7 @@ function remOTable(w){
   rows.forEach(function(r){tt.total+=r.total;tt.expected+=r.expected;tt.paid+=r.paid;tt.out+=r.outstanding;tt.behind+=remOActCounts(w,remOActBySeq(r.seq)).behind;});
   var tBand=(tt.paid<tt.expected)?"behind":(((tt.total-tt.paid)<=0)?"ahead":"ontrack"),totPct=tt.total>0?remOPct(tt.paid/tt.total):"n/a";
   var tPaidPct=tt.total>0?Math.min(100,tt.paid/tt.total*100):0,tExpPct=tt.total>0?Math.min(100,tt.expected/tt.total*100):0;
-  var totMini=tt.total>0?('<span class="w04-minirow"><span class="w04-mini"><span class="w04-mini-track"><span class="w04-mini-fill w04-fill-'+tBand+'" style="width:'+tPaidPct.toFixed(1)+'%"></span></span><span class="w04-mini-mark" style="left:'+tExpPct.toFixed(1)+'%"></span></span><span class="w04-mini-pct">'+totPct+'</span></span>'):'<span class="remO-nopct">n/a</span>';
+  var totMini=tt.total>0?('<span class="w04-minirow"><span class="w04-mini"><span class="w04-mini-track"><span class="w04-mini-fill w04-fill-'+tBand+'" style="width:'+tPaidPct.toFixed(1)+'%"></span></span></span><span class="w04-mini-pct">'+totPct+'</span></span>'):'<span class="remO-nopct">n/a</span>';
   var full=remOFull(w);
   var tot='<div class="remO-row remO-total'+(full?" remO-full":"")+'">'+
     (full?'<span class="remO-cell remO-seq"></span>':'')+
@@ -4860,10 +4920,11 @@ var REMO_CARD_TIPS={
 function remOPaceCards(w,drill){
   var cur=w.remPaceF||"all",st=remOBandStats(w);
   var defs=[["behind","Behind","error"],["ontrack","On track","check_circle"],["ahead","Ahead","trending_up"]];
-  return '<div class="remO-cards" role="group" aria-label="'+(drill?"Pledge pace, tap to open":"Filter pledges by pace")+'">'+defs.map(function(d){
-    var b=st[d[0]],top='<span class="remO-card-top">'+ICON(d[2])+'<span class="remO-card-lbl">'+d[1]+'</span></span><span class="remO-card-n">'+b.n+'</span><span class="remO-card-sub">'+money(b.out)+(w.size==="xwide"?' outstanding':'')+'</span>';
+  return '<div class="remO-cards" role="group" aria-label="'+(drill?"Pledge pace":"Filter pledges by pace")+'">'+defs.map(function(d){
+    var b=st[d[0]],top='<span class="remO-card-top">'+ICON(d[2])+'<span class="remO-card-lbl">'+d[1]+'</span></span><span class="remO-card-n">'+b.n+'</span><span class="remO-card-sub">'+money(b.out)+(w.size==="xwide"?' outstanding':(w.size==="kpi"?'<span class="remO-card-sub-l">outstanding</span>':''))+'</span>';
     var info=w.size==="kpi"?'':'<button type="button" class="remO-cardinfo" data-tip="'+remOEsc(REMO_CARD_TIPS[d[0]])+'" data-tip-plain aria-label="'+remOEsc("What "+d[1]+" means. "+REMO_CARD_TIPS[d[0]])+'">'+ICON("info")+'</button>';
-    if(drill)return '<span class="remO-cardwrap"><button class="remO-card remO-card-'+d[0]+'" data-action="remO-drill" data-id="'+w.id+'" data-band="'+d[0]+'" aria-label="'+d[1]+', '+b.n+' pledge'+(b.n===1?"":"s")+', '+money(b.out)+' outstanding, tap to open">'+top+'</button>'+info+'</span>';
+    /* Glance: the cards are read-only (owner 29 Sep: no pop-up from Behind / On track / Ahead) */
+    if(drill)return '<span class="remO-cardwrap"><div class="remO-card remO-card-static remO-card-'+d[0]+'" role="group" aria-label="'+d[1]+', '+b.n+' pledge'+(b.n===1?"":"s")+', '+money(b.out)+' outstanding">'+top+'</div>'+info+'</span>';
     var on=cur===d[0];
     return '<span class="remO-cardwrap"><button class="remO-card remO-card-'+d[0]+(on?" on":"")+'" data-action="remO-set-pacef" data-id="'+w.id+'" data-v="'+(on?"all":d[0])+'" aria-pressed="'+on+'" aria-label="'+d[1]+', '+b.n+' pledge'+(b.n===1?"":"s")+', '+money(b.out)+' outstanding, tap to filter">'+top+'</button>'+info+'</span>';
   }).join("")+'</div>';
@@ -4956,8 +5017,8 @@ function remOPopContent(){
    --------------------------------------------------------------- */
 var REMO_ABOUT="How each remittance pledge is pacing against its own term: what has come in so far versus what was expected by now over the pledge's start-to-end dates, and what is still outstanding. Behind or ahead is measured in days against each pledge's own schedule, not the calendar year.";
 
-var REMO_PAGE_SIZE=8;
-var REMO_BASIS_NOTE="These figures check each pledge against its own instalment due dates, so they show what is actually owed so far and who has missed a payment. Expected and Behind can differ slightly from the card, which paces the activity evenly over its term. Pledged, Paid and Outstanding always match the card.";
+var REMO_PAGE_SIZE=20; /* pledges loaded per batch: enough to fill the table, so Load more sits below the fold */
+var REMO_BASIS_NOTE="These figures check each pledge against its own instalment due dates, so they show what is actually owed so far and who has missed a payment. Pledges behind can differ from the card's Behind, which paces the activity evenly over its term. Pledged, Paid, Outstanding and % Paid always match the card.";
 var REMO_GRACE_DAYS=7; /* W04-T13: grace runs from the day AFTER the due date */
 var REMO_CHURCHES=["Whitfield, Dana","Bell, Marcus","Alvarez, Rosa","Nguyen, Thomas","Okafor, Grace","Sullivan, Patrick","Ramirez, Elena","Coleman, Derek","Fitzgerald, Maureen","Patel, Anil","Brooks, Latoya","Hoffman, Greg","Delgado, Carmen","Whitaker, Susan","Osei, Kwame","Lindqvist, Erik","Montoya, Beatriz","Callahan, Sean","Iverson, Dana","Freeman, Cheryl","Barrett, Malcolm","Zhang, Wei","Donovan, Claire","Ashworth, Peter","Guerrero, Sofia","Pruitt, Wesley","Fairchild, Nora","Waverly, Nathaniel","Kowalski, Irene","Abrams, Sidney"];
 
@@ -5148,6 +5209,8 @@ function remOScheduleSummary(sch){
   /* dueAmt keeps ALL instalments whose date has passed, at-risk ones included,
      because the due dates themselves are unchanged (W04-T13). */
   var dueAmt=due.reduce(function(s,x){return s+x.amount;},0);
+  /* shown in the pop-up summary: due instalments past their grace period only; grace-period money is shown on its own */
+  var dueAmtExGrace=due.filter(function(x){return x.status!=='atrisk';}).reduce(function(s,x){return s+x.amount;},0);
   /* W04-T16: unfunded counts ONLY instalments past grace. At-risk money is tracked
      separately, which is why expected minus received will not reach it - the at-risk
      amount sits between the two, and the note names it (W04-T5). */
@@ -5155,7 +5218,7 @@ function remOScheduleSummary(sch){
     part.reduce(function(s,x){return s+(x.amount-x.applied);},0);
   var atRiskAmt=atrisk.reduce(function(s,x){return s+(x.amount-x.applied);},0);
   return {missed:missed,part:part,atrisk:atrisk,paid:paid,dueCount:due.length,total:sch.length,
-    dueAmt:dueAmt,missedAmt:missedAmt,atRiskAmt:atRiskAmt,
+    dueAmt:dueAmt,dueAmtExGrace:dueAmtExGrace,missedAmt:missedAmt,atRiskAmt:atRiskAmt,
     shortCount:missed.length+part.length,
     atRiskCount:atrisk.length,
     firstMissed:missed.length?missed[0].due:null,
@@ -5176,7 +5239,7 @@ function remOPledgePace(pl,act,asOfIso){
   else if(pl.paid>s.dueAmt)status="ahead";
   else if(s.atRiskCount>0)status="atrisk";  /* W04-T15: inside grace, so NOT behind */
   else status="onpace";
-  return {sch:sch,sum:s,expectedByNow:s.dueAmt,shortCount:s.shortCount,
+  return {sch:sch,sum:s,expectedByNow:s.dueAmt,expectedExGrace:s.dueAmtExGrace,shortCount:s.shortCount,
     atRiskCount:s.atRiskCount,atRiskAmt:s.atRiskAmt,
     unfunded:s.missedAmt,outstanding:outstanding,pctPaid:pctPaid,
     status:status,termEnded:termEnded};
@@ -5261,6 +5324,8 @@ function remOPledgeHistoryHTML(w,act,item){
     '<span class="w04-plh-m">pledged '+remOMoney(pl.goal)+' over '+remOFmtDate(pl.begin)+' to '+remOFmtDate(pl.end)+'</span>'+
     '<span class="w04-plh-m">'+s.paid.length+' of '+s.dueCount+' due payments paid</span>'+flag+'</div>';
   var head='<div class="w04-plh-row w04-plh-head"><span>Due date</span><span class="w04-plh-num">Amount due</span><span class="w04-plh-num">Paid</span><span>Status</span></div>';
+  var schAmt=sch.reduce(function(t,x){return t+x.amount;},0),schPaid=sch.reduce(function(t,x){return t+x.applied;},0);
+  var tot='<div class="w04-plh-row w04-plh-total"><span>Total, '+sch.length+' instalment'+(sch.length===1?'':'s')+'</span><span class="w04-plh-num">'+remOMoney(schAmt)+'</span><span class="w04-plh-num">'+remOMoney(schPaid)+'</span><span></span></div>';
   var body=sch.map(function(x){
     return '<div class="w04-plh-row'+(x.status==='missed'?' is-missed':'')+'">'+
       '<span>'+remOFmtDate(x.due)+'</span>'+
@@ -5269,11 +5334,7 @@ function remOPledgeHistoryHTML(w,act,item){
       remOSchStatusCell(x.status)+
     '</div>';
   }).join("");
-  var foot='<div class="w04-plh-foot">'+
-    (s.firstMissed?('First missed payment: '+remOFmtDate(s.firstMissed)+'. '):'')+
-    (p.termEnded?('This term ended '+remOFmtDate(pl.end)+', so the unpaid balance cannot be caught up inside it. '):'')+
-    'Payments are applied to the oldest instalment first, so a gap shows as the earliest unpaid instalment. '+remOMoney(pl.paid)+' paid on this pledge.</div>';
-  return '<div class="w04-plh" role="region" aria-label="'+remOEsc('Payment schedule for '+pl.donor)+'">'+hd+head+body+foot+'</div>';
+  return '<div class="w04-plh" role="region" aria-label="'+remOEsc('Payment schedule for '+pl.donor)+'">'+head+tot+body+'</div>';
 }
 
 function remOPledgeRowHTML(item,w,act){
@@ -5308,12 +5369,14 @@ function remOPager(w,seq,pg,pages,total){
    which is exactly what an exception view must not do. */
 function remOPledgeAgg(w,act){
   var rows=remOPledgeRows(w,act),i,o={rows:rows,n:rows.length,goal:0,paid:0,outstanding:0,
-    dueAmt:0,unfunded:0,shortPledges:0,shortInstalments:0,ended:0,minBegin:null,maxEnd:null,
+    dueAmt:0,dueExGrace:0,behindAmt:0,unfunded:0,shortPledges:0,shortInstalments:0,ended:0,minBegin:null,maxEnd:null,
     atRiskPledges:0,atRiskInstalments:0,atRiskAmt:0,full:0};
   for(i=0;i<rows.length;i++){
     var pl=rows[i].pl,p=rows[i].p;
     o.goal+=pl.goal;o.paid+=pl.paid;o.outstanding+=p.outstanding;
-    o.dueAmt+=p.expectedByNow;o.unfunded+=p.unfunded;
+    o.dueAmt+=p.expectedByNow;o.dueExGrace+=p.expectedExGrace;
+    /* Amount behind, per pledge: expected so far - paid - still in grace period, never below 0 (a pledge paid ahead cannot hide one that is behind) */
+    o.behindAmt+=Math.max(0,p.expectedByNow-pl.paid-p.atRiskAmt);o.unfunded+=p.unfunded;
     if(p.shortCount>0){o.shortPledges++;o.shortInstalments+=p.shortCount;}
     /* W04-T15: at risk is counted on its own and never folded into behind */
     if(p.shortCount===0&&p.atRiskCount>0)o.atRiskPledges++;
@@ -5345,12 +5408,13 @@ function remOActStrip(w,r,agg){
   function cell(k,v){return '<div class="w04-sum-cell"><span class="w04-sum-k">'+k+'</span><span class="w04-sum-v">'+v+'</span></div>';}
   return '<div class="w04-sum">'+
     cell("Total pledged",remOMoney(agg.goal))+
-    cell("Expected by instalments due",remOMoney(agg.dueAmt))+
     cell("Paid to date",remOMoney(agg.paid))+
     cell("Outstanding",remOMoney(agg.outstanding))+
     cell("% Paid",pct==null?"n/a":remOPct(pct))+
     cell("Pledges behind",agg.shortPledges+" of "+agg.n)+
+    cell("Amount behind",remOMoney(agg.behindAmt))+
     cell("Pledges in grace period",agg.atRiskPledges+" of "+agg.n)+
+    cell("Amount in grace period",remOMoney(agg.atRiskAmt))+
   '</div>';
 }
 
@@ -5558,11 +5622,38 @@ function arODetailInvoices(w,mode,key){
 function arORcChip(w){var rc=w.arORc||"All",spin=w.arOloading?'<span class="bgt-spin" aria-hidden="true"></span>':"";return '<button class="filter-chip arO-chip" data-action="arO-rc" data-id="'+w.id+'" aria-haspopup="listbox" aria-label="Revenue center, tap to change">'+spin+'<span class="fc-label">'+(rc==="All"?"All revenue centers":rc)+'</span>'+ICON("expand_more")+'</button>';}
 function arOSourceChip(w){var s=w.arOSource||"All";return '<button class="filter-chip arO-chip" data-action="arO-source" data-id="'+w.id+'" aria-haspopup="listbox" aria-label="Source, tap to change"><span class="fc-label">'+(s==="All"?"All sources":s)+'</span>'+ICON("expand_more")+'</button>';}
 function arOGroupToggle(w){
-  var g=w.arOGroup||"aging";
-  if(g!=="aging"&&g!=="customer"&&g!=="pie")g="aging";
-  function seg(v,lbl,ic){return '<button class="vt'+(g===v?" on":"")+'" data-action="arO-group" data-id="'+w.id+'" data-v="'+v+'" aria-pressed="'+(g===v)+'">'+ICON(ic)+lbl+'</button>';}
-  return '<div class="vtoggle" role="group" aria-label="View">'+seg("aging","Aging","stacked_bar_chart")+seg("customer","Customers","groups")+seg("pie","Pie","pie_chart")+'</div>';
+  var g=(w.arOGroup==="customer")?"customer":"aging";
+  function seg(v,lbl,ic,tip){return '<button class="vt'+(g===v?" on":"")+'" data-action="arO-group" data-id="'+w.id+'" data-v="'+v+'" aria-pressed="'+(g===v)+'" data-tip="'+tip+'" data-tip-plain>'+ICON(ic)+lbl+'</button>';}
+  return '<div class="vtoggle" role="group" aria-label="Group by">'+seg("aging","Aging","stacked_bar_chart","Show the balance split by how overdue it is.")+seg("customer","Customers","groups","Show which customers owe the most.")+'</div>';
 }
+/* Jo's format (owner 29 Sep): group toggle in the header, then a Table | Pie view toggle, then a sortable table or the donut. V2 colours and styling. */
+function arODataView(w){return (w.arOView==="pie"||w.arOGroup==="pie")?"pie":"table";}
+function arODataViewToggle(w){var v=arODataView(w);
+  function seg(val,lbl,ic,tip){return '<button class="vt'+(v===val?" on":"")+'" data-action="arO-view" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(v===val)+'" data-tip="'+tip+'" data-tip-plain>'+ICON(ic)+lbl+'</button>';}
+  return '<div class="vtoggle" role="group" aria-label="Data view">'+seg("table","Table","table_rows","See the figures as a sortable table.")+seg("pie","Pie","pie_chart","See the share as a donut.")+'</div>';}
+function arOTSortBtn(w,st,k,label){var sk=(w[st]||"").split("-"),on=sk[0]===k,dir=sk[1]==="asc"?1:-1;var ic=on?(dir<0?"arrow_downward":"arrow_upward"):"unfold_more";
+  return '<button class="wt-sort'+(on?" on":"")+'" data-action="arO-wsort" data-id="'+w.id+'" data-st="'+st+'" data-k="'+k+'" aria-label="Sort by '+label+'">'+label+ICON(ic)+'</button>';}
+function arOAgingTable(w){
+  if(!w.arOBandSort)w.arOBandSort="band-asc";
+  var b=arOBuckets(w),tot=arOTotal(w),sk=w.arOBandSort.split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1,rows=b.slice();
+  if(key==="amount")rows.sort(function(a,c){return dir*(a.total-c.total);});
+  else if(key==="count")rows.sort(function(a,c){return dir*(a.count-c.count);});
+  else if(key==="band"&&dir<0)rows.reverse();
+  var head='<div class="wt-row wt-head arO-tbl-head"><span class="lr-main">'+arOTSortBtn(w,"arOBandSort","band","Aging")+'</span><span class="wt-c2 arO-tc">'+arOTSortBtn(w,"arOBandSort","count","Invoices")+'</span><span class="wt-c2">'+arOTSortBtn(w,"arOBandSort","amount","Amount")+'</span></div>';
+  var body=rows.map(function(r){var live=r.total>0,click=live?(' data-action="arO-open" data-id="'+w.id+'" data-mode="aging" data-key="'+r.key+'" role="button" tabindex="0" aria-label="'+arOEsc(r.label+", "+money(r.total)+", "+r.count+" invoices, open")+'"'):"";
+    return '<div class="wt-row arO-trow'+(live?" wt-rowlink":" arO-trow-zero")+'"'+click+'><span class="lr-main"><span class="arO-sevdot" style="background:var('+r.color+')"></span><span class="arO-trow-nm">'+r.label+'<span class="arO-trow-sub">'+r.sub+'</span></span></span><span class="wt-c2 arO-tc">'+r.count+'</span><span class="wt-c2">'+money(r.total)+'</span></div>';}).join("");
+  return '<div class="scroll arO-tbl">'+head+body+'</div><div class="dep-total"><span>Total outstanding</span><span>'+money(tot)+'</span></div>';
+}
+function arOCustTable(w){
+  if(!w.arOSort)w.arOSort="total-desc";
+  var rows=arOCustomers(w),tot=arOTotal(w);
+  var head='<div class="wt-row wt-head arO-tbl-head"><span class="lr-main">'+arOTSortBtn(w,"arOSort","customer","Customer")+'</span><span class="wt-c2 arO-tc">'+arOTSortBtn(w,"arOSort","oldest","Aging")+'</span><span class="wt-c2">'+arOTSortBtn(w,"arOSort","total","Balance")+'</span></div>';
+  var body=rows.map(function(r){var ageLbl=r.oldest<=0?"Current":(r.oldest+"d");
+    return '<div class="wt-row arO-trow wt-rowlink" data-action="arO-open" data-id="'+w.id+'" data-mode="customer" data-key="'+arOEsc(r.customer)+'" role="button" tabindex="0" aria-label="'+arOEsc(r.customer+", "+money(r.total)+", oldest "+ageLbl+", open")+'"><span class="lr-main"><span class="arO-sevdot" style="background:var('+ARO_SEV_COLORS[r.worst]+')"></span><span class="arO-trow-nm">'+r.customer+'<span class="arO-trow-sub">'+r.count+' invoice'+(r.count>1?"s":"")+'</span></span></span><span class="wt-c2 arO-tc">'+ageLbl+'</span><span class="wt-c2">'+money(r.total)+'</span></div>';}).join("");
+  if(!rows.length)return '<div class="arO-zeroline">'+ICON("info")+'Nothing to show for this selection.</div>';
+  return '<div class="scroll arO-tbl">'+head+body+'</div><div class="dep-total"><span>Total outstanding</span><span>'+money(tot)+'</span></div>';
+}
+function arOView(w){var g=(w.arOGroup==="customer")?"customer":"aging";return (arODataView(w)==="pie")?arOPie(w,undefined,g):(g==="customer"?arOCustTable(w):arOAgingTable(w));}
 
 /* Compact stacked severity bar (single row) , the Glance aging read and a tidy
    summary strip. One segment per band that has a balance, amethyst gradient.
@@ -5615,11 +5706,10 @@ function arOHeaderBlock(w,mode){
   var numInner;
   if(loading){numInner='<div class="dep-hd-kpigrp"><span class="sk" style="width:120px;height:22px;border-radius:6px"></span><span class="sk" style="width:120px;height:20px;border-radius:999px"></span></div>';}
   else{numInner='<div class="dep-hd-kpigrp"><span class="metric-value">'+money(arOTotal(w))+'</span>'+arOOverduePill(w)+'</div>';}
-  var ctx='Owed to you, oldest balances first.';
   var toggle=arOGroupToggle(w);
-  return '<div class="dep-hd">'+
+  return '<div class="dep-hd arO-hd">'+
     '<div class="dep-hd-top"><div class="arO-ctlrow">'+arORcChip(w)+arOSourceChip(w)+'</div><div class="dep-hd-toggle">'+toggle+'</div></div>'+
-    '<div class="dep-hd-num"><div class="arO-numwrap">'+numInner+'<div class="arO-ctx">'+ctx+'</div></div></div>'+
+    '<div class="dep-hd-num"><div class="arO-numwrap">'+numInner+'</div>'+((w.size==="wide"&&!loading)?'<div class="dep-hd-r arO-hd-view">'+arODataViewToggle(w)+'</div>':'')+'</div>'+
   '</div>';
 }
 
@@ -5670,9 +5760,9 @@ function arOBar(w,forceGroup){
   return sortbar+'<div class="arO-bars" role="img" aria-label="Outstanding balance by '+(cust?"customer":"aging band, current to most overdue")+'">'+body+'</div>'+pager;
 }
 
-function arOPie(w,forceSize){
-  var DS=forceSize||({wide:300,xwide:210}[w.size]||210);
-  var all=arOBuckets(w),tot=all.reduce(function(s,r){return s+r.total;},0);
+function arOPie(w,forceSize,group){
+  var DS=forceSize||({wide:300,xwide:210}[w.size]||210),cust=(group=="customer");
+  var all=cust?arOCustomers(w).map(function(r){return {key:r.customer,label:r.customer,total:r.total,count:r.count,color:ARO_SEV_COLORS[r.worst]};}):arOBuckets(w),tot=all.reduce(function(s,r){return s+r.total;},0);
   if(tot<=0)return '<div class="arO-chart-empty">'+ICON("pie_chart")+'<span>Nothing outstanding for this selection.</span></div>';
   var R=52,C=2*Math.PI*R,off=0,arcs="",legend="";
   all.forEach(function(r,i){
@@ -5682,7 +5772,7 @@ function arOPie(w,forceSize){
       off+=len;
     }
     var zero=!(r.total>0);
-    var lattr=zero?'':(' data-action="arO-open" data-id="'+w.id+'" data-mode="aging" data-key="'+arOEsc(r.key)+'" role="button" tabindex="0" aria-label="'+arOEsc(r.label+", "+money(r.total)+", "+Math.round(frac*100)+" percent. Open the detail list.")+'"');
+    var lattr=zero?'':(' data-action="arO-open" data-id="'+w.id+'" data-mode="'+(cust?"customer":"aging")+'" data-key="'+arOEsc(r.key)+'" role="button" tabindex="0" aria-label="'+arOEsc(r.label+", "+money(r.total)+", "+Math.round(frac*100)+" percent. Open the detail list.")+'"');
     legend+='<div class="leg arO-leg'+(zero?' arO-leg-zero':' arO-clickable')+'" data-seg="'+i+'"'+lattr+'>'+
       '<span class="dot" style="background:var('+r.color+')"></span>'+
       '<span class="lg-main">'+r.label+'</span>'+
@@ -5690,8 +5780,8 @@ function arOPie(w,forceSize){
   });
   return '<div class="arO-pie"><div class="pie-wrap row"><svg class="donut" viewBox="0 0 140 140" width="'+DS+'" height="'+DS+'" aria-hidden="true">'+arcs+
     '<text x="70" y="67" text-anchor="middle" class="donut-c1">'+money(tot)+'</text><text x="70" y="86" text-anchor="middle" class="donut-c2">outstanding</text></svg>'+
-    '<div class="legend-col"><div class="legend-head"><span class="legend-hd">Outstanding by aging band</span></div>'+
-    '<div class="legend" style="max-height:'+DS+'px">'+legend+'</div></div></div>'+
+    '<div class="legend-col"><div class="legend-head"><span class="legend-hd">'+(cust?"Outstanding by customer":"Outstanding by aging band")+'</span></div>'+
+    '<div class="legend" style="max-height:'+(w.size==="xwide"?320:DS)+'px">'+legend+'</div></div></div>'+
     '<span class="sr-only">Total outstanding: '+money(tot)+'.</span></div>';
 }
 
@@ -5713,19 +5803,16 @@ function arOContent(w){
   if(w.size==="kpi")return arOGlance(w);
   if(w.arOloading)return arOHeaderBlock(w,"loading")+arOSkeleton();
   var mh=arOHeaderBlock(w);
-  var g=w.arOGroup||"aging";
+  var g=(w.arOGroup==="customer")?"customer":"aging";
+  /* Detail: split in half, the table on the left and the pie of the same grouping on the right, so no Table | Pie toggle */
   if(w.size==="xwide"){
-    var lh=(g==="pie")?["pie_chart","Outstanding by band"]
-          :(g==="customer")?["groups","Top overdue customers"]
-          :["stacked_bar_chart","By aging"];
-    var lbody=(g==="pie")?arOPie(w):arOBar(w,g==="customer"?"customer":"aging");
+    var lh=(g==="customer")?["groups","By customer"]:["stacked_bar_chart","By aging"];
     return mh+'<div class="arO-explore">'+
-      '<section class="arO-panel"><h4 class="arO-panel-h">'+ICON(lh[0])+lh[1]+'</h4>'+lbody+'</section>'+
-      '<section class="arO-panel"><h4 class="arO-panel-h">'+ICON("receipt_long")+'Invoice detail</h4>'+arOInlineList(w)+'</section>'+
+      '<section class="arO-panel"><h4 class="arO-panel-h">'+ICON(lh[0])+lh[1]+'</h4>'+(g==="customer"?arOCustTable(w):arOAgingTable(w))+'</section>'+
+      '<section class="arO-panel"><h4 class="arO-panel-h">'+ICON("pie_chart")+'Share of total</h4>'+arOPie(w,undefined,g)+'</section>'+
     '</div>';
   }
-  if(g==="pie")return mh+'<div class="arO-body">'+arOPie(w)+'</div>';
-  return mh+'<div class="arO-body">'+arOBar(w)+'</div>';
+  return mh+'<div class="arO-body">'+arOView(w)+'</div>';
 }
 
 /* Drill-to-detail focus overlay: report-style list (Customer, Bill To, Due Date,
@@ -5735,7 +5822,7 @@ function arOContent(w){
    (item 2, Feargal); the tabs are ported exactly as built. */
 function arODetailTabs(x){
   var tab=modal.tab||"details";
-  var tabs=[["details","Details","list_alt"],["attachments","Attachments","attach_file"],["note","Note","sticky_note_2"],["payments","Payments","payments"]];
+  var tabs=[["details","Details","list_alt"],["attachments","Attachments","attach_file"],["note","Note","sticky_note_2"]];
   var bar=tabs.map(function(tb){return '<button class="arO-tab'+(tab===tb[0]?" on":"")+'" role="tab" data-action="arO-tab" data-tab="'+tb[0]+'" aria-selected="'+(tab===tb[0])+'">'+ICON(tb[2])+tb[1]+'</button>';}).join("");
   var panel;
   if(tab==="details"){
@@ -5748,9 +5835,10 @@ function arODetailTabs(x){
     panel=at.length
       ?'<div class="arO-atts">'+at.map(function(f){return '<div class="arO-att">'+ICON("description")+'<span class="arO-att-nm">'+f.name+'</span><span class="arO-att-sz">'+f.size+'</span></div>';}).join("")+'</div>'
       :'<div class="arO-tab-empty">'+ICON("attach_file")+'No attachments on this invoice.</div>';
-  } else if(tab==="note"){
-    panel=x.note?'<div class="arO-note">'+x.note+'</div>':'<div class="arO-tab-empty">'+ICON("sticky_note_2")+'No note added.</div>';
   } else {
+    panel=x.note?'<div class="arO-note">'+x.note+'</div>':'<div class="arO-tab-empty">'+ICON("sticky_note_2")+'No note added.</div>';
+  }
+  if(false){
     var pm=(x.payments||[]).filter(function(p){return p.amount>0;});
     panel=pm.length
       ?'<div class="arO-pays"><div class="arO-prow arO-phead"><span>Date</span><span>Method</span><span class="arO-pa">Amount</span></div>'+pm.map(function(p){return '<div class="arO-prow"><span>'+arOFmtDate(p.date)+'</span><span>'+p.method+'</span><span class="arO-pa">'+money(p.amount)+'</span></div>';}).join("")+'</div>'
@@ -5760,20 +5848,43 @@ function arODetailTabs(x){
 }
 /* Developer hook: the link to this invoice record in Accounts Receivable. The destination is wired by development; the demo only reports the intent. */
 function arOInvoiceLink(w,x){
-  return '<div class="arO-actions"><button class="btn outlined sm" data-action="arO-open-invoice" data-id="'+w.id+'" data-inv="'+arOEsc(x.inv)+'">'+ICON("open_in_new")+'Open invoice</button></div>';
+  return '<div class="arO-actions"><button class="btn outlined sm" data-action="arO-open-invoice" data-id="'+w.id+'" data-inv="'+arOEsc(x.inv)+'">'+ICON("open_in_new")+'Open invoice</button><button class="btn outlined sm" data-action="arO-statement" data-id="'+w.id+'" data-cust="'+arOEsc(x.customer)+'">'+ICON("mail")+'Send statement</button></div>';
 }
+/* Customer contact + last activity, from Jo's phase-2 pop-up (demo values derived from the name). */
+function arOContact(name){
+  var hsh=0,i;for(i=0;i<name.length;i++)hsh=(hsh*31+name.charCodeAt(i))>>>0;
+  var slug=name.toLowerCase().replace(/[^a-z]+/g,"").slice(0,14);
+  var chans=["Emailed a reminder","Left a voicemail","Mailed a statement","Spoke with the office"];
+  var daysAgo=hsh%46,d=new Date(2026,6,23);d.setDate(d.getDate()-daysAgo);
+  var last=(daysAgo<38)?{via:chans[hsh%chans.length],iso:d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}:null;
+  return {email:"accounts@"+slug+".org",phone:"(555) "+String(200+hsh%799)+"-"+String(1000+hsh%8999),last:last};
+}
+function arOContactLine(x){var c=arOContact(x.customer);
+  var act=c.last?('<span class="arO-cp-actline">'+ICON("history")+c.last.via+' on '+arOFmtDate(c.last.iso)+'</span>'):('<span class="arO-cp-actline arO-cp-none">'+ICON("error_outline")+'No contact logged yet</span>');
+  return '<div class="arO-cp-contact"><span class="arO-cp-ci">'+ICON("mail")+c.email+'</span><span class="arO-cp-ci">'+ICON("call")+c.phone+'</span>'+act+'</div>';}
 function arODetailModalHTML(){
   var w=find(modal.id);if(!w)return "";
   var mode=modal.mode,key=modal.key;
-  var invs=arODetailInvoices(w,mode,key);
-  var subj=(mode==="customer")?key:arOBucketLabel(key);
+  var all=arODetailInvoices(w,mode,key),invs=all.slice();
+  var q=(modal.q||"").trim().toLowerCase();
+  if(q)invs=invs.filter(function(x){return x.customer.toLowerCase().indexOf(q)>-1;});
+  var sort=modal.sort||"oldest";
+  invs.sort(function(a,b){if(sort==="name")return a.customer.localeCompare(b.customer)||(b.days-a.days);if(sort==="owed")return b.amount-a.amount;return (b.days-a.days)||(b.amount-a.amount);});
+  var subj=(mode==="customer")?key:(mode==="all")?"All outstanding":arOBucketLabel(key);
+  var custOf=function(list){var m={};list.forEach(function(x){m[x.customer]=1;});return Object.keys(m);};
+  var grand=all.reduce(function(s,x){return s+x.amount;},0),custN=custOf(all).length;
+  var sel=modal.sel||{},selCust=custOf(all.filter(function(x){return sel[x.inv];})).length;
+  var sortLbl={oldest:"Oldest first",owed:"Most owed",name:"Name"}[sort];
+  var controls='<div class="arO-wl-controls"><div class="arO-wl-search"><span class="material-symbols-rounded" aria-hidden="true">search</span><input id="arOdq" class="arO-wl-q" placeholder="Search customers" aria-label="Search customers" value="'+arOEsc(modal.q||"")+'"></div>'+
+    '<button class="arO-wl-sort" data-action="arO-dsort" data-id="'+w.id+'" aria-label="Sort, now '+sortLbl+'">'+ICON("swap_vert")+sortLbl+'</button></div>';
   var cols=["Customer","Bill To","Due Date","Invoice #","Days Past Due","Outstanding"];
-  var head='<div class="wt-row wt-head arO-dhead"><span class="arO-dexp"></span>'+cols.map(function(c,i){return '<span class="arO-dc arO-dc'+i+(i===5?" arO-dc-amt":"")+'">'+c+'</span>';}).join("")+'</div>';
+  var head='<div class="wt-row wt-head arO-dhead"><span class="arO-dchk"></span><span class="arO-dexp"></span>'+cols.map(function(c,i){return '<span class="arO-dc arO-dc'+i+(i===5?" arO-dc-amt":"")+'">'+c+'</span>';}).join("")+'</div>';
   var body;
   if(invs.length){
     body=invs.map(function(x){
-      var open=(modal.exp===x.inv),dpd=x.days>0?(x.days+" days"):"Not due";
+      var open=(modal.exp===x.inv),dpd=x.days>0?(x.days+" days"):"Not due",on=!!sel[x.inv];
       var row='<div class="wt-row arO-drow'+(open?" open":"")+'" data-action="arO-exp" data-id="'+w.id+'" data-inv="'+arOEsc(x.inv)+'" role="button" tabindex="0" aria-expanded="'+open+'">'+
+        '<span class="arO-dchk" role="checkbox" aria-checked="'+on+'" tabindex="0" data-action="arO-check" data-id="'+w.id+'" data-inv="'+arOEsc(x.inv)+'" aria-label="Select '+arOEsc(x.inv)+'">'+ICON(on?"check_box":"check_box_outline_blank")+'</span>'+
         '<span class="arO-dexp">'+ICON(open?"expand_more":"chevron_right")+'</span>'+
         '<span class="arO-dc arO-dc0">'+x.customer+'</span>'+
         '<span class="arO-dc arO-dc1">'+x.billTo+'</span>'+
@@ -5781,19 +5892,20 @@ function arODetailModalHTML(){
         '<span class="arO-dc arO-dc3">'+x.inv+'</span>'+
         '<span class="arO-dc arO-dc4">'+dpd+'</span>'+
         '<span class="arO-dc arO-dc5 arO-dc-amt">'+money(x.amount)+'</span></div>';
-      if(open)row+='<div class="arO-drawer">'+arODetailTabs(x)+arOInvoiceLink(w,x)+'</div>';
+      if(open)row+='<div class="arO-drawer">'+arOContactLine(x)+arODetailTabs(x)+arOInvoiceLink(w,x)+'</div>';
       return row;
     }).join("");
   } else {
-    body='<div class="state" data-kind="empty">'+ICON("inbox")+'<div class="state-title">No invoices to display</div><div class="state-sub">Nothing matches this selection.</div></div>';
+    body='<div class="state" data-kind="empty">'+ICON(q?"search_off":"inbox")+'<div class="state-title">'+(q?"No customers match":"No invoices to display")+'</div><div class="state-sub">'+(q?"Try a different name.":"Nothing matches this selection.")+'</div></div>';
   }
   var totalOut=invs.reduce(function(s,x){return s+x.amount;},0);
   var foot=invs.length?'<div class="dep-total arO-dtotal"><span>'+invs.length+' invoice'+(invs.length>1?"s":"")+'</span><span>'+money(totalOut)+'</span></div>':'';
   return '<div class="modal-backdrop" data-action="arO-detail-close"><div class="modal modal-wide arO-detail-modal" data-action="stop" role="dialog" aria-modal="true" aria-label="Receivable invoices outstanding, detail">'+
-    '<div class="modal-h arO-detail-h"><span class="modal-title"><span class="material-symbols-rounded" aria-hidden="true" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">receipt_long</span>Receivable Invoices Outstanding: Detail</span><span class="arO-dsub">'+subj+'</span><span class="arO-dh-spacer"></span><button class="btn naked sm" data-action="arO-export" data-id="'+w.id+'">'+ICON("download")+'Export to Excel</button><button class="iconbtn" data-action="arO-detail-close" aria-label="Close">'+ICON("close")+'</button></div>'+
-    '<div class="modal-b arO-detail-b"><div class="arO-detail-scroll">'+head+body+'</div>'+foot+'</div>'+
-    '<div class="modal-f"><button class="btn primary sm" data-action="arO-detail-close">Close</button></div></div></div>';
+    '<div class="modal-h arO-detail-h"><div class="arO-wl-htext"><span class="modal-title"><span class="material-symbols-rounded" aria-hidden="true" style="font-size:19px;vertical-align:-4px;margin-right:7px;color:var(--txt-subtle)">receipt_long</span>Receivable Invoices Outstanding: Detail</span><span class="arO-wl-sub">'+subj+' · '+custN+' customer'+(custN===1?"":"s")+' · '+money(grand)+'</span></div><span class="arO-dh-spacer"></span><button class="btn naked sm" data-action="arO-export" data-id="'+w.id+'">'+ICON("download")+'Export to Excel</button><button class="iconbtn" data-action="arO-detail-close" aria-label="Close">'+ICON("close")+'</button></div>'+
+    '<div class="modal-b arO-detail-b">'+controls+'<div class="arO-detail-scroll">'+head+body+'</div>'+foot+'</div>'+
+    '<div class="modal-f"><button class="btn outlined sm" data-action="arO-statements" data-id="'+w.id+'">'+ICON("mail")+'Print statements ('+(selCust||custN)+')</button><button class="btn primary sm" data-action="arO-detail-close">Close</button></div></div></div>';
 }
+function arOHandleInput(e){if(e.target&&e.target.id==="arOdq"&&modal&&modal.type==="arOdetail"){modal.q=e.target.value;var pos=e.target.selectionStart;renderModal();var qi=document.getElementById("arOdq");if(qi){qi.focus();try{qi.setSelectionRange(pos,pos);}catch(_q){}}return true;}return false;}
 
 /* (3) HANDLERS --------------------------------------------------------- */
 /* Data-fetch: revenue center / source changes fetch new data => transient
@@ -5805,7 +5917,9 @@ function arOHandleClick(a,id,t){
   if(a==="arO-set-rc"){var wrc=find(id);if(wrc){var nv=t.getAttribute("data-v");if((wrc.arORc||"All")!==nv){wrc.arORc=nv;wrc.arOCustPage=0;arOLoad(wrc);}}pop=null;render();return true;}
   if(a==="arO-source"){pop=(pop&&pop.type==="arO-source"&&pop.id===id)?null:{type:"arO-source",id:id};render();return true;}
   if(a==="arO-set-source"){var wso=find(id);if(wso){var sv=t.getAttribute("data-v");if((wso.arOSource||"All")!==sv){wso.arOSource=sv;wso.arOCustPage=0;arOLoad(wso);}}pop=null;render();return true;}
-  if(a==="arO-group"){var wg=find(id);if(wg){var g=t.getAttribute("data-v");wg.arOGroup=g;}pop=null;render();return true;}
+  if(a==="arO-group"){var wg=find(id);if(wg){var g=t.getAttribute("data-v");if(g==="pie"){wg.arOView="pie";g="aging";}wg.arOGroup=g;}pop=null;render();return true;}
+  if(a==="arO-view"){var wv=find(id);if(wv){wv.arOView=t.getAttribute("data-v")==="pie"?"pie":"table";if(wv.arOGroup==="pie")wv.arOGroup="aging";}pop=null;render();return true;}
+  if(a==="arO-wsort"){var wt=find(id);if(wt){var st=t.getAttribute("data-st"),k=t.getAttribute("data-k");if(st!=="arOSort"&&st!=="arOBandSort")return true;var cur=(wt[st]||"").split("-");wt[st]=(cur[0]===k)?(k+"-"+(cur[1]==="asc"?"desc":"asc")):(k+"-"+((k==="customer"||k==="band")?"asc":"desc"));}pop=null;render();return true;}
   if(a==="arO-cust-sort"){var wcs=find(id);if(wcs){var nsk=t.getAttribute("data-v");if((wcs.arOSort||"total-desc").split("-")[0]!==nsk){wcs.arOSort=nsk+"-desc";wcs.arOCustPage=0;}}pop=null;render();return true;}
   if(a==="arO-cust-page"){
     var wcp=find(id);
@@ -5821,6 +5935,10 @@ function arOHandleClick(a,id,t){
   if(a==="arO-open-invoice"){setStatus("Opening invoice "+t.getAttribute("data-inv")+" in Accounts Receivable");return true;}
   if(a==="arO-tab"){if(modal)modal.tab=t.getAttribute("data-tab");render();return true;}
   if(a==="arO-export"){pop=null;setStatus("Exporting the detail list to Excel");render();return true;}
+  if(a==="arO-check"){if(modal){var ci=t.getAttribute("data-inv");modal.sel=modal.sel||{};if(modal.sel[ci])delete modal.sel[ci];else modal.sel[ci]=true;}render();return true;}
+  if(a==="arO-dsort"){if(modal){var ord=["oldest","owed","name"];modal.sort=ord[(ord.indexOf(modal.sort||"oldest")+1)%ord.length];}render();return true;}
+  if(a==="arO-statement"){setStatus("Sending a statement to "+t.getAttribute("data-cust"));return true;}
+  if(a==="arO-statements"){var nsel=(modal&&modal.sel)?Object.keys(modal.sel).length:0;setStatus(nsel?"Printing statements for the selected customers":"Printing statements for every customer in this list");return true;}
   return false;
 }
 /* popContent branches (routed from popContent(): arO-rc / arO-source -> arOPopContent) */
@@ -5852,7 +5970,7 @@ function arOShowPop(row,mx,my){
 }
 /* Attach once at load (this listener lives inside the ar IIFE block): */
 document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.target.closest(".arO-barrow[data-arOpop]");if(!row){if(arOPopEl)arOHidePop();return;}arOShowPop(row,e.clientX,e.clientY);});
-  WIDGETS.register("receivables",{content:arOContent,about:function(w){return {h:w.title,b:ARO_ABOUT};},click:function(a,id,t){return !!(a&&a.indexOf("arO-")===0&&arOHandleClick(a,id,t));},pops:{"arO-rc":{content:arOPopContent,trigger:function(){return '[data-action="arO-rc"][data-id="'+pop.id+'"]';}},"arO-source":{content:arOPopContent,trigger:function(){return '[data-action="arO-source"][data-id="'+pop.id+'"]';}}},modals:{arOdetail:arODetailModalHTML}});
+  WIDGETS.register("receivables",{content:arOContent,input:arOHandleInput,about:function(w){return {h:w.title,b:ARO_ABOUT};},click:function(a,id,t){return !!(a&&a.indexOf("arO-")===0&&arOHandleClick(a,id,t));},pops:{"arO-rc":{content:arOPopContent,trigger:function(){return '[data-action="arO-rc"][data-id="'+pop.id+'"]';}},"arO-source":{content:arOPopContent,trigger:function(){return '[data-action="arO-source"][data-id="'+pop.id+'"]';}}},modals:{arOdetail:arODetailModalHTML}});
 /* ===== end W05 Receivable Invoices Outstanding V2 ===== */
 
 /* ===== W06 Insurance Billing Plans V2 ===== */

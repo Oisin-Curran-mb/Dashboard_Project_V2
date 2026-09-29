@@ -97,6 +97,7 @@ const viewV = (html.match(/data-action="remO-view"[^>]*data-v="([a-z]+)"/) || []
 if (viewV) { A.eq(EX.WIDGETS.click("remO-view", w.id, T({ "data-v": viewV }), {}), true, "view toggle handled"); }
 /* pace-band filter and drill */
 const band = (html.match(/data-action="remO-drill"[^>]*data-band="([a-z]+)"/) || [])[1];
+{ const kr = rows.filter(function (x) { return x.size === "kpi"; })[0]; if (kr) { const kh = EX.contentHTML(kr); A.absent(kh, 'data-action="remO-drill"', "Glance pace cards open no pop-up (owner 29 Sep)"); A.contains(kh, "remO-card-static", "Glance pace cards are read-only"); } }
 if (band) { A.eq(EX.WIDGETS.click("remO-drill", w.id, T({ "data-band": band }), {}), true, "band drill handled"); A.eq(EX.getModal() && EX.getModal().type, "remOdrill", "band drill modal opened"); let mh = EX.modalHTML(); A.ok(mh && mh.length > 300, "band drill renders via WIDGETS.modal()"); A.noEmDash(mh, "band drill"); if (/wt-head/.test(mh)) A.headMatchesBody(mh, "band drill table (D12)"); A.eq(EX.WIDGETS.click("remO-drill-close", w.id, T(), {}), true, "drill close handled"); A.eq(EX.getModal(), null, "drill closed"); }
 /* the pledge pop-up */
 const seq = (html.match(/data-action="remO-open"[^>]*data-seq="([^"]+)"/) || [])[1];
@@ -112,8 +113,11 @@ if (seq) {
   A.contains(mh, 'class="iconbtn w04-basis-info"', "pop-up header has the basis info icon");
   A.contains(mh, "paces the activity evenly over its term", "info icon carries the basis note");
   A.absent(mh, "remO-ppage", "no page buttons");
-  const n0 = rowsIn(mh); A.eq(n0, 8, "pop-up shows the first 8 pledges");
+  const n0 = rowsIn(mh); A.eq(n0, 20, "pop-up shows the first 20 pledges (fills the table)");
   if (/data-action="remO-plmore"/.test(mh)) { A.eq(EX.WIDGETS.click("remO-plmore", w.id, T({ "data-seq": seq }), {}), true, "Load more handled"); const mh2 = EX.modalHTML(); A.eq(rowsIn(mh2), Math.min(16, n0 + 8 + 99) > 16 ? 16 : rowsIn(mh2), "Load more adds the next batch"); A.ok(rowsIn(mh2) > n0, "Load more shows more pledges (" + rowsIn(mh2) + ")"); A.absent(mh2, "w04-pl-pager", "no page or count line under the list"); }
+  { const kv = {}, re = /w04-sum-k">([^<]+)<\/span><span class="w04-sum-v">([^<]+)</g; let m; while ((m = re.exec(mh))) kv[m[1]] = m[2];
+    A.ok("Amount in grace period" in kv, "summary has Amount in grace period (" + JSON.stringify(kv) + ")");
+    A.eq(Object.keys(kv).join("|"), "Total pledged|Paid to date|Outstanding|% Paid|Pledges behind|Amount behind|Pledges in grace period|Amount in grace period", "summary headings in the owner's order"); }
   ["Paid to date", "Pledges in grace period", "Pledged amount"].forEach(function (t) { A.contains(mh, t, "pop-up wording: " + t); });
   ["Received to date", "Pledges at risk", "Prepaid", "unfunded", "no single term"].forEach(function (t) { A.absent(mh, t, "old pop-up wording gone: " + t); });
   A.eq(EX.WIDGETS.click("remO-detail-close", w.id, T(), {}), true, "pop-up close handled"); A.eq(EX.getModal(), null, "pop-up closed");
