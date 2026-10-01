@@ -998,14 +998,14 @@ A.eq((shell.script.match(/gpFRange:"thru"/g) || []).length, 3,
   /* the shapes, read off the rules rather than guessed */
   const segOther = /\.gpf-root \.gpf-seg-other\{([^}]*)\}/.exec(shell.css);
   A.ok(!!segOther, "the gifts segment's rule was located");
-  A.contains(segOther[1], "border-radius:0 7px 7px 0", "straight on the left, curved on the right");
+  A.contains(segOther[1], "border-radius:0 var(--cornerradius-medium) var(--cornerradius-medium) 0", "straight on the left, curved on the right");
   const fill = /\.gpf-root \.gpf-fill\{([^}]*)\}/.exec(shell.css);
   A.ok(!!fill, "the base fill rule was located");
-  A.contains(fill[1], "border-radius:7px 0 0 7px", "which the pledge segment inherits, curved left and straight right");
+  A.contains(fill[1], "border-radius:var(--cornerradius-medium) 0 0 var(--cornerradius-medium)", "which the pledge segment inherits, curved left and straight right");
   /* the legend swatches take the same classes and must stay square */
   const sw = /\.gpf-root \.gpf-lg-sw\.gpf-seg-pledge,\.gpf-root \.gpf-lg-sw\.gpf-seg-other\{([^}]*)\}/.exec(shell.css);
   A.ok(!!sw, "the legend swatch rule was located");
-  A.contains(sw[1], "border-radius:3px", "the legend swatches do not inherit the bar's asymmetric corners");
+  A.contains(sw[1], "border-radius:var(--cornerradius-xsmall)", "the legend swatches do not inherit the bar's asymmetric corners");
   /* a gifts-only purpose starts its gift segment at zero; the track clips the
      corner, so no special case is needed and none is pretended */
   const giftsOnlyRow = ctx.gpFPurposeCompute(fresh("gpF", { size: "xwide" }))

@@ -63,9 +63,11 @@ const w = rows.filter(function (x) { return x.size === "wide"; })[0], T = functi
 
 /* ---------- 4. controls ----------------------------------------------- */
 A.eq(EX.WIDGETS.click("nope", w.id, T(), {}), false, "unknown action declined");
-A.eq(EX.WIDGETS.click("insO-type", w.id, T(), {}), true, "type chip opens the inline popover");
-let html = EX.contentHTML(w); A.contains(html, "w06-menu", "inline popover rendered in the widget"); A.noEmDash(html, "type popover");
-const tv = (html.match(/data-action="insO-set-type"[^>]*data-v="([^"]+)"/g) || []).map(function (m) { return /data-v="([^"]+)"/.exec(m)[1]; }).filter(function (x) { return x !== "All"; })[0];
+A.eq(EX.WIDGETS.click("insO-type", w.id, T(), {}), true, "type chip opens the shell popover");
+A.eq(EX.getPop() && EX.getPop().type, "insO-type", "pop state set (shell popover, so it is not clipped by the card)");
+let html = EX.contentHTML(w); A.absent(html, "w06-menu", "no inline menu inside the card");
+const pcx = EX.popContent(); A.noEmDash(pcx, "type popover");
+const tv = (pcx.match(/data-action="insO-set-type"[^>]*data-v="([^"]+)"/g) || []).map(function (m) { return /data-v="([^"]+)"/.exec(m)[1]; }).filter(function (x) { return x !== "All"; })[0];
 A.ok(!!tv, "popover offers a type"); if (tv) { A.eq(EX.WIDGETS.click("insO-set-type", w.id, T({ "data-v": tv }), {}), true, "type applied"); A.eq(w.insType, tv, "type stored"); A.eq(w.insloading, true, "type change is the one fetch (skeleton)"); settle(w); html = EX.contentHTML(w); A.absent(html, "w06-menu", "popover closed after choosing"); }
 A.eq(EX.WIDGETS.click("insO-set-type", w.id, T({ "data-v": "All" }), {}), true, "type back to All"); settle(w);
 html = EX.contentHTML(w);
@@ -80,4 +82,18 @@ const wx = rows.filter(function (x) { return x.size === "xwide"; })[0]; const hx
 /* fixtures */
 const fx = H.extractRegistry(S, "insurance"); ["insO3", "insO4"].forEach(function (id) { const r = fx.filter(function (x) { return x.id === id; })[0]; A.ok(!!r, "fixture " + id + " readable"); if (r) { settle(r); const h = EX.contentHTML(r); A.ok(h.length > 100, id + " renders (" + h.length + " bytes)"); } });
 
+/* sort: group (type) rows follow every sort, and Cost is sortable (owner ask 2026-10-01) */
+(function () {
+  function order() { return (EX.contentHTML(w).match(/w06-grp-nm"><span[^>]*>[^<]*<\/span>([A-Za-z]+)/g) || []).map(function (m) { return /([A-Za-z]+)$/.exec(m)[1]; }); }
+  A.contains(EX.contentHTML(w), 'data-k="cost"', "Cost header is sortable");
+  w.insType = "All"; w.insloading = false;
+  w.insSort = "plan-asc"; A.eq(order().join(","), "Dental,Medical,Vision,Property", "name A-Z orders the types (zero group last)");
+  w.insSort = "plan-desc"; A.eq(order().join(","), "Vision,Medical,Dental,Property", "name Z-A orders the types");
+  w.insSort = "count-desc"; A.eq(order().join(","), "Medical,Dental,Vision,Property", "enrolled high-low");
+  w.insSort = "count-asc"; A.eq(order().join(","), "Vision,Dental,Medical,Property", "enrolled low-high");
+  w.insSort = "cost-desc"; A.eq(order().join(","), "Medical,Dental,Vision,Property", "cost high-low");
+  w.insSort = "cost-asc"; A.eq(order().join(","), "Vision,Dental,Medical,Property", "cost low-high");
+  A.eq(EX.WIDGETS.click("insO-sort", w.id, T({ "data-k": "cost" }), {}), true, "cost sort click handled"); A.eq(w.insSort, "cost-desc", "cost click flips direction from asc");
+  w.insSort = "count-desc";
+})();
 process.exit(A.report());

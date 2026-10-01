@@ -24,7 +24,7 @@ A.absent(S, "function bankBeginTotal(", "dead bankBeginTotal removed");
 A.contains(S, 'WIDGETS.register("bank",{content:bankContent,about:function(w){return {h:w.title,b:BANK_ABOUT};}});', "her content and about text are registered under kind bank (so the viewer lists W15)"); A.absent(S, 'if(w.kind==="bank")return {h:w.title', "aboutOf no longer special-cases bank"); A.absent(S, 'if(w.kind==="bank")return bankContent(w);', "the old contentHTML hook is gone");
 A.contains(shell.css, ".bank-hb-zero{position:absolute;top:-2px;bottom:-2px;width:1px;background:var(--wn-400);}", "zero axis uses a declared token (was the undeclared --wn-500)");
 A.absent(shell.css, "--wn-500", "no reference to the undeclared --wn-500");
-A.contains(shell.css, ".bank-glrow{flex-direction:column;gap:var(--space-xtight);padding:8px 8px calc(8px + var(--space-xtight));}", "Glance row uses the xtight spacing token");
+A.contains(shell.css, ".bank-glrow{flex-direction:column;gap:var(--space-xtight);padding:var(--padding-tight) var(--padding-tight) calc(var(--padding-tight) + var(--space-xtight));}", "Glance row uses the xtight spacing token");
 A.contains(shell.css, "--space-xtight:4px;", "the xtight token is declared");
 A.eq((raw.match(/kind:"bank"/g) || []).length, 3, "exactly three registry rows");
 A.eq((raw.match(/title:"Bank Balances",\s*kind:"bank"|title:"Bank Balances",kind:"bank"/g) || []).length, 3, "all three titled Bank Balances");
