@@ -62,6 +62,33 @@
   .tn-ic{width:34px;height:34px;border:0;background:transparent;color:var(--txt-subtle);border-radius:8px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;}
   .tn-ic:hover{background:var(--wn-200);color:var(--txt-primary);}
   .tn-avatar{width:30px;height:30px;border-radius:50%;background:var(--brand-100);color:var(--cn-0);font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;}
+  /* ===== Shell: Demo / Spec view toggle (dark, top-right) + spec document ===== */
+  .viewtab{display:inline-flex;align-items:center;gap:2px;background:var(--cn-190);border-radius:999px;padding:3px;margin-right:6px;}
+  .vtb{border:0;background:transparent;color:var(--cn-40);font-family:inherit;font-size:12px;font-weight:600;padding:5px 14px;border-radius:999px;cursor:pointer;transition:background var(--dur),color var(--dur);}
+  .vtb:hover{color:var(--cn-0);}
+  .vtb.on{background:var(--brand-100);color:var(--cn-0);}
+  .spec{max-width:900px;margin:0 auto;padding:4px 0 64px;color:var(--txt-primary);}
+  .spec-mode .pagetitle,.spec-mode .toolbar,.spec-mode .statusline,.spec-mode .fkp-band,.spec-mode .dashboard{display:none!important;}
+  .spec-hd{padding:8px 0 10px;border-bottom:1px solid var(--stroke-widget);margin-bottom:8px;}
+  .spec-title{font-family:'Red Hat Display',sans-serif;font-weight:700;font-size:26px;line-height:1.15;color:var(--txt-primary);margin-bottom:8px;}
+  .spec-lead{font-size:14px;line-height:1.6;color:var(--txt-secondary);max-width:72ch;}
+  .spec-links{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+  .spec-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:var(--brand-400);text-decoration:none;border:1px solid var(--stroke-container);border-radius:8px;padding:7px 12px;background:var(--surface-widget);}
+  .spec-link:hover{border-color:var(--brand-100);background:var(--brand-10);}
+  .spec-link .material-symbols-rounded{font-size:16px;}
+  .spec-sec{padding:16px 0;border-bottom:1px solid var(--stroke-widget);}
+  .spec-sec h2{font-family:'Red Hat Display',sans-serif;font-weight:700;font-size:18px;color:var(--txt-primary);margin-bottom:8px;}
+  .spec-sec h3{font-size:13px;font-weight:700;color:var(--txt-primary);margin:14px 0 6px;}
+  .spec-sec p{font-size:13.5px;line-height:1.6;color:var(--txt-secondary);max-width:76ch;margin-bottom:6px;}
+  .spec-ul{margin:4px 0 4px 18px;}
+  .spec-ul li{font-size:13.5px;line-height:1.6;color:var(--txt-secondary);margin-bottom:5px;}
+  .spec b{color:var(--txt-primary);font-weight:600;}
+  .spec code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12px;background:var(--wn-200);border:1px solid var(--stroke-widget);border-radius:4px;padding:1px 5px;color:var(--txt-primary);}
+  .spec-tbl{width:100%;border-collapse:collapse;margin:8px 0;font-size:13px;}
+  .spec-tbl th{text-align:left;padding:7px 10px;border-bottom:1px solid var(--stroke-widget);vertical-align:top;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;color:var(--txt-subtle);}
+  .spec-tbl td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--stroke-widget);vertical-align:top;color:var(--txt-secondary);}
+  .spec-tbl td b{color:var(--txt-primary);}
+  /* ===== end Shell: Demo / Spec view toggle + spec document ===== */
   .appbody{flex:1;display:flex;min-height:0;}
   .sidenav{flex:0 0 216px;width:216px;background:var(--wn-100);border-right:1px solid var(--stroke-widget);padding:10px 12px 20px;display:flex;flex-direction:column;gap:1px;overflow:auto;}
   .sn-group{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--txt-subtle);padding:14px 10px 4px;}
@@ -3287,6 +3314,10 @@
     <span class="tn-div"></span>
     <span class="tn-org">Grace Community Church <span class="material-symbols-rounded">unfold_more</span></span>
     <span class="tn-spacer"></span>
+    <div class="viewtab" role="tablist" aria-label="View mode">
+      <button class="vtb on" data-action="view-demo" role="tab" aria-selected="true">Demo</button>
+      <button class="vtb" data-action="view-spec" role="tab" aria-selected="false">Spec</button>
+    </div>
     <button class="tn-ic" aria-label="Search"><span class="material-symbols-rounded">search</span></button>
     <button class="tn-ic" aria-label="Help"><span class="material-symbols-rounded">help</span></button>
     <button class="tn-ic" aria-label="Notifications"><span class="material-symbols-rounded">notifications</span></button>
@@ -3312,6 +3343,154 @@
         <!-- W18 Financial KPI: fixed full width band, pinned above the grid. Filled by fkpRender(). -->
         <div class="fkp-band" id="fkpBand"></div>
         <div class="dashboard" id="dashboard"></div>
+        <section class="spec" id="specView" hidden aria-label="Implementation specification">
+          <header class="spec-hd">
+            <h1 class="spec-title">Accounting Dashboard, Implementation Spec (Version 2)</h1>
+            <p class="spec-lead">What an engineer needs to build this dashboard and its widgets as they appear in the Demo view: design tokens, the responsive grid, the three widget sizes plus the KPI band, the toolbar and edit flow, overlays, widget states, accessibility, and the full widget inventory. Every visual value resolves from Pathway Design System tokens; nothing wears a raw hex.</p>
+            <div class="spec-links">
+              <a class="spec-link" href="#" target="_blank" rel="noopener"><span class="material-symbols-rounded">open_in_new</span>Figma, design source (placeholder)</a>
+              <a class="spec-link" href="#" target="_blank" rel="noopener"><span class="material-symbols-rounded">description</span>Widget-by-widget docs, SharePoint (placeholder)</a>
+            </div>
+          </header>
+
+          <div class="spec-sec" id="spec-tokens">
+            <h2>1. Design tokens</h2>
+            <p>Colour, spacing, radius, border, type and motion come from the Pathway Design System, loaded over CDN: package <code>@helloimjolopez-pathway/pathway-tokens@10.0.4</code>, files <code>dist/primitives.css</code> and <code>dist/themes/light.css</code>. Source: <code>github.com/helloimjolopez-collab/pathway-ds</code>.</p>
+            <ul class="spec-ul">
+              <li><b>Primitives</b> (<code>--primitive-color-{family}-{step}</code>): the raw ramps (cool-neutral, warm-neutral, brand, amethyst, red, green, saffron, orange and the accent families), with alpha variants on anchor steps for tints and scrims.</li>
+              <li><b>Semantics</b> (<code>--semantic-color-{fill|foreground|stroke}-*</code>, <code>--semantic-layout-units-*</code>, <code>--semantic-type-*</code>): role tokens. Surfaces are warm (widget and header on warm-neutral-0), text is cool grey, the canvas is cool-neutral-10.</li>
+              <li><b>Page aliases</b>: the page declares short aliases on <code>:root</code> that point at the DS tokens, and all widget CSS uses the aliases. Text <code>--txt-primary / -secondary / -subtle / -pos</code>; neutrals <code>--wn-*</code> (warm) and <code>--cn-*</code> (cool); brand <code>--brand-10 .. --brand-500</code>; charts <code>--am-50 .. --am-700</code> (amethyst), <code>--chart</code>, <code>--chart-soft</code>, <code>--chart-strong</code>; status <code>--pos-100</code>, <code>--red-100</code>; strokes <code>--stroke-widget</code>, <code>--stroke-container</code>; surfaces <code>--surface-canvas / -header / -sheet / -widget</code>; spacing <code>--gap-*</code> and <code>--padding-*</code>; radius <code>--cornerradius-xsmall / -small / -medium / -full</code>; motion <code>--dur</code>, <code>--dur2</code>, <code>--ease</code>, <code>--dec</code>; focus <code>--focusring-base</code>.</li>
+              <li><b>Rule:</b> semantic where a role fits, primitive only where no semantic exists (categorical chart series, alpha scrims and shadows). Charts are amethyst; red is reserved for true alarms (overdrawn, overdue, rejected).</li>
+            </ul>
+            <h3>Type scale (<code>--semantic-type-*</code>)</h3>
+            <table class="spec-tbl"><thead><tr><th>Token</th><th>Size</th><th>Used for</th></tr></thead><tbody>
+              <tr><td>font-size-xl</td><td>24px</td><td>KPI metric values (22px inside a Glance tile)</td></tr>
+              <tr><td>font-size-l</td><td>20px</td><td>Overlay titles</td></tr>
+              <tr><td>font-size-r / m</td><td>16 / 18px</td><td>Section headings</td></tr>
+              <tr><td>font-size-s</td><td>14px</td><td>Body, table rows</td></tr>
+              <tr><td>font-size-xs</td><td>12px</td><td>Secondary text, badges, chips</td></tr>
+              <tr><td>font-size-xxs / xxxs</td><td>11 / 10px</td><td>Column headers, captions</td></tr>
+            </tbody></table>
+            <p>Families: <b>Red Hat Display</b> (metric values, titles; weights 600 and 700), <b>Red Hat Text</b> (body; 400 to 700), <b>Material Symbols Rounded</b> (icons). All three load from Google Fonts.</p>
+            <h3>Spacing, radius, border (<code>--semantic-layout-units-*</code>)</h3>
+            <table class="spec-tbl"><thead><tr><th>Scale</th><th>Values</th></tr></thead><tbody>
+              <tr><td>gap</td><td>2, 4, 6, 8, 12, 16 (base), 24, 36px</td></tr>
+              <tr><td>padding</td><td>2, 4, 6, 8, 12, 14 (medium), 16 (base), 24, 36, 48px</td></tr>
+              <tr><td>corner radius</td><td>2, 4, 8 (base), 12 (large), 16 (xlarge), 999 (full)</td></tr>
+              <tr><td>border width</td><td>0.5, 0.75, 1, 1.5, 2, 4px. Pathway buttons: Fill and Naked have no border, Outlined has a 0.75px stroke</td></tr>
+              <tr><td>touch target</td><td>36 (desktop), 44 (AA), 48 (AAA)</td></tr>
+            </tbody></table>
+            <h3>Motion and elevation</h3>
+            <p>Durations <code>--dur</code> (micro) and <code>--dur2</code> (enter); easing <code>--ease</code> for most transitions and <code>--dec</code> (decelerate) for overlays. Every animation is switched off under <code>prefers-reduced-motion</code>. Shadows come from <code>--elevation-widget / -lift / -overlay</code>, never a hand-rolled rgba.</p>
+          </div>
+
+          <div class="spec-sec" id="spec-grid">
+            <h2>2. Responsive grid</h2>
+            <p>The dashboard is a CSS grid whose column count follows the <b>viewport</b> width through media queries. The side navigation (216px) is hidden at 900px and below, so the grid takes the full width on tablet and phone.</p>
+            <table class="spec-tbl"><thead><tr><th>Viewport width</th><th>Columns</th></tr></thead><tbody>
+              <tr><td>under 768px</td><td>4</td></tr>
+              <tr><td>768px and up</td><td>8</td></tr>
+              <tr><td>1024px and up</td><td>12</td></tr>
+            </tbody></table>
+            <p><code>grid-auto-rows: 48px</code>, <code>gap: 16px</code> (gap-base), <code>grid-auto-flow: row dense</code>, so a Glance tile backfills a gap left by a larger widget. Widgets span whole columns and rows; a widget's height is its row span times 48px plus the gaps between rows.</p>
+          </div>
+
+          <div class="spec-sec" id="spec-sizes">
+            <h2>3. Widget sizes</h2>
+            <p>Three sizes, <b>Glance</b> (<code>kpi</code>), <b>Explore</b> (<code>wide</code>) and <b>Detail</b> (<code>xwide</code>), plus the <b>Financial KPI band</b>, which is not a grid widget: it is mounted full width above the grid (<code>#fkpBand</code>) and has one size. Column span adapts to the current column count; row span is fixed per size. Each widget declares which sizes it offers (<code>tiers</code>); the size picker shows only those.</p>
+            <table class="spec-tbl"><thead><tr><th>Size</th><th>4-col</th><th>8-col</th><th>12-col</th><th>Rows</th><th>Role</th></tr></thead><tbody>
+              <tr><td><b>Glance</b> (kpi)</td><td>span 4</td><td>span 4</td><td>span 3</td><td>3 (176px)</td><td>Headline number plus the one actionable figure. The tile has no controls of its own; it opens its parent screen or a pop-up.</td></tr>
+              <tr><td><b>Explore</b> (wide)</td><td>span 4</td><td>span 8</td><td>span 6</td><td>8 (496px)</td><td>Table or chart with the widget's controls: scope filter, view toggle, sort on column headers, search where a list grows, Load more instead of pagination.</td></tr>
+              <tr><td><b>Detail</b> (xwide)</td><td>span 4</td><td>span 8</td><td>span 12</td><td>9 (560px)</td><td>Fullest in-grid view: table and chart, or the widget's richest layout. Tap a row to drill into a pop-up or overlay.</td></tr>
+              <tr><td><b>Band</b></td><td colspan="3">full width, above the grid</td><td>n/a</td><td>Financial KPI band (W18): total income, total expenses and net income, year to date, with the previous-year comparison.</td></tr>
+            </tbody></table>
+            <p>My Status (W08) and Alerts &amp; Actions (W19) offer Explore and Detail only; every other widget offers all three sizes. A Glance tile never carries more than its number and one supporting line.</p>
+          </div>
+
+          <div class="spec-sec" id="spec-resize">
+            <h2>4. Resizing</h2>
+            <p>A widget's size is changed from its header menu (<code>wsize</code>, then <code>pick-size</code>): the picker lists the widget's tiers, the chosen size is written to the widget and the grid re-places following widgets automatically. The status line confirms the change (widget title and new size name). At narrower viewports the column spans above already clamp a widget to the full row, so a Detail widget on a phone renders at 4 columns and its content reflows inside that width; the widget keeps its chosen size and gets it back when the viewport widens.</p>
+          </div>
+
+          <div class="spec-sec" id="spec-toolbar">
+            <h2>5. Toolbar, edit mode and dashboards</h2>
+            <ul class="spec-ul">
+              <li><b>Dashboard switcher</b> (the title chevron): switch dashboard, set the default, rename, delete, or create a new one. A system dashboard cannot be overwritten; saving it offers Save as new.</li>
+              <li><b>Find a widget</b>: a searchable list of the widgets on the current dashboard. Choosing one scrolls it into view and highlights it; the list ends with Add widget.</li>
+              <li><b>Refresh</b> reloads every widget (each shows its skeleton while loading). Each widget also has its own refresh in its header.</li>
+              <li><b>Edit Dashboard</b> enters edit mode: the dashboard name becomes editable, every widget gets a drag handle to move it, plus Resize, Duplicate and Remove. The toolbar changes to Add widget, Reset, Cancel and Save (with Save as new in the split menu). Save or Cancel exits edit mode.</li>
+              <li><b>Add widget</b> appends a placeholder widget at Glance size, in edit mode, for the user to resize and arrange. A widget-shaped Add widget tile also sits in the grid whenever a dashboard has one widget or none.</li>
+              <li><b>Status line</b> under the toolbar reports what just happened (saved, widget added, size changed, errors). It is text only.</li>
+              <li>The <b>For developers only</b> selector in the toolbar is a review aid for this demo (show one widget at a time). It is not part of the product and is not built.</li>
+            </ul>
+          </div>
+
+          <div class="spec-sec" id="spec-overlays">
+            <h2>6. Overlays</h2>
+            <ul class="spec-ul">
+              <li><b>Pop-overs</b> (<code>.pop</code>) are fixed-position panels anchored to the control that opened them: scope menus, size picker, widget menu, find-a-widget, row detail cards. One is open at a time; clicking outside closes it. Elevation <code>--elevation-lift</code>, radius 10px, enter animation on <code>--dur2</code> with decelerate easing.</li>
+              <li><b>Modals</b> (<code>.modal</code>, <code>role="dialog"</code>) sit on a scrim. The compact class (confirm and picker dialogs) is 390px wide. Drill-down tables use <code>.modal-wide</code>: 1080px, 94vw maximum, 84vh tall, header fixed and body scrolling, so the overlay never jumps as content re-renders. A few widgets declare their own modal size for a specific layout (for example the W01 report picker at 640px).</li>
+              <li>Every overlay states its subject once, uses the one table pattern (<code>.wt-row.wt-head</code> header cells carry exactly the width and alignment classes of their body cells, text left, amounts and counts right), shows status as icon plus text, and has one clear action hierarchy. Per-row actions are inline; bulk actions live with the selection summary.</li>
+              <li>Wide modals are capped at 94vw and 84vh, and the widget-specific ones at the viewport less a 32px margin, so they fit a small viewport without a separate full-screen variant.</li>
+            </ul>
+          </div>
+
+          <div class="spec-sec" id="spec-states">
+            <h2>7. Widget states</h2>
+            <ul class="spec-ul">
+              <li><b>Loading</b>: a skeleton (<code>.skeleton</code>, shimmer sweep and a soft spinner) in the shape of the content. Loading is only ever triggered by a data fetch or a scope change.</li>
+              <li><b>Empty</b> and <b>error</b>: the shared <code>.state</code> block with an icon, a title, one line of explanation and, where it applies, an action (Retry, Set up budget, Add account).</li>
+              <li><b>Ready</b>: the content for the current size. A widget renders the same data at all three sizes; only the layout changes.</li>
+            </ul>
+          </div>
+
+          <div class="spec-sec" id="spec-a11y">
+            <h2>8. Accessibility</h2>
+            <ul class="spec-ul">
+              <li><b>Colour contrast</b> from the semantic foreground tokens meets WCAG AA for text; status is never communicated by colour alone, always icon plus text.</li>
+              <li><b>Focus</b>: <code>--focusring-base</code> on every interactive element, 2px with 2px offset; Pathway buttons use the DS button ring (6px surface halo plus 2px ring).</li>
+              <li><b>Keyboard</b>: all controls reachable and operable; toggles expose <code>role</code> and <code>aria-pressed</code> or <code>aria-selected</code>; menus use <code>aria-haspopup</code> and <code>aria-expanded</code>; drillable rows are <code>role="button"</code> with <code>tabindex="0"</code>.</li>
+              <li><b>Screen reader</b>: each drillable row and chart segment carries an <code>aria-label</code> that summarises its data and action.</li>
+              <li><b>Motion</b>: every animation honours <code>prefers-reduced-motion</code>. <b>Touch</b>: hover-only affordances reveal on tap where there is no hover.</li>
+              <li><b>Copy</b>: no em dashes in user-facing text; no narrative subtitles; interactive elements look interactive and static context never looks tappable.</li>
+            </ul>
+          </div>
+
+          <div class="spec-sec" id="spec-widgets">
+            <h2>9. Widget inventory</h2>
+            <p>Nineteen widgets ship in Version 2. The kind is the registration key in the build; sizes are the tiers the widget offers.</p>
+            <table class="spec-tbl"><thead><tr><th>No.</th><th>Widget</th><th>Kind</th><th>Sizes</th></tr></thead><tbody>
+              <tr><td>W01</td><td>Budget Compared to Actual</td><td><code>budget</code></td><td>Glance, Explore, Detail</td></tr>
+              <tr><td>W02</td><td>Pension Plans</td><td><code>pension</code></td><td>Glance, Explore, Detail</td></tr>
+              <tr><td>W03</td><td>Payroll Distributions</td><td><code>payroll</code></td><td>Glance, Explore, Detail</td></tr>
+              <tr><td>W04</td><td>Remittance Pledges</td><td><code>remittance</code></td><td>Glance, Explore, Detail</td></tr>
+              <tr><td>W05</td><td>Receivable Invoices Outstanding</td><td><code>receivables</code></td><td>Glance, Explore, Detail</td></tr>
+              <tr><td>W06</td><td>Insurance Billing Plans</td><td><code>insurance</code></td><td>Glance, Explore, Detail</td></tr>
+              <tr><td>W07</td><td>Deposits on Hand</td><td><code>deposits</code></td><td>Glance, Explore, Detail</td></tr>
+              <tr><td>W08</td><td>My Status</td><td><code>mystatus</code></td><td>Explore, Detail</td></tr>
+              <tr><td>W09</td><td>Payroll Scheduled Time Off</td><td><code>pto</code></td><td>Glance, Explore, Detail</td></tr>
+              <tr><td>W10</td><td>Loans With Balance Due</td><td><code>loans</code></td><td>Glance, Explore, Detail</td></tr>
+              <tr><td>W11</td><td>Fixed Asset Values</td><td><code>fixedassets</code></td><td>Glance, Explore, Detail</td></tr>
+              <tr><td>W13</td><td>Purchasing Management</td><td><code>purchasing</code></td><td>Glance, Explore, Detail</td></tr>
+              <tr><td>W14</td><td>Main Content Tasks</td><td><code>tasks</code></td><td>Glance, Explore, Detail</td></tr>
+              <tr><td>W15</td><td>Bank Balances</td><td><code>bank</code></td><td>Glance, Explore, Detail</td></tr>
+              <tr><td>W16</td><td>Accounts Payable By Due Date</td><td><code>payables</code></td><td>Glance, Explore, Detail</td></tr>
+              <tr><td>W17</td><td>Gifts Pledges</td><td><code>gifts</code></td><td>Glance, Explore, Detail</td></tr>
+              <tr><td>W18</td><td>Financial KPI</td><td>band</td><td>Band (above the grid)</td></tr>
+              <tr><td>W19</td><td>Alerts &amp; Actions</td><td><code>alerts</code></td><td>Explore, Detail</td></tr>
+            </tbody></table>
+          </div>
+
+          <div class="spec-sec" id="spec-build">
+            <h2>10. How the demo is built</h2>
+            <ul class="spec-ul">
+              <li>One file, one script. The shell (grid, toolbar, dashboards, overlays, status line) is a single IIFE; each widget is one self-contained block of CSS, data, render functions, pop-up and modal content and handlers, registered with <code>WIDGETS.register(kind, {content, about, pop, modal, click, input})</code>. The shell dispatches by kind; it holds no widget-specific branches.</li>
+              <li>Widget CSS is namespaced by a per-widget prefix, so no selector reaches another widget. Shared helpers (attribute escaping, date parsing, money formatting, the month table, pace bands) live in one labelled package inside the shell.</li>
+              <li>Data in this demo is static and shaped like the live API responses described in the widget docs; a build replaces each widget's data constants with the real fetch and keeps the render code.</li>
+              <li>Every widget has a driver that renders its sizes, drives its controls and checks the table-header rule, the no-em-dash rule and token use. Nothing changes here without those passing.</li>
+            </ul>
+          </div>
+        </section>
       </div>
     </main>
   </div>
@@ -11882,6 +12061,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(a==="noop"){pop=null;render();return;}
     if(a==="stop"){return;}
     if(a==="modal-close"){modal=null;pop=null;render();return;}
+    if(a==="view-spec"||a==="view-demo"){var _spec=(a==="view-spec");document.body.classList.toggle("spec-mode",_spec);var _sv=document.getElementById("specView");if(_sv)_sv.hidden=!_spec;Array.prototype.forEach.call(document.querySelectorAll(".viewtab .vtb"),function(b){var on=b.getAttribute("data-action")===a;b.classList.toggle("on",on);b.setAttribute("aria-selected",on?"true":"false");});pop=null;try{document.querySelector(".appmain").scrollTop=0;}catch(_e){}window.scrollTo(0,0);return;}
     if(a&&a.indexOf("ap-")===0&&apHandleClick(a,id,t))return;
     if(a==="bank-acct"){bankQuery="";pop=(pop&&pop.type==="bank-acct"&&pop.id===id)?null:{type:"bank-acct",id:id};render();return;}
     if(a==="bank-set-acct"){var wba=find(id);if(wba){var na=t.getAttribute("data-acct");var nv=(na==="all"||!na)?null:na;if(wba.bkacct!==nv){wba.bkacct=nv;bankLoad(wba);}}pop=null;render();return;}

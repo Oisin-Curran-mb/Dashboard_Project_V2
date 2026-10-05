@@ -34,6 +34,7 @@ Manager's agreed task list:
 | D10 | (25 Sep) Code comments: keep what a function/block does, why non-obvious logic exists, and structural markers agents rely on (region banners, `data-<prefix>` conventions, "shared by Wnn" labels). Remove decision history, "what changed", row citations, dates, stash/rebase notes, "Jo's block untouched". History lives in `docs/decisions/`. |
 | D11 | (25 Sep) Pilot: W14 Main Content Tasks and W08 My Status. Owner ruling: keep Jo's version of both; `mystatus-oc` is deleted. |
 | D12 | (25 Sep) **Table header rule, all widgets and pop-ups:** a header cell carries exactly the same width/alignment classes as the body cells in its column, so headers sit over their data. Text columns left-aligned, amount/count columns right-aligned, nothing centred. Checked per widget at build (driver `H.headMatchesBody`) and fixed as a defect. |
+| D13 | (5 Oct) Jo's Demo / Spec view toggle is ported into the shell from her live phase-2 page (not in the frozen `_ref`); the spec document is rewritten to describe V2 as built. Record: `docs/decisions/Shell-spec-toggle.md`, driver `_tools/shell-spec.driver.js`. |
 
 ## Key facts the plan rests on
 
