@@ -90,7 +90,7 @@ const fx = H.extractRegistry(S, "deposits"); ["depO4", "depO5"].forEach(function
   const pc = EX.popContent(); A.contains(pc, "Show change over", "picker heading says what Deposits measures"); ["This month", "This period", "This quarter", "This year", "This fiscal year"].forEach(function (l) { A.contains(pc, l, "offers " + l); }); A.absent(pc, "This week", "no week option");
   A.eq(EX.WIDGETS.click("depO-set-span", w.id, TT({ "data-s": "F" }), {}), true, "window applied"); A.eq(w.range, "F", "range stored"); A.contains(EX.contentHTML(w), "This fiscal year", "chip label follows"); A.absent(EX.contentHTML(w), "since ", "no start date in the header");
   const H2 = function (r) { w.range = r; return EX.contentHTML(w).replace(/data-id="[^"]*"/g, "").replace(/This (month|period)/g, "X"); }; A.eq(H2("P"), H2("M"), "This period draws the same numbers as This month (one-month period in the demo)");
-  const g = rows.filter(function (x) { return x.size === "kpi"; })[0]; if (g) { const gh = EX.contentHTML(g); A.contains(gh, "This quarter", "Glance caption names the window"); A.absent(gh, "since ", "no start date on the Glance"); A.contains(gh, 'data-action="depO-span"', "Glance caption opens the same picker"); }
+  const g = rows.filter(function (x) { return x.size === "kpi"; })[0]; if (g) { const gh = EX.contentHTML(g); A.contains(gh, "vs quarter", "Glance caption uses Jo's wording (vs quarter)"); A.absent(gh, "since ", "no start date on the Glance"); A.contains(gh, 'data-action="depO-span"', "Glance caption opens the same picker"); }
   w.range = "Q";
 })();
 /* balances are always today's; only the % moves with the window, and every view agrees (owner rule 2026-10-01) */

@@ -25,7 +25,7 @@ A.contains(S, 'WIDGETS.register("bank",{content:bankContent,about:function(w){re
 A.contains(shell.css, ".bank-hb-zero{position:absolute;top:-2px;bottom:-2px;width:1px;background:var(--wn-400);}", "zero axis uses a declared token (was the undeclared --wn-500)");
 A.absent(shell.css, "--wn-500", "no reference to the undeclared --wn-500");
 A.contains(shell.css, ".bank-glrow{flex-direction:column;gap:var(--space-xtight);padding:var(--padding-tight) var(--padding-tight) calc(var(--padding-tight) + var(--space-xtight));}", "Glance row uses the xtight spacing token");
-A.contains(shell.css, "--space-xtight:4px;", "the xtight token is declared");
+A.contains(shell.css, "--space-xtight:var(--primitive-unit-unit-4,4px);", "the xtight token is declared");
 A.eq((raw.match(/kind:"bank"/g) || []).length, 3, "exactly three registry rows");
 A.eq((raw.match(/title:"Bank Balances",\s*kind:"bank"|title:"Bank Balances",kind:"bank"/g) || []).length, 3, "all three titled Bank Balances");
 A.absent(raw, 'id:"bank2"', "fixture bank2 gone"); A.absent(raw, 'id:"bank3"', "fixture bank3 gone");

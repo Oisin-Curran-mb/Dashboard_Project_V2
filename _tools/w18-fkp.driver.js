@@ -150,7 +150,7 @@ A.eq((ourCss.match(/^\s*:root/gm) || []).length, 0, "nothing declared on :root")
    design-system steps had no user but the warning chip and its panel. */
 A.eq((ourCss.match(/--cn-90:/g) || []).length, 1, "--cn-90 declared exactly once in our block");
 A.eq((css.replace(ourCss, "").match(/--cn-90:/g) || []).length, 0, "--cn-90 not declared anywhere of hers");
-A.contains(ourCss, "--cn-90:#979797", "--cn-90 carries her cool neutral value");
+A.contains(ourCss, "--cn-90:var(--primitive-color-cool-neutral-200)", "--cn-90 carries her cool neutral value");
 const ourCssCode = stripCss(ourCss);
 ["--sf-20", "--sf-60", "--sf-100", "--sf-140", "--red-50", "--pos-30"].forEach(t => {
   A.absent(ourCssCode, t, t + " went with the warning chip, rather than being left declared and unused");
