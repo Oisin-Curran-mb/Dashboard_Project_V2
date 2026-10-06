@@ -3084,8 +3084,9 @@
   /* account pop-up: own 560px modal shell so the shared .wt-row column widths fit */
 
 .depo-acct-modal.modal-wide{max-width:1180px;}
-.depo-acct-modal .depo-acct-mw{min-height:620px;}
-.depo-acct-modal .depo-acct-mw .tr-plot{min-height:380px;}
+.depo-acct-modal .modal-b{overflow:auto;} /* short windows: the body scrolls, the footer with Done stays in view */
+.depo-acct-modal .depo-acct-mw{flex:1;min-height:0;} /* fills whatever the 84vh frame leaves; no fixed floor (the 620px one hid Done on ~900px windows, 6 Oct) */
+.depo-acct-modal .depo-acct-mw .tr-plot{min-height:180px;} /* keeps the chart legible; below this the body scrolls rather than pushing Done out */
 
 
   .wt-row .dt-inc{flex:0 0 92px;}
