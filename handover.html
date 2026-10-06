@@ -1,0 +1,539 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>V1 to V2 Handover</title>
+<style>
+:root{--bg:#f6f5f2;--card:#fff;--ink:#1f1d24;--sub:#5c5868;--line:#e4e1ea;--accent:#524790;--soft:#efedf7;
+--visual:#6b7280;--feature:#2563eb;--complete:#c2410c;--new:#15803d;--ok:#15803d;--okbg:#e8f5ec;}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#16151a;--card:#1f1e25;--ink:#ecebf1;--sub:#a6a2b3;--line:#34323d;--accent:#a99df0;--soft:#2a2835;--visual:#9ca3af;--feature:#60a5fa;--complete:#fb923c;--new:#4ade80;--ok:#4ade80;--okbg:#1d3325;}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+.layout{display:grid;grid-template-columns:270px 1fr;max-width:1400px;margin:0 auto}
+nav{position:sticky;top:0;height:100vh;overflow:auto;padding:24px 14px;border-right:1px solid var(--line)}
+nav .brand{font-weight:700;font-size:15px;margin:0 8px 4px}
+nav .prog{font-size:12px;color:var(--sub);margin:0 8px 16px}
+nav a{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;color:var(--ink);text-decoration:none;font-size:13.5px}
+nav a:hover{background:var(--soft)}
+.dot{width:8px;height:8px;border-radius:50%;flex:none;background:currentColor}
+nav a .dot{color:var(--visual)} nav a.t-feature .dot{color:var(--feature)} nav a.t-complete .dot{color:var(--complete)} nav a.t-new .dot{color:var(--new)}
+.nw{font-weight:600;font-variant-numeric:tabular-nums} .nn{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--sub)}
+.chk{color:var(--ok);font-weight:700}
+main{padding:32px 36px 80px;min-width:0}
+h1{font-size:26px;margin:0 0 8px}
+.intro{color:var(--sub);max-width:860px} .intro strong{color:var(--ink)}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 28px}
+.widget{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px 28px;margin:0 0 24px;scroll-margin-top:16px}
+.wh{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:14px;margin-bottom:16px}
+.wid{font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.04em}
+h2{margin:2px 0 0;font-size:21px}
+.badges{display:flex;gap:8px;flex-wrap:wrap}
+.ctype,.rev{font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;border:1px solid var(--line);color:var(--sub);white-space:nowrap}
+.ctype.t-visual{color:var(--visual)} .ctype.t-feature{color:var(--feature)} .ctype.t-complete{color:var(--complete)} .ctype.t-new{color:var(--new)}
+.ctype.t-none{color:var(--ok);background:var(--okbg);border-color:transparent}
+nav a.t-none .dot{color:var(--ok)}
+.rev.ok{color:var(--ok);background:var(--okbg);border-color:transparent}
+.prose h3{font-size:19px;font-weight:700;color:var(--ink);margin:30px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--line)}
+.prose h3:first-child{margin-top:6px}
+.prose h4{font-size:15px;font-weight:600;color:var(--accent);margin:18px 0 4px;padding-left:10px;border-left:3px solid var(--accent)}
+.prose ul{padding-left:20px;margin:6px 0} .prose li{margin:4px 0}
+.prose code,.ph code{font:12.5px ui-monospace,Consolas,monospace;background:var(--soft);padding:1px 5px;border-radius:4px}
+.prose table{border-collapse:collapse;width:100%;margin:8px 0 12px;font-size:14px;display:block;overflow-x:auto}
+.prose th,.prose td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top}
+.prose th{background:var(--soft);font-weight:600} .prose td:first-child{font-weight:600;white-space:nowrap}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;color:var(--accent);background:var(--soft);padding:0 7px;border-radius:5px;margin-left:2px}
+.purpose{font-weight:600;color:var(--sub)}
+.shots{margin:0 0 8px} .shots summary{cursor:pointer;font-weight:600;font-size:14px;margin-bottom:10px}
+.count{font-weight:400;color:var(--sub);font-size:12.5px;margin-left:6px}
+.pair{margin:0 0 18px} .pair h4{margin:0 0 8px;font-size:14px;display:flex;gap:8px;align-items:center}
+.num{font-size:11px;color:var(--sub);border:1px solid var(--line);border-radius:5px;padding:0 5px}
+.pair-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.shot{margin:0} .shot figcaption{font-size:11.5px;font-weight:700;color:var(--sub);margin-bottom:4px}
+.zoom{all:unset;cursor:zoom-in;display:block;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--bg)}
+.zoom:focus-visible{outline:2px solid var(--accent)}
+.shot img{display:block;width:100%;height:auto}
+.ph{border:1.5px dashed var(--line);border-radius:10px;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--sub);font-size:13px;padding:12px;text-align:center}
+#lb{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;align-items:center;justify-content:center;padding:24px;cursor:zoom-out;z-index:10}
+#lb.on{display:flex} #lb img{max-width:100%;max-height:100%;border-radius:8px}
+@media (max-width:900px){.layout{grid-template-columns:1fr} nav{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}
+main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template-columns:1fr}}
+</style></head><body>
+<div class="layout">
+<nav aria-label="Widgets"><div class="brand">V1 → V2 Handover</div><div class="prog">Widgets</div><a href="#w01" class="t-feature"><span class="dot"></span><span class="nw">W01</span><span class="nn">Budget Compared to Actual</span><span class=chk>✓</span></a><a href="#w02" class="t-feature"><span class="dot"></span><span class="nw">W02</span><span class="nn">Pension Plans</span><span class=chk>✓</span></a><a href="#w03" class="t-feature"><span class="dot"></span><span class="nw">W03</span><span class="nn">Payroll Distributions</span><span class=chk>✓</span></a><a href="#w04" class="t-feature"><span class="dot"></span><span class="nw">W04</span><span class="nn">Remittance Pledges</span><span class=chk>✓</span></a><a href="#w05" class="t-feature"><span class="dot"></span><span class="nw">W05</span><span class="nn">Receivable Invoices Outstanding</span></a><a href="#w06" class="t-feature"><span class="dot"></span><span class="nw">W06</span><span class="nn">Insurance Billing Plans</span></a><a href="#w07" class="t-feature"><span class="dot"></span><span class="nw">W07</span><span class="nn">Deposits on Hand</span></a><a href="#w08" class="t-none"><span class="dot"></span><span class="nw">W08</span><span class="nn">My Status</span></a><a href="#w19" class="t-new"><span class="dot"></span><span class="nw">W19</span><span class="nn">Alerts &amp; Actions</span></a></nav>
+<main>
+<h1>V1 → V2 Handover — Shelby Financials Dashboard</h1>
+<div class="intro"><p><strong>Purpose of this doc:</strong> to tell developers what changed between V1 (<code>Phase 1 branch/design-sandbox/Widget Container Demo/index.html</code>) and V2 (<code>Complete Version 2/index.html</code>), widget by widget, in plain English — no code. Every widget is tagged with an overall change type so you know how much attention it needs before you start:</p>
+<ul>
+<li><strong>Visual Only</strong> — appearance changed, nothing else.</li>
+<li><strong>New Feature or Logic</strong> — new capability, or a calculation/behavior change, on top of the same basic design.</li>
+<li><strong>Complete Change</strong> — the widget was substantially or fully rebuilt.</li>
+<li><strong>New Widget</strong> — did not exist in V1 (W19 only).</li>
+</ul>
+<p>This handover covers <strong>W01 Budget Compared to Actual</strong> through <strong>W08 My Status</strong>, plus <strong>W19 Alerts &amp; Actions</strong>, which is new in V2 and not yet written up. Each finished widget has V1 and V2 screenshots side by side, what changed and where, and developer notes on any logic. More widgets are added here as each one is signed off.</p></div>
+<div class="legend"><span class="ctype t-feature">New Feature or Logic</span><span class="ctype t-new">New Widget</span><span class="ctype t-none">No Change</span></div>
+<section id="w01" class="widget"><header class="wh"><div><span class="wid">W01</span><h2>Budget Compared to Actual</h2></div><div class="badges"><span class="ctype t-feature">New Feature or Logic</span><span class="rev ok">Reviewed 28 Sep 2026</span></div></header><details class="shots" open><summary>Screenshots <span class="count">12 of 12 saved</span></summary><div class="pair"><h4><span class="num">01</span>Glance</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W01%20-%20Budget%20Compared%20to%20Actual/W01-V1-01%20Glance.png" aria-label="Enlarge V1 Glance"><img src="docs/Pics/Version%201/W01%20-%20Budget%20Compared%20to%20Actual/W01-V1-01%20Glance.png" alt="V1 Glance" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W01%20-%20Budget%20Compared%20to%20Actual/W01-V2-01%20Glance.png" aria-label="Enlarge V2 Glance"><img src="docs/Pics/Version%202/W01%20-%20Budget%20Compared%20to%20Actual/W01-V2-01%20Glance.png" alt="V2 Glance" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">02</span>Explore - Bar</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W01%20-%20Budget%20Compared%20to%20Actual/W01-V1-02%20Explore%20-%20Bar.png" aria-label="Enlarge V1 Explore - Bar"><img src="docs/Pics/Version%201/W01%20-%20Budget%20Compared%20to%20Actual/W01-V1-02%20Explore%20-%20Bar.png" alt="V1 Explore - Bar" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W01%20-%20Budget%20Compared%20to%20Actual/W01-V2-02%20Explore%20-%20Bar.png" aria-label="Enlarge V2 Explore - Bar"><img src="docs/Pics/Version%202/W01%20-%20Budget%20Compared%20to%20Actual/W01-V2-02%20Explore%20-%20Bar.png" alt="V2 Explore - Bar" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">03</span>Explore - Line</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W01%20-%20Budget%20Compared%20to%20Actual/W01-V1-03%20Explore%20-%20Line.png" aria-label="Enlarge V1 Explore - Line"><img src="docs/Pics/Version%201/W01%20-%20Budget%20Compared%20to%20Actual/W01-V1-03%20Explore%20-%20Line.png" alt="V1 Explore - Line" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W01%20-%20Budget%20Compared%20to%20Actual/W01-V2-03%20Explore%20-%20Line.png" aria-label="Enlarge V2 Explore - Line"><img src="docs/Pics/Version%202/W01%20-%20Budget%20Compared%20to%20Actual/W01-V2-03%20Explore%20-%20Line.png" alt="V2 Explore - Line" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">04</span>Explore - Table</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W01%20-%20Budget%20Compared%20to%20Actual/W01-V1-04%20Explore%20-%20Table.png" aria-label="Enlarge V1 Explore - Table"><img src="docs/Pics/Version%201/W01%20-%20Budget%20Compared%20to%20Actual/W01-V1-04%20Explore%20-%20Table.png" alt="V1 Explore - Table" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W01%20-%20Budget%20Compared%20to%20Actual/W01-V2-04%20Explore%20-%20Table.png" aria-label="Enlarge V2 Explore - Table"><img src="docs/Pics/Version%202/W01%20-%20Budget%20Compared%20to%20Actual/W01-V2-04%20Explore%20-%20Table.png" alt="V2 Explore - Table" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">05</span>Detail - Charts</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W01%20-%20Budget%20Compared%20to%20Actual/W01-V1-05%20Detail%20-%20Charts.png" aria-label="Enlarge V1 Detail - Charts"><img src="docs/Pics/Version%201/W01%20-%20Budget%20Compared%20to%20Actual/W01-V1-05%20Detail%20-%20Charts.png" alt="V1 Detail - Charts" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W01%20-%20Budget%20Compared%20to%20Actual/W01-V2-05%20Detail%20-%20Charts.png" aria-label="Enlarge V2 Detail - Charts"><img src="docs/Pics/Version%202/W01%20-%20Budget%20Compared%20to%20Actual/W01-V2-05%20Detail%20-%20Charts.png" alt="V2 Detail - Charts" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">06</span>Detail - Table</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W01%20-%20Budget%20Compared%20to%20Actual/W01-V1-06%20Detail%20-%20Table.png" aria-label="Enlarge V1 Detail - Table"><img src="docs/Pics/Version%201/W01%20-%20Budget%20Compared%20to%20Actual/W01-V1-06%20Detail%20-%20Table.png" alt="V1 Detail - Table" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W01%20-%20Budget%20Compared%20to%20Actual/W01-V2-06%20Detail%20-%20Table.png" aria-label="Enlarge V2 Detail - Table"><img src="docs/Pics/Version%202/W01%20-%20Budget%20Compared%20to%20Actual/W01-V2-06%20Detail%20-%20Table.png" alt="V2 Detail - Table" loading="lazy"></button></figure></div></div></details><div class="prose"><h3>Overview</h3>
+<p>V2 looks and works the same as V1, with three additions:</p>
+<ol>
+<li><strong>% of budget next to the total.</strong> The headline reads "+$5,900 1.9%".</li>
+<li><strong>A sparkline on the Glance card.</strong> A small line of actuals by period.</li>
+<li><strong>Hover text on the sparkline.</strong> Hovering over the line shows that period and its actual.</li>
+</ol>
+<p>Everything else (charts, table, filters, time windows, the Favourable pill and the time-window link) is unchanged and in the same place as V1.</p>
+<h3>What's Different</h3>
+<h4>Percentage indicator</h4>
+<ul>
+<li><strong>Glance:</strong> right of the big number.</li>
+<li><strong>Explore - Bar:</strong> right of the big number, top-left of the card.</li>
+<li><strong>Explore - Line:</strong> right of the big number, top-left of the card.</li>
+<li><strong>Explore - Table:</strong> right of the big number, top-left of the card.</li>
+<li><strong>Detail - Charts:</strong> right of the big number, top-left of the card.</li>
+<li><strong>Detail - Table:</strong> right of the big number, top-left of the card.</li>
+</ul>
+<p><strong>No budget set up = no % at all</strong>, on every size and tab. The card shows "No budget set up" as before.</p>
+<h4>Sparkline</h4>
+<ul>
+<li><strong>Glance:</strong> top-right of the card, beside the account filter and number.</li>
+</ul>
+<p>It shows for every time window (see Developer Notes for how the points are picked).</p>
+<h4>Hover text on the sparkline</h4>
+<ul>
+<li><strong>Glance:</strong> hover over the sparkline to see that period and its actual.</li>
+</ul>
+<h4>Time window wording</h4>
+<ul>
+<li><strong>Glance:</strong> the time-window link under the number reads "This fiscal year ⌄". V1 read "vs. budget, This fiscal year ⌄". Same place and styling, and it still opens the time-window picker.</li>
+</ul>
+<h3>Developer Notes</h3>
+<h4>Sparkline logic</h4>
+<p><strong>The sparkline works the same way as W07 Deposits on Hand's Glance sparkline.</strong> Same hover text and the same rule for picking the interval. One difference in look: W01 shows the line only, with no shading underneath (set with the <code>--spark-area-opacity</code> token, 0 for W01). Build and test the two together.</p>
+<ul>
+<li>It plots the <strong>Actual</strong> for each posted period in the selected time window. Periods that haven't posted yet are left out.</li>
+<li>The interval follows the Deposits rule: the smallest step that still reads as a trend.<ul>
+<li>This month: by week (Deposits "month" = weekly points)</li>
+<li>This period: by week</li>
+<li>This quarter: by month (Deposits "quarter" = monthly points)</li>
+<li>This year (last 12 months): by month (Deposits "year" = monthly points)</li>
+<li>This fiscal year: by month (Deposits "fiscal year" = monthly points)</li>
+</ul>
+</li>
+<li>It needs at least 2 posted points. With fewer, the sparkline is hidden.</li>
+<li>It follows the account filter (Income accounts, Expense accounts or Special report).</li>
+<li>Hover text works like Deposits: it shows the period label (e.g. "Mar") and its amount.</li>
+<li>It uses the same sparkline drawing as Deposits, so a change to one changes both.</li>
+<li>One difference from Deposits: Deposits always shows a fixed run of 8 to 12 points ending today, even when that reaches back before the chosen window. Budget only plots periods inside the chosen window, because it compares against that window's budget.</li>
+</ul>
+<h4>Percentage logic</h4>
+<ul>
+<li><strong>% = Variance ÷ Budget × 100</strong>, shown without a sign and rounded to 1 decimal place.</li>
+<li>Budget and Actual are the totals of the <strong>posted periods only</strong> in the selected time window, the same totals as the big number ("Total, posted so far").</li>
+<li>Variance for income accounts = Actual − Budget. For expense accounts it's Budget − Actual. Either way, a positive variance is favourable.</li>
+<li>The +/− sign and the Favourable / Unfavourable pill show the direction; the % only shows the size.</li>
+<li><strong>If no budget is set up, don't show the % at all</strong>, on any size or tab. The same goes for a time window whose posted budget adds up to $0. Never divide by zero, and never show "0%" or "100%" in its place.</li>
+<li>It's the same % on every size and tab. It changes with the account filter and time window, but not with the D / W / M / P / Q / Y toggle.</li>
+<li>Example (This fiscal year, Jan–Jul): Budget $312,000, Actual $317,900, so Variance = +$5,900 and 5,900 ÷ 312,000 = 1.89%, shown as <strong>1.9%</strong>.</li>
+</ul><h4>"This period" length</h4>
+<ul>
+<li>A fiscal period's length is set by each organization, from one month up to three. Don't assume it's one month.</li>
+<li>The demo treats This period as one month (Jul 1–Jul 31, 2026), so it shows the same figures as This month. The real build must take the current period's start and end dates from the organization's fiscal calendar.</li>
+<li>Check the interval toggle against the real period length. The rule is that an interval is offered only when it gives 2 to 31 points. A one-month period offers D, W, M; a three-month period gives about 90 days, so D must be greyed out and it offers W, M.</li>
+</ul></div></section><section id="w02" class="widget"><header class="wh"><div><span class="wid">W02</span><h2>Pension Plans</h2></div><div class="badges"><span class="ctype t-feature">New Feature or Logic</span><span class="rev ok">Reviewed 29 Sep 2026</span></div></header><details class="shots" open><summary>Screenshots <span class="count">14 of 14 saved</span></summary><div class="pair"><h4><span class="num">01</span>Glance</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W02%20-%20Pension%20Plans/W02-V1-01%20Glance.png" aria-label="Enlarge V1 Glance"><img src="docs/Pics/Version%201/W02%20-%20Pension%20Plans/W02-V1-01%20Glance.png" alt="V1 Glance" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W02%20-%20Pension%20Plans/W02-V2-01%20Glance.png" aria-label="Enlarge V2 Glance"><img src="docs/Pics/Version%202/W02%20-%20Pension%20Plans/W02-V2-01%20Glance.png" alt="V2 Glance" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">02</span>Explore - Table</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W02%20-%20Pension%20Plans/W02-V1-02%20Explore%20-%20Table.png" aria-label="Enlarge V1 Explore - Table"><img src="docs/Pics/Version%201/W02%20-%20Pension%20Plans/W02-V1-02%20Explore%20-%20Table.png" alt="V1 Explore - Table" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W02%20-%20Pension%20Plans/W02-V2-02%20Explore%20-%20Table.png" aria-label="Enlarge V2 Explore - Table"><img src="docs/Pics/Version%202/W02%20-%20Pension%20Plans/W02-V2-02%20Explore%20-%20Table.png" alt="V2 Explore - Table" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">03</span>Explore - Pie</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W02%20-%20Pension%20Plans/W02-V1-03%20Explore%20-%20Pie.png" aria-label="Enlarge V1 Explore - Pie"><img src="docs/Pics/Version%201/W02%20-%20Pension%20Plans/W02-V1-03%20Explore%20-%20Pie.png" alt="V1 Explore - Pie" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W02%20-%20Pension%20Plans/W02-V2-03%20Explore%20-%20Pie.png" aria-label="Enlarge V2 Explore - Pie"><img src="docs/Pics/Version%202/W02%20-%20Pension%20Plans/W02-V2-03%20Explore%20-%20Pie.png" alt="V2 Explore - Pie" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">04</span>Explore - By district</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W02%20-%20Pension%20Plans/W02-V1-04%20Explore%20-%20By%20district.png" aria-label="Enlarge V1 Explore - By district"><img src="docs/Pics/Version%201/W02%20-%20Pension%20Plans/W02-V1-04%20Explore%20-%20By%20district.png" alt="V1 Explore - By district" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W02%20-%20Pension%20Plans/W02-V2-04%20Explore%20-%20By%20district.png" aria-label="Enlarge V2 Explore - By district"><img src="docs/Pics/Version%202/W02%20-%20Pension%20Plans/W02-V2-04%20Explore%20-%20By%20district.png" alt="V2 Explore - By district" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">05</span>Detail - Pie</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W02%20-%20Pension%20Plans/W02-V1-05%20Detail%20-%20Pie.png" aria-label="Enlarge V1 Detail - Pie"><img src="docs/Pics/Version%201/W02%20-%20Pension%20Plans/W02-V1-05%20Detail%20-%20Pie.png" alt="V1 Detail - Pie" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W02%20-%20Pension%20Plans/W02-V2-05%20Detail%20-%20Pie.png" aria-label="Enlarge V2 Detail - Pie"><img src="docs/Pics/Version%202/W02%20-%20Pension%20Plans/W02-V2-05%20Detail%20-%20Pie.png" alt="V2 Detail - Pie" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">06</span>Detail - By district</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W02%20-%20Pension%20Plans/W02-V1-06%20Detail%20-%20By%20district.png" aria-label="Enlarge V1 Detail - By district"><img src="docs/Pics/Version%201/W02%20-%20Pension%20Plans/W02-V1-06%20Detail%20-%20By%20district.png" alt="V1 Detail - By district" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W02%20-%20Pension%20Plans/W02-V2-06%20Detail%20-%20By%20district.png" aria-label="Enlarge V2 Detail - By district"><img src="docs/Pics/Version%202/W02%20-%20Pension%20Plans/W02-V2-06%20Detail%20-%20By%20district.png" alt="V2 Detail - By district" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">07</span>Pop-up - Appointees</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W02%20-%20Pension%20Plans/W02-V1-07%20Pop-up%20-%20Appointees.png" aria-label="Enlarge V1 Pop-up - Appointees"><img src="docs/Pics/Version%201/W02%20-%20Pension%20Plans/W02-V1-07%20Pop-up%20-%20Appointees.png" alt="V1 Pop-up - Appointees" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W02%20-%20Pension%20Plans/W02-V2-07%20Pop-up%20-%20Appointees.png" aria-label="Enlarge V2 Pop-up - Appointees"><img src="docs/Pics/Version%202/W02%20-%20Pension%20Plans/W02-V2-07%20Pop-up%20-%20Appointees.png" alt="V2 Pop-up - Appointees" loading="lazy"></button></figure></div></div></details><div class="prose"><h3>Overview</h3>
+<p>V2 looks and works the same as V1, with three front-end changes:</p>
+<ol>
+<li><strong>A district filter on the Glance card.</strong> The same "All Districts" filter the bigger sizes already have.</li>
+<li><strong>New caption wording on the Glance card.</strong> "contributed a year across…" now reads "per year across…".</li>
+<li><strong>A tidier appointee pop-up.</strong> The list is wider so nothing is cut off, and the count and total stack in a narrow column on the right.</li>
+</ol>
+<p>Everything else (Table, Pie and By district views, shares, sorting, legend, the Detail view's two panels) is unchanged and in the same place as V1. There are no logic or calculation changes.</p>
+<h3>What's Different</h3>
+<h4>District filter</h4>
+<ul>
+<li><strong>Glance:</strong> new. "All Districts ⌄" sits on its own line under "per year across 5 plans, all districts".</li>
+</ul>
+<p>It's the same filter as on Explore and Detail, which are unchanged. Picking a district updates the total, the appointee count and the caption (e.g. "per year across 3 plans, district 3").</p>
+<h4>Caption wording</h4>
+<ul>
+<li><strong>Glance:</strong> "contributed a year across 5 plans, all districts" now reads "per year across 5 plans, all districts".</li>
+</ul>
+<p>The amount is a year's worth of contributions, not money already paid, so "per year" is the accurate wording.</p>
+<h4>Appointee pop-up</h4>
+<ul>
+<li><strong>Pop-up - Appointees:</strong> the list now fills most of the width. In V1 it took about half, with "N appointees $total" on one line beside it.</li>
+<li><strong>Pop-up - Appointees:</strong> the count and total are stacked (count above total) in a narrow column on the right.</li>
+<li><strong>Pop-up - Appointees:</strong> the list is wider, so appointee names and column headings are shown in full instead of being cut off ("Rev. Jonathan …", "Church / Organisa…").</li>
+<li><strong>Pop-up - Appointees:</strong> Annual amount is bold and right-aligned.</li>
+</ul>
+<p>The pop-up opens the same way as before, by clicking a plan in Explore - Table, Explore - Pie, Explore - By district, Detail - Pie or Detail - By district.</p>
+</div></section><section id="w03" class="widget"><header class="wh"><div><span class="wid">W03</span><h2>Payroll Distributions</h2></div><div class="badges"><span class="ctype t-feature">New Feature or Logic</span><span class="rev ok">Reviewed 29 Sep 2026</span></div></header><details class="shots" open><summary>Screenshots <span class="count">12 of 12 saved</span></summary><div class="pair"><h4><span class="num">01</span>Glance</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W03%20-%20Payroll%20Distributions/W03-V1-01%20Glance.png" aria-label="Enlarge V1 Glance"><img src="docs/Pics/Version%201/W03%20-%20Payroll%20Distributions/W03-V1-01%20Glance.png" alt="V1 Glance" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W03%20-%20Payroll%20Distributions/W03-V2-01%20Glance.png" aria-label="Enlarge V2 Glance"><img src="docs/Pics/Version%202/W03%20-%20Payroll%20Distributions/W03-V2-01%20Glance.png" alt="V2 Glance" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">02</span>Explore - Table</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W03%20-%20Payroll%20Distributions/W03-V1-02%20Explore%20-%20Table.png" aria-label="Enlarge V1 Explore - Table"><img src="docs/Pics/Version%201/W03%20-%20Payroll%20Distributions/W03-V1-02%20Explore%20-%20Table.png" alt="V1 Explore - Table" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W03%20-%20Payroll%20Distributions/W03-V2-02%20Explore%20-%20Table.png" aria-label="Enlarge V2 Explore - Table"><img src="docs/Pics/Version%202/W03%20-%20Payroll%20Distributions/W03-V2-02%20Explore%20-%20Table.png" alt="V2 Explore - Table" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">03</span>Explore - Chart</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W03%20-%20Payroll%20Distributions/W03-V1-03%20Explore%20-%20Chart.png" aria-label="Enlarge V1 Explore - Chart"><img src="docs/Pics/Version%201/W03%20-%20Payroll%20Distributions/W03-V1-03%20Explore%20-%20Chart.png" alt="V1 Explore - Chart" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W03%20-%20Payroll%20Distributions/W03-V2-03%20Explore%20-%20Chart.png" aria-label="Enlarge V2 Explore - Chart"><img src="docs/Pics/Version%202/W03%20-%20Payroll%20Distributions/W03-V2-03%20Explore%20-%20Chart.png" alt="V2 Explore - Chart" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">04</span>Detail</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W03%20-%20Payroll%20Distributions/W03-V1-04%20Detail.png" aria-label="Enlarge V1 Detail"><img src="docs/Pics/Version%201/W03%20-%20Payroll%20Distributions/W03-V1-04%20Detail.png" alt="V1 Detail" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W03%20-%20Payroll%20Distributions/W03-V2-04%20Detail.png" aria-label="Enlarge V2 Detail"><img src="docs/Pics/Version%202/W03%20-%20Payroll%20Distributions/W03-V2-04%20Detail.png" alt="V2 Detail" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">05</span>Pop-up - Distribution detail</h4><div class="pair-grid"><figure class="shot missing"><figcaption>V1</figcaption><div class="ph">Not in V1<code>New in V2</code></div></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W03%20-%20Payroll%20Distributions/W03-V2-05%20Pop-up%20-%20Distribution%20detail.png" aria-label="Enlarge V2 Pop-up - Distribution detail"><img src="docs/Pics/Version%202/W03%20-%20Payroll%20Distributions/W03-V2-05%20Pop-up%20-%20Distribution%20detail.png" alt="V2 Pop-up - Distribution detail" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">06</span>Pop-up - Employee expanded</h4><div class="pair-grid"><figure class="shot missing"><figcaption>V1</figcaption><div class="ph">Not in V1<code>New in V2</code></div></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W03%20-%20Payroll%20Distributions/W03-V2-06%20Pop-up%20-%20Employee%20expanded.png" aria-label="Enlarge V2 Pop-up - Employee expanded"><img src="docs/Pics/Version%202/W03%20-%20Payroll%20Distributions/W03-V2-06%20Pop-up%20-%20Employee%20expanded.png" alt="V2 Pop-up - Employee expanded" loading="lazy"></button></figure></div></div></details><div class="prose"><h3>Overview</h3>
+<p>V2 keeps V1's layout and adds four things:</p>
+<ol>
+<li><strong>A distribution mix bar on the Glance card.</strong> It shows how payroll splits across distributions, with the largest named underneath with its amount.</li>
+<li><strong>A Pay type filter.</strong> It sits next to the distribution filter and works together with it.</li>
+<li><strong>A distribution detail pop-up.</strong> Click a distribution to see its pay types and an Employee Break Down.</li>
+<li><strong>A tidier Detail view.</strong> The chart legend sits beside the donut instead of being cut off below it.</li>
+</ol>
+<p>Everything else (period options, Table and Chart tabs, % of total bars, sorting of the main table) is unchanged and in the same place as V1.</p>
+<h3>What's Different</h3>
+<h4>Distribution mix bar</h4>
+<ul>
+<li><strong>Glance:</strong> new. A coloured bar under the total shows each distribution's share, with a line below it naming the largest, in the same style as W05 (e.g. "$24,593 in Pastoral Staff, the largest distribution"). Hover a section to see that distribution's name, amount and % of payroll.</li>
+</ul>
+<h4>"No payroll this period" message</h4>
+<ul>
+<li><strong>Glance:</strong> new. It shows in place of the total when the period has no payroll. V1 showed $0.</li>
+</ul>
+<h4>Pay type filter</h4>
+<ul>
+<li><strong>Explore - Table:</strong> new "All pay types ⌄" filter, to the right of "All distributions ⌄".</li>
+<li><strong>Explore - Chart:</strong> the same filter, in the same place.</li>
+<li><strong>Detail:</strong> the same filter, in the same place.</li>
+<li><strong>Pop-up - Distribution detail:</strong> the same filter, at the top of the pop-up.</li>
+</ul>
+<h4>Distribution filter</h4>
+<ul>
+<li><strong>Explore - Table, Explore - Chart, Detail:</strong> the "By pay type" option is gone. The filter now offers All distributions or a single distribution; pay type has its own filter.</li>
+</ul>
+<h4>Chart legend</h4>
+<ul>
+<li><strong>Detail:</strong> the legend moved from below the donut (where it was cut off) to the right of it.</li>
+</ul>
+<h4>Distribution detail pop-up</h4>
+<ul>
+<li><strong>How it opens:</strong> click a distribution name in the table (Explore - Table, Detail) or its entry in the chart legend (Explore - Chart, Detail). New in V2; V1 had no pop-up.</li>
+<li><strong>Pop-up - Distribution detail, top:</strong> period, distribution and pay type filters, the distribution's total, a pay-type table and a donut. The distribution filter here lists single distributions only (no "All distributions"), and the pop-up title follows the one you pick.</li>
+<li><strong>Pop-up - Distribution detail, header:</strong> an Export to Excel button, top-right next to the close ×, in the same place as the Remittance Pledges pop-up.</li>
+<li><strong>Pop-up - Distribution detail, top table:</strong> always sorted by Amount, largest first, with no sort buttons.</li>
+<li><strong>Pop-up - Distribution detail, Employee Break Down:</strong> every employee paid from that distribution, with their total pay and a total for all employees.</li>
+<li><strong>Pop-up - Distribution detail, Employee Break Down:</strong> sorted by Employee name A–Z by default. Click Total pay to sort by pay, largest first.</li>
+<li><strong>Pop-up - Employee expanded:</strong> click an employee to see their pay types (largest first) on a grey background, ending with "Total, N pay types" and their total.</li>
+</ul>
+<h3>Developer Notes</h3>
+<h4>Filter logic</h4>
+<ul>
+<li>Period, Distribution and Pay type are three separate filters. All three apply together: the total, table, chart and Glance mix bar only count pay that matches every selected filter.</li>
+<li>Distribution offers All distributions or one distribution. Pay type offers All pay types or one pay type.</li>
+<li>Changing a filter inside the pop-up only changes the pop-up. The card behind it keeps its own filters.</li>
+</ul>
+<h4>Pop-up sorting</h4>
+<ul>
+<li>Top table: always Amount, largest first. No user sorting.</li>
+<li>Employee Break Down: Employee name A–Z by default, every time the pop-up opens. Clicking Employee flips A–Z / Z–A. Clicking Total pay sorts largest first, and a second click smallest first. Ties fall back to name A–Z.</li>
+<li>Expanded employee: pay types are always largest first. The total row is the sum of that employee's pay types under the current filters.</li>
+</ul>
+<h4>Export to Excel</h4>
+<ul>
+<li>Export to Excel in the distribution pop-up downloads everything on screen, based on the pop-up's filters (the period, distribution and pay type chips):
+<ul>
+<li><strong>1. Header total:</strong> the distribution's total for the selected filters (e.g. $24,593).</li>
+<li><strong>2. Pay types:</strong> the pay type table, one row each, with Pay type, % of total and Amount, plus the Total row.</li>
+<li><strong>3. Employee Break Down:</strong> every employee paid from that distribution under the same filters, one row each, with Employee and Total pay, plus the total for all employees.</li>
+</ul></li>
+<li>It does not download the child items: the pay type split you see when an employee is expanded is not in the file.</li>
+<li>The employee rows are personal pay data, so the export should follow the same permission as the Employee Break Down API.</li>
+</ul>
+<h4>Data needed</h4>
+<ul>
+<li>The Employee Break Down needs pay per employee, per distribution, per pay type, for the selected period. V1 only needed totals per distribution and pay type, so this is new data the backend has to supply.</li>
+<li><strong>The Employee Break Down must come from its own, separate API call.</strong> Don't add employee details to the existing distribution / pay type response. The pop-up may be permission gated, and hiding data in the screen doesn't protect it: anything in an API response can be read from the browser, even if it's never shown. Only call the employee API when the pop-up opens, and only return data if the user has permission to see employee pay. The card and the pop-up's top table keep using the totals API, which has no employee names or amounts.</li>
+<li>Only employees with pay above $0 under the current filters are listed. If none, the list shows "No employees paid in this period".</li>
+</ul>
+</div></section><section id="w04" class="widget"><header class="wh"><div><span class="wid">W04</span><h2>Remittance Pledges</h2></div><div class="badges"><span class="ctype t-feature">New Feature or Logic</span><span class="rev ok">Reviewed 29 Sep 2026</span></div></header><details class="shots" open><summary>Screenshots <span class="count">14 of 14 saved</span></summary><div class="pair"><h4><span class="num">01</span>Glance</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W04%20-%20Remittance%20Pledges/W04-V1-01%20Glance.png" aria-label="Enlarge V1 Glance"><img src="docs/Pics/Version%201/W04%20-%20Remittance%20Pledges/W04-V1-01%20Glance.png" alt="V1 Glance" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W04%20-%20Remittance%20Pledges/W04-V2-01%20Glance.png" aria-label="Enlarge V2 Glance"><img src="docs/Pics/Version%202/W04%20-%20Remittance%20Pledges/W04-V2-01%20Glance.png" alt="V2 Glance" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">02</span>Explore - Table</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W04%20-%20Remittance%20Pledges/W04-V1-02%20Explore%20-%20Table.png" aria-label="Enlarge V1 Explore - Table"><img src="docs/Pics/Version%201/W04%20-%20Remittance%20Pledges/W04-V1-02%20Explore%20-%20Table.png" alt="V1 Explore - Table" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W04%20-%20Remittance%20Pledges/W04-V2-02%20Explore%20-%20Table.png" aria-label="Enlarge V2 Explore - Table"><img src="docs/Pics/Version%202/W04%20-%20Remittance%20Pledges/W04-V2-02%20Explore%20-%20Table.png" alt="V2 Explore - Table" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">03</span>Explore - Progress</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W04%20-%20Remittance%20Pledges/W04-V1-03%20Explore%20-%20Progress.png" aria-label="Enlarge V1 Explore - Progress"><img src="docs/Pics/Version%201/W04%20-%20Remittance%20Pledges/W04-V1-03%20Explore%20-%20Progress.png" alt="V1 Explore - Progress" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W04%20-%20Remittance%20Pledges/W04-V2-03%20Explore%20-%20Progress.png" aria-label="Enlarge V2 Explore - Progress"><img src="docs/Pics/Version%202/W04%20-%20Remittance%20Pledges/W04-V2-03%20Explore%20-%20Progress.png" alt="V2 Explore - Progress" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">04</span>Detail - Table</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W04%20-%20Remittance%20Pledges/W04-V1-04%20Detail%20-%20Table.png" aria-label="Enlarge V1 Detail - Table"><img src="docs/Pics/Version%201/W04%20-%20Remittance%20Pledges/W04-V1-04%20Detail%20-%20Table.png" alt="V1 Detail - Table" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W04%20-%20Remittance%20Pledges/W04-V2-04%20Detail%20-%20Table.png" aria-label="Enlarge V2 Detail - Table"><img src="docs/Pics/Version%202/W04%20-%20Remittance%20Pledges/W04-V2-04%20Detail%20-%20Table.png" alt="V2 Detail - Table" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">05</span>Detail - Progress</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W04%20-%20Remittance%20Pledges/W04-V1-05%20Detail%20-%20Progress.png" aria-label="Enlarge V1 Detail - Progress"><img src="docs/Pics/Version%201/W04%20-%20Remittance%20Pledges/W04-V1-05%20Detail%20-%20Progress.png" alt="V1 Detail - Progress" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W04%20-%20Remittance%20Pledges/W04-V2-05%20Detail%20-%20Progress.png" aria-label="Enlarge V2 Detail - Progress"><img src="docs/Pics/Version%202/W04%20-%20Remittance%20Pledges/W04-V2-05%20Detail%20-%20Progress.png" alt="V2 Detail - Progress" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">06</span>Pop-up - Pledges</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W04%20-%20Remittance%20Pledges/W04-V1-06%20Pop-up%20-%20Pledges.png" aria-label="Enlarge V1 Pop-up - Pledges"><img src="docs/Pics/Version%201/W04%20-%20Remittance%20Pledges/W04-V1-06%20Pop-up%20-%20Pledges.png" alt="V1 Pop-up - Pledges" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W04%20-%20Remittance%20Pledges/W04-V2-06%20Pop-up%20-%20Pledges.png" aria-label="Enlarge V2 Pop-up - Pledges"><img src="docs/Pics/Version%202/W04%20-%20Remittance%20Pledges/W04-V2-06%20Pop-up%20-%20Pledges.png" alt="V2 Pop-up - Pledges" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">07</span>Pop-up - Pledge expanded</h4><div class="pair-grid"><figure class="shot missing"><figcaption>V1</figcaption><div class="ph">Not in V1<code>New in V2</code></div></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W04%20-%20Remittance%20Pledges/W04-V2-07%20Pop-up%20-%20Pledge%20expanded.png" aria-label="Enlarge V2 Pop-up - Pledge expanded"><img src="docs/Pics/Version%202/W04%20-%20Remittance%20Pledges/W04-V2-07%20Pop-up%20-%20Pledge%20expanded.png" alt="V2 Pop-up - Pledge expanded" loading="lazy"></button></figure></div></div></details><div class="prose"><h3>Overview</h3>
+<p>V2 keeps V1's layout (date filter left, Table / Progress toggle right, three pace cards, table or progress bars) and adds three things:</p>
+<ol>
+<li><strong>A Pledges behind column.</strong> It's on both tables, and every column heading is now sortable.</li>
+<li><strong>A rebuilt pop-up.</strong> It lists every pledge under the activity, instead of just the activity's receipts.</li>
+<li><strong>An instalment schedule per pledge.</strong> Expand a pledge in the pop-up to see what was due and what came in.</li>
+</ol>
+<p>Everything else (Receipts through date filter, Behind / On track / Ahead cards, table columns from V1, Export to Excel, Open in Remittance) is unchanged and in the same place as V1.</p>
+<h3>What's Different</h3>
+<h4>Pace cards</h4>
+<ul>
+<li><strong>Glance:</strong> the Behind / On track / Ahead cards are display only. In V1, clicking a card opened a pop-up listing that band's activities; in V2 nothing opens.</li>
+<li><strong>Explore - Table, Explore - Progress:</strong> the same, just the amount.</li>
+<li><strong>Glance:</strong> unchanged, the amount with "outstanding" on the line below it, as in V1.</li>
+<li><strong>Detail - Table, Detail - Progress:</strong> unchanged, still "$23,400 outstanding".</li>
+</ul>
+<h4>Pace card info icons</h4>
+<ul>
+<li><strong>Explore - Table, Explore - Progress, Detail - Table, Detail - Progress:</strong> each Behind / On track / Ahead card has an ⓘ icon, top-right, explaining what that band means.</li>
+</ul>
+<h4>Pledges behind column</h4>
+<ul>
+<li><strong>Explore - Table:</strong> new, right after Activity. Columns now read Activity, Pledges behind, Pledge, Outstanding, Paid, Expected, % Paid.</li>
+<li><strong>Detail - Table:</strong> new, after Activity.</li>
+</ul>
+<p>It shows how many pledges under that activity are behind, a "-" when none are, and a total in the Total row.</p>
+<h4>Seq. column</h4>
+<ul>
+<li><strong>Detail - Table:</strong> new first column, the activity's order number. It's the default sort.</li>
+</ul>
+<h4>Sortable columns</h4>
+<ul>
+<li><strong>Explore - Table:</strong> every column heading is sortable. V1 had no sorting.</li>
+<li><strong>Detail - Table:</strong> the same.</li>
+</ul>
+<h4>Pledges pop-up</h4>
+<ul>
+<li><strong>Pop-up - Pledges, title:</strong> "Pledges and instalments" instead of "Payment history".</li>
+<li><strong>Pop-up - Pledges, summary:</strong> first row Total pledged, Paid to date, Outstanding, % Paid; second row Pledges behind (e.g. 40 of 60), Amount behind, Pledges in grace period (e.g. 3 of 60) and Amount in grace period. V1's "Expected by now" is not shown in the pop-up.</li>
+<li><strong>Pop-up - Pledges, info icon:</strong> an ⓘ in the header, top-right, next to Export to Excel. Hovering shows how the figures are worked out: each pledge is checked against its own instalment due dates, so Pledges behind can differ from the card's Behind, which paces the activity evenly over its term. Pledged, Paid, Outstanding and % Paid always match the card.</li>
+<li><strong>Pop-up - Pledges, list:</strong> every pledge under the activity, with Name, Begin date, End date, Pledged amount, Paid, Outstanding and Status. Sorted by Status (most behind first), every column sortable. Every column, including the money columns, is left-aligned, in the list and in the expanded schedule.</li>
+<li><strong>Pop-up - Pledges, loading:</strong> the list loads 20 pledges, enough to fill the table, so you scroll down to reach a "Load 20 more · 40 remaining" button (small outlined button, centred under the list) for the next 20. Changing the sort goes back to the first 20. There are no page numbers or count line under the list.</li>
+<li><strong>Pop-up - Pledges, status labels:</strong> "N payments behind", "1 payment behind", "In grace period", "On track", "Paid ahead", "Paid in full", "Term ended, unpaid" and "No pledge".</li>
+<li><strong>Pop-up - Pledges, banner:</strong> a green "Every instalment that has fallen due… has been paid" banner when nothing is owed.</li>
+<li><strong>Pop-up - Pledges, removed:</strong> V1's "about 102 days behind…" catch-up message and its single "Pledge term … 58% elapsed" line. One line now covers all pledge terms: "60 pledges, terms running Jan 1, 2025 to Mar 31, 2029."</li>
+</ul>
+<h4>Instalment schedule</h4>
+<ul>
+<li><strong>Pop-up - Pledge expanded:</strong> new. Click a pledge to open its instalment schedule straight under the row. The pledge's name, term and status are already on the row above, so there is no extra header line. The row and its schedule share a light grey bar down the left, with the schedule indented under the name, so they read as one block.</li>
+<li><strong>Pop-up - Pledge expanded:</strong> a table of Due date, Amount due, Paid and Status. The first row under the headings is the total ("Total, 24 instalments", with the pledged amount and the amount paid), then every instalment below it with its status (Paid, Part paid, In grace period, Missed, Not due yet).</li>
+</ul>
+<h3>Developer Notes</h3>
+<h4>Card logic is unchanged</h4>
+<ul>
+<li>The card (Glance, Explore, Detail, the pace cards, the tables and the Progress bars) works exactly as in V1: each activity is paced evenly over its own term. Expected = pledge × (days elapsed ÷ days in the term). Behind, On track and Ahead come from that.</li>
+<li>The one exception is the Pledges behind column, which counts pledges using the pop-up's instalment logic (below). Every money figure on the card stays on the V1 basis.</li>
+</ul>
+<h4>Pop-up logic is new</h4>
+<ul>
+<li>The pop-up works from every individual pledge under the activity, each with its own begin date, end date and instalment schedule. A pledge is checked against the instalments that have actually fallen due, not just how much money has come in. This shows what is truly owed so far and whether a pledge is really behind.</li>
+<li>Payments are applied to the oldest instalment first, so a gap always shows as the earliest unpaid instalment.</li>
+<li><strong>Behind:</strong> an instalment has been unpaid for more than 7 days after its due date.</li>
+<li><strong>In grace period:</strong> an unpaid instalment is still inside that 7-day grace period. It doesn't count as behind. Amount in grace period = the unpaid part of those instalments.</li>
+<li><strong>Amount behind</strong> = for each pledge, expected so far − paid − amount in grace period, never below $0, then added up. "Expected so far" is every instalment whose due date has passed. A pledge paid ahead counts as $0, so it can't hide one that is behind.</li>
+</ul>
+<h4>Why the pop-up's numbers can differ from the card</h4>
+<ul>
+<li>Pledged, Paid, Outstanding and % Paid always match the card.</li>
+<li>Behind can differ. The card's Behind / On track / Ahead paces the activity evenly over its term. The pop-up's Pledges behind counts pledges with an instalment more than 7 days late. This is intended: the pop-up is the more accurate view of who has actually missed a payment.</li>
+<li>The pop-up shows no expected figure. Money that is due but still inside its grace period is shown on its own as Amount in grace period.</li>
+<li>The pop-up explains this behind the ⓘ icon in its header.</li>
+</ul>
+<h4>Export to Excel</h4>
+<ul>
+<li>Export to Excel in the pledges pop-up downloads a file with two sections:
+<ul>
+<li><strong>1. Header totals:</strong> the summary figures at the top of the pop-up: Total pledged, Paid to date, Outstanding, % Paid, Pledges behind, Amount behind, Pledges in grace period and Amount in grace period.</li>
+<li><strong>2. List of pledges:</strong> every pledge under the activity, one row each, with the same columns as the pop-up: Name, Begin date, End date, Pledged amount, Paid, Outstanding and Status. In this example that is all 60 pledges, not just the ones loaded on screen.</li>
+</ul></li>
+<li>It does not download the child items: the instalment schedule rows you see when a pledge is expanded (Due date, Amount due, Paid, Status) are not in the file.</li>
+</ul>
+<h4>Loading</h4>
+<ul>
+<li>The pledge list loads 20 pledges at a time. "Load more" adds the next 20; a sort change goes back to the first 20. The backend should support fetching the list in batches (offset and count) for activities with many pledges.</li>
+</ul>
+<h4>Data needed</h4>
+<ul>
+<li>Every pledge's begin date, end date, pledged amount, payment frequency and receipts, so the instalment schedule can be built. V1 only needed activity totals and receipts, so this is new data the backend has to supply.</li>
+</ul>
+</div></section><section id="w05" class="widget"><header class="wh"><div><span class="wid">W05</span><h2>Receivable Invoices Outstanding</h2></div><div class="badges"><span class="ctype t-feature">New Feature or Logic</span><span class="rev">Draft 5 Oct 2026</span></div></header><details class="shots" open><summary>Screenshots <span class="count">18 of 18 saved</span></summary><div class="pair"><h4><span class="num">01</span>Glance</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V1-01%20Glance.png" aria-label="Enlarge V1 Glance"><img src="docs/Pics/Version%201/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V1-01%20Glance.png" alt="V1 Glance" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V2-01%20Glance.png" aria-label="Enlarge V2 Glance"><img src="docs/Pics/Version%202/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V2-01%20Glance.png" alt="V2 Glance" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">02</span>Explore - Aging</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V1-02%20Explore%20-%20Aging.png" aria-label="Enlarge V1 Explore - Aging"><img src="docs/Pics/Version%201/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V1-02%20Explore%20-%20Aging.png" alt="V1 Explore - Aging" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V2-02%20Explore%20-%20Aging.png" aria-label="Enlarge V2 Explore - Aging"><img src="docs/Pics/Version%202/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V2-02%20Explore%20-%20Aging.png" alt="V2 Explore - Aging" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">03</span>Explore - Customers</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V1-03%20Explore%20-%20Customers.png" aria-label="Enlarge V1 Explore - Customers"><img src="docs/Pics/Version%201/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V1-03%20Explore%20-%20Customers.png" alt="V1 Explore - Customers" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V2-03%20Explore%20-%20Customers.png" aria-label="Enlarge V2 Explore - Customers"><img src="docs/Pics/Version%202/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V2-03%20Explore%20-%20Customers.png" alt="V2 Explore - Customers" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">04</span>Explore - Aging Pie</h4><div class="pair-grid"><figure class="shot missing"><figcaption>V1</figcaption><div class="ph">Not in V1<code>New in V2</code></div></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V2-04%20Explore%20-%20Aging%20Pie.png" aria-label="Enlarge V2 Explore - Aging Pie"><img src="docs/Pics/Version%202/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V2-04%20Explore%20-%20Aging%20Pie.png" alt="V2 Explore - Aging Pie" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">05</span>Explore - Customers Pie</h4><div class="pair-grid"><figure class="shot missing"><figcaption>V1</figcaption><div class="ph">Not in V1<code>New in V2</code></div></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V2-05%20Explore%20-%20Customers%20Pie.png" aria-label="Enlarge V2 Explore - Customers Pie"><img src="docs/Pics/Version%202/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V2-05%20Explore%20-%20Customers%20Pie.png" alt="V2 Explore - Customers Pie" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">06</span>Detail - Customers</h4><div class="pair-grid"><figure class="shot missing"><figcaption>V1</figcaption><div class="ph">Not in V1<code>New in V2</code></div></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V2-06%20Detail%20-%20Customers.png" aria-label="Enlarge V2 Detail - Customers"><img src="docs/Pics/Version%202/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V2-06%20Detail%20-%20Customers.png" alt="V2 Detail - Customers" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">07</span>Detail - Aging</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V1-07%20Detail%20-%20Aging.png" aria-label="Enlarge V1 Detail - Aging"><img src="docs/Pics/Version%201/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V1-07%20Detail%20-%20Aging.png" alt="V1 Detail - Aging" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V2-07%20Detail%20-%20Aging.png" aria-label="Enlarge V2 Detail - Aging"><img src="docs/Pics/Version%202/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V2-07%20Detail%20-%20Aging.png" alt="V2 Detail - Aging" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">08</span>Pop-up - Invoices</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V1-08%20Pop-up%20-%20Invoices.png" aria-label="Enlarge V1 Pop-up - Invoices"><img src="docs/Pics/Version%201/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V1-08%20Pop-up%20-%20Invoices.png" alt="V1 Pop-up - Invoices" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V2-08%20Pop-up%20-%20Invoices.png" aria-label="Enlarge V2 Pop-up - Invoices"><img src="docs/Pics/Version%202/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V2-08%20Pop-up%20-%20Invoices.png" alt="V2 Pop-up - Invoices" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">09</span>Pop-up - Invoice expanded</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V1-09%20Pop-up%20-%20Invoice%20expanded.png" aria-label="Enlarge V1 Pop-up - Invoice expanded"><img src="docs/Pics/Version%201/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V1-09%20Pop-up%20-%20Invoice%20expanded.png" alt="V1 Pop-up - Invoice expanded" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V2-09%20Pop-up%20-%20Invoice%20expanded.png" aria-label="Enlarge V2 Pop-up - Invoice expanded"><img src="docs/Pics/Version%202/W05%20-%20Receivable%20Invoices%20Outstanding/W05-V2-09%20Pop-up%20-%20Invoice%20expanded.png" alt="V2 Pop-up - Invoice expanded" loading="lazy"></button></figure></div></div></details><div class="prose"><h3>Overview</h3>
+<p>V2 keeps V1's filters (revenue center and source), the aging bands, the Aging / Customers switch, Export to Excel and the drill-down pop-up. What the customer sees differently:</p>
+<ol>
+<li><strong>Six aging bands instead of five.</strong> "Current" now means not yet due, and a new "1-30 days" band holds invoices up to a month late.</li>
+<li><strong>The overdue badge counts every late invoice.</strong> In V1 it left out invoices up to 30 days late.</li>
+<li><strong>A table and a pie instead of bars.</strong> Explore gets a Table / Pie switch; Detail shows the table and the pie side by side.</li>
+<li><strong>A tidier pop-up.</strong> Search by customer or invoice number, sortable column headers, a full-width list, and an expanded invoice with the customer's contact details and the invoice's Details / Attachments / Note.</li>
+</ol>
+<p>Everything else (the Glance card apart from its six-segment bar, the filters, Export to Excel, the expanded invoice's line items) is unchanged and in the same place as V1. There is no new data behind any of this: the pie, the bands and the badge all come from the same invoices, due dates and amounts V1 already shows.</p>
+<h3>What's Different</h3>
+<h4>Aging bands</h4>
+<ul>
+<li><strong>Explore - Aging:</strong> six rows: Current ("not yet due"), 1-30 days ("under 1 month over"), 31-60, 61-90, 91-120 and 121+ days, each with a short description under the name. V1's "Current" ("not yet overdue") also held invoices up to 30 days past due.</li>
+<li><strong>Explore - Aging:</strong> every band is listed, even with no balance (shown with $0, not clickable). V1 left empty bands out and added a line such as "No balance in 91-120 days".</li>
+<li><strong>Glance:</strong> the mix bar has six segments to match.</li>
+</ul>
+<h4>Overdue badge</h4>
+<ul>
+<li><strong>Glance, Explore - Aging, Detail - Aging:</strong> "$X overdue (Y%)" now counts every invoice past its due date (e.g. $78,390 of $84,570, 93%). V1 counted only invoices more than 30 days past due.</li>
+</ul>
+<h4>Caption</h4>
+<ul>
+<li><strong>Explore - Aging, Detail - Aging:</strong> the "Owed to you, oldest balances first." line under the total is gone.</li>
+</ul>
+<h4>Table and Pie views</h4>
+<ul>
+<li><strong>Explore - Aging:</strong> the bars are now a table: Aging, Invoices and Amount, every heading sortable (default: Aging, Current first). Each band has its colour dot, and a "Total outstanding" row closes the table.</li>
+<li><strong>Explore - Aging:</strong> new Table / Pie switch, under Aging / Customers and level with the total.</li>
+<li><strong>Explore - Customers:</strong> the bars are now a table: Customer (with its invoice count underneath), Aging (the age of the customer's oldest invoice, e.g. "145d", or "Current") and Balance, every heading sortable (default: Balance, highest first). The dot shows the customer's most overdue band.</li>
+<li><strong>Explore - Aging Pie, Explore - Customers Pie:</strong> a donut of each band's or customer's share, with a legend beside it giving amount and %. The customer legend scrolls. Hovering a slice or a legend row highlights the other.</li>
+</ul>
+<h4>Detail view</h4>
+<ul>
+<li><strong>Detail - Aging, Detail - Customers:</strong> the Aging / Customers switch is top-right. The chosen view shows as a table on the left ("By aging" / "By customer") and a "Share of total" pie on the right. V1 always showed "By aging" bars and "Top overdue customers" bars side by side, with no switch.</li>
+</ul>
+<h4>Pop-up</h4>
+<ul>
+<li><strong>How it opens:</strong> click a band or customer row in a table, or its entry in a pie legend. V1 opened from the bars.</li>
+<li><strong>Pop-up - Invoices, header:</strong> a subtitle under the title ("band · N customers · $total") replaces V1's band chip. Export to Excel and the close × are unchanged.</li>
+<li><strong>Pop-up - Invoices, search:</strong> new "Search customer or invoice #" box. It matches either.</li>
+<li><strong>Pop-up - Invoices, columns:</strong> Customer, Bill To, Due Date, Invoice #, Days Past Due, Outstanding, every heading sortable. Default is Days Past Due, oldest first. There is no separate sort control.</li>
+<li><strong>Pop-up - Invoices, list:</strong> the list uses the full width, one row per invoice, with a footer row "N invoices … $total". V1 had the summary on the right. There are no row checkboxes and no select-all.</li>
+<li><strong>Pop-up - Invoices, buttons:</strong> Close only. V1's "Confirm" is gone; nothing replaces it.</li>
+<li><strong>Pop-up - Invoice expanded:</strong> a contact line above the tabs: the customer's email and phone.</li>
+<li><strong>Pop-up - Invoice expanded:</strong> tabs are Details, Attachments and Note. The Payments tab is gone.</li>
+<li><strong>Pop-up - Invoice expanded:</strong> one button, Open invoice. V1's "Record a follow-up" is gone.</li>
+</ul>
+<h3>Developer Notes</h3>
+<p>Nothing here needs a new backend read. Every figure is derived from the invoices V1 already returns (customer, bill-to, invoice number, due date, outstanding amount) plus the as-of date. The only front-end addition is the pie, and it plots the same band and customer totals as the table beside it.</p>
+<h4>Aging bands</h4>
+<ul>
+<li>Days past due = the as-of date minus the invoice's due date.</li>
+<li>Bands: <strong>Current</strong> = 0 or less (not yet due); <strong>1-30</strong>; <strong>31-60</strong>; <strong>61-90</strong>; <strong>91-120</strong>; <strong>121+</strong>. V1's Current covered everything up to 30 days past due, so the same invoice can sit in a different band than it did in V1.</li>
+<li>Show all six bands, including empty ones.</li>
+</ul>
+<h4>Overdue badge</h4>
+<ul>
+<li>Overdue = the total of every invoice with days past due above 0. % = overdue ÷ total outstanding, rounded to a whole number. Example: $78,390 ÷ $84,570 = 92.7%, shown as <strong>93%</strong>.</li>
+<li>It follows the revenue center and source filters, the same as the total.</li>
+</ul>
+<h4>Customers view</h4>
+<ul>
+<li>Balance = the sum of the customer's open invoices under the current filters. Aging = days past due of the customer's oldest open invoice, "Current" when none is past due. The dot colour is that invoice's band.</li>
+</ul>
+<h4>Pie</h4>
+<ul>
+<li>Aging pie: one slice per band with a balance, in band order. Customers pie: one slice per customer, largest first. % = slice ÷ total outstanding. A band or customer with $0 is left out of the pie but stays in the table.</li>
+<li>Slice and legend row highlight each other on hover; clicking either opens the same pop-up as the table row.</li>
+</ul>
+<h4>Pop-up</h4>
+<ul>
+<li>Search matches the customer name or the invoice number, and applies before the sort.</li>
+<li>Sorting is on the column headers: money and days columns open highest first, text columns A to Z; a second click reverses. Default is Days Past Due, highest first, ties by amount.</li>
+<li>The contact line needs the customer's email and phone, which the customer record already holds. No last-contact history is shown.</li>
+<li>Export to Excel downloads the rows shown, under the pop-up's search and sort.</li>
+</ul>
+</div></section><section id="w06" class="widget"><header class="wh"><div><span class="wid">W06</span><h2>Insurance Billing Plans</h2></div><div class="badges"><span class="ctype t-feature">New Feature or Logic</span><span class="rev">Draft 2 Oct 2026</span></div></header><details class="shots" open><summary>Screenshots <span class="count">8 of 8 saved</span></summary><div class="pair"><h4><span class="num">01</span>Glance</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W06%20-%20Insurance%20Billing%20Plans/W06-V1-01%20Glance.png" aria-label="Enlarge V1 Glance"><img src="docs/Pics/Version%201/W06%20-%20Insurance%20Billing%20Plans/W06-V1-01%20Glance.png" alt="V1 Glance" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W06%20-%20Insurance%20Billing%20Plans/W06-V2-01%20Glance.png" aria-label="Enlarge V2 Glance"><img src="docs/Pics/Version%202/W06%20-%20Insurance%20Billing%20Plans/W06-V2-01%20Glance.png" alt="V2 Glance" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">02</span>Explore - Table</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W06%20-%20Insurance%20Billing%20Plans/W06-V1-02%20Explore%20-%20Table.png" aria-label="Enlarge V1 Explore - Table"><img src="docs/Pics/Version%201/W06%20-%20Insurance%20Billing%20Plans/W06-V1-02%20Explore%20-%20Table.png" alt="V1 Explore - Table" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W06%20-%20Insurance%20Billing%20Plans/W06-V2-02%20Explore%20-%20Table.png" aria-label="Enlarge V2 Explore - Table"><img src="docs/Pics/Version%202/W06%20-%20Insurance%20Billing%20Plans/W06-V2-02%20Explore%20-%20Table.png" alt="V2 Explore - Table" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">03</span>Explore - Pie</h4><div class="pair-grid"><figure class="shot missing"><figcaption>V1</figcaption><div class="ph">Not in V1<code>New in V2</code></div></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W06%20-%20Insurance%20Billing%20Plans/W06-V2-03%20Explore%20-%20Pie.png" aria-label="Enlarge V2 Explore - Pie"><img src="docs/Pics/Version%202/W06%20-%20Insurance%20Billing%20Plans/W06-V2-03%20Explore%20-%20Pie.png" alt="V2 Explore - Pie" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">04</span>Detail</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W06%20-%20Insurance%20Billing%20Plans/W06-V1-04%20Detail.png" aria-label="Enlarge V1 Detail"><img src="docs/Pics/Version%201/W06%20-%20Insurance%20Billing%20Plans/W06-V1-04%20Detail.png" alt="V1 Detail" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W06%20-%20Insurance%20Billing%20Plans/W06-V2-04%20Detail.png" aria-label="Enlarge V2 Detail"><img src="docs/Pics/Version%202/W06%20-%20Insurance%20Billing%20Plans/W06-V2-04%20Detail.png" alt="V2 Detail" loading="lazy"></button></figure></div></div></details><div class="prose"><h3>Overview</h3>
+<p>V2 keeps V1's layout (type filter, the Type / Plan table with Share, Enrolled and Cost, and the Total row) and adds three things:</p>
+<ol>
+<li><strong>A type filter on the Glance card.</strong> The same "All types" filter the bigger sizes already have.</li>
+<li><strong>A pie chart of enrolment by plan.</strong> Behind a Table / Pie toggle on Explore, and beside the table on Detail.</li>
+<li><strong>Every column sortable, including Cost.</strong> Sorting now reorders the types themselves, not only the plans inside them.</li>
+</ol>
+<p>Everything else (the types and plans, enrolled counts, cost and the totals) is unchanged and in the same place as V1.</p>
+<h3>What's Different</h3>
+<h4>Type filter</h4>
+<ul>
+<li><strong>Glance:</strong> new. "All types ⌄" sits on its own line under the caption, the same filter as on Explore and Detail.</li>
+<li><strong>Glance:</strong> picking a type updates the number, the plan count and the caption. The caption reads "enrolled across all types, employees and dependents" for All types, and names the type when one is picked (e.g. "enrolled across Dental").</li>
+</ul>
+<h4>Headline</h4>
+<ul>
+<li><strong>Explore - Table, Detail:</strong> under the filter, V2 shows the total enrolled with an "N plans" pill (e.g. "349 · 5 plans"), as in Jo's Phase 2. It replaces V1's note "Counts include employees and their dependents."</li>
+</ul>
+<h4>Pie chart</h4>
+<ul>
+<li><strong>Explore - Pie:</strong> new. A Table / Pie toggle, top-right, switches the card between the table (the default) and a donut of enrolment by plan, with the total enrolled in the middle and a legend beside it (plan, enrolled, %).</li>
+<li><strong>Detail:</strong> the table sits on the left and the pie on the right. V1's Detail showed the table alone, full width.</li>
+<li><strong>Explore - Pie, Detail:</strong> hovering a slice or a legend row highlights the other.</li>
+<li><strong>Explore - Pie, Detail:</strong> plans with no one enrolled (e.g. Property) are listed in the table but not drawn in the pie.</li>
+</ul>
+<h4>Sorting</h4>
+<ul>
+<li><strong>Explore - Table, Detail:</strong> Insurance type / plan, Enrolled and Cost are all sortable. V1 sorted only by type / plan and Enrolled, and Cost had no sort.</li>
+<li><strong>Explore - Table, Detail:</strong> the sort now reorders the type rows (Medical, Dental, Vision, Property) as well as the plans inside an expanded type. In V1 the types stayed in enrolled order whatever the sort.</li>
+</ul>
+<h4>Labels</h4>
+<ul>
+<li><strong>Explore - Table, Detail:</strong> the "Share" heading now reads "Share of total".</li>
+</ul>
+<h3>Developer Notes</h3>
+<h4>Sort logic</h4>
+<ul>
+<li>Insurance type / plan: A–Z first click, Z–A second. Enrolled and Cost: highest first, then lowest first.</li>
+<li>The sort applies to the type rows (by type name, enrolled subtotal or cost subtotal) and to the plans inside an expanded type.</li>
+<li>Ties fall back to name A–Z. A type or plan with 0 enrolled always sits at the bottom, whichever way the column is sorted.</li>
+</ul>
+<h4>Pie logic</h4>
+<ul>
+<li>One slice per plan; slice = plan enrolled ÷ total enrolled under the current type filter.</li>
+<li>Plans with 0 enrolled are left out of the pie but stay in the table.</li>
+<li>The pie, the table and the Glance number all use the same filtered set, so their totals always agree.</li>
+</ul>
+<h4>Glance filter</h4>
+<ul>
+<li>The Glance filter is the same type filter as Explore and Detail and makes the same request; the number, plan count and caption all follow it.</li>
+</ul>
+<h4>Cost</h4>
+<ul>
+<li>Cost per plan = enrolled × that plan's monthly rate per enrollee; type and total rows are the sums. This is unchanged from V1.</li>
+</ul>
+</div></section><section id="w07" class="widget"><header class="wh"><div><span class="wid">W07</span><h2>Deposits on Hand</h2></div><div class="badges"><span class="ctype t-feature">New Feature or Logic</span><span class="rev">Draft 6 Oct 2026</span></div></header><details class="shots" open><summary>Screenshots <span class="count">16 of 16 saved</span></summary><div class="pair"><h4><span class="num">01</span>Glance</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W07%20-%20Deposits%20on%20Hand/W07-V1-01%20Glance.png" aria-label="Enlarge V1 Glance"><img src="docs/Pics/Version%201/W07%20-%20Deposits%20on%20Hand/W07-V1-01%20Glance.png" alt="V1 Glance" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W07%20-%20Deposits%20on%20Hand/W07-V2-01%20Glance.png" aria-label="Enlarge V2 Glance"><img src="docs/Pics/Version%202/W07%20-%20Deposits%20on%20Hand/W07-V2-01%20Glance.png" alt="V2 Glance" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">02</span>Explore - Table</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W07%20-%20Deposits%20on%20Hand/W07-V1-02%20Explore%20-%20Table.png" aria-label="Enlarge V1 Explore - Table"><img src="docs/Pics/Version%201/W07%20-%20Deposits%20on%20Hand/W07-V1-02%20Explore%20-%20Table.png" alt="V1 Explore - Table" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W07%20-%20Deposits%20on%20Hand/W07-V2-02%20Explore%20-%20Table.png" aria-label="Enlarge V2 Explore - Table"><img src="docs/Pics/Version%202/W07%20-%20Deposits%20on%20Hand/W07-V2-02%20Explore%20-%20Table.png" alt="V2 Explore - Table" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">03</span>Explore - Distribution</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W07%20-%20Deposits%20on%20Hand/W07-V1-03%20Explore%20-%20Distribution.png" aria-label="Enlarge V1 Explore - Distribution"><img src="docs/Pics/Version%201/W07%20-%20Deposits%20on%20Hand/W07-V1-03%20Explore%20-%20Distribution.png" alt="V1 Explore - Distribution" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W07%20-%20Deposits%20on%20Hand/W07-V2-03%20Explore%20-%20Distribution.png" aria-label="Enlarge V2 Explore - Distribution"><img src="docs/Pics/Version%202/W07%20-%20Deposits%20on%20Hand/W07-V2-03%20Explore%20-%20Distribution.png" alt="V2 Explore - Distribution" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">04</span>Explore - Trend</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W07%20-%20Deposits%20on%20Hand/W07-V1-04%20Explore%20-%20Trend.png" aria-label="Enlarge V1 Explore - Trend"><img src="docs/Pics/Version%201/W07%20-%20Deposits%20on%20Hand/W07-V1-04%20Explore%20-%20Trend.png" alt="V1 Explore - Trend" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W07%20-%20Deposits%20on%20Hand/W07-V2-04%20Explore%20-%20Trend.png" aria-label="Enlarge V2 Explore - Trend"><img src="docs/Pics/Version%202/W07%20-%20Deposits%20on%20Hand/W07-V2-04%20Explore%20-%20Trend.png" alt="V2 Explore - Trend" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">05</span>Detail - Balances</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W07%20-%20Deposits%20on%20Hand/W07-V1-05%20Detail%20-%20Balances.png" aria-label="Enlarge V1 Detail - Balances"><img src="docs/Pics/Version%201/W07%20-%20Deposits%20on%20Hand/W07-V1-05%20Detail%20-%20Balances.png" alt="V1 Detail - Balances" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W07%20-%20Deposits%20on%20Hand/W07-V2-05%20Detail%20-%20Balances.png" aria-label="Enlarge V2 Detail - Balances"><img src="docs/Pics/Version%202/W07%20-%20Deposits%20on%20Hand/W07-V2-05%20Detail%20-%20Balances.png" alt="V2 Detail - Balances" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">06</span>Detail - Trend</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W07%20-%20Deposits%20on%20Hand/W07-V1-06%20Detail%20-%20Trend.png" aria-label="Enlarge V1 Detail - Trend"><img src="docs/Pics/Version%201/W07%20-%20Deposits%20on%20Hand/W07-V1-06%20Detail%20-%20Trend.png" alt="V1 Detail - Trend" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W07%20-%20Deposits%20on%20Hand/W07-V2-06%20Detail%20-%20Trend.png" aria-label="Enlarge V2 Detail - Trend"><img src="docs/Pics/Version%202/W07%20-%20Deposits%20on%20Hand/W07-V2-06%20Detail%20-%20Trend.png" alt="V2 Detail - Trend" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">07</span>Pop-up - Account trend</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W07%20-%20Deposits%20on%20Hand/W07-V1-07%20Pop-up%20-%20Account%20trend.png" aria-label="Enlarge V1 Pop-up - Account trend"><img src="docs/Pics/Version%201/W07%20-%20Deposits%20on%20Hand/W07-V1-07%20Pop-up%20-%20Account%20trend.png" alt="V1 Pop-up - Account trend" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W07%20-%20Deposits%20on%20Hand/W07-V2-07%20Pop-up%20-%20Account%20trend.png" aria-label="Enlarge V2 Pop-up - Account trend"><img src="docs/Pics/Version%202/W07%20-%20Deposits%20on%20Hand/W07-V2-07%20Pop-up%20-%20Account%20trend.png" alt="V2 Pop-up - Account trend" loading="lazy"></button></figure></div></div><div class="pair"><h4><span class="num">08</span>Pop-up - Account table</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W07%20-%20Deposits%20on%20Hand/W07-V1-08%20Pop-up%20-%20Account%20table.png" aria-label="Enlarge V1 Pop-up - Account table"><img src="docs/Pics/Version%201/W07%20-%20Deposits%20on%20Hand/W07-V1-08%20Pop-up%20-%20Account%20table.png" alt="V1 Pop-up - Account table" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W07%20-%20Deposits%20on%20Hand/W07-V2-08%20Pop-up%20-%20Account%20table.png" aria-label="Enlarge V2 Pop-up - Account table"><img src="docs/Pics/Version%202/W07%20-%20Deposits%20on%20Hand/W07-V2-08%20Pop-up%20-%20Account%20table.png" alt="V2 Pop-up - Account table" loading="lazy"></button></figure></div></div></details><div class="prose"><h3>Overview</h3>
+<p>V2 keeps V1's layout: the account scope chip, the Table / Distribution / Trend switch (Balances / Trend at Detail), the total with its % pill and "vs quarter ⌄" link, the search box, the donut with its Total / By Account Type switch, and the account pop-up. It changes four things:</p>
+<ol>
+<li><strong>An Inception column</strong> in the account table (when the account was opened), between Type and Trend.</li>
+<li><strong>Load more moves into the list.</strong> The table shows 50 accounts, then "Load 50 more · 75 remaining" as the last row, reached by scrolling. V1 had a "Load more" button under the Total.</li>
+<li><strong>The Trend axis shows dates</strong> ("May 1, Jun 1, Jul 1, Today") instead of "8w ago … This week".</li>
+<li><strong>The Compare to menu</strong> gains "Previous period" (the organisation's fiscal period) and loses "Previous week".</li>
+</ol>
+<p>Everything else (the Glance card, the % pill and "vs quarter ⌄" link, the filters, the donut and its legend, the Detail layouts, the account pop-up's shape) is unchanged and in the same place as V1. Where the figures in the two screenshots differ, that is only because the two demos use different sample data.</p>
+<h3>What's Different</h3>
+<h4>Compare to menu</h4>
+<ul>
+<li><strong>Glance, Explore, Detail, Pop-up:</strong> the "vs quarter ⌄" link opens "Compare to": Previous month, Previous period, Previous quarter, Previous fiscal year, Previous calendar year. V1 offered Previous week and had no Previous period.</li>
+</ul>
+<h4>Table</h4>
+<ul>
+<li><strong>Explore - Table, Detail - Balances:</strong> new Inception column (the month and year the account was opened) between Type and Trend, sortable like the others.</li>
+<li><strong>Explore - Table, Detail - Balances:</strong> the first 50 accounts are listed; the last row of the list is "Load 50 more · 75 remaining", inside the scroll. V1 showed a "Load more 75" button in a footer under the Total.</li>
+</ul>
+<h4>Trend</h4>
+<ul>
+<li><strong>Explore - Trend, Detail - Trend, Pop-up - Account trend:</strong> the x-axis is dated: the window's start, each month start, then Today. V1 read "8w ago, 5w ago, 3w ago, This week".</li>
+</ul>
+<h4>Account pop-up</h4>
+<ul>
+<li><strong>Pop-up - Account trend, Pop-up - Account table:</strong> the same pop-up as V1: a wide overlay titled with the account, scoped to it ("Account: Capital **60"), Table / Trend switch, the figure with its % and "vs quarter ⌄", then the chart or the one-row table with Total, closed with Done. Only the two changes above show here: the table has the Inception column and the chart has the dated axis.</li>
+</ul>
+<h3>Developer Notes</h3>
+<p>One new piece of data is needed (the date each account was opened). Everything else is how things are shown. The % rule is written out below so that one calculation serves the headline, the sparkline, the Trend chart, the table's Trend column and the pop-up.</p>
+<h4>The % and the shared history</h4>
+<ul>
+<li>Every balance shown is <strong>today's</strong>. The window changes only the comparison point, never the balances.</li>
+<li>% = (today's balance − balance on the window's start date) ÷ balance on the start date. "Today" is the server date, not the browser's.</li>
+<li>Start dates: Previous month = the 1st of this month; Previous period = the start of the current fiscal period; Previous quarter = the 1st of the month three months back; Previous fiscal year = the fiscal year start; Previous calendar year = the 1st of the month twelve months back. "Previous week" is not offered.</li>
+<li>One history per account, fetched once: the balance on the start date, at each month start in between (at each week for month-length windows), and today. Every % on the card is read from that one history, so the headline, sparkline, Trend chart, table and pop-up can never disagree.</li>
+<li>Example (This quarter, today Jul 31): Capital was $2,789,000 on May 1 and is $2,485,392 today → −10.9%, shown "↘ 10.9% vs quarter". Switching to This month compares with Jul 1 instead; the balance stays $2,485,392.</li>
+<li>A start-date balance of $0 shows no %.</li>
+</ul>
+<h4>"This period" length</h4>
+<ul>
+<li>A fiscal period is set by each organisation, one to three months. The demo treats it as one month, so This period equals This month. The real build takes the period start from the organisation's fiscal calendar and keeps weekly points whatever the length.</li>
+</ul>
+<h4>Inception</h4>
+<ul>
+<li>The month and year the account was opened, from the account record. Shown as "Jun 2013"; sortable (oldest first on first click).</li>
+</ul>
+<h4>Table paging</h4>
+<ul>
+<li>The server returns 50 accounts a page, sorted by the chosen column (default Balance, highest first); "Load 50 more · N remaining" requests the next page and appends it. Totals are for the whole filtered set, not the loaded rows. Search and sort reset to the first page.</li>
+</ul>
+<h4>Account pop-up</h4>
+<ul>
+<li>The pop-up is the widget itself, limited to one account number. It uses the same requests and the same history; nothing extra is fetched.</li>
+<li>Where the row's "Open account" link should go is still open; don't assume a target page exists.</li>
+</ul>
+<h4>Data still to confirm</h4>
+<ul>
+<li>Past balances (the start-date and month-start points) are invented in the demo. Real month-start balances have to come from the backend, and that source is not yet agreed.</li>
+<li>The dataset has two accounts with the same name (different numbers) and one very long name; both should be tested.</li>
+</ul>
+</div></section><section id="w08" class="widget"><header class="wh"><div><span class="wid">W08</span><h2>My Status</h2></div><div class="badges"><span class="ctype t-none">No Change</span><span class="rev ok">Done 2 Oct 2026</span></div></header><div class="prose"><h3>Overview</h3>
+<p><strong>W08 My Status is done. Nothing needs to be built or changed: V2 is the same as V1.</strong></p>
+<p>Checked side by side against V1 (main) and Jo's Phase 2: the queries and counts, the 7 queries shown by default, the header total and "N queries need attention" / "All clear" pill, the Configure button and Configure My Status pop-up (search, Cancel, Done), the list order, the "Up to date" section, the records pop-up (Overdue in red, Export to Excel), the empty states, tooltips and keyboard behaviour all look and work the same.</p>
+<h3>What's Different</h3>
+<ul>
+<li><strong>Nothing a user sees or does has changed.</strong></li>
+<li><strong>Dashboard only:</strong> there is a second "My Status (Detail)" tile showing the widget at the Detail size. The content is the same as Explore, just wider. It came from Jo's Phase 2.</li>
+</ul>
+<h3>Developer Notes</h3>
+<ul>
+<li>Build it exactly as V1. No new data, API or logic.</li>
+<li>Sizes: Explore and Detail only. There is no Glance size, in V1 or V2.</li>
+<li>Colours, buttons and focus rings use the same Pathway v10 tokens as every other widget (see the token checklist); that is styling only, with no change to layout or behaviour.</li>
+</ul>
+</div></section></main></div>
+<section id="w19" class="widget"><header class="wh"><div><span class="wid">W19</span><h2>Alerts &amp; Actions</h2></div><div class="badges"><span class="ctype t-new">New Widget</span><span class="rev">Not written yet</span></div></header><div class="prose"><h3>Overview</h3><p>W19 Alerts &amp; Actions is new in V2 and has no V1 counterpart. The handover notes and screenshots for this widget have not been written yet; this section is a placeholder so the widget appears here in the same place it does on the dashboard.</p></div></section>
+<div id="lb" role="dialog" aria-label="Enlarged screenshot"><img alt=""></div>
+<script>
+var lb=document.getElementById('lb'),li=lb.querySelector('img');
+document.addEventListener('click',function(e){var z=e.target.closest('.zoom');if(z){li.src=z.dataset.src;lb.classList.add('on');}else if(e.target.closest('#lb'))lb.classList.remove('on');});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')lb.classList.remove('on');});
+</script>
+</body></html>
