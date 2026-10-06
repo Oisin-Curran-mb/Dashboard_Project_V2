@@ -102,7 +102,7 @@ if (person) {
   const el2 = env.shim.mkTarget({ "data-pto": "pto-unapprove", "data-id": w.id, "data-day": ids }, "button"); el2.closest = function (sel) { return sel.indexOf("data-pto") > -1 ? el2 : null; }; EX.pto.click({ target: el2 });
   A.ok(idList.every(function (id) { return (w.ptofAppr || {})[id] === "Pending"; }), "undoing the day returns both lines to pending");
   const ih = EX.pto.info(w.id, dana); A.eq((ih.match(/<strong>Aug 20<\/strong>/g) || []).length, 2, "the pop-up shows the split as two rows for Aug 20"); A.contains(ih, "4 h &middot; Pending", "each pending row carries its hours");
-  const pendCap = (ih.match(/Pending approval, (\d+) days? \((\d+) h\)/) || []); A.ok(pendCap.length && +pendCap[1] === 4 && +pendCap[2] === 32, "pop-up header counts distinct days with hours (" + pendCap[0] + ")");
+  const pendCap = (ih.match(/Pending approval, (\d+) h</) || []); A.ok(pendCap.length && +pendCap[1] === 32, "pop-up header totals the pending hours, hours only (" + pendCap[0] + ")"); A.absent(ih, " day", "no day counts in the pop-up: hours are the one format (owner, 6 Oct)");
   w.ptofView = "calendar"; const hc = EX.contentHTML(w); const aug20 = (hc.match(/data-day="20"[\s\S]*?ptof-marks">([\s\S]*?)<\/div>/) || ["", ""])[1]; A.eq((aug20.match(/>DW</g) || []).length, 1, "the calendar shows Dana once on Aug 20 (" + (aug20.match(/ptof-mark /g) || []).length + " people marked)"); w.ptofView = "queue";
   delete w.ptofOpen[dana];
 })();
@@ -110,7 +110,7 @@ if (person) {
 if (person) {
   const ih = EX.pto.info(w.id, person);
   A.ok(ih.length > 400, "Info pop-up renders (" + ih.length + " bytes)"); A.absent(ih, "Placeholder", "no placeholder note in the pop-up");
-  A.contains(ih, "Pending approval, ", "Pending approval section with its day count"); A.contains(ih, "Taken and approved, ", "Taken and approved section with its day count");
+  A.contains(ih, "Pending approval, ", "Pending approval section with its hours"); A.contains(ih, "Taken and approved, ", "Taken and approved section with its hours"); A.ok(/is out on this date|are out on this date|Also out from/.test(ih), "a one-day entry says \"this date\"");
   A.ok(/ptof-info-pend"><span class="ptof-info-typ-nm"><strong>[A-Z][a-z]{2} \d+/.test(ih), "each pending entry shows its dates");
   A.ok(/ptof-info-conf (ok|warn)"/.test(ih), "each pending entry carries a same-department coverage line");
   A.ok(!/(\d+) others from [^<]+ are out|Also out from [^<]+: [^;]+;[^;]+;[^;]+;/.test(ih) || true, "more than three colleagues collapse to a count");

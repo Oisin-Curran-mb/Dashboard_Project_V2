@@ -1286,6 +1286,8 @@
   .w09-status.pend{color:var(--txt-secondary);font-weight:500;}
   .w09-status.ok{color:var(--txt-subtle);font-weight:400;font-size:var(--type-size-12);}
   .w09-actioncol{display:inline-flex;align-items:center;gap:var(--gap-tight);justify-content:flex-end;}
+  /* The day table's status column is one fixed width in the header and in every row, whatever the row's state holds (Pending + Approve is ~175px, Approved by + Undo ~252px), so the Hrs heading sits directly above the hours (owner, 6 Oct). */
+  .w09-l3 .w09-actioncol,.w09-colhead .ptof-statuscol{flex:0 0 256px;}
   .w09-l2-action{flex:0 0 auto;margin-left:var(--padding-tight);}
   .w09-abtn{display:inline-flex;align-items:center;gap:var(--gap-xxtight);font-family:inherit;font-size:var(--type-size-12);font-weight:600;line-height:1;border-radius:var(--cornerradius-medium);padding:var(--padding-xtight) var(--padding-medium);cursor:pointer;white-space:nowrap;border:1px solid;}
   .w09-abtn .material-symbols-rounded{font-size:var(--type-size-16);}
@@ -1446,14 +1448,14 @@
   /* Per-person Info popover, same card. */
   .ptof-info-hd-main{flex:1;display:flex;flex-direction:column;gap:var(--gap-xxxtight);min-width:0;}
   .ptof-info-hd-sub{font-size:var(--type-size-11);font-weight:500;color:var(--txt-subtle);}
-  .ptof-info-cap{font-size:var(--type-size-10);font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:var(--txt-subtle);margin:var(--padding-xtight) 0 var(--padding-xxxtight);}
+  .ptof-info-cap{font-size:var(--type-size-10);font-weight:700;text-transform:uppercase;letter-spacing:var(--primitive-type-letter-spacing-wide);color:var(--txt-subtle);margin:var(--padding-xtight) 0 var(--padding-xxxtight);}
   .ptof-info-cap2{margin-top:var(--padding-medium);padding-top:var(--padding-tight);border-top:1px solid var(--stroke-widget);}
-  .ptof-info-typ{display:flex;align-items:center;gap:var(--gap-tight);padding:var(--padding-xxtight) 0;border-bottom:1px solid var(--wn-200);}
+  .ptof-info-typ{display:flex;align-items:center;gap:var(--gap-tight);padding:var(--padding-xxtight) 0;border-bottom:1px solid var(--stroke-widget);}
   .ptof-info-typ-nm{flex:1;font-size:var(--type-size-12);color:var(--txt-primary);}
   .ptof-info-typ-n{font-size:var(--type-size-12);font-weight:600;color:var(--txt-secondary);font-variant-numeric:tabular-nums;}
   .ptof-info-empty{font-size:var(--type-size-12);color:var(--txt-subtle);padding:var(--padding-tight) 0;}
   .ptof-info-pend{border-bottom:none;padding-bottom:var(--padding-xxxtight);}
-  .ptof-info-conf{display:flex;align-items:flex-start;gap:var(--gap-xtight);font-size:var(--type-size-11);line-height:1.4;padding:0 0 var(--padding-tight) var(--padding-xxxtight);margin-bottom:var(--padding-xxtight);border-bottom:1px solid var(--wn-200);color:var(--txt-subtle);}
+  .ptof-info-conf{display:flex;align-items:flex-start;gap:var(--gap-xtight);font-size:var(--type-size-11);line-height:1.4;padding:0 0 var(--padding-tight) var(--padding-xxxtight);margin-bottom:var(--padding-xxtight);border-bottom:1px solid var(--stroke-widget);color:var(--txt-subtle);}
   .ptof-info-conf .material-symbols-rounded{font-size:var(--type-size-14);flex:0 0 auto;margin-top:var(--padding-xxxtight);}
   .ptof-info-conf.ok .material-symbols-rounded{color:var(--ptof-st-appr);}
   .ptof-info-conf.warn{color:var(--txt-secondary);}
@@ -7150,18 +7152,18 @@ function ptoFDayDetailHTML(){
    one else is off during these dates." The subject's own department and
    pay group sit in the header. Informational only, no approve action
    here. ---------------------------------------------------------------- */
-/* Person pop-up: two sections. Pending approval (days by leave type this year, and who else from the same
-   department is out during those pending dates) and Taken and approved (days by type). Informational only. */
+/* Person pop-up: two sections. Pending approval (each pending day with its hours, and who else from the same
+   department is out on it) and Taken and approved (hours by type). Hours only: the system has no fixed hours-per-day rule (owner, 6 Oct). Informational only. */
 function ptoFPersonDaysByState(w,pk,approved){var out={},hrs={},lines=[],hours=0;ptoFYearFlat(w).forEach(function(fe){if(fe.personKey!==pk)return;var isA=(ptoFEff(w,fe)==="Approved");if(isA!==approved)return;out[fe.type]=(out[fe.type]||0)+ptoFEntryDays(fe);hrs[fe.type]=(hrs[fe.type]||0)+(fe.hours||0);hours+=(fe.hours||0);lines.push(fe);});return {by:out,hrs:hrs,tot:ptoFDistinctDays(lines),hours:hours};}
 function ptoFSameDeptOut(w,pk,dept,fe){var out=[],seen={};ptoFFlat(w).forEach(function(o){if(o.personKey===pk||o.dept!==dept||!ptoFRangesOverlap(fe,o)||seen[o.personKey])return;seen[o.personKey]=1;out.push({person:o.person,type:o.type,dates:ptoFDates(o),status:ptoFEffState(w,o)});});return out;}
-function ptoFInfoTypes(st){var by=st.by,hrs=st.hrs||{};var rows=PTOF_LEAVE_TYPES.filter(function(o){return (by[o.key]||0)>0;});if(!rows.length)return '<div class="ptof-info-empty">None</div>';return rows.map(function(o){var n=by[o.key],h=hrs[o.key]||0;return '<div class="ptof-info-typ"><span class="ptof-info-typ-nm">'+o.key+'</span><span class="ptof-info-typ-n">'+h+' h &middot; '+n+(n===1?" day":" days")+'</span></div>';}).join("");}
+function ptoFInfoTypes(st){var by=st.by,hrs=st.hrs||{};var rows=PTOF_LEAVE_TYPES.filter(function(o){return (by[o.key]||0)>0;});if(!rows.length)return '<div class="ptof-info-empty">None</div>';return rows.map(function(o){var n=by[o.key],h=hrs[o.key]||0;return '<div class="ptof-info-typ"><span class="ptof-info-typ-nm">'+o.key+'</span><span class="ptof-info-typ-n">'+h+' h</span></div>';}).join("");}
 /* one pending entry: its dates, type and state, then the same-department coverage on those dates (named up to three, otherwise a count) */
 function ptoFInfoPendingRow(w,pk,dept,fe){
-  var n=ptoFEntryDays(fe),others=ptoFSameDeptOut(w,pk,dept,fe),st=ptoFEffState(w,fe);
+  var n=ptoFEntryDays(fe),others=ptoFSameDeptOut(w,pk,dept,fe),st=ptoFEffState(w,fe),when=(n>1?"these dates":"this date");
   var head='<div class="ptof-info-typ ptof-info-pend"><span class="ptof-info-typ-nm"><strong>'+ptoFDates(fe)+'</strong> &middot; '+fe.type+'</span><span class="ptof-info-typ-n">'+(fe.hours||0)+' h &middot; '+st+'</span></div>';
   var conf;
-  if(!others.length)conf='<div class="ptof-info-conf ok">'+ICON("check_circle")+'No one else from '+dept+' is out on these dates</div>';
-  else if(others.length>3)conf='<div class="ptof-info-conf warn">'+ICON("groups")+others.length+' others from '+dept+' are out on these dates</div>';
+  if(!others.length)conf='<div class="ptof-info-conf ok">'+ICON("check_circle")+'No one else from '+dept+' is out on '+when+'</div>';
+  else if(others.length>3)conf='<div class="ptof-info-conf warn">'+ICON("groups")+others.length+' others from '+dept+' are out on '+when+'</div>';
   else conf='<div class="ptof-info-conf warn">'+ICON("groups")+'Also out from '+dept+': '+others.map(function(o){return o.person+' ('+o.dates+', '+o.type+', '+o.status+')';}).join("; ")+'</div>';
   return head+conf;
 }
@@ -7170,15 +7172,14 @@ function ptoFInfoPanelHTML(){
   var w=find(st.id);if(!w)return "";
   var pk=st.pk;var nm=ptoFPersonName(pk);var meta=ptoFPersonMeta(w,pk);
   var pending=ptoFFlat(w).filter(function(fe){return fe.personKey===pk&&ptoFEff(w,fe)!=="Approved";}).sort(function(a,b){return (a.year-b.year)||(a.mo-b.mo)||(a.d-b.d);});
-  var pendDays=ptoFDistinctDays(pending),pendHours=pending.reduce(function(a,fe){return a+(fe.hours||0);},0);
+  var pendHours=pending.reduce(function(a,fe){return a+(fe.hours||0);},0);
   var appr=ptoFPersonDaysByState(w,pk,true);
-  var days=function(n){return n+(n===1?" day":" days");};
   var pendHtml=pending.length?pending.map(function(fe){return ptoFInfoPendingRow(w,pk,meta.dept,fe);}).join(""):'<div class="ptof-info-empty">Nothing is waiting on approval.</div>';
   return '<div class="modal-backdrop" data-pto="pto-ovl-close"><div class="modal ptof-ovl" data-pto="stop" role="dialog" aria-modal="true" aria-label="Time off detail for '+ptoFEsc(nm+", "+meta.dept+", "+meta.pg)+'">'+
     '<div class="modal-h"><div class="ptof-info-hd-main"><span class="modal-title">'+nm+'</span><span class="ptof-info-hd-sub">'+meta.dept+' &middot; '+meta.pg+'</span></div><button class="iconbtn" data-pto="pto-ovl-close" aria-label="Close detail">'+ICON("close")+'</button></div>'+
     '<div class="modal-b ptof-ovl-b">'+
-      '<div class="ptof-info-cap">Pending approval, '+days(pendDays)+' ('+pendHours+' h)</div>'+pendHtml+
-      '<div class="ptof-info-cap ptof-info-cap2">Taken and approved, '+days(appr.tot)+' ('+appr.hours+' h) this year, '+PTOF_WORK_Y+'</div>'+ptoFInfoTypes(appr)+
+      '<div class="ptof-info-cap">Pending approval, '+pendHours+' h</div>'+pendHtml+
+      '<div class="ptof-info-cap ptof-info-cap2">Taken and approved, '+appr.hours+' h this year, '+PTOF_WORK_Y+'</div>'+ptoFInfoTypes(appr)+
     '</div></div></div>';
 }
 
