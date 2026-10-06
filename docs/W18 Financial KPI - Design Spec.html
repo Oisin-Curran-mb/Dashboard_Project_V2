@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>W18 Financial KPI - Design Spec</title>
+<style>
+:root{--bg:#f6f5f2;--card:#fff;--ink:#1f1d24;--sub:#5c5868;--line:#e4e1ea;--accent:#524790;--soft:#efedf7;}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#16151a;--card:#1f1e25;--ink:#ecebf1;--sub:#a6a2b3;--line:#34323d;--accent:#a99df0;--soft:#2a2835;}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:960px;margin:0 auto;padding:32px 24px 80px}
+.back{display:inline-block;margin-bottom:18px;color:var(--accent);text-decoration:none;font-size:13.5px}
+.back:hover{text-decoration:underline}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px 28px}
+h1{font-size:26px;margin:0 0 12px} h2{font-size:20px;margin:30px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--line)} h3{font-size:16px;margin:22px 0 8px}
+blockquote{margin:0 0 16px;padding:10px 16px;border-left:4px solid var(--accent);background:var(--soft);border-radius:0 8px 8px 0;color:var(--sub)}
+blockquote p{margin:0}
+table{border-collapse:collapse;width:100%;margin:12px 0 18px;font-size:14px}
+th,td{border:1px solid var(--line);padding:7px 10px;text-align:left;vertical-align:top} th{background:var(--soft)}
+code{font:13px/1.5 ui-monospace,Consolas,monospace;background:var(--soft);padding:1px 5px;border-radius:5px}
+pre{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow:auto} pre code{background:none;padding:0}
+hr{border:0;border-top:1px solid var(--line);margin:28px 0}
+img{max-width:100%}
+.note{font-size:13px;color:var(--sub);margin:0 0 18px}
+</style></head><body><main>
+<a class="back" href="../handover.html#w18">&larr; Back to the V1 to V2 handover</a>
+<div class="card">
+<p class="note">Aditya's design specification for the W18 Financial KPI band, reproduced as written (v5, 15 Sep 2026). The prototype file it refers to is not part of this repo; the band as built lives in <code>index.html</code>.</p>
+<h1>Financial KPI Cards v5 — Design Specification</h1>
+<blockquote>
+<p><strong>Widget ID:</strong> <code>w-kpi5</code>
+<strong>Prototype file:</strong> <code>Aditya_Widget_Design/Dashboard Container Demo.html</code> — widget <code>#w-kpi5</code>
+<strong>Author:</strong> Aditya
+<strong>Last updated:</strong> 2026-09-15
+<strong>Status:</strong> 🟡 Prototype — under review</p>
+</blockquote>
+<hr />
+<h2>1. Overview</h2>
+<p><strong>Financial KPI Cards v5</strong> is the fifth iteration of the Financial KPI Cards widget on the Amplify/Shelby church accounting dashboard. It is a fixed 4-tile glance-level card that displays the most critical financial health metrics for the organisation at a glance.</p>
+<p>This version is a direct copy of <strong>KPI v4</strong> with one key change: the Cash Position tile's unreconciled account warning system is simplified from a <strong>5-tier count-based model</strong> to a <strong>2-colour threshold model</strong> (amber / red) based on the number of unreconciled accounts. All other tiles are identical to v3 and v4.</p>
+<h3>What's new in v5 vs v4</h3>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>KPI v4</th>
+<th>KPI v5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Warning colour logic</td>
+<td>5 tiers (Tier 1–5) by account count</td>
+<td>2 colours: <strong>Amber</strong> (&lt;3 accounts) · <strong>Red</strong> (&gt;5 accounts)</td>
+</tr>
+<tr>
+<td>Tooltip interactivity</td>
+<td>Non-clickable (CSS <code>:hover</code> only)</td>
+<td><strong>Clickable</strong> — tooltip stays open when mouse moves into it</td>
+</tr>
+<tr>
+<td>Account card style</td>
+<td>Plain info card</td>
+<td><strong>Clickable row</strong> with right chevron <code>›</code> indicating navigation</td>
+</tr>
+<tr>
+<td>Demo states</td>
+<td>5 states (Tier 1–5)</td>
+<td>4 states (Clean, Amber 1, Amber 2, Red 6)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>2. Widget Layout</h2>
+<p>The widget is a single-row grid of <strong>4 KPI tiles</strong> (<code>kpi-cards-row</code>, 4-column grid):</p>
+<table>
+<thead>
+<tr>
+<th>Tile</th>
+<th>ID</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><em>(static)</em></td>
+<td>Total Income — YTD</td>
+</tr>
+<tr>
+<td>2</td>
+<td><em>(static)</em></td>
+<td>Total Expenses — YTD</td>
+</tr>
+<tr>
+<td>3</td>
+<td><em>(static)</em></td>
+<td>Net Income — YTD</td>
+</tr>
+<tr>
+<td>4</td>
+<td><code>kpi5-cash-card</code></td>
+<td>Cash Position (dynamic — reconciliation warning)</td>
+</tr>
+</tbody>
+</table>
+<p>Tiles 1–3 are static display tiles with no interactive warning states. All dynamic logic is applied to <strong>Tile 4 — Cash Position</strong> only.</p>
+<hr />
+<h2>3. Static Tiles (1–3)</h2>
+<p>Each static tile follows the standard KPI card pattern:</p>
+<pre><code>[LABEL — e.g. TOTAL INCOME — YTD]
+[$1,824,350]
+Prev yr $1,682,400  ·  ↑ 8.4%
+</code></pre>
+<ul>
+<li><strong>Label:</strong> <code>font-size:10px</code>, uppercase, <code>color:#999</code></li>
+<li><strong>Value:</strong> <code>font-size:21px</code>, <code>font-weight:700</code>, <code>color:#202020</code></li>
+<li><strong>Meta row:</strong> prior-year comparison + variance badge (<code>fav</code> = green, <code>unfav</code> = red)</li>
+</ul>
+<p>Mock data (prototype):</p>
+<table>
+<thead>
+<tr>
+<th>Tile</th>
+<th>Value</th>
+<th>Prev yr</th>
+<th>Change</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Total Income — YTD</td>
+<td>$1,824,350</td>
+<td>$1,682,400</td>
+<td>↑ 8.4% (fav)</td>
+</tr>
+<tr>
+<td>Total Expenses — YTD</td>
+<td>$1,681,550</td>
+<td>$1,598,200</td>
+<td>↑ 5.2% (unfav)</td>
+</tr>
+<tr>
+<td>Net Income — YTD</td>
+<td>$142,800</td>
+<td>$84,200</td>
+<td>↑ 69.6% (fav)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>4. Cash Position Tile (Tile 4)</h2>
+<h3>4a. What the numbers mean</h3>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>Value (mock)</th>
+<th>Calculation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Primary metric</strong></td>
+<td>9 months</td>
+<td>Total cash ÷ avg monthly operating expenses</td>
+</tr>
+<tr>
+<td><strong>Total cash</strong></td>
+<td>$3,224,350</td>
+<td>Sum of all bank account balances</td>
+</tr>
+<tr>
+<td><strong>Avg monthly OpEx</strong></td>
+<td>$358,000</td>
+<td>Trailing 3-month average (May–Jul 2026)</td>
+</tr>
+<tr>
+<td><strong>Runway</strong></td>
+<td>≈ 9.01 → displayed as <strong>9 months</strong></td>
+<td>$3,224,350 ÷ $358,000</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>ⓘ</code> tooltip next to "of operating runway" shows:</p>
+<blockquote>
+<p><em>"Avg monthly operating expenses calculated using May – Jul 2026 (3 months)."</em></p>
+</blockquote>
+<h3>4b. Why unreconciled accounts matter</h3>
+<p>Bank accounts that have not been reconciled within the configured threshold (default: 30 days) may contain undetected errors or unauthorised transactions. When unreconciled accounts exist, the total cash figure used in the runway calculation may not reflect the organisation's true financial position.</p>
+<p>The warning system exists to <strong>communicate the reliability of the runway figure</strong> — not to block access to it.</p>
+<hr />
+<h2>5. Unreconciled Account Warning — 2-Colour Logic (v5)</h2>
+<h3>5a. Threshold rules</h3>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Colour</th>
+<th>Icon</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 unreconciled accounts</td>
+<td><strong>Clean</strong> (no warning)</td>
+<td>—</td>
+<td>No warning icon; runway shown normally</td>
+</tr>
+<tr>
+<td><strong>1–2 accounts</strong> (&lt; 3)</td>
+<td><strong>Amber</strong> ⚠</td>
+<td><code>warning</code> (filled, amber)</td>
+<td>Tooltip with clickable account card(s)</td>
+</tr>
+<tr>
+<td><strong>6+ accounts</strong> (&gt; 5)</td>
+<td><strong>Red</strong> 🔴</td>
+<td><code>error</code> (filled, red)</td>
+<td>Tooltip with CTA button only</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Note on the 3–5 account gap:</strong> The design specification currently defines thresholds as "&lt; 3" for amber and "&gt; 5" for red. Accounts 3–5 are not explicitly addressed in v5. For prototype purposes they are treated as amber (shown alongside the 1–2 account states). This gap should be confirmed with the product team before production.</p>
+</blockquote>
+<h3>5b. Clean state (0 accounts)</h3>
+<ul>
+<li>Warning wrap (<code>#kpi5-warn-wrap</code>) is <strong>empty</strong> — no icon rendered</li>
+<li>Runway value shows normally: <strong>9 months</strong></li>
+<li>Meta row visible: "of operating runway" + ⓘ tooltip</li>
+<li>Demo chip: green, <code>check_circle</code> icon, label "No warning"</li>
+</ul>
+<h3>5c. Amber state (1–2 accounts)</h3>
+<ul>
+<li>Warning icon: amber <code>⚠</code> (<code>warning</code>, filled, <code>color:#e67e22</code>) at <code>top:12px; right:12px</code> of the tile</li>
+<li>Tooltip appears on hover (or mouse-over via JS — see Section 7):</li>
+<li><strong>Header:</strong> "⚠ N Unreconciled Account(s)" (amber, uppercase, small caps)</li>
+<li><strong>Body:</strong> "The cash figure may not reflect the true position."</li>
+<li><strong>Account card(s):</strong> one card per unreconciled account, each rendered as a <strong>clickable row</strong> with:<ul>
+<li>Account name (bold, <code>#202020</code>)</li>
+<li>Last-reconciled date + days-ago (amber or red text depending on severity)</li>
+<li>Right chevron icon (<code>chevron_right</code>, <code>color:#b7620a</code>) on the far right — indicates the card navigates to the bank account detail</li>
+</ul>
+</li>
+<li>Runway value: <strong>still shown</strong> (9 months) — amber does not suppress the figure</li>
+<li>Meta row: visible</li>
+</ul>
+<p><strong>Mock data — Amber 1 account:</strong></p>
+<pre><code>Payroll Checking ··3355
+Last reconciled: Jul 26, 2026 — 31 days ago  ›
+</code></pre>
+<p><strong>Mock data — Amber 2 accounts:</strong></p>
+<pre><code>Payroll Checking ··3355
+Last reconciled: Jul 26, 2026 — 31 days ago  ›
+
+Missions Savings ··1188
+Last reconciled: Jun 25, 2026 — 62 days ago  ›   ← shown in red (#c0392b) due to age
+</code></pre>
+<ul>
+<li>Demo chip: amber, <code>warning</code> icon, label "⚠ 1 acct" or "⚠ 2 accts"</li>
+</ul>
+<h3>5d. Red state (&gt; 5 accounts)</h3>
+<ul>
+<li>Warning icon: red 🔴 (<code>error</code>, filled, <code>color:#c0392b</code>) at <code>top:12px; right:12px</code></li>
+<li>Tooltip:</li>
+<li><strong>Header:</strong> "🔴 6 Unreconciled Accounts" (red)</li>
+<li><strong>Body:</strong> "A significant number of accounts exceed the 30-day reconciliation threshold. The cash position shown may be inaccurate."</li>
+<li><strong>CTA button:</strong> "Review in Bank Account Mgmt →" (<code>kpi-warn-tip-cta</code>, blue pill button)</li>
+<li>No individual account cards shown (too many to list)</li>
+<li>Runway value: <strong>still shown</strong> (9 months) — red at this tier does not suppress the figure (contrast with v3 red state which suppressed the value)</li>
+<li>Demo chip: red, <code>error</code> icon, label "● 6 accts"</li>
+</ul>
+<blockquote>
+<p><strong>v5 vs v3 difference:</strong> In KPI v3, the red state (&gt;15% of cash unreconciled) suppressed the runway value and showed "—". In KPI v5, the red state (&gt;5 accounts) still shows the runway value but shows a CTA button in the tooltip. This is a deliberate design choice — the 2-colour model does not degrade the displayed figure.</p>
+</blockquote>
+<hr />
+<h2>6. Demo Cycle (Prototype Only)</h2>
+<p>The demo chip in the widget header cycles through 4 states in order. This button is a <strong>prototype-only control</strong> — it does not exist in production.</p>
+<table>
+<thead>
+<tr>
+<th>Cycle position</th>
+<th>Chip label</th>
+<th>Icon</th>
+<th>State</th>
+<th>Accounts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 (start)</td>
+<td>⚠ 1 acct</td>
+<td><code>warning</code> (amber)</td>
+<td>Amber</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>⚠ 2 accts</td>
+<td><code>warning</code> (amber)</td>
+<td>Amber</td>
+<td>2</td>
+</tr>
+<tr>
+<td>2</td>
+<td>● 6 accts</td>
+<td><code>error</code> (red)</td>
+<td>Red</td>
+<td>6</td>
+</tr>
+<tr>
+<td>3</td>
+<td>No warning</td>
+<td><code>check_circle</code> (green)</td>
+<td>Clean</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<p>The widget <strong>loads at state 0 (Amber 1 acct)</strong> so the clickable account card with the right chevron is immediately visible to reviewers without needing to click the demo button.</p>
+<h3>Chip colour coding</h3>
+<table>
+<thead>
+<tr>
+<th>State</th>
+<th>Border</th>
+<th>Background</th>
+<th>Text / Icon colour</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Clean</td>
+<td><code>#b7dfc4</code></td>
+<td><code>#f0faf1</code></td>
+<td><code>#1a7f3c</code></td>
+</tr>
+<tr>
+<td>Amber</td>
+<td><code>#eed5b0</code></td>
+<td><code>#fff8e1</code></td>
+<td><code>#b7620a</code> / <code>#e67e22</code></td>
+</tr>
+<tr>
+<td>Red</td>
+<td><code>#f5a9a0</code></td>
+<td><code>#feeceb</code></td>
+<td><code>#c0392b</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>7. Interactive Tooltip — Hover Persistence Fix</h2>
+<h3>Problem (prior to v5)</h3>
+<p>All previous KPI widget versions (v1–v4) used a CSS <code>:hover</code> rule to show the tooltip:</p>
+<pre><code class="language-css">.kpi-warn-wrap:hover .kpi-warn-tip { display: block; }
+</code></pre>
+<p>This caused the tooltip to <strong>disappear the moment the mouse moved from the warning icon toward the tooltip</strong>, because the mouse briefly left the <code>.kpi-warn-wrap</code> element's bounding box. Account cards and CTA buttons inside the tooltip were therefore impossible to click.</p>
+<h3>Solution (implemented in v5, applied globally)</h3>
+<p><strong>CSS change:</strong></p>
+<pre><code class="language-css">/* Before */
+.kpi-warn-tip { pointer-events: none; }
+.kpi-warn-wrap:hover .kpi-warn-tip { display: block; }
+
+/* After */
+.kpi-warn-tip { pointer-events: auto; }
+/* CSS :hover rule removed — replaced by JS */
+</code></pre>
+<p><strong>JS — global IIFE tooltip manager</strong> (applies to all <code>.kpi-warn-wrap</code> elements on the page, including v1–v4):</p>
+<pre><code class="language-javascript">(function(){
+  var _tt = {};
+  document.addEventListener('mouseover', function(e) {
+    var wrap = e.target.closest('.kpi-warn-wrap');
+    if (!wrap) return;
+    clearTimeout(_tt[wrap.id]);
+    var tip = wrap.querySelector('.kpi-warn-tip');
+    if (tip) tip.style.display = 'block';
+  });
+  document.addEventListener('mouseout', function(e) {
+    var wrap = e.target.closest('.kpi-warn-wrap');
+    if (!wrap) return;
+    if (wrap.contains(e.relatedTarget)) return; // still inside wrap — ignore
+    var id = wrap.id || '_';
+    _tt[id] = setTimeout(function() {
+      var tip = wrap.querySelector('.kpi-warn-tip');
+      if (tip) tip.style.display = 'none';
+    }, 200); // 200 ms delay so mouse can travel from icon → tooltip
+  });
+})();
+</code></pre>
+<p><strong>How it works:</strong>
+1. <code>mouseover</code> on any element inside <code>.kpi-warn-wrap</code> → show the tooltip, cancel any pending hide timer
+2. <code>mouseout</code> from <code>.kpi-warn-wrap</code> → check if the mouse is moving to a <strong>child element</strong> (<code>wrap.contains(e.relatedTarget)</code>) — if yes, ignore (mouse is still inside the tooltip)
+3. If the mouse truly leaves the wrap, start a <strong>200 ms timer</strong> to hide the tooltip
+4. If the mouse re-enters within 200 ms, the timer is cancelled and the tooltip stays open</p>
+<p>This pattern allows the user to:
+- Move the mouse from the warning icon into the tooltip without it closing
+- Hover over and <strong>click</strong> individual account cards inside the tooltip
+- Click the <strong>CTA button</strong> ("Review in Bank Account Mgmt") in the red state</p>
+<hr />
+<h2>8. Clickable Account Cards</h2>
+<p>Account cards inside the amber tooltip are rendered as <strong>interactive rows</strong> using the <code>.kpi-warn-tip-acct.clickable</code> CSS class.</p>
+<h3>CSS</h3>
+<pre><code class="language-css">.kpi-warn-tip-acct.clickable {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+.kpi-warn-tip-acct.clickable:hover {
+  background: #fff3e0;
+  border-color: #f0c07a;
+}
+</code></pre>
+<h3>HTML structure of a single clickable account card</h3>
+<pre><code class="language-html">&lt;div class=&quot;kpi-warn-tip-acct clickable&quot; onclick=&quot;void(0)&quot; role=&quot;button&quot; tabindex=&quot;0&quot;&gt;
+  &lt;div style=&quot;flex:1; min-width:0&quot;&gt;
+    &lt;div class=&quot;kpi-warn-tip-acct-name&quot;&gt;Payroll Checking ··3355&lt;/div&gt;
+    &lt;div class=&quot;kpi-warn-tip-acct-date&quot;&gt;Last reconciled: Jul 26, 2026 — 31 days ago&lt;/div&gt;
+  &lt;/div&gt;
+  &lt;span class=&quot;msr&quot; style=&quot;font-size:16px; color:#b7620a; flex-shrink:0&quot;&gt;chevron_right&lt;/span&gt;
+&lt;/div&gt;
+</code></pre>
+<p><strong>Key elements:</strong>
+- <code>flex:1; min-width:0</code> — account name + date block takes all available space, truncates cleanly if long
+- <code>chevron_right</code> icon — right-aligned, <code>flex-shrink:0</code> so it never wraps or disappears
+- <code>onclick="void(0)"</code> — prototype placeholder; in production this navigates to the Bank Account Management page filtered to the specific account
+- <code>role="button"</code> + <code>tabindex="0"</code> — accessible for keyboard navigation
+- Hover: background turns <code>#fff3e0</code> (warm amber tint) to signal interactivity</p>
+<h3>When chevron is shown</h3>
+<ul>
+<li><strong>1 account (amber):</strong> 1 clickable card with chevron</li>
+<li><strong>2 accounts (amber):</strong> 2 clickable cards, each with chevron; second card has <code>margin-top:4px</code> spacing</li>
+<li><strong>6 accounts (red):</strong> No individual cards — CTA button only (too many to enumerate)</li>
+</ul>
+<hr />
+<h2>9. JavaScript Functions</h2>
+<h3><code>cycleReconState5()</code></h3>
+<p>Called by the demo chip button (<code>onclick</code>). Advances <code>_recon5StateIdx</code> through the 4-state array and updates:
+1. The demo chip label, icon, and colour
+2. Calls <code>applyReconState5(state, accts)</code> to update the Cash Position tile</p>
+<h3><code>applyReconState5(state, accts)</code></h3>
+<p>Writes directly to the Cash Position tile DOM:</p>
+<table>
+<thead>
+<tr>
+<th>Target ID</th>
+<th>What it changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>kpi5-warn-wrap</code></td>
+<td>Warning icon + tooltip HTML</td>
+</tr>
+<tr>
+<td><code>kpi5-val</code></td>
+<td>Runway value (always "9 months" in v5)</td>
+</tr>
+<tr>
+<td><code>kpi5-meta</code></td>
+<td>Meta row visibility</td>
+</tr>
+<tr>
+<td><code>kpi5-degrade</code></td>
+<td>Degraded/alert block (unused in v5)</td>
+</tr>
+</tbody>
+</table>
+<p>The function contains an inner helper <code>acctCard(name, date, isFirst, dateRed)</code> that builds a single clickable account card HTML string:</p>
+<pre><code class="language-javascript">function acctCard(name, date, isFirst, dateRed) {
+  var mt  = isFirst ? '' : 'margin-top:4px;';
+  var dc  = dateRed ? 'color:#c0392b;' : '';
+  return '&lt;div class=&quot;kpi-warn-tip-acct clickable&quot; ...&gt;' +
+    '&lt;div style=&quot;flex:1;min-width:0&quot;&gt;' +
+      '&lt;div class=&quot;kpi-warn-tip-acct-name&quot;&gt;' + name + '&lt;/div&gt;' +
+      '&lt;div class=&quot;kpi-warn-tip-acct-date&quot; style=&quot;' + dc + '&quot;&gt;' + date + '&lt;/div&gt;' +
+    '&lt;/div&gt;' +
+    '&lt;span class=&quot;msr&quot; style=&quot;font-size:16px;color:#b7620a;flex-shrink:0&quot;&gt;chevron_right&lt;/span&gt;' +
+  '&lt;/div&gt;';
+}
+</code></pre>
+<p><code>dateRed: true</code> renders the date text in <code>#c0392b</code> (red) for accounts that are significantly overdue (e.g. 62 days).</p>
+<hr />
+<h2>10. Comparison: KPI v3 / v4 / v5</h2>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>KPI v3</th>
+<th>KPI v4</th>
+<th>KPI v5</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Warning model</strong></td>
+<td>3-state by % of cash</td>
+<td>5-tier by account count</td>
+<td>2-colour by account count</td>
+</tr>
+<tr>
+<td><strong>Amber trigger</strong></td>
+<td>&gt;5% of cash unreconciled</td>
+<td>Tier 1 (1 acct) or Tier 2 (≤5 accts)</td>
+<td>&lt; 3 accounts</td>
+</tr>
+<tr>
+<td><strong>Red trigger</strong></td>
+<td>&gt;15% of cash unreconciled</td>
+<td>Tier 3–5 (≥47 accts)</td>
+<td>&gt; 5 accounts</td>
+</tr>
+<tr>
+<td><strong>Runway suppressed (→ "—")</strong></td>
+<td>Yes — red state shows "—"</td>
+<td>Yes — Tier 5 shows "—"</td>
+<td><strong>No</strong> — always shown</td>
+</tr>
+<tr>
+<td><strong>Inline degrade block</strong></td>
+<td>Red state only</td>
+<td>Tier 4 + Tier 5</td>
+<td><strong>None</strong></td>
+</tr>
+<tr>
+<td><strong>Tooltip clickable</strong></td>
+<td>No</td>
+<td>No</td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td><strong>Account card chevron</strong></td>
+<td>No</td>
+<td>No</td>
+<td><strong>Yes</strong></td>
+</tr>
+<tr>
+<td><strong>Tooltip hover-persistent</strong></td>
+<td>No</td>
+<td>No</td>
+<td><strong>Yes (global fix)</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>11. Production Implementation Notes</h2>
+<p>The following items are <strong>not implemented</strong> in the prototype and must be addressed in production:</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Navigation on account card click</strong></td>
+<td><code>onclick="void(0)"</code> in prototype. In production: navigate to Bank Account Management filtered to the specific account (e.g. by account ID).</td>
+</tr>
+<tr>
+<td><strong>CTA button action</strong></td>
+<td><code>onclick="void(0)"</code> in prototype. In production: navigate to Bank Account Management — unreconciled accounts list.</td>
+</tr>
+<tr>
+<td><strong>Threshold configuration</strong></td>
+<td>The 30-day reconciliation threshold is hardcoded in prototype. In production this should be configurable per organisation (admin setting).</td>
+</tr>
+<tr>
+<td><strong>Account data source</strong></td>
+<td>Prototype uses hardcoded mock accounts. In production: API endpoint returning unreconciled accounts with last-reconciled date, days-since, and balance.</td>
+</tr>
+<tr>
+<td><strong>3–5 account range</strong></td>
+<td>Not explicitly handled in the current v5 spec. Product team must confirm whether this maps to amber or a separate state.</td>
+</tr>
+<tr>
+<td><strong>Runway calculation period</strong></td>
+<td>"May–Jul 2026 (3 months)" is hardcoded. In production: trailing N months of confirmed operating expense history, where N is configurable (default 3).</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>12. Files</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Aditya_Widget_Design/Dashboard Container Demo.html</code></td>
+<td>Prototype — contains <code>#w-kpi5</code> HTML, CSS classes, JS functions</td>
+</tr>
+<tr>
+<td>This document</td>
+<td>Design specification and logic reference</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Key IDs and class names in the prototype:</strong></p>
+<table>
+<thead>
+<tr>
+<th>ID / Class</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>#w-kpi5</code></td>
+<td>Widget card root</td>
+</tr>
+<tr>
+<td><code>#kpi5-cash-card</code></td>
+<td>Cash Position tile</td>
+</tr>
+<tr>
+<td><code>#kpi5-warn-wrap</code></td>
+<td>Warning icon + tooltip container</td>
+</tr>
+<tr>
+<td><code>#kpi5-val</code></td>
+<td>Runway value element</td>
+</tr>
+<tr>
+<td><code>#kpi5-meta</code></td>
+<td>Meta row ("of operating runway" + ⓘ)</td>
+</tr>
+<tr>
+<td><code>#kpi5-degrade</code></td>
+<td>Inline degrade block (unused in v5)</td>
+</tr>
+<tr>
+<td><code>#recon5-demo-btn</code></td>
+<td>Demo chip button</td>
+</tr>
+<tr>
+<td><code>#recon5-demo-ic</code></td>
+<td>Demo chip icon</td>
+</tr>
+<tr>
+<td><code>#recon5-demo-lbl</code></td>
+<td>Demo chip label</td>
+</tr>
+<tr>
+<td><code>.kpi-warn-tip-acct.clickable</code></td>
+<td>Clickable account card row</td>
+</tr>
+<tr>
+<td><code>cycleReconState5()</code></td>
+<td>Demo cycle function</td>
+</tr>
+<tr>
+<td><code>applyReconState5(state, accts)</code></td>
+<td>State application function</td>
+</tr>
+</tbody>
+</table>
+</div></main></body></html>
