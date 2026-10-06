@@ -119,6 +119,7 @@ const W = {
       { num: "04", label: "Detail", size: "xwide" },
       { num: "05", label: "Explore - One account", size: "wide", steps: [{ click: '[data-action="bank-acct"]' }, { click: '#overlay [data-action="bank-set-acct"]:not([data-acct="all"])' }] },
       { num: "06", label: "Pop-up - Overdrawn accounts", size: "kpi", steps: [{ click: '[data-action="bank-drill"]' }], target: SHELL_MODAL },
+      { num: "07", label: "Explore - One account chart", size: "wide", steps: [{ click: '[data-action="bank-acct"]' }, { click: '#overlay [data-action="bank-set-acct"]:not([data-acct="all"])' }, { click: '[data-action="bank-view"][data-v="chart"]' }] },
     ] } },
   W16: { name: "Accounts Payable By Due Date", kind: "payables",
     v1: { id: "ap", shots: [

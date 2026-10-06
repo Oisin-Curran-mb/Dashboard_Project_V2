@@ -889,49 +889,79 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 <li>In both demos a user with no saved tasks is given a starter set in My Tasks (the everyday tasks of each application plus a handful of reports); the "new user" card is only empty because it is told so. Decide whether a real new user starts with that starter set or with nothing.</li>
 </ul>
 </div></section>
-<section id="w15" class="widget"><header class="wh"><div><span class="wid">W15</span><h2>Bank Balances</h2></div><div class="badges"><span class="ctype t-feature">New Feature or Logic</span><span class="rev">Not reviewed yet</span></div></header><div class="prose"><h3>Overview</h3>
-<p>V2 turns Bank Balances from a mostly read-only card into a genuinely interactive one: the "All Accounts" view finally gets the bar-chart alternative that V1's toggle only pretended to offer, clicking an account now drills into a real detail overlay instead of just re-scoping the card in place, the overdrawn filter gets its own persistent control, and the Glance tile gains a trend sparkline and a working drill-through.</p>
+<section id="w15" class="widget">
+<header class="wh"><div><span class="wid">W15</span><h2>Bank Balances</h2></div><div class="badges"><span class="ctype t-feature">New Feature or Logic</span><span class="rev">Draft 6 Oct 2026</span></div></header>
+
+<details class="shots" open><summary>Screenshots <span class="count">14 of 14 saved</span></summary>
+<div class="pair"><h4><span class="num">01</span>Glance</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W15%20-%20Bank%20Balances/W15-V1-01%20Glance.png" aria-label="Enlarge V1 Glance"><img src="docs/Pics/Version%201/W15%20-%20Bank%20Balances/W15-V1-01%20Glance.png" alt="V1 Glance" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W15%20-%20Bank%20Balances/W15-V2-01%20Glance.png" aria-label="Enlarge V2 Glance"><img src="docs/Pics/Version%202/W15%20-%20Bank%20Balances/W15-V2-01%20Glance.png" alt="V2 Glance" loading="lazy"></button></figure></div></div>
+<div class="pair"><h4><span class="num">02</span>Explore - Table</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W15%20-%20Bank%20Balances/W15-V1-02%20Explore%20-%20Table.png" aria-label="Enlarge V1 Explore - Table"><img src="docs/Pics/Version%201/W15%20-%20Bank%20Balances/W15-V1-02%20Explore%20-%20Table.png" alt="V1 Explore - Table" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W15%20-%20Bank%20Balances/W15-V2-02%20Explore%20-%20Table.png" aria-label="Enlarge V2 Explore - Table"><img src="docs/Pics/Version%202/W15%20-%20Bank%20Balances/W15-V2-02%20Explore%20-%20Table.png" alt="V2 Explore - Table" loading="lazy"></button></figure></div></div>
+<div class="pair"><h4><span class="num">03</span>Explore - Bars</h4><div class="pair-grid"><figure class="shot missing"><figcaption>V1</figcaption><div class="ph">Not in V1<code>New in V2</code></div></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W15%20-%20Bank%20Balances/W15-V2-03%20Explore%20-%20Bars.png" aria-label="Enlarge V2 Explore - Bars"><img src="docs/Pics/Version%202/W15%20-%20Bank%20Balances/W15-V2-03%20Explore%20-%20Bars.png" alt="V2 Explore - Bars" loading="lazy"></button></figure></div></div>
+<div class="pair"><h4><span class="num">04</span>Detail</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W15%20-%20Bank%20Balances/W15-V1-04%20Detail.png" aria-label="Enlarge V1 Detail"><img src="docs/Pics/Version%201/W15%20-%20Bank%20Balances/W15-V1-04%20Detail.png" alt="V1 Detail" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W15%20-%20Bank%20Balances/W15-V2-04%20Detail.png" aria-label="Enlarge V2 Detail"><img src="docs/Pics/Version%202/W15%20-%20Bank%20Balances/W15-V2-04%20Detail.png" alt="V2 Detail" loading="lazy"></button></figure></div></div>
+<div class="pair"><h4><span class="num">05</span>Explore - One account</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W15%20-%20Bank%20Balances/W15-V1-05%20Explore%20-%20One%20account.png" aria-label="Enlarge V1 Explore - One account"><img src="docs/Pics/Version%201/W15%20-%20Bank%20Balances/W15-V1-05%20Explore%20-%20One%20account.png" alt="V1 Explore - One account" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W15%20-%20Bank%20Balances/W15-V2-05%20Explore%20-%20One%20account.png" aria-label="Enlarge V2 Explore - One account"><img src="docs/Pics/Version%202/W15%20-%20Bank%20Balances/W15-V2-05%20Explore%20-%20One%20account.png" alt="V2 Explore - One account" loading="lazy"></button></figure></div></div>
+<div class="pair"><h4><span class="num">06</span>Pop-up - Overdrawn accounts</h4><div class="pair-grid"><figure class="shot missing"><figcaption>V1</figcaption><div class="ph">Not in V1<code>New in V2</code></div></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W15%20-%20Bank%20Balances/W15-V2-06%20Pop-up%20-%20Overdrawn%20accounts.png" aria-label="Enlarge V2 Pop-up - Overdrawn accounts"><img src="docs/Pics/Version%202/W15%20-%20Bank%20Balances/W15-V2-06%20Pop-up%20-%20Overdrawn%20accounts.png" alt="V2 Pop-up - Overdrawn accounts" loading="lazy"></button></figure></div></div>
+<div class="pair"><h4><span class="num">07</span>Explore - One account chart</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W15%20-%20Bank%20Balances/W15-V1-07%20Explore%20-%20One%20account%20chart.png" aria-label="Enlarge V1 Explore - One account chart"><img src="docs/Pics/Version%201/W15%20-%20Bank%20Balances/W15-V1-07%20Explore%20-%20One%20account%20chart.png" alt="V1 Explore - One account chart" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W15%20-%20Bank%20Balances/W15-V2-07%20Explore%20-%20One%20account%20chart.png" aria-label="Enlarge V2 Explore - One account chart"><img src="docs/Pics/Version%202/W15%20-%20Bank%20Balances/W15-V2-07%20Explore%20-%20One%20account%20chart.png" alt="V2 Explore - One account chart" loading="lazy"></button></figure></div></div>
+</details>
+
+<div class="prose"><h3>Overview</h3>
+<p>V2 keeps V1's account picker, the headline balance, the account table with its search box and sortable Account / Balance / Type columns, the overdrawn filter and its "Overdrawn total" strip, the one-account statement with its Table / Bars switch, the loading, empty and error states, and the export actions. It changes six things:</p>
+<ol>
+<li><strong>The Glance is live.</strong> The chip opens the real picker, the amount is compact ($4.9M, exact on hover) beside a twelve-month sparkline, and a "2 overdrawn ›" pill and a delta pill against a year ago sit underneath. V1 showed a label, the full amount and an inert red count.</li>
+<li><strong>A Bars view for all accounts.</strong> Explore gains a Table / Bars switch; Detail shows "Balances" and "Balance comparison" side by side. V1 had the table only; its Table / Chart switch appeared once one account was chosen.</li>
+<li><strong>Clicking an account opens a pop-up</strong> holding that account's Detail, with Back, "Open in Bank" and Close. V1 re-scoped the card in place.</li>
+<li><strong>The overdrawn filter is a toolbar chip</strong> beside the account chip; the "18 accounts" pill is gone, so the headline is the money alone.</li>
+<li><strong>The table pages.</strong> 20 accounts, then "Showing 20 of 26 accounts · Load more" as the last row inside the scroll. V1 listed every account.</li>
+<li><strong>The one-account statement is reworked.</strong> Sortable Type / Amount headers, "Beginning balance" pinned on top, signed green and red amounts; the chart loses its legend, draws outflows red with the value under each bar, and its hover card shrinks to type and amount.</li>
+</ol>
+<p>Everything else (the picker, the search box, the sort rules, the "Overdrawn total" strip, the loading skeleton, the empty and error copy, the export actions) is unchanged and in the same place as V1. Where the figures differ (26 accounts and two overdrawn in V2, 18 and one in V1), that is only because the two demos use different sample data.</p>
 <h3>What's Different</h3>
+<h4>Glance and headline</h4>
 <ul>
-<li>All-Accounts view now has a real second view — a sorted, zero-centered diverging bar chart — reachable from a Table/Bars toggle <span class="tag">New Feature</span> <span class="purpose">Why:</span> accounts can be visually compared, including negative/overdrawn balances.</li>
-<li>Clicking an account row now opens a full drill-down overlay showing that account's statement, instead of silently re-scoping the same card <span class="tag">New Feature.</span></li>
-<li>All-Accounts table now paginates (20 rows, "Load more") <span class="tag">New Feature</span> <span class="purpose">Why:</span> needed once the mock account list grew past one screenful.</li>
-<li>The overdrawn quick-filter moved into its own toolbar chip, staying visible whenever any account is overdrawn <span class="tag">Logic/Visual</span> <span class="purpose">Why:</span> separates "how much money" from "is anything wrong."</li>
-<li>Glance card is now interactive: account-picker chip, abbreviated amount, a 12-month sparkline trend, and a year-over-year delta pill <span class="tag">New Feature</span> <span class="purpose">Why:</span> real at-a-glance trend instead of a static number.</li>
-<li>Single-account activity table adds sortable columns, pins "Beginning balance" as the first row, and shows signed, color-coded amounts <span class="tag">New Feature/Logic.</span></li>
-<li>Detail view for All Accounts changed from one column (table only) to two (table + bar chart) <span class="tag">New Feature.</span></li>
-<li>Mock dataset grew from 18 to 26 bank accounts <span class="tag">Visual/data.</span></li>
+<li><strong>Glance:</strong> the chip is the same picker as Explore and turns the tile to the chosen account. A sparkline of month-end balance over the last twelve months sits beside the abbreviated amount; hovering a point reads month and amount. A delta pill compares today with the first month: "↘ $129k", tooltip "Balance in Sep 2025 $5,077,811 · down $128,961 since then".</li>
+<li><strong>Glance, Pop-up - Overdrawn accounts:</strong> "2 overdrawn ›" opens the overdrawn accounts in a pop-up. V1's pill was inert.</li>
+<li><strong>Explore - Table, Explore - Bars, Detail:</strong> the overdrawn chip sits in the toolbar next to the account chip (red outline, filled while on), shown only when an account is overdrawn. Pressing it filters to the overdrawn accounts, drops any selected account and relabels the total "Overdrawn total". V1 had the filter as a pill on the headline row and, while on, a "Showing N overdrawn accounts · Show all accounts" bar in place of the search box.</li>
 </ul>
-<h3>Visual Changes</h3>
+<h4>Table and bars</h4>
 <ul>
-<li>Single-account bar chart: legend removed, value labels added under each bar; outflow color changed from light purple to red.</li>
-<li>KPI header row simplified.</li>
-<li>Overdrawn quick-filter restyled as a standalone toolbar chip.</li>
-<li>Detail-view heading reworded.</li>
+<li><strong>Explore - Table, Explore - Bars:</strong> the Table / Bars switch is always present at Explore. V1 showed Table / Chart only with one account selected.</li>
+<li><strong>Explore - Table, Detail:</strong> the first 20 accounts are listed, then "Showing 20 of 26 accounts" with a "Load more" link as the last row of the scroll. The name sits over its masked number on two lines and an OVERDRAWN tag sits inline with a negative amount. Clicking a name opens the pop-up; V1 switched the card to that account in place.</li>
+<li><strong>Explore - Bars, Detail:</strong> one horizontal bar per account on a shared zero line, positive balances in amethyst growing right, overdrafts in red growing left with a warning mark, the amount printed at the right. Rows follow the table's sort and filter; names open the pop-up. At Detail this is the "Balance comparison" column beside "Balances"; V1's Detail was the table alone.</li>
 </ul>
-<h3>New Features &amp; Logic</h3>
+<h4>Pop-up</h4>
 <ul>
-<li>Working bar-chart view for All Accounts, including in the two-column Detail layout.</li>
-<li>Row-click drill-down modal (single account or "overdrawn accounts") with Back/Close/"Open in Bank."</li>
-<li>Table pagination ("Load more").</li>
-<li>Sortable, sign-colored single-account activity table with pinned Beginning Balance row.</li>
-<li>Glance card: account chip, sparkline, YoY delta pill, clickable overdrawn chip.</li>
+<li><strong>Pop-up - Overdrawn accounts:</strong> a wide overlay titled "Overdrawn accounts" (from the Glance pill or with the filter on) or "Bank Balances", holding the widget's own Detail layout; closed with the X or a click outside. An account opened from a row or bar is titled with its name and number, gains "Open in Bank" and a Back button ("All accounts" or "Overdrawn accounts"), and shows the one-account Detail. New in V2.</li>
 </ul>
-<h3>Removed or Retired</h3>
+<h4>One account</h4>
 <ul>
-<li>Dedicated "single account, chart view" and "no accounts" demo cards no longer appear in V2's default dashboard list (the underlying code still works).</li>
-<li>Inline account-count/overdrawn pills inside the KPI number row.</li>
-<li>Explanatory note text and color-swatch legend on the single-account bar-chart hover popover.</li>
+<li><strong>Explore - One account, Detail:</strong> sortable Type / Amount headers (Amount, largest first, by default), "Beginning balance" pinned above the movements, Deposits, Voids, Checks, Withdrawals and EFT signed and coloured (+ green, − red), "Ending balance" as the total with an OVERDRAWN tag if negative. V1 listed the six lines in a fixed order with "· inflow" or "· outflow" after each name. At Detail the heading is "Balance movement since last reconciliation"; V1 read "Activity since last reconciliation".</li>
+<li><strong>Explore - One account chart:</strong> the switch reads Table / Bars; no legend, red outflow bars, the signed value under each label, a hover card of type and signed amount. V1 read Table / Chart, had an "Inflow (money in) / Outflow (money out)" legend, light-purple outflows and a hover card with "Money in / Money out" and a note.</li>
 </ul>
 <h3>Developer Notes</h3>
+<p>One new piece of data is needed, the month-end balance for each of the last twelve months, in total and per account, for the Glance sparkline and delta. Everything else is presentation over the data V1 used.</p>
+<h4>Data</h4>
 <ul>
-<li>V1's chart toggle for "All Accounts" was never actually reachable by a user — V2 removed that gate. Confirm this scope expansion is intentional rather than assumed to be simply a bug fix.</li>
-<li>The hover-popover label change (dropping "Money in/Money out" wording) reads like an unintended simplification — flag for a copy check.</li>
-<li>There are now two ways to change which account is in view (the account chip vs. clicking a row) — keep both in sync, they use different state.</li>
-<li>The overdrawn toggle behaves differently by size (filters in place at wide/xwide; opens the drill modal at Glance) — confirm this is intended.</li>
-<li>"Open in Bank" is a stub with no real destination yet.</li>
-<li>The outflow-color change (purple → red) should get a design sign-off check against any "no red on data" convention used elsewhere.</li>
-</ul></div></section><section id="w16" class="widget"><header class="wh"><div><span class="wid">W16</span><h2>Accounts Payable By Due Date</h2></div><div class="badges"><span class="ctype t-feature">New Feature or Logic</span><span class="rev">Draft 6 Oct 2026</span></div></header>
+<li><strong>Ending balance</strong> = beginning + deposits + voids + checks + withdrawals + EFT, checks and withdrawals held as negatives. Operating Checking: $380,000 + $210,500 + $1,200 − $142,300 − $21,400 + $39,500 = $467,500. Overdrawn means an ending balance below zero; every count, tag and red bar uses that one test.</li>
+<li><strong>Month-end balances</strong> are invented in the demo by walking back from the ending balance. The real build must supply them.</li>
+</ul>
+<h4>The twelve-month rule</h4>
+<ul>
+<li>Twelve points, oldest left, latest right; the latest equals the headline total. With an account selected the line is that account's own history.</li>
+<li>Delta = today's total − the oldest point; arrow by sign, amount abbreviated, tooltip "Balance in &lt;oldest month&gt; $X · up/down $Y since then". Example: $4,948,850 today, $5,077,811 in Sep 2025 → "↘ $129k", "down $128,961 since then".</li>
+<li>The demo fixes the window at Sep 2025 to Aug 2026 and does not read the browser's date; the live build should end at the current month.</li>
+</ul>
+<h4>Table and bars</h4>
+<ul>
+<li>Page size 20 in the demo; "Load more" adds 20 and "Showing N of M accounts" appears only when M is over 20. Page size is yours to choose. Search hides rows by name only and leaves the total and bars as they are, as in V1.</li>
+<li>Bar span = largest positive balance + largest overdraft; the zero line sits at overdraft ÷ span from the left and each bar is |balance| ÷ span wide. Example: $1,280,000 and −$3,250 → span $1,283,250, zero line 0.25% in, a $560,300 bar 43.7% wide. Bars and table share one sort and filter; totals are over the whole filtered set, not the loaded page.</li>
+<li>The pop-up is the widget at Detail size with the account or the overdrawn filter applied: same data, nothing extra fetched. "Open in Bank" only writes a status message; no destination is wired.</li>
+</ul>
+<h4>Still open</h4>
+<ul>
+<li>What a month-end point is: the calendar month-end balance, or the balance at the last reconciliation in that month.</li>
+<li>Opening the pop-up from the Glance pill switches the widget's overdrawn filter on and Close does not switch it off, so the card arrives filtered if resized to Explore. Decide whether Close should clear it.</li>
+<li>At Detail the table loads 20 at a time but the Balance comparison bars list every account. Decide whether the bars should follow the pages.</li>
+</ul>
+</div></section>
+<section id="w16" class="widget"><header class="wh"><div><span class="wid">W16</span><h2>Accounts Payable By Due Date</h2></div><div class="badges"><span class="ctype t-feature">New Feature or Logic</span><span class="rev">Draft 6 Oct 2026</span></div></header>
 <details class="shots" open><summary>Screenshots <span class="count">8 of 8 saved</span></summary>
 <div class="pair"><h4><span class="num">01</span>Glance</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W16%20-%20Accounts%20Payable%20By%20Due%20Date/W16-V1-01%20Glance.png" aria-label="Enlarge V1 Glance"><img src="docs/Pics/Version%201/W16%20-%20Accounts%20Payable%20By%20Due%20Date/W16-V1-01%20Glance.png" alt="V1 Glance" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W16%20-%20Accounts%20Payable%20By%20Due%20Date/W16-V2-01%20Glance.png" aria-label="Enlarge V2 Glance"><img src="docs/Pics/Version%202/W16%20-%20Accounts%20Payable%20By%20Due%20Date/W16-V2-01%20Glance.png" alt="V2 Glance" loading="lazy"></button></figure></div></div>
 <div class="pair"><h4><span class="num">02</span>Explore - Table</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W16%20-%20Accounts%20Payable%20By%20Due%20Date/W16-V1-02%20Explore%20-%20Table.png" aria-label="Enlarge V1 Explore - Table"><img src="docs/Pics/Version%201/W16%20-%20Accounts%20Payable%20By%20Due%20Date/W16-V1-02%20Explore%20-%20Table.png" alt="V1 Explore - Table" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W16%20-%20Accounts%20Payable%20By%20Due%20Date/W16-V2-02%20Explore%20-%20Table.png" aria-label="Enlarge V2 Explore - Table"><img src="docs/Pics/Version%202/W16%20-%20Accounts%20Payable%20By%20Due%20Date/W16-V2-02%20Explore%20-%20Table.png" alt="V2 Explore - Table" loading="lazy"></button></figure></div></div>
