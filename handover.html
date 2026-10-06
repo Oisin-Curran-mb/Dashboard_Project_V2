@@ -506,7 +506,8 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 <h4>Table</h4>
 <ul>
 <li>Inception is sortable like the other columns, oldest first on the first click.</li>
-<li>Paging: the server returns 50 accounts a page, sorted by the chosen column (default Balance, highest first). "Load 50 more · N remaining" requests the next page and appends it; search and sort reset to the first page. Totals are for the whole filtered set, not the loaded rows.</li>
+<li>Paging: the server returns one page of accounts at a time, sorted by the chosen column (default Balance, highest first). "Load N more · N remaining" requests the next page and appends it; search and sort reset to the first page. Totals are for the whole filtered set, not the loaded rows.</li>
+<li><strong>Page size is yours to choose.</strong> The demo uses 50, but that is not a requirement. Pick a round number large enough that the "Load more" row always sits below the first screen of rows, so it is reached by scrolling rather than showing on open.</li>
 </ul>
 <h4>Still open</h4>
 <ul>
