@@ -1048,51 +1048,84 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 <li>Remove the intro sentence only. As in V1, the All due dates row and the four band rows are buttons that set the due-date filter (a band with nothing in it is shown greyed and cannot be picked), and the Top vendors owed rows are not clickable.</li>
 </ul>
 </div></section>
-<section id="w17" class="widget"><header class="wh"><div><span class="wid">W17</span><h2>Gifts Pledges</h2></div><div class="badges"><span class="ctype t-complete">Complete Change</span><span class="rev">Not reviewed yet</span></div></header><div class="prose"><h3>Overview</h3>
-<p>V1 only ever contained the original "Gifts Pledges" widget; Oisin's own version did not exist there yet — it was first ported into V2, then substantially rebuilt again. That rebuild reversed an earlier design pivot: it retired an invented "campaign Goal" concept that didn't match real data, restored the legacy panel's real terms (Purpose, Pledge Total, Pledge Due, Received, Due Remaining, Percent Due), and — per an explicit product ruling — now counts both pledge payments <strong>and</strong> unpledged "other gifts" toward each purpose, surfacing money that was previously invisible.</p>
+<section id="w17" class="widget">
+<header class="wh"><div><span class="wid">W17</span><h2>Gifts Pledges</h2></div><div class="badges"><span class="ctype t-complete">Complete Change</span><span class="rev">Draft 6 Oct 2026</span></div></header>
+
+<details class="shots" open><summary>Screenshots <span class="count">12 of 12 saved</span></summary>
+<div class="pair"><h4><span class="num">01</span>Glance</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W17%20-%20Gifts%20Pledges/W17-V1-01%20Glance.png" aria-label="Enlarge V1 Glance"><img src="docs/Pics/Version%201/W17%20-%20Gifts%20Pledges/W17-V1-01%20Glance.png" alt="V1 Glance" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W17%20-%20Gifts%20Pledges/W17-V2-01%20Glance.png" aria-label="Enlarge V2 Glance"><img src="docs/Pics/Version%202/W17%20-%20Gifts%20Pledges/W17-V2-01%20Glance.png" alt="V2 Glance" loading="lazy"></button></figure></div></div>
+<div class="pair"><h4><span class="num">02</span>Explore - Giving</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W17%20-%20Gifts%20Pledges/W17-V1-02%20Explore%20-%20Giving.png" aria-label="Enlarge V1 Explore - Giving"><img src="docs/Pics/Version%201/W17%20-%20Gifts%20Pledges/W17-V1-02%20Explore%20-%20Giving.png" alt="V1 Explore - Giving" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W17%20-%20Gifts%20Pledges/W17-V2-02%20Explore%20-%20Giving.png" aria-label="Enlarge V2 Explore - Giving"><img src="docs/Pics/Version%202/W17%20-%20Gifts%20Pledges/W17-V2-02%20Explore%20-%20Giving.png" alt="V2 Explore - Giving" loading="lazy"></button></figure></div></div>
+<div class="pair"><h4><span class="num">03</span>Explore - Summary Table</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W17%20-%20Gifts%20Pledges/W17-V1-03%20Explore%20-%20Summary%20Table.png" aria-label="Enlarge V1 Explore - Summary Table"><img src="docs/Pics/Version%201/W17%20-%20Gifts%20Pledges/W17-V1-03%20Explore%20-%20Summary%20Table.png" alt="V1 Explore - Summary Table" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W17%20-%20Gifts%20Pledges/W17-V2-03%20Explore%20-%20Summary%20Table.png" aria-label="Enlarge V2 Explore - Summary Table"><img src="docs/Pics/Version%202/W17%20-%20Gifts%20Pledges/W17-V2-03%20Explore%20-%20Summary%20Table.png" alt="V2 Explore - Summary Table" loading="lazy"></button></figure></div></div>
+<div class="pair"><h4><span class="num">04</span>Detail</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W17%20-%20Gifts%20Pledges/W17-V1-04%20Detail.png" aria-label="Enlarge V1 Detail"><img src="docs/Pics/Version%201/W17%20-%20Gifts%20Pledges/W17-V1-04%20Detail.png" alt="V1 Detail" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W17%20-%20Gifts%20Pledges/W17-V2-04%20Detail.png" aria-label="Enlarge V2 Detail"><img src="docs/Pics/Version%202/W17%20-%20Gifts%20Pledges/W17-V2-04%20Detail.png" alt="V2 Detail" loading="lazy"></button></figure></div></div>
+<div class="pair"><h4><span class="num">05</span>Pop-up - Giving ledger</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W17%20-%20Gifts%20Pledges/W17-V1-05%20Pop-up%20-%20Giving%20ledger.png" aria-label="Enlarge V1 Pop-up - Giving ledger"><img src="docs/Pics/Version%201/W17%20-%20Gifts%20Pledges/W17-V1-05%20Pop-up%20-%20Giving%20ledger.png" alt="V1 Pop-up - Giving ledger" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W17%20-%20Gifts%20Pledges/W17-V2-05%20Pop-up%20-%20Giving%20ledger.png" aria-label="Enlarge V2 Pop-up - Giving ledger"><img src="docs/Pics/Version%202/W17%20-%20Gifts%20Pledges/W17-V2-05%20Pop-up%20-%20Giving%20ledger.png" alt="V2 Pop-up - Giving ledger" loading="lazy"></button></figure></div></div>
+<div class="pair"><h4><span class="num">06</span>Explore - Summary Table gifts</h4><div class="pair-grid"><figure class="shot missing"><figcaption>V1</figcaption><div class="ph">Not in V1<code>New in V2</code></div></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W17%20-%20Gifts%20Pledges/W17-V2-06%20Explore%20-%20Summary%20Table%20gifts.png" aria-label="Enlarge V2 Explore - Summary Table gifts"><img src="docs/Pics/Version%202/W17%20-%20Gifts%20Pledges/W17-V2-06%20Explore%20-%20Summary%20Table%20gifts.png" alt="V2 Explore - Summary Table gifts" loading="lazy"></button></figure></div></div>
+</details>
+
+<div class="prose"><h3>Overview</h3>
+<p>V2 keeps V1's frame: a date chip and a purpose chip, a two-way view switch (V1 called the views Progress and Table; V2 calls them Giving and Summary Table), one bar per purpose, a purpose table with totals, and a pop-up opened from a bar or a row (V1's listed the donors behind a purpose; V2's is "Pop-up - Giving ledger"). It changes seven things:</p>
+<ol>
+<li><strong>What counts.</strong> V2 shows all money given to a purpose in two named parts: payments against a pledge, and gifts with no pledge. A purpose with gifts but no pledge now appears. V1 counted pledge payments only.</li>
+<li><strong>The goal is retired.</strong> V1 measured each purpose against a "goal" (its pledge total): "% of goal", "$5,050 behind", "Fully funded". V2 states the money given; the only percentage left is the headline's pledge payments over the pledge total.</li>
+<li><strong>The date control.</strong> V1 had one "received through" date (Today, End of last month, custom). V2 keeps "Gifts received through" as the default and adds Year to date, This quarter, This month and Custom dates.</li>
+<li><strong>The Giving bars.</strong> Three segments that always fill the track (pledge payments, still expected, gifts), most received first, with a figures line under each. V1 drew a thermometer with a hatched shortfall, a due marker and a % fulfilled.</li>
+<li><strong>The Summary Table splits in two.</strong> Pledges reproduces the legacy Gifts and Pledges panel column for column; Gifts lists the money with no pledge. Neither is sortable. V1 had one sortable table.</li>
+<li><strong>The pop-up becomes a giving ledger.</strong> Every gift and pledge for the purpose, largest first, with an All / Pledges / Gifts filter, a search box and rows that open to their history. V1 listed donors most behind first.</li>
+<li><strong>Detail and Glance.</strong> Detail gains the view switch (V1 showed only "Progress toward goal" there). Glance drops the purpose chip and the "N purposes behind schedule" line for a split bar and a one-line split.</li>
+</ol>
+<p>Everything else (the card menu, the chip row, the view switch top right, the loading skeleton, the empty state, Close) is in the same place as V1. The demos use different sample data and anchor dates, so every figure, name and row count in the screenshots differs for that reason alone.</p>
 <h3>What's Different</h3>
+<h4>Filters</h4>
 <ul>
-<li>Invented per-row campaign "Goal" and its color bands were removed; the headline again ties to real legacy fields <span class="tag">Complete Change</span> <span class="purpose">Why:</span> the "Goal" field doesn't actually exist per Purpose in the source system (it exists per campaign period, a different entity); showing it risked presenting fabricated numbers as real.</li>
-<li>Received now = pledge payments + unpledged "other gifts," shown as two segments <span class="tag">New Feature/Logic</span> <span class="purpose">Why:</span> reverses an earlier "pledge-linked only" decision; makes previously invisible giving visible (e.g., a "Memorial Gifts" purpose that has gifts but no pledge).</li>
-<li>Row unit renamed from "Campaign" back to "Purpose" <span class="tag">Logic/terminology</span> <span class="purpose">Why:</span> these are distinct real entities; the mislabel made the invented Goal look native.</li>
-<li>Two-tone progress bar (pledge payments vs. other gifts) replacing a single-tone fill <span class="tag">Visual.</span></li>
-<li>The old "Donors behind pace" modal was replaced by a Ledger pop-up (everything received for a purpose, filterable, searchable, expandable) <span class="tag">New Feature</span> <span class="purpose">Why:</span> removes duplication with W04 Remittance Pledges, which already owns "which pledges are behind."</li>
-<li>Date control changed to "Gifts received through" plus Year-to-date / Quarter / Month / Custom presets, with every dollar figure now window-aware <span class="tag">New Feature.</span></li>
-<li>A "Paid in full" mislabel on merely-current pledges was corrected to "Up to date" <span class="tag">Logic/bugfix.</span></li>
-<li>The donut-by-Purpose chart, a retired Detail goal panel, and dead pre-redesign layout code were fully deleted <span class="tag">Removed.</span></li>
-<li>CSS decoupled from another widget's classes <span class="tag">Logic/architecture</span> <span class="purpose">Why:</span> prevents a future edit to one widget from silently breaking the other.</li>
+<li><strong>Explore, Detail:</strong> the date chip opens "Dates": Gifts received through, Year to date, This quarter, This month, Custom dates (From and To, capped at today). The chip shows only the dates ("Aug 19, 2026" or "Jan 1 to Aug 19, 2026"). V1 offered Today, End of last month and one custom date.</li>
+<li><strong>Explore, Detail:</strong> the purpose chip comes first and lists "CODE: Name". V1 put the date first, listed plain names and hid the chip for a single purpose.</li>
 </ul>
-<h3>Visual Changes</h3>
+<h4>Headline</h4>
 <ul>
-<li>Two-tone bar instead of a single-tone fill.</li>
-<li>Goal-band colours removed.</li>
-<li>Goal Progress and Summary Table each render as one full-width view at a time, with no overlapping content.</li>
-<li>New ledger pop-up replacing the old modal.</li>
+<li><strong>Glance, Explore, Detail:</strong> the big figure is everything given; a pill reads "81.45% of $400,200 pledged" and a grey chip splits it, "$325,951 from pledges, $56,940 from gifts". With a start date the pill drops its percentage. V1 showed pledge payments, a status pill ("$5,050 behind", "On track", "Fully funded") and "58% of goal".</li>
+<li><strong>Glance:</strong> a three-segment bar and a one-line caption ("$325,951 pledged, $56,940 gifts"). V1 had the All purposes chip, a small bar with a due marker and "3 purposes behind schedule".</li>
 </ul>
-<h3>New Features &amp; Logic</h3>
+<h4>Giving</h4>
 <ul>
-<li>Received combines pledge payments and unpledged "other gifts" per purpose.</li>
-<li>Date range presets, all figures window-aware.</li>
-<li>Purposes with gifts but no pledge now appear (previously invisible).</li>
-<li>New ledger pop-up: type filter, search, expandable row history.</li>
-<li>Corrected status labels.</li>
+<li><strong>Explore - Giving, Detail:</strong> each row is "CODE: Name" (a Closed badge where closed), the amount given on the right in the status colour, three segments in fixed order (pledge payments dark, still expected grey, gifts light) and the line "$236,500 given · $205,000 from pledges · $31,500 from gifts · $45,000 still expected"; a purpose with no pledge says so. Hovering a segment shows its amount. Most received first; the legend with the three totals sits under the list. V1 ran rows in data order, filled green or saffron by status, hatched the shortfall, marked "Expected by today" and ended each row with "60%" and a flag.</li>
+<li><strong>Detail:</strong> the same bars full width, with the view switch. V1's Detail was one "Progress toward goal" panel.</li>
 </ul>
-<h3>Removed or Retired</h3>
+<h4>Table</h4>
 <ul>
-<li>Invented campaign "Goal" field and its color bands.</li>
-<li>Donut-by-Purpose view (already dead, now fully deleted).</li>
-<li>Retired Detail goal panel and dead layout code.</li>
-<li>"Donors behind pace" modal (superseded by the ledger pop-up).</li>
+<li><strong>Explore - Summary Table, Detail:</strong> a Pledges / Gifts switch on its own line under the view switch, right-aligned, only while the table is up. New in V2.</li>
+<li><strong>Explore - Summary Table:</strong> Pledges has Purpose, Pledge Total, Pledge Due, Received, Due Remaining, plus Percent Due at Detail only; amounts to the cent; largest Pledge Total first; over-received Due Remaining in green parentheses; a caption; a "Total (6 purposes)" row. Only purposes with an active pledge are listed. V1 had Pledged, Due by date, Received, Remaining and % Fulfilled, every header sortable, in whole dollars.</li>
+<li><strong>Explore - Summary Table gifts:</strong> Gifts has Purpose ("Also has pledges" or "No pledges" beneath), Gifts, Donors and Total, left-aligned, largest first, with its own totals row. A row opens the ledger filtered to Gifts. Not in V1.</li>
+</ul>
+<h4>Pop-up</h4>
+<ul>
+<li><strong>Pop-up - Giving ledger:</strong> titled "CODE: Name"; a summary strip (Pledge Total, Pledge Due, Pledge payments, Gifts, Received, status badge); All / Pledges / Gifts and a search over donor, pledge and reference; columns Donor, Pledged, Received, Due Remaining, Type. A pledge row shows its pace status ("Fully paid", "Up to date", "About a month behind") and a Pledge tag; a gift row reads "No pledge" with a Gift tag. A pledge opens to its instalment schedule (Fallen due or Not yet due) and the gifts applied to it; a gift opens to its one line. The list scrolls inside the pop-up; footer "Open in Gifts and Pledges" and Close. V1 had the donors most behind first, All donors / Behind only, Export to Excel and a drawer per donor; its "Paid in full" on a merely current pledge is now "Up to date".</li>
 </ul>
 <h3>Developer Notes</h3>
+<p>New data is needed: each purpose's gift lines with their pledge link, posted and undone flags, how each arrived and its reference; and each active pledge's begin date, end date, frequency and instalment count. Everything else is presentation.</p>
+<h4>Data</h4>
 <ul>
-<li>This rebuild is grounded in a direct read of the legacy MBAccounting data model — full rationale is documented in two companion files in the same project folder: "W17 Gifts Pledges - Thought Process and Concept Review" and "W17 Gifts Pledges - Rebuild Plan."</li>
-<li>A real "Goal" field does exist in the legacy system, but per campaign period, not per Purpose. A true goal-tracking version of this widget would require changing the row unit to campaign period — explicitly out of scope for this rebuild and flagged as future work.</li>
-<li>Pledge Due proration deliberately anchors on the chosen date rather than "today" — a documented fix to a known legacy bug.</li>
-<li>The widget still borrows roughly sixty CSS classes originally declared elsewhere, now copied into its own namespace since the original block was deleted — full de-duplication is pending.</li>
-<li>Unresolved items carried forward: a Step 4 terminology conflict, a contested goal-met colour, and a navigation stub that conflicts with the export-only action rule.</li>
-<li>The "pace band" (ahead/behind logic) is explicitly shared with W04 Remittance Pledges — useful if either widget's pacing thresholds change.</li>
-</ul></div></section><section id="w18" class="widget"><header class="wh"><div><span class="wid">W18</span><h2>Financial KPI</h2></div><div class="badges"><span class="ctype t-new">New Widget</span><span class="rev ok">Finalised 28 Sep 2026</span></div></header>
+<li><strong>Two reads per purpose, nothing else.</strong> Gift lines for the purpose that are posted, not undone and dated inside the window, split once on the pledge link into pledge payments (linked) and gifts (not linked); and the purpose's active pledges, whose sum is Pledge Total. No campaign figure is used; a goal exists per campaign period, not per purpose.</li>
+<li><strong>Posted and not-undone are part of every figure</strong>, not a filter: on the owner's dev database the excluded lines were $30,192 against $200 included.</li>
+<li>Per gift line: date, amount, pledge link, how it arrived, reference (cheque or receipt number).</li>
+<li>Today is the browser's date; the demos pin it (V1 24 Jul 2026, V2 19 Aug 2026).</li>
+</ul>
+<h4>The counting rule</h4>
+<ul>
+<li><strong>A pledge's position is always read to the thru date</strong> (the window's end), whatever the start; gift transactions obey the whole window. So the Pledges table and the headline percentage never move with a start date; Giving, the Gifts table and the ledger do.</li>
+<li><strong>Presets.</strong> Gifts received through: no start, end = chosen date (today by default). Year to date: 1 January to today (never "fiscal"; gifts run on the calendar). This quarter, This month: first day to today. The default has no start so the Pledges table matches the legacy panel figure for figure and old pledges catch up: 2020 Pledge, $1,000 pledged, term long ended, $96 received → Pledge Due $1,000, Due Remaining $904, Percent Due 90.40%.</li>
+<li><strong>Pledge Due</strong> per pledge: the full pledge once the thru date is past its end date; otherwise the instalment amount × (cycles elapsed from the begin date to the thru date + 1), capped at the instalment count. Example: $12,000 monthly over 24 months from 1 Jan 2025, thru 19 Aug 2026 → $500 × (19 + 1) = $10,000. Count cycles to the chosen date, not today; the legacy routine anchors on today, a known defect.</li>
+<li><strong>Due Remaining</strong> = Pledge Due − pledge payments to the thru date; negative is over-received, in parentheses (Stoke Sell: $1,200 pledged, $1,855 received → ($655.00)). <strong>Percent Due</strong> = Due Remaining ÷ Pledge Due; "n/a" when Pledge Due is zero (the legacy divides by 1 there). Not totalled.</li>
+<li><strong>Headline pill</strong> = pledge payments ÷ Pledge Total ($325,951 ÷ $400,200 = 81.45%), only with no start date. <strong>Status</strong> moves on pledge payments alone: Fully funded when payments ≥ Pledge Total, On track when ≥ Pledge Due, else Behind; gifts with no pledge is "Gifts only, no pledge".</li>
+<li><strong>Bar:</strong> pledge payments in the window; still expected = Pledge Total − pledge payments, never below zero; gifts in the window. Scale = the larger of Pledge Total and payments, plus gifts, so an over-paid pledge cannot run off the track.</li>
+<li><strong>Tables and ledger:</strong> Pledges lists purposes with an active pledge, largest Pledge Total first (the panel's order). Gifts lists purposes with an unlinked gift in the window; Donors counts a donor once per purpose, once across purposes in the totals row. The ledger is the same two reads for one purpose, sorted by amount. Per-pledge pace: Fully paid (payments ≥ pledge), Up to date (Due Remaining ≤ 0), else banded by (share paid − share due) × term days: 30+ days ahead, On track, About a month behind, 60+ days behind.</li>
+</ul>
+<h4>Still open</h4>
+<ul>
+<li>Whether the Summary Table captions are wanted.</li>
+<li>Whether the dashboard endpoint can supply how a gift arrived and its reference; the API spec still describes the earlier blended basis.</li>
+<li>The headline pill still carries a percentage, and the amount given appears twice on a Giving row; the owner has been asked which to keep.</li>
+<li>Where "Open in Gifts and Pledges" should go. Don't assume a target page exists.</li>
+</ul>
+</div></section>
+<section id="w18" class="widget"><header class="wh"><div><span class="wid">W18</span><h2>Financial KPI</h2></div><div class="badges"><span class="ctype t-new">New Widget</span><span class="rev ok">Finalised 28 Sep 2026</span></div></header>
 <details class="shots" open><summary>Screenshots <span class="count">2 of 2 saved</span></summary>
 <div class="pair"><h4><span class="num">01</span>KPI band</h4><div class="pair-grid"><figure class="shot missing"><figcaption>V1</figcaption><div class="ph">Not in V1<code>New in V2</code></div></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W18%20-%20Financial%20KPI/W18-V2-01%20KPI%20band.png" aria-label="Enlarge V2 KPI band"><img src="docs/Pics/Version%202/W18%20-%20Financial%20KPI/W18-V2-01%20KPI%20band.png" alt="V2 KPI band" loading="lazy"></button></figure></div></div>
 </details>
