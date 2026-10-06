@@ -741,38 +741,56 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 <li>The Kanban/drag-and-drop view is intentionally not offered at the medium size — only Table and Encumbrances are available there.</li>
 <li>"Closing"/"Voiding" is modeled as dragging to a special "Finish" drop zone rather than a lane of its own, and Voiding is restricted to unpaid orders only — easy to miss if only inspecting visible lanes.</li>
 <li>All record edits are session-only in this build — there is no live save-to-backend API yet.</li>
-</ul></div></section><section id="w14" class="widget"><header class="wh"><div><span class="wid">W14</span><h2>Main Content Tasks</h2></div><div class="badges"><span class="ctype t-visual">Visual Only</span><span class="rev">Not reviewed yet</span></div></header><div class="prose"><h3>Overview</h3>
-<p>The task launcher behaves identically in V2 — same search, same filter-by-application chip, same Recent/My/Content Tasks sections, same "new user" and Glance variants, same click-through confirmation dialog. What changed is purely presentational: the three main sections and icon tiles in the compact Glance card now sit inside subtle rounded panels so a user can visually tell the groups apart at a glance, with tightened spacing. A couple of unused code leftovers were cleaned out — not user-visible.</p>
+</ul></div></section><section id="w14" class="widget"><header class="wh"><div><span class="wid">W14</span><h2>Main Content Tasks</h2></div><div class="badges"><span class="ctype t-visual">Visual Only</span><span class="rev">Draft 6 Oct 2026</span></div></header>
+<details class="shots" open><summary>Screenshots <span class="count">10 of 10 saved</span></summary>
+<div class="pair"><h4><span class="num">01</span>Glance</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W14%20-%20Main%20Content%20Tasks/W14-V1-01%20Glance.png" aria-label="Enlarge V1 Glance"><img src="docs/Pics/Version%201/W14%20-%20Main%20Content%20Tasks/W14-V1-01%20Glance.png" alt="V1 Glance" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W14%20-%20Main%20Content%20Tasks/W14-V2-01%20Glance.png" aria-label="Enlarge V2 Glance"><img src="docs/Pics/Version%202/W14%20-%20Main%20Content%20Tasks/W14-V2-01%20Glance.png" alt="V2 Glance" loading="lazy"></button></figure></div></div>
+<div class="pair"><h4><span class="num">02</span>Explore</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W14%20-%20Main%20Content%20Tasks/W14-V1-02%20Explore.png" aria-label="Enlarge V1 Explore"><img src="docs/Pics/Version%201/W14%20-%20Main%20Content%20Tasks/W14-V1-02%20Explore.png" alt="V1 Explore" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W14%20-%20Main%20Content%20Tasks/W14-V2-02%20Explore.png" aria-label="Enlarge V2 Explore"><img src="docs/Pics/Version%202/W14%20-%20Main%20Content%20Tasks/W14-V2-02%20Explore.png" alt="V2 Explore" loading="lazy"></button></figure></div></div>
+<div class="pair"><h4><span class="num">03</span>Detail</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W14%20-%20Main%20Content%20Tasks/W14-V1-03%20Detail.png" aria-label="Enlarge V1 Detail"><img src="docs/Pics/Version%201/W14%20-%20Main%20Content%20Tasks/W14-V1-03%20Detail.png" alt="V1 Detail" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W14%20-%20Main%20Content%20Tasks/W14-V2-03%20Detail.png" aria-label="Enlarge V2 Detail"><img src="docs/Pics/Version%202/W14%20-%20Main%20Content%20Tasks/W14-V2-03%20Detail.png" alt="V2 Detail" loading="lazy"></button></figure></div></div>
+<div class="pair"><h4><span class="num">04</span>Pop-up - Task</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W14%20-%20Main%20Content%20Tasks/W14-V1-04%20Pop-up%20-%20Task.png" aria-label="Enlarge V1 Pop-up - Task"><img src="docs/Pics/Version%201/W14%20-%20Main%20Content%20Tasks/W14-V1-04%20Pop-up%20-%20Task.png" alt="V1 Pop-up - Task" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W14%20-%20Main%20Content%20Tasks/W14-V2-04%20Pop-up%20-%20Task.png" aria-label="Enlarge V2 Pop-up - Task"><img src="docs/Pics/Version%202/W14%20-%20Main%20Content%20Tasks/W14-V2-04%20Pop-up%20-%20Task.png" alt="V2 Pop-up - Task" loading="lazy"></button></figure></div></div>
+<div class="pair"><h4><span class="num">05</span>Explore - New user</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W14%20-%20Main%20Content%20Tasks/W14-V1-05%20Explore%20-%20New%20user.png" aria-label="Enlarge V1 Explore - New user"><img src="docs/Pics/Version%201/W14%20-%20Main%20Content%20Tasks/W14-V1-05%20Explore%20-%20New%20user.png" alt="V1 Explore - New user" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W14%20-%20Main%20Content%20Tasks/W14-V2-05%20Explore%20-%20New%20user.png" aria-label="Enlarge V2 Explore - New user"><img src="docs/Pics/Version%202/W14%20-%20Main%20Content%20Tasks/W14-V2-05%20Explore%20-%20New%20user.png" alt="V2 Explore - New user" loading="lazy"></button></figure></div></div>
+</details>
+<div class="prose"><h3>Overview</h3>
+<p>V2 keeps everything V1 did: the "All applications ⌄" filter chip and its list, the "Search tasks" box with its clear button, the three sections (Recent Tasks, My Tasks, Content Tasks), the one-row tile strip at Glance, the "new user" variant that shows Content Tasks only, and the "Opens …" pop-up with its Got it button. Nothing functional changed: the same tasks, the same search and ranking, the same filter, the same empty states and the same pop-up text. It changes three things, all presentation:</p>
+<ol>
+<li><strong>Section panels.</strong> Recent Tasks, My Tasks and Content Tasks each sit inside a rounded, padded panel in one warm-sand tint, so the eye can tell where one group ends and the next begins. V1 ran the three groups down a plain white body with only a small grey heading between them.</li>
+<li><strong>Glance bubbles.</strong> The Glance tile row is split into two bubbles in the same tint: Recent Tasks first, then My Tasks not already shown. The tiles, their order and the scrolling row are the ones V1 had; only the backgrounds are new. While searching, the matching tiles sit in one bubble.</li>
+<li><strong>Design-system tokens.</strong> Spacing, type sizes, corner radii, the application badge colours, the hover shadow and the focus ring now come from the design system rather than fixed values. The section headings are a shade darker and the small application code on a Glance tile is a point larger. Nothing moves; the card simply matches the rest of the V2 dashboard.</li>
+</ol>
+<p>Everything else (the filter list, the search, the row layout with icon, task name, path and application badge, the Glance strip, the pop-up) is unchanged and in the same place as V1. The two demos use the same sample tasks, so the figures differ only by the tints.</p>
 <h3>What's Different</h3>
+<h4>Sections</h4>
 <ul>
-<li>Recent Tasks, My Tasks, and Content Tasks sections now render as distinct rounded, padded panels instead of plain unlabeled groupings <span class="tag">Visual</span> <span class="purpose">Why:</span> easier to tell at a glance which group a task belongs to.</li>
-<li>Section header labels use a slightly more prominent text color <span class="tag">Visual.</span></li>
-<li>In the Glance card, Recent and My Tasks icons are shown as two separate clusters instead of one flat row <span class="tag">Visual</span> <span class="purpose">Why:</span> same grouping clarity at small size; tap behavior unchanged.</li>
-<li>Vertical spacing tightened throughout <span class="tag">Visual.</span></li>
-<li>Two unused helper functions were deleted <span class="tag">Logic (cleanup), no visible effect.</span></li>
+<li><strong>Explore, Detail, Explore - New user:</strong> each of Recent Tasks, My Tasks and Content Tasks is a rounded panel in one warm-sand tint with its own padding; the task rows stay white inside it. V1 had no panels: white body, grey heading, rows.</li>
+<li><strong>Explore, Detail, Explore - New user:</strong> the section headings ("Recent Tasks", "My Tasks", "Content Tasks") are a shade darker than V1's. Still the same size and weight.</li>
+<li><strong>Explore, Detail:</strong> the search-results list ("N results across all applications", or "No tasks match …") replaces the three sections while a search is typed and has no tint, as in V1.</li>
+<li><strong>Explore - New user:</strong> a user with no recent and no saved tasks sees Content Tasks only, now in its panel. Same rule as V1, which also hid empty Recent Tasks and My Tasks sections.</li>
 </ul>
-<h3>Visual Changes</h3>
+<h4>Glance</h4>
 <ul>
-<li>Rounded panels for each section.</li>
-<li>Slightly darker section header text.</li>
-<li>Glance card icon clusters.</li>
-<li>Tighter spacing.</li>
+<li><strong>Glance:</strong> the tile row is two bubbles side by side in the one scrolling strip: Recent Tasks, then My Tasks that are not already recent. Each tile is unchanged (icon, application code, tooltip, tap opens the task pop-up). V1 showed the same tiles in the same order as one flat row.</li>
+<li><strong>Glance:</strong> while searching, up to 12 matching tiles sit in a single bubble; "No matches" and "No recent or saved tasks yet" read as in V1.</li>
+<li><strong>Glance:</strong> the application code under each tile icon is a point larger. The bubbles and the Glance padding were trimmed so the row still fits the fixed Glance height; nothing is cut off and the row still scrolls sideways.</li>
 </ul>
-<h3>New Features &amp; Logic</h3>
+<h4>Styling</h4>
 <ul>
-<li>None identified. Search/ranking, application filtering, saving/removing tasks, and the click-through confirmation dialog all work exactly as in V1.</li>
+<li><strong>Glance, Explore, Detail:</strong> the application badge colours (AP, AR, PR, PUR, BNK, CON) come from the design-system palette; V1 used fixed colour values that were close to, but not the same as, the palette. GL and FA already used palette tokens in V1. Expect a slight shift in shade, not a different colour.</li>
+<li><strong>Glance, Explore, Detail:</strong> gaps, padding, corner radii, text sizes, the row hover shadow and the keyboard focus ring are all design-system tokens. Row height and layout are unchanged.</li>
 </ul>
-<h3>Removed or Retired</h3>
+<h4>Filter, search and pop-up</h4>
 <ul>
-<li>Two unused helper functions (never wired to anything visible) were deleted.</li>
-<li>Nothing user-facing removed; all widget variants carry forward unchanged.</li>
+<li><strong>Explore, Detail:</strong> the "All applications ⌄" chip opens the same list as V1: All applications, then Accounts Payable, Accounts Receivable, General Ledger, Payroll, Purchasing, Bank and Contributions, each with its badge. Fixed Assets is left out because it has no tasks. The filter narrows all three sections and the search.</li>
+<li><strong>Glance, Explore, Detail:</strong> the search works as in V1: words are matched against the task name, its keywords and its application (name or code), with the same synonyms ("send" finds "pay", "giving" finds "contribution"), and results are ranked by how many words matched, then by score.</li>
+<li><strong>Pop-up - Task:</strong> tapping any task row or tile opens the same "Opens Reconcile Bank Account" style pop-up: "Tapping this task takes you to <b>Bank, Reconciliation, Reconcile Account</b> in Bank. Tasks you do not have permission to use are not shown here." with Got it. Identical to V1.</li>
 </ul>
 <h3>Developer Notes</h3>
+<p>Nothing needs building for this widget: the three V2 changes are panels, bubbles and tokens on the same markup, and no data or rule changed between V1 and V2.</p>
+<h4>Still open</h4>
 <ul>
-<li>A save/star toggle button is fully wired in the code but never actually rendered in the task row template, in either version — no regression, but flag in case the real build is expected to expose it.</li>
-<li>The "new user, content tasks only" variant depends on the widget instance being given explicit empty saved/recent-task lists — an omitted field falls back to default starter tasks.</li>
-<li>Visual grouping changes are CSS-only additions to existing markup — low-risk to port.</li>
-</ul></div></section><section id="w15" class="widget"><header class="wh"><div><span class="wid">W15</span><h2>Bank Balances</h2></div><div class="badges"><span class="ctype t-feature">New Feature or Logic</span><span class="rev">Not reviewed yet</span></div></header><div class="prose"><h3>Overview</h3>
+<li>Neither version lets a user add a task to My Tasks or remove one. The "Added to My Tasks." / "Removed from My Tasks." actions exist behind the scenes in both builds, but no star or button shows them on a row. Decide whether the real build needs that control.</li>
+<li>In both demos a user with no saved tasks is given a starter set in My Tasks (the everyday tasks of each application plus a handful of reports); the "new user" card is only empty because it is told so. Decide whether a real new user starts with that starter set or with nothing.</li>
+</ul>
+</div></section>
+<section id="w15" class="widget"><header class="wh"><div><span class="wid">W15</span><h2>Bank Balances</h2></div><div class="badges"><span class="ctype t-feature">New Feature or Logic</span><span class="rev">Not reviewed yet</span></div></header><div class="prose"><h3>Overview</h3>
 <p>V2 turns Bank Balances from a mostly read-only card into a genuinely interactive one: the "All Accounts" view finally gets the bar-chart alternative that V1's toggle only pretended to offer, clicking an account now drills into a real detail overlay instead of just re-scoping the card in place, the overdrawn filter gets its own persistent control, and the Glance tile gains a trend sparkline and a working drill-through.</p>
 <h3>What's Different</h3>
 <ul>

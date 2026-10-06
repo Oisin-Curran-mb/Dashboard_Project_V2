@@ -90,11 +90,12 @@ const W = {
       { num: "07", label: "Pop-up - Purchase order", size: "wide", steps: [{ click: '[data-purf="open"]' }], target: ["#purfModalRoot .modal", "#purfModalRoot [role=dialog]"] },
     ] } },
   W14: { name: "Main Content Tasks", kind: "tasks",
-    v1: { ids: { kpi: "mct4", wide: "mct", xwide: "mct2" }, shots: [
+    v1: { ids: { kpi: "mct4", wide: "mct", xwide: "mct2", wide2: "mct3" }, shots: [
       { num: "01", label: "Glance", size: "kpi" },
       { num: "02", label: "Explore", size: "wide" },
       { num: "03", label: "Detail", size: "xwide" },
       { num: "04", label: "Pop-up - Task", size: "wide", steps: [{ click: '[data-action="mct-open"]' }], target: SHELL_MODAL },
+      { num: "05", label: "Explore - New user", size: "wide2" },
     ] },
     v2: { ids: { kpi: "mct4", wide: "mct", xwide: "mct2", wide2: "mct3" }, shots: [
       { num: "01", label: "Glance", size: "kpi" },
