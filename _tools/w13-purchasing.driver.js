@@ -80,16 +80,13 @@ A.eq(C("purFMineSet", wide).length, 10, "ten requests await me (next or later, i
 A.eq(C("purFPendingCount", wide), 13, "thirteen requests pending approval");
 
 /* ---------- 2. render ---------------------------------------------------- */
-/* The table is the default view since 27 Sep; the board sections opt into Kanban at Detail explicitly. */
-xw.purfView = "kanban";
+/* The table is the default view; the Kanban board was removed on 5 Oct 2026 (owner: it did not work). */
 [wide, kpi, xw].forEach(function (w) { const h = C("purFContent", w); A.ok(h && h.length > 800, w.id + " (" + w.size + ") renders (" + h.length + " bytes)"); A.noEmDash(h, w.id); if (/wt-head/.test(h)) A.headMatchesBody(h, w.id + " table (D12)"); });
 let h = C("purFContent", xw);
 A.contains(h, '<span class="metric-value">10</span><span class="bank-pill">need your approval</span>', "Detail headline: requests awaiting me");
-["Pending approval", "Payment approval", "Ready to pay", "Paid"].forEach(function (l) { A.contains(h, 'data-purf-drop="' + l + '"', "board has the " + l + " lane"); });
-A.absent(h, 'data-purf-drop="Rejected"', "no Rejected lane"); A.absent(h, 'data-purf-drop="Approved"', "no raw Approved lane");
-A.contains(h, 'class="purf-finish"', "Finish column at All statuses");
-A.contains(h, "purf-turn purf-turn-next", "cards carry a next-turn badge"); A.contains(h, "purf-turn purf-turn-rejected", "rejected badge"); A.contains(h, "purf-turn purf-turn-hold", "hold badge"); A.contains(h, "purf-turn purf-turn-waiting", "waiting badge");
-A.absent(h, 'draggable="false"', "every open card can be picked up (Close and Void are status actions, whatever the turn)"); A.contains(h, 'draggable="true"', "cards are draggable"); A.eq(C("purFCanDrag", { stage: "Closed" }), false, "a closed card cannot be picked up"); A.eq(C("purFCanDrag", { stage: "Voided" }), false, "a voided card cannot be picked up");
+A.absent(h, "data-purf-drop=", "no board drop zones anywhere (Kanban removed 5 Oct)"); A.absent(h, "purf-kcard", "no cards");
+A.contains(h, "purf-turn purf-turn-next", "rows carry a next-turn badge"); A.contains(h, "purf-turn purf-turn-waiting", "waiting badge");
+A.absent(h, "draggable=", "nothing is draggable: the board is gone");
 A.contains(h, 'data-purf="scope"', "scope chip present"); A.contains(h, ">All requests<", "scope defaults to All requests");
 const hk = C("purFContent", kpi); const glOpen = POS.filter(function (p) { const l = C("purFLane", p); return l === "Pending approval" || l === "Payment approval" || l === "Ready to pay"; }).length;
 A.contains(hk, '<span class="metric-value">' + glOpen + '</span>', "Glance headline: everything waiting for someone to act (owner, 27 Sep)"); A.contains(hk, ">waiting for action<", "headline pill"); A.contains(hk, 'title="Everything waiting for someone to act: ', "headline hover explains itself");
@@ -97,12 +94,12 @@ A.contains(hk, ">My approval<", "tile: Awaiting my approval next"); A.contains(h
 A.contains(hk, 'title="Awaiting my approval next: 9 requests where your level is the next one to act."', "tile hover: full meaning with the count"); A.contains(hk, 'title="Awaiting my approval: 1 request on a path you are on', "tile hover: later"); A.contains(hk, 'title="Ready to pay: 1 order with payment approval complete', "tile hover: to be paid");
 A.absent(hk, " pending, ", "caption is the outstanding figure only"); A.contains(hk, "$14,397.50 outstanding</span>", "caption: outstanding dollars"); A.absent(hk, "need your approval", "old headline gone");
 /* scope filter */
-xw.purfScope = "Awaiting my approval next"; h = C("purFContent", xw); A.eq((h.match(/purf-turn-next/g) || []).length, (h.match(/class="purf-kcard/g) || []).length, "'Awaiting my approval next' shows only next-turn cards (cards now carry our purf-kcard class)"); A.absent(h, "purf-turn-waiting", "no waiting cards under 'next'");
-xw.purfScope = "Awaiting my approval"; h = C("purFContent", xw); A.ok(/purf-turn-mine/.test(h) && !/purf-turn-waiting/.test(h), "'Awaiting my approval' adds my later levels, still no waiting cards");
+xw.purfScope = "Awaiting my approval next"; h = C("purFContent", xw); A.ok(/purf-turn-next/.test(h), "'Awaiting my approval next' shows next-turn rows"); A.absent(h, "purf-turn-waiting", "no waiting rows under 'next'");
+xw.purfScope = "Awaiting my approval"; h = C("purFContent", xw); A.ok(/purf-turn-mine/.test(h) && !/purf-turn-waiting/.test(h), "'Awaiting my approval' adds my later levels, still no waiting rows");
 xw.purfScope = "All requests";
-/* status chip means the lane on the board */
-xw.purfStatus = "Payment approval"; h = C("purFContent", xw); A.eq((h.match(/data-purf-drop="/g) || []).length, 1, "one lane and no Finish column when a lane is chosen"); A.contains(h, "PO-2872", "Payment approval lane shows its cards"); xw.purfStatus = null;
-xw.purfView = "table"; h = C("purFContent", xw); A.contains(h, ">Payment approval</span>", "table status cell names the lane"); A.contains(h, "purf-turn", "table rows carry the turn badge"); if (/wt-head/.test(h)) A.headMatchesBody(h, "table (D12)"); xw.purfView = null;
+/* status chip means the derived status in the table */
+xw.purfStatus = "Payment approval"; h = C("purFContent", xw); A.contains(h, "PO-2872", "Payment approval filter shows its rows"); xw.purfStatus = null;
+h = C("purFContent", xw); A.contains(h, ">Payment approval</span>", "table status cell names the derived status"); A.contains(h, "purf-turn", "table rows carry the turn badge"); if (/wt-head/.test(h)) A.headMatchesBody(h, "table (D12)"); xw.purfView = null;
 
 /* ---------- 3. actions on the live path --------------------------------- */
 /* PO-2893: my level 2 is next; approving completes the request path */
@@ -190,31 +187,23 @@ mh = openTab("PO-2888", "detail"); A.contains(mh, 'aria-label="Approval Path" di
 /* read-only records */
 mh = openTab("PO-2610"); A.contains(mh, "Read-only: this order is approved and paid", "paid order grid is read-only"); A.contains(mh, 'data-v="payment"', "Payment Approval tab once Approved/Closed");
 mh = openTab("PO-2872", "payment"); A.contains(mh, "Payment Approval Path: Administration", "payment grid lives on the Payment Approval tab"); A.contains(mh, "Add Invoice Payment Approval", "invoice grid follows");
-/* the board drop writes the same rows Save writes */
-reset(); C("purFApplyMove", wide, "PO-2888", "Payment approval", ""); A.eq(po("PO-2888").stage, "Approved", "drop: approved"); A.ok(po("PO-2888").appr.some(function (a) { return a.user === "Nitzi Wright" && a.by === ME; }) && po("PO-2888").appr.some(function (a) { return a.user === ME; }), "drop stores the cascaded rows like Save");
+/* an approval from the Approvals grid writes the same rows Save writes */
+reset(); C("purFApplyMove", wide, "PO-2888", "Payment approval", ""); A.eq(po("PO-2888").stage, "Approved", "grid approval: approved"); A.ok(po("PO-2888").appr.some(function (a) { return a.user === "Nitzi Wright" && a.by === ME; }) && po("PO-2888").appr.some(function (a) { return a.user === ME; }), "stores the cascaded rows like Save");
 C("purFCloseModal"); reset();
 
 /* ---------- 4b. legend (owner, 27 Sep): info icon top right, Explore and Detail only ---- */
-xw.purfView = "kanban"; const hdWide = C("purFHeaderBlock", wide), hdX = C("purFHeaderBlock", xw), glance = C("purFContent", kpi);
-A.contains(hdWide, 'data-purf="legend"', "Explore header carries the legend icon"); A.contains(hdX, 'data-purf="legend"', "Detail header carries the legend icon");
+const hdWide = C("purFHeaderBlock", wide), hdX = C("purFHeaderBlock", xw), glance = C("purFContent", kpi);
+A.absent(hdWide, 'data-purf="legend"', "Explore header has no legend icon (owner, 6 Oct)"); A.absent(hdX, 'data-purf="legend"', "Detail header has no legend icon (owner, 6 Oct)");
 A.absent(glance, 'data-purf="legend"', "Glance has no legend icon");
-A.ok(hdX.indexOf("dep-hd-num") < hdX.indexOf('data-purf="legend"'), "the icon sits in the headline row, one line below the toggle (owner, 27 Sep)");
 C("purFOpenPop", "legend", xw.id, null); A.eq(env.get("PURF_POP").type, "legend", "the icon opens the legend pop-up");
 const lg = C("purFPopContent");
-["Lanes", "Badges: whose turn it is", "Card colours", "Moving a card"].forEach(function (c) { A.contains(lg, '<div class="cap">' + c + "</div>", "legend section " + c); });
-env.get("PURF_LANES").forEach(function (l) { A.contains(lg, ">" + l + "</span>", "legend names lane " + l); });
+["Status", "Badges: whose turn it is", "Issued column"].forEach(function (c) { A.contains(lg, '<div class="cap">' + c + "</div>", "legend section " + c); });
+env.get("PURF_LANES").forEach(function (l) { A.contains(lg, ">" + l + "</span>", "legend names status " + l); });
 ["next", "mine", "waiting", "rejected", "hold"].forEach(function (k) { A.contains(lg, "purf-turn purf-turn-" + k, "legend shows the " + k + " badge with its real class"); });
-["purf-card-next", "purf-card-ok", "purf-card-paid", "purf-card-hold", "purf-card-rej"].forEach(function (k) { A.contains(lg, k, "legend shows card colour " + k); });
-A.contains(lg, "purf-fin-close", "legend shows the Close zone"); A.contains(lg, "purf-fin-void", "legend shows the Void zone"); A.contains(lg, "purf-age-hot", "legend shows the overdue clock");
-A.contains(lg, "One lane at a time", "legend states the move rules"); A.noEmDash(lg, "legend");
+["purf-card-", "purf-fin-close", "Moving a card", "Drag the card"].forEach(function (k) { A.absent(lg, k, "legend has no board item " + k + " (Kanban removed 5 Oct)"); });
+A.noEmDash(lg, "legend");
 C("purFClosePop"); A.eq(env.get("PURF_POP"), null, "legend closes");
 
-/* ---------- 4c. Explore board scrolls sideways (owner, 27 Sep) ------------ */
-wide.purfView = "kanban"; wide.purfStatus = null;
-const bw = C("purFBoard", wide), bx = C("purFBoard", xw);
-A.contains(bw, "grid-template-columns:repeat(4,minmax(180px,1fr)) 96px", "Explore: four lanes keep a 180px minimum and Finish is a fixed track");
-A.contains(bx, "grid-template-columns:repeat(4,1fr) 0.6fr", "Detail: unchanged fluid tracks");
-A.contains(css, '.purf-root[data-tier="wide"] .purf-board{overflow-x:auto;overflow-y:hidden', "Explore board scrolls sideways only, never up and down");
 
 /* ---------- 4d. Encumbrances view (owner, 27 Sep) ----------------------- */
 reset();
@@ -244,30 +233,28 @@ A.eq((encT.match(/purf-enc-trow/g) || []).length, pers.length, "one table row pe
 env.get("PURF_POP"); C("purFClosePop");
 /* bar pop-up lists the orders behind a period with their lane */
 const body = C("purFBody", wide); A.contains(body, "purf-enc", "body renders the view");
-xw.purfView = "table"; wide.purfView = "kanban"; wide.purfEncView = null;
+xw.purfView = "table"; wide.purfView = null; wide.purfEncView = null;
 A.absent(C("purFLegendHTML", wide), "Encumbrances view", "legend carries no Encumbrances note (icon is hidden in that view)");
 A.contains(css, ".purf-root .purf-enc-bar{", "chart CSS copied as purf-enc-*"); A.absent(block, ".pur-bar", "no dependency on her .pur-bar class");
 reset();
 
-/* ---------- 4e. legend by view, no Kanban at Explore (owner, 27 Sep) ------ */
+/* ---------- 4e. legend by view; no Kanban at any tier (owner, 5 Oct) ------ */
 reset(); wide.purfView = null; xw.purfView = null; wide.purfEncView = null;
 A.absent(C("purFViewToggle", wide), 'data-v="kanban"', "Explore toggle has no Kanban"); A.contains(C("purFViewToggle", wide), 'data-v="table"', "Explore offers Table"); A.contains(C("purFViewToggle", wide), 'data-v="enc"', "Explore offers Encumbrances");
-A.contains(C("purFViewToggle", xw), 'data-v="kanban"', "Detail keeps Kanban");
-A.eq(C("purFViewCur", wide), "table", "Explore default view is the table"); A.eq(C("purFViewCur", xw), "table", "Detail default view is the table too (owner, 27 Sep)"); xw.purfView = "kanban"; A.eq(C("purFViewCur", xw), "kanban", "Kanban stays an explicit choice at Detail"); xw.purfView = null;
+A.absent(C("purFViewToggle", xw), 'data-v="kanban"', "Detail toggle has no Kanban either (removed 5 Oct)"); A.absent(C("purFViewToggle", xw), ">Kanban<", "no Kanban label");
+A.eq(C("purFViewCur", wide), "table", "Explore default view is the table"); A.eq(C("purFViewCur", xw), "table", "Detail default view is the table too (owner, 27 Sep)"); xw.purfView = "kanban"; A.eq(C("purFViewCur", xw), "table", "a stored kanban view resolves to the table at Detail (board removed 5 Oct)"); xw.purfView = null;
 wide.purfView = "kanban"; A.eq(C("purFViewCur", wide), "table", "a stored kanban view resolves to table at Explore"); wide.purfView = null;
 xw.purfView = "enc"; A.absent(C("purFHeaderBlock", xw), 'data-purf="legend"', "no legend icon in the Encumbrances view"); xw.purfView = "table";
-A.contains(C("purFHeaderBlock", xw), 'data-purf="legend"', "legend icon in the Table view");
+A.absent(C("purFHeaderBlock", xw), 'data-purf="legend"', "no legend icon in the Table view either (owner, 6 Oct)");
 C("purFOpenPop", "legend", xw.id, null); const lgT = C("purFPopContent"); C("purFClosePop");
 A.contains(lgT, '<div class="cap">Status</div>', "table legend: Status section"); A.contains(lgT, ">Closed</span>", "table legend names Closed"); A.contains(lgT, ">Voided</span>", "table legend names Voided");
 A.contains(lgT, "purf-ovflag", "table legend shows the Overdue flag"); A.contains(lgT, "purf-turn purf-turn-next", "table legend keeps the badges");
 ["purf-card-", "purf-fin-close", "Moving a card", "Drag the card", "Encumbrances view", "purf-age-hot"].forEach(function (k) { A.absent(lgT, k, "table legend has no board-only item " + k); });
-xw.purfView = "kanban"; C("purFOpenPop", "legend", xw.id, null); const lgK = C("purFPopContent"); C("purFClosePop");
-A.contains(lgK, '<div class="cap">Lanes</div>', "board legend: Lanes"); A.contains(lgK, "purf-card-next", "board legend: card colours"); A.contains(lgK, "Moving a card", "board legend: move rules"); A.absent(lgK, ">Closed</span>", "board legend has no Closed chip");
 xw.purfView = null; reset();
 
 /* ---------- 4f. Table first; short chip labels at Explore (owner, 27 Sep) -- */
 reset(); wide.purfView = null; xw.purfView = null; wide.purfScope = null; xw.purfScope = null;
-const tgX = C("purFViewToggle", xw); A.ok(tgX.indexOf('data-v="table"') < tgX.indexOf('data-v="kanban"') && tgX.indexOf('data-v="kanban"') < tgX.indexOf('data-v="enc"'), "Detail toggle order: Table, Kanban, Encumbrances");
+const tgX = C("purFViewToggle", xw); A.ok(tgX.indexOf('data-v="table"') < tgX.indexOf('data-v="enc"'), "Detail toggle order: Table, Encumbrances"); A.eq((tgX.match(/data-v=/g) || []).length, 2, "two views only");
 const tgW = C("purFViewToggle", wide); A.ok(tgW.indexOf('data-v="table"') < tgW.indexOf('data-v="enc"'), "Explore toggle order: Table, Encumbrances");
 const hW = C("purFHeaderBlock", wide), hX = C("purFHeaderBlock", xw);
 A.contains(hW, '<span class="fc-label">All statuses</span>', "Explore status chip drops the Status: prefix"); A.contains(hX, '<span class="fc-label">Status: All statuses</span>', "Detail status chip unchanged");
@@ -281,7 +268,7 @@ wide.purfScope = null; xw.purfScope = null; reset();
 /* ---------- 4g. Explore header: one layout at both tiers (owner, 27 Sep: "fix this to way it was before") -- */
 reset(); wide.purfView = null; xw.purfView = null;
 const hsW = C("purFHeaderBlock", wide), hsX = C("purFHeaderBlock", xw);
-[hsW, hsX].forEach(function (h, i) { const n = i ? "Detail" : "Explore"; A.contains(h, 'class="dep-hd-toggle"', n + ": labelled toggle on the chip line"); A.contains(h, ">Encumbrances</button>", n + ": toggle keeps its labels"); A.ok(h.indexOf("dep-hd-num") < h.indexOf('data-purf="legend"'), n + ": legend icon on the headline row"); });
+[hsW, hsX].forEach(function (h, i) { const n = i ? "Detail" : "Explore"; A.contains(h, 'class="dep-hd-toggle"', n + ": labelled toggle on the chip line"); A.contains(h, ">Encumbrances</button>", n + ": toggle keeps its labels"); });
 A.absent(hsW, "purf-hd-acts", "no stacked actions cell"); A.absent(css, "purf-vtoggle-ic", "no icon-only toggle CSS");
 A.contains(css, "justify-self:stretch;align-self:center;}", "chip row stretches to its track (was start-justified and overflowed under the toggle)");
 A.contains(css, '.purf-root[data-tier="wide"] .purf-chip::before{display:none;}', "Explore chips drop the leading filter glyph");
@@ -291,49 +278,32 @@ wide.purfView = "enc"; A.absent(C("purFHeaderBlock", wide), 'data-purf="legend"'
 A.noEmDash(block.replace(/\/\*[\s\S]*?\*\//g, ""), "block code");
 A.contains(css, ".purf-turn-next", "turn badge CSS"); A.contains(css, ".purf-turnline", "turn line CSS");
 A.absent(block.replace(/\/\*[\s\S]*?\*\//g, ""), 'stage==="Rejected"', "no code tests for a Rejected stage");
-A.contains(css, ".purf-kcol-sub", "threshold sub-line CSS"); A.contains(css, ".purf-kcol-dim", "dimmed column CSS");
+A.absent(css, ".purf-kcol-", "no board column CSS left (Kanban removed 5 Oct)"); A.absent(css, ".purf-board", "no board CSS"); A.absent(css, ".purf-card", "no card CSS"); A.absent(css, ".purf-tnote", "the \"Showing the N longest waiting\" note is gone (owner, 5 Oct)");
 A.absent(css, ".purf-paybadge", "the dead pay badge CSS is gone"); A.absent(css, ".purf-holdflag", "and the dead hold flag CSS");
 
-/* ---------- 6. the shipped default: the approval-path board (owner, 2026-09-28) ------
+/* ---------- 6. the shipped default: the approval path with the payment process off (owner, 2026-09-28; board removed 5 Oct 2026) ------
    PURF_USE_PAY off is how the widget ships, and how a company with PO_Company
    .UsePaymentApprovalProcess = 0 sees it. The board stops being payment lanes and becomes the approval
-   path itself: one column per level of the selected path, then Approved. Everything above this line
-   describes the same widget with the constant flipped on. */
+   path itself. The Kanban that drew it as columns is gone; the column model (purFCols / purFColOf) still drives the
+   move rules behind the Approvals grid. Everything above this line describes the same widget with the constant flipped on. */
 payOn(false); reset();
-xw.purfView = "kanban"; xw.purfPath = null; xw.purfScope = null; xw.purfStatus = null;
+xw.purfView = null; xw.purfPath = null; xw.purfScope = null; xw.purfStatus = null;
 const col = function (ref) { return C("purFColOf", po(ref)); };
 const chk6 = function (ref, to) { return C("purFMoveCheck", po(ref), to); };
 
-/* 6a. one path, and no status axis of its own */
-A.eq(C("purFPathVals", xw).join("|"), "Administration|Education Ministry|Everyone|QA Path", "the board offers every approval path, not only the ones with rows, so a quiet path still shows its levels");
-A.eq(C("purFPathCur", xw), "Administration", "and defaults to the first path");
-xw.purfStatus = "Payment approval";
-A.eq(C("purFStatusVals", xw, "kanban").join("|"), "All statuses", "the columns are the status axis, so the chip has nothing to offer");
-A.eq(C("purFStatusCur", xw), "All statuses", "a stored payment lane falls back instead of emptying the board");
-xw.purfStatus = null;
+/* 6a. paths and statuses with no board: the table keeps both chips */
+A.eq(C("purFPathVals", xw).slice().sort().join("|"), "Administration|Education Ministry|Everyone|QA Path", "every approval path with rows is offered");
+A.eq(C("purFPathCur", xw), "All approval paths", "the table defaults to all paths (the board that needed one is gone)");
+A.eq(C("purFStatusVals", xw, "table").join("|"), "All statuses|Pending|Approved", "status filter is All / Pending / Approved only (owner, 6 Oct)");
 const h6 = C("purFHeaderBlock", xw);
-A.absent(h6, 'data-purf="status"', "no status chip on the path board");
-A.contains(h6, 'data-purf="path"', "the path chip is always shown, because the board needs one path");
+A.contains(h6, 'data-purf="status"', "status chip on the table");
+A.contains(h6, 'data-purf="path"', "path chip on the table");
 C("purFOpenPop", "path", xw.id, null); const pp6 = C("purFPopContent"); C("purFClosePop");
-A.absent(pp6, ">All approval paths<", "the path popover drops All approval paths on the board");
-A.contains(pp6, "draws its columns from one approval path", "and says why");
+A.contains(pp6, ">All approval paths<", "the path popover offers All approval paths");
+A.absent(pp6, "Kanban", "and never mentions the Kanban");
 
-/* 6b. the columns are the path's levels */
-let bd = C("purFBoard", xw);
-A.eq((bd.match(/data-purf-drop="[^"]*"/g) || []).join(" "), 'data-purf-drop="Level 1" data-purf-drop="Level 2" data-purf-drop="Approved" data-purf-drop="Closed" data-purf-drop="Voided"', "Administration: two levels, Approved, and the Finish column");
-["Payment approval", "Ready to pay", "Paid"].forEach(function (l) { A.absent(bd, 'data-purf-drop="' + l + '"', "no " + l + " column exists"); });
-A.contains(bd, 'class="purf-finish"', "the Finish column always shows, there being no status filter to hide it");
-A.contains(bd, ">any open order</span>", "Void is no longer unpaid-only: nothing is paid when the process is off");
-A.contains(bd, "grid-template-columns:repeat(3,1fr) 0.6fr", "the track count follows the path, not a fixed four");
-A.contains(bd, ">Nitzi Wright</span>", "level 1 is titled with its approver");
-A.contains(bd, ">Oisin Curran (you)</span>", "and my own level says so");
-/* measured in the browser: every column header is one height, so the cards start on the same line */
-A.contains(bd, "purf-pathboard", "the board carries its own class, so one header height applies to every column");
-A.contains(css, ".purf-root .purf-pathboard .purf-kcol-h{min-height:46px;align-items:flex-start;}", "one header height across the path board (the four bodies started at four heights before this)");
-A.contains(css, "-webkit-line-clamp:2", "the title clamps to two lines so a narrow column cannot make the row ragged again");
-A.contains(bd, 'title="Starts with Nitzi Wright', "a clamped title is readable on hover, not only to a screen reader");
+/* 6b. the column model is the path's levels (it drives the move rules, no longer a board) */
 xw.purfPath = "Everyone";
-A.contains(C("purFBoard", xw), "grid-template-columns:repeat(2,1fr) 0.6fr", "a one-level path draws two columns");
 A.eq(C("purFCols", xw)[0].aria, "Ends with Oisin Curran (you). Any one approver on a level satisfies it.", "a one-level path reads Ends with, as the legacy rewrite does (POOrder.cs:154-166)");
 
 /* 6c. thresholds: the sub-line, the legacy wording, and the dimmed column */
@@ -344,11 +314,6 @@ A.eq(cs6.map(function (c) { return c.sub; }).join("|"), "from $500|from $2,000|f
 A.eq(cs6[0].aria, "Starts with Alfred Johnson from $500. Any one approver on a level satisfies it.", "level 1 carries the legacy Starts with wording");
 A.eq(cs6[1].aria, "Then Lanette Stewart or Jim AndersonAndMoreLetters from $2,000. Any one approver on a level satisfies it.", "an Or level is Then, with both approvers named");
 A.eq(cs6[2].aria, "Ends with Pastor Bob from $5,000. Any one approver on a level satisfies it.", "the last level is Ends with");
-bd = C("purFBoard", xw);
-A.contains(bd, '<span class="purf-kcol-sub">from $5,000</span>', "the threshold renders as the header sub-line");
-A.eq((bd.match(/purf-kcol-dim/g) || []).length, 1, "exactly one column is unreachable at these amounts");
-A.contains(bd, ">Not required under $5,000<", "and it says why rather than looking merely empty");
-A.absent(bd, "Nothing at this level", "so the generic empty text is not used for it");
 
 /* 6d. every card sits in the column of the level that has to act next */
 A.eq(col("PO-2893"), "Level 2", "PO-2893: Nitzi approved level 1, so it waits at my level 2");
@@ -359,13 +324,12 @@ A.eq(col("PO-2902"), "Level 2", "a rejected request stays in the column it was r
 A.eq(col("PO-2907"), "Level 1", "PO-2907 ($430): no level applies, so it sits in the first column");
 A.eq(col("PO-2633"), "Approved", "PO-2633 was released and is out of the flow");
 A.eq(col("PO-2864"), "Approved", "a paid fixture reads simply as Approved: nothing reads the pay fields");
-A.contains(C("purFBoard", xw), "No approver required at $430.00", "the release case keeps its own badge on the board");
 
-/* 6e. a drop is still an act on the path, forward only */
+/* 6e. an approval is an act on the path, forward only (the same rules the Approvals grid uses) */
 xw.purfPath = "Administration";
 A.eq(chk6("PO-2893", "Approved").ok, true, "my level can be approved onto Approved");
 A.eq(chk6("PO-2888", "Level 2").ok, true, "and onto a later level");
-A.eq(chk6("PO-2893", "Level 1").ok, false, "a leftward drop is refused");
+A.eq(chk6("PO-2893", "Level 1").ok, false, "a backward move is refused");
 A.contains(chk6("PO-2893", "Level 1").msg, "Approval moves forward only", "and says so");
 A.eq(chk6("PO-2902", "Approved").ok, false, "a rejected request cannot be approved");
 A.contains(chk6("PO-2899", "Level 2").msg, "Not your approval", "someone else's turn is refused by name");
@@ -376,14 +340,14 @@ A.eq(chk6("PO-2861", "Voided").ok, true, "an approved order can still be voided:
 A.eq(C("purFLandCol", po("PO-2893")), "Approved", "the confirm dialog can name where the card will land");
 A.eq(C("purFLandCol", po("PO-2888")), "Approved", "including when approving my later level satisfies the whole path");
 
-/* 6f. the write: no payment path is opened, and the drop stores what Save stores */
+/* 6f. the write: no payment path is opened, and an approval stores what Save stores */
 reset(); A.eq(C("purFApplyMove", xw, "PO-2893", "Approved", ""), true, "approving my level");
 A.eq(po("PO-2893").stage, "Approved", "completes the request path");
-A.eq(col("PO-2893"), "Approved", "and the card lands in Approved");
+A.eq(col("PO-2893"), "Approved", "and its column is Approved");
 A.ok(po("PO-2893").pay === undefined && po("PO-2893").payPath === undefined && po("PO-2893").payAppr === undefined, "no payment path is seeded, as the legacy leaves PaymentApprovalID null");
 reset(); C("purFApplyMove", xw, "PO-2888", "Level 2", "");
 A.eq(po("PO-2888").stage, "Approved", "approving my later level implies the lower one (POOrderRepository.cs:1754)");
-A.ok(po("PO-2888").appr.some(function (a) { return a.user === "Nitzi Wright" && a.by === ME; }), "and the drop stores the cascaded row exactly as Save does");
+A.ok(po("PO-2888").appr.some(function (a) { return a.user === "Nitzi Wright" && a.by === ME; }), "and it stores the cascaded row exactly as Save does");
 reset(); xw.purfPath = "Education Ministry";
 A.eq(C("purFApplyMove", xw, "PO-2907", "Approved", ""), true, "the release case is approved without an approver");
 A.eq(po("PO-2907").stage, "Approved", "and goes straight to Approved");
@@ -404,19 +368,13 @@ A.absent(rm6, 'data-v="payment"', "the record pop-up has no Payment Approval tab
 A.absent(rm6, "Payment Approval Path", "and no payment-path dropdown");
 A.contains(rm6, 'data-v="approvals"', "the Approvals tab is untouched");
 env.ctx.PURF_MODAL = null;
-A.contains(C("purFAbout"), "one column per approval level", "the about text describes the board it draws");
+A.absent(C("purFAbout"), "column", "the about text no longer describes a board"); A.contains(C("purFAbout"), "whose approval is next", "it describes the table");
 
-/* 6h. the legend cannot drift from the board */
-xw.purfView = "kanban"; xw.purfPath = "Education Ministry";
+/* 6h. the legend is the table legend only */
+xw.purfPath = "Education Ministry";
 C("purFOpenPop", "legend", xw.id, null); const lg6 = C("purFPopContent"); C("purFClosePop");
-A.contains(lg6, '<div class="cap">Columns</div>', "the board legend leads with Columns, not Lanes");
-C("purFCols", xw).forEach(function (c) { A.contains(lg6, ">" + c.title + "</span>", "legend covers the " + c.key + " column (" + c.title + ")"); });
-A.contains(lg6, '<span class="purf-kcol-sub purf-lg-lane">from $500</span>', "and explains the threshold with the board's own sub-line");
-A.contains(lg6, "below it the level is skipped", "in the path editor's own terms");
-["purf-card-next", "purf-card-hold", "purf-card-rej"].forEach(function (c) { A.contains(lg6, "purf-lg-card " + c, "card colour " + c + " is covered"); });
-["purf-card-ok", "purf-card-paid"].forEach(function (c) { A.absent(lg6, "purf-lg-card " + c, "the payment card colour " + c + " cannot occur, so it is not shown"); });
-["Ready to pay", "Payment approval", "the check"].forEach(function (s) { A.absent(lg6, s, "the board legend never mentions " + s); });
-A.contains(lg6, "can pass more than one column", "the move rules explain the implied lower levels");
+A.absent(lg6, '<div class="cap">Columns</div>', "no Columns section without a board"); A.absent(lg6, "purf-lg-card", "no card colours"); A.absent(lg6, "Moving a card", "no move rules");
+["Ready to pay", "Payment approval", "the check"].forEach(function (s) { A.absent(lg6, s, "the legend never mentions " + s); });
 xw.purfView = "table"; C("purFOpenPop", "legend", xw.id, null); const lt6 = C("purFPopContent"); C("purFClosePop");
 A.contains(lt6, '<div class="cap">Status</div>', "the table legend keeps its Status section");
 A.contains(lt6, ">Approved</span>", "naming Approved");

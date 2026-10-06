@@ -102,14 +102,19 @@ if (open) {
   A.headMatchesBody(mh, "drill invoice table (D12)");
   /* owner (25 Sep): the pop-up is information only */
   ["arO-confirm", "arO-followup", "Move to unposted", "Confirm</button>"].forEach(function (n) { A.absent(mh, n, "pop-up: no " + n); });
-  /* owner 29 Sep: Jo's phase-2 additions (subtitle, search + sort, row select, contact line, Send / Print statements); Payments tab removed */
-  A.contains(mh, 'data-action="arO-statements"', "footer has Print statements"); A.contains(mh, 'id="arOdq"', "pop-up has the customer search"); A.contains(mh, 'data-action="arO-dsort"', "pop-up has the sort button"); A.contains(mh, "arO-wl-sub", "pop-up has the subtitle line");
-  { const inv = (mh.match(/data-action="arO-check"[^>]*data-inv="([^"]+)"/) || [])[1]; A.ok(!!inv, "rows carry a select box"); if (inv) { EX.WIDGETS.click("arO-check", w.id, T({ "data-inv": inv }), {}); A.ok(EX.getModal().sel && EX.getModal().sel[inv], "select box stores the row"); A.contains(EX.modalHTML(), "Print statements (1)", "Print statements counts the selected customer"); EX.WIDGETS.click("arO-check", w.id, T({ "data-inv": inv }), {}); }
-    EX.WIDGETS.click("arO-dsort", w.id, T(), {}); A.eq(EX.getModal().sort, "owed", "sort cycles to Most owed"); EX.WIDGETS.click("arO-dsort", w.id, T(), {}); EX.WIDGETS.click("arO-dsort", w.id, T(), {}); A.eq(EX.getModal().sort, "oldest", "sort cycles back to Oldest first"); }
+  /* owner 29 Sep: Jo's phase-2 additions (subtitle, search, contact line, Send statement); Payments tab removed.
+     owner 5 Oct (agreed with Jo, W05-8/10/11): no row select, no Print statements, no sort button; sorting on the column headers; search matches invoice numbers. */
+  A.absent(mh, 'data-action="arO-statements"', "footer has no Print statements"); A.absent(mh, 'data-action="arO-check"', "rows carry no select box"); A.absent(mh, "arO-wl-sort", "no sort button");
+  A.contains(mh, 'id="arOdq"', "pop-up has the search"); A.contains(mh, 'placeholder="Search customer or invoice #"', "search covers customer and invoice number"); A.contains(mh, "arO-wl-sub", "pop-up has the subtitle line");
+  A.eq((mh.match(/data-action="arO-dsort"/g) || []).length, 6, "all six headers sortable");
+  { const inv0 = (mh.match(/arO-dc3">([^<]+)</) || [])[1]; if (inv0) { EX.getModal().q = inv0.toLowerCase(); const mq = EX.modalHTML(); A.eq((mq.match(/data-action="arO-exp"/g) || []).length, 1, "searching an invoice number finds that one row"); EX.getModal().q = ""; }
+    EX.WIDGETS.click("arO-dsort", w.id, T({ "data-k": "amount" }), {}); A.eq(EX.getModal().sort, "amount-desc", "Outstanding header sorts largest first"); EX.WIDGETS.click("arO-dsort", w.id, T({ "data-k": "amount" }), {}); A.eq(EX.getModal().sort, "amount-asc", "second click flips it");
+    EX.WIDGETS.click("arO-dsort", w.id, T({ "data-k": "customer" }), {}); A.eq(EX.getModal().sort, "customer-asc", "Customer header sorts A to Z first"); EX.getModal().sort = null; }
+  mh = EX.modalHTML();
   const inv = (mh.match(/data-action="arO-exp"[^>]*data-inv="([^"]+)"/) || [])[1];
   A.ok(!!inv, "rows expand to the info drawer");
   if (inv) { A.eq(EX.WIDGETS.click("arO-exp", w.id, T({ "data-inv": inv }), {}), true, "row expand handled"); mh = EX.modalHTML(); A.ok(/arO-drawer/.test(mh), "drawer rendered"); A.contains(mh, 'data-action="arO-open-invoice"', "drawer keeps the Open invoice link (developer hook)"); A.eq(EX.WIDGETS.click("arO-open-invoice", w.id, T({ "data-inv": inv }), {}), true, "Open invoice handled"); A.eq(EX.getModal() && EX.getModal().type, "arOdetail", "modal stays open"); const tab = (mh.match(/data-action="arO-tab"[^>]*data-tab="([a-z]+)"/) || [])[1]; if (tab) A.eq(EX.WIDGETS.click("arO-tab", w.id, T({ "data-tab": tab }), {}), true, "drawer tab handled"); }
-  if (inv) { A.contains(mh, "arO-cp-contact", "drawer shows the contact line"); A.contains(mh, 'data-action="arO-statement"', "drawer has Send statement"); A.absent(mh, 'data-tab="payments"', "no Payments tab"); }
+  if (inv) { A.contains(mh, "arO-cp-contact", "drawer shows the contact line"); A.absent(mh, 'data-action="arO-statement"', "drawer has no Send statement (owner, 5 Oct)"); A.absent(mh, 'data-tab="payments"', "no Payments tab"); }
   A.eq(EX.WIDGETS.click("arO-detail-close", w.id, T(), {}), true, "drill close handled"); A.eq(EX.getModal(), null, "drill closed");
 }
 /* fixtures */

@@ -73,7 +73,7 @@ w.filter = "All types";
 const acct = EX.depO.data[0]; A.ok(!!acct, "an account exists in the dataset");
 EX.depO.openAcct(w, acct.name, acct.type, acct.acct);
 A.eq(EX.getModal() && EX.getModal().type, "depOacct", "account pop-up opened");
-let mh = EX.modalHTML(); A.ok(mh && mh.length > 800, "pop-up renders via WIDGETS.modal() (" + (mh || "").length + " bytes)"); A.contains(mh, "depo-acct-modal", "pop-up uses the block's 560px shell"); A.noEmDash(mh, "account pop-up");
+let mh = EX.modalHTML(); A.ok(mh && mh.length > 800, "pop-up renders via WIDGETS.modal() (" + (mh || "").length + " bytes)"); A.contains(mh, "depo-acct-modal", "pop-up uses the block's shell"); A.contains(mh, "modal-wide", "pop-up is the wide scoped overlay (Jo Phase 2, agreed 6 Oct)"); A.contains(mh, ">Done</button>", "closes with Done"); A.absent(mh, "Got it", "no Got it"); A.contains(mh, "Account: ", "scoped Account chip"); A.contains(mh, "vs quarter", "pop-up carries the vs link"); A.ok(/data-depo="view"[^>]*data-v="table"/.test(mh) || /data-v="table"/.test(mh), "pop-up has the Table / Trend switch"); A.ok(EX.getModal().mw && EX.getModal().mw.acct, "pop-up is a scoped clone of the widget"); A.noEmDash(mh, "account pop-up");
 if (/wt-head/.test(mh)) A.headMatchesBody(mh, "account pop-up table (D12)");
 A.contains(mh, acct.name, "pop-up names the account");
 EX.setModal(null);
@@ -85,11 +85,11 @@ const fx = H.extractRegistry(S, "deposits"); ["depO4", "depO5"].forEach(function
 /* time window chip: same picker and wording as W01 Budget Compared to Actual (owner ask 2026-10-01) */
 (function () {
   function TT(attrs) { return { getAttribute: function (k) { return (attrs || {})[k] || null; }, closest: function () { return null; } }; }
-  const h0 = EX.contentHTML(w); A.contains(h0, 'data-action="depO-span"', "header carries the time window chip"); A.contains(h0, "This quarter", "default window reads This quarter"); A.absent(h0, "vs quarter", "old compare button gone");
+  const h0 = EX.contentHTML(w); A.contains(h0, 'data-action="depO-span"', "header carries the time window link"); A.contains(h0, "vs quarter", "default window reads vs quarter beside the % (Jo Phase 2, agreed 6 Oct)"); A.absent(h0, "This quarter", "no separate time chip in the filter row"); A.ok(h0.indexOf("delta-pill") < h0.indexOf("vs quarter"), "the link sits after the % pill");
   A.eq(EX.WIDGETS.click("depO-span", w.id, TT(), {}), true, "chip opens the shell popover"); A.eq(EX.getPop() && EX.getPop().type, "depO-span", "pop state set");
-  const pc = EX.popContent(); A.contains(pc, "Show change over", "picker heading says what Deposits measures"); ["This month", "This period", "This quarter", "This year", "This fiscal year"].forEach(function (l) { A.contains(pc, l, "offers " + l); }); A.absent(pc, "This week", "no week option");
-  A.eq(EX.WIDGETS.click("depO-set-span", w.id, TT({ "data-s": "F" }), {}), true, "window applied"); A.eq(w.range, "F", "range stored"); A.contains(EX.contentHTML(w), "This fiscal year", "chip label follows"); A.absent(EX.contentHTML(w), "since ", "no start date in the header");
-  const H2 = function (r) { w.range = r; return EX.contentHTML(w).replace(/data-id="[^"]*"/g, "").replace(/This (month|period)/g, "X"); }; A.eq(H2("P"), H2("M"), "This period draws the same numbers as This month (one-month period in the demo)");
+  const pc = EX.popContent(); A.contains(pc, "Compare to", "picker heading matches Jo Phase 2 (6 Oct)"); ["Previous month", "Previous period", "Previous quarter", "Previous fiscal year", "Previous calendar year"].forEach(function (l) { A.contains(pc, l, "offers " + l); }); A.absent(pc, "Previous week", "no week option: V2 has no weekly points"); A.absent(pc, "mi-sub2", "no sub-lines");
+  A.eq(EX.WIDGETS.click("depO-set-span", w.id, TT({ "data-s": "F" }), {}), true, "window applied"); A.eq(w.range, "F", "range stored"); A.contains(EX.contentHTML(w), "vs fiscal year", "link label follows"); A.absent(EX.contentHTML(w), "since ", "no start date in the header");
+  const H2 = function (r) { w.range = r; return EX.contentHTML(w).replace(/data-id="[^"]*"/g, "").replace(/vs (month|period)/g, "X"); }; A.eq(H2("P"), H2("M"), "This period draws the same numbers as This month (one-month period in the demo)");
   const g = rows.filter(function (x) { return x.size === "kpi"; })[0]; if (g) { const gh = EX.contentHTML(g); A.contains(gh, "vs quarter", "Glance caption uses Jo's wording (vs quarter)"); A.absent(gh, "since ", "no start date on the Glance"); A.contains(gh, 'data-action="depO-span"', "Glance caption opens the same picker"); }
   w.range = "Q";
 })();
@@ -99,8 +99,8 @@ const fx = H.extractRegistry(S, "deposits"); ["depO4", "depO5"].forEach(function
   function bal(h) { return [(h.match(/metric-value">([^<]*)/) || [])[1]].concat((h.match(/class="lg-meta">[^<]*/g) || [])).join("|"); }
   function pct(h) { return (h.match(/delta-pill[^>]*>.*?<\/span>([0-9.]+%)/) || [])[1]; }
   w.range = "M"; const b0 = bal(EX.contentHTML(w)), seen = {};
-  ["P", "Q", "Y", "F"].forEach(function (r) { w.range = r; const h = EX.contentHTML(w); A.eq(bal(h), b0, r + ": headline and pie balances are today's, unchanged by the window"); A.contains(h, "w07-chg", r + ": pie legend shows each slice's change"); seen[r] = pct(h); });
-  A.ok(seen.Q !== seen.Y, "the % changes with the window");
+  ["P", "Q", "Y", "F"].forEach(function (r) { w.range = r; const h = EX.contentHTML(w); A.eq(bal(h), b0, r + ": headline and pie balances are today's, unchanged by the window"); A.absent(h, "w07-chg", r + ": pie legend shows amount and share only (W07-7, 6 Oct)"); seen[r] = pct(h); });
+  
   ["Q", "F"].forEach(function (r) { w.range = r; w.view = "dist"; const a = pct(EX.contentHTML(w)); w.view = "trend"; A.eq(pct(EX.contentHTML(w)), a, r + ": headline % is the same on Distribution and Trend"); });
   w.view = keep.view; w.range = keep.range;
 })();

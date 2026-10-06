@@ -1470,7 +1470,12 @@
   /* ===== W11 Fixed Asset Values V2 CSS ===== */
   .faf-root.faf-w{height:100%;display:flex;flex-direction:column;min-height:0;overflow:hidden;}
   .faf-root .dep-hd{row-gap:var(--gap-tight);padding:var(--padding-medium) var(--padding-base) var(--padding-medium);}
-  .faf-root .dep-hd-top{display:contents;}
+  .faf-root .dep-hd-top,.faf-root .dep-hd-num{display:contents;}
+  /* Jo's headline block (5 Oct): spans both header columns under the controls. */
+  .faf-root .faf-numwrap{grid-column:1/-1;display:flex;flex-direction:column;align-items:flex-start;gap:var(--gap-xxtight);min-width:0;}
+  .faf-root .faf-kpi-lbl{font-size:var(--type-size-11);font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--txt-subtle);}
+  .faf-root .faf-pills{display:flex;align-items:center;gap:var(--gap-tight);flex-wrap:wrap;margin-top:var(--padding-xxxtight);}
+  .faf-root .kpi-num .faf-pills{margin-top:var(--padding-xxtight);}
   .faf-root .kpi-num{justify-content:center;}
   .faf-root .wt-head{z-index:2;}
   .faf-root .wt-row:not(.wt-head):not(.faf-totalrow):hover{background:var(--wn-100);}
@@ -1487,7 +1492,8 @@
   /* Download: its own slim right-aligned row, height set by the button itself
      so it does not push the content down. */
   .faf-root .faf-tblwrap{display:flex;flex-direction:column;flex:1;min-height:0;}
-  .faf-root .faf-tscroll{flex:1 1 auto;min-height:0;overflow-x:auto;}
+  /* The table gives up height to the headline block and scrolls inside the card (owner, 5 Oct). */
+  .faf-root .faf-tscroll{flex:1 1 auto;min-height:0;overflow:auto;}
   .faf-root .faf-tbl{min-width:624px;}
   .faf-root .faf-rowgroup{display:contents;}
   .faf-root .faf-arow{gap:var(--gap-tight);}
@@ -1498,13 +1504,9 @@
   /* Totals row: sticky, and it totals the whole filtered group, never the page. */
   .faf-root .faf-totalrow{border-top:1.5px solid var(--stroke-widget);border-bottom:none;position:sticky;bottom:0;background:var(--surface-widget);font-weight:700;z-index:2;}
   .faf-root .faf-totalrow .faf-c{color:var(--txt-primary);font-weight:700;}
-  /* A fully depreciated row is marked by a word, not by colour alone. */
-  .faf-root .faf-zero .faf-nm,.faf-root .faf-zero .faf-tag{color:var(--txt-secondary);}
-  .faf-root .faf-zerotag{margin-left:var(--padding-xtight);font-size:var(--type-size-10);font-weight:600;text-transform:uppercase;letter-spacing:.03em;color:var(--txt-subtle);}
-  /* Server pager: 10 rows a page, and the count line names the whole group. */
-  .faf-root .faf-pager{display:flex;align-items:center;justify-content:flex-end;gap:var(--gap-tight);flex:0 0 auto;padding:var(--padding-xtight) var(--padding-medium) var(--padding-xxxtight);border-top:1px solid var(--stroke-widget);font-size:var(--type-size-11);color:var(--txt-subtle);}
-  .faf-root .faf-pgcount{margin-right:auto;font-variant-numeric:tabular-nums;}
-  .faf-root .faf-pgnum{font-variant-numeric:tabular-nums;min-width:82px;text-align:center;}
+  /* Load more row, inside the scroll under the last asset row. */
+  .faf-root .faf-more{display:flex;justify-content:center;padding:var(--padding-tight) 0;}
+  .faf-root .faf-more .faf-more-n{color:var(--txt-subtle);font-weight:400;margin-left:var(--gap-xxtight);}
   /* Donut: responsive within the card, legend capped so the arcs keep their
      room at both tiers. */
   .faf-root .faf-pie{display:flex;flex-direction:column;justify-content:center;min-width:0;flex:1;min-height:0;}
@@ -1600,33 +1602,8 @@
   .purf-root .purf-skel-rows{flex:1;min-height:0;display:flex;flex-direction:column;gap:var(--gap-medium);}
   .purf-root .purf-sk-line{display:flex;align-items:center;gap:var(--gap-medium);}
   .purf-root .purf-skel-cap{display:flex;align-items:center;gap:var(--gap-tight);justify-content:center;color:var(--txt-subtle);font-size:var(--type-size-12);padding:var(--padding-medium) 0 0;}
-  /* Board. The column count is set inline because it varies with the status
-     filter and with whether the split Finish column is showing. */
-  .purf-root .purf-board{flex:1;min-height:0;align-items:stretch;}
-  .purf-root[data-tier="wide"] .purf-board{overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scrollbar-width:thin;padding-bottom:var(--padding-tight);}
-  .purf-root[data-tier="wide"] .purf-col,.purf-root[data-tier="wide"] .purf-finish{min-width:0;}
-  .purf-root .purf-col{min-height:0;}
-  .purf-root .purf-colb{min-height:64px;border-radius:var(--cornerradius-medium);padding:var(--padding-xxxtight);transition:background var(--dur,.15s) ease,box-shadow var(--dur,.15s) ease;}
-  .purf-root[data-tier="xwide"] .purf-colb{overflow-y:auto;max-height:340px;scrollbar-width:thin;}
-  .purf-root .purf-colb.purf-dragover,.purf-root .purf-fin-half.purf-dragover{background:var(--am-50);box-shadow:inset 0 0 0 2px var(--am-300);}
-  .purf-root .purf-card{position:relative;}
-  .purf-root .purf-card-age{display:inline-flex;align-items:center;gap:var(--gap-xxxtight);font-size:var(--type-size-11);color:var(--txt-subtle);font-variant-numeric:tabular-nums;}
-  .purf-root .purf-card-age .material-symbols-rounded{font-size:var(--type-size-12);opacity:.55;}
-  .purf-root .purf-card-age.purf-age-hot{color:var(--red-100);font-weight:600;}
-  .purf-root .purf-card-age.purf-age-hot .material-symbols-rounded{opacity:1;}
-  .purf-root .purf-card-ok{background:var(--wn-100);}
-  .purf-root .purf-card-paid{background:var(--primitive-color-jade-25);border-color:var(--primitive-color-jade-100);}
-  .purf-root .purf-card-hold{background:var(--primitive-color-saffron-25);border-color:var(--primitive-color-saffron-100);}
-  .purf-root .purf-card-rej{background:var(--red-10);border-color:var(--wn-400);}
   .purf-root .purf-more{background:none;border:0;font-family:inherit;font-size:var(--type-size-11);font-weight:600;color:var(--am-700);cursor:pointer;padding:var(--padding-xxtight) var(--padding-xxxtight);text-align:left;text-decoration:underline;text-underline-offset:2px;}
   .purf-root .purf-more:hover{color:var(--txt-primary);}
-  .purf-root .purf-finish{display:flex;flex-direction:column;gap:var(--gap-tight);min-width:0;min-height:0;padding-top:var(--padding-base);}
-  .purf-root .purf-fin-half{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--gap-xxxtight);border:1.5px dashed;border-radius:var(--cornerradius-medium);padding:var(--padding-tight) var(--padding-xxtight);text-align:center;min-height:64px;}
-  .purf-root .purf-fin-half .material-symbols-rounded{font-size:var(--type-size-18);}
-  .purf-root .purf-fin-t{font-size:var(--type-size-10);font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
-  .purf-root .purf-fin-s{font-size:var(--type-size-10);color:var(--txt-subtle);}
-  .purf-root .purf-fin-close{border-color:var(--primitive-color-jade-100);color:var(--primitive-color-jade-500);background:var(--pos-10);}
-  .purf-root .purf-fin-void{border-color:var(--wn-400);color:var(--txt-secondary);background:var(--wn-100);}
   /* PO Table, on her .wt-row primitives with the ARIA table roles */
   .purf-root .purf-tblwrap{display:flex;flex-direction:column;flex:1;min-height:0;}
   .purf-root .purf-tscroll{flex:1 1 auto;min-height:0;overflow-x:auto;}
@@ -1648,7 +1625,6 @@
   .purf-root .purf-rowclick:hover .purf-c-go{color:var(--txt-secondary);}
   .purf-root .purf-rowclick:focus-visible{outline:2px solid var(--focusring-base);outline-offset:-2px;}
   .purf-root .purf-none{color:var(--txt-subtle);}
-  .purf-root .purf-tnote{font-size:var(--type-size-11);color:var(--txt-subtle);padding:var(--padding-xxtight) var(--padding-base) var(--padding-xxxtight);}
   /* Glance: three state-count cards under the headline */
   .purf-root .purf-glance{display:flex;gap:var(--gap-xtight);align-items:stretch;width:100%;margin-top:var(--padding-xxxtight);}
   .purf-root .purf-gcard{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:0;background:var(--wn-100);border:1px solid var(--stroke-widget);border-radius:var(--cornerradius-medium);padding:var(--padding-xxtight) var(--padding-xxxtight);}
@@ -1738,8 +1714,6 @@
   .purf-root .purf-turn-waiting{background:var(--wn-100);color:var(--txt-subtle);}
   .purf-root .purf-turn-rejected{background:var(--red-10);color:var(--red-100);}
   .purf-root .purf-turn-hold{background:var(--primitive-color-saffron-25);color:var(--primitive-color-saffron-500);}
-  .purf-root .purf-card-next{border-color:var(--am-400);box-shadow:inset 3px 0 0 var(--am-500);}
-  .purf-root .purf-card[draggable="false"]{cursor:pointer;}
   .purf-root .purf-turnline{display:flex;align-items:center;gap:var(--gap-xtight);font-size:var(--type-size-12);font-weight:600;margin:var(--padding-xxxtight) 0 var(--padding-tight);padding:var(--padding-xtight) var(--padding-tight);border-radius:var(--cornerradius-medium);background:var(--wn-100);color:var(--txt-secondary);}
   .purf-root .purf-turnline .material-symbols-rounded{font-size:var(--type-size-16);}
   .purf-root .purf-turnline.purf-turn-next{background:var(--am-100);color:var(--am-700);}
@@ -1749,9 +1723,6 @@
   .purf-root .purf-ap-me{background:var(--am-50,var(--wn-100));}
   .purf-root .purf-apgrid+.purf-flbl{margin-top:var(--padding-medium);}
   /* Legend: header info icon (plain, no circle, no border) and the legend pop-up rows. */
-  .purf-root .purf-lgbtn{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border:0;background:transparent;color:var(--txt-subtle);border-radius:var(--cornerradius-medium);cursor:pointer;padding:0;justify-self:end;align-self:start;}
-  .purf-root .purf-lgbtn .material-symbols-rounded{font-size:var(--type-size-18);}
-  .purf-root .purf-lgbtn:hover{color:var(--txt-primary);}
   .purf-pop-lg{min-width:300px;max-width:360px;max-height:min(78vh,640px);overflow-y:auto;}
   .purf-root .purf-lg-row{display:grid;grid-template-columns:118px 1fr;gap:var(--gap-tight);align-items:center;padding:var(--padding-xxxtight) var(--padding-tight);}
   .purf-root .purf-lg-txt{font-size:var(--type-size-11);color:var(--txt-secondary);line-height:1.35;}
@@ -1831,35 +1802,6 @@
   .purf-root .purf-rec-ft{border-top:1px solid var(--stroke-widget);padding-top:var(--padding-medium);}
   .purf-root .purf-rec-ft .btn[disabled]{opacity:.5;cursor:default;}
   @media (max-width:640px){.purf-root .purf-rec{grid-template-columns:1fr;}}
-  /* Board, card and tab primitives, copied from her deleted .pur- run (only this widget used them). */
-  .purf-root .purf-tabs{display:inline-flex;gap:var(--gap-xxxtight);background:var(--wn-100);border-radius:var(--cornerradius-medium);padding:var(--padding-xxxtight);}
-  .purf-root .purf-tab{display:inline-flex;align-items:center;gap:var(--gap-xtight);font-family:inherit;font-size:var(--type-size-12);font-weight:600;color:var(--txt-secondary);background:none;border:none;border-radius:var(--cornerradius-medium);padding:var(--padding-xtight) var(--padding-medium);cursor:pointer;white-space:nowrap;}
-  .purf-root .purf-tab .material-symbols-rounded{font-size:var(--type-size-16);}
-  .purf-root .purf-tab.on{background:var(--surface-widget);color:var(--txt-primary);box-shadow:0 1px 3px color-mix(in srgb,var(--wn-950) 14%,transparent);}
-  .purf-root .purf-tab:focus-visible{outline:2px solid var(--focusring-base);outline-offset:2px;}
-  .purf-root .purf-kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap-tight);align-items:start;padding:var(--padding-tight) var(--padding-base) var(--padding-xtight);}
-  .purf-root .purf-kcol{display:flex;flex-direction:column;gap:var(--gap-tight);min-width:0;}
-  .purf-root .purf-kcol-h{display:flex;align-items:center;justify-content:space-between;gap:var(--gap-xxtight);padding:0 var(--padding-xxxtight) var(--padding-xxxtight);}
-  .purf-root .purf-kcol-t{font-size:var(--type-size-12);font-weight:600;color:var(--txt-secondary);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .purf-root .purf-kcol-n{font-size:var(--type-size-11);color:var(--txt-subtle);font-variant-numeric:tabular-nums;flex:0 0 auto;}
-  .purf-root .purf-kcol-b{display:flex;flex-direction:column;gap:var(--gap-tight);}
-  .purf-root .purf-kcard{display:flex;flex-direction:column;gap:var(--gap-xxxtight);text-align:left;font-family:inherit;background:var(--surface-widget);border:1px solid var(--stroke-widget);border-radius:var(--cornerradius-medium);padding:var(--padding-tight) var(--padding-tight);cursor:pointer;min-width:0;}
-  .purf-root .purf-kcard:hover{background:var(--wn-100);}
-  .purf-root .purf-kc-top{display:flex;align-items:center;justify-content:space-between;gap:var(--gap-xtight);}
-  .purf-root .purf-kc-num{font-size:var(--type-size-11);color:var(--txt-subtle);font-variant-numeric:tabular-nums;}
-  .purf-root .purf-kc-vendor{font-size:var(--type-size-12);color:var(--txt-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .purf-root .purf-kc-amt{font-size:var(--type-size-12);font-weight:600;font-variant-numeric:tabular-nums;color:var(--txt-primary);}
-  .purf-root .purf-kempty{font-size:var(--type-size-11);color:var(--txt-subtle);padding:var(--padding-xtight) var(--padding-xxxtight);}
-  .purf-root .purf-kcol-ttl{display:flex;flex-direction:column;gap:var(--gap-xxxtight);min-width:0;}
-  .purf-root .purf-kcol-ttl .purf-kcol-t{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.25;}
-  .purf-root .purf-kcol-sub{font-size:var(--type-size-10);font-weight:600;color:var(--txt-subtle);font-variant-numeric:tabular-nums;white-space:nowrap;}
-  .purf-root .purf-kcol-dim{opacity:.62;}
-  .purf-root .purf-kcol-dim .purf-colb{border:1px dashed var(--stroke-widget);}
-  /* One header height for every column, so the cards across the board start on the same line. Tall
-     enough for a two-line title plus the threshold line; the title clamps to two lines so a narrow
-     column cannot push the header taller and make the row ragged again. */
-  .purf-root .purf-pathboard .purf-kcol-h{min-height:46px;align-items:flex-start;}
-  .purf-root .purf-pathboard .purf-kcol-ttl .purf-kcol-t,.purf-root .purf-pathboard .purf-kcol-h>.purf-kcol-t{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-height:30px;}
 /* ===== end W13 Purchasing Management V2 CSS ===== */
   /* ===== W17 Gifts Pledges V2 CSS , prefix gpF , kind "gifts" ===== */
   /* ----- W17: the shell classes this widget used to borrow from the retired gft
@@ -3007,22 +2949,16 @@
 /* pop-up additions from Jo's phase-2 (subtitle, search + sort, row select, contact line, statements), V2 styling */
 .arO-wl-htext{display:flex;flex-direction:column;gap:var(--gap-xxxtight);min-width:0;}
 .arO-wl-sub{font-size:var(--type-size-12);color:var(--txt-subtle);}
+/* Pop-up header, Jo's shape (agreed 6 Oct, W05-7): title, then the band or customer as a chip, then "N customers · N invoices · $total". */
+.arO-wl-chip{margin-left:var(--gap-tight);font-weight:600;vertical-align:middle;}
 .arO-wl-controls{display:flex;align-items:center;gap:var(--gap-tight);padding:var(--padding-xxtight) 0 var(--padding-medium);}
 .arO-wl-search{flex:1 1 auto;display:flex;align-items:center;gap:var(--gap-xtight);background:var(--surface-widget);border:1px solid var(--stroke-widget);border-radius:var(--cornerradius-medium);padding:var(--padding-xtight) var(--padding-tight);min-height:34px;box-sizing:border-box;}
 .arO-wl-search:focus-within{border-color:var(--focusring-base);}
 .arO-wl-search .material-symbols-rounded{font-size:var(--type-size-18);color:var(--txt-subtle);}
 .arO-wl-q{flex:1;border:0;background:transparent;font:inherit;font-size:var(--type-size-12);outline:none;color:var(--txt-primary);}
-.arO-wl-sort{display:inline-flex;align-items:center;gap:var(--gap-xxtight);background:transparent;border:1px solid var(--stroke-widget);border-radius:var(--cornerradius-medium);padding:var(--padding-xtight) var(--padding-tight);font:inherit;font-size:var(--type-size-12);font-weight:500;color:var(--txt-secondary);cursor:pointer;white-space:nowrap;}
-.arO-wl-sort:hover{background:var(--wn-100);}
-.arO-wl-sort .material-symbols-rounded{font-size:var(--type-size-16);}
-.arO-dchk{flex:0 0 22px;display:inline-flex;align-items:center;justify-content:center;color:var(--txt-subtle);cursor:pointer;}
-.arO-dchk .material-symbols-rounded{font-size:var(--type-size-18);}
-.arO-dchk[aria-checked="true"]{color:var(--am-500);}
 .arO-cp-contact{display:flex;flex-wrap:wrap;gap:var(--gap-medium);font-size:var(--type-size-12);color:var(--txt-secondary);margin:0 0 var(--padding-tight);}
-.arO-cp-ci,.arO-cp-actline{display:inline-flex;align-items:center;gap:var(--gap-xxtight);}
-.arO-cp-ci .material-symbols-rounded,.arO-cp-actline .material-symbols-rounded{font-size:var(--type-size-14);color:var(--txt-subtle);}
-.arO-cp-actline{color:var(--txt-subtle);}
-.arO-cp-none{color:var(--red-100);}
+.arO-cp-ci{display:inline-flex;align-items:center;gap:var(--gap-xxtight);}
+.arO-cp-ci .material-symbols-rounded{font-size:var(--type-size-14);color:var(--txt-subtle);}
 /* pop-up body stacks top to bottom: search + sort, the invoice table (scrolls), then the total */
 .modal.modal-wide.arO-detail-modal .modal-b{display:flex;flex-direction:column;overflow:hidden;padding:0 var(--padding-base) var(--padding-xtight);}
 .arO-detail-modal .arO-wl-controls{flex:0 0 auto;}
@@ -3122,12 +3058,11 @@
   .w07-cap-btn:hover{color:var(--txt-primary);}
   .w07-more{display:flex;justify-content:center;padding:var(--padding-medium) 0;border-top:1px solid var(--stroke-widget);}
   .w07-more .w07-more-n{color:var(--txt-subtle);font-weight:400;margin-left:var(--gap-xxtight);}
-  .w07-chg{font-size:var(--type-size-11);font-weight:600;color:var(--primitive-color-jade-500);font-variant-numeric:tabular-nums;flex:0 0 auto;padding-left:var(--padding-xtight);}
-  .w07-chg.neg{color:var(--red-100);}
   .w07-since{font-size:var(--type-size-11);color:var(--txt-subtle);white-space:nowrap;}
   .w07-cap-btn .material-symbols-rounded{font-size:var(--type-size-16);}
   .kpi-row.w07-gl{flex-wrap:wrap;align-content:center;row-gap:var(--gap-xxtight);}
   .kpi-row.w07-gl .w07-gl-sub{flex:0 0 100%;margin-top:var(--padding-xtight);}
+  .dep-hd .delta-grp{display:inline-flex;align-items:center;gap:var(--gap-tight);}
   .kpi-row .depo-spark{flex:0 0 40%;max-width:42%;min-width:96px;align-self:stretch;display:block;position:relative;}
   .kpi-row .depo-spark svg{width:100%;height:100%;display:block;}
   .depo-spark{position:relative;display:block;height:44px;cursor:crosshair;flex:1;min-width:0;}
@@ -3148,14 +3083,11 @@
 
   /* account pop-up: own 560px modal shell so the shared .wt-row column widths fit */
 
-.depo-acct-modal{max-width:560px;}
+.depo-acct-modal.modal-wide{max-width:1180px;}
+.depo-acct-modal .depo-acct-mw{min-height:620px;}
+.depo-acct-modal .depo-acct-mw .tr-plot{min-height:380px;}
 
-.depo-acct-modal .acctm{display:flex;flex-direction:column;gap:var(--gap-tight);min-width:0;}
-.depo-acct-modal .acctm-kpi{display:flex;align-items:baseline;gap:var(--gap-tight);flex-wrap:wrap;min-width:0;}
 
-/* explicit height: .tr-plot's flex:1 cannot resolve inside a modal */
-.depo-acct-modal .acctm-chart{height:152px;flex:none;padding:var(--padding-xxxtight) 0 0;min-width:0;}
-.depo-acct-modal .acctm-chart .tr-canvas{min-height:0;}
   .wt-row .dt-inc{flex:0 0 92px;}
 /* ===== end W07 Deposits on Hand V2 CSS ===== */
 
@@ -6063,7 +5995,7 @@ function arOGlance(w){
   var read="";
   if(tot>0){
     var call=(over>0&&worst&&worst.key!=="cur")
-      ?'<span class="arO-glance-cap"><span class="arO-sevdot" style="background:var('+worst.color+')"></span>'+money(worst.total)+' in '+worst.label+', the oldest with a balance</span>'
+      ?'<span class="arO-glance-cap"><span class="arO-sevdot" style="background:var('+worst.color+')"></span>'+money(worst.total)+' in '+worst.label+'</span>'
       :'<span class="arO-glance-cap arO-cap-ok">'+ICON("check")+'Every invoice is still current</span>';
     read='<div class="arO-glance-read">'+arOStackBar(w)+call+'</div>';
   }
@@ -6227,7 +6159,7 @@ function arODetailTabs(x){
 }
 /* Developer hook: the link to this invoice record in Accounts Receivable. The destination is wired by development; the demo only reports the intent. */
 function arOInvoiceLink(w,x){
-  return '<div class="arO-actions"><button class="btn outlined sm" data-action="arO-open-invoice" data-id="'+w.id+'" data-inv="'+arOEsc(x.inv)+'">'+ICON("open_in_new")+'Open invoice</button><button class="btn outlined sm" data-action="arO-statement" data-id="'+w.id+'" data-cust="'+arOEsc(x.customer)+'">'+ICON("mail")+'Send statement</button></div>';
+  return '<div class="arO-actions"><button class="btn outlined sm" data-action="arO-open-invoice" data-id="'+w.id+'" data-inv="'+arOEsc(x.inv)+'">'+ICON("open_in_new")+'Open invoice</button></div>';
 }
 /* Customer contact + last activity, from Jo's phase-2 pop-up (demo values derived from the name). */
 function arOContact(name){
@@ -6238,32 +6170,38 @@ function arOContact(name){
   var last=(daysAgo<38)?{via:chans[hsh%chans.length],iso:d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}:null;
   return {email:"accounts@"+slug+".org",phone:"(555) "+String(200+hsh%799)+"-"+String(1000+hsh%8999),last:last};
 }
+/* Contact line: email and phone only. The last-contact note and the statement button were removed (owner, 5 Oct). */
 function arOContactLine(x){var c=arOContact(x.customer);
-  var act=c.last?('<span class="arO-cp-actline">'+ICON("history")+c.last.via+' on '+arOFmtDate(c.last.iso)+'</span>'):('<span class="arO-cp-actline arO-cp-none">'+ICON("error_outline")+'No contact logged yet</span>');
-  return '<div class="arO-cp-contact"><span class="arO-cp-ci">'+ICON("mail")+c.email+'</span><span class="arO-cp-ci">'+ICON("call")+c.phone+'</span>'+act+'</div>';}
+  return '<div class="arO-cp-contact"><span class="arO-cp-ci">'+ICON("mail")+c.email+'</span><span class="arO-cp-ci">'+ICON("call")+c.phone+'</span></div>';}
 function arODetailModalHTML(){
   var w=find(modal.id);if(!w)return "";
   var mode=modal.mode,key=modal.key;
   var all=arODetailInvoices(w,mode,key),invs=all.slice();
   var q=(modal.q||"").trim().toLowerCase();
-  if(q)invs=invs.filter(function(x){return x.customer.toLowerCase().indexOf(q)>-1;});
-  var sort=modal.sort||"oldest";
-  invs.sort(function(a,b){if(sort==="name")return a.customer.localeCompare(b.customer)||(b.days-a.days);if(sort==="owed")return b.amount-a.amount;return (b.days-a.days)||(b.amount-a.amount);});
+  if(q)invs=invs.filter(function(x){return x.customer.toLowerCase().indexOf(q)>-1||String(x.inv).toLowerCase().indexOf(q)>-1;});
+  /* Sorting lives on the column headers (agreed 5 Oct, W05-8). Default: Days past due, oldest first. */
+  var sp=(modal.sort||"days-desc").split("-"),sk=sp[0],sd=sp[1]==="asc"?1:-1;
+  invs.sort(function(a,b){var r;
+    if(sk==="customer")r=a.customer.localeCompare(b.customer);
+    else if(sk==="billto")r=a.billTo.localeCompare(b.billTo);
+    else if(sk==="due")r=String(a.due).localeCompare(String(b.due));
+    else if(sk==="inv")r=String(a.inv).localeCompare(String(b.inv));
+    else if(sk==="amount")r=a.amount-b.amount;
+    else r=a.days-b.days;
+    if(r===0)r=(b.amount-a.amount)||a.customer.localeCompare(b.customer);
+    return sd*r;});
   var subj=(mode==="customer")?key:(mode==="all")?"All outstanding":arOBucketLabel(key);
   var custOf=function(list){var m={};list.forEach(function(x){m[x.customer]=1;});return Object.keys(m);};
   var grand=all.reduce(function(s,x){return s+x.amount;},0),custN=custOf(all).length;
-  var sel=modal.sel||{},selCust=custOf(all.filter(function(x){return sel[x.inv];})).length;
-  var sortLbl={oldest:"Oldest first",owed:"Most owed",name:"Name"}[sort];
-  var controls='<div class="arO-wl-controls"><div class="arO-wl-search"><span class="material-symbols-rounded" aria-hidden="true">search</span><input id="arOdq" class="arO-wl-q" placeholder="Search customers" aria-label="Search customers" value="'+arOEsc(modal.q||"")+'"></div>'+
-    '<button class="arO-wl-sort" data-action="arO-dsort" data-id="'+w.id+'" aria-label="Sort, now '+sortLbl+'">'+ICON("swap_vert")+sortLbl+'</button></div>';
-  var cols=["Customer","Bill To","Due Date","Invoice #","Days Past Due","Outstanding"];
-  var head='<div class="wt-row wt-head arO-dhead"><span class="arO-dchk"></span><span class="arO-dexp"></span>'+cols.map(function(c,i){return '<span class="arO-dc arO-dc'+i+(i===5?" arO-dc-amt":"")+'">'+c+'</span>';}).join("")+'</div>';
+  var controls='<div class="arO-wl-controls"><div class="arO-wl-search"><span class="material-symbols-rounded" aria-hidden="true">search</span><input id="arOdq" class="arO-wl-q" placeholder="Search customer or invoice #" aria-label="Search customer or invoice number" value="'+arOEsc(modal.q||"")+'"></div></div>';
+  var cols=[["customer","Customer"],["billto","Bill To"],["due","Due Date"],["inv","Invoice #"],["days","Days Past Due"],["amount","Outstanding"]];
+  function dsort(k,label){var on=sk===k,ic=on?(sd<0?"arrow_downward":"arrow_upward"):"unfold_more";return '<button class="wt-sort'+(on?" on":"")+'" data-action="arO-dsort" data-id="'+w.id+'" data-k="'+k+'" aria-label="Sort by '+label+'">'+label+ICON(ic)+'</button>';}
+  var head='<div class="wt-row wt-head arO-dhead"><span class="arO-dexp"></span>'+cols.map(function(c,i){return '<span class="arO-dc arO-dc'+i+(i===5?" arO-dc-amt":"")+'">'+dsort(c[0],c[1])+'</span>';}).join("")+'</div>';
   var body;
   if(invs.length){
     body=invs.map(function(x){
-      var open=(modal.exp===x.inv),dpd=x.days>0?(x.days+" days"):"Not due",on=!!sel[x.inv];
+      var open=(modal.exp===x.inv),dpd=x.days>0?(x.days+" days"):"Not due";
       var row='<div class="wt-row arO-drow'+(open?" open":"")+'" data-action="arO-exp" data-id="'+w.id+'" data-inv="'+arOEsc(x.inv)+'" role="button" tabindex="0" aria-expanded="'+open+'">'+
-        '<span class="arO-dchk" role="checkbox" aria-checked="'+on+'" tabindex="0" data-action="arO-check" data-id="'+w.id+'" data-inv="'+arOEsc(x.inv)+'" aria-label="Select '+arOEsc(x.inv)+'">'+ICON(on?"check_box":"check_box_outline_blank")+'</span>'+
         '<span class="arO-dexp">'+ICON(open?"expand_more":"chevron_right")+'</span>'+
         '<span class="arO-dc arO-dc0">'+x.customer+'</span>'+
         '<span class="arO-dc arO-dc1">'+x.billTo+'</span>'+
@@ -6275,14 +6213,14 @@ function arODetailModalHTML(){
       return row;
     }).join("");
   } else {
-    body='<div class="state" data-kind="empty">'+ICON(q?"search_off":"inbox")+'<div class="state-title">'+(q?"No customers match":"No invoices to display")+'</div><div class="state-sub">'+(q?"Try a different name.":"Nothing matches this selection.")+'</div></div>';
+    body='<div class="state" data-kind="empty">'+ICON(q?"search_off":"inbox")+'<div class="state-title">'+(q?"No invoices match":"No invoices to display")+'</div><div class="state-sub">'+(q?"Try a different customer or invoice number.":"Nothing matches this selection.")+'</div></div>';
   }
   var totalOut=invs.reduce(function(s,x){return s+x.amount;},0);
   var foot=invs.length?'<div class="dep-total arO-dtotal"><span>'+invs.length+' invoice'+(invs.length>1?"s":"")+'</span><span>'+money(totalOut)+'</span></div>':'';
   return '<div class="modal-backdrop" data-action="arO-detail-close"><div class="modal modal-wide arO-detail-modal" data-action="stop" role="dialog" aria-modal="true" aria-label="Receivable invoices outstanding, detail">'+
-    '<div class="modal-h arO-detail-h"><div class="arO-wl-htext"><span class="modal-title"><span class="material-symbols-rounded" aria-hidden="true" style="font-size:var(--type-size-18);vertical-align:-4px;margin-right:var(--padding-xtight);color:var(--txt-subtle)">receipt_long</span>Receivable Invoices Outstanding: Detail</span><span class="arO-wl-sub">'+subj+' · '+custN+' customer'+(custN===1?"":"s")+' · '+money(grand)+'</span></div><span class="arO-dh-spacer"></span><button class="btn naked sm" data-action="arO-export" data-id="'+w.id+'">'+ICON("download")+'Export to Excel</button><button class="iconbtn" data-action="arO-detail-close" aria-label="Close">'+ICON("close")+'</button></div>'+
+    '<div class="modal-h arO-detail-h"><div class="arO-wl-htext"><span class="modal-title"><span class="material-symbols-rounded" aria-hidden="true" style="font-size:var(--type-size-18);vertical-align:-4px;margin-right:var(--padding-xtight);color:var(--txt-subtle)">receipt_long</span>Receivable Invoices Outstanding<span class="bank-pill arO-wl-chip">'+subj+'</span></span><span class="arO-wl-sub">'+custN+' customer'+(custN===1?"":"s")+' · '+all.length+' invoice'+(all.length===1?"":"s")+' · '+money(grand)+'</span></div><span class="arO-dh-spacer"></span><button class="btn naked sm" data-action="arO-export" data-id="'+w.id+'">'+ICON("download")+'Export to Excel</button><button class="iconbtn" data-action="arO-detail-close" aria-label="Close">'+ICON("close")+'</button></div>'+
     '<div class="modal-b arO-detail-b">'+controls+'<div class="arO-detail-scroll">'+head+body+'</div>'+foot+'</div>'+
-    '<div class="modal-f"><button class="btn outlined sm" data-action="arO-statements" data-id="'+w.id+'">'+ICON("mail")+'Print statements ('+(selCust||custN)+')</button><button class="btn primary sm" data-action="arO-detail-close">Close</button></div></div></div>';
+    '<div class="modal-f"><button class="btn primary sm" data-action="arO-detail-close">Close</button></div></div></div>';
 }
 function arOHandleInput(e){if(e.target&&e.target.id==="arOdq"&&modal&&modal.type==="arOdetail"){modal.q=e.target.value;var pos=e.target.selectionStart;renderModal();var qi=document.getElementById("arOdq");if(qi){qi.focus();try{qi.setSelectionRange(pos,pos);}catch(_q){}}return true;}return false;}
 
@@ -6314,10 +6252,7 @@ function arOHandleClick(a,id,t){
   if(a==="arO-open-invoice"){setStatus("Opening invoice "+t.getAttribute("data-inv")+" in Accounts Receivable");return true;}
   if(a==="arO-tab"){if(modal)modal.tab=t.getAttribute("data-tab");render();return true;}
   if(a==="arO-export"){pop=null;setStatus("Exporting the detail list to Excel");render();return true;}
-  if(a==="arO-check"){if(modal){var ci=t.getAttribute("data-inv");modal.sel=modal.sel||{};if(modal.sel[ci])delete modal.sel[ci];else modal.sel[ci]=true;}render();return true;}
-  if(a==="arO-dsort"){if(modal){var ord=["oldest","owed","name"];modal.sort=ord[(ord.indexOf(modal.sort||"oldest")+1)%ord.length];}render();return true;}
-  if(a==="arO-statement"){setStatus("Sending a statement to "+t.getAttribute("data-cust"));return true;}
-  if(a==="arO-statements"){var nsel=(modal&&modal.sel)?Object.keys(modal.sel).length:0;setStatus(nsel?"Printing statements for the selected customers":"Printing statements for every customer in this list");return true;}
+  if(a==="arO-dsort"){if(modal){var dk=t.getAttribute("data-k"),dc=(modal.sort||"days-desc").split("-");modal.sort=(dc[0]===dk)?(dk+"-"+(dc[1]==="asc"?"desc":"asc")):(dk+"-"+((dk==="customer"||dk==="billto"||dk==="inv")?"asc":"desc"));}render();return true;}
   return false;
 }
 /* popContent branches (routed from popContent(): arO-rc / arO-source -> arOPopContent) */
@@ -6647,17 +6582,16 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
   function depOTypeLabel(w){if(w.acct){var suf=w.acctNo?w.acctNo.slice(-2):"";return "Account: "+w.acct+(suf?" **"+suf:"");}var f=w.filter||"All types";return f.indexOf("All")===0?"All Accounts":"Account Type: "+f;}
   function depOScopeChip(w){var lb=depOTypeLabel(w);return '<button class="scope-chip" data-depo="depfilter" data-id="'+w.id+'" aria-haspopup="listbox" aria-label="Scope, tap to change" title="'+lb.replace(/"/g,"&quot;")+'"><span class="sc-nm">'+lb+'</span>'+ICON("expand_more")+'</button>';}
   /* Time window wording and placement match W01 Budget Compared to Actual (owner ask 2026-10-01): a filter chip beside the scope chip, labelled This month / This period / This quarter / This year / This fiscal year. It still sets what the % change compares against (the previous one of that window). */
-  var DEPO_SPANS=[["M","This month"],["P","This period"],["Q","This quarter"],["Y","This year"],["F","This fiscal year"]];
+  /* Picker matches Jo's Phase 2 "Compare to" menu (agreed 6 Oct): Previous month / period / quarter / fiscal year / calendar year, no sub-lines. No week option: V2 has no weekly points. */
+  var DEPO_SPANS=[["M","Previous month"],["P","Previous period"],["Q","Previous quarter"],["F","Previous fiscal year"],["Y","Previous calendar year"]];
   function depOSpanLabel(w){var r=depONorm(w.range||"Q");return r==="W"?"This week":({M:"This month",P:"This period",Q:"This quarter",Y:"This year",F:"This fiscal year"})[r]||"This quarter";}
-  /* Same picker as W01: the shell popover ("Show data over", each window with its one-line description), opened by the header chip and the Glance caption alike. */
-  var DEPO_SPAN_SUB={M:"the current calendar month",P:"the current fiscal period",Q:"rolling, the last 3 months",Y:"rolling, the last 12 months",F:"fiscal year to date"};
-  function depOSpanPop(){var w=find(pop.id);if(!w)return "";var cur=w.range||"Q";return '<div class="cap">Show change over</div>'+DEPO_SPANS.map(function(o){var on=cur===o[0];return '<button class="mi'+(on?" check":"")+'" data-action="depO-set-span" data-id="'+w.id+'" data-s="'+o[0]+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm">'+o[1]+'<span class="mi-sub2">'+DEPO_SPAN_SUB[o[0]]+'</span></span></button>';}).join("");}
+  function depOSpanPop(){var w=find(pop.id);if(!w)return "";var cur=w.range||"Q";return '<div class="cap">Compare to</div>'+DEPO_SPANS.map(function(o){var on=cur===o[0];return '<button class="mi'+(on?" check":"")+'" data-action="depO-set-span" data-id="'+w.id+'" data-s="'+o[0]+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm">'+o[1]+'</span></button>';}).join("");}
   function depOSpanClick(a,id,t){if(a==="depO-span"){pop=(pop&&pop.type==="depO-span"&&pop.id===id)?null:{type:"depO-span",id:id};render();return true;}
     if(a==="depO-set-span"){var w=find(id);if(w)w.range=t.getAttribute("data-s");pop=null;render();return true;}return false;}
   function depOSpanChip(w){return '<button class="filter-chip" data-action="depO-span" data-id="'+w.id+'" aria-haspopup="listbox" aria-label="Time span, tap to change"><span class="fc-label">'+depOSpanLabel(w)+'</span>'+ICON("expand_more")+'</button>';}
   function depORangeBtn(w){return '<button class="w07-cap-btn" data-action="depO-span" data-id="'+w.id+'" aria-haspopup="listbox" aria-label="Comparison window, tap to change">'+depOVsLabel(w)+ICON("expand_more")+'</button>';}
   /* Glance wording matches Jo's Phase 2 ("vs quarter"); the picker and the chip on the bigger sizes keep the full window names */
-  function depOVsLabel(w){var r=depONorm(w.range||"Q");return "vs "+({M:"month",P:"period",Q:"quarter",Y:"year",F:"fiscal year"})[r];}
+  function depOVsLabel(w){var r=depONorm(w.range||"Q");return "vs "+({M:"month",P:"period",Q:"quarter",Y:"calendar year",F:"fiscal year"})[r];}
   function depODelta(p){return '<span class="delta-pill'+(p.neg?" neg":"")+'">'+ICON(p.neg?"south_east":"north_east")+Math.abs(p.dpct).toFixed(1)+'%</span>';}
   function depOTog(opts,cur,w){return '<div class="vtoggle" role="group" aria-label="View">'+opts.map(function(o){return '<button class="vt'+(cur===o[0]?" on":"")+'" data-depo="dep-view" data-id="'+w.id+'" data-v="'+o[0]+'" aria-pressed="'+(cur===o[0])+'">'+(o[2]?ICON(o[2]):"")+o[1]+'</button>';}).join("")+'</div>';}
   function depOToggle(w){var v=w.view||"table";if(w.size==="xwide")return depOTog([["balances","Balances","table_rows"],["trend","Trend","show_chart"]],(v==="trend"?"trend":"balances"),w);if(w.acct||w.leaf)return depOTog([["table","Table","table_rows"],["trend","Trend","show_chart"]],(v==="dist"?"trend":v),w);return depOTog([["table","Table","table_rows"],["dist","Distribution","donut_small"],["trend","Trend","show_chart"]],v,w);}
@@ -6688,7 +6622,7 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
   /* One source of truth for every % on the card: a group's history is the SUM of its accounts' own histories, so the headline, Trend total, table trend and pie legend always agree. The last point is always today's balance (a.net), whatever window is picked; only the start-date balance, and so the %, changes. */
   function depOSumSeries(accts,range){var n=depOPts(range).length,agg=[];for(var j=0;j<n;j++)agg.push(0);accts.forEach(function(a){depOAcctSeries(a,range).forEach(function(v,j){agg[j]+=v;});});return agg;}
   function depOChgPct(first,last){return ((last-first)/(first||1))*100;}
-  function depOChgHTML(first,last){if(!(first>0))return "";var p=depOChgPct(first,last),neg=p<0;return '<span class="w07-chg'+(neg?" neg":"")+'" title="Change since the start of the selected window">'+(neg?"−":"+")+Math.abs(p).toFixed(1)+'%</span>';}
+  function depOChgHTML(first,last){return "";} /* pie legend shows amount and share only; the per-slice % change was removed (agreed with Jo 6 Oct, W07-7 / W07-8) so the names fit */
   function depOSegFirst(w,a,d){var range=w.range||"Q",scope=depOData(w);
     if(a.total)return depOSumSeries(depOScope(w),range)[0];
     if(d.by==="type"&&!a.others)return depOSumSeries(scope.filter(function(x){return x.type===a.name;}),range)[0];
@@ -6736,10 +6670,10 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
   function depOSparkHTML(p,cls){var s=p.s,W=120,H=44,pad=4,mx=Math.max.apply(null,s),mn=Math.min.apply(null,s),rng=(mx-mn)||1;var xs=s.map(function(v,i){return pad+i*(W-2*pad)/((s.length-1)||1);}),ys=s.map(function(v){return H-pad-((v-mn)/rng)*(H-2*pad);});var line=smoothPath(xs,ys),area=line+" L"+xs[xs.length-1].toFixed(1)+","+H+" L"+xs[0].toFixed(1)+","+H+" Z";var xp=xs.map(function(x){return (x/W*100).toFixed(2);}).join(","),yp=ys.map(function(y){return (y/H*100).toFixed(2);}).join(",");return '<div class="kpi-spark depo-spark'+(cls?" "+cls:"")+'" data-series="'+s.join(',')+'" data-labels="'+p.labs.join("|")+'" data-xp="'+xp+'" data-yp="'+yp+'" tabindex="0" aria-label="Total deposits over the selected window. Hover to read a point"><svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none"><defs><linearGradient id="depodsg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--chart)" stop-opacity="0.22"/><stop offset="100%" stop-color="var(--chart)" stop-opacity="0"/></linearGradient></defs><path d="'+area+'" fill="url(#depodsg)"/><path d="'+line+'" fill="none" stroke="var(--chart)" stroke-width="2" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round"/></svg><div class="ds-end" style="left:'+xp.split(",").pop()+'%;top:'+yp.split(",").pop()+'%"></div><div class="ds-hair"></div><div class="ds-dot"></div></div>';}
   function depOGlance(w){var p=depOMetricParts(w);return '<div class="kpi-row w07-gl"><div class="kpi-num">'+depOScopeChip(w)+'<div class="metric-value" data-depo-num data-latest="'+money(p.latest)+'">'+money(p.latest)+'</div></div>'+depOSparkHTML(p)+'<div class="gl-sub w07-gl-sub">'+depODelta(p)+depORangeBtn(w)+'</div></div>';}
   function depOHeaderBlock(w){var p=depOMetricParts(w);var v=w.view||"table";
-    var numInner='<div class="dep-hd-kpigrp"><span class="metric-value">'+money(p.latest)+'</span><span class="delta-grp">'+depODelta(p)+'</span></div>';
+    var numInner='<div class="dep-hd-kpigrp"><span class="metric-value">'+money(p.latest)+'</span><span class="delta-grp">'+depODelta(p)+depORangeBtn(w)+'</span></div>';
     var showSearch=(v==="table"||v==="dist"||v==="balances");
     var searchHTML=showSearch?'<div class="dep-search hd-search"><span class="material-symbols-rounded" aria-hidden="true">search</span><input class="dep-q" placeholder="Search accounts" aria-label="Search accounts"></div>':'';
-    return '<div class="dep-hd"><div class="dep-hd-top"><div class="w07-ctlrow">'+depOScopeChip(w)+depOSpanChip(w)+'</div><div class="dep-hd-toggle">'+depOToggle(w)+'</div></div><div class="dep-hd-num">'+numInner+'<div class="dep-hd-r">'+depOBreakToggle(w)+searchHTML+'</div></div></div>';}
+    return '<div class="dep-hd"><div class="dep-hd-top"><div class="w07-ctlrow">'+depOScopeChip(w)+'</div><div class="dep-hd-toggle">'+depOToggle(w)+'</div></div><div class="dep-hd-num">'+numInner+'<div class="dep-hd-r">'+depOBreakToggle(w)+searchHTML+'</div></div></div>';}
   /* V2 states, self-owned (previously deferred to the generic shell fallback). Empty triggers on the account COUNT (zero accounts), matching the v2 API spec, or an explicit state flag; loading only ever comes from a data-fetch change. */
   function depOEmptyState(w){return '<div class="state" data-kind="empty">'+ICON("inbox")+'<div class="state-title">No deposit accounts</div><div class="state-sub">There are no deposit accounts to show here yet.</div><button class="btn outlined" data-depo="add-acct" data-id="'+w.id+'">'+ICON("add")+'Add account</button></div>';}
   function depOScopedEmpty(w){var f=String(w.filter||"").replace(/&/g,"&amp;").replace(/</g,"&lt;");return '<div class="state" data-kind="empty">'+ICON("inbox")+'<div class="state-title">No accounts on '+f+'</div><div class="state-sub">This account type is set up but has no accounts opened against it yet. Pick another account type above to see the rest.</div></div>';}
@@ -6758,40 +6692,25 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
     return mh+(v==="trend"?depOTrend(w,true):depOFull(w));
   }
   /* Row-detail modal body (owner change 3 keeps this; only the CHART drill-modal was removed). Reuses Jo's .acctm* classes and her global modal chrome (modal.b path in renderModal). */
+  /* Account pop-up, Jo's Phase 2 pattern (agreed 6 Oct, W07-9): isolating one account opens the SAME scoped
+     overlay the widget uses for a type, a modal-wide clone of the card (Account chip, Table / Trend switch, figure,
+     % pill and the "vs quarter" link, then the full-width trend or the one-row table), closed with Done. */
   function depOAcctModalHTML(){
-    if(!modal)return "";
-    return '<div class="modal-backdrop" data-action="modal-close"><div class="modal depo-acct-modal" data-action="stop" role="dialog" aria-modal="true" aria-label="'+modal.t+'">'+
+    if(!modal||!modal.mw)return "";
+    return '<div class="modal-backdrop" data-action="modal-close"><div class="modal modal-wide depo-acct-modal" data-action="stop" role="dialog" aria-modal="true" aria-label="'+modal.t+'">'+
       '<div class="modal-h"><span class="modal-title">'+(modal.glyph?'<span class="material-symbols-rounded" style="font-size:var(--type-size-18);vertical-align:-4px;margin-right:var(--padding-xtight);color:var(--txt-subtle)">'+modal.glyph+'</span>':'')+modal.t+'</span>'+
       '<button class="iconbtn" data-action="modal-close" aria-label="Close">'+ICON("close")+'</button></div>'+
-      '<div class="modal-b">'+depOAcctModalBody(modal.depo)+'</div>'+
-      '<div class="modal-f"><button class="btn primary sm" data-action="modal-close">Got it</button></div>'+
+      '<div class="modal-b"><div class="wcontent acct-mw depo-acct-mw">'+depOContent(modal.mw)+'</div></div>'+
+      '<div class="modal-f"><button class="btn primary sm" data-action="modal-close">Done</button></div>'+
     '</div></div>';
   }
-  function depOAcctModalBody(m){var a=m.acctNo?DEPO_DEP.filter(function(x){return x.acct===m.acctNo;})[0]:DEPO_DEP.filter(function(x){return x.name===m.aname&&(!m.atype||x.type===m.atype);})[0];if(!a)return "";
-    var range=m.range||"Q",mv=m.mview||"trend",s=depOAcctSeries(a,range),n=s.length,latest=s[n-1],first=s[0],dpct=((latest-first)/(first||1))*100,neg=dpct<0;
-    var toggle='<div class="vtoggle" role="group" aria-label="View"><button class="vt'+(mv==="trend"?" on":"")+'" data-depo="acct-view" data-v="trend" aria-pressed="'+(mv==="trend")+'">'+ICON("show_chart")+'Trend</button><button class="vt'+(mv==="table"?" on":"")+'" data-depo="acct-view" data-v="table" aria-pressed="'+(mv==="table")+'">'+ICON("table_rows")+'Table</button></div>';
-    var head='<div class="acctm-bar"><span class="type-badge tb-static"><span class="tb-ic material-symbols-rounded" aria-hidden="true">category</span><span class="tb-nm">'+a.type+'</span></span>'+toggle+'</div><div class="acctm-kpi"><span class="metric-value">'+money(latest)+'</span><span class="delta-grp">'+depODelta({dpct:dpct,neg:neg})+'</span></div>';
-    var content;
-    if(mv==="table"){var tn=neg;
-      content='<div class="acctm-tbl"><div class="wt-row wt-head"><span class="lr-main lr-stack">Name</span><span class="dt-c dt-type">Type</span><span class="dt-c dt-tr">Trend</span><span class="wt-c2">Balance</span></div><div class="wt-row"><span class="lr-main lr-stack"><span class="lr-tipwrap" data-tip="'+a.name.replace(/"/g,"&quot;")+', Account '+(a.acctFull||a.acct)+'" data-tip-plain><span class="lr-name">'+a.name+'</span><span class="lr-acctno">'+a.acct+'</span></span></span><span class="dt-c dt-type"><span class="type-badge"><span class="material-symbols-rounded tb-ic" aria-hidden="true">category</span><span class="tb-nm">'+a.type+'</span></span></span><span class="dt-c dt-tr"><span class="rtrend'+(tn?" neg":"")+'"><span class="material-symbols-rounded" aria-hidden="true">'+(tn?"arrow_drop_down":"arrow_drop_up")+'</span>'+Math.abs(dpct).toFixed(1)+'%</span></span><span class="wt-c2">'+money(a.net)+'</span></div><div class="dep-total"><span>Total</span><span>'+money(a.net)+'</span></div></div>';
-    }else{
-      var lo=Math.min.apply(null,s),hi=Math.max.apply(null,s),sp=(hi-lo)||Math.abs(hi)||1;lo=Math.max(0,lo-sp*0.18);hi=hi+sp*0.18;var dom=(hi-lo)||1;
-      function px(i){return n>1?(i/(n-1)*100):50;}function py(v){return (1-(v-lo)/dom)*100;}
-      var pts=s.map(function(v,i){return px(i).toFixed(2)+','+py(v).toFixed(2);}).join(" ");
-      var grid="";[0,50,100].forEach(function(gy){grid+='<line x1="0" y1="'+gy+'" x2="100" y2="'+gy+'" stroke="var(--stroke-widget)" stroke-width="1" vector-effect="non-scaling-stroke"'+(gy===100?'':' stroke-dasharray="2 4" opacity="0.5"')+'/>';});
-      var svg='<svg class="ln" viewBox="0 0 100 100" preserveAspectRatio="none"><defs><linearGradient id="depotafm" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--chart)" stop-opacity="0.16"/><stop offset="100%" stop-color="var(--chart)" stop-opacity="0"/></linearGradient></defs>'+grid+'<polygon fill="url(#depotafm)" points="0,100 '+pts+' 100,100"/><polyline fill="none" stroke="var(--chart)" stroke-width="1.7" vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" points="'+pts+'"/></svg>';
-      var yl='<span style="top:0%">'+fmtAxis(hi)+'</span><span style="top:50%">'+fmtAxis((hi+lo)/2)+'</span><span style="top:100%">'+fmtAxis(lo)+'</span>';
-      var months=depORangeMonths(range,n),tk=(n<=1)?[0]:(n<=3)?[0,n-1]:[0,Math.round((n-1)/3),Math.round((n-1)*2/3),n-1];tk=tk.filter(function(v,i,arr){return arr.indexOf(v)===i;});
-      var xl=tk.map(function(i){return '<span style="left:'+px(i)+'%;transform:translateX('+(i===0?"0":(i===n-1?"-100%":"-50%"))+')">'+months[i]+'</span>';}).join("");
-      var blob=a.name+"|var(--chart)|0|"+s.join(",");
-      content='<div class="acctm-chart tr-plot"><div class="tr-yax">'+yl+'</div><div class="tr-canvas" data-multi="0" data-blob="'+blob.replace(/"/g,"&quot;")+'" data-months="'+months.join(",")+'" data-lo="'+lo+'" data-hi="'+hi+'" data-n="'+n+'">'+svg+'<div class="tr-cross"></div></div><div class="tr-xax">'+xl+'</div></div>';
-    }
-    return '<div class="acctm">'+head+content+'</div>';}
-  function depOOpenAcct(w,name,type,acctNo){var a=acctNo?DEPO_DEP.filter(function(x){return x.acct===acctNo;})[0]:DEPO_DEP.filter(function(x){return x.name===name&&(!type||x.type===type);})[0];if(!a)return;var ctx={aname:a.name,atype:a.type,acctNo:a.acct,range:w.range||"Q",mview:"trend"};modal={t:a.name,glyph:"account_balance_wallet",type:"depOacct",depo:ctx,b:depOAcctModalBody(ctx)};modalMounted=false;depOClosePop();pop=null;render();}
+  function depOOpenAcct(w,name,type,acctNo){var a=acctNo?DEPO_DEP.filter(function(x){return x.acct===acctNo;})[0]:DEPO_DEP.filter(function(x){return x.name===name&&(!type||x.type===type);})[0];if(!a)return;
+    var mw=Object.assign({},w,{id:"__depotypemodal",acct:a.name,acctType:a.type,acctNo:a.acct,filter:"All types",bd:"total",size:"wide",view:"trend",trIso:null,tshown:50,range:w.range||"Q",state:"ready"});
+    modal={t:a.name+" "+a.acct,glyph:"account_balance_wallet",type:"depOacct",scoped:true,mw:mw};modalMounted=false;depOClosePop();pop=null;render();}
   /* Owner change 3: chart click drills into scope, it does not expand. A type series sets the top-left scope to that type and flips the breakdown to By Account. */
   function depODrillType(w,typeName){if(!typeName)return;w.filter=typeName;w.acct=null;w.acctType=null;w.acctNo=null;w.bd="group";w.trIso=null;w.tpage=1;w.tshown=50;}
   function depOPopContent(){var w=find(DEPO_POP.id);if(!w)return "";
-    if(DEPO_POP.type==="rangemenu"){var r=w.range||"Q";return '<div class="cap">Show change over</div>'+DEPO_SPANS.map(function(o){return '<button class="mi'+(r===o[0]?" check":"")+'" data-depo="range-set" data-id="'+w.id+'" data-r="'+o[0]+'">'+(r===o[0]?ICON("check"):'<span class="mi-gap"></span>')+o[1]+'</button>';}).join("");}
+    if(DEPO_POP.type==="rangemenu"){var r=w.range||"Q";return '<div class="cap">Compare to</div>'+DEPO_SPANS.map(function(o){return '<button class="mi'+(r===o[0]?" check":"")+'" data-depo="range-set" data-id="'+w.id+'" data-r="'+o[0]+'">'+(r===o[0]?ICON("check"):'<span class="mi-gap"></span>')+o[1]+'</button>';}).join("");}
     var q=(DEPO_FQ||"").toLowerCase();
     var allSel=(!w.acct)&&(w.filter||"All types").indexOf("All")===0;
     var types=depOTypes(w).map(function(t){return t.name;});
@@ -6817,7 +6736,6 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
     var t=e.target.closest&&e.target.closest("[data-depo]");
     if(!t){if(DEPO_POP&&!(e.target.closest&&e.target.closest("#depoPop")))depOClosePop();return;}
     var a=t.getAttribute("data-depo"),id=t.getAttribute("data-id");
-    if(a==="acct-view"){if(modal&&modal.depo){modal.depo.mview=t.getAttribute("data-v");modal.b=depOAcctModalBody(modal.depo);render();}return;}
     var w=id?find(id):null;if(!w)return;
     if(a==="depfilter"){if(DEPO_POP&&DEPO_POP.type==="depfilter"&&document.getElementById("depoPop")){depOClosePop();}else{depOOpenPop(t,"depfilter",id);}return;}
     if(a==="rangemenu"){if(DEPO_POP&&DEPO_POP.type==="rangemenu"&&document.getElementById("depoPop")){depOClosePop();}else{depOOpenPop(t,"rangemenu",id);}return;}
@@ -7865,6 +7783,19 @@ var FAF_ASSETS=[
   {tag:'FA-1048',nm:'Prep Tables',cls:'Kitchen Equipment',bldg:'Family Life Center',room:'Fellowship Hall',cap:136333,cost:140550,salv:0,dep:47787},
   {tag:'FA-1049',nm:'Coffee Service Unit',cls:'Kitchen Equipment',bldg:'Family Life Center',room:'Kitchen',cap:46560,cost:48000,salv:1920,dep:0},
   {tag:'FA-1050',nm:'Freezer, Upright',cls:'Kitchen Equipment',bldg:'Chapel',room:'Kitchen',cap:86339,cost:91850,salv:7348,dep:21125},
+  /* 12 more Audio Visual assets (owner, 5 Oct) so one class exceeds the 20-row chunk and exercises Load more. */
+  {tag:'FA-1051',nm:'Portable PA System',cls:'Audio Visual',bldg:'Annex',room:'Stage',cap:18200,cost:19400,salv:970,dep:9700},
+  {tag:'FA-1052',nm:'Lobby Display Screens',cls:'Audio Visual',bldg:'Main Campus',room:'Lobby',cap:26950,cost:28400,salv:0,dep:14200},
+  {tag:'FA-1053',nm:'Confidence Monitor',cls:'Audio Visual',bldg:'Main Campus',room:'Sanctuary',cap:9800,cost:9800,salv:0,dep:2450},
+  {tag:'FA-1054',nm:'Youth Room Projector',cls:'Audio Visual',bldg:'Family Life Center',room:'Youth Room',cap:7450,cost:7900,salv:395,dep:7505},
+  {tag:'FA-1055',nm:'Streaming Audio Interface',cls:'Audio Visual',bldg:'Chapel',room:'Media Room',cap:4600,cost:4850,salv:0,dep:1617},
+  {tag:'FA-1056',nm:'Stage Lighting Console',cls:'Audio Visual',bldg:'Main Campus',room:'Sanctuary',cap:21300,cost:22500,salv:1125,dep:11250},
+  {tag:'FA-1057',nm:'Hearing Loop System',cls:'Audio Visual',bldg:'Chapel',room:'Sanctuary',cap:15750,cost:16500,salv:0,dep:4125},
+  {tag:'FA-1058',nm:'Camera Tripods and Heads',cls:'Audio Visual',bldg:'Chapel',room:'Media Room',cap:3900,cost:4100,salv:0,dep:4100},
+  {tag:'FA-1059',nm:'Choir Microphones',cls:'Audio Visual',bldg:'Main Campus',room:'Sanctuary',cap:6200,cost:6500,salv:325,dep:3250},
+  {tag:'FA-1060',nm:'Chapel Sound Desk',cls:'Audio Visual',bldg:'Chapel',room:'Sanctuary',cap:31800,cost:33600,salv:1680,dep:25200},
+  {tag:'FA-1061',nm:'Fellowship Hall Speakers',cls:'Audio Visual',bldg:'Family Life Center',room:'Fellowship Hall',cap:12400,cost:13200,salv:0,dep:6600},
+  {tag:'FA-1062',nm:'Media Room Edit Workstation',cls:'Audio Visual',bldg:'Chapel',room:'Media Room',cap:8900,cost:9400,salv:470,dep:7050},
   {tag:'FA-1900',nm:'Fully Depreciated Organ',cls:'Audio Visual',bldg:'Main Campus',room:'Sanctuary',cap:74000,cost:76000,salv:0,dep:76000},
   {tag:'FA-1901',nm:'Unclassified Equipment',cls:'',bldg:'',room:'',cap:5400,cost:5600,salv:0,dep:1200}
 ];
@@ -7895,7 +7826,8 @@ var FAF_MEASURES=[
    the only signal, so every arc and legend row carries its group name and its
    value as text in the DOM. */
 var FAF_COLORS=['--am-600','--am-500','--am-400','--am-300','--am-200'];
-var FAF_PAGE_SIZE=10;
+/* Lazy loading (owner, 5 Oct): the list opens with FAF_CHUNK rows and a "Load N more · M remaining" button at its foot adds the next chunk; paging is gone. */
+var FAF_CHUNK=20;
 var FAF_SORTABLE=['tag','nm','cap','cost','depr','accum','net'];
 var FAF_POP=null;
 var FAF_ABOUT="The financial value of the organisation's fixed assets, grouped by class, building or room. Pick a grouping and a group to list the individual assets with all five money measures and a totals row, or switch to the donut to see one measure split across the groups. The headline figure is Total Net Value across every fixed asset, organisation wide, and it ignores the filters.";
@@ -7904,7 +7836,7 @@ function faFDimK(w){return w.faFDim||'cls';}
 function faFMeasK(w){return w.faFMeasure||'net';}
 function faFViewK(w){return (w.faFView==='assets'||w.faFView==null)?'assets':'donut';}
 function faFSortK(w){return w.faFSort||'tag-asc';}
-function faFPageN(w){return w.faFPage||0;}
+function faFShownN(w){return Math.max(FAF_CHUNK,w.faFShown||FAF_CHUNK);}
 
 /* (3) HELPERS. money() and ICON() are the shell's own. */
 function faFIcon(n){return '<span class="material-symbols-rounded" aria-hidden="true">'+n+'</span>';}
@@ -7975,7 +7907,7 @@ function faFCurrentGroup(w){
 function faFServerQuery(w){
   /* --- everything from here to the return is SERVER-SIDE work --- */
   var d=faFDimDef(faFDimK(w)),g=faFCurrentGroup(w);
-  if(g===null) return {rows:[],totalCount:0,totals:{},pageIndex:0,pageCount:1};
+  if(g===null) return {rows:[],totalCount:0,totals:{},shown:0,remaining:0};
   var set=faFDataset(w).filter(function(a){return faFGroupOf(a,d.k)===g;});
   var parts=faFSortK(w).split('-'),key=parts[0],dir=parts[1]==='asc'?1:-1;
   if(FAF_SORTABLE.indexOf(key)<0) key='tag';               /* whitelist, as the API must */
@@ -7992,32 +7924,23 @@ function faFServerQuery(w){
   FAF_MEASURES.forEach(function(m){
     totals[m.k]=set.reduce(function(s,a){return s+faFValue(a,m.k);},0);
   });
-  var pageCount=Math.max(1,Math.ceil(set.length/FAF_PAGE_SIZE));
-  var pi=faFPageN(w); if(pi<0) pi=0; if(pi>pageCount-1) pi=pageCount-1;
+  /* Lazy loading: the client asks for the first N rows and the server says how many are left. */
+  var shown=Math.min(set.length,faFShownN(w));
   return {
-    rows:set.slice(pi*FAF_PAGE_SIZE,(pi+1)*FAF_PAGE_SIZE),
+    rows:set.slice(0,shown),
     totalCount:set.length,
     totals:totals,
-    pageIndex:pi,
-    pageCount:pageCount
+    shown:shown,
+    remaining:set.length-shown
   };
 }
-/* Reads the response only. The client does not know how many pages there are
-   until the server says so, which is the point. */
-function faFPager(w,res){
-  if(res.totalCount<=FAF_PAGE_SIZE) return '';
-  var i=res.pageIndex,n=res.pageCount;
-  var from=i*FAF_PAGE_SIZE+1,to=Math.min(res.totalCount,(i+1)*FAF_PAGE_SIZE);
-  function btn(act,ic,lbl,off){
-    return '<button class="iconbtn faf-pgbtn" data-faf="'+act+'" data-id="'+w.id+'"'+(off?' disabled aria-disabled="true"':'')+
-      ' aria-label="'+lbl+'" title="'+lbl+'">'+faFIcon(ic)+'</button>';
-  }
-  return '<div class="faf-pager">'+
-    '<span class="faf-pgcount">'+from+' to '+to+' of '+res.totalCount+'</span>'+
-    btn('page-prev','chevron_left','Previous page, refetches from the server',i===0)+
-    '<span class="faf-pgnum">Page '+(i+1)+' of '+n+'</span>'+
-    btn('page-next','chevron_right','Next page, refetches from the server',i>=n-1)+
-  '</div>';
+/* "Load N more · M remaining", inside the scroll below the last row (the shared
+   convention: W07, W15). Reads the response only; the client learns what is left
+   from the server. */
+function faFMoreRow(w,res){
+  if(res.remaining<=0) return '';
+  var n=Math.min(FAF_CHUNK,res.remaining);
+  return '<div class="faf-more" role="row"><button class="btn outlined sm" data-faf="more" data-id="'+w.id+'" aria-label="Load '+n+' more assets, '+res.remaining+' remaining">'+faFIcon('expand_more')+'Load '+n+' more<span class="faf-more-n">'+res.remaining+' remaining</span></button></div>';
 }
 
 /* Glance: Total Net Value across ALL fixed assets, organisation wide. It ignores
@@ -8067,9 +7990,24 @@ function faFViewToggle(w){
     seg('donut','Donut','donut_small','The selected measure split across the groups of the chosen dimension.')+
   '</div>';
 }
+/* Jo's Phase 2 header block (owner, 5 Oct): NET BOOK VALUE label, the full figure,
+   then the "N assets" and "N% depreciated" pills. The figure follows what is on
+   screen: the current group in the asset table, the whole organisation behind
+   the donut (whose centre shows the same total). */
+function faFHeadlineBlock(w){
+  var d=faFDimDef(faFDimK(w)),g=faFCurrentGroup(w),table=(faFViewK(w)==='assets');
+  var list=(table&&g!==null)?faFDataset(w).filter(function(a){return faFGroupOf(a,d.k)===g;}):faFDataset(w);
+  var h=faFHeadline(list);
+  var exact='Net Book Value, '+(table&&g!==null?(d.l+' '+g):'all fixed assets, organisation wide')+', '+faFMoneyFull(h.net);
+  return '<div class="dep-hd-num"><div class="faf-numwrap">'+
+    '<div class="faf-kpi-lbl">Net book value</div>'+
+    '<span class="metric-value" title="'+faFEsc(exact)+'" aria-label="'+faFEsc(exact)+'">'+faFMoneyFull(h.net)+'</span>'+
+    '<div class="faf-pills">'+faFCountPill(h)+faFPdPill(h)+'</div>'+
+  '</div></div>';
+}
 function faFHeader(w){
   return '<div class="dep-hd faf-hd"><div class="dep-hd-top">'+faFControls(w)+
-    '<div class="dep-hd-toggle faf-hd-right">'+faFViewToggle(w)+'</div></div></div>';
+    '<div class="dep-hd-toggle faf-hd-right">'+faFViewToggle(w)+'</div></div>'+faFHeadlineBlock(w)+'</div>';
 }
 
 /* (6) CHART POPULATION. The rule a build must not get wrong in either direction:
@@ -8167,13 +8105,8 @@ function faFAssetHead(w,full){
     '<span class="faf-nm" role="columnheader" aria-sort="'+faFSortAria(w,'nm')+'">'+faFSortBtn(w,'nm','Name')+'</span>'+
     cells+'</div>';
 }
-/* The zero treatment used to key off the SELECTED measure being zero, which
-   cannot mean anything once no measure is selected in this view, so a row is
-   marked only when its Net Value is zero, Net Value being the measure the
-   widget's own headline figure uses. The marker is not colour-only: the words
-   "fully depreciated" sit in the DOM next to the name. */
+/* A zero Net Value row is shown like any other (owner, 5 Oct): the "fully depreciated" tag was a build invention Jo's version does not have. */
 function faFAssetRow(w,a,full){
-  var netZero=faFValue(a,'net')===0;
   var cells=faFVisibleMeasures(full).map(function(m){
     var v=faFValue(a,m.k);
     var exact=a.tag+', '+a.nm+', '+m.l+' '+faFMoneyFull(v);
@@ -8184,10 +8117,10 @@ function faFAssetRow(w,a,full){
      nothing more to open, so the row stays inert rather than offering a
      control that would do nothing. */
   var open=full?'':' data-faf="open-table" data-id="'+w.id+'" tabindex="0" aria-label="'+faFEsc(a.tag+', '+a.nm+', open the full breakdown')+'"';
-  return '<div class="wt-row faf-arow'+(netZero?' faf-zero':'')+(full?'':' faf-rowopen')+'" role="row"'+open+'>'+
+  return '<div class="wt-row faf-arow'+(full?'':' faf-rowopen')+'" role="row"'+open+'>'+
     (full?('<span class="faf-tag" role="cell">'+faFEsc(a.tag)+'</span>'):'')+
     '<span class="faf-nm" role="cell" title="'+faFEsc(a.nm)+'">'+faFEsc(a.nm)+
-      (netZero?'<span class="faf-zerotag">fully depreciated</span>':'')+'</span>'+
+      '</span>'+
     cells+'</div>';
 }
 /* Takes the SERVER'S totals and count. It must NOT reduce over the rows it was
@@ -8221,11 +8154,10 @@ function faFAssetTable(w,full){
     '<div class="scroll faf-tscroll" role="table" aria-label="'+faFEsc(aria)+'" aria-rowcount="'+(res.totalCount+2)+'" aria-colcount="'+cols+'">'+
       '<div class="faf-tbl'+(full?'':' faf-tbl-slim')+'">'+
         '<div class="faf-rowgroup" role="rowgroup">'+faFAssetHead(w,full)+'</div>'+
-        '<div class="faf-rowgroup" role="rowgroup">'+body+'</div>'+
+        '<div class="faf-rowgroup" role="rowgroup">'+body+faFMoreRow(w,res)+'</div>'+
         '<div class="faf-rowgroup" role="rowgroup">'+faFAssetTotalRow(w,res,full)+'</div>'+
       '</div>'+
     '</div>'+
-    faFPager(w,res)+
   '</div>';
 }
 
@@ -8260,15 +8192,22 @@ function faFUnbuilt(w){
   '</div>';
 }
 
-/* (10) GLANCE: ONE figure, Total Net Value org-wide, plus an asset-count pill.
-   No controls, no view switch, no download. Refresh comes from the card chrome. */
+/* (10) GLANCE, matched to Jo's Phase 2 card (owner, 5 Oct): the full Net Book
+   Value figure, then two pills, "N% depreciated" and "N assets". No caption, no
+   controls. Depreciated % is accumulated depreciation over cost. */
+function faFHeadline(list){
+  var net=0,cost=0,acc=0;
+  list.forEach(function(a){net+=faFValue(a,'net');cost+=faFValue(a,'cost');acc+=faFValue(a,'accum');});
+  return {net:net,cost:cost,acc:acc,n:list.length,pd:cost>0?Math.round(acc/cost*100):0};
+}
+function faFPdPill(h){return '<span class="bank-pill faf-pdpill" title="'+faFEsc(faFMoneyFull(h.acc)+' of '+faFMoneyFull(h.cost)+' in cost depreciated')+'">'+h.pd+'% depreciated</span>';}
+function faFCountPill(h){return '<span class="bank-pill faf-countpill">'+faFIcon('inventory_2')+h.n+' asset'+(h.n===1?'':'s')+'</span>';}
 function faFGlance(w){
-  var tot=faFOrgNetTotal(w),n=faFOrgAssetCount(w);
-  var exact='Total Net Value across all fixed assets, organisation wide, '+faFMoneyFull(tot);
+  var h=faFHeadline(faFDataset(w));
+  var exact='Net Book Value across all fixed assets, organisation wide, '+faFMoneyFull(h.net);
   return '<div class="kpi-row"><div class="kpi-num">'+
-    '<div class="dep-hd-kpigrp"><span class="metric-value" title="'+faFEsc(exact)+'" aria-label="'+faFEsc(exact)+'">'+faFMoneyShort(tot)+'</span>'+
-      '<span class="bank-pill">'+faFIcon('inventory_2')+n+' asset'+(n===1?'':'s')+'</span></div>'+
-    '<div class="gl-sub"><span>Total Net Value, all fixed assets, organisation wide</span></div>'+
+    '<span class="metric-value" title="'+faFEsc(exact)+'" aria-label="'+faFEsc(exact)+'">'+faFMoneyFull(h.net)+'</span>'+
+    '<div class="gl-sub faf-pills">'+faFPdPill(h)+faFCountPill(h)+'</div>'+
   '</div></div>';
 }
 
@@ -8380,11 +8319,10 @@ function faFHandleClick(e){
     /* a slim row opens the full table; the pop-up uses her shared modal
        object, so her own modal-close action closes it and we add no closer */
     if(a==='open-table'){modal={type:'fafTable',id:id,t:'Fixed assets'};modalMounted=false;faFClosePop();render();return;}
-  /* Paging. Prev and Next move one page from the page the server actually
-     served, so a change that shortens the set cannot strand the view past the
-     end. Totals and the donut never page. */
-  if(a==='page-prev'){w.faFPage=Math.max(0,faFServerQuery(w).pageIndex-1);render();return;}
-  if(a==='page-next'){var q=faFServerQuery(w);w.faFPage=Math.min(q.pageCount-1,q.pageIndex+1);render();return;}
+  /* Load more: asks for the next chunk and keeps the scroll where it was, so the
+     new rows appear under the old ones rather than the list jumping to the top. */
+  if(a==='more'){var sc=t.closest?t.closest('.faf-tscroll'):null,top=sc?sc.scrollTop:0;w.faFShown=faFShownN(w)+FAF_CHUNK;render();
+    if(sc){var again=document.querySelector('[data-id="'+w.id+'"] .faf-tscroll, .faf-table-modal .faf-tscroll');if(again)again.scrollTop=top;}return;}
   if(a==='dim'||a==='group'||a==='measure'){
     if(FAF_POP&&FAF_POP.type===a&&FAF_POP.id===id&&document.getElementById('fafPop'))faFClosePop();
     else faFOpenPop(t,a,id);
@@ -8392,15 +8330,14 @@ function faFHandleClick(e){
   }
   if(a==='set-dim'){
     var nd=t.getAttribute('data-v');
-    if(faFDimK(w)!==nd){w.faFDim=nd;w.faFGroup=null;w.faFPage=0;}  /* THE RESET */
+    if(faFDimK(w)!==nd){w.faFDim=nd;w.faFGroup=null;w.faFShown=0;}  /* THE RESET */
     faFClosePop();render();return;
   }
-  /* Back to page 1 whenever the row set changes: landing on page 4 of a group
-     that now has one page would show an empty table. */
-  if(a==='set-group'){w.faFPage=0;w.faFGroup=t.getAttribute('data-v');faFClosePop();render();return;}
+  /* Back to the first chunk whenever the row set changes. */
+  if(a==='set-group'){w.faFShown=0;w.faFGroup=t.getAttribute('data-v');faFClosePop();render();return;}
   if(a==='set-measure'){w.faFMeasure=t.getAttribute('data-v');faFClosePop();render();return;}
   if(a==='sort'){
-    w.faFPage=0;
+    w.faFShown=0;
     var k=t.getAttribute('data-k'),p=faFSortK(w).split('-');
     /* First click on a money column opens DESCENDING, because the useful
        question of a value column is which is largest. Text columns open
@@ -8520,13 +8457,12 @@ var PURF_DEPT_ACCT={
   "IT":{fund:"1 Church",dept:"150 Information Technology",acct:"50610 Computer Supplies"}
 };
 var PURF_PAY_LBL={unpaid:"Payment: not paid",paid:"Payment: paid"};
-var PURF_CAP_BOARD_WIDE=2;
 var PURF_CAP_TABLE_WIDE=5;
 var PURF_CAP_TABLE_XWIDE=10;
 var PURF_ABOUT="Purchase requests moving through approval to payment. Lanes follow the record: pending approval on its approval path, payment approval on its payment path, ready to pay, paid; closed and voided orders stay in the table. Each card says whose approval is next; drag a request you can act on to the next lane, or open it for the record.";
-var PURF_ABOUT_NOPAY="Purchase requests moving along their approval path. The board is the path itself: one column per approval level, in order, and a request sits in the column of the level that has to act next; a level whose dollar minimum the request does not reach is skipped. Approved requests leave the flow to Accounts Payable, and closed and voided orders stay in the table. Each card says whose approval is next; drag a request you can act on forward to record your approval, or open it for the record.";
+var PURF_ABOUT_NOPAY="Purchase requests moving along their approval path, oldest first. Each row says whose approval is next; a level whose dollar minimum the request does not reach is skipped. Approved requests leave the flow to Accounts Payable, and closed and voided orders stay in the table. Open a request for the record, and approve it on its Approvals tab. Encumbrances shows the budget committed by open orders, by accounting period.";
 function purFAbout(){return PURF_USE_PAY?PURF_ABOUT:PURF_ABOUT_NOPAY;}
-var PURF_POP=null,PURF_MODAL=null,PURF_MOVE=null,PURF_HOLD=null,PURF_DRAG=null,PURF_Q="";
+var PURF_POP=null,PURF_MODAL=null,PURF_MOVE=null,PURF_HOLD=null,PURF_Q="";
 
 /* (2) DERIVATIONS ------------------------------------------------------ */
 function purFIcon(n){return '<span class="material-symbols-rounded" aria-hidden="true">'+n+'</span>';}
@@ -8681,12 +8617,12 @@ function purFRejectStep(w,po,reason){var live=purFLivePath(po);if(!live)return f
 function purFClearReject(po){var live=purFLivePath(po);if(!live)return false;var n=live.acted.length;for(var i=n-1;i>=0;i--)if(live.acted[i].state==="rejected")live.acted.splice(i,1);return live.acted.length!==n;}
 
 function purFTier(w){var s=w.size;if(s==="kpi")return "kpi";if(s==="xwide"||s==="large")return "xwide";return "wide";}
-/* Explore (wide) has no Kanban: a stored kanban view resolves to the table there (owner, 27 Sep). */
-/* Default view is the table at every tier (owner, 27 Sep); Kanban is an explicit choice at Detail only. */
-function purFViewCur(w){if(w.purfView==="enc")return "enc";if(w.purfView==="kanban"&&purFTier(w)!=="wide")return "kanban";return "table";}
+/* Two views, Table (default) and Encumbrances. The Kanban board was removed (owner, 5 Oct: it did not work); a stored kanban view resolves to the table. */
+function purFViewCur(w){return (w.purfView==="enc")?"enc":"table";}
 /* The path board has no status axis of its own: its columns ARE the status, so only "All statuses"
    is available there, which hides the chip and lets a stored lane fall back through purFStatusCur. */
-function purFStatusVals(w,view){if(view==="kanban"&&!PURF_USE_PAY)return ["All statuses"];return (view==="table")?["All statuses"].concat(PURF_STAGES,PURF_ARCHIVE):["All statuses"].concat(PURF_LANES);}
+/* Status filter offers All / Pending / Approved only (owner, 6 Oct, matching Jo Phase 2); Closed and Voided orders are not filter options. */
+function purFStatusVals(w,view){return (view==="table")?["All statuses"].concat(PURF_STAGES):["All statuses"].concat(PURF_LANES);}
 function purFStatusCur(w){
   var view=purFViewCur(w),vals=purFStatusVals(w,view),s=w.purfStatus||"All statuses";
   return (vals.indexOf(s)>-1)?s:"All statuses";
@@ -8696,7 +8632,7 @@ function purFMatchStatus(w,p,st){if(st==="All statuses")return true;return (purF
 /* The path board draws its columns from one path, so it offers every path and no "All approval
    paths" (owner, 28 Sep). Listing all of them, not just the ones with rows, means selecting a quiet
    path still shows its levels. */
-function purFPathReq(w){return !PURF_USE_PAY&&purFTier(w)!=="kpi"&&purFViewCur(w)==="kanban";}
+function purFPathReq(w){return false;} /* was: the Kanban needed one path for its columns. Board removed 5 Oct. */
 function purFPathVals(w){
   if(purFPathReq(w))return Object.keys(PURF_PATHS);
   var st=purFStatusCur(w),seen={},out=[];
@@ -8723,8 +8659,6 @@ function purFRows(w){
   });
 }
 function purFOldestFirst(list){return list.slice().sort(function(a,b){return purFParse(a.issued)-purFParse(b.issued);});}
-/* The board is the live approval flow only: the archive never appears on it. */
-function purFBoardRows(w){return purFOldestFirst(purFRows(w).filter(purFActive));}
 /* The table adds the three Rule 11 filters and keeps the archive. */
 function purFTableRows(w){
   var ov=purFOvOnly(w);
@@ -8743,15 +8677,6 @@ function purFPendingCount(w){return purFPendingSet(w).length;}
    Never on a paid or a rejected request, and never on the archive. */
 function purFCanHold(po){return !po.hold&&(po.stage==="Pending"||(po.stage==="Approved"&&!po.paid&&po.pay!=="paid"));}
 function purFHoldReason(po){var h=(po.log||[]).filter(function(l){return l.to==="On hold";});return h.length?h[h.length-1].note:"";}
-function purFCardCls(po){
-  var tn=purFTurn(po).kind,lane=purFLane(po);
-  if(po.hold||tn==="hold")return " purf-card-hold";
-  if(tn==="rejected")return " purf-card-rej";
-  if(lane==="Paid")return " purf-card-paid";
-  if(lane==="Ready to pay")return " purf-card-ok";
-  if(tn==="next")return " purf-card-next";
-  return "";
-}
 function purFLoad(w){
   w.purfLoading=true;
   clearTimeout(timers["purf-"+w.id]);
@@ -8779,7 +8704,6 @@ function purFViewToggle(w){
   }
   return '<div class="vtoggle purf-vtoggle" role="group" aria-label="View">'+
     seg("table","Table","table_rows","Every purchase order over time, including closed and voided ones, with the overdue filter.")+
-    ((purFTier(w)==="wide")?"":seg("kanban","Kanban","view_kanban","The live approval flow: one column per approval state, longest waiting first, drag a card to action it."))+
     seg("enc","Encumbrances","account_balance_wallet","Budget committed by open purchase orders, by accounting period: pending or approved, unpaid, not rejected.")+
   '</div>';
 }
@@ -8787,7 +8711,7 @@ function purFShortScope(s){return s==="Awaiting my approval next"?"My approval n
 function purFHeaderBlock(w){
   var view=purFViewCur(w),tier=purFTier(w),loading=!!w.purfLoading;
   var mine=purFMineSet(w).length,pending=purFPendingCount(w),outstanding=purFSum(purFPendingSet(w));
-  var setRows=(view==="table")?purFTableRows(w):purFBoardRows(w);
+  var setRows=purFTableRows(w);
   /* Explore shortens the chip labels so all three fit beside the view toggle (owner, 27 Sep). */
   var sh=(tier==="wide"),sc=purFScopeCur(w),st=purFStatusCur(w),pa=purFPathCur(w);
   var chips=purFChip(w,"scope",sh?purFShortScope(sc):sc,"Viewer scope, currently "+sc,false);
@@ -8801,7 +8725,7 @@ function purFHeaderBlock(w){
     : ((view==="enc")?'<div class="dep-hd-kpigrp"><span class="metric-value">'+purFMoney(purFEncTotal(w))+'</span><span class="bank-pill">encumbered, not yet paid</span></div>'
     : '<div class="dep-hd-kpigrp"><span class="metric-value">'+mine+'</span><span class="bank-pill">'+(mine===1?"needs":"need")+' your approval</span></div>');
   var ctx=loading?"":(view==="enc")?'<div class="purf-ctx">'+purFEncCtx(w)+'</div>':'<div class="purf-ctx">'+pending+' pending approval, '+purFMoney(outstanding)+' outstanding. '+setRows.length+' request'+(setRows.length===1?"":"s")+' in view.</div>';
-  var lg=(view==="enc")?"":'<button class="purf-lgbtn" data-purf="legend" data-id="'+w.id+'" aria-haspopup="dialog" aria-label="Legend: what the lanes, badges and colours mean" data-tip="Legend">'+purFIcon("info")+'</button>';
+  var lg=""; /* legend info icon removed (owner, 6 Oct) */
   return '<div class="dep-hd purf-hd">'+
     '<div class="dep-hd-top"><div class="purf-chiprow">'+chips+'</div><div class="dep-hd-toggle">'+purFViewToggle(w)+'</div></div>'+
     '<div class="dep-hd-num"><div class="purf-numwrap">'+kpi+ctx+'</div>'+((view==="enc"&&tier==="wide")?purFEncSubToggle(w):lg)+'</div>'+
@@ -8810,61 +8734,6 @@ function purFHeaderBlock(w){
 function purFSkeleton(){
   var rows=[0,1,2,3,4].map(function(){return '<div class="purf-sk-line"><span class="sk" style="height:12px;flex:1"></span><span class="sk" style="height:12px;width:74px"></span></div>';}).join("");
   return '<div class="purf-skel"><div class="purf-skel-rows">'+rows+'</div><div class="purf-skel-cap"><span class="bgt-spin" aria-hidden="true"></span>Loading purchase requests</div></div>';
-}
-/* One card, on her .purf-kcard component. Everything we add beyond her card sits
-   on our own purf- classes: the colour state, the pay badge, the hold flag. */
-/* One card, on her .purf-kcard component, plus our turn badge: who has to act, from the live path. Only a
-   card the viewer can act on is draggable. */
-/* Any open card can be picked up; purFMoveCheck rules on the drop (owner, 27 Sep: the page allows Close, and Void from Approved, whatever the turn). */
-function purFCanDrag(po){return po.stage!=="Closed"&&po.stage!=="Voided";}
-function purFCard(w,po){
-  var ov=purFOverdue(po),age=purFAgeLabel(po),tn=purFTurn(po),hr=purFHoldReason(po),can=purFCanDrag(po);
-  var lbl=po.ref+", "+po.vendor+", "+purFMoney(po.amt)+", "+age+(ov?", overdue":"")+". "+tn.label+". "+
-    (can?"Open the purchase order record, or drag the card to the next column to action it.":"Open the purchase order record.");
-  return '<button class="purf-kcard purf-card'+purFCardCls(po)+'" draggable="'+(can?"true":"false")+'" data-purf="open" data-purf-ref="'+purFEsc(po.ref)+'" data-purf-card="'+purFEsc(po.ref)+'" data-id="'+w.id+'" aria-label="'+purFEsc(lbl)+'">'+
-    '<span class="purf-kc-top"><span class="purf-kc-num">'+po.ref+'</span><span class="purf-kc-amt">'+purFMoney(po.amt)+'</span></span>'+
-    '<span class="purf-kc-vendor">'+purFEsc(po.vendor)+'</span>'+
-    '<span class="purf-card-age'+(ov?" purf-age-hot":"")+'">'+purFIcon("schedule")+age+(ov?", overdue":"")+'</span>'+
-    purFTurnBadge(po)+
-  '</button>';
-}
-/* The board. Columns are the approval states; the status filter hides the columns
-   it does not select. The split Finish column appears ONLY at "All statuses",
-   because closing or voiding is a move out of the whole flow and a single-state
-   board is not the whole flow. */
-/* The board. Lanes are the lifecycle stages derived from the record status and the live approval path;
-   the status filter shows one lane. The split Finish column (Close / Void) appears only at "All statuses". */
-function purFBoard(w){
-  var rows=purFBoardRows(w),tier=purFTier(w),cols=purFCols(w);
-  var cap=(tier==="wide")?PURF_CAP_BOARD_WIDE:9999;
-  /* The payment board hides the Finish column when the status chip selects one lane, because closing or
-     voiding is a move out of the whole flow. The path board always shows the whole flow. */
-  var finish=PURF_USE_PAY?(purFStatusCur(w)==="All statuses"):true;
-  /* A level whose minimum is above every amount on the board cannot receive a card, so it says so
-     instead of looking merely empty: the skip rule made visible (POOrderRepository.cs:1760). */
-  var top=rows.reduce(function(m,p){return Math.max(m,p.amt);},0);
-  var cs=cols.map(function(c){
-    var sp=rows.filter(function(p){return purFColOf(p)===c.key;});
-    var dim=(c.min>0&&c.min>top);
-    var cards=sp.slice(0,cap).map(function(po){return purFCard(w,po);}).join("");
-    if(!sp.length)cards='<div class="purf-kempty">'+(dim?("Not required under "+purFMoneyShort(c.min)):c.empty)+'</div>';
-    else if(sp.length>cap)cards+='<button class="purf-more" data-purf="more" data-id="'+w.id+'">+'+(sp.length-cap)+' more, view in the PO Table</button>';
-    var ttl='<span class="purf-kcol-t" style="color:'+c.tone+'"'+(c.aria?' title="'+purFEsc(c.aria)+'"':"")+'>'+purFEsc(c.title)+'</span>';
-    var head=c.sub
-      ? '<div class="purf-kcol-h"><span class="purf-kcol-ttl">'+ttl+'<span class="purf-kcol-sub">'+purFEsc(c.sub)+'</span></span><span class="purf-kcol-n">'+sp.length+'</span></div>'
-      : '<div class="purf-kcol-h">'+ttl+'<span class="purf-kcol-n">'+sp.length+'</span></div>';
-    return '<div class="purf-kcol purf-col'+(dim?" purf-kcol-dim":"")+'"'+(c.aria?' role="group" aria-label="'+purFEsc(c.aria)+'"':"")+'>'+head+
-      '<div class="purf-kcol-b purf-colb" data-purf-drop="'+purFEsc(c.key)+'" data-id="'+w.id+'">'+cards+'</div></div>';
-  }).join("");
-  var fin=finish
-    ? '<div class="purf-finish" role="group" aria-label="Finish: drop a card here to close or void it">'+
-        '<div class="purf-fin-half purf-fin-close" data-purf-drop="Closed" data-id="'+w.id+'">'+purFIcon("task_alt")+'<span class="purf-fin-t">Close</span><span class="purf-fin-s">any status</span></div>'+
-        '<div class="purf-fin-half purf-fin-void" data-purf-drop="Voided" data-id="'+w.id+'">'+purFIcon("block")+'<span class="purf-fin-t">Void</span><span class="purf-fin-s">'+(PURF_USE_PAY?"unpaid only":"any open order")+'</span></div>'+
-      '</div>'
-    : "";
-  /* Explore: columns keep a readable minimum and the board scrolls sideways (owner, 27 Sep). */
-  var gtc=(tier==="wide")?("repeat("+cols.length+",minmax(180px,1fr))"+(finish?" 96px":"")):("repeat("+cols.length+",1fr)"+(finish?" 0.6fr":""));
-  return '<div class="purf-kanban purf-board'+(PURF_USE_PAY?"":" purf-pathboard")+'" data-purf-tier="'+tier+'" style="grid-template-columns:'+gtc+'">'+cs+fin+'</div>';
 }
 /* The PO Table, on her .wt-row primitives with the ARIA table roles so the
    semantics survive the swap from a real table element. Fixed oldest-first order
@@ -8898,13 +8767,11 @@ function purFTable(w){
       '<span class="purf-c-go" role="cell">'+purFIcon("edit_square")+'</span></div>';
   }).join("");
   if(!rows.length)body='<div class="wt-row purf-trow" role="row"><span class="lr-main purf-none" role="cell">No purchase orders match these filters.</span></div>';
-  var more=(rows.length>cap)?('<div class="purf-tnote">Showing the '+cap+' longest waiting of '+rows.length+' requests. The full list is available at the largest size.</div>'):"";
   return '<div class="purf-tblwrap">'+
     '<div class="scroll purf-tscroll" role="table" aria-label="Purchase orders, oldest first" aria-colcount="7" aria-rowcount="'+(rows.length+2)+'">'+
       '<div class="purf-tbl">'+head+body+'</div>'+
     '</div>'+
     '<div class="dep-total"><span>'+rows.length+' request'+(rows.length===1?"":"s")+'</span><span>'+purFMoney(purFSum(rows))+'</span></div>'+
-    more+
   '</div>';
 }
 /* Glance (owner, 27 Sep): headline = everything waiting for someone to act; tiles = my approval next / coming to
@@ -8997,9 +8864,7 @@ function purFBody(w){
   if(purFTier(w)==="kpi")return purFGlance(w);
   if(w.purfLoading)return purFHeaderBlock(w)+purFSkeleton();
   var view=purFViewCur(w);
-  var rows=(view==="table")?purFTableRows(w):purFBoardRows(w);
-  if(!rows.length&&view==="kanban")return purFHeaderBlock(w)+purFEmpty(w,true);
-  return purFHeaderBlock(w)+'<div class="purf-body">'+((view==="table")?purFTable(w):(view==="enc")?purFEncView(w):purFBoard(w))+'</div>';
+  return purFHeaderBlock(w)+'<div class="purf-body">'+((view==="enc")?purFEncView(w):purFTable(w))+'</div>';
 }
 /* Single entry point, dispatched by w.kind==="purchasing". */
 function purFContent(w){
@@ -9026,7 +8891,7 @@ function purFPopContent(){
   if(t==="status"){
     var cs=purFStatusCur(w),vals=purFStatusVals(w,purFViewCur(w));
     return '<div class="cap">PO status</div>'+vals.map(function(v){return row("set-status",v,v,cs===v,"");}).join("")+
-      ((purFViewCur(w)==="table")?'<div class="mi-note purf-popnote">Closed and voided orders are archive states. They are listed in the Table view only, never on the board.</div>':"");
+      "";
   }
   if(t==="path"){
     var cp=purFPathCur(w),q=(PURF_Q||"").toLowerCase(),list=purFPathVals(w).filter(function(p){return p.toLowerCase().indexOf(q)>-1;});
@@ -9036,7 +8901,6 @@ function purFPopContent(){
     if(list.length)out+='<div class="cap">Approval paths</div>'+list.map(function(p){return row("set-path",p,p,cp===p,"account_tree");}).join("");
     if(!list.length&&q&&"all approval paths".indexOf(q)<0)out+='<div class="mi-note purf-popnote">No approval paths match "'+purFEsc(PURF_Q)+'"</div>';
     out+='</div>';
-    if(purFPathReq(w))out+='<div class="mi-note purf-popnote">The Kanban draws its columns from one approval path, so every request on the board is on the path selected here. The Table and Encumbrances views still show them all.</div>';
     return out;
   }
   return "";
@@ -9050,40 +8914,22 @@ function purFPositionPop(el,anchor){
   var top=r.bottom+6;if(top+bh>window.innerHeight-M)top=Math.max(M,r.top-bh-6);
   el.style.left=left+"px";el.style.top=top+"px";el.style.visibility="";
 }
-/* Legend. Every sample is the board's own markup (lane tone, .purf-turn-*, .purf-card-*), so what the
-   legend shows is what the board draws. */
+/* Legend for the Table: status tones and the turn badges, in the table's own markup. */
 /* With the payment process off the lanes do not exist, so the legend is its own function and the
    payment legend above is left exactly as the owner signed it off. The Columns section is built from
    purFCols, so it cannot drift from the board it describes. */
-function purFLegendNoPay(w,table){
-  var out;
-  if(table){
-    var sts=[["Pending approval","On its approval path. Approvers act in level order."],["Approved","Approval path complete. The invoice is entered in Accounts Payable."],["Closed","Final. Archive state, listed in the Table only."],["Voided","Cancelled. Archive state, listed in the Table only."]];
-    out='<div class="cap">Status</div>'+sts.map(function(l){return '<div class="purf-lg-row"><span class="purf-chip-st purf-lg-lane" style="color:'+PURF_STAGE_TONE[l[0]]+'">'+l[0]+'</span><span class="purf-lg-txt">'+l[1]+'</span></div>';}).join("");
-  }else{
-    var cols=purFCols(w),thr=cols.filter(function(c){return c.min>0;})[0];
-    out='<div class="cap">Columns</div>'+cols.map(function(c){return '<div class="purf-lg-row"><span class="purf-chip-st purf-lg-lane" style="color:'+c.tone+'">'+purFEsc(c.title)+'</span><span class="purf-lg-txt">'+purFEsc(c.aria)+'</span></div>';}).join("");
-    out+='<div class="mi-note purf-popnote">The columns are the levels of the approval path selected above, in order. A request sits in the column of the level that has to act next.</div>';
-    if(thr)out+='<div class="purf-lg-row"><span class="purf-kcol-sub purf-lg-lane">'+purFEsc(thr.sub)+'</span><span class="purf-lg-txt">The dollar minimum belongs to the approver, not the level: they have to approve only once the request total reaches it, and below it the level is skipped. A column no request on the board can reach is greyed out.</span></div>';
-    out+='<div class="purf-lg-row"><span class="purf-lg-fin purf-fin-close">Close</span><span class="purf-lg-txt">Finish column: closes an order from any column, as the Status list on the record does. Leaves the board, stays in the Table.</span></div>';
-    out+='<div class="purf-lg-row"><span class="purf-lg-fin purf-fin-void">Void</span><span class="purf-lg-txt">Finish column: cancels an open order. Leaves the board, stays in the Table.</span></div>';
-  }
-  var act=table?"Approve on the Approvals tab of the record.":"Drag the card forward, or approve on the Approvals tab.";
-  var badges=[["next","how_to_reg","Your approval next","Your level is the next one. "+act],["mine","schedule","Your approval later","You are on the path, someone else is first. You may still approve; that also satisfies the lower levels."],["waiting","hourglass_top","Waiting on","Someone else's turn."+(table?"":" You can only drag it to Close or Void.")],["rejected","block","Rejected by","An approver rejected it with a reason. Clear the rejection on the Approvals tab to resume."],["hold","lock","On hold","Parked with a reason. Remove the hold before it moves."],["next","how_to_reg","No approver required","The amount is under every minimum on the path. Approve to release it."]];
+function purFLegendNoPay(w){
+  var sts=[["Pending approval","On its approval path. Approvers act in level order."],["Approved","Approval path complete. The invoice is entered in Accounts Payable."],["Closed","Final. Archive state, listed in the Table only."],["Voided","Cancelled. Archive state, listed in the Table only."]];
+  var out='<div class="cap">Status</div>'+sts.map(function(l){return '<div class="purf-lg-row"><span class="purf-chip-st purf-lg-lane" style="color:'+PURF_STAGE_TONE[l[0]]+'">'+l[0]+'</span><span class="purf-lg-txt">'+l[1]+'</span></div>';}).join("");
+  var act="Approve on the Approvals tab of the record.";
+  var badges=[["next","how_to_reg","Your approval next","Your level is the next one. "+act],["mine","schedule","Your approval later","You are on the path, someone else is first. You may still approve; that also satisfies the lower levels."],["waiting","hourglass_top","Waiting on others","Not on this path, or already approved. Nothing for you to do."]];
   out+='<div class="cap">Badges: whose turn it is</div>'+badges.map(function(b){return '<div class="purf-lg-row"><span class="purf-turn purf-turn-'+b[0]+'">'+purFIcon(b[1])+b[2]+'</span><span class="purf-lg-txt">'+b[3]+'</span></div>';}).join("");
-  if(table){
-    out+='<div class="cap">Issued column</div><div class="purf-lg-row"><span class="purf-ovflag purf-lg-ov">'+purFIcon("warning")+'Overdue</span><span class="purf-lg-txt">Past its expected-by date and not yet approved.</span></div>';
-    return out;
-  }
-  var cards=[["purf-card-next","Your turn","Amber edge: you can act on this card now."],["purf-card-hold","On hold","Cream: parked. Moves only to Close or Void."],["purf-card-rej","Rejected","Red tint: rejected. Clear it on the Approvals tab to approve; Close or Void still allowed."]];
-  out+='<div class="cap">Card colours</div>'+cards.map(function(c){return '<div class="purf-lg-row"><span class="purf-kcard purf-card purf-lg-card '+c[0]+'">'+c[1]+'</span><span class="purf-lg-txt">'+c[2]+'</span></div>';}).join("");
-  out+='<div class="purf-lg-row"><span class="purf-card-age purf-age-hot purf-lg-age">'+purFIcon("schedule")+'overdue</span><span class="purf-lg-txt">Red clock: past its due date.</span></div>';
-  out+='<div class="cap">Moving a card</div><div class="mi-note purf-popnote purf-lg-rules">Dragging a card onto a later level records your approval, so only your turn can move it forward. Approving at your level also satisfies every level below it, so a card can pass more than one column at once. Any card can be dragged to Close, and any open order to Void, whatever the turn. A card on hold moves only to Close or Void.</div>';
+  out+='<div class="cap">Issued column</div><div class="purf-lg-row"><span class="purf-ovflag purf-lg-ov">'+purFIcon("warning")+'Overdue</span><span class="purf-lg-txt">Past its expected-by date and not yet approved.</span></div>';
   return out;
 }
 function purFLegendHTML(w){
-  var view=purFViewCur(w),table=(view==="table");
-  if(!PURF_USE_PAY)return purFLegendNoPay(w,table);
+  var table=true; /* the Table is the only view with a legend (Kanban removed 5 Oct) */
+  if(!PURF_USE_PAY)return purFLegendNoPay(w);
   var lanes=[["Pending approval","Request path open. Approvers act in level order."],["Payment approval","Approved. Payment path open, one per invoice."],["Ready to pay","Payment approved. Waiting on the check."],["Paid",table?"Check posted.":"Check posted. Drag to Close when the order is done."]];
   if(table)lanes=lanes.concat([["Closed","Final. Archive state, listed in the Table only."],["Voided","Cancelled. Archive state, listed in the Table only."]]);
   var out='<div class="cap">'+(table?"Status":"Lanes")+'</div>'+lanes.map(function(l){return '<div class="purf-lg-row"><span class="purf-chip-st purf-lg-lane" style="color:'+PURF_STAGE_TONE[l[0]]+'">'+l[0]+'</span><span class="purf-lg-txt">'+l[1]+'</span></div>';}).join("");
@@ -9536,7 +9382,6 @@ function purFHandleClick(e){
   if(a==="enc-view"){if(w)w.purfEncView=v;purFClosePop();render();return;}
   if(a==="enc-pop"){if(PURF_POP&&PURF_POP.type==="enc"&&PURF_POP.id===id&&PURF_POP.v===v){purFClosePop();return;}PURF_POP={type:"enc",id:id,v:v};PURF_Q="";purFRenderPop(t);return;}
   if(a==="view"){if(w)w.purfView=v;purFClosePop();render();return;}
-  if(a==="more"){if(w)w.purfView="table";purFClosePop();render();return;}
   if(a==="open"){if(w&&ref)purFOpenPO(w,ref);return;}
   if(a==="close-modal"){if(PURF_MODAL&&PURF_MODAL.draft){var wc=find(PURF_MODAL.id),pc=wc?purFPO(wc,PURF_MODAL.ref):null;if(pc)purFRecordCancel(pc,PURF_MODAL.draft);}purFCloseModal();render();return;}
   if(a==="tab"){if(PURF_MODAL){PURF_MODAL.tab=v;purFRenderModal();}return;}
@@ -9615,55 +9460,12 @@ function purFHandleChange(e){
   if(key==="payPath")dr.payRows=purFGridRows(po,dr.payPath,po.payAppr||[],false);
   purFRenderModal();
 }
-function purFDragStart(e){
-  var c=e.target.closest&&e.target.closest("[data-purf-card]");
-  if(!c)return;
-  var w=find(c.getAttribute("data-id")),po=w?purFPO(w,c.getAttribute("data-purf-card")):null;
-  if(!po)return;
-  if(!purFCanDrag(po)){
-    if(e.preventDefault)e.preventDefault();
-    PURF_DRAG=null;
-    setStatus(po.ref+" is "+po.stage.toLowerCase()+": closed and voided orders are final.");
-    return;
-  }
-  PURF_DRAG={id:w.id,ref:po.ref};
-  if(e.dataTransfer&&e.dataTransfer.setData)e.dataTransfer.setData("text/plain",po.ref);
-}
-function purFDragOver(e){
-  var z=e.target.closest&&e.target.closest("[data-purf-drop]");
-  if(!z)return;
-  if(e.preventDefault)e.preventDefault();
-  if(z.classList&&z.classList.add)z.classList.add("purf-dragover");
-}
-function purFDragLeave(e){
-  var z=e.target.closest&&e.target.closest("[data-purf-drop]");
-  if(z&&z.classList&&z.classList.remove)z.classList.remove("purf-dragover");
-}
-function purFDrop(e){
-  var z=e.target.closest&&e.target.closest("[data-purf-drop]");
-  if(!z)return;
-  if(e.preventDefault)e.preventDefault();
-  if(z.classList&&z.classList.remove)z.classList.remove("purf-dragover");
-  var to=z.getAttribute("data-purf-drop"),d=PURF_DRAG;
-  PURF_DRAG=null;
-  if(!d)return;
-  var w=find(d.id),po=w?purFPO(w,d.ref):null;
-  if(!po)return;
-  var c=purFMoveCheck(po,to);
-  if(!c.ok){if(c.msg)setStatus(c.msg);return;}
-  PURF_MOVE={id:d.id,ref:d.ref,to:to,from:purFLane(po),note:""};
-  purFRenderModal();
-}
 var PURF_WIRED=false;
 (function(){
   if(PURF_WIRED)return;PURF_WIRED=true;
   document.addEventListener("click",purFHandleClick);
   document.addEventListener("input",purFHandleInput);
   document.addEventListener("change",purFHandleChange);
-  document.addEventListener("dragstart",purFDragStart);
-  document.addEventListener("dragover",purFDragOver);
-  document.addEventListener("dragleave",purFDragLeave);
-  document.addEventListener("drop",purFDrop);
   /* Enter on a focused table row opens the record, the keyboard route to a
      request. Escape closes the dialogs and the popover, innermost first. */
   document.addEventListener("keydown",function(e){
@@ -11197,14 +10999,14 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       {id:"lonF3", title:"Loans With Balance Due",     kind:"loans",size:"wide", tiers:["kpi","wide","xwide"],state:"empty",lonType:"All",lonSort:"amt-desc",lonBucket:"total",lonView:"table",updated:"just now"}
       */
       /* W11 Fixed Asset Values */
-      ,{id:"faF",  title:"Fixed Asset Values",                             kind:"fixedassets",size:"wide", tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFPage:0,updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]}
-      ,{id:"faF_k",title:"Fixed Asset Values",                     kind:"fixedassets",size:"kpi",  tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFPage:0,updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]}
-      ,{id:"faF_x",title:"Fixed Asset Values",                kind:"fixedassets",size:"xwide",tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFPage:0,updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]}
+      ,{id:"faF",  title:"Fixed Asset Values",                             kind:"fixedassets",size:"wide", tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFShown:0,updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]}
+      ,{id:"faF_k",title:"Fixed Asset Values",                     kind:"fixedassets",size:"kpi",  tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFShown:0,updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]}
+      ,{id:"faF_x",title:"Fixed Asset Values",                kind:"fixedassets",size:"xwide",tiers:["kpi","wide","xwide"],goto:false,faFDim:"cls", faFMeasure:"net",  faFSort:"tag-asc",faFShown:0,updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]}
       /* W11 driver fixtures (state variants), not rendered as cards:
-      {id:"faF2", title:"Fixed Asset Values",          kind:"fixedassets",size:"wide", tiers:["kpi","wide","xwide"],goto:false,faFDim:"bldg",faFMeasure:"accum",faFSort:"tag-asc",faFPage:0,faFView:"donut",updated:"just now"}
-      {id:"faF3", title:"Fixed Asset Values",       kind:"fixedassets",size:"wide", tiers:["kpi","wide","xwide"],goto:false,faFDim:"acctAsset",faFMeasure:"net",faFSort:"tag-asc",faFPage:0,updated:"just now"}
-      {id:"faF4", title:"Fixed Asset Values",            kind:"fixedassets",size:"wide", tiers:["kpi","wide","xwide"],goto:false,state:"empty",faFDim:"cls",faFMeasure:"net",faFSort:"tag-asc",faFPage:0,updated:"just now"}
-      {id:"faF5", title:"Fixed Asset Values",        kind:"fixedassets",size:"wide", tiers:["kpi","wide","xwide"],goto:false,state:"unspecified",faFDim:"cls",faFMeasure:"net",faFSort:"tag-asc",faFPage:0,updated:"just now"}
+      {id:"faF2", title:"Fixed Asset Values",          kind:"fixedassets",size:"wide", tiers:["kpi","wide","xwide"],goto:false,faFDim:"bldg",faFMeasure:"accum",faFSort:"tag-asc",faFShown:0,faFView:"donut",updated:"just now"}
+      {id:"faF3", title:"Fixed Asset Values",       kind:"fixedassets",size:"wide", tiers:["kpi","wide","xwide"],goto:false,faFDim:"acctAsset",faFMeasure:"net",faFSort:"tag-asc",faFShown:0,updated:"just now"}
+      {id:"faF4", title:"Fixed Asset Values",            kind:"fixedassets",size:"wide", tiers:["kpi","wide","xwide"],goto:false,state:"empty",faFDim:"cls",faFMeasure:"net",faFSort:"tag-asc",faFShown:0,updated:"just now"}
+      {id:"faF5", title:"Fixed Asset Values",        kind:"fixedassets",size:"wide", tiers:["kpi","wide","xwide"],goto:false,state:"unspecified",faFDim:"cls",faFMeasure:"net",faFSort:"tag-asc",faFShown:0,updated:"just now"}
       */
       /* W13 Purchasing Management (ours, prefix purF) */
       ,{id:"purF",  title:"Purchasing Management",           kind:"purchasing",size:"wide", tiers:["kpi","wide","xwide"],purfView:"table",purfStatus:"All statuses",purfPath:null,purfOv:false,updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]}
