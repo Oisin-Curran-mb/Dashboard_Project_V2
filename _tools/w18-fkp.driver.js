@@ -201,10 +201,28 @@ const run = H.runBlock(block, {
   dataAttr: "data-fkp",
   globals: {
     setTimeout: function (f) { timerScheduled++; lastTimerFn = f; return timerScheduled; },
-    clearTimeout: function () {}
+    clearTimeout: function () {},
+    /* the shell's registry, reduced to the two slots the band adds to (a popover type and a click handler); it registers no kind */
+    WIDGETS: { kinds: {}, pops: {}, clicks: [] }
   }
 });
 const ctx = run.ctx, shim = run.shim;
+
+/* ---------- 3b. the About popover plugs into the registry, not into the shell's code (owner, 7 Oct 2026) ---- */
+A.eq(Object.keys(ctx.WIDGETS.kinds).length, 0, "the band still registers no widget kind");
+A.ok(!!ctx.WIDGETS.pops["fkp-info"], "it adds one popover type, fkp-info");
+A.eq(ctx.WIDGETS.clicks.length, 1, "and one click handler");
+ctx.pop = { type: "fkp-info", id: "fkp-0" };
+const popHtml = ctx.WIDGETS.pops["fkp-info"].content();
+A.contains(popHtml, '<div class="wtip-h">Total Income (YTD)</div>', "the popover title is the tile name, in her About title class");
+A.contains(popHtml, '<div class="wtip-b">Sum of all revenue posted to income accounts from Jan 1 to today.</div>', "the body is the calculation sentence, in her About body class");
+A.contains(popHtml, '<div class="sep"></div>', "her divider"); A.contains(popHtml, 'class="mi wtip-link" data-action="noop"', "and her user-guide link, inert as on every widget");
+A.absent(popHtml, "Prev yr", "the popover does not repeat the prior-year figure the tile already shows");
+A.eq(ctx.WIDGETS.pops["fkp-info"].trigger(), '[data-action="fkp-info"][data-id="fkp-0"]', "the popover is positioned against its own tile's button");
+ctx.pop = { type: "fkp-info", id: "fkp-2" }; A.contains(ctx.WIDGETS.pops["fkp-info"].content(), "Total Income minus Total Expenses year-to-date.", "the third tile explains net income");
+ctx.pop = null; A.eq(ctx.WIDGETS.clicks[0]("fkp-info", "fkp-1"), true, "the click handler claims fkp-info"); A.ok(ctx.pop && ctx.pop.type === "fkp-info" && ctx.pop.id === "fkp-1", "and opens that tile's popover");
+A.eq(ctx.WIDGETS.clicks[0]("fkp-info", "fkp-1"), true, "a second click"); A.eq(ctx.pop, null, "toggles it closed");
+A.eq(ctx.WIDGETS.clicks[0]("winfo", "x"), false, "any other action is left to the shell");
 
 const bandNode = shim.mkNode("fkpBand", "div");
 shim.nodes.fkpBand = bandNode;
@@ -258,12 +276,18 @@ A.contains(h, "unfavourable", "and the unfavourable wording");
 
 /* her tooltip system, never a native title */
 A.contains(h, "data-tip=", "uses her data-tip system");
-A.eq((h.match(/data-tip=/g) || []).length, 4, "four tooltips in the band: one calculation tip per tile and the refresh stamp (7 Oct)");
+A.eq((h.match(/data-tip=/g) || []).length, 1, "exactly one text tooltip in the band: the refresh stamp (the tiles use the About popover, not a tooltip)");
+/* Each tile's info button is the shell's .wmini opening the shell's About popover through the registry (owner, 7 Oct 2026). */
+A.eq((h.match(/data-action="fkp-info"/g) || []).length, 3, "one info button per tile");
+A.eq((h.match(/class="wmini fkp-info-btn"/g) || []).length, 3, "the info button is her .wmini, not new chrome");
+A.eq((h.match(/aria-haspopup="dialog"/g) || []).length, 3, "each announces its popover");
+A.contains(blockCode, 'WIDGETS.pops["fkp-info"]', "the About popover is registered as a shell popover type");
+A.contains(blockCode, 'class="wtip-h"', "and renders the shell's About card: title"); A.contains(blockCode, 'class="wtip-b"', "body"); A.contains(blockCode, 'class="sep"', "divider"); A.contains(blockCode, "Learn more in user guides", "and the user-guide link");
 /* The plain variant was carried by the prototype chip and the runway info
    icon, both of which held prose long enough to need it. Both are gone, and
    the refresh stamp never used it, so asserting it here would be asserting
    the presence of something the band has no use for. */
-A.eq((h.match(/data-tip-plain/g) || []).length, 3, "the three calculation tips use the plain, narrow variant; the refresh stamp does not"); A.eq((h.match(/data-tip-narrow/g) || []).length, 3, "and the narrow width");
+A.absent(h, "data-tip-plain", "no plain-variant tooltip: the tiles' explanations live in the About popover");
 A.eq((h.match(/\stitle="/g) || []).length, 0, "no native title attribute in the band");
 
 /* ---------- 7. the refresh control ---------------------------------- */
@@ -308,7 +332,7 @@ h = shim.captured.fkpBand;
   "No warning", "not yet confirmed", "$3,224,350", "$358,000"].forEach(s =>
     A.absent(h, s, "the band says nothing about " + JSON.stringify(s)));
 ['data-fkp="warn"', 'data-fkp="acct"', 'data-fkp="review"', 'data-fkp="cycle"',
-  'data-fkp="stop"', "fkp-cash", "fkp-warn", "fkp-unit", 'fkp-info"', "fkp-demo",  /* 'fkp-info"' exact: fkp-info-btn is the live 7 Oct button */
+  'data-fkp="stop"', "fkp-cash", "fkp-warn", "fkp-unit", 'class="fkp-info"', "fkp-demo",  /* the old info popover's class exactly; fkp-info-btn and data-action="fkp-info" are the live 7 Oct button */
   "aria-expanded", "data-fkp-sev", "data-sev", "id=\"fkpWarnBtn\""].forEach(s =>
     A.absent(h, s, "the band carries no " + s));
 
@@ -341,10 +365,10 @@ A.eq(timerScheduled, before, "and none of them schedules a timer");
 
 /* the listeners that existed only for the panel are gone */
 A.eq((shim.listeners.click || []).length, 1, "exactly one click listener, where rev 2 had one plus four more");
-["mouseover", "mouseout", "keydown"].forEach(k =>
-  A.eq((shim.listeners[k] || []).length, 0, "no " + k + " listener survives: it served the panel only"));
-["FKP_HIDE_MS", "addEventListener(\"mouseover\"", "addEventListener(\"mouseout\"",
-  "addEventListener(\"keydown\"", "window.addEventListener"].forEach(s =>
+A.eq((shim.listeners.mouseover || []).length, 1, "one mouseover listener: hover opens a tile's About popover, as her winfo does (7 Oct)");
+A.eq((shim.listeners.mouseout || []).length, 1, "one mouseout listener: leaving closes it after her 180ms grace");
+A.eq((shim.listeners.keydown || []).length, 0, "no keydown listener survives: Escape is the shell's job");
+["FKP_HIDE_MS", "addEventListener(\"keydown\"", "window.addEventListener"].forEach(s =>
     A.absent(blockCode, s, "the block's code no longer contains " + JSON.stringify(s)));
 
 /* Escape and an outside click are inert now, rather than closing something */

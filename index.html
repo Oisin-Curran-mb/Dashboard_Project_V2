@@ -3365,17 +3365,9 @@
   border:1px solid var(--stroke-widget);
   border-radius:8px;
 }
-/* Info button: positioned top-right inside the tile; reuses the shared
-   .iconbtn style and just anchors it absolutely. Size is set to match the
-   .wactions .iconbtn 28 × 18px pattern rather than the full 32px default. */
-.fkp-info-btn{
-  position:absolute;
-  top:var(--padding-xtight);
-  right:var(--padding-xtight);
-  width:28px;
-  height:28px;
-}
-.fkp-info-btn .material-symbols-rounded{font-size:var(--type-size-18);}
+/* Info button: the shell's .wmini (24px, subtle, her 16px glyph, her hover tint), anchored top-right in
+   the tile. Always visible: a tile has no header row to hover, which is what reveals it on a card. */
+.fkp-info-btn{position:absolute;top:var(--padding-xtight);right:var(--padding-xtight);opacity:1;pointer-events:auto;}
 
 .fkp-lbl{
   font-size:10px;
@@ -12986,6 +12978,13 @@ var FKP_TILES=[
   {lbl:"Net Income (YTD)",     val:142800,  prev:84200,   chg:"69.6%", dir:"up", fav:true}
 ];
 
+/* What each tile measures, for its About popover (Aditya's wording, 7 Oct 2026). */
+var FKP_CALC={
+  "Total Income (YTD)":"Sum of all revenue posted to income accounts from Jan 1 to today.",
+  "Total Expenses (YTD)":"Sum of all amounts posted to expense accounts from Jan 1 to today.",
+  "Net Income (YTD)":"Total Income minus Total Expenses year-to-date."
+};
+
 /* THE CASH POSITION TILE AND ITS RECONCILIATION WARNING WERE REMOVED on
    28 Sep 2026 (owner, following Aditya c0359df and c016583). Deleted with
    them: FKP_CASH, FKP_THRESHOLD_DAYS, FKP_ACCTS, FKP_DEMO, fkpSevOf,
@@ -13002,21 +13001,13 @@ var FKP_STATE={loading:false,updated:"just now"};
 /* (2) RENDER ----------------------------------------------------------- */
 function fkpEsc(s){return escText(s);}
 
-function fkpTileHTML(t){
+function fkpTileHTML(t,i){
   if(FKP_STATE.loading)return '<div class="fkp-tile"><div class="fkp-skel lbl"></div><div class="fkp-skel val"></div><div class="fkp-skel meta"></div></div>';
   var cls=t.fav?"pos":"neg";
   var arrow=t.dir==="up"?"↑":"↓";
-  /* Calculation descriptions per tile, shown in the narrow hover tooltip */
-  var calcDesc={
-    "Total Income (YTD)":"Sum of all revenue posted to income accounts from Jan 1 to today.",
-    "Total Expenses (YTD)":"Sum of all amounts posted to expense accounts from Jan 1 to today.",
-    "Net Income (YTD)":"Total Income minus Total Expenses year-to-date."
-  };
-  var tipTxt=fkpEsc((calcDesc[t.lbl]||t.lbl)+' Prev yr: '+money(t.prev)+'. Change: '+(t.dir==="up"?'\u2191':'\u2193')+' '+t.chg+'.');
-  return '<div class="fkp-tile">'+
-    '<button type="button" class="iconbtn fkp-info-btn" data-tip="'+tipTxt+'" data-tip-plain data-tip-narrow aria-label="How '+fkpEsc(t.lbl)+' is calculated">'+
-      ICON("info")+
-    '</button>'+
+  /* The shell's small info button (her .wmini), opening the shell's About popover for this tile (owner, 7 Oct 2026). */
+  var info='<button type="button" class="wmini fkp-info-btn" data-action="fkp-info" data-id="fkp-'+i+'" aria-haspopup="dialog" aria-label="About '+fkpEsc(t.lbl)+'">'+ICON("info")+'</button>';
+  return '<div class="fkp-tile">'+info+
     '<div class="fkp-lbl">'+fkpEsc(t.lbl)+'</div>'+
     '<div class="fkp-val">'+money(t.val)+'</div>'+
     '<div class="fkp-meta">'+
@@ -13083,8 +13074,31 @@ function fkpRefresh(){
    mouseout and keydown handlers and the resize and scroll repositioning
    all existed for the warning panel, and warn, acct, review, cycle and
    stop were its actions. Refresh is what is left. */
+/* About popover per tile. It is the shell's own info card (title, body, divider, user-guide link), produced
+   through the registry's popover hooks exactly as a widget's About is, so the box, caret, shadow, type and
+   position are the shell's and cannot drift. The band still registers no widget kind: it adds one popover
+   type and one click handler to the registry, nothing else (owner, 7 Oct 2026). */
+function fkpInfoPopHTML(){
+  var i=parseInt(String(pop&&pop.id||"").slice(4),10),t=FKP_TILES[i];if(!t)return "";
+  return '<div class="wtip-h">'+fkpEsc(t.lbl)+'</div><div class="wtip-b">'+fkpEsc(FKP_CALC[t.lbl]||"")+'</div><div class="sep"></div><button class="mi wtip-link" data-action="noop">'+ICON("open_in_new")+'Learn more in user guides</button>';
+}
+WIDGETS.pops["fkp-info"]={content:fkpInfoPopHTML,trigger:function(){return '[data-action="fkp-info"][data-id="'+pop.id+'"]';}};
+WIDGETS.clicks.push(function(a,id){if(a!=="fkp-info")return false;pop=(pop&&pop.type==="fkp-info"&&pop.id===id)?null:{type:"fkp-info",id:id};render();return true;});
+
+var FKP_HOVER_T=null;
 function fkpWire(){
   if(FKP_WIRED)return;FKP_WIRED=true;
+  /* Hover opens the About popover and leaving it closes it after the shell's 180ms grace, mirroring her winfo handlers. */
+  document.addEventListener("mouseover",function(e){
+    var ic=e.target.closest&&e.target.closest('[data-action="fkp-info"]');
+    if(ic){clearTimeout(FKP_HOVER_T);var id=ic.getAttribute("data-id");if(!(pop&&pop.type==="fkp-info"&&pop.id===id)){pop={type:"fkp-info",id:id};render();}return;}
+    if(pop&&pop.type==="fkp-info"&&e.target.closest&&e.target.closest("#overlay .pop"))clearTimeout(FKP_HOVER_T);
+  });
+  document.addEventListener("mouseout",function(e){
+    if(!(pop&&pop.type==="fkp-info"))return;
+    var to=e.relatedTarget,stay=to&&to.closest&&(to.closest('[data-action="fkp-info"]')||to.closest("#overlay .pop"));
+    if(!stay){clearTimeout(FKP_HOVER_T);FKP_HOVER_T=setTimeout(function(){if(pop&&pop.type==="fkp-info"){pop=null;render();}},180);}
+  });
   document.addEventListener("click",function(e){
     var n=e.target.closest&&e.target.closest("[data-fkp]");
     if(!n)return;
