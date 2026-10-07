@@ -135,7 +135,7 @@ A.cssDeclares(ourCss, USED, "W18 CSS");
    the deletion has only moved the dead weight. */
 A.absent(ourCss, ".fkp-sub", "the removed subtitle's CSS rule is gone, not orphaned");
 A.absent(ourCss, ".fkp-tip{", "the old in-tile .fkp-tip rule is gone");
-[".fkp-demo", ".fkp-unit", ".fkp-info", ".fkp-warn", ".fkp-cash", ".fkp-pop",
+[".fkp-demo", ".fkp-unit", ".fkp-info{", ".fkp-warn", ".fkp-cash", ".fkp-pop",  /* ".fkp-info{" exact: the 7 Oct .fkp-info-btn is a different, live rule */
   ".fkp-tip-hd", ".fkp-tip-body", ".fkp-tip-cta", ".fkp-acct"].forEach(sel => {
     A.absent(ourCss, sel, "the retired rule " + sel + " is gone from our CSS");
     A.absent(css, sel, "and from the whole stylesheet, so nothing else adopted it");
@@ -175,7 +175,7 @@ A.contains(tileRule, "border:1px solid var(--stroke-widget)", "each tile has its
 A.contains(tileRule, "border-radius:8px", "each tile has his 8px radius");
 A.contains(tileRule, "padding:10px 16px 12px", "and his tile padding");
 A.absent(tileRule, "border-left", "the 1px divider band is gone");
-A.absent(tileRule, "position:relative", "nothing is positioned against the tile now the warning button is gone");
+A.contains(tileRule, "position:relative", "the tile anchors its calculation info button (Aditya, 7 Oct)");
 A.absent(ourCss, "var(--cn-30)", "the divider colour left with the dividers");
 A.absent(ourCss, ":first-child", "and so did the first-child exception it needed");
 A.contains(bandRule, "height:auto", "(4) the band sizes to its cards, not to her fixed Glance height");
@@ -258,12 +258,12 @@ A.contains(h, "unfavourable", "and the unfavourable wording");
 
 /* her tooltip system, never a native title */
 A.contains(h, "data-tip=", "uses her data-tip system");
-A.eq((h.match(/data-tip=/g) || []).length, 1, "exactly one tooltip in the band now: the refresh stamp");
+A.eq((h.match(/data-tip=/g) || []).length, 4, "four tooltips in the band: one calculation tip per tile and the refresh stamp (7 Oct)");
 /* The plain variant was carried by the prototype chip and the runway info
    icon, both of which held prose long enough to need it. Both are gone, and
    the refresh stamp never used it, so asserting it here would be asserting
    the presence of something the band has no use for. */
-A.absent(h, "data-tip-plain", "no plain-variant tooltip survives: its two users left with the cash tile");
+A.eq((h.match(/data-tip-plain/g) || []).length, 3, "the three calculation tips use the plain, narrow variant; the refresh stamp does not"); A.eq((h.match(/data-tip-narrow/g) || []).length, 3, "and the narrow width");
 A.eq((h.match(/\stitle="/g) || []).length, 0, "no native title attribute in the band");
 
 /* ---------- 7. the refresh control ---------------------------------- */
@@ -308,7 +308,7 @@ h = shim.captured.fkpBand;
   "No warning", "not yet confirmed", "$3,224,350", "$358,000"].forEach(s =>
     A.absent(h, s, "the band says nothing about " + JSON.stringify(s)));
 ['data-fkp="warn"', 'data-fkp="acct"', 'data-fkp="review"', 'data-fkp="cycle"',
-  'data-fkp="stop"', "fkp-cash", "fkp-warn", "fkp-unit", "fkp-info", "fkp-demo",
+  'data-fkp="stop"', "fkp-cash", "fkp-warn", "fkp-unit", 'fkp-info"', "fkp-demo",  /* 'fkp-info"' exact: fkp-info-btn is the live 7 Oct button */
   "aria-expanded", "data-fkp-sev", "data-sev", "id=\"fkpWarnBtn\""].forEach(s =>
     A.absent(h, s, "the band carries no " + s));
 

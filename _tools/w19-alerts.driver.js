@@ -78,7 +78,7 @@ h = EX.contentHTML(w); A.eq((h.match(/class="al-body"/g) || []).length, 5, "clos
 EX.WIDGETS.click("alO-toggle", w.id, T({ "data-cat": "al-cat-1" }), {});
 h = EX.contentHTML(w); A.eq((h.match(/class="al-body"/g) || []).length, 1, "opening one closes the others (single-open, as in the source)");
 A.contains(h, "Restricted Fund Compliance Breach", "and it is the one opened");
-A.contains(h, 'data-action="alO-item"', "items carry their action buttons");
+A.ok(/data-action="alO-(item|payment|recon|ar|budget)"/.test(h), "items carry their action buttons (item pop-up, or one of the 7 Oct destination screens)");
 /* every item's pop-up opens without throwing, including the two source crash cases */
 let threw = 0;
 EX.cats.forEach(function (c) { c.items.forEach(function (lbl, i) { try { const mh = EX.modalHTML(c.sev, c.title, lbl, EX.cfgs[c.id + ":" + i] || null); if (!/al-modal/.test(mh)) threw++; } catch (e) { threw++; if (threw === 1) console.log("first error:", e && e.message); } }); });

@@ -2163,8 +2163,8 @@
   .al-modal-val{flex:1;font-size:var(--type-size-12);color:var(--txt-primary);}
   .al-modal-val.val-err{color:var(--red-100);font-weight:600;}
   .al-modal-actions{display:flex;gap:var(--gap-tight);justify-content:flex-end;padding:var(--padding-base) var(--padding-relaxed);}
-  .al-modal-redirect-note{display:flex;align-items:flex-start;gap:6px;margin-top:8px;font-size:var(--type-size-11);color:var(--txt-tertiary);line-height:1.4;}
-  .al-modal-redirect-note .material-symbols-rounded{font-size:12px;flex-shrink:0;margin-top:1px;color:var(--txt-tertiary);}
+  .al-modal-redirect-note{display:flex;align-items:flex-start;gap:var(--gap-xtight);margin-top:var(--padding-tight);font-size:var(--type-size-11);color:var(--txt-subtle);line-height:1.4;}
+  .al-modal-redirect-note .material-symbols-rounded{font-size:var(--type-size-12);flex-shrink:0;margin-top:1px;color:var(--txt-subtle);}
   .al-modal.approval{width:600px;max-width:95vw;max-height:90vh;overflow-y:auto;}
   .al-modal-apv-hd{display:flex;align-items:flex-start;justify-content:space-between;padding:var(--padding-base) var(--padding-relaxed) var(--padding-medium);border-bottom:1px solid var(--stroke-widget);gap:var(--gap-medium);}
   .al-modal-apv-hd-text{flex:1;min-width:0;}
@@ -2209,17 +2209,17 @@
   .al-report-hd-left{display:flex;align-items:center;gap:var(--gap-tight);flex-shrink:0;}
   .al-report-hd-title{flex:1;font-size:var(--type-size-18);font-weight:700;color:var(--txt-primary);text-align:center;}
   .al-report-hd-right{display:flex;align-items:center;gap:var(--gap-tight);flex-shrink:0;}
-  .al-report-close-btn{display:inline-flex;align-items:center;gap:var(--gap-xxtight);padding:var(--padding-xxtight) var(--padding-tight);border-radius:var(--button-radius);font-family:inherit;font-size:var(--type-size-13);font-weight:500;color:var(--txt-secondary);background:transparent;border:none;cursor:pointer;}
+  .al-report-close-btn{display:inline-flex;align-items:center;gap:var(--gap-xxtight);padding:var(--padding-xxtight) var(--padding-tight);border-radius:var(--button-radius);font-family:inherit;font-size:var(--type-size-12);font-weight:500;color:var(--txt-secondary);background:transparent;border:none;cursor:pointer;}
   .al-report-close-btn:hover{background:var(--fill-action-secondary-hover);}
-  .al-report-edit-btn{display:inline-flex;align-items:center;gap:var(--gap-xxtight);padding:var(--padding-xxtight) var(--padding-tight);border-radius:var(--button-radius);font-family:inherit;font-size:var(--type-size-13);font-weight:500;color:var(--txt-secondary);background:transparent;border:1px solid var(--stroke-action-secondary-inverse-base);cursor:pointer;}
+  .al-report-edit-btn{display:inline-flex;align-items:center;gap:var(--gap-xxtight);padding:var(--padding-xxtight) var(--padding-tight);border-radius:var(--button-radius);font-family:inherit;font-size:var(--type-size-12);font-weight:500;color:var(--txt-secondary);background:transparent;border:1px solid var(--stroke-action-secondary-inverse-base);cursor:pointer;}
   .al-report-edit-btn:hover{background:var(--fill-action-secondary-hover);}
-  .al-report-save-btn,.al-report-sched-btn{display:inline-flex;align-items:center;gap:var(--gap-xxtight);padding:var(--padding-xxtight) var(--padding-medium);border-radius:var(--button-radius);font-family:inherit;font-size:var(--type-size-13);font-weight:500;color:var(--text-action-secondary-base);background:var(--surface-sheet);border:1px solid var(--stroke-action-secondary-inverse-base);cursor:pointer;}
+  .al-report-save-btn,.al-report-sched-btn{display:inline-flex;align-items:center;gap:var(--gap-xxtight);padding:var(--padding-xxtight) var(--padding-medium);border-radius:var(--button-radius);font-family:inherit;font-size:var(--type-size-12);font-weight:500;color:var(--brand-300);background:var(--surface-sheet);border:1px solid var(--stroke-action-secondary-inverse-base);cursor:pointer;}
   .al-report-save-btn:hover,.al-report-sched-btn:hover{background:var(--fill-action-secondary-hover);}
-  .al-report-share-btn{display:inline-flex;align-items:center;gap:var(--gap-xxtight);padding:var(--padding-xxtight) var(--padding-medium);border-radius:var(--button-radius);font-family:inherit;font-size:var(--type-size-13);font-weight:600;color:#fff;background:var(--fill-action-primary-base);border:none;cursor:pointer;}
+  .al-report-share-btn{display:inline-flex;align-items:center;gap:var(--gap-xxtight);padding:var(--padding-xxtight) var(--padding-medium);border-radius:var(--button-radius);font-family:inherit;font-size:var(--type-size-12);font-weight:600;color:var(--cn-0);background:var(--fill-action-primary-base);border:none;cursor:pointer;}
   .al-report-share-btn:hover{background:var(--fill-action-primary-hover);}
   .al-report-share-btn .material-symbols-rounded{font-size:var(--type-size-14);}
   .al-report-body{flex:1;overflow:auto;background:var(--surface-header);padding:var(--padding-relaxed);}
-  .al-report-doc{background:#fff;border-radius:var(--cornerradius-medium);max-width:900px;margin:0 auto;padding:var(--padding-relaxed);box-shadow:0 1px 4px color-mix(in srgb,var(--primitive-color-cool-neutral-900) 10%,transparent);overflow-x:auto;}
+  .al-report-doc{background:var(--surface-widget);border-radius:var(--cornerradius-medium);max-width:900px;margin:0 auto;padding:var(--padding-relaxed);box-shadow:0 1px 4px color-mix(in srgb,var(--primitive-color-cool-neutral-900) 10%,transparent);overflow-x:auto;}
   .al-report-doc-hd{font-size:var(--type-size-12);color:var(--txt-secondary);line-height:1.8;margin-bottom:var(--padding-medium);}
   .al-report-doc-hd strong{color:var(--txt-primary);}
   .al-report-tbl{width:100%;border-collapse:collapse;font-size:var(--type-size-12);min-width:760px;}
@@ -2231,12 +2231,12 @@
   .al-report-section-hd td{font-weight:700;color:var(--txt-primary);padding-top:var(--padding-medium);padding-bottom:var(--padding-xxxtight);border-top:none!important;}
   .al-report-section-sub td{font-weight:700;font-size:var(--type-size-11);text-transform:uppercase;letter-spacing:.04em;color:var(--txt-subtle);padding-top:var(--padding-tight);border-top:none!important;}
   .al-report-total-row td{font-weight:700;border-top:2px solid var(--primitive-color-cool-neutral-200)!important;background:var(--surface-header);}
-  .al-report-fund-hd td{font-weight:700;font-size:var(--type-size-13);color:var(--txt-primary);padding:var(--padding-tight) var(--padding-tight) var(--padding-xxxtight);border-bottom:1px solid var(--primitive-color-cool-neutral-150);}
+  .al-report-fund-hd td{font-weight:700;font-size:var(--type-size-12);color:var(--txt-primary);padding:var(--padding-tight) var(--padding-tight) var(--padding-xxxtight);border-bottom:1px solid var(--primitive-color-cool-neutral-150);}
   .al-report-foot{display:flex;align-items:center;gap:var(--gap-base);justify-content:flex-end;padding:var(--padding-tight) var(--padding-relaxed);border-top:1px solid var(--stroke-widget);flex-shrink:0;background:var(--surface-sheet);}
   .al-report-foot-label{font-size:var(--type-size-12);color:var(--txt-subtle);}
-  .al-report-foot-rpp{display:inline-flex;align-items:center;gap:var(--gap-xxtight);font-size:var(--type-size-12);color:var(--txt-primary);font-weight:500;padding:2px 6px;border:1px solid var(--stroke-widget);border-radius:var(--cornerradius-xsmall);cursor:default;}
+  .al-report-foot-rpp{display:inline-flex;align-items:center;gap:var(--gap-xxtight);font-size:var(--type-size-12);color:var(--txt-primary);font-weight:500;padding:var(--padding-xxxtight) var(--padding-xtight);border:1px solid var(--stroke-widget);border-radius:var(--cornerradius-xsmall);cursor:default;}
   .al-report-foot-count{font-size:var(--type-size-12);color:var(--txt-secondary);margin:0 var(--gap-tight);}
-  .al-report-foot-nav{display:inline-flex;align-items:center;gap:2px;}
+  .al-report-foot-nav{display:inline-flex;align-items:center;gap:var(--gap-xxxtight);}
   .al-report-foot-nav button{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border:none;background:transparent;border-radius:var(--cornerradius-xsmall);cursor:pointer;color:var(--txt-secondary);}
   .al-report-foot-nav button:hover{background:var(--fill-action-secondary-hover);}
   .al-report-foot-nav button:disabled{opacity:.35;cursor:default;}
@@ -2246,7 +2246,7 @@
   .al-pay-confirm{background:var(--surface-sheet);border-radius:var(--cornerradius-medium);width:440px;max-width:92vw;box-shadow:var(--elevation-overlay);overflow:hidden;animation:al-slide-up .18s ease;}
   .al-pay-confirm-hd{display:flex;align-items:flex-start;justify-content:space-between;padding:var(--padding-base) var(--padding-relaxed) var(--padding-medium);border-bottom:1px solid var(--stroke-widget);gap:var(--gap-medium);}
   .al-pay-confirm-hd-icon{width:36px;height:36px;border-radius:var(--cornerradius-medium);background:color-mix(in srgb,var(--fill-action-primary-base) 12%,transparent);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-  .al-pay-confirm-hd-icon .material-symbols-rounded{font-size:20px;color:var(--fill-action-primary-base);}
+  .al-pay-confirm-hd-icon .material-symbols-rounded{font-size:var(--type-size-20);color:var(--fill-action-primary-base);}
   .al-pay-confirm-hd-text{flex:1;min-width:0;}
   .al-pay-confirm-overline{font-size:var(--type-size-11);font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--txt-subtle);margin-bottom:var(--padding-xxxtight);}
   .al-pay-confirm-title{font-size:var(--type-size-16);font-weight:700;color:var(--txt-primary);}
@@ -2256,69 +2256,69 @@
   /* Payment Processing full-screen overlay */
   .al-pay-screen-wrap{position:fixed;inset:0;z-index:9300;display:flex;flex-direction:column;animation:al-fade-in .18s ease;}
   .al-pay-screen-wrap.al-pay-screen-hiding{animation:al-fade-out .15s ease forwards;}
-  .al-pay-topnav{height:44px;background:#1a2535;display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0;}
-  .al-pay-topnav-logo{width:28px;height:28px;border-radius:6px;background:#4a7cf7;display:flex;align-items:center;justify-content:center;}
-  .al-pay-topnav-logo svg{width:16px;height:16px;fill:#fff;}
-  .al-pay-topnav-grid{color:#8fa3c0;font-size:18px;cursor:pointer;margin-right:4px;}
-  .al-pay-topnav-appname{color:#fff;font-size:var(--type-size-14);font-weight:600;}
-  .al-pay-topnav-right{margin-left:auto;display:flex;align-items:center;gap:16px;}
-  .al-pay-topnav-right span{color:#8fa3c0;font-size:var(--type-size-12);}
-  .al-pay-topnav-right a{color:#8fa3c0;font-size:var(--type-size-12);text-decoration:none;cursor:pointer;}
-  .al-pay-topnav-right a:hover{color:#fff;}
-  .al-pay-ctx-bar{height:52px;background:#fff;border-bottom:1px solid #e4e8ef;display:flex;align-items:center;padding:0 16px;gap:8px;flex-shrink:0;font-size:var(--type-size-12);}
-  .al-pay-ctx-bar-bc{display:flex;align-items:center;gap:4px;color:#4a7cf7;flex:1;}
-  .al-pay-ctx-bar-bc span{color:#6b7a8d;}
-  .al-pay-ctx-bar-sep{color:#b0b8c4;}
-  .al-pay-ctx-bar-meta{display:flex;align-items:center;gap:24px;color:#6b7a8d;}
-  .al-pay-ctx-bar-meta strong{color:#1d2635;font-weight:600;}
-  .al-pay-ctx-bar-actions{display:flex;align-items:center;gap:8px;margin-left:16px;}
-  .al-pay-ctx-bar-actions button{font-size:var(--type-size-12);color:#4a7cf7;background:none;border:none;cursor:pointer;font-family:inherit;padding:0;}
+  .al-pay-topnav{height:44px;background:var(--cn-190);display:flex;align-items:center;padding:0 var(--padding-base);gap:var(--gap-medium);flex-shrink:0;}
+  .al-pay-topnav-logo{width:28px;height:28px;border-radius:var(--cornerradius-medium);background:var(--brand-100);display:flex;align-items:center;justify-content:center;}
+  .al-pay-topnav-logo svg{width:16px;height:16px;fill:var(--cn-0);}
+  .al-pay-topnav-grid{color:var(--cn-110);font-size:var(--type-size-18);cursor:pointer;margin-right:var(--padding-xxtight);}
+  .al-pay-topnav-appname{color:var(--cn-0);font-size:var(--type-size-14);font-weight:600;}
+  .al-pay-topnav-right{margin-left:auto;display:flex;align-items:center;gap:var(--gap-base);}
+  .al-pay-topnav-right span{color:var(--cn-110);font-size:var(--type-size-12);}
+  .al-pay-topnav-right a{color:var(--cn-110);font-size:var(--type-size-12);text-decoration:none;cursor:pointer;}
+  .al-pay-topnav-right a:hover{color:var(--cn-0);}
+  .al-pay-ctx-bar{height:52px;background:var(--surface-widget);border-bottom:1px solid var(--wn-200);display:flex;align-items:center;padding:0 var(--padding-base);gap:var(--gap-tight);flex-shrink:0;font-size:var(--type-size-12);}
+  .al-pay-ctx-bar-bc{display:flex;align-items:center;gap:var(--gap-xxtight);color:var(--brand-100);flex:1;}
+  .al-pay-ctx-bar-bc span{color:var(--txt-subtle);}
+  .al-pay-ctx-bar-sep{color:var(--txt-subtle);}
+  .al-pay-ctx-bar-meta{display:flex;align-items:center;gap:var(--gap-relaxed);color:var(--txt-subtle);}
+  .al-pay-ctx-bar-meta strong{color:var(--txt-primary);font-weight:600;}
+  .al-pay-ctx-bar-actions{display:flex;align-items:center;gap:var(--gap-tight);margin-left:var(--padding-base);}
+  .al-pay-ctx-bar-actions button{font-size:var(--type-size-12);color:var(--brand-100);background:none;border:none;cursor:pointer;font-family:inherit;padding:0;}
   .al-pay-body{flex:1;display:flex;overflow:hidden;}
-  .al-pay-sidebar{width:168px;background:#f3f5f8;border-right:1px solid #e4e8ef;display:flex;flex-direction:column;padding:8px 0;flex-shrink:0;overflow-y:auto;}
-  .al-pay-nav-item{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;font-size:var(--type-size-13);color:#3d4c5e;cursor:pointer;user-select:none;}
-  .al-pay-nav-item:hover{background:#e8ecf2;}
-  .al-pay-nav-item.active{background:#e3eaff;color:#2455d6;font-weight:600;}
-  .al-pay-nav-item .material-symbols-rounded{font-size:14px;color:#8fa3c0;}
-  .al-pay-main{flex:1;overflow:auto;display:flex;flex-direction:column;background:#f7f8fa;}
-  .al-pay-main-hd{padding:12px 20px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-  .al-pay-main-title{font-size:var(--type-size-16);font-weight:700;color:#1d2635;}
-  .al-pay-main-filters{display:flex;align-items:center;gap:12px;font-size:var(--type-size-12);color:#6b7a8d;}
-  .al-pay-main-filters label{font-weight:600;color:#3d4c5e;}
-  .al-pay-main-filters select{font-size:var(--type-size-12);border:1px solid #cdd3dd;border-radius:4px;padding:3px 6px;background:#fff;color:#1d2635;}
-  .al-pay-tbl-wrap{flex:1;overflow:auto;padding:0 20px 12px;}
-  .al-pay-tbl{width:100%;border-collapse:collapse;font-size:var(--type-size-12);background:#fff;border:1px solid #e4e8ef;border-radius:6px;overflow:hidden;margin-top:12px;}
-  .al-pay-tbl thead tr{background:#f3f5f8;}
-  .al-pay-tbl th{padding:7px 8px;text-align:left;font-size:var(--type-size-11);font-weight:600;color:#6b7a8d;border-bottom:2px solid #e4e8ef;white-space:nowrap;}
-  .al-pay-tbl td{padding:6px 8px;color:#1d2635;border-top:1px solid #eef0f4;vertical-align:middle;white-space:nowrap;}
-  .al-pay-tbl tr.selected td{background:#eef3ff;}
-  .al-pay-tbl tr:hover td{background:#f5f7fb;}
-  .al-pay-tbl tr.selected:hover td{background:#e6edff;}
-  .al-pay-chk{width:14px;height:14px;accent-color:#2455d6;}
-  .al-pay-chk-checked{width:14px;height:14px;accent-color:#2455d6;}
-  .al-pay-icon-check{color:#2455d6;font-size:14px;}
-  .al-pay-tbl-summary{padding:8px 20px;font-size:var(--type-size-12);color:#6b7a8d;border-top:1px solid #e4e8ef;background:#fff;display:flex;justify-content:space-between;align-items:flex-start;}
+  .al-pay-sidebar{width:168px;background:var(--wn-100);border-right:1px solid var(--wn-200);display:flex;flex-direction:column;padding:var(--padding-tight) 0;flex-shrink:0;overflow-y:auto;}
+  .al-pay-nav-item{display:flex;align-items:center;justify-content:space-between;padding:var(--padding-tight) var(--padding-base);font-size:var(--type-size-12);color:var(--txt-secondary);cursor:pointer;user-select:none;}
+  .al-pay-nav-item:hover{background:var(--wn-200);}
+  .al-pay-nav-item.active{background:var(--brand-10);color:var(--brand-300);font-weight:600;}
+  .al-pay-nav-item .material-symbols-rounded{font-size:var(--type-size-14);color:var(--cn-110);}
+  .al-pay-main{flex:1;overflow:auto;display:flex;flex-direction:column;background:var(--wn-100);}
+  .al-pay-main-hd{padding:var(--padding-medium) var(--padding-base) 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+  .al-pay-main-title{font-size:var(--type-size-16);font-weight:700;color:var(--txt-primary);}
+  .al-pay-main-filters{display:flex;align-items:center;gap:var(--gap-medium);font-size:var(--type-size-12);color:var(--txt-subtle);}
+  .al-pay-main-filters label{font-weight:600;color:var(--txt-secondary);}
+  .al-pay-main-filters select{font-size:var(--type-size-12);border:1px solid var(--stroke-widget);border-radius:var(--cornerradius-small);padding:var(--padding-xxtight) var(--padding-xtight);background:var(--surface-widget);color:var(--txt-primary);}
+  .al-pay-tbl-wrap{flex:1;overflow:auto;padding:0 var(--padding-base) var(--padding-medium);}
+  .al-pay-tbl{width:100%;border-collapse:collapse;font-size:var(--type-size-12);background:var(--surface-widget);border:1px solid var(--wn-200);border-radius:var(--cornerradius-medium);overflow:hidden;margin-top:var(--padding-medium);}
+  .al-pay-tbl thead tr{background:var(--wn-100);}
+  .al-pay-tbl th{padding:var(--padding-tight) var(--padding-tight);text-align:left;font-size:var(--type-size-11);font-weight:600;color:var(--txt-subtle);border-bottom:2px solid var(--wn-200);white-space:nowrap;}
+  .al-pay-tbl td{padding:var(--padding-xtight) var(--padding-tight);color:var(--txt-primary);border-top:1px solid var(--wn-200);vertical-align:middle;white-space:nowrap;}
+  .al-pay-tbl tr.selected td{background:var(--brand-10);}
+  .al-pay-tbl tr:hover td{background:var(--wn-100);}
+  .al-pay-tbl tr.selected:hover td{background:var(--brand-10);}
+  .al-pay-chk{width:14px;height:14px;accent-color:var(--fill-action-primary-base);}
+  .al-pay-chk-checked{width:14px;height:14px;accent-color:var(--fill-action-primary-base);}
+  .al-pay-icon-check{color:var(--brand-300);font-size:var(--type-size-14);}
+  .al-pay-tbl-summary{padding:var(--padding-tight) var(--padding-base);font-size:var(--type-size-12);color:var(--txt-subtle);border-top:1px solid var(--wn-200);background:var(--surface-widget);display:flex;justify-content:space-between;align-items:flex-start;}
   .al-pay-tbl-summary-left{line-height:1.8;}
-  .al-pay-tbl-summary-right{text-align:right;font-weight:600;color:#1d2635;line-height:1.8;}
-  .al-pay-tbl-foot{display:flex;align-items:center;padding:8px 20px;border-top:1px solid #e4e8ef;background:#fff;flex-shrink:0;}
-  .al-pay-tbl-foot-pag{display:flex;align-items:center;gap:4px;font-size:var(--type-size-12);color:#6b7a8d;}
-  .al-pay-tbl-foot-pag button{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border:1px solid #cdd3dd;border-radius:4px;background:#fff;cursor:pointer;color:#6b7a8d;}
-  .al-pay-tbl-foot-pag button.active{background:#2455d6;color:#fff;border-color:#2455d6;}
-  .al-pay-tbl-foot-pgsize{display:flex;align-items:center;gap:4px;font-size:var(--type-size-12);color:#6b7a8d;margin-left:12px;}
-  .al-pay-tbl-foot-pgsize select{font-size:var(--type-size-12);border:1px solid #cdd3dd;border-radius:4px;padding:2px 4px;background:#fff;}
-  .al-pay-tbl-foot-count{margin-left:auto;font-size:var(--type-size-12);color:#6b7a8d;}
-  .al-pay-bottom-bar{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:10px 20px;border-top:1px solid #e4e8ef;background:#fff;flex-shrink:0;}
-  .al-pay-close-overlay{position:absolute;top:10px;right:14px;background:none;border:none;cursor:pointer;color:#8fa3c0;display:flex;align-items:center;justify-content:center;z-index:10;}
-  .al-pay-close-overlay:hover{color:#fff;}
+  .al-pay-tbl-summary-right{text-align:right;font-weight:600;color:var(--txt-primary);line-height:1.8;}
+  .al-pay-tbl-foot{display:flex;align-items:center;padding:var(--padding-tight) var(--padding-base);border-top:1px solid var(--wn-200);background:var(--surface-widget);flex-shrink:0;}
+  .al-pay-tbl-foot-pag{display:flex;align-items:center;gap:var(--gap-xxtight);font-size:var(--type-size-12);color:var(--txt-subtle);}
+  .al-pay-tbl-foot-pag button{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border:1px solid var(--stroke-widget);border-radius:var(--cornerradius-small);background:var(--surface-widget);cursor:pointer;color:var(--txt-subtle);}
+  .al-pay-tbl-foot-pag button.active{background:var(--fill-action-primary-base);color:var(--cn-0);border-color:var(--fill-action-primary-base);}
+  .al-pay-tbl-foot-pgsize{display:flex;align-items:center;gap:var(--gap-xxtight);font-size:var(--type-size-12);color:var(--txt-subtle);margin-left:var(--padding-medium);}
+  .al-pay-tbl-foot-pgsize select{font-size:var(--type-size-12);border:1px solid var(--stroke-widget);border-radius:var(--cornerradius-small);padding:var(--padding-xxxtight) var(--padding-xxtight);background:var(--surface-widget);}
+  .al-pay-tbl-foot-count{margin-left:auto;font-size:var(--type-size-12);color:var(--txt-subtle);}
+  .al-pay-bottom-bar{display:flex;align-items:center;justify-content:flex-end;gap:var(--gap-tight);padding:var(--padding-tight) var(--padding-base);border-top:1px solid var(--wn-200);background:var(--surface-widget);flex-shrink:0;}
+  .al-pay-close-overlay{position:absolute;top:10px;right:14px;background:none;border:none;cursor:pointer;color:var(--cn-110);display:flex;align-items:center;justify-content:center;z-index:10;}
+  .al-pay-close-overlay:hover{color:var(--cn-0);}
   /* Bank Reconciliation detail table */
-  .al-recon-summary{margin:24px 0 16px;}
-  .al-recon-summary-title{font-weight:600;font-size:13px;margin-bottom:8px;}
+  .al-recon-summary{margin:var(--padding-relaxed) 0 var(--padding-base);}
+  .al-recon-summary-title{font-weight:600;font-size:var(--type-size-12);margin-bottom:var(--padding-tight);}
   .al-recon-sum-table{border-collapse:collapse;width:auto;}
-  .al-recon-sum-table td{padding:2px 32px 2px 0;font-size:13px;}
+  .al-recon-sum-table td{padding:var(--padding-xxxtight) var(--padding-wide) var(--padding-xxxtight) 0;font-size:var(--type-size-12);}
   .al-recon-sum-amt{text-align:right;padding-right:0!important;}
-  .al-recon-detail-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:16px;}
-  .al-recon-detail-table thead tr{border-bottom:1px solid #ccc;}
-  .al-recon-detail-table tbody tr{border-bottom:1px solid #eee;}
-  .al-recon-detail-table td,.al-recon-detail-table th{padding:5px 10px 5px 0;vertical-align:middle;}
+  .al-recon-detail-table{width:100%;border-collapse:collapse;font-size:var(--type-size-12);margin-top:var(--padding-base);}
+  .al-recon-detail-table thead tr{border-bottom:1px solid var(--stroke-widget);}
+  .al-recon-detail-table tbody tr{border-bottom:1px solid var(--wn-200);}
+  .al-recon-detail-table td,.al-recon-detail-table th{padding:var(--padding-xtight) var(--padding-tight) var(--padding-xtight) 0;vertical-align:middle;}
   .al-recon-detail-table th{font-weight:normal;}
   .al-recon-th-ul{text-decoration:underline;font-weight:600;}
   .al-recon-payee{width:36%;}
@@ -2335,63 +2335,63 @@
   .al-bfs-num{text-align:right!important;white-space:nowrap;}
   .al-bfs-section-hd td{font-weight:700;color:var(--txt-primary);padding-top:var(--padding-medium);padding-bottom:var(--padding-xxxtight);border-top:none!important;}
   .al-bfs-total-row td{font-weight:700;border-top:2px solid var(--primitive-color-cool-neutral-200)!important;background:var(--surface-header);}
-  .al-bfs-grand-total td{font-size:var(--type-size-13);}
+  .al-bfs-grand-total td{font-size:var(--type-size-12);}
   .al-bfs-spacer td{height:8px;border:none!important;background:transparent!important;}
   /* ── AR Unposted Invoices screen ── */
-  .al-ar-backdrop{position:fixed;inset:0;z-index:3100;background:#f0f2f5;overflow:auto;}
-  .al-ar-screen{display:flex;flex-direction:column;min-height:100vh;font-family:var(--font-family,inherit);font-size:13px;}
+  .al-ar-backdrop{position:fixed;inset:0;z-index:3100;background:var(--wn-100);overflow:auto;}
+  .al-ar-screen{display:flex;flex-direction:column;min-height:100vh;font-family:var(--font-family,inherit);font-size:var(--type-size-12);}
   /* topbar */
-  .al-ar-topbar{display:flex;align-items:center;justify-content:space-between;background:#1a2b4a;color:#fff;padding:0 16px;height:48px;flex-shrink:0;}
-  .al-ar-topbar-left{display:flex;align-items:center;gap:4px;}
+  .al-ar-topbar{display:flex;align-items:center;justify-content:space-between;background:var(--cn-190);color:var(--cn-0);padding:0 var(--padding-base);height:48px;flex-shrink:0;}
+  .al-ar-topbar-left{display:flex;align-items:center;gap:var(--gap-xxtight);}
   .al-ar-topbar-appname{font-size:15px;font-weight:600;letter-spacing:.01em;}
-  .al-ar-topbar-right{display:flex;align-items:center;gap:20px;}
+  .al-ar-topbar-right{display:flex;align-items:center;gap:var(--gap-base);}
   .al-ar-topbar-meta{display:flex;flex-direction:column;align-items:flex-end;}
-  .al-ar-meta-label{font-size:10px;opacity:.65;line-height:1.1;}
-  .al-ar-meta-val{font-size:12px;font-weight:500;line-height:1.2;}
-  .al-ar-screen-close{background:none;border:none;color:#fff;cursor:pointer;padding:4px;border-radius:4px;display:flex;align-items:center;margin-left:16px;}
-  .al-ar-screen-close:hover{background:rgba(255,255,255,.15);}
+  .al-ar-meta-label{font-size:var(--type-size-10);opacity:.65;line-height:1.1;}
+  .al-ar-meta-val{font-size:var(--type-size-12);font-weight:500;line-height:1.2;}
+  .al-ar-screen-close{background:none;border:none;color:var(--cn-0);cursor:pointer;padding:var(--padding-xxtight);border-radius:var(--cornerradius-small);display:flex;align-items:center;margin-left:var(--padding-base);}
+  .al-ar-screen-close:hover{background:color-mix(in srgb,var(--cn-0) 15%,transparent);}
   /* breadcrumb */
-  .al-ar-breadcrumb{background:#fff;border-bottom:1px solid #e2e5ea;padding:6px 16px;font-size:12px;color:#5a6a82;display:flex;align-items:center;gap:4px;flex-shrink:0;}
-  .al-ar-bc-link{color:#2563eb;cursor:pointer;}
+  .al-ar-breadcrumb{background:var(--surface-widget);border-bottom:1px solid var(--wn-200);padding:var(--padding-xtight) var(--padding-base);font-size:var(--type-size-12);color:var(--txt-subtle);display:flex;align-items:center;gap:var(--gap-xxtight);flex-shrink:0;}
+  .al-ar-bc-link{color:var(--brand-300);cursor:pointer;}
   .al-ar-bc-link:hover{text-decoration:underline;}
   /* body layout */
   .al-ar-body{display:flex;flex:1;overflow:hidden;}
   /* sidebar */
-  .al-ar-sidebar{width:128px;background:#fff;border-right:1px solid #e2e5ea;display:flex;flex-direction:column;padding:8px 0;flex-shrink:0;}
-  .al-ar-nav-item{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:13px;color:#374151;cursor:pointer;position:relative;}
-  .al-ar-nav-item:hover{background:#f0f4ff;}
-  .al-ar-nav-active{color:#2563eb;background:#eff6ff;font-weight:600;border-left:3px solid #2563eb;}
-  .al-ar-nav-chev{margin-left:auto;color:#9ca3af;}
+  .al-ar-sidebar{width:128px;background:var(--surface-widget);border-right:1px solid var(--wn-200);display:flex;flex-direction:column;padding:var(--padding-tight) 0;flex-shrink:0;}
+  .al-ar-nav-item{display:flex;align-items:center;gap:var(--gap-tight);padding:var(--padding-tight) var(--padding-medium);font-size:var(--type-size-12);color:var(--txt-secondary);cursor:pointer;position:relative;}
+  .al-ar-nav-item:hover{background:var(--brand-10);}
+  .al-ar-nav-active{color:var(--brand-300);background:var(--brand-10);font-weight:600;border-left:3px solid var(--fill-action-primary-base);}
+  .al-ar-nav-chev{margin-left:auto;color:var(--txt-subtle);}
   /* main content */
-  .al-ar-main{flex:1;padding:16px 20px;overflow:auto;display:flex;flex-direction:column;gap:12px;}
+  .al-ar-main{flex:1;padding:var(--padding-base) var(--padding-base);overflow:auto;display:flex;flex-direction:column;gap:var(--gap-medium);}
   /* filters bar */
-  .al-ar-filters-bar{background:#fff;border:1px solid #e2e5ea;border-radius:6px;padding:8px 14px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:#374151;cursor:pointer;}
+  .al-ar-filters-bar{background:var(--surface-widget);border:1px solid var(--wn-200);border-radius:var(--cornerradius-medium);padding:var(--padding-tight) var(--padding-medium);display:flex;align-items:center;gap:var(--gap-tight);font-size:var(--type-size-12);font-weight:500;color:var(--txt-secondary);cursor:pointer;}
   /* section header */
-  .al-ar-section-hd{display:flex;align-items:center;justify-content:space-between;padding:4px 0;}
-  .al-ar-section-title{font-size:14px;font-weight:600;color:#1a2b4a;}
-  .al-ar-section-btns{display:flex;gap:8px;}
-  .al-ar-btn-outlined{border:1px solid #d1d5db;background:#fff;color:#374151;border-radius:5px;padding:5px 14px;font-size:12px;cursor:pointer;}
-  .al-ar-btn-outlined:hover{background:#f9fafb;}
-  .al-ar-btn-primary{border:none;background:#2563eb;color:#fff;border-radius:5px;padding:5px 14px;font-size:12px;cursor:pointer;font-weight:500;}
-  .al-ar-btn-primary:hover{background:#1d4ed8;}
+  .al-ar-section-hd{display:flex;align-items:center;justify-content:space-between;padding:var(--padding-xxtight) 0;}
+  .al-ar-section-title{font-size:var(--type-size-14);font-weight:600;color:var(--cn-190);}
+  .al-ar-section-btns{display:flex;gap:var(--gap-tight);}
+  .al-ar-btn-outlined{border:1px solid var(--stroke-widget);background:var(--surface-widget);color:var(--txt-secondary);border-radius:var(--cornerradius-small);padding:var(--padding-xtight) var(--padding-medium);font-size:var(--type-size-12);cursor:pointer;}
+  .al-ar-btn-outlined:hover{background:var(--wn-100);}
+  .al-ar-btn-primary{border:none;background:var(--fill-action-primary-base);color:var(--cn-0);border-radius:var(--cornerradius-small);padding:var(--padding-xtight) var(--padding-medium);font-size:var(--type-size-12);cursor:pointer;font-weight:500;}
+  .al-ar-btn-primary:hover{background:var(--fill-action-primary-hover);}
   /* table */
-  .al-ar-tbl-wrap{background:#fff;border:1px solid #e2e5ea;border-radius:6px;overflow:auto;}
-  .al-ar-tbl{width:100%;border-collapse:collapse;font-size:12px;}
-  .al-ar-tbl th{background:#f8fafc;border-bottom:2px solid #e2e5ea;padding:7px 8px;text-align:left;white-space:nowrap;font-weight:600;color:#374151;}
-  .al-ar-tbl td{border-bottom:1px solid #f0f2f5;padding:6px 8px;color:#374151;white-space:nowrap;}
+  .al-ar-tbl-wrap{background:var(--surface-widget);border:1px solid var(--wn-200);border-radius:var(--cornerradius-medium);overflow:auto;}
+  .al-ar-tbl{width:100%;border-collapse:collapse;font-size:var(--type-size-12);}
+  .al-ar-tbl th{background:var(--wn-100);border-bottom:2px solid var(--wn-200);padding:var(--padding-tight) var(--padding-tight);text-align:left;white-space:nowrap;font-weight:600;color:var(--txt-secondary);}
+  .al-ar-tbl td{border-bottom:1px solid var(--wn-100);padding:var(--padding-xtight) var(--padding-tight);color:var(--txt-secondary);white-space:nowrap;}
   .al-ar-tbl tbody tr:last-child td{border-bottom:none;}
-  .al-ar-tbl tbody tr:hover td{background:#f5f8ff;}
+  .al-ar-tbl tbody tr:hover td{background:var(--brand-10);}
   .al-ar-chk{cursor:pointer;}
-  .al-ar-icon-cell{display:flex;align-items:center;color:#6b7280;}
-  .al-ar-import-type{font-size:11px;color:#6b7280;background:#f3f4f6;border-radius:3px;padding:1px 5px;}
-  .al-ar-actions-cell{display:flex;gap:4px;}
-  .al-ar-row-btn{background:none;border:none;cursor:pointer;padding:2px;border-radius:3px;color:#6b7280;display:flex;align-items:center;}
-  .al-ar-row-btn:hover{background:#f0f0f0;color:#374151;}
+  .al-ar-icon-cell{display:flex;align-items:center;color:var(--txt-subtle);}
+  .al-ar-import-type{font-size:var(--type-size-11);color:var(--txt-subtle);background:var(--wn-100);border-radius:var(--cornerradius-xsmall);padding:1px var(--padding-xtight);}
+  .al-ar-actions-cell{display:flex;gap:var(--gap-xxtight);}
+  .al-ar-row-btn{background:none;border:none;cursor:pointer;padding:var(--padding-xxxtight);border-radius:var(--cornerradius-xsmall);color:var(--txt-subtle);display:flex;align-items:center;}
+  .al-ar-row-btn:hover{background:var(--wn-100);color:var(--txt-secondary);}
   .al-ar-setup-cell{display:block;width:24px;}
   /* table footer */
-  .al-ar-tbl-footer{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-top:2px solid #e2e5ea;background:#fafbfc;}
-  .al-ar-tbl-count{font-size:13px;font-weight:600;color:#374151;}
-  .al-ar-tbl-footer-btns{display:flex;gap:8px;}
+  .al-ar-tbl-footer{display:flex;align-items:center;justify-content:space-between;padding:var(--padding-tight) var(--padding-medium);border-top:2px solid var(--wn-200);background:var(--wn-100);}
+  .al-ar-tbl-count{font-size:var(--type-size-12);font-weight:600;color:var(--txt-secondary);}
+  .al-ar-tbl-footer-btns{display:flex;gap:var(--gap-tight);}
 /* ===== end W19 Alerts & Actions V2 CSS ===== */
 
 /* ===== W01 Budget Compared to Actual V2 CSS ===== */
@@ -3365,17 +3365,17 @@
   border:1px solid var(--stroke-widget);
   border-radius:8px;
 }
-/* Info button — positioned top-right inside the tile; reuses the shared
+/* Info button: positioned top-right inside the tile; reuses the shared
    .iconbtn style and just anchors it absolutely. Size is set to match the
    .wactions .iconbtn 28 × 18px pattern rather than the full 32px default. */
 .fkp-info-btn{
   position:absolute;
-  top:6px;
-  right:6px;
+  top:var(--padding-xtight);
+  right:var(--padding-xtight);
   width:28px;
   height:28px;
 }
-.fkp-info-btn .material-symbols-rounded{font-size:18px;}
+.fkp-info-btn .material-symbols-rounded{font-size:var(--type-size-18);}
 
 .fkp-lbl{
   font-size:10px;
@@ -11186,14 +11186,14 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         '<div class="al-modal-report" role="dialog" aria-modal="true" aria-label="Designated Fund Summary">'+
           '<div class="al-report-hd">'+
             '<div class="al-report-hd-left">'+
-              '<button class="al-report-close-btn" id="alReportClose"><span class="material-symbols-rounded" style="font-size:16px">close</span>Close</button>'+
-              '<button class="al-report-edit-btn"><span class="material-symbols-rounded" style="font-size:14px">arrow_back</span>Edit</button>'+
+              '<button class="al-report-close-btn" id="alReportClose"><span class="material-symbols-rounded" style="font-size:var(--type-size-16)">close</span>Close</button>'+
+              '<button class="al-report-edit-btn"><span class="material-symbols-rounded" style="font-size:var(--type-size-14)">arrow_back</span>Edit</button>'+
             '</div>'+
             '<span class="al-report-hd-title">Designated Fund Summary</span>'+
             '<div class="al-report-hd-right">'+
               '<button class="al-report-save-btn">Save Configuration</button>'+
               '<button class="al-report-sched-btn">Schedule</button>'+
-              '<button class="al-report-share-btn"><span class="material-symbols-rounded" style="font-size:14px">share</span>Share<span class="material-symbols-rounded" style="font-size:14px">arrow_drop_down</span></button>'+
+              '<button class="al-report-share-btn"><span class="material-symbols-rounded" style="font-size:var(--type-size-14)">share</span>Share<span class="material-symbols-rounded" style="font-size:var(--type-size-14)">arrow_drop_down</span></button>'+
             '</div>'+
           '</div>'+
           '<div class="al-report-body">'+
@@ -11220,11 +11220,11 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
           '</div>'+
           '<div class="al-report-foot">'+
             '<span class="al-report-foot-label">Rows per page:</span>'+
-            '<span class="al-report-foot-rpp">25<span class="material-symbols-rounded" style="font-size:14px">arrow_drop_down</span></span>'+
+            '<span class="al-report-foot-rpp">25<span class="material-symbols-rounded" style="font-size:var(--type-size-14)">arrow_drop_down</span></span>'+
             '<span class="al-report-foot-count">1\u201325 of 41</span>'+
             '<div class="al-report-foot-nav">'+
-              '<button disabled aria-label="Previous page"><span class="material-symbols-rounded" style="font-size:18px">chevron_left</span></button>'+
-              '<button aria-label="Next page"><span class="material-symbols-rounded" style="font-size:18px">chevron_right</span></button>'+
+              '<button disabled aria-label="Previous page"><span class="material-symbols-rounded" style="font-size:var(--type-size-18)">chevron_left</span></button>'+
+              '<button aria-label="Next page"><span class="material-symbols-rounded" style="font-size:var(--type-size-18)">chevron_right</span></button>'+
             '</div>'+
           '</div>'+
         '</div>'+
@@ -11286,7 +11286,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       {sel:false,vendor:"Walmart, INC.(#1401)", city:"Nashville",state:"TN",inv:"18",idate:"08/08/202\u2026",ddate:"08/08/20\u2026",avid:true,ach:false,eft:false,hold:false,amt:"$5.00",sep:true,note:true,setup:true},
       {sel:false,vendor:"Walmart, INC.(#1401)", city:"Nashville",state:"TN",inv:"18",idate:"08/08/202\u2026",ddate:"08/08/20\u2026",avid:true,ach:false,eft:false,hold:false,amt:"$3.50",sep:true,note:true,setup:true}
     ];
-    function ck(v){return v?'<span class="material-symbols-rounded al-pay-icon-check" style="font-size:14px">check</span>':'';}
+    function ck(v){return v?'<span class="material-symbols-rounded al-pay-icon-check" style="font-size:var(--type-size-14)">check</span>':'';}
     function chkbox(sel){return '<input type="checkbox" class="al-pay-chk"'+(sel?' checked':'')+'>';}
     var rows=INVOICES.map(function(r){
       return '<tr class="'+(r.sel?'selected':'')+'">'+
@@ -11303,31 +11303,31 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         '<td>'+ck(r.hold)+'</td>'+
         '<td>'+r.amt+'</td>'+
         '<td>'+(r.sep?ck(true):'')+'</td>'+
-        '<td>'+(r.note?'<span class="material-symbols-rounded" style="font-size:14px;color:#8fa3c0">description</span>':'')+'</td>'+
-        '<td>'+(r.setup?'<span class="material-symbols-rounded" style="font-size:14px;color:#8fa3c0">edit</span>':'')+'</td>'+
+        '<td>'+(r.note?'<span class="material-symbols-rounded" style="font-size:var(--type-size-14);color:var(--cn-110)">description</span>':'')+'</td>'+
+        '<td>'+(r.setup?'<span class="material-symbols-rounded" style="font-size:var(--type-size-14);color:var(--cn-110)">edit</span>':'')+'</td>'+
       '</tr>';
     }).join("");
     var html=
       '<div class="al-pay-screen-wrap" id="alPayScreenWrap">'+
         '<div class="al-pay-topnav" style="position:relative">'+
           '<div class="al-pay-topnav-logo"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg></div>'+
-          '<span class="material-symbols-rounded al-pay-topnav-grid" style="color:#8fa3c0;font-size:20px">apps</span>'+
+          '<span class="material-symbols-rounded al-pay-topnav-grid" style="color:var(--cn-110);font-size:var(--type-size-20)">apps</span>'+
           '<span class="al-pay-topnav-appname">Accounts Payable</span>'+
           '<div class="al-pay-topnav-right">'+
             '<span>Aditya Bhaskarrao Lakhmapure</span>'+
             '<a>Set Out of Office</a>'+
             '<a>Log Off</a>'+
-            '<span class="material-symbols-rounded" style="font-size:18px;color:#8fa3c0">settings</span>'+
+            '<span class="material-symbols-rounded" style="font-size:var(--type-size-18);color:var(--cn-110)">settings</span>'+
           '</div>'+
-          '<button class="al-pay-close-overlay" id="alPayScreenClose" aria-label="Close Payment Processing"><span class="material-symbols-rounded" style="font-size:22px">close</span></button>'+
+          '<button class="al-pay-close-overlay" id="alPayScreenClose" aria-label="Close Payment Processing"><span class="material-symbols-rounded" style="font-size:var(--type-size-20)">close</span></button>'+
         '</div>'+
         '<div class="al-pay-ctx-bar">'+
           '<div class="al-pay-ctx-bar-bc">'+
-            '<span class="material-symbols-rounded" style="font-size:14px;color:#4a7cf7">home</span>'+
+            '<span class="material-symbols-rounded" style="font-size:var(--type-size-14);color:var(--brand-100)">home</span>'+
             '<span class="al-pay-ctx-bar-sep">/</span>'+
             '<span>Accounts Payable</span>'+
             '<span class="al-pay-ctx-bar-sep">/</span>'+
-            '<span style="color:#1d2635;font-weight:600">Payment Processing</span>'+
+            '<span style="color:var(--txt-primary);font-weight:600">Payment Processing</span>'+
           '</div>'+
           '<div class="al-pay-ctx-bar-meta">'+
             '<span>Company <strong>1 Saint Michael Church</strong></span>'+
@@ -11336,7 +11336,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
             '<span>Bank Account <strong>0-0-1-10140 ACB payroll checking</strong></span>'+
           '</div>'+
           '<div class="al-pay-ctx-bar-actions">'+
-            '<button><span class="material-symbols-rounded" style="font-size:13px">sync</span> Change</button>'+
+            '<button><span class="material-symbols-rounded" style="font-size:var(--type-size-12)">sync</span> Change</button>'+
             '<button>Add To My Tasks</button>'+
           '</div>'+
         '</div>'+
@@ -11376,9 +11376,9 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
             '</div>'+
             '<div class="al-pay-tbl-foot">'+
               '<div class="al-pay-tbl-foot-pag">'+
-                '<button><span class="material-symbols-rounded" style="font-size:14px">chevron_left</span></button>'+
+                '<button><span class="material-symbols-rounded" style="font-size:var(--type-size-14)">chevron_left</span></button>'+
                 '<button class="active">1</button>'+
-                '<button><span class="material-symbols-rounded" style="font-size:14px">chevron_right</span></button>'+
+                '<button><span class="material-symbols-rounded" style="font-size:var(--type-size-14)">chevron_right</span></button>'+
               '</div>'+
               '<div class="al-pay-tbl-foot-pgsize"><span>Page size:</span><select><option>100</option></select></div>'+
               '<div class="al-pay-tbl-foot-count">16 items in 1 pages</div>'+
@@ -11457,14 +11457,14 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         '<div class="al-modal-report" role="dialog" aria-modal="true" aria-label="Budget Financial Statement">'+
           '<div class="al-report-hd">'+
             '<div class="al-report-hd-left">'+
-              '<button class="al-report-close-btn" id="alBudgetClose"><span class="material-symbols-rounded" style="font-size:16px">close</span>Close</button>'+
-              '<button class="al-report-edit-btn"><span class="material-symbols-rounded" style="font-size:14px">arrow_back</span>Edit</button>'+
+              '<button class="al-report-close-btn" id="alBudgetClose"><span class="material-symbols-rounded" style="font-size:var(--type-size-16)">close</span>Close</button>'+
+              '<button class="al-report-edit-btn"><span class="material-symbols-rounded" style="font-size:var(--type-size-14)">arrow_back</span>Edit</button>'+
             '</div>'+
             '<span class="al-report-hd-title">Budget Financial Statement</span>'+
             '<div class="al-report-hd-right">'+
               '<button class="al-report-save-btn">Save Configuration</button>'+
               '<button class="al-report-sched-btn">Schedule</button>'+
-              '<button class="al-report-share-btn"><span class="material-symbols-rounded" style="font-size:14px">share</span>Share<span class="material-symbols-rounded" style="font-size:14px">arrow_drop_down</span></button>'+
+              '<button class="al-report-share-btn"><span class="material-symbols-rounded" style="font-size:var(--type-size-14)">share</span>Share<span class="material-symbols-rounded" style="font-size:var(--type-size-14)">arrow_drop_down</span></button>'+
             '</div>'+
           '</div>'+
           '<div class="al-report-body">'+
@@ -11521,11 +11521,11 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
           '</div>'+
           '<div class="al-report-foot">'+
             '<span class="al-report-foot-label">Rows per page:</span>'+
-            '<span class="al-report-foot-rpp">50<span class="material-symbols-rounded" style="font-size:14px">arrow_drop_down</span></span>'+
+            '<span class="al-report-foot-rpp">50<span class="material-symbols-rounded" style="font-size:var(--type-size-14)">arrow_drop_down</span></span>'+
             '<span class="al-report-foot-count">1\u201350 of 346</span>'+
             '<div class="al-report-foot-nav">'+
-              '<button disabled aria-label="Previous page"><span class="material-symbols-rounded" style="font-size:18px">chevron_left</span></button>'+
-              '<button aria-label="Next page"><span class="material-symbols-rounded" style="font-size:18px">chevron_right</span></button>'+
+              '<button disabled aria-label="Previous page"><span class="material-symbols-rounded" style="font-size:var(--type-size-18)">chevron_left</span></button>'+
+              '<button aria-label="Next page"><span class="material-symbols-rounded" style="font-size:var(--type-size-18)">chevron_right</span></button>'+
             '</div>'+
           '</div>'+
         '</div>'+
@@ -11602,14 +11602,14 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         '<div class="al-modal-report" role="dialog" aria-modal="true" aria-label="Bank Reconciliation">'+
           '<div class="al-report-hd">'+
             '<div class="al-report-hd-left">'+
-              '<button class="al-report-close-btn" id="alReconClose"><span class="material-symbols-rounded" style="font-size:16px">close</span>Close</button>'+
-              '<button class="al-report-edit-btn"><span class="material-symbols-rounded" style="font-size:14px">arrow_back</span>Edit</button>'+
+              '<button class="al-report-close-btn" id="alReconClose"><span class="material-symbols-rounded" style="font-size:var(--type-size-16)">close</span>Close</button>'+
+              '<button class="al-report-edit-btn"><span class="material-symbols-rounded" style="font-size:var(--type-size-14)">arrow_back</span>Edit</button>'+
             '</div>'+
             '<span class="al-report-hd-title">Bank Reconciliation</span>'+
             '<div class="al-report-hd-right">'+
               '<button class="al-report-save-btn">Save Configuration</button>'+
               '<button class="al-report-sched-btn">Schedule</button>'+
-              '<button class="al-report-share-btn"><span class="material-symbols-rounded" style="font-size:14px">share</span>Share<span class="material-symbols-rounded" style="font-size:14px">arrow_drop_down</span></button>'+
+              '<button class="al-report-share-btn"><span class="material-symbols-rounded" style="font-size:var(--type-size-14)">share</span>Share<span class="material-symbols-rounded" style="font-size:var(--type-size-14)">arrow_drop_down</span></button>'+
             '</div>'+
           '</div>'+
           '<div class="al-report-body">'+
@@ -11646,11 +11646,11 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
           '</div>'+
           '<div class="al-report-foot">'+
             '<span class="al-report-foot-label">Rows per page:</span>'+
-            '<span class="al-report-foot-rpp">50<span class="material-symbols-rounded" style="font-size:14px">arrow_drop_down</span></span>'+
+            '<span class="al-report-foot-rpp">50<span class="material-symbols-rounded" style="font-size:var(--type-size-14)">arrow_drop_down</span></span>'+
             '<span class="al-report-foot-count">1\u201323 of 23</span>'+
             '<div class="al-report-foot-nav">'+
-              '<button disabled aria-label="Previous page"><span class="material-symbols-rounded" style="font-size:18px">chevron_left</span></button>'+
-              '<button disabled aria-label="Next page"><span class="material-symbols-rounded" style="font-size:18px">chevron_right</span></button>'+
+              '<button disabled aria-label="Previous page"><span class="material-symbols-rounded" style="font-size:var(--type-size-18)">chevron_left</span></button>'+
+              '<button disabled aria-label="Next page"><span class="material-symbols-rounded" style="font-size:var(--type-size-18)">chevron_right</span></button>'+
             '</div>'+
           '</div>'+
         '</div>'+
@@ -11725,7 +11725,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
   }
   function aloOpenPaymentMerged(cfg,sev){
     var c=cfg||{sevLabel:"Critical: Payment Overdue",title:"Overdue Payables",rows:[],redirectNote:""};
-    c.redirectNote=c.redirectNote||"Opens <strong>AP Payment Processing</strong> — review and process the overdue invoice.";
+    c.redirectNote=c.redirectNote||"Opens <strong>AP Payment Processing</strong>: review and process the overdue invoice.";
     aloMergedModal(c,sev,"Process Payment",function(){aloOpenPaymentScreen();});
   }
   function aloOpenReconMerged(cfg,sev){
@@ -11735,12 +11735,12 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
   }
   function aloOpenARMerged(cfg,sev){
     var c=cfg||{sevLabel:"Warning: Receivable Outstanding",title:"Outstanding Invoice",rows:[],redirectNote:""};
-    c.redirectNote=c.redirectNote||"Opens <strong>AR &rsaquo; Unposted Invoices</strong> — review and post outstanding AR invoices.";
+    c.redirectNote=c.redirectNote||"Opens <strong>AR &rsaquo; Unposted Invoices</strong>: review and post outstanding AR invoices.";
     aloMergedModal(c,sev,"View Invoice",function(){aloOpenARScreen();});
   }
   function aloOpenBudgetMerged(cfg,sev){
     var c=cfg||{sevLabel:"Warning: Budget Exceeded",title:"Budget Exceeded",rows:[]};
-    c.redirectNote=c.redirectNote||"Opens the <strong>Budgeted Financial Statement</strong> — budget vs actual by fund and department.";
+    c.redirectNote=c.redirectNote||"Opens the <strong>Budgeted Financial Statement</strong>: budget vs actual by fund and department.";
     aloMergedModal(c,sev,"Review Budget",function(){aloOpenBudgetModal();});
   }
   function aloOpenARConfirm(){
@@ -11805,7 +11805,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         /* top nav bar */
         '<div class="al-ar-topbar">'+
           '<div class="al-ar-topbar-left">'+
-            '<span class="material-symbols-rounded" style="font-size:20px;margin-right:6px;">grid_view</span>'+
+            '<span class="material-symbols-rounded" style="font-size:var(--type-size-20);margin-right:var(--padding-xtight);">grid_view</span>'+
             '<span class="al-ar-topbar-appname">Accounts Receivable</span>'+
           '</div>'+
           '<div class="al-ar-topbar-right">'+
@@ -13006,7 +13006,7 @@ function fkpTileHTML(t){
   if(FKP_STATE.loading)return '<div class="fkp-tile"><div class="fkp-skel lbl"></div><div class="fkp-skel val"></div><div class="fkp-skel meta"></div></div>';
   var cls=t.fav?"pos":"neg";
   var arrow=t.dir==="up"?"↑":"↓";
-  /* Calculation descriptions per tile — shown in the narrow hover tooltip */
+  /* Calculation descriptions per tile, shown in the narrow hover tooltip */
   var calcDesc={
     "Total Income (YTD)":"Sum of all revenue posted to income accounts from Jan 1 to today.",
     "Total Expenses (YTD)":"Sum of all amounts posted to expense accounts from Jan 1 to today.",
