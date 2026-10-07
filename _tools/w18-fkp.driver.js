@@ -216,7 +216,7 @@ ctx.pop = { type: "fkp-info", id: "fkp-0" };
 const popHtml = ctx.WIDGETS.pops["fkp-info"].content();
 A.contains(popHtml, '<div class="wtip-h">Total Income (YTD)</div>', "the popover title is the tile name, in her About title class");
 A.contains(popHtml, '<div class="wtip-b">Sum of all revenue posted to income accounts from Jan 1 to today.</div>', "the body is the calculation sentence, in her About body class");
-A.contains(popHtml, '<div class="sep"></div>', "her divider"); A.contains(popHtml, 'class="mi wtip-link" data-action="noop"', "and her user-guide link, inert as on every widget");
+A.absent(popHtml, '<div class="sep">', "no divider on the KPI card (owner, 7 Oct)"); A.absent(popHtml, "Learn more in user guides", "and no user-guide link: title and body only");
 A.absent(popHtml, "Prev yr", "the popover does not repeat the prior-year figure the tile already shows");
 A.eq(ctx.WIDGETS.pops["fkp-info"].trigger(), '[data-action="fkp-info"][data-id="fkp-0"]', "the popover is positioned against its own tile's button");
 ctx.pop = { type: "fkp-info", id: "fkp-2" }; A.contains(ctx.WIDGETS.pops["fkp-info"].content(), "Total Income minus Total Expenses year-to-date.", "the third tile explains net income");
@@ -282,7 +282,7 @@ A.eq((h.match(/data-action="fkp-info"/g) || []).length, 3, "one info button per 
 A.eq((h.match(/class="wmini fkp-info-btn"/g) || []).length, 3, "the info button is her .wmini, not new chrome");
 A.eq((h.match(/aria-haspopup="dialog"/g) || []).length, 3, "each announces its popover");
 A.contains(blockCode, 'WIDGETS.pops["fkp-info"]', "the About popover is registered as a shell popover type");
-A.contains(blockCode, 'class="wtip-h"', "and renders the shell's About card: title"); A.contains(blockCode, 'class="wtip-b"', "body"); A.contains(blockCode, 'class="sep"', "divider"); A.contains(blockCode, "Learn more in user guides", "and the user-guide link");
+A.contains(blockCode, 'class="wtip-h"', "and renders the shell's About card: title"); A.contains(blockCode, 'class="wtip-b"', "and body"); A.absent(blockCode, "Learn more in user guides", "without the user-guide link (owner, 7 Oct)");
 /* The plain variant was carried by the prototype chip and the runway info
    icon, both of which held prose long enough to need it. Both are gone, and
    the refresh stamp never used it, so asserting it here would be asserting

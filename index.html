@@ -13074,13 +13074,14 @@ function fkpRefresh(){
    mouseout and keydown handlers and the resize and scroll repositioning
    all existed for the warning panel, and warn, acct, review, cycle and
    stop were its actions. Refresh is what is left. */
-/* About popover per tile. It is the shell's own info card (title, body, divider, user-guide link), produced
+/* About popover per tile. It is the shell's own info card (title and body; no divider or user-guide link here), produced
    through the registry's popover hooks exactly as a widget's About is, so the box, caret, shadow, type and
    position are the shell's and cannot drift. The band still registers no widget kind: it adds one popover
    type and one click handler to the registry, nothing else (owner, 7 Oct 2026). */
 function fkpInfoPopHTML(){
   var i=parseInt(String(pop&&pop.id||"").slice(4),10),t=FKP_TILES[i];if(!t)return "";
-  return '<div class="wtip-h">'+fkpEsc(t.lbl)+'</div><div class="wtip-b">'+fkpEsc(FKP_CALC[t.lbl]||"")+'</div><div class="sep"></div><button class="mi wtip-link" data-action="noop">'+ICON("open_in_new")+'Learn more in user guides</button>';
+  /* Title and body only: no divider and no user-guide link on the KPI card (owner, 7 Oct 2026). */
+  return '<div class="wtip-h">'+fkpEsc(t.lbl)+'</div><div class="wtip-b">'+fkpEsc(FKP_CALC[t.lbl]||"")+'</div>';
 }
 WIDGETS.pops["fkp-info"]={content:fkpInfoPopHTML,trigger:function(){return '[data-action="fkp-info"][data-id="'+pop.id+'"]';}};
 WIDGETS.clicks.push(function(a,id){if(a!=="fkp-info")return false;pop=(pop&&pop.type==="fkp-info"&&pop.id===id)?null:{type:"fkp-info",id:id};render();return true;});
