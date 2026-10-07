@@ -2161,6 +2161,8 @@
   .al-modal-val{flex:1;font-size:var(--type-size-12);color:var(--txt-primary);}
   .al-modal-val.val-err{color:var(--red-100);font-weight:600;}
   .al-modal-actions{display:flex;gap:var(--gap-tight);justify-content:flex-end;padding:var(--padding-base) var(--padding-relaxed);}
+  .al-modal-redirect-note{display:flex;align-items:flex-start;gap:6px;margin-top:8px;font-size:var(--type-size-11);color:var(--txt-tertiary);line-height:1.4;}
+  .al-modal-redirect-note .material-symbols-rounded{font-size:12px;flex-shrink:0;margin-top:1px;color:var(--txt-tertiary);}
   .al-modal.approval{width:600px;max-width:95vw;max-height:90vh;overflow-y:auto;}
   .al-modal-apv-hd{display:flex;align-items:flex-start;justify-content:space-between;padding:var(--padding-base) var(--padding-relaxed) var(--padding-medium);border-bottom:1px solid var(--stroke-widget);gap:var(--gap-medium);}
   .al-modal-apv-hd-text{flex:1;min-width:0;}
@@ -2197,6 +2199,197 @@
   .al-modal-apv-spacer{flex:1;}
   .al-modal .btn.al-btn-reject{color:var(--red-100);border-color:var(--red-100);}
   .al-modal .btn.al-btn-reject:hover{background:var(--red-10);}
+  /* ── Designated Fund Summary report modal ── */
+  .al-report-backdrop{position:fixed;inset:0;background:color-mix(in srgb,var(--primitive-color-cool-neutral-900) 52%,transparent);z-index:9100;display:flex;align-items:center;justify-content:center;animation:al-fade-in .15s ease;}
+  .al-report-backdrop.al-report-hiding{animation:al-fade-out .15s ease forwards;}
+  .al-modal-report{background:var(--surface-sheet);border-radius:var(--cornerradius-medium);width:1280px;max-width:97vw;max-height:94vh;display:flex;flex-direction:column;box-shadow:var(--elevation-overlay);overflow:hidden;animation:al-slide-up .18s ease;}
+  .al-report-hd{display:flex;align-items:center;gap:var(--gap-tight);padding:var(--padding-medium) var(--padding-relaxed);border-bottom:1px solid var(--stroke-widget);flex-shrink:0;}
+  .al-report-hd-left{display:flex;align-items:center;gap:var(--gap-tight);flex-shrink:0;}
+  .al-report-hd-title{flex:1;font-size:var(--type-size-18);font-weight:700;color:var(--txt-primary);text-align:center;}
+  .al-report-hd-right{display:flex;align-items:center;gap:var(--gap-tight);flex-shrink:0;}
+  .al-report-close-btn{display:inline-flex;align-items:center;gap:var(--gap-xxtight);padding:var(--padding-xxtight) var(--padding-tight);border-radius:var(--button-radius);font-family:inherit;font-size:var(--type-size-13);font-weight:500;color:var(--txt-secondary);background:transparent;border:none;cursor:pointer;}
+  .al-report-close-btn:hover{background:var(--fill-action-secondary-hover);}
+  .al-report-edit-btn{display:inline-flex;align-items:center;gap:var(--gap-xxtight);padding:var(--padding-xxtight) var(--padding-tight);border-radius:var(--button-radius);font-family:inherit;font-size:var(--type-size-13);font-weight:500;color:var(--txt-secondary);background:transparent;border:1px solid var(--stroke-action-secondary-inverse-base);cursor:pointer;}
+  .al-report-edit-btn:hover{background:var(--fill-action-secondary-hover);}
+  .al-report-save-btn,.al-report-sched-btn{display:inline-flex;align-items:center;gap:var(--gap-xxtight);padding:var(--padding-xxtight) var(--padding-medium);border-radius:var(--button-radius);font-family:inherit;font-size:var(--type-size-13);font-weight:500;color:var(--text-action-secondary-base);background:var(--surface-sheet);border:1px solid var(--stroke-action-secondary-inverse-base);cursor:pointer;}
+  .al-report-save-btn:hover,.al-report-sched-btn:hover{background:var(--fill-action-secondary-hover);}
+  .al-report-share-btn{display:inline-flex;align-items:center;gap:var(--gap-xxtight);padding:var(--padding-xxtight) var(--padding-medium);border-radius:var(--button-radius);font-family:inherit;font-size:var(--type-size-13);font-weight:600;color:#fff;background:var(--fill-action-primary-base);border:none;cursor:pointer;}
+  .al-report-share-btn:hover{background:var(--fill-action-primary-hover);}
+  .al-report-share-btn .material-symbols-rounded{font-size:var(--type-size-14);}
+  .al-report-body{flex:1;overflow:auto;background:var(--surface-header);padding:var(--padding-relaxed);}
+  .al-report-doc{background:#fff;border-radius:var(--cornerradius-medium);max-width:900px;margin:0 auto;padding:var(--padding-relaxed);box-shadow:0 1px 4px color-mix(in srgb,var(--primitive-color-cool-neutral-900) 10%,transparent);overflow-x:auto;}
+  .al-report-doc-hd{font-size:var(--type-size-12);color:var(--txt-secondary);line-height:1.8;margin-bottom:var(--padding-medium);}
+  .al-report-doc-hd strong{color:var(--txt-primary);}
+  .al-report-tbl{width:100%;border-collapse:collapse;font-size:var(--type-size-12);min-width:760px;}
+  .al-report-tbl th{font-size:var(--type-size-11);font-weight:600;color:var(--txt-subtle);text-align:right;padding:var(--padding-xxtight) var(--padding-tight);border-bottom:2px solid var(--primitive-color-cool-neutral-150);white-space:nowrap;}
+  .al-report-tbl th:first-child{text-align:left;text-decoration:underline;}
+  .al-report-tbl td{padding:var(--padding-xxxtight) var(--padding-tight);color:var(--txt-primary);text-align:right;vertical-align:middle;}
+  .al-report-tbl td:first-child{text-align:left;}
+  .al-report-tbl tr+tr td{border-top:1px solid var(--primitive-color-cool-neutral-50);}
+  .al-report-section-hd td{font-weight:700;color:var(--txt-primary);padding-top:var(--padding-medium);padding-bottom:var(--padding-xxxtight);border-top:none!important;}
+  .al-report-section-sub td{font-weight:700;font-size:var(--type-size-11);text-transform:uppercase;letter-spacing:.04em;color:var(--txt-subtle);padding-top:var(--padding-tight);border-top:none!important;}
+  .al-report-total-row td{font-weight:700;border-top:2px solid var(--primitive-color-cool-neutral-200)!important;background:var(--surface-header);}
+  .al-report-fund-hd td{font-weight:700;font-size:var(--type-size-13);color:var(--txt-primary);padding:var(--padding-tight) var(--padding-tight) var(--padding-xxxtight);border-bottom:1px solid var(--primitive-color-cool-neutral-150);}
+  .al-report-foot{display:flex;align-items:center;gap:var(--gap-base);justify-content:flex-end;padding:var(--padding-tight) var(--padding-relaxed);border-top:1px solid var(--stroke-widget);flex-shrink:0;background:var(--surface-sheet);}
+  .al-report-foot-label{font-size:var(--type-size-12);color:var(--txt-subtle);}
+  .al-report-foot-rpp{display:inline-flex;align-items:center;gap:var(--gap-xxtight);font-size:var(--type-size-12);color:var(--txt-primary);font-weight:500;padding:2px 6px;border:1px solid var(--stroke-widget);border-radius:var(--cornerradius-xsmall);cursor:default;}
+  .al-report-foot-count{font-size:var(--type-size-12);color:var(--txt-secondary);margin:0 var(--gap-tight);}
+  .al-report-foot-nav{display:inline-flex;align-items:center;gap:2px;}
+  .al-report-foot-nav button{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border:none;background:transparent;border-radius:var(--cornerradius-xsmall);cursor:pointer;color:var(--txt-secondary);}
+  .al-report-foot-nav button:hover{background:var(--fill-action-secondary-hover);}
+  .al-report-foot-nav button:disabled{opacity:.35;cursor:default;}
+  /* ── Payment redirect confirmation + Payment Processing screen ── */
+  .al-pay-confirm-backdrop{position:fixed;inset:0;background:color-mix(in srgb,var(--primitive-color-cool-neutral-900) 48%,transparent);z-index:9200;display:flex;align-items:center;justify-content:center;animation:al-fade-in .15s ease;}
+  .al-pay-confirm-backdrop.al-pay-confirm-hiding{animation:al-fade-out .15s ease forwards;}
+  .al-pay-confirm{background:var(--surface-sheet);border-radius:var(--cornerradius-medium);width:440px;max-width:92vw;box-shadow:var(--elevation-overlay);overflow:hidden;animation:al-slide-up .18s ease;}
+  .al-pay-confirm-hd{display:flex;align-items:flex-start;justify-content:space-between;padding:var(--padding-base) var(--padding-relaxed) var(--padding-medium);border-bottom:1px solid var(--stroke-widget);gap:var(--gap-medium);}
+  .al-pay-confirm-hd-icon{width:36px;height:36px;border-radius:var(--cornerradius-medium);background:color-mix(in srgb,var(--fill-action-primary-base) 12%,transparent);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .al-pay-confirm-hd-icon .material-symbols-rounded{font-size:20px;color:var(--fill-action-primary-base);}
+  .al-pay-confirm-hd-text{flex:1;min-width:0;}
+  .al-pay-confirm-overline{font-size:var(--type-size-11);font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--txt-subtle);margin-bottom:var(--padding-xxxtight);}
+  .al-pay-confirm-title{font-size:var(--type-size-16);font-weight:700;color:var(--txt-primary);}
+  .al-pay-confirm-body{padding:var(--padding-base) var(--padding-relaxed);}
+  .al-pay-confirm-msg{font-size:var(--type-size-14);color:var(--txt-secondary);line-height:1.6;margin:0;}
+  .al-pay-confirm-actions{display:flex;gap:var(--gap-tight);justify-content:flex-end;padding:var(--padding-medium) var(--padding-relaxed);border-top:1px solid var(--stroke-widget);}
+  /* Payment Processing full-screen overlay */
+  .al-pay-screen-wrap{position:fixed;inset:0;z-index:9300;display:flex;flex-direction:column;animation:al-fade-in .18s ease;}
+  .al-pay-screen-wrap.al-pay-screen-hiding{animation:al-fade-out .15s ease forwards;}
+  .al-pay-topnav{height:44px;background:#1a2535;display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0;}
+  .al-pay-topnav-logo{width:28px;height:28px;border-radius:6px;background:#4a7cf7;display:flex;align-items:center;justify-content:center;}
+  .al-pay-topnav-logo svg{width:16px;height:16px;fill:#fff;}
+  .al-pay-topnav-grid{color:#8fa3c0;font-size:18px;cursor:pointer;margin-right:4px;}
+  .al-pay-topnav-appname{color:#fff;font-size:var(--type-size-14);font-weight:600;}
+  .al-pay-topnav-right{margin-left:auto;display:flex;align-items:center;gap:16px;}
+  .al-pay-topnav-right span{color:#8fa3c0;font-size:var(--type-size-12);}
+  .al-pay-topnav-right a{color:#8fa3c0;font-size:var(--type-size-12);text-decoration:none;cursor:pointer;}
+  .al-pay-topnav-right a:hover{color:#fff;}
+  .al-pay-ctx-bar{height:52px;background:#fff;border-bottom:1px solid #e4e8ef;display:flex;align-items:center;padding:0 16px;gap:8px;flex-shrink:0;font-size:var(--type-size-12);}
+  .al-pay-ctx-bar-bc{display:flex;align-items:center;gap:4px;color:#4a7cf7;flex:1;}
+  .al-pay-ctx-bar-bc span{color:#6b7a8d;}
+  .al-pay-ctx-bar-sep{color:#b0b8c4;}
+  .al-pay-ctx-bar-meta{display:flex;align-items:center;gap:24px;color:#6b7a8d;}
+  .al-pay-ctx-bar-meta strong{color:#1d2635;font-weight:600;}
+  .al-pay-ctx-bar-actions{display:flex;align-items:center;gap:8px;margin-left:16px;}
+  .al-pay-ctx-bar-actions button{font-size:var(--type-size-12);color:#4a7cf7;background:none;border:none;cursor:pointer;font-family:inherit;padding:0;}
+  .al-pay-body{flex:1;display:flex;overflow:hidden;}
+  .al-pay-sidebar{width:168px;background:#f3f5f8;border-right:1px solid #e4e8ef;display:flex;flex-direction:column;padding:8px 0;flex-shrink:0;overflow-y:auto;}
+  .al-pay-nav-item{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;font-size:var(--type-size-13);color:#3d4c5e;cursor:pointer;user-select:none;}
+  .al-pay-nav-item:hover{background:#e8ecf2;}
+  .al-pay-nav-item.active{background:#e3eaff;color:#2455d6;font-weight:600;}
+  .al-pay-nav-item .material-symbols-rounded{font-size:14px;color:#8fa3c0;}
+  .al-pay-main{flex:1;overflow:auto;display:flex;flex-direction:column;background:#f7f8fa;}
+  .al-pay-main-hd{padding:12px 20px 0;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+  .al-pay-main-title{font-size:var(--type-size-16);font-weight:700;color:#1d2635;}
+  .al-pay-main-filters{display:flex;align-items:center;gap:12px;font-size:var(--type-size-12);color:#6b7a8d;}
+  .al-pay-main-filters label{font-weight:600;color:#3d4c5e;}
+  .al-pay-main-filters select{font-size:var(--type-size-12);border:1px solid #cdd3dd;border-radius:4px;padding:3px 6px;background:#fff;color:#1d2635;}
+  .al-pay-tbl-wrap{flex:1;overflow:auto;padding:0 20px 12px;}
+  .al-pay-tbl{width:100%;border-collapse:collapse;font-size:var(--type-size-12);background:#fff;border:1px solid #e4e8ef;border-radius:6px;overflow:hidden;margin-top:12px;}
+  .al-pay-tbl thead tr{background:#f3f5f8;}
+  .al-pay-tbl th{padding:7px 8px;text-align:left;font-size:var(--type-size-11);font-weight:600;color:#6b7a8d;border-bottom:2px solid #e4e8ef;white-space:nowrap;}
+  .al-pay-tbl td{padding:6px 8px;color:#1d2635;border-top:1px solid #eef0f4;vertical-align:middle;white-space:nowrap;}
+  .al-pay-tbl tr.selected td{background:#eef3ff;}
+  .al-pay-tbl tr:hover td{background:#f5f7fb;}
+  .al-pay-tbl tr.selected:hover td{background:#e6edff;}
+  .al-pay-chk{width:14px;height:14px;accent-color:#2455d6;}
+  .al-pay-chk-checked{width:14px;height:14px;accent-color:#2455d6;}
+  .al-pay-icon-check{color:#2455d6;font-size:14px;}
+  .al-pay-tbl-summary{padding:8px 20px;font-size:var(--type-size-12);color:#6b7a8d;border-top:1px solid #e4e8ef;background:#fff;display:flex;justify-content:space-between;align-items:flex-start;}
+  .al-pay-tbl-summary-left{line-height:1.8;}
+  .al-pay-tbl-summary-right{text-align:right;font-weight:600;color:#1d2635;line-height:1.8;}
+  .al-pay-tbl-foot{display:flex;align-items:center;padding:8px 20px;border-top:1px solid #e4e8ef;background:#fff;flex-shrink:0;}
+  .al-pay-tbl-foot-pag{display:flex;align-items:center;gap:4px;font-size:var(--type-size-12);color:#6b7a8d;}
+  .al-pay-tbl-foot-pag button{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border:1px solid #cdd3dd;border-radius:4px;background:#fff;cursor:pointer;color:#6b7a8d;}
+  .al-pay-tbl-foot-pag button.active{background:#2455d6;color:#fff;border-color:#2455d6;}
+  .al-pay-tbl-foot-pgsize{display:flex;align-items:center;gap:4px;font-size:var(--type-size-12);color:#6b7a8d;margin-left:12px;}
+  .al-pay-tbl-foot-pgsize select{font-size:var(--type-size-12);border:1px solid #cdd3dd;border-radius:4px;padding:2px 4px;background:#fff;}
+  .al-pay-tbl-foot-count{margin-left:auto;font-size:var(--type-size-12);color:#6b7a8d;}
+  .al-pay-bottom-bar{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:10px 20px;border-top:1px solid #e4e8ef;background:#fff;flex-shrink:0;}
+  .al-pay-close-overlay{position:absolute;top:10px;right:14px;background:none;border:none;cursor:pointer;color:#8fa3c0;display:flex;align-items:center;justify-content:center;z-index:10;}
+  .al-pay-close-overlay:hover{color:#fff;}
+  /* Bank Reconciliation detail table */
+  .al-recon-summary{margin:24px 0 16px;}
+  .al-recon-summary-title{font-weight:600;font-size:13px;margin-bottom:8px;}
+  .al-recon-sum-table{border-collapse:collapse;width:auto;}
+  .al-recon-sum-table td{padding:2px 32px 2px 0;font-size:13px;}
+  .al-recon-sum-amt{text-align:right;padding-right:0!important;}
+  .al-recon-detail-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:16px;}
+  .al-recon-detail-table thead tr{border-bottom:1px solid #ccc;}
+  .al-recon-detail-table tbody tr{border-bottom:1px solid #eee;}
+  .al-recon-detail-table td,.al-recon-detail-table th{padding:5px 10px 5px 0;vertical-align:middle;}
+  .al-recon-detail-table th{font-weight:normal;}
+  .al-recon-th-ul{text-decoration:underline;font-weight:600;}
+  .al-recon-payee{width:36%;}
+  .al-recon-amt{text-align:right;white-space:nowrap;}
+  .al-recon-bold-row td{font-weight:600;}
+  /* ── Budget Financial Statement table ── */
+  .al-bfs-tbl{width:100%;border-collapse:collapse;font-size:var(--type-size-12);min-width:600px;}
+  .al-bfs-tbl thead tr{border-bottom:2px solid var(--primitive-color-cool-neutral-200);}
+  .al-bfs-tbl th{font-size:var(--type-size-11);font-weight:700;color:var(--txt-subtle);padding:var(--padding-xxtight) var(--padding-tight);white-space:nowrap;text-align:right;}
+  .al-bfs-tbl td{padding:var(--padding-xxxtight) var(--padding-tight);color:var(--txt-primary);vertical-align:middle;}
+  .al-bfs-tbl tr+tr td{border-top:1px solid var(--primitive-color-cool-neutral-50);}
+  .al-bfs-acct{text-align:left!important;width:80px;color:var(--txt-secondary);}
+  .al-bfs-desc{text-align:left!important;flex:1;}
+  .al-bfs-num{text-align:right!important;white-space:nowrap;}
+  .al-bfs-section-hd td{font-weight:700;color:var(--txt-primary);padding-top:var(--padding-medium);padding-bottom:var(--padding-xxxtight);border-top:none!important;}
+  .al-bfs-total-row td{font-weight:700;border-top:2px solid var(--primitive-color-cool-neutral-200)!important;background:var(--surface-header);}
+  .al-bfs-grand-total td{font-size:var(--type-size-13);}
+  .al-bfs-spacer td{height:8px;border:none!important;background:transparent!important;}
+  /* ── AR Unposted Invoices screen ── */
+  .al-ar-backdrop{position:fixed;inset:0;z-index:3100;background:#f0f2f5;overflow:auto;}
+  .al-ar-screen{display:flex;flex-direction:column;min-height:100vh;font-family:var(--font-family,inherit);font-size:13px;}
+  /* topbar */
+  .al-ar-topbar{display:flex;align-items:center;justify-content:space-between;background:#1a2b4a;color:#fff;padding:0 16px;height:48px;flex-shrink:0;}
+  .al-ar-topbar-left{display:flex;align-items:center;gap:4px;}
+  .al-ar-topbar-appname{font-size:15px;font-weight:600;letter-spacing:.01em;}
+  .al-ar-topbar-right{display:flex;align-items:center;gap:20px;}
+  .al-ar-topbar-meta{display:flex;flex-direction:column;align-items:flex-end;}
+  .al-ar-meta-label{font-size:10px;opacity:.65;line-height:1.1;}
+  .al-ar-meta-val{font-size:12px;font-weight:500;line-height:1.2;}
+  .al-ar-screen-close{background:none;border:none;color:#fff;cursor:pointer;padding:4px;border-radius:4px;display:flex;align-items:center;margin-left:16px;}
+  .al-ar-screen-close:hover{background:rgba(255,255,255,.15);}
+  /* breadcrumb */
+  .al-ar-breadcrumb{background:#fff;border-bottom:1px solid #e2e5ea;padding:6px 16px;font-size:12px;color:#5a6a82;display:flex;align-items:center;gap:4px;flex-shrink:0;}
+  .al-ar-bc-link{color:#2563eb;cursor:pointer;}
+  .al-ar-bc-link:hover{text-decoration:underline;}
+  /* body layout */
+  .al-ar-body{display:flex;flex:1;overflow:hidden;}
+  /* sidebar */
+  .al-ar-sidebar{width:128px;background:#fff;border-right:1px solid #e2e5ea;display:flex;flex-direction:column;padding:8px 0;flex-shrink:0;}
+  .al-ar-nav-item{display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:13px;color:#374151;cursor:pointer;position:relative;}
+  .al-ar-nav-item:hover{background:#f0f4ff;}
+  .al-ar-nav-active{color:#2563eb;background:#eff6ff;font-weight:600;border-left:3px solid #2563eb;}
+  .al-ar-nav-chev{margin-left:auto;color:#9ca3af;}
+  /* main content */
+  .al-ar-main{flex:1;padding:16px 20px;overflow:auto;display:flex;flex-direction:column;gap:12px;}
+  /* filters bar */
+  .al-ar-filters-bar{background:#fff;border:1px solid #e2e5ea;border-radius:6px;padding:8px 14px;display:flex;align-items:center;gap:8px;font-size:13px;font-weight:500;color:#374151;cursor:pointer;}
+  /* section header */
+  .al-ar-section-hd{display:flex;align-items:center;justify-content:space-between;padding:4px 0;}
+  .al-ar-section-title{font-size:14px;font-weight:600;color:#1a2b4a;}
+  .al-ar-section-btns{display:flex;gap:8px;}
+  .al-ar-btn-outlined{border:1px solid #d1d5db;background:#fff;color:#374151;border-radius:5px;padding:5px 14px;font-size:12px;cursor:pointer;}
+  .al-ar-btn-outlined:hover{background:#f9fafb;}
+  .al-ar-btn-primary{border:none;background:#2563eb;color:#fff;border-radius:5px;padding:5px 14px;font-size:12px;cursor:pointer;font-weight:500;}
+  .al-ar-btn-primary:hover{background:#1d4ed8;}
+  /* table */
+  .al-ar-tbl-wrap{background:#fff;border:1px solid #e2e5ea;border-radius:6px;overflow:auto;}
+  .al-ar-tbl{width:100%;border-collapse:collapse;font-size:12px;}
+  .al-ar-tbl th{background:#f8fafc;border-bottom:2px solid #e2e5ea;padding:7px 8px;text-align:left;white-space:nowrap;font-weight:600;color:#374151;}
+  .al-ar-tbl td{border-bottom:1px solid #f0f2f5;padding:6px 8px;color:#374151;white-space:nowrap;}
+  .al-ar-tbl tbody tr:last-child td{border-bottom:none;}
+  .al-ar-tbl tbody tr:hover td{background:#f5f8ff;}
+  .al-ar-chk{cursor:pointer;}
+  .al-ar-icon-cell{display:flex;align-items:center;color:#6b7280;}
+  .al-ar-import-type{font-size:11px;color:#6b7280;background:#f3f4f6;border-radius:3px;padding:1px 5px;}
+  .al-ar-actions-cell{display:flex;gap:4px;}
+  .al-ar-row-btn{background:none;border:none;cursor:pointer;padding:2px;border-radius:3px;color:#6b7280;display:flex;align-items:center;}
+  .al-ar-row-btn:hover{background:#f0f0f0;color:#374151;}
+  .al-ar-setup-cell{display:block;width:24px;}
+  /* table footer */
+  .al-ar-tbl-footer{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-top:2px solid #e2e5ea;background:#fafbfc;}
+  .al-ar-tbl-count{font-size:13px;font-weight:600;color:#374151;}
+  .al-ar-tbl-footer-btns{display:flex;gap:8px;}
 /* ===== end W19 Alerts & Actions V2 CSS ===== */
 
 /* ===== W01 Budget Compared to Actual V2 CSS ===== */
@@ -3158,6 +3351,7 @@
   min-height:0;
 }
 .fkp-tile{
+  position:relative;
   display:flex;
   flex-direction:column;
   justify-content:center;
@@ -3168,6 +3362,17 @@
   border:1px solid var(--stroke-widget);
   border-radius:8px;
 }
+/* Info button — positioned top-right inside the tile; reuses the shared
+   .iconbtn style and just anchors it absolutely. Size is set to match the
+   .wactions .iconbtn 28 × 18px pattern rather than the full 32px default. */
+.fkp-info-btn{
+  position:absolute;
+  top:6px;
+  right:6px;
+  width:28px;
+  height:28px;
+}
+.fkp-info-btn .material-symbols-rounded{font-size:18px;}
 
 .fkp-lbl{
   font-size:10px;
@@ -10619,7 +10824,24 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       {lbl:"Breach Amount",val:"$35,200 (135.8% of income)",err:true},
       {lbl:"First Detected",val:"Today, Aug 26, 2026",err:false}
     ],
-    btnSec:{label:"Review Fund"}
+    btnSec:{label:"Review Fund"},
+    opensBudget:true
+  },
+
+  /* ── Budget Exceeded ── */
+  "al-cat-4:0":{
+    sevLabel:"Warning: Budget Exceeded",
+    title:"Budget Exceeded: Worship Arts",
+    msg:"Actual expenditure for the Worship Arts department has exceeded its annual budget allocation. Review the Budgeted Financial Statement for a detailed breakdown by account.",
+    rows:[
+      {lbl:"Department",val:"Worship Arts",err:false},
+      {lbl:"Actual YTD",val:"$67,800",err:true},
+      {lbl:"Annual Budget",val:"$60,500",err:false},
+      {lbl:"Overage Amount",val:"$7,300 (112% of budget)",err:true},
+      {lbl:"Period",val:"Period 1 – July",err:false}
+    ],
+    btnSec:{label:"Review Budget"},
+    opensBudget:true
   },
 
   /* ── Overdue Payables ── */
@@ -10635,7 +10857,8 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       {lbl:"Vendor",val:"Acme Audio LLC",err:false},
       {lbl:"Due Date",val:"Aug 4, 2026",err:false}
     ],
-    btnPri:{icon:"arrow_forward",label:"Process Payment"}
+    btnPri:{icon:"arrow_forward",label:"Process Payment"},
+    opensPayment:true
   },
   "al-cat-2:1":{
     sevLabel:"Critical: Payment Overdue",
@@ -10649,7 +10872,8 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       {lbl:"Vendor",val:"City Building Services",err:false},
       {lbl:"Due Date",val:"Aug 10, 2026",err:false}
     ],
-    btnPri:{icon:"arrow_forward",label:"Process Payment"}
+    btnPri:{icon:"arrow_forward",label:"Process Payment"},
+    opensPayment:true
   },
   "al-cat-2:2":{
     sevLabel:"Critical: Payment Overdue",
@@ -10663,7 +10887,8 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       {lbl:"Vendor",val:"Grace Print & Design",err:false},
       {lbl:"Due Date",val:"Aug 17, 2026",err:false}
     ],
-    btnPri:{icon:"arrow_forward",label:"Process Payment"}
+    btnPri:{icon:"arrow_forward",label:"Process Payment"},
+    opensPayment:true
   },
 
   /* ── Receivable Invoices Outstanding ── */
@@ -10678,7 +10903,8 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       {lbl:"Days Outstanding",val:"45 days",err:true},
       {lbl:"Due Date",val:"Jul 12, 2026",err:false}
     ],
-    btnPri:{icon:"arrow_forward",label:"View Invoice"}
+    btnPri:{icon:"arrow_forward",label:"View Invoice"},
+    opensAR:true
   },
   "al-cat-6:1":{
     sevLabel:"Warning: Receivable Outstanding",
@@ -10691,7 +10917,8 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       {lbl:"Days Outstanding",val:"38 days",err:true},
       {lbl:"Due Date",val:"Jul 19, 2026",err:false}
     ],
-    btnPri:{icon:"arrow_forward",label:"View Invoice"}
+    btnPri:{icon:"arrow_forward",label:"View Invoice"},
+    opensAR:true
   },
   "al-cat-6:2":{
     sevLabel:"Warning: Receivable Outstanding",
@@ -10704,7 +10931,8 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       {lbl:"Days Outstanding",val:"32 days",err:true},
       {lbl:"Due Date",val:"Jul 25, 2026",err:false}
     ],
-    btnPri:{icon:"arrow_forward",label:"View Invoice"}
+    btnPri:{icon:"arrow_forward",label:"View Invoice"},
+    opensAR:true
   },
   "al-cat-6:3":{
     sevLabel:"Warning: Receivable Outstanding",
@@ -10717,7 +10945,8 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       {lbl:"Days Outstanding",val:"28 days",err:true},
       {lbl:"Due Date",val:"Jul 29, 2026",err:false}
     ],
-    btnPri:{icon:"arrow_forward",label:"View Invoice"}
+    btnPri:{icon:"arrow_forward",label:"View Invoice"},
+    opensAR:true
   },
   "al-cat-6:4":{
     sevLabel:"Warning: Receivable Outstanding",
@@ -10730,7 +10959,8 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       {lbl:"Days Outstanding",val:"22 days",err:false},
       {lbl:"Due Date",val:"Aug 4, 2026",err:false}
     ],
-    btnPri:{icon:"arrow_forward",label:"View Invoice"}
+    btnPri:{icon:"arrow_forward",label:"View Invoice"},
+    opensAR:true
   },
   "al-cat-6:5":{
     sevLabel:"Warning: Receivable Outstanding",
@@ -10743,7 +10973,8 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       {lbl:"Days Outstanding",val:"18 days",err:false},
       {lbl:"Due Date",val:"Aug 8, 2026",err:false}
     ],
-    btnPri:{icon:"arrow_forward",label:"View Invoice"}
+    btnPri:{icon:"arrow_forward",label:"View Invoice"},
+    opensAR:true
   },
   "al-cat-6:6":{
     sevLabel:"Warning: Receivable Outstanding",
@@ -10756,7 +10987,8 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       {lbl:"Days Outstanding",val:"14 days",err:false},
       {lbl:"Due Date",val:"Aug 12, 2026",err:false}
     ],
-    btnPri:{icon:"arrow_forward",label:"View Invoice"}
+    btnPri:{icon:"arrow_forward",label:"View Invoice"},
+    opensAR:true
   },
 
   /* ── Purchase Order Queue ── */
@@ -10809,6 +11041,18 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       {name:"Finance Pre-check",sub:"Automated · Aug 21, 2026",done:true},
       {name:"Department Head Approval",sub:"Michael R. · Waiting 6 business days",done:false}
     ]
+  },
+  /* ── Unreconciled Bank Account ── */
+  "al-cat-3:0":{
+    sevLabel:"Warning: Reconciliation Overdue",
+    title:"Unreconciled Bank Account: Payroll Checking",
+    rows:[
+      {lbl:"Account",val:"Payroll Checking ··3355",err:false},
+      {lbl:"Last Reconciled",val:"Jul 26, 2026",err:false},
+      {lbl:"Days Unreconciled",val:"31 days",err:true},
+      {lbl:"Threshold",val:"30 days",err:false}
+    ],
+    opensRecon:true
   }
 };
 
@@ -10818,9 +11062,17 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
   function aloEnsure(w){if(!aloOpen[w.id]){aloOpen[w.id]={};ALO_CATS.forEach(function(c){aloOpen[w.id][c.id]=true;});}}
   function aloItemBtns(cat,idx,wid){
     var cfg=ALO_ITEM_MODALS[cat.id+":"+idx]||null,a=' data-action="alO-item" data-id="'+wid+'" data-cat="'+cat.id+'" data-idx="'+idx+'"';
+    var ap=' data-action="alO-payment" data-id="'+wid+'" data-cat="'+cat.id+'" data-idx="'+idx+'"';
+    var ar=' data-action="alO-recon" data-id="'+wid+'" data-cat="'+cat.id+'" data-idx="'+idx+'"';
+    var aAR=' data-action="alO-ar" data-id="'+wid+'" data-cat="'+cat.id+'" data-idx="'+idx+'"';
+    var aBudget=' data-action="alO-budget" data-id="'+wid+'" data-cat="'+cat.id+'" data-idx="'+idx+'"';
     if(cfg&&cfg.type==="approval")return '<div class="al-item-actions"><button class="al-act-btn sec"'+a+'>'+ICON("visibility")+'Review</button><button class="al-act-btn pri"'+a+'>'+ICON("check_circle")+'Approve</button></div>';
-    if(cfg&&cfg.btnPri)return '<div class="al-item-actions"><button class="al-act-btn pri"'+a+'>'+cfg.btnPri.label+ICON("arrow_forward")+'</button></div>';
-    return '<div class="al-item-actions"><button class="al-act-btn sec"'+a+'>'+ICON("open_in_new")+'View Details</button></div>';
+    if(cfg&&cfg.opensPayment)return '<div class="al-item-actions"><button class="al-act-btn pri"'+ap+'>'+cfg.btnPri.label+'</button></div>';
+    if(cfg&&cfg.opensRecon)return '<div class="al-item-actions"><button class="al-act-btn sec"'+ar+'>View Details</button></div>';
+    if(cfg&&cfg.opensAR)return '<div class="al-item-actions"><button class="al-act-btn pri"'+aAR+'>View Invoice</button></div>';
+    if(cfg&&cfg.opensBudget)return '<div class="al-item-actions"><button class="al-act-btn sec"'+aBudget+'>Review Budget</button></div>';
+    if(cfg&&cfg.btnPri)return '<div class="al-item-actions"><button class="al-act-btn pri"'+a+'>'+cfg.btnPri.label+'</button></div>';
+    return '<div class="al-item-actions"><button class="al-act-btn sec"'+a+'>View Details</button></div>';
   }
   function aloCatHTML(cat,wid){
     var isOpen=!!(aloOpen[wid]&&aloOpen[wid][cat.id]);
@@ -10884,11 +11136,532 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       if(ev.target===bd){close();return;}
       var b=ev.target.closest&&ev.target.closest("[data-alo]");if(!b)return;ev.stopPropagation();
       var k=b.getAttribute("data-alo");close();
+      if(k==="go"&&cfg&&cfg.opensBudget){aloOpenBudgetConfirm();return;}
+      if(k==="go"&&cfg&&cfg.opensReport){aloOpenReportModal();return;}
+      if(k==="go"&&cfg&&cfg.opensAR){aloOpenARConfirm();return;}
       if(k==="go")setStatus("Opening "+catTitle+"…");
       if(k==="reject")setStatus("Rejected: "+itemLbl);
       if(k==="approve")setStatus("Approved: "+itemLbl);
     });
     var f=bd.querySelector("[data-alo]");if(f)f.focus();
+  }
+  function aloOpenReportModal(){
+    var ROWS=[
+      {type:"fund-hd",label:"Fund Name: 1 Church"},
+      {type:"section-hd",label:"LIAB & NET ASSETS"},
+      {type:"section-sub",label:"LIABILITIES"},
+      {type:"section-sub",label:"CURRENT LIAB"},
+      {type:"data",label:"Accounts payable (GAAP)",c1:"$0.00",c2:"",c3:"$3,016.63",c4:"$2,791.63",c5:"",c6:"",c7:""},
+      {type:"total",label:"TOTAL CURRENT LIAB",c1:"$0.00",c2:"",c3:"$3,016.63",c4:"$2,791.63",c5:"",c6:"",c7:""},
+      {type:"section-sub",label:"LONG TERM DEBT"},
+      {type:"total",label:"TOTAL LONG TERM DEBT",c1:"$0.00",c2:"",c3:"$0.00",c4:"$0.00",c5:"",c6:"",c7:""},
+      {type:"total",label:"TOTAL LIABILITIES",c1:"$0.00",c2:"",c3:"$3,016.63",c4:"$2,791.63",c5:"",c6:"",c7:""},
+      {type:"section-hd",label:"NET ASSETS"},
+      {type:"section-sub",label:"UNRESTRICTED"},
+      {type:"data",label:"General operations",c1:"$0.00",c2:"",c3:"$89,361.00",c4:"$90,134.01",c5:"",c6:"",c7:""},
+      {type:"data",label:"Bookstore & Coffee House",c1:"$0.00",c2:"",c3:"$0.00",c4:"$1,878.34",c5:"",c6:"",c7:""},
+      {type:"data",label:"Youth trips",c1:"$0.00",c2:"",c3:"$0.00",c4:"$200.00",c5:"",c6:"",c7:""},
+      {type:"total",label:"TOTAL UNRESTRICTED",c1:"$0.00",c2:"",c3:"$89,361.00",c4:"$92,212.35",c5:"",c6:"",c7:""},
+      {type:"section-sub",label:"TEMP RESTRICTED"},
+      {type:"data",label:"Benevolence",c1:"$0.00",c2:"",c3:"$500.00",c4:"$425.00",c5:"",c6:"",c7:""},
+      {type:"data",label:"Missions-home",c1:"$0.00",c2:"",c3:"$550.00",c4:"$575.00",c5:"",c6:"",c7:""},
+      {type:"data",label:"Missions-overseas",c1:"$0.00",c2:"",c3:"$350.00",c4:"$330.00",c5:"",c6:"",c7:""},
+      {type:"data",label:"Missions-trips",c1:"$0.00",c2:"",c3:"$4,700.00",c4:"$12,000.00",c5:"",c6:"",c7:""},
+      {type:"data",label:"Emergency relief",c1:"$0.00",c2:"",c3:"$230.00",c4:"$250.00",c5:"",c6:"",c7:""},
+      {type:"data",label:"Building Fund",c1:"$0.00",c2:"",c3:"$53,000.00",c4:"$52,000.00",c5:"",c6:"",c7:""},
+      {type:"total",label:"TOTAL TEMP RESTRICTED",c1:"$0.00",c2:"",c3:"$59,330.00",c4:"$65,580.00",c5:"",c6:"",c7:""}
+    ];
+    function cell(r,k){return r[k]?'<td>'+r[k]+'</td>':'<td></td>';}
+    var tRows=ROWS.map(function(r){
+      if(r.type==="fund-hd")return '<tr class="al-report-fund-hd"><td colspan="8">'+r.label+'</td></tr>';
+      if(r.type==="section-hd")return '<tr class="al-report-section-hd"><td colspan="8">'+r.label+'</td></tr>';
+      if(r.type==="section-sub")return '<tr class="al-report-section-sub"><td colspan="8">'+r.label+'</td></tr>';
+      if(r.type==="total")return '<tr class="al-report-total-row"><td>'+r.label+'</td>'+cell(r,"c1")+cell(r,"c2")+cell(r,"c3")+cell(r,"c4")+cell(r,"c5")+cell(r,"c6")+cell(r,"c7")+'</tr>';
+      return '<tr><td>'+r.label+'</td>'+cell(r,"c1")+cell(r,"c2")+cell(r,"c3")+cell(r,"c4")+cell(r,"c5")+cell(r,"c6")+cell(r,"c7")+'</tr>';
+    }).join("");
+    var html=
+      '<div class="al-report-backdrop" id="alReportBackdrop">'+
+        '<div class="al-modal-report" role="dialog" aria-modal="true" aria-label="Designated Fund Summary">'+
+          '<div class="al-report-hd">'+
+            '<div class="al-report-hd-left">'+
+              '<button class="al-report-close-btn" id="alReportClose"><span class="material-symbols-rounded" style="font-size:16px">close</span>Close</button>'+
+              '<button class="al-report-edit-btn"><span class="material-symbols-rounded" style="font-size:14px">arrow_back</span>Edit</button>'+
+            '</div>'+
+            '<span class="al-report-hd-title">Designated Fund Summary</span>'+
+            '<div class="al-report-hd-right">'+
+              '<button class="al-report-save-btn">Save Configuration</button>'+
+              '<button class="al-report-sched-btn">Schedule</button>'+
+              '<button class="al-report-share-btn"><span class="material-symbols-rounded" style="font-size:14px">share</span>Share<span class="material-symbols-rounded" style="font-size:14px">arrow_drop_down</span></button>'+
+            '</div>'+
+          '</div>'+
+          '<div class="al-report-body">'+
+            '<div class="al-report-doc">'+
+              '<div class="al-report-doc-hd">'+
+                'Designated Fund Summary for Period 1 July<br>'+
+                'Company: 1 First Church<br>'+
+                'Fiscal Year: 26-27'+
+              '</div>'+
+              '<table class="al-report-tbl">'+
+                '<thead><tr>'+
+                  '<th style="text-align:left">Opening Balance</th>'+
+                  '<th>Beg. Balance</th>'+
+                  '<th>Receipts</th>'+
+                  '<th>Disbursements</th>'+
+                  '<th>YTD Transfers & Adjustments</th>'+
+                  '<th>YTD Receipts</th>'+
+                  '<th>YTD Disbursements</th>'+
+                  '<th></th>'+
+                '</tr></thead>'+
+                '<tbody>'+tRows+'</tbody>'+
+              '</table>'+
+            '</div>'+
+          '</div>'+
+          '<div class="al-report-foot">'+
+            '<span class="al-report-foot-label">Rows per page:</span>'+
+            '<span class="al-report-foot-rpp">25<span class="material-symbols-rounded" style="font-size:14px">arrow_drop_down</span></span>'+
+            '<span class="al-report-foot-count">1\u201325 of 41</span>'+
+            '<div class="al-report-foot-nav">'+
+              '<button disabled aria-label="Previous page"><span class="material-symbols-rounded" style="font-size:18px">chevron_left</span></button>'+
+              '<button aria-label="Next page"><span class="material-symbols-rounded" style="font-size:18px">chevron_right</span></button>'+
+            '</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    var wrap=document.createElement("div");wrap.innerHTML=html;var bd=wrap.firstChild;document.body.appendChild(bd);
+    function closeReport(){bd.classList.add("al-report-hiding");setTimeout(function(){if(bd.parentNode)bd.parentNode.removeChild(bd);},160);document.removeEventListener("keydown",escReport,true);}
+    function escReport(ev){if(ev.key==="Escape"){ev.stopPropagation();closeReport();}}
+    document.addEventListener("keydown",escReport,true);
+    bd.addEventListener("click",function(ev){
+      if(ev.target===bd){closeReport();return;}
+      var btn=ev.target.closest&&ev.target.closest("#alReportClose");if(btn){closeReport();}
+    });
+    var ff=bd.querySelector("button");if(ff)ff.focus();
+  }
+  function aloOpenPaymentConfirm(catTitle){
+    var html=
+      '<div class="al-pay-confirm-backdrop" id="alPayConfirmBd">'+
+        '<div class="al-pay-confirm" role="dialog" aria-modal="true" aria-label="Redirect to Payment Processing">'+
+          '<div class="al-pay-confirm-hd">'+
+            '<div class="al-pay-confirm-hd-icon"><span class="material-symbols-rounded">payments</span></div>'+
+            '<div class="al-pay-confirm-hd-text">'+
+              '<div class="al-pay-confirm-overline">Accounts Payable</div>'+
+              '<div class="al-pay-confirm-title">Redirect to Payment Processing</div>'+
+            '</div>'+
+          '</div>'+
+          '<div class="al-pay-confirm-body">'+
+            '<p class="al-pay-confirm-msg">You are being redirected to the <strong>Accounts Payable &rsaquo; Payment Processing</strong> page to complete this payment. You\'ll be able to review all unpaid invoices and process the outstanding balance.</p>'+
+          '</div>'+
+          '<div class="al-pay-confirm-actions">'+
+            '<button class="btn outlined sm" id="alPayConfirmCancel">Cancel</button>'+
+            '<button class="btn primary sm" id="alPayConfirmProceed">Proceed'+ICON("arrow_forward")+'</button>'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    var wrap=document.createElement("div");wrap.innerHTML=html;var bd=wrap.firstChild;document.body.appendChild(bd);
+    function closeConfirm(){bd.classList.add("al-pay-confirm-hiding");setTimeout(function(){if(bd.parentNode)bd.parentNode.removeChild(bd);},160);document.removeEventListener("keydown",escC,true);}
+    function escC(ev){if(ev.key==="Escape"){ev.stopPropagation();closeConfirm();}}
+    document.addEventListener("keydown",escC,true);
+    bd.querySelector("#alPayConfirmCancel").addEventListener("click",function(){closeConfirm();});
+    bd.querySelector("#alPayConfirmProceed").addEventListener("click",function(){closeConfirm();setTimeout(function(){aloOpenPaymentScreen();},160);});
+    var ff=bd.querySelector("button");if(ff)ff.focus();
+  }
+  function aloOpenPaymentScreen(){
+    var INVOICES=[
+      {sel:false,vendor:"A-1 Advertising(#1598)",city:"Atlanta",state:"GA",inv:"14",idate:"02/02/202\u2026",ddate:"02/02/20\u2026",avid:true,ach:false,eft:false,hold:false,amt:"$0.21",sep:false,note:true,setup:true},
+      {sel:false,vendor:"A-1 Advertising(#1598)",city:"Atlanta",state:"GA",inv:"14",idate:"02/02/202\u2026",ddate:"02/02/20\u2026",avid:true,ach:false,eft:false,hold:false,amt:"$0.12",sep:false,note:true,setup:true},
+      {sel:true, vendor:"ACH Vendor(#4825)",   city:"Bartlett",state:"TN",inv:"51",idate:"02/06/202\u2026",ddate:"02/28/20\u2026",avid:false,ach:true,eft:false,hold:false,amt:"$7.00",sep:false,note:false,setup:true},
+      {sel:false,vendor:"ACH Vendor(#4825)",   city:"Bartlett",state:"TN",inv:"51",idate:"02/06/202\u2026",ddate:"02/28/20\u2026",avid:false,ach:true,eft:false,hold:false,amt:"$5.00",sep:false,note:false,setup:true},
+      {sel:false,vendor:"ACH Vendor(#4825)",   city:"Bartlett",state:"TN",inv:"24",idate:"02/25/202\u2026",ddate:"02/25/20\u2026",avid:false,ach:true,eft:false,hold:false,amt:"$315.00",sep:false,note:false,setup:true},
+      {sel:false,vendor:"ACH Vendor(#4825)",   city:"Bartlett",state:"TN",inv:"2212345",idate:"02/26/202\u2026",ddate:"02/26/20\u2026",avid:false,ach:false,eft:false,hold:false,amt:"$5.00",sep:false,note:false,setup:true},
+      {sel:false,vendor:"ACH Vendor(#4825)",   city:"Bartlett",state:"TN",inv:"22",idate:"02/26/202\u2026",ddate:"02/26/20\u2026",avid:false,ach:false,eft:false,hold:false,amt:"$798.00",sep:false,note:false,setup:true},
+      {sel:false,vendor:"ACH Vendor(#4825)",   city:"Bartlett",state:"TN",inv:"43",idate:"06/10/2025",ddate:"06/10/202\u2026",avid:false,ach:true,eft:false,hold:false,amt:"$88.00",sep:false,note:false,setup:true},
+      {sel:false,vendor:"ACH Vendor(#4825)",   city:"Bartlett",state:"TN",inv:"42",idate:"06/10/2025",ddate:"06/10/202\u2026",avid:false,ach:true,eft:false,hold:false,amt:"$10.00",sep:false,note:false,setup:true},
+      {sel:false,vendor:"ACH Vendor(#4825)",   city:"Bartlett",state:"TN",inv:"44",idate:"06/25/202\u2026",ddate:"06/25/20\u2026",avid:false,ach:true,eft:false,hold:false,amt:"$5.00",sep:false,note:false,setup:true},
+      {sel:false,vendor:"ACH Vendor(#4825)",   city:"Bartlett",state:"TN",inv:"48",idate:"08/13/202\u2026",ddate:"07/28/20\u2026",avid:false,ach:true,eft:false,hold:false,amt:"$33.00",sep:false,note:false,setup:true},
+      {sel:false,vendor:"ACH Vendor(#4825)",   city:"Bartlett",state:"TN",inv:"56",idate:"10/13/202\u2026",ddate:"10/13/202\u2026",avid:false,ach:true,eft:false,hold:false,amt:"$99.00",sep:false,note:false,setup:true},
+      {sel:true, vendor:"Shah, Als (#4870)",   city:"Tampa",state:"FL",inv:"5282025",idate:"05/27/202\u2026",ddate:"05/27/20\u2026",avid:false,ach:true,eft:false,hold:false,amt:"$180.00",sep:false,note:false,setup:true},
+      {sel:false,vendor:"Walmart, INC.(#1401)", city:"Nashville",state:"TN",inv:"18",idate:"08/08/202\u2026",ddate:"08/08/20\u2026",avid:true,ach:false,eft:false,hold:false,amt:"$3.00",sep:true,note:true,setup:true},
+      {sel:false,vendor:"Walmart, INC.(#1401)", city:"Nashville",state:"TN",inv:"18",idate:"08/08/202\u2026",ddate:"08/08/20\u2026",avid:true,ach:false,eft:false,hold:false,amt:"$5.00",sep:true,note:true,setup:true},
+      {sel:false,vendor:"Walmart, INC.(#1401)", city:"Nashville",state:"TN",inv:"18",idate:"08/08/202\u2026",ddate:"08/08/20\u2026",avid:true,ach:false,eft:false,hold:false,amt:"$3.50",sep:true,note:true,setup:true}
+    ];
+    function ck(v){return v?'<span class="material-symbols-rounded al-pay-icon-check" style="font-size:14px">check</span>':'';}
+    function chkbox(sel){return '<input type="checkbox" class="al-pay-chk"'+(sel?' checked':'')+'>';}
+    var rows=INVOICES.map(function(r){
+      return '<tr class="'+(r.sel?'selected':'')+'">'+
+        '<td>'+chkbox(r.sel)+'</td>'+
+        '<td>'+r.vendor+'</td>'+
+        '<td>'+r.city+'</td>'+
+        '<td>'+r.state+'</td>'+
+        '<td>'+r.inv+'</td>'+
+        '<td>'+r.idate+'</td>'+
+        '<td>'+r.ddate+'</td>'+
+        '<td>'+ck(r.avid)+'</td>'+
+        '<td>'+ck(r.ach)+'</td>'+
+        '<td>'+ck(r.eft)+'</td>'+
+        '<td>'+ck(r.hold)+'</td>'+
+        '<td>'+r.amt+'</td>'+
+        '<td>'+(r.sep?ck(true):'')+'</td>'+
+        '<td>'+(r.note?'<span class="material-symbols-rounded" style="font-size:14px;color:#8fa3c0">description</span>':'')+'</td>'+
+        '<td>'+(r.setup?'<span class="material-symbols-rounded" style="font-size:14px;color:#8fa3c0">edit</span>':'')+'</td>'+
+      '</tr>';
+    }).join("");
+    var html=
+      '<div class="al-pay-screen-wrap" id="alPayScreenWrap">'+
+        '<div class="al-pay-topnav" style="position:relative">'+
+          '<div class="al-pay-topnav-logo"><svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="8"/></svg></div>'+
+          '<span class="material-symbols-rounded al-pay-topnav-grid" style="color:#8fa3c0;font-size:20px">apps</span>'+
+          '<span class="al-pay-topnav-appname">Accounts Payable</span>'+
+          '<div class="al-pay-topnav-right">'+
+            '<span>Aditya Bhaskarrao Lakhmapure</span>'+
+            '<a>Set Out of Office</a>'+
+            '<a>Log Off</a>'+
+            '<span class="material-symbols-rounded" style="font-size:18px;color:#8fa3c0">settings</span>'+
+          '</div>'+
+          '<button class="al-pay-close-overlay" id="alPayScreenClose" aria-label="Close Payment Processing"><span class="material-symbols-rounded" style="font-size:22px">close</span></button>'+
+        '</div>'+
+        '<div class="al-pay-ctx-bar">'+
+          '<div class="al-pay-ctx-bar-bc">'+
+            '<span class="material-symbols-rounded" style="font-size:14px;color:#4a7cf7">home</span>'+
+            '<span class="al-pay-ctx-bar-sep">/</span>'+
+            '<span>Accounts Payable</span>'+
+            '<span class="al-pay-ctx-bar-sep">/</span>'+
+            '<span style="color:#1d2635;font-weight:600">Payment Processing</span>'+
+          '</div>'+
+          '<div class="al-pay-ctx-bar-meta">'+
+            '<span>Company <strong>1 Saint Michael Church</strong></span>'+
+            '<span>Fiscal Year <strong>2025</strong></span>'+
+            '<span>Period <strong>1 January</strong></span>'+
+            '<span>Bank Account <strong>0-0-1-10140 ACB payroll checking</strong></span>'+
+          '</div>'+
+          '<div class="al-pay-ctx-bar-actions">'+
+            '<button><span class="material-symbols-rounded" style="font-size:13px">sync</span> Change</button>'+
+            '<button>Add To My Tasks</button>'+
+          '</div>'+
+        '</div>'+
+        '<div class="al-pay-body">'+
+          '<div class="al-pay-sidebar">'+
+            '<div class="al-pay-nav-item"><span>Enter</span><span class="material-symbols-rounded">chevron_right</span></div>'+
+            '<div class="al-pay-nav-item active"><span>Manage</span><span class="material-symbols-rounded">expand_more</span></div>'+
+            '<div class="al-pay-nav-item"><span>View</span><span class="material-symbols-rounded">chevron_right</span></div>'+
+            '<div class="al-pay-nav-item"><span>Reports</span></div>'+
+            '<div class="al-pay-nav-item"><span>Modify</span><span class="material-symbols-rounded">chevron_right</span></div>'+
+            '<div class="al-pay-nav-item"><span>Utilities</span><span class="material-symbols-rounded">chevron_right</span></div>'+
+            '<div class="al-pay-nav-item"><span>Help</span></div>'+
+          '</div>'+
+          '<div class="al-pay-main">'+
+            '<div class="al-pay-main-hd">'+
+              '<span class="al-pay-main-title">List of Unpaid Invoices</span>'+
+              '<div class="al-pay-main-filters">'+
+                '<label>View</label><select><option>All</option></select>'+
+                '<label>Auto-Select</label><select><option>None</option></select>'+
+              '</div>'+
+            '</div>'+
+            '<div class="al-pay-tbl-wrap">'+
+              '<table class="al-pay-tbl">'+
+                '<thead><tr>'+
+                  '<th><input type="checkbox" class="al-pay-chk"></th>'+
+                  '<th>Vendor</th><th>City</th><th>State</th><th>Invoice #</th>'+
+                  '<th>Invoice Date</th><th>Due Date</th>'+
+                  '<th>Avid</th><th>ACH</th><th>EFT</th><th>Hold</th>'+
+                  '<th>Amount</th><th>Sep</th><th>Note</th><th>Setup</th>'+
+                '</tr></thead>'+
+                '<tbody>'+rows+'</tbody>'+
+              '</table>'+
+            '</div>'+
+            '<div class="al-pay-tbl-summary">'+
+              '<div class="al-pay-tbl-summary-left">On Grid:<br>Total Invoices Lines to be Paid (2):<br>Bank Balance:<br>16 entries, 2 selected</div>'+
+              '<div class="al-pay-tbl-summary-right">$1,556.83<br>$187.00<br>($81,865.3)</div>'+
+            '</div>'+
+            '<div class="al-pay-tbl-foot">'+
+              '<div class="al-pay-tbl-foot-pag">'+
+                '<button><span class="material-symbols-rounded" style="font-size:14px">chevron_left</span></button>'+
+                '<button class="active">1</button>'+
+                '<button><span class="material-symbols-rounded" style="font-size:14px">chevron_right</span></button>'+
+              '</div>'+
+              '<div class="al-pay-tbl-foot-pgsize"><span>Page size:</span><select><option>100</option></select></div>'+
+              '<div class="al-pay-tbl-foot-count">16 items in 1 pages</div>'+
+            '</div>'+
+            '<div class="al-pay-bottom-bar">'+
+              '<button class="btn outlined sm">Process Payments</button>'+
+              '<button class="btn primary sm">Payment Edit Report</button>'+
+            '</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    var wrap=document.createElement("div");wrap.innerHTML=html;var sc=wrap.firstChild;document.body.appendChild(sc);
+    function closeScreen(){sc.classList.add("al-pay-screen-hiding");setTimeout(function(){if(sc.parentNode)sc.parentNode.removeChild(sc);},160);document.removeEventListener("keydown",escS,true);}
+    function escS(ev){if(ev.key==="Escape"){ev.stopPropagation();closeScreen();}}
+    document.addEventListener("keydown",escS,true);
+    sc.querySelector("#alPayScreenClose").addEventListener("click",function(){closeScreen();});
+  }
+  function aloOpenBudgetConfirm(){
+    var bd=document.createElement("div");bd.className="al-pay-confirm-backdrop";
+    bd.innerHTML=
+      '<div class="al-pay-confirm">'+
+        '<div class="al-pay-confirm-hd">'+
+          '<div class="al-pay-confirm-hd-icon"><span class="material-symbols-rounded">open_in_new</span></div>'+
+          '<div class="al-pay-confirm-hd-text">'+
+            '<div class="al-pay-confirm-overline">Redirect</div>'+
+            '<div class="al-pay-confirm-title">Budget Financial Statement</div>'+
+          '</div>'+
+        '</div>'+
+        '<div class="al-pay-confirm-body">'+
+          '<p class="al-pay-confirm-msg">You are about to be redirected to the <strong>Budgeted Financial Statement</strong> report in Accounting. This report shows budget vs actual figures by fund and department for the selected period.</p>'+
+        '</div>'+
+        '<div class="al-pay-confirm-actions">'+
+          '<button class="btn outlined sm" id="alBudgetConfirmCancel">Cancel</button>'+
+          '<button class="btn primary sm" id="alBudgetConfirmProceed">Proceed \u203a</button>'+
+        '</div>'+
+      '</div>';
+    document.body.appendChild(bd);
+    function closeConfirm(){bd.classList.add("al-pay-confirm-hiding");setTimeout(function(){if(bd.parentNode)bd.parentNode.removeChild(bd);},160);}
+    bd.addEventListener("click",function(ev){if(ev.target===bd)closeConfirm();});
+    bd.querySelector("#alBudgetConfirmCancel").addEventListener("click",function(){closeConfirm();});
+    bd.querySelector("#alBudgetConfirmProceed").addEventListener("click",function(){closeConfirm();setTimeout(function(){aloOpenBudgetModal();},160);});
+    var ff=bd.querySelector("button");if(ff)ff.focus();
+  }
+  function aloOpenBudgetModal(){
+    var INCOME_OFFERINGS=[
+      {acct:"40110",desc:"Offering-Tithes/pledge",           budAnn:"$270,000.00",budYTD:"$22,500.00", actYTD:"$24,331.00"},
+      {acct:"40120",desc:"Offering-Tithes/nonpledge",        budAnn:"$800,000.00",budYTD:"$66,666.63", actYTD:"$63,926.00"},
+      {acct:"40140",desc:"Offering-Plate/loose cash",        budAnn:"$9,600.00",  budYTD:"$800.00",    actYTD:"$904.00"},
+      {acct:"40910",desc:"Offering-non cash/stocks",         budAnn:"$12,000.00", budYTD:"$1,000.00",  actYTD:"$0.00"}
+    ];
+    var INCOME_OTHER=[
+      {acct:"45110",desc:"Facility Use Income-Outside Groups",budAnn:"$9,600.00",  budYTD:"$800.00",   actYTD:"$0.00"},
+      {acct:"45120",desc:"Facility Use Income-School",        budAnn:"$24,000.00", budYTD:"$2,000.00", actYTD:"$0.00"},
+      {acct:"45150",desc:"Interest Income",                   budAnn:"$4,000.00",  budYTD:"$333.26",   actYTD:"$0.00"},
+      {acct:"45190",desc:"Other Income",                      budAnn:"$2,800.00",  budYTD:"$233.26",   actYTD:"$0.00"},
+      {acct:"45910",desc:"Gain/loss on sale of investments",  budAnn:"$0.00",      budYTD:"$0.00",     actYTD:"$0.00"}
+    ];
+    var PERSONNEL_SALARIES=[
+      {acct:"51110",desc:"Salaries-Ministers", budAnn:"$220,000.00",budYTD:"$18,333.33",actYTD:"$18,333.33"},
+      {acct:"51120",desc:"Salaries-Staff",     budAnn:"$140,000.00",budYTD:"$11,666.67",actYTD:"$11,580.00"},
+      {acct:"51130",desc:"Salaries-Part Time", budAnn:"$28,000.00", budYTD:"$2,333.33", actYTD:"$2,200.00"},
+      {acct:"51140",desc:"Salaries-Overtime",  budAnn:"$2,000.00",  budYTD:"$166.67",   actYTD:"$0.00"},
+      {acct:"51150",desc:"Salaries-Intern",    budAnn:"$6,000.00",  budYTD:"$500.00",   actYTD:"$500.00"}
+    ];
+    function dataRow(r){
+      return '<tr>'+
+        '<td class="al-bfs-acct">'+r.acct+'</td>'+
+        '<td class="al-bfs-desc">'+r.desc+'</td>'+
+        '<td class="al-bfs-num">'+r.budAnn+'</td>'+
+        '<td class="al-bfs-num">'+r.budYTD+'</td>'+
+        '<td class="al-bfs-num">'+r.actYTD+'</td>'+
+      '</tr>';
+    }
+    var html=
+      '<div class="al-report-backdrop" id="alBudgetBackdrop">'+
+        '<div class="al-modal-report" role="dialog" aria-modal="true" aria-label="Budget Financial Statement">'+
+          '<div class="al-report-hd">'+
+            '<div class="al-report-hd-left">'+
+              '<button class="al-report-close-btn" id="alBudgetClose"><span class="material-symbols-rounded" style="font-size:16px">close</span>Close</button>'+
+              '<button class="al-report-edit-btn"><span class="material-symbols-rounded" style="font-size:14px">arrow_back</span>Edit</button>'+
+            '</div>'+
+            '<span class="al-report-hd-title">Budget Financial Statement</span>'+
+            '<div class="al-report-hd-right">'+
+              '<button class="al-report-save-btn">Save Configuration</button>'+
+              '<button class="al-report-sched-btn">Schedule</button>'+
+              '<button class="al-report-share-btn"><span class="material-symbols-rounded" style="font-size:14px">share</span>Share<span class="material-symbols-rounded" style="font-size:14px">arrow_drop_down</span></button>'+
+            '</div>'+
+          '</div>'+
+          '<div class="al-report-body">'+
+            '<div class="al-report-doc">'+
+              '<div class="al-report-doc-hd">'+
+                '<strong>Budgeted Financial Statement for Period 1 - July</strong><br>'+
+                'Company#: 1 Name: First Church<br>'+
+                'Fiscal Year Beginning 7/1/2026<br>'+
+                'Fund Name: 1 Church / Department Name: 10 Genl Income'+
+              '</div>'+
+              '<table class="al-bfs-tbl">'+
+                '<thead><tr>'+
+                  '<th class="al-bfs-acct">Account #</th>'+
+                  '<th class="al-bfs-desc">Description</th>'+
+                  '<th class="al-bfs-num">Budget Annual</th>'+
+                  '<th class="al-bfs-num">Budget YTD</th>'+
+                  '<th class="al-bfs-num">Actual YTD</th>'+
+                '</tr></thead>'+
+                '<tbody>'+
+                  '<tr class="al-bfs-section-hd"><td colspan="5">NET INC(EXP) CHURCH</td></tr>'+
+                  '<tr class="al-bfs-section-hd"><td colspan="5">INCOME</td></tr>'+
+                  '<tr class="al-bfs-section-hd"><td colspan="5">OFFERINGS</td></tr>'+
+                  INCOME_OFFERINGS.map(dataRow).join("")+
+                  '<tr class="al-bfs-total-row"><td></td><td><strong>TOTAL OFFERINGS</strong></td><td class="al-bfs-num"><strong>$1,091,600.00</strong></td><td class="al-bfs-num"><strong>$90,966.63</strong></td><td class="al-bfs-num"><strong>$89,161.00</strong></td></tr>'+
+                  '<tr class="al-bfs-spacer"><td colspan="5"></td></tr>'+
+                  '<tr class="al-bfs-section-hd"><td colspan="5">OTHER INCOME</td></tr>'+
+                  INCOME_OTHER.map(dataRow).join("")+
+                  '<tr class="al-bfs-total-row"><td></td><td><strong>TOTAL OTHER INCOME</strong></td><td class="al-bfs-num"><strong>$40,400.00</strong></td><td class="al-bfs-num"><strong>$3,366.52</strong></td><td class="al-bfs-num"><strong>$0.00</strong></td></tr>'+
+                  '<tr class="al-bfs-spacer"><td colspan="5"></td></tr>'+
+                  '<tr class="al-bfs-total-row al-bfs-grand-total"><td></td><td><strong>TOTAL INCOME</strong></td><td class="al-bfs-num"><strong>$1,132,000.00</strong></td><td class="al-bfs-num"><strong>$94,333.15</strong></td><td class="al-bfs-num"><strong>$89,161.00</strong></td></tr>'+
+                '</tbody>'+
+              '</table>'+
+              '<div class="al-report-doc-hd" style="margin-top:32px">'+
+                '<strong>Budgeted Financial Statement for Period 1 - July</strong><br>'+
+                'Company#: 1 Name: First Church<br>'+
+                'Fiscal Year Beginning 7/1/2026<br>'+
+                'Fund Name: 1 Church / Department Name: 20 Personnel'+
+              '</div>'+
+              '<table class="al-bfs-tbl">'+
+                '<thead><tr>'+
+                  '<th class="al-bfs-acct">Account #</th>'+
+                  '<th class="al-bfs-desc">Description</th>'+
+                  '<th class="al-bfs-num">Budget Annual</th>'+
+                  '<th class="al-bfs-num">Budget YTD</th>'+
+                  '<th class="al-bfs-num">Actual YTD</th>'+
+                '</tr></thead>'+
+                '<tbody>'+
+                  '<tr class="al-bfs-section-hd"><td colspan="5">PERSONNEL</td></tr>'+
+                  '<tr class="al-bfs-section-hd"><td colspan="5">SALARIES</td></tr>'+
+                  PERSONNEL_SALARIES.map(dataRow).join("")+
+                '</tbody>'+
+              '</table>'+
+            '</div>'+
+          '</div>'+
+          '<div class="al-report-foot">'+
+            '<span class="al-report-foot-label">Rows per page:</span>'+
+            '<span class="al-report-foot-rpp">50<span class="material-symbols-rounded" style="font-size:14px">arrow_drop_down</span></span>'+
+            '<span class="al-report-foot-count">1\u201350 of 346</span>'+
+            '<div class="al-report-foot-nav">'+
+              '<button disabled aria-label="Previous page"><span class="material-symbols-rounded" style="font-size:18px">chevron_left</span></button>'+
+              '<button aria-label="Next page"><span class="material-symbols-rounded" style="font-size:18px">chevron_right</span></button>'+
+            '</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    var wrap=document.createElement("div");wrap.innerHTML=html;var bd=wrap.firstChild;document.body.appendChild(bd);
+    function closeReport(){bd.classList.add("al-report-hiding");setTimeout(function(){if(bd.parentNode)bd.parentNode.removeChild(bd);},160);document.removeEventListener("keydown",escB,true);}
+    function escB(ev){if(ev.key==="Escape"){ev.stopPropagation();closeReport();}}
+    document.addEventListener("keydown",escB,true);
+    bd.addEventListener("click",function(ev){
+      if(ev.target===bd){closeReport();return;}
+      var btn=ev.target.closest&&ev.target.closest("#alBudgetClose");if(btn){closeReport();}
+    });
+    var ff=bd.querySelector("button");if(ff)ff.focus();
+  }
+  function aloOpenReconConfirm(){
+    var html=
+      '<div class="al-pay-confirm-backdrop" id="alReconConfirmBd">'+
+        '<div class="al-pay-confirm" role="dialog" aria-modal="true" aria-label="Redirect to Bank Reconciliation">'+
+          '<div class="al-pay-confirm-hd">'+
+            '<div class="al-pay-confirm-hd-icon"><span class="material-symbols-rounded">account_balance</span></div>'+
+            '<div class="al-pay-confirm-hd-text">'+
+              '<div class="al-pay-confirm-overline">BANK RECONCILIATION</div>'+
+              '<div class="al-pay-confirm-title">Redirect to Bank Reconciliation Report</div>'+
+            '</div>'+
+          '</div>'+
+          '<div class="al-pay-confirm-body">'+
+            '<p class="al-pay-confirm-msg">You are being redirected to the <strong>Bank Reconciliation</strong> report to review outstanding items for the <strong>Payroll Checking \u00b7\u00b73355</strong> account. The report will open in a new view.</p>'+
+          '</div>'+
+          '<div class="al-pay-confirm-actions">'+
+            '<button class="btn outlined sm" id="alReconConfirmCancel">Cancel</button>'+
+            '<button class="btn primary sm" id="alReconConfirmProceed">Proceed'+ICON("arrow_forward")+'</button>'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    var wrap=document.createElement("div");wrap.innerHTML=html;var bd=wrap.firstChild;document.body.appendChild(bd);
+    function closeConfirm(){bd.classList.add("al-pay-confirm-hiding");setTimeout(function(){if(bd.parentNode)bd.parentNode.removeChild(bd);},160);}
+    bd.querySelector("#alReconConfirmCancel").addEventListener("click",function(){closeConfirm();});
+    bd.querySelector("#alReconConfirmProceed").addEventListener("click",function(){closeConfirm();setTimeout(function(){aloOpenReconModal();},160);});
+    var ff=bd.querySelector("button");if(ff)ff.focus();
+  }
+  function aloOpenReconModal(){
+    var ROWS=[
+      {canceled:"",item:"",type:"",date:"",payee:"Beginning Balance",amount:"$567,153.09",reconciled:"",isBold:true},
+      {canceled:"",item:"9103",type:"Check",date:"9/15/2026",payee:"SUW Adams, Alice B",amount:"-$923.50",reconciled:""},
+      {canceled:"",item:"9202",type:"Check",date:"9/1/2026",payee:"SUW Baker, Carl",amount:"-$477.05",reconciled:""},
+      {canceled:"",item:"9203",type:"Check",date:"9/10/2026",payee:"SUW Baker, Carl",amount:"-$277.05",reconciled:""},
+      {canceled:"",item:"9203",type:"Void",date:"9/10/2026",payee:"SUW Baker, Carl",amount:"$277.05",reconciled:""},
+      {canceled:"",item:"8000077",type:"Withdrawal",date:"10/5/2026",payee:"Gift Deletion",amount:"-$40.00",reconciled:""},
+      {canceled:"",item:"9000066",type:"Deposit",date:"9/28/2026",payee:"Test",amount:"$10.00",reconciled:""},
+      {canceled:"",item:"9000067",type:"Deposit",date:"9/28/2026",payee:"Test 2",amount:"$11.00",reconciled:""},
+      {canceled:"",item:"9000068",type:"Deposit",date:"9/28/2026",payee:"Test 3",amount:"$123.00",reconciled:""},
+      {canceled:"",item:"9000069",type:"Deposit",date:"9/28/2026",payee:"Test 5",amount:"$2,233.00",reconciled:""},
+      {canceled:"",item:"9000070",type:"Deposit",date:"10/1/2026",payee:"Gifts Posting",amount:"$570.00",reconciled:""},
+      {canceled:"",item:"9000074",type:"Deposit",date:"10/2/2026",payee:"Account Receivable Payments",amount:"$490.00",reconciled:""},
+      {canceled:"",item:"9000078",type:"Deposit",date:"10/3/2026",payee:"Loan Processing Payments",amount:"$806.85",reconciled:""},
+      {canceled:"",item:"9000079",type:"Deposit",date:"10/5/2026",payee:"Loan Processing Payments",amount:"$1,756.85",reconciled:""},
+      {canceled:"",item:"9000080",type:"Deposit",date:"10/5/2026",payee:"Loan Processing Payments",amount:"-$450.00",reconciled:""},
+      {canceled:"",item:"9000081",type:"Deposit",date:"10/5/2026",payee:"Loan Processing Void Payment",amount:"-$50.00",reconciled:""},
+      {canceled:"",item:"9000082",type:"Deposit",date:"10/5/2026",payee:"Gifts Posting",amount:"$890.00",reconciled:""}
+    ];
+    var tableRows=ROWS.map(function(r){
+      return '<tr'+(r.isBold?' class="al-recon-bold-row"':'')+'>'+
+        '<td>'+r.canceled+'</td>'+
+        '<td>'+r.item+'</td>'+
+        '<td>'+r.type+'</td>'+
+        '<td>'+r.date+'</td>'+
+        '<td class="al-recon-payee">'+r.payee+'</td>'+
+        '<td class="al-recon-amt">'+r.amount+'</td>'+
+        '<td>'+r.reconciled+'</td>'+
+      '</tr>';
+    }).join("");
+    var html=
+      '<div class="al-report-backdrop" id="alReconBackdrop">'+
+        '<div class="al-modal-report" role="dialog" aria-modal="true" aria-label="Bank Reconciliation">'+
+          '<div class="al-report-hd">'+
+            '<div class="al-report-hd-left">'+
+              '<button class="al-report-close-btn" id="alReconClose"><span class="material-symbols-rounded" style="font-size:16px">close</span>Close</button>'+
+              '<button class="al-report-edit-btn"><span class="material-symbols-rounded" style="font-size:14px">arrow_back</span>Edit</button>'+
+            '</div>'+
+            '<span class="al-report-hd-title">Bank Reconciliation</span>'+
+            '<div class="al-report-hd-right">'+
+              '<button class="al-report-save-btn">Save Configuration</button>'+
+              '<button class="al-report-sched-btn">Schedule</button>'+
+              '<button class="al-report-share-btn"><span class="material-symbols-rounded" style="font-size:14px">share</span>Share<span class="material-symbols-rounded" style="font-size:14px">arrow_drop_down</span></button>'+
+            '</div>'+
+          '</div>'+
+          '<div class="al-report-body">'+
+            '<div class="al-report-doc">'+
+              '<div class="al-report-doc-hd">'+
+                '<strong>Bank Reconciliation Outstanding Items for</strong><br>'+
+                'Sorted by : Canceled, Item Number, Type, Payee, Reconciled, Item Date and Amount<br>'+
+                '9/1/2026 \u2013 10/7/2026<br>'+
+                '1-10110 ACB operating checking'+
+              '</div>'+
+              '<div class="al-recon-summary">'+
+                '<div class="al-recon-summary-title">Summary</div>'+
+                '<table class="al-recon-sum-table">'+
+                  '<tr><td>Opening Balance:</td><td class="al-recon-sum-amt">$567,153.09</td></tr>'+
+                  '<tr><td>Deposits:</td><td class="al-recon-sum-amt">$7,840.70</td></tr>'+
+                  '<tr><td>Checks and Voids:</td><td class="al-recon-sum-amt">-$1,400.55</td></tr>'+
+                  '<tr><td>Withdrawals:</td><td class="al-recon-sum-amt">-$40.00</td></tr>'+
+                  '<tr><td><strong>Ending Balance:</strong></td><td class="al-recon-sum-amt"><strong>$573,553.24</strong></td></tr>'+
+                '</table>'+
+              '</div>'+
+              '<table class="al-recon-detail-table">'+
+                '<thead><tr>'+
+                  '<th class="al-recon-th-ul">Canceled</th>'+
+                  '<th class="al-recon-th-ul">Item #</th>'+
+                  '<th class="al-recon-th-ul">Type</th>'+
+                  '<th class="al-recon-th-ul">Date</th>'+
+                  '<th class="al-recon-th-ul al-recon-payee">Payee</th>'+
+                  '<th class="al-recon-th-ul al-recon-amt">Amount</th>'+
+                  '<th class="al-recon-th-ul">Reconciled</th>'+
+                '</tr></thead>'+
+                '<tbody>'+tableRows+'</tbody>'+
+              '</table>'+
+            '</div>'+
+          '</div>'+
+          '<div class="al-report-foot">'+
+            '<span class="al-report-foot-label">Rows per page:</span>'+
+            '<span class="al-report-foot-rpp">50<span class="material-symbols-rounded" style="font-size:14px">arrow_drop_down</span></span>'+
+            '<span class="al-report-foot-count">1\u201323 of 23</span>'+
+            '<div class="al-report-foot-nav">'+
+              '<button disabled aria-label="Previous page"><span class="material-symbols-rounded" style="font-size:18px">chevron_left</span></button>'+
+              '<button disabled aria-label="Next page"><span class="material-symbols-rounded" style="font-size:18px">chevron_right</span></button>'+
+            '</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    var wrap=document.createElement("div");wrap.innerHTML=html;var bd=wrap.firstChild;document.body.appendChild(bd);
+    function closeReport(){bd.classList.add("al-report-hiding");setTimeout(function(){if(bd.parentNode)bd.parentNode.removeChild(bd);},160);document.removeEventListener("keydown",escR,true);}
+    function escR(ev){if(ev.key==="Escape"){ev.stopPropagation();closeReport();}}
+    document.addEventListener("keydown",escR,true);
+    bd.addEventListener("click",function(ev){
+      if(ev.target===bd){closeReport();return;}
+      var btn=ev.target.closest&&ev.target.closest("#alReconClose");if(btn){closeReport();}
+    });
+    var ff=bd.querySelector("button");if(ff)ff.focus();
   }
   function aloHandle(a,id,t){
     var w=find(id);if(!w)return false;aloEnsure(w);
@@ -10899,7 +11672,201 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       aloOpen[id][cat]=will;render();return true;}
     if(a==="alO-item"){var cid=t.getAttribute("data-cat"),idx=parseInt(t.getAttribute("data-idx"),10)||0,cd=ALO_CATS.filter(function(c){return c.id===cid;})[0];
       if(cd)aloOpenModal(cd.sev,cd.title,String(cd.items[idx]||"").replace(/<[^>]+>/g,""),ALO_ITEM_MODALS[cid+":"+idx]||null);return true;}
+    if(a==="alO-payment"){var pcid=t.getAttribute("data-cat"),pidx=parseInt(t.getAttribute("data-idx"),10)||0,pcfg=ALO_ITEM_MODALS[pcid+":"+pidx]||null,pcd=ALO_CATS.filter(function(c){return c.id===pcid;})[0];
+      aloOpenPaymentMerged(pcfg,pcd?pcd.sev:"err");return true;}
+    if(a==="alO-recon"){var rcid=t.getAttribute("data-cat"),ridx=parseInt(t.getAttribute("data-idx"),10)||0,rcfg=ALO_ITEM_MODALS[rcid+":"+ridx]||null,rcd=ALO_CATS.filter(function(c){return c.id===rcid;})[0];
+      aloOpenReconMerged(rcfg,rcd?rcd.sev:"warn");return true;}
+    if(a==="alO-ar"){var arcid=t.getAttribute("data-cat"),aridx=parseInt(t.getAttribute("data-idx"),10)||0,arcfg=ALO_ITEM_MODALS[arcid+":"+aridx]||null,arcd=ALO_CATS.filter(function(c){return c.id===arcid;})[0];
+      aloOpenARMerged(arcfg,arcd?arcd.sev:"warn");return true;}
+    if(a==="alO-budget"){
+      var bcid=t.getAttribute("data-cat"),bidx=parseInt(t.getAttribute("data-idx"),10)||0;
+      var bcfg=ALO_ITEM_MODALS[bcid+":"+bidx]||null;
+      var bcd=ALO_CATS.filter(function(c){return c.id===bcid;})[0];
+      aloOpenBudgetMerged(bcfg,bcd?bcd.sev:"warn");return true;}
     return false;
+  }
+  function aloMergedModal(cfg,sev,proceedLabel,proceedFn){
+    if(!cfg)return;
+    var sevCls=sev==="err"?"sev-err":"sev-warn";
+    var rows=(cfg.rows||[]).map(function(r){
+      return '<div class="al-modal-row"><span class="al-modal-lbl">'+r.lbl+'</span><span class="al-modal-val'+(r.err?" val-err":"")+'">'+r.val+'</span></div>';
+    }).join("");
+    var noteText=cfg.redirectNote||"";
+    var bd=document.createElement("div");bd.className="al-modal-backdrop";
+    bd.innerHTML=
+      '<div class="al-modal al-modal-md" role="dialog" aria-modal="true" aria-label="'+aloEsc(cfg.title||"")+'">'+
+        '<div class="al-modal-hd">'+
+          '<div class="al-modal-hd-text">'+
+            (cfg.sevLabel?'<div class="al-modal-sev '+sevCls+'">'+cfg.sevLabel+'</div>':'')+
+            '<div class="al-modal-title">'+(cfg.title||"")+'</div>'+
+          '</div>'+
+          '<button class="al-modal-close iconbtn" id="alMergedClose" aria-label="Close">'+ICON("close")+'</button>'+
+        '</div>'+
+        '<div class="al-modal-body">'+
+          (rows?'<div class="al-modal-table">'+rows+'</div>':'')+
+          (noteText?'<div class="al-modal-redirect-note">'+ICON("open_in_new")+'<span>'+noteText+'</span></div>':'')+
+        '</div>'+
+        '<div class="al-modal-actions">'+
+          '<button class="btn outlined sm" id="alMergedCancel">Cancel</button>'+
+          '<button class="btn primary sm" id="alMergedProceed">'+proceedLabel+'</button>'+
+        '</div>'+
+      '</div>';
+    document.body.appendChild(bd);
+    function close(){bd.classList.add("al-modal-hiding");setTimeout(function(){if(bd.parentNode)bd.parentNode.removeChild(bd);},160);document.removeEventListener("keydown",esc,true);}
+    function esc(ev){if(ev.key==="Escape"){ev.stopPropagation();close();}}
+    document.addEventListener("keydown",esc,true);
+    bd.addEventListener("click",function(ev){if(ev.target===bd)close();});
+    bd.querySelector("#alMergedClose").addEventListener("click",function(){close();});
+    bd.querySelector("#alMergedCancel").addEventListener("click",function(){close();});
+    bd.querySelector("#alMergedProceed").addEventListener("click",function(){close();setTimeout(function(){proceedFn();},160);});
+    var ff=bd.querySelector("button");if(ff)ff.focus();
+  }
+  function aloOpenPaymentMerged(cfg,sev){
+    var c=cfg||{sevLabel:"Critical: Payment Overdue",title:"Overdue Payables",rows:[],redirectNote:""};
+    c.redirectNote=c.redirectNote||"Opens <strong>AP Payment Processing</strong> — review and process the overdue invoice.";
+    aloMergedModal(c,sev,"Process Payment",function(){aloOpenPaymentScreen();});
+  }
+  function aloOpenReconMerged(cfg,sev){
+    var c=cfg||{sevLabel:"Warning: Reconciliation Overdue",title:"Unreconciled Bank Account",rows:[],redirectNote:""};
+    c.redirectNote=c.redirectNote||"Opens the <strong>Bank Reconciliation</strong> report for the selected account.";
+    aloMergedModal(c,sev,"View Details",function(){aloOpenReconModal();});
+  }
+  function aloOpenARMerged(cfg,sev){
+    var c=cfg||{sevLabel:"Warning: Receivable Outstanding",title:"Outstanding Invoice",rows:[],redirectNote:""};
+    c.redirectNote=c.redirectNote||"Opens <strong>AR &rsaquo; Unposted Invoices</strong> — review and post outstanding AR invoices.";
+    aloMergedModal(c,sev,"View Invoice",function(){aloOpenARScreen();});
+  }
+  function aloOpenBudgetMerged(cfg,sev){
+    var c=cfg||{sevLabel:"Warning: Budget Exceeded",title:"Budget Exceeded",rows:[]};
+    c.redirectNote=c.redirectNote||"Opens the <strong>Budgeted Financial Statement</strong> — budget vs actual by fund and department.";
+    aloMergedModal(c,sev,"Review Budget",function(){aloOpenBudgetModal();});
+  }
+  function aloOpenARConfirm(){
+    var html=
+      '<div class="al-pay-confirm-backdrop" id="alARConfirmBd">'+
+        '<div class="al-pay-confirm" role="dialog" aria-modal="true" aria-label="Redirect to Accounts Receivable">'+
+          '<div class="al-pay-confirm-hd">'+
+            '<div class="al-pay-confirm-hd-icon"><span class="material-symbols-rounded">receipt_long</span></div>'+
+            '<div class="al-pay-confirm-hd-text">'+
+              '<div class="al-pay-confirm-overline">ACCOUNTS RECEIVABLE</div>'+
+              '<div class="al-pay-confirm-title">Redirect to Unposted Invoices</div>'+
+            '</div>'+
+          '</div>'+
+          '<div class="al-pay-confirm-body">'+
+            '<p class="al-pay-confirm-msg">You are being redirected to <strong>Accounts Receivable &rsaquo; Unposted Invoices</strong>. Here you can review all outstanding AR invoices, import transactions, and post invoices for the selected period.</p>'+
+          '</div>'+
+          '<div class="al-pay-confirm-actions">'+
+            '<button class="btn outlined sm" id="alARConfirmCancel">Cancel</button>'+
+            '<button class="btn primary sm" id="alARConfirmProceed">Proceed '+ICON("arrow_forward")+'</button>'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    var wrap=document.createElement("div");wrap.innerHTML=html;var bd=wrap.firstChild;document.body.appendChild(bd);
+    function closeConfirm(){bd.classList.add("al-pay-confirm-hiding");setTimeout(function(){if(bd.parentNode)bd.parentNode.removeChild(bd);},160);}
+    bd.addEventListener("click",function(ev){if(ev.target===bd)closeConfirm();});
+    bd.querySelector("#alARConfirmCancel").addEventListener("click",function(){closeConfirm();});
+    bd.querySelector("#alARConfirmProceed").addEventListener("click",function(){closeConfirm();setTimeout(function(){aloOpenARScreen();},160);});
+    var ff=bd.querySelector("button");if(ff)ff.focus();
+  }
+  function aloOpenARScreen(){
+    var AR_ROWS=[
+      {customer:"ach, Lady",       billto:"ach, Lady",       inv:"142",date:"10/13/2025",due:"10/20/2025",rc:"Church",amt:"$0.00",   hasNote:true, hasAttach:true, hasInfo:true,  importType:""},
+      {customer:"ach, Lady",       billto:"ach, Lady",       inv:"143",date:"10/13/2025",due:"10/20/2025",rc:"Church",amt:"$77.00",  hasNote:false,hasAttach:false,hasInfo:true,  importType:""},
+      {customer:"ACH Vendor",      billto:"ACH Vendor",      inv:"138",date:"08/13/2025",due:"08/20/2025",rc:"Church",amt:"$16.00",  hasNote:false,hasAttach:false,hasInfo:true,  importType:""},
+      {customer:"Money, PersonPutMoneyIn Send",billto:"Money, PersonPutMoneyIn Send",inv:"144",date:"10/23/2025",due:"10/30/2025",rc:"Church",amt:"$600.00", hasNote:false,hasAttach:false,hasInfo:true,  importType:""},
+      {customer:"Rodriguez, Evan", billto:"Rodriguez, Evan", inv:"146",date:"12/12/2025",due:"12/19/2025",rc:"Church",amt:"$500.00", hasNote:false,hasAttach:false,hasInfo:true,  importType:""},
+      {customer:"Wright, Nitzi",   billto:"Wright, Nitzi",   inv:"100",date:"06/01/2024",due:"06/01/2024",rc:"Church",amt:"$6.00",   hasNote:true, hasAttach:false,hasInfo:true,  importType:"Excel"},
+      {customer:"Wright, Nitzi",   billto:"Wright, Nitzi",   inv:"101",date:"06/02/2024",due:"06/02/2024",rc:"Church",amt:"$7.00",   hasNote:true, hasAttach:false,hasInfo:true,  importType:"Excel"}
+    ];
+    var total=AR_ROWS.reduce(function(s,r){return s+parseFloat(r.amt.replace(/[$,]/g,""));},0);
+    function fmtTot(n){return "$"+n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,",");}
+    var rows=AR_ROWS.map(function(r){
+      return '<tr>'+
+        '<td><input type="checkbox" class="al-ar-chk"></td>'+
+        '<td>'+r.customer+'</td>'+
+        '<td>'+r.billto+'</td>'+
+        '<td>'+r.inv+'</td>'+
+        '<td>'+r.date+'</td>'+
+        '<td>'+r.due+'</td>'+
+        '<td>'+r.rc+'</td>'+
+        '<td>'+r.amt+'</td>'+
+        '<td>'+(r.hasNote?'<span class="al-ar-icon-cell">'+ICON("description")+'</span>':'')+'</td>'+
+        '<td>'+(r.importType?'<span class="al-ar-import-type">'+r.importType+'</span>':'')+'</td>'+
+        '<td>'+(r.hasAttach?'<span class="al-ar-icon-cell">'+ICON("attach_file")+'</span>':'')+'</td>'+
+        '<td>'+(r.hasInfo?'<span class="al-ar-icon-cell">'+ICON("info")+'</span>':'')+'</td>'+
+        '<td><span class="al-ar-setup-cell"></span></td>'+
+        '<td class="al-ar-actions-cell"><button class="al-ar-row-btn" title="Edit">'+ICON("edit")+'</button><button class="al-ar-row-btn" title="Delete">'+ICON("delete")+'</button></td>'+
+      '</tr>';
+    }).join("");
+    var html=
+      '<div class="al-ar-screen" id="alARScreen">'+
+        /* top nav bar */
+        '<div class="al-ar-topbar">'+
+          '<div class="al-ar-topbar-left">'+
+            '<span class="material-symbols-rounded" style="font-size:20px;margin-right:6px;">grid_view</span>'+
+            '<span class="al-ar-topbar-appname">Accounts Receivable</span>'+
+          '</div>'+
+          '<div class="al-ar-topbar-right">'+
+            '<div class="al-ar-topbar-meta"><span class="al-ar-meta-label">Company</span><span class="al-ar-meta-val">1 Saint Michael Church</span></div>'+
+            '<div class="al-ar-topbar-meta"><span class="al-ar-meta-label">Fiscal Year</span><span class="al-ar-meta-val">2025</span></div>'+
+            '<div class="al-ar-topbar-meta"><span class="al-ar-meta-label">Period</span><span class="al-ar-meta-val">1 January</span></div>'+
+            '<div class="al-ar-topbar-meta"><span class="al-ar-meta-label">Bank Account</span><span class="al-ar-meta-val">0-0-1-10140 ACB payroll checking</span></div>'+
+            '<button class="al-ar-screen-close" id="alARScreenClose" aria-label="Close">'+ICON("close")+'</button>'+
+          '</div>'+
+        '</div>'+
+        /* breadcrumb */
+        '<div class="al-ar-breadcrumb">'+
+          ICON("home")+' / <span class="al-ar-bc-link">Accounts Receivable</span> / <span>Unposted Invoices</span>'+
+        '</div>'+
+        /* body */
+        '<div class="al-ar-body">'+
+          /* sidebar */
+          '<nav class="al-ar-sidebar">'+
+            '<div class="al-ar-nav-item">'+ICON("edit")+'<span>Enter</span><span class="al-ar-nav-chev">'+ICON("chevron_right")+'</span></div>'+
+            '<div class="al-ar-nav-item">'+ICON("tune")+'<span>Manage</span><span class="al-ar-nav-chev">'+ICON("chevron_right")+'</span></div>'+
+            '<div class="al-ar-nav-item">'+ICON("visibility")+'<span>View</span><span class="al-ar-nav-chev">'+ICON("chevron_right")+'</span></div>'+
+            '<div class="al-ar-nav-item al-ar-nav-active">'+ICON("bar_chart")+'<span>Reports</span><span class="al-ar-nav-chev">'+ICON("chevron_right")+'</span></div>'+
+            '<div class="al-ar-nav-item">'+ICON("settings")+'<span>Modify</span><span class="al-ar-nav-chev">'+ICON("chevron_right")+'</span></div>'+
+            '<div class="al-ar-nav-item">'+ICON("build")+'<span>Utilities</span><span class="al-ar-nav-chev">'+ICON("chevron_right")+'</span></div>'+
+            '<div class="al-ar-nav-item">'+ICON("help")+'<span>Help</span></div>'+
+          '</nav>'+
+          /* main */
+          '<div class="al-ar-main">'+
+            '<div class="al-ar-filters-bar">'+
+              '<span class="al-ar-filters-lbl">Filters</span>'+
+              ICON("expand_more")+
+            '</div>'+
+            '<div class="al-ar-section-hd">'+
+              '<span class="al-ar-section-title">Add New Invoice</span>'+
+              '<div class="al-ar-section-btns">'+
+                '<button class="al-ar-btn-outlined">Import Transactions</button>'+
+                '<button class="al-ar-btn-primary">Add New Invoice</button>'+
+              '</div>'+
+            '</div>'+
+            '<div class="al-ar-tbl-wrap">'+
+              '<table class="al-ar-tbl">'+
+                '<thead><tr>'+
+                  '<th><input type="checkbox" class="al-ar-chk"></th>'+
+                  '<th>Customer</th><th>Bill To</th><th>Invoice #</th><th>Invoice Date</th><th>Due Date</th>'+
+                  '<th>Revenue Center</th><th>Amount</th><th>AI</th><th>Import Type</th><th>Note</th><th>Attach</th><th>Setup</th><th></th>'+
+                '</tr></thead>'+
+                '<tbody>'+rows+'</tbody>'+
+              '</table>'+
+              '<div class="al-ar-tbl-footer">'+
+                '<span class="al-ar-tbl-count">'+AR_ROWS.length+' entries / '+fmtTot(total)+'</span>'+
+                '<div class="al-ar-tbl-footer-btns">'+
+                  '<button class="al-ar-btn-outlined">Post Invoices</button>'+
+                  '<button class="al-ar-btn-primary">Invoice Edit Report</button>'+
+                '</div>'+
+              '</div>'+
+            '</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    var wrap=document.createElement("div");wrap.className="al-ar-backdrop";wrap.id="alARBackdrop";
+    wrap.innerHTML=html;document.body.appendChild(wrap);
+    function closeScreen(){wrap.classList.add("al-pay-confirm-hiding");setTimeout(function(){if(wrap.parentNode)wrap.parentNode.removeChild(wrap);},160);}
+    document.getElementById("alARScreenClose").addEventListener("click",closeScreen);
   }
   WIDGETS.register("alerts",{content:aloContent,about:function(w){return {h:w.title,b:ALO_ABOUT};},click:function(a,id,t){return !!(a&&a.indexOf("alO-")===0&&aloHandle(a,id,t));}});
 /* ===== end W19 Alerts & Actions V2 ===== */
@@ -12037,7 +13004,17 @@ function fkpTileHTML(t){
   if(FKP_STATE.loading)return '<div class="fkp-tile"><div class="fkp-skel lbl"></div><div class="fkp-skel val"></div><div class="fkp-skel meta"></div></div>';
   var cls=t.fav?"pos":"neg";
   var arrow=t.dir==="up"?"↑":"↓";
+  /* Calculation descriptions per tile — shown in the narrow hover tooltip */
+  var calcDesc={
+    "Total Income (YTD)":"Sum of all revenue posted to income accounts from Jan 1 to today.",
+    "Total Expenses (YTD)":"Sum of all amounts posted to expense accounts from Jan 1 to today.",
+    "Net Income (YTD)":"Total Income minus Total Expenses year-to-date."
+  };
+  var tipTxt=fkpEsc((calcDesc[t.lbl]||t.lbl)+' Prev yr: '+money(t.prev)+'. Change: '+(t.dir==="up"?'\u2191':'\u2193')+' '+t.chg+'.');
   return '<div class="fkp-tile">'+
+    '<button type="button" class="iconbtn fkp-info-btn" data-tip="'+tipTxt+'" data-tip-plain data-tip-narrow aria-label="How '+fkpEsc(t.lbl)+' is calculated">'+
+      ICON("info")+
+    '</button>'+
     '<div class="fkp-lbl">'+fkpEsc(t.lbl)+'</div>'+
     '<div class="fkp-val">'+money(t.val)+'</div>'+
     '<div class="fkp-meta">'+
