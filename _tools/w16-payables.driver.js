@@ -47,7 +47,20 @@ const wide = rows.filter(function (w) { return w.size === "wide"; })[0], xw = ro
 
 /* ---------- 4. her controls are intact ---------------------------------- */
 const e = EX.contentHTML(wide), d = EX.contentHTML(xw);
-A.contains(e, 'data-action="ap-due"', "Explore: due-date chip"); A.contains(d, 'data-action="ap-due"', "Detail: due-date chip");
+/* Jo phase-2 d7f33b0 (owner, 9 Oct: her widget one to one, except the Glance and the invoice pop-up): the header is
+   the total with a "Total due" eyebrow and an inline search; the due-date chip gave way to four filter tiles. */
+["All dates", "Overdue", "Due this week", "Due this month"].forEach(function (lbl) { A.contains(e, '<span class="ap-tile-lbl">' + lbl + "</span>", "Explore: filter tile " + lbl); A.contains(d, '<span class="ap-tile-lbl">' + lbl + "</span>", "Detail: filter tile " + lbl); });
+A.contains(e, 'data-action="ap-set-due" data-due="week"', "the tiles reuse her ap-set-due handler"); A.absent(e, 'data-action="ap-due"', "no due-date chip in the header any more (her phase-2 header)");
+A.contains(e, '<span class="kpi-eyebrow">Total due</span>', "Explore: Total due eyebrow over the total"); A.contains(e, 'placeholder="Search vendor, invoice or date"', "Explore: inline search in the header");
+A.contains(e, 'class="ap-sbadge ap-sbadge-over"', "Explore: overdue rows carry her negative status badge"); A.contains(e, "ap-sbadge-warn", "and due-within-a-month rows the attention badge");
+A.contains(e, '<span class="ap-c-inv">', "invoice number is plain text (no code-copy helper in this shell)"); A.absent(e, "codecopy", "no codecopy markup");
+A.contains(d, '<div class="dep-col-h">Top vendors owed</div>', "Detail: the right column is Top vendors owed"); A.absent(d, "ap-vendor-drill", "vendor rows do not drill (owner: our pop-up only, not hers)"); A.absent(d, "ap-sum-click", "no drill styling on vendor rows");
+A.absent(S, "function apBillModalHTML(", "her invoice pop-up is not ported"); A.absent(S, "function apVendorModalHTML(", "her vendor pop-up is not ported"); A.absent(S, "AP_AVIDPAY", "no AvidPay flag");
+A.contains(S, 'if(a==="ap-open"){var _inv=t.getAttribute("data-inv")', "our invoice pop-up handler stays"); A.contains(S, 'showModal("Invoice "+_inv,', "and opens through the shell's showModal");
+["ap-vendor-drill", "ap-bill-close", "ap-openbill", "ap-schedule-pay"].forEach(function (act) { A.absent(S, 'a==="' + act + '"', "no handler for " + act); });
+const kpi = rows.filter(function (w) { return w.size === "kpi"; })[0], g = EX.contentHTML(kpi);
+A.contains(g, '<span class="sc-nm">Accounts payable</span>', "Glance stays ours: scope chip, total, overdue and this-week pills (owner: the Glance is not treated the same)"); A.absent(g, "kpi-eyebrow", "no eyebrow at Glance"); A.absent(g, "ap-tile", "no tiles at Glance");
+A.contains(e, 'data-acct="', "rows carry her search text so the shell's header search filters them");
 EX.setPop({ type: "ap-due", id: wide.id });
 A.eq(EX.triggerSelector(), '[data-action="ap-due"][data-id="' + wide.id + '"]', "trigger selector for her pop-up");
 const pc = EX.popContent(); A.ok(pc && pc.length > 100, "her pop-up content renders through the shell (" + (pc || "").length + " bytes)");

@@ -888,13 +888,13 @@
 .ap-due-chip .fc-label{display:inline-flex;align-items:center;gap:var(--gap-xtight);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 
 /* KPI overdue / nothing-overdue pill */
-.ap-pill{display:inline-flex;align-items:center;gap:var(--gap-xxxtight);font-size:var(--type-size-12);font-weight:600;border-radius:var(--cornerradius-full);padding:var(--padding-xxxtight) var(--padding-tight) var(--padding-xxxtight) var(--padding-xtight);font-variant-numeric:tabular-nums;white-space:nowrap;}
-.ap-pill .material-symbols-rounded{font-size:var(--type-size-14);}
+.ap-pill{display:inline-flex;align-items:center;gap:var(--gap-xxxtight);font-size:var(--type-size-12);font-weight:600;border-radius:var(--cornerradius-full);padding:var(--padding-xxxtight) var(--padding-tight) var(--padding-xxxtight) var(--padding-xtight);font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--semantic-color-foreground-static-info-on-subtle,var(--am-600));background:var(--semantic-color-fill-static-info-subtle,var(--am-100));}
+.ap-pill .material-symbols-rounded{font-size:var(--type-size-16);}
 .ap-pill.warn{color:var(--red-100);background:var(--red-10);}
 .ap-pill.pos{color:var(--txt-pos,var(--primitive-color-green-500));background:var(--wn-200);}
+.ap-pill.ap-week{color:var(--primitive-color-saffron-500);background:var(--primitive-color-saffron-25);}
 
 /* glance caption (cash needed soon) */
-.ap-glance-cap{font-size:var(--type-size-11);color:var(--txt-subtle);margin-top:var(--padding-xxtight);}
 
 /* dropdown right-aligned amount; overdue amounts/subtitles in red */
 .ap-mi-amt{margin-left:auto;padding-left:var(--padding-tight);font-size:var(--type-size-12);font-weight:600;font-variant-numeric:tabular-nums;color:var(--txt-secondary);}
@@ -904,57 +904,77 @@
 
 /* ---- table columns ---- */
 .ap-c-inv{flex:0 0 92px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--txt-secondary);font-variant-numeric:tabular-nums;}
-.ap-c-due{flex:0 0 158px;min-width:0;display:flex;flex-direction:column;gap:var(--gap-xxxtight);}
 .ap-c-duedate{flex:0 0 108px;min-width:0;color:var(--txt-secondary);font-variant-numeric:tabular-nums;white-space:nowrap;}
 .ap-c-status{flex:0 0 140px;min-width:0;display:flex;align-items:center;}
 .wt-head .ap-c-duedate,.wt-head .ap-c-status{color:var(--txt-subtle);}
 .ap-rowclick{cursor:pointer;}
 .ap-rowclick:hover{background:var(--wn-100);}
-.ap-due-d{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.ap-due-days{font-size:var(--type-size-11);color:var(--txt-subtle);display:inline-flex;align-items:center;gap:var(--gap-xxxtight);}
-.ap-due-days .material-symbols-rounded{font-size:var(--type-size-12);}
-.ap-due-days.over{color:var(--red-100);font-weight:600;}
 .wt-head .ap-c-inv,.wt-head .ap-c-due{color:var(--txt-subtle);}
 
 /* ---- aging band subheader inside the table ---- */
-.wt-row.ap-grp{gap:var(--gap-medium);background:var(--wn-100);padding-top:var(--padding-medium);padding-bottom:var(--padding-tight);margin-top:var(--padding-xtight);border-top:1px solid var(--stroke-widget);}
-.ap-grp:first-child{margin-top:0;border-top:none;}
-.ap-grp-nm{font-size:var(--type-size-11);letter-spacing:.05em;}
-.ap-grp-nm{flex:1;min-width:0;display:inline-flex;align-items:center;gap:var(--gap-xtight);font-size:var(--type-size-11);font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--txt-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.ap-grp-nm.over{color:var(--red-100);}
-.ap-grp-nm .material-symbols-rounded{font-size:var(--type-size-14);flex:0 0 auto;}
-.ap-grp-ct{font-weight:500;text-transform:none;letter-spacing:0;color:var(--txt-subtle);font-size:var(--type-size-11);}
-.ap-grp-amt{flex:0 0 auto;font-size:var(--type-size-12);font-weight:600;font-variant-numeric:tabular-nums;color:var(--txt-primary);}
-.ap-grp-amt.over{color:var(--red-100);}
 
 /* ---- explore right column: cash requirements + vendor rollup ---- */
 .ap-col-cash{flex:0 0 300px;}
 .ap-panel{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:var(--padding-xxxtight) var(--padding-medium) var(--padding-medium);}
-.ap-sum-sub{font-size:var(--type-size-11);color:var(--txt-subtle);line-height:1.45;padding:var(--padding-xxxtight) var(--padding-xxxtight) var(--padding-tight);}
-.ap-sum-h{padding:var(--padding-tight) var(--padding-xxxtight) var(--padding-xxxtight);}
 .ap-sum-row{display:flex;align-items:center;gap:var(--gap-tight);width:100%;border:0;background:transparent;font-family:inherit;text-align:left;padding:var(--padding-tight);border-radius:var(--cornerradius-medium);color:var(--txt-primary);cursor:pointer;}
 .ap-sum-row[data-action]:hover{background:var(--wn-100);}
 .ap-sum-row.sel{background:var(--wn-200);box-shadow:inset 0 0 0 1px var(--wn-400);}
 .ap-sum-row.ap-static,.ap-sum-row[disabled]{cursor:default;}
 .ap-sum-row[disabled]{opacity:.55;}
-.ap-sum-all{border-bottom:1px solid var(--stroke-widget);border-radius:var(--cornerradius-medium) var(--cornerradius-medium) 0 0;margin-bottom:var(--padding-xxxtight);}
-.ap-sum-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--gap-xxtight);}
 .ap-sum-lbl{display:inline-flex;align-items:center;gap:var(--gap-xtight);font-size:var(--type-size-12);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.ap-sum-lbl .material-symbols-rounded{font-size:var(--type-size-14);flex:0 0 auto;color:var(--txt-subtle);}
+.ap-sum-lbl .material-symbols-rounded{font-size:var(--type-size-16);flex:0 0 auto;color:var(--txt-subtle);}
 .ap-sum-lbl.over{color:var(--red-100);}
 .ap-sum-lbl.over .material-symbols-rounded{color:var(--red-100);}
-.ap-sum-meta{font-size:var(--type-size-11);color:var(--txt-subtle);}
-.ap-sum-track{width:100%;height:5px;border-radius:var(--cornerradius-full);background:var(--wn-200);overflow:hidden;}
-.ap-sum-fill{display:block;height:100%;border-radius:var(--cornerradius-full);background:var(--am-300);}
-.ap-sum-fill.over{background:var(--am-600);}
-.ap-sum-fill.zero{background:var(--wn-300);}
-.ap-sum-val{flex:0 0 auto;text-align:right;font-size:var(--type-size-12);font-weight:700;font-variant-numeric:tabular-nums;}
+.ap-sum-val{flex:0 0 auto;text-align:right;font-size:var(--type-size-12);font-weight:600;font-variant-numeric:tabular-nums;}
+.ap-sum-row{justify-content:space-between;}
 .ap-sum-val.over{color:var(--red-100);}
-.ap-sum-sep{height:1px;background:var(--stroke-widget);margin:var(--padding-tight) var(--padding-xxxtight) var(--padding-xxxtight);}
 
 /* ---- loading skeleton (table rows) ---- */
 .ap-skel{padding:var(--padding-xtight) 0;}
 .ap-sk-row{display:flex;align-items:center;gap:var(--gap-medium);padding:var(--padding-tight) var(--padding-medium);}
+
+/* ---- header, filter tiles, status badge (Jo phase-2) ---- */
+/* AP header: KPI left, small search inline right. */
+.ap-hd-row{display:flex;align-items:center;gap:var(--gap-medium);padding:var(--padding-xxxtight) var(--padding-xxxtight) 0;}
+.ap-hd-kpi{display:flex;align-items:baseline;gap:var(--gap-tight);min-width:0;}
+.ap-hd-search{margin-left:auto;}
+/* AP filter tiles: icon + tone colour + readable text. */
+.ap-tiles{display:flex;gap:var(--gap-tight);flex-wrap:wrap;padding:var(--padding-tight) var(--padding-medium) var(--padding-medium);}
+.ap-tile{flex:1 1 0;min-width:130px;display:flex;flex-direction:column;gap:var(--gap-xxxtight);align-items:flex-start;padding:var(--padding-tight) var(--padding-medium);border:1px solid var(--stroke-container);border-radius:var(--cornerradius-medium);background:var(--surface-sheet);cursor:pointer;font-family:inherit;text-align:left;transition:border-color var(--dur),box-shadow var(--dur);}
+.ap-tile:hover{border-color:var(--brand-100);box-shadow:0 0 0 2px var(--brand-10);}
+.ap-tile.sel{border-color:var(--brand-100);box-shadow:0 0 0 2px var(--brand-10);}
+.ap-tile-top{display:inline-flex;align-items:center;gap:var(--gap-xxtight);min-width:0;max-width:100%;}
+.ap-tile-ic{font-size:var(--type-size-16);}
+.ap-tile-lbl{font-size:var(--type-size-12);font-weight:600;color:var(--txt-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ap-tile-amt{font-size:var(--type-size-18);font-weight:700;font-variant-numeric:tabular-nums;line-height:1.1;color:var(--txt-primary);}
+.ap-tile-cnt{font-size:var(--type-size-11);color:var(--txt-subtle);white-space:nowrap;}
+/* Whole tile toned per status from ONE matched semantic set (fill + foreground + stroke). */
+.ap-tile-neutral .ap-tile-ic{color:var(--semantic-color-foreground-static-neutral-subtle);}
+.ap-tile-month{background:var(--semantic-color-fill-static-attention-subtle);border-color:var(--semantic-color-stroke-static-attention-subtle);}
+.ap-tile-month .ap-tile-ic,.ap-tile-month .ap-tile-lbl,.ap-tile-month .ap-tile-amt,.ap-tile-month .ap-tile-cnt{color:var(--semantic-color-foreground-static-attention-on-subtle);}
+.ap-tile-over{background:var(--semantic-color-fill-static-negative-subtle);border-color:var(--semantic-color-stroke-static-negative-subtle);}
+.ap-tile-over .ap-tile-ic,.ap-tile-over .ap-tile-lbl,.ap-tile-over .ap-tile-amt,.ap-tile-over .ap-tile-cnt{color:var(--semantic-color-foreground-static-negative-on-subtle);}
+.ap-tile-month.sel{border-color:var(--semantic-color-foreground-static-attention-on-subtle);box-shadow:0 0 0 2px var(--semantic-color-stroke-static-attention-subtle);}
+.ap-tile-over.sel{border-color:var(--semantic-color-foreground-static-negative-on-subtle);box-shadow:0 0 0 2px var(--semantic-color-stroke-static-negative-subtle);}
+/* Due this week = severe (orange). The token set here has no "severe" semantic family (only attention/
+   negative/positive/info), so severe is expressed with the saffron/orange primitive ramp. */
+.ap-tile-week{background:var(--primitive-color-saffron-25);border-color:var(--primitive-color-saffron-200);}
+.ap-tile-week .ap-tile-ic,.ap-tile-week .ap-tile-lbl,.ap-tile-week .ap-tile-amt,.ap-tile-week .ap-tile-cnt{color:var(--primitive-color-saffron-500);}
+.ap-tile-week.sel{border-color:var(--primitive-color-saffron-500);box-shadow:0 0 0 2px var(--primitive-color-saffron-200);}
+.ap-sum-click .ap-sum-val{display:inline-flex;align-items:center;gap:var(--gap-xxxtight);}
+.ap-sum-click .ap-sum-val .material-symbols-rounded{font-size:var(--type-size-18);color:var(--txt-subtle);}
+/* Status cell: plain upcoming text aligns under the Status header; overdue is a negative badge. */
+.ap-sbadge{display:inline-flex;align-items:center;gap:var(--gap-xxtight);min-height:24px;font-size:var(--type-size-12);font-weight:600;line-height:1;padding:var(--padding-xxxtight) var(--padding-tight);border-radius:var(--cornerradius-full);font-variant-numeric:tabular-nums;white-space:nowrap;}
+.ap-sbadge .material-symbols-rounded{font-size:var(--type-size-16);}
+.ap-sbadge-over{color:var(--semantic-color-foreground-static-negative-on-subtle);background:var(--semantic-color-fill-static-negative-subtle);}
+.ap-sbadge-warn{color:var(--semantic-color-foreground-static-attention-on-subtle);background:var(--semantic-color-fill-static-attention-subtle);}
+.ap-sbadge-neutral{color:var(--txt-secondary);background:var(--wn-200);}
+/* Amount column: header right-aligned over the right-aligned amounts. */
+.ap-c-amt{text-align:right;}
+.wt-head .ap-c-amt .wt-sort{justify-content:flex-end;width:100%;}
+/* KPI eyebrow over the total, as Jo's shell draws it (scoped here; the shell has no such rule) */
+.ap-hd-kpi .kpi-eyegrp{display:inline-flex;flex-direction:column;align-items:flex-start;gap:var(--gap-xxxtight);min-width:0;}
+.ap-hd-kpi .kpi-eyebrow{display:block;font-size:var(--type-size-10);font-weight:500;line-height:1.4;letter-spacing:0.6px;color:var(--txt-subtle);}
 
   .mi .mi-sub{margin-left:auto;font-size:11px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;}
   /* Consistent table header styling across every widget */
@@ -12622,40 +12642,49 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
 
   /* aging bands , plain language, earliest first */
   var AP_BANDS=[
-    {id:"overdue",label:"Overdue",glyph:"warning"},
-    {id:"week",   label:"Due this week",  glyph:"event"},
+    {id:"overdue",label:"Overdue",glyph:"error"},
     {id:"month",  label:"Due this month", glyph:"calendar_month"},
-    {id:"later",  label:"Due later",      glyph:"schedule"}
+    {id:"later",  label:"Due later",      glyph:"event_upcoming"}
   ];
+  var AP_MONTHS_FULL=["January","February","March","April","May","June","July","August","September","October","November","December"];
 
   /* ---- helpers ------------------------------------------------------- */
   function apMoney(n){return moneyFull(n);}
-  var AP_M=MONTHS.slice();
+  var AP_M=["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   function apParse(iso){return parseISO(iso);}
+  function apISO(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
   function apFmtLong(iso){var d=apParse(iso);return AP_M[d.getMonth()]+" "+d.getDate()+", "+d.getFullYear();}
   function apDiffDays(iso){var d=apParse(iso),t=new Date(AP_TODAY.getFullYear(),AP_TODAY.getMonth(),AP_TODAY.getDate());return Math.round((d-t)/86400000);}
   function apIsOverdue(iso){return apDiffDays(iso)<0;}
   function apDaysLabel(iso){var n=apDiffDays(iso);if(n<0)return "Overdue by "+(-n)+" day"+((-n)===1?"":"s");if(n===0)return "Due today";return "Due in "+n+" day"+(n===1?"":"s");}
 function apDaysShort(iso){var n=apDiffDays(iso);if(n<0)return "Overdue "+(-n)+"d";if(n===0)return "Due today";return "Due "+n+"d";}
+/* Plain, readable due text (never "2d" which reads like "second"): "Due in 2d", "Due in 3w", "Due in 2mo". */
+function apDueText(iso){var n=apDiffDays(iso);if(n===0)return "Due today";if(n<14)return "Due in "+n+"d";if(n<56)return "Due in "+Math.round(n/7)+"w";return "Due in "+Math.round(n/30)+"mo";}
+function apOverdueText(iso){var n=-apDiffDays(iso);return n<14?("Overdue "+n+"d"):("Overdue "+Math.round(n/7)+"w");}
+/* Search haystack for a row: vendor, invoice, and the due date in several spellings
+   (abbrev + full month, both "25 July" and "July 25") so typing a month, a date or a vendor all work. */
+function apRowSearch(x){var d=apParse(x.due),full=AP_MONTHS_FULL[d.getMonth()],day=d.getDate(),yr=d.getFullYear();return [x.vendor,x.inv,apFmtLong(x.due),apFmtShort(x.due),full,full+" "+day,day+" "+full,full+" "+yr].join(" ");}
 function apFmtShort(iso){var d=apParse(iso),s=d.getDate()+" "+AP_M[d.getMonth()];if(d.getFullYear()!==AP_TODAY.getFullYear())s+=" "+d.getFullYear();return s;}
-  function apBandOf(iso){var n=apDiffDays(iso);if(n<0)return "overdue";if(n<=7)return "week";if(n<=30)return "month";return "later";}
+  function apBandOf(iso){var n=apDiffDays(iso);if(n<0)return "overdue";if(n<=30)return "month";return "later";}
   function apEsc(s){return escAttr(s);}
 
   function apDueDates(w){var seen={},out=[];apData(w).forEach(function(x){if(!seen[x.due]){seen[x.due]=1;out.push(x.due);}});out.sort(function(a,b){return apParse(a)-apParse(b);});return out;}
   function apByDate(w){var dates=apDueDates(w);return dates.map(function(iso){var inv=apData(w).filter(function(x){return x.due===iso;});var tot=inv.reduce(function(s,x){return s+x.amount;},0);return {iso:iso,total:tot,count:inv.length,overdue:apIsOverdue(iso)};});}
-  function apBandData(w){var res={overdue:{total:0,count:0},week:{total:0,count:0},month:{total:0,count:0},later:{total:0,count:0}};apData(w).forEach(function(x){var b=apBandOf(x.due);res[b].total+=x.amount;res[b].count++;});return res;}
+  function apBandData(w){var res={overdue:{total:0,count:0},month:{total:0,count:0},later:{total:0,count:0}};apData(w).forEach(function(x){var b=apBandOf(x.due);res[b].total+=x.amount;res[b].count++;});return res;}
   function apTotalDue(w){return apData(w).reduce(function(s,x){return s+x.amount;},0);}
   function apOverdueTotal(w){return apData(w).filter(function(x){return apIsOverdue(x.due);}).reduce(function(s,x){return s+x.amount;},0);}
   function apOverdueCount(w){return apData(w).filter(function(x){return apIsOverdue(x.due);}).length;}
+  function apDueWithin(w,lo,hi){return apData(w).filter(function(x){var d=apDiffDays(x.due);return d>=lo&&d<=hi;}).reduce(function(s,x){return s+x.amount;},0);}
   function apVendors(w){var m={},order=[];apData(w).forEach(function(x){if(!m[x.vendor]){m[x.vendor]={vendor:x.vendor,total:0,count:0,over:0};order.push(x.vendor);}var e=m[x.vendor];e.total+=x.amount;e.count++;if(apIsOverdue(x.due))e.over+=x.amount;});var arr=order.map(function(k){return m[k];});arr.sort(function(a,b){return b.total-a.total;});return arr;}
 
   /* current selection: "total" | band id | ISO date. Defaults to Total. */
-  function apIsBand(v){return v==="overdue"||v==="week"||v==="month"||v==="later";}
-  function apSel(w){var v=w&&w.apDue;if(v==null||v==="total")return "total";if(apIsBand(v))return v;var dates=apDueDates(w);return dates.indexOf(v)>-1?v:"total";}
-  function apSelLabel(w){var s=apSel(w);if(s==="total")return "All due dates";if(apIsBand(s)){for(var i=0;i<AP_BANDS.length;i++)if(AP_BANDS[i].id===s)return AP_BANDS[i].label;}return "Due "+apFmtLong(s);}
+  function apIsBand(v){return v==="overdue"||v==="month"||v==="later";}
+  function apSel(w){var v=w&&w.apDue;if(v==null||v==="total")return "total";if(v==="week")return "week";if(apIsBand(v))return v;var dates=apDueDates(w);return dates.indexOf(v)>-1?v:"total";}
+  function apSelLabel(w){var s=apSel(w);if(s==="total")return "All due dates";if(s==="week")return "Due this week";if(apIsBand(s)){for(var i=0;i<AP_BANDS.length;i++)if(AP_BANDS[i].id===s)return AP_BANDS[i].label;}return "Due "+apFmtLong(s);}
 
   function apRows(w){var sel=apSel(w),list=apData(w).slice();
-    if(apIsBand(sel))list=list.filter(function(x){return apBandOf(x.due)===sel;});
+    if(sel==="week")list=list.filter(function(x){var d=apDiffDays(x.due);return d>=0&&d<=7;});
+    else if(apIsBand(sel))list=list.filter(function(x){return apBandOf(x.due)===sel;});
     else if(sel!=="total")list=list.filter(function(x){return x.due===sel;});
     var sk=(w.apsort||"due-asc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
     list.sort(function(a,b){
@@ -12671,12 +12700,12 @@ function apFmtShort(iso){var d=apParse(iso),s=d.getDate()+" "+AP_M[d.getMonth()]
      leading filter glyph + trailing chevron from the shell, sized to content,
      capped so a long date ellipses rather than stretching the toolbar. */
   function apDueChip(w){var spin=w.aploading?'<span class="bgt-spin" aria-hidden="true"></span>':"";
-    return '<button class="filter-chip ap-due-chip" data-action="ap-due" data-id="'+w.id+'" aria-haspopup="listbox" aria-expanded="'+(pop&&pop.type==="ap-due"&&pop.id===w.id?"true":"false")+'" aria-label="Filter by due date, currently '+apEsc(apSelLabel(w))+'"><span class="fc-label">'+spin+apSelLabel(w)+'</span>'+ICON("expand_more")+'</button>';}
+    return '<button class="filter-chip ap-due-chip'+(apSel(w)!=="total"?" applied":"")+'" data-action="ap-due" data-id="'+w.id+'" aria-haspopup="listbox" aria-expanded="'+(pop&&pop.type==="ap-due"&&pop.id===w.id?"true":"false")+'" aria-label="Filter by due date, currently '+apEsc(apSelLabel(w))+'"><span class="fc-label">'+spin+apSelLabel(w)+'</span>'+ICON("expand_more")+'</button>';}
 
   /* KPI badge: overdue money (warn) or a positive "Nothing overdue". */
   /* Compact "due this week" cash-timing signal for the glance/header KPI, beside the
    overdue alarm. Shown only when something is due within the week. */
-function apWeekPill(w){var wk=apBandData(w).week;if(!wk||wk.total<=0)return "";return '<span class="ap-pill" data-tip="'+apEsc(apMoney(wk.total)+" across "+wk.count+" invoice"+(wk.count===1?"":"s")+" falls due this week.")+'" data-tip-plain>'+ICON("event")+apMoney(wk.total)+' due this week</span>';}
+function apWeekPill(w){var wkTotal=apDueWithin(w,0,7);if(wkTotal<=0)return "";var wkCount=apData(w).filter(function(x){var d=apDiffDays(x.due);return d>=0&&d<=7;}).length;return '<span class="ap-pill ap-week" data-tip="'+apEsc(apMoney(wkTotal)+" across "+wkCount+" invoice"+(wkCount===1?"":"s")+" falls due this week.")+'" data-tip-plain>'+ICON("event")+apMoney(wkTotal)+' due this week</span>';}
 function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);return '<span class="ap-pill warn" data-tip="'+apMoney(od)+' across '+n+' invoice'+(n===1?"":"s")+' is past its due date." data-tip-plain>'+ICON("warning")+apMoney(od)+' overdue</span>';}return '<span class="ap-pill pos" data-tip="No outstanding invoice is past its due date." data-tip-plain>'+ICON("check_circle")+'Nothing overdue</span>';}
 
   /* ---- header (Detail / Explore) : two-row .dep-hd ------------------- */
@@ -12684,50 +12713,42 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
      payable + overdue badge (LEFT), one quiet context line under it stating
      count, cash-needed-within-7-days, and "as of". */
   function apHeaderBlock(w,mode){
-    var numInner,ctx;
+    var kpi;
     if(mode==="loading"){
-      numInner='<div class="dep-hd-kpigrp"><span class="sk" style="width:120px;height:22px;border-radius:var(--cornerradius-small)"></span><span class="sk" style="width:110px;height:20px;border-radius:var(--cornerradius-full)"></span></div>';
-      ctx="Updating outstanding invoices…";
+      kpi='<span class="sk" style="width:150px;height:26px;border-radius:6px"></span>';
     }else{
-      numInner='<div class="dep-hd-kpigrp"><span class="metric-value">'+apMoney(apTotalDue(w))+'</span>'+apBadge(w)+apWeekPill(w)+'</div>';
+      kpi='<span class="kpi-eyegrp"><span class="kpi-eyebrow">Total due</span><span class="metric-value">'+apMoney(apTotalDue(w))+'</span></span>';
     }
-    return '<div class="dep-hd">'+
-      '<div class="dep-hd-top">'+apDueChip(w)+'<div class="dep-hd-toggle"></div></div>'+
-      '<div class="dep-hd-num"><div class="bank-numwrap">'+numInner+'</div></div>'+
-      '</div>';}
+    /* KPI on the left; a small search inline on the right (type a vendor, invoice or date). */
+    var search='<div class="dep-search hd-search ap-hd-search"><span class="material-symbols-rounded" aria-hidden="true">search</span><input class="dep-q" placeholder="Search vendor, invoice or date" aria-label="Search invoices by vendor, invoice number or date"></div>';
+    return '<div class="dep-hd"><div class="ap-hd-row"><div class="ap-hd-kpi">'+kpi+'</div>'+search+'</div></div>';}
 
   /* ---- the hero: dense due-date table, grouped by aging band --------- */
-  function apRowHTML(x){var od=apIsOverdue(x.due),n=apDiffDays(x.due);
-    var daysIcon=od?"warning":(n===0?"today":"schedule");
-    return '<div class="wt-row ap-rowclick" data-acct="'+apEsc(x.vendor+" "+x.inv)+'" data-action="ap-open" data-inv="'+apEsc(x.inv)+'" data-vendor="'+apEsc(x.vendor)+'" data-due="'+apEsc(apFmtLong(x.due))+'" data-amt="'+apEsc(apMoney(x.amount))+'" data-status="'+apEsc(apDaysLabel(x.due))+'" role="button" tabindex="0" aria-label="Invoice '+apEsc(x.inv)+' from '+apEsc(x.vendor)+', due '+apFmtLong(x.due)+', '+apDaysLabel(x.due)+', '+apMoney(x.amount)+'. Open invoice.">'+
+  /* One status badge used in the table AND the invoice detail: overdue = negative,
+     due within a month = attention, later = neutral. Icon + label, semantic tokens. */
+  function apStatusChip(iso,full){var n=apDiffDays(iso),lbl=full?apDaysLabel(iso):(n<0?apOverdueText(iso):apDueText(iso));
+    if(n<0)return '<span class="ap-sbadge ap-sbadge-over">'+ICON("error")+lbl+'</span>';
+    if(n<=30)return '<span class="ap-sbadge ap-sbadge-warn">'+ICON(n===0?"event":"schedule")+lbl+'</span>';
+    return '<span class="ap-sbadge ap-sbadge-neutral">'+ICON("schedule")+lbl+'</span>';}
+  function apRowHTML(x){
+    var statusCell=apStatusChip(x.due,false);
+    return '<div class="wt-row ap-rowclick" data-acct="'+apEsc(apRowSearch(x))+'" data-action="ap-open" data-inv="'+apEsc(x.inv)+'" data-vendor="'+apEsc(x.vendor)+'" data-dueiso="'+apEsc(x.due)+'" data-amt="'+apEsc(apMoney(x.amount))+'" role="button" tabindex="0" aria-label="Invoice '+apEsc(x.inv)+' from '+apEsc(x.vendor)+', due '+apFmtLong(x.due)+', '+apDaysLabel(x.due)+', '+apMoney(x.amount)+'. Open invoice.">'+
       '<span class="lr-main">'+x.vendor+'</span>'+
-      '<span class="ap-c-inv">'+x.inv+'</span>'+
+      '<span class="ap-c-inv">'+apEsc(x.inv)+'</span>'+
       '<span class="ap-c-duedate">'+apFmtShort(x.due)+'</span>'+
-      '<span class="ap-c-status"><span class="ap-pill'+(od?" warn":"")+'">'+ICON(daysIcon)+apDaysShort(x.due)+'</span></span>'+
-      '<span class="wt-c2">'+apMoney(x.amount)+'</span></div>';}
+      '<span class="ap-c-status">'+statusCell+'</span>'+
+      '<span class="wt-c2 ap-c-amt">'+apMoney(x.amount)+'</span></div>';}
   function apTable(w){
     var sel=apSel(w),rows=apRows(w);
     var sk=(w.apsort||"due-asc").split("-"),key=sk[0],dir=sk[1]==="asc"?1:-1;
-    function sb(k,label){var on=key===k,ic=on?(dir<0?"arrow_downward":"arrow_upward"):"swap_vert";return '<button class="wt-sort'+(on?" on":"")+'" data-action="ap-sort" data-id="'+w.id+'" data-k="'+k+'">'+label+' '+ICON(ic)+'</button>';}
-    var head='<div class="wt-row wt-head"><span class="lr-main">'+sb("vendor","Vendor")+'</span><span class="ap-c-inv">'+sb("inv","Invoice")+'</span><span class="ap-c-duedate">'+sb("due","Due date")+'</span><span class="ap-c-status">'+sb("status","Status")+'</span><span class="wt-c2">'+sb("amt","Amount")+'</span></div>';
-    var body;
-    if(sel==="total"){
-      /* grouped: one subheader per non-empty aging band + its subtotal. Rows
-         keep the current sort within each band. This is the aging report. */
-      body=AP_BANDS.map(function(b){
-        var br=rows.filter(function(x){return apBandOf(x.due)===b.id;});
-        if(!br.length)return "";
-        var st=br.reduce(function(s,x){return s+x.amount;},0),over=(b.id==="overdue");
-        var gh='<div class="wt-row ap-grp"><span class="ap-grp-nm'+(over?" over":"")+'">'+ICON(b.glyph)+b.label+' <span class="ap-grp-ct">'+br.length+' invoice'+(br.length===1?"":"s")+'</span></span><span class="ap-grp-amt'+(over?" over":"")+'">'+apMoney(st)+'</span></div>';
-        return gh+br.map(apRowHTML).join("");
-      }).join("");
-    }else{
-      body=rows.map(apRowHTML).join("");
-    }
+    function sb(k,label){var on=key===k,ic=on?(dir<0?"arrow_downward":"arrow_upward"):"unfold_more";return '<button class="wt-sort'+(on?" on":"")+'" data-action="ap-sort" data-id="'+w.id+'" data-k="'+k+'">'+label+' '+ICON(ic)+'</button>';}
+    var head='<div class="wt-row wt-head"><span class="lr-main">'+sb("vendor","Vendor")+'</span><span class="ap-c-inv">'+sb("inv","Invoice")+'</span><span class="ap-c-duedate">'+sb("due","Due date")+'</span><span class="ap-c-status">'+sb("status","Status")+'</span><span class="wt-c2 ap-c-amt">'+sb("amt","Amount")+'</span></div>';
+    /* One flat, sorted list for every filter (including All dates); the Status column and the tiles
+       carry overdue/upcoming, so no band section headers. */
+    var body=rows.map(apRowHTML).join("");
     var tot=rows.reduce(function(s,x){return s+x.amount;},0);
     var footLbl=apSelLabel(w)+' ('+rows.length+' invoice'+(rows.length===1?"":"s")+')';
-    var search=(rows.length>6)?'<div class="tbl-search"><div class="dep-search"><span class="material-symbols-rounded">search</span><input class="dep-q" placeholder="Search invoices or vendors" aria-label="Search invoices or vendors"></div></div>':'';
-    return search+'<div class="scroll">'+head+body+'</div><div class="dep-total"><span>'+footLbl+'</span><span>'+apMoney(tot)+'</span></div>';
+    return '<div class="scroll">'+head+body+'</div><div class="dep-total"><span>'+footLbl+'</span><span>'+apMoney(tot)+'</span></div>';
   }
 
   /* ---- explore right column: Cash requirements + Top vendors owed ----
@@ -12737,27 +12758,15 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
      for (11.4), done as synced values-as-text, not an un-synced chart. The
      share bars are aria-hidden magnitude cues (amethyst; overdue a step
      darker), never the sole signal , sign + label carry overdue. */
-  function apMiniBar(frac,cls){var pct=Math.max(3,Math.round(frac*100));return '<span class="ap-sum-track" aria-hidden="true"><span class="ap-sum-fill'+(cls?" "+cls:"")+'" style="width:'+pct+'%"></span></span>';}
+  /* Top vendors owed: just who you owe and how much, biggest first. Not a progress toward anything,
+     so no bar. The invoice count and any overdue amount live on the row's hover, not in tiny text. */
   function apPanel(w){
-    var sel=apSel(w),grand=apTotalDue(w),bd=apBandData(w),n=apData(w).length;
     var out='<div class="ap-panel">';
-    var allSel=(sel==="total");
-    out+='<button class="ap-sum-row ap-sum-all'+(allSel?" sel":"")+'" data-action="ap-set-due" data-due="total" data-id="'+w.id+'" aria-pressed="'+allSel+'"><span class="ap-sum-main"><span class="ap-sum-lbl">'+ICON("account_balance_wallet")+'All due dates</span><span class="ap-sum-meta">'+n+' invoice'+(n===1?"":"s")+' outstanding</span></span><span class="ap-sum-val">'+apMoney(grand)+'</span></button>';
-    AP_BANDS.forEach(function(b){var d=bd[b.id],over=(b.id==="overdue"),has=d.count>0,frac=grand>0?d.total/grand:0,isSel=(sel===b.id);
-      out+='<button class="ap-sum-row'+(isSel?" sel":"")+(has?"":" ap-static")+'"'+(has?' data-action="ap-set-due" data-due="'+b.id+'" data-id="'+w.id+'" aria-pressed="'+isSel+'"':' disabled aria-disabled="true"')+'>'+
-        '<span class="ap-sum-main">'+
-          '<span class="ap-sum-lbl'+(over&&has?" over":"")+'">'+ICON(b.glyph)+b.label+'</span>'+
-          apMiniBar(frac,(over?"over":"")+(has?"":" zero"))+
-          '<span class="ap-sum-meta">'+(has?(d.count+' invoice'+(d.count===1?"":"s")+', '+Math.round(frac*100)+'% of total'):'nothing due')+'</span>'+
-        '</span>'+
-        '<span class="ap-sum-val'+(over&&has?" over":"")+'">'+apMoney(d.total)+'</span></button>';
-    });
-    var vend=apVendors(w).slice(0,5),vmax=vend.length?vend[0].total:1;
-    out+='<div class="ap-sum-sep"></div><div class="dep-col-h ap-sum-h">Top vendors owed</div>';
-    vend.forEach(function(v){var frac=vmax>0?v.total/vmax:0;
-      out+='<div class="ap-sum-row ap-static"><span class="ap-sum-main"><span class="ap-sum-lbl">'+v.vendor+'</span>'+
-        apMiniBar(frac,"")+
-        '<span class="ap-sum-meta">'+v.count+' invoice'+(v.count===1?"":"s")+(v.over>0?', <span class="ap-over">'+apMoney(v.over)+' overdue</span>':'')+'</span></span>'+
+    var vend=apVendors(w).slice(0,6);
+    vend.forEach(function(v){
+      var tip=v.count+' invoice'+(v.count===1?"":"s")+(v.over>0?(' · '+apMoney(v.over)+' overdue'):' · none overdue');
+      out+='<div class="ap-sum-row ap-static" data-tip="'+apEsc(v.vendor+' \u00b7 '+tip)+'" data-tip-plain tabindex="0" aria-label="'+apEsc(v.vendor+', '+apMoney(v.total)+', '+tip)+'">'+
+        '<span class="ap-sum-lbl'+(v.over>0?" over":"")+'">'+v.vendor+'</span>'+
         '<span class="ap-sum-val">'+apMoney(v.total)+'</span></div>';
     });
     return out+'</div>';
@@ -12765,7 +12774,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
   function apFull(w){
     return '<div class="dep-full">'+
       '<div class="dep-col"><div class="dep-col-h">Outstanding invoices</div>'+apTable(w)+'</div>'+
-      '<div class="dep-col ap-col-cash"><div class="dep-col-h">Cash requirements</div>'+apPanel(w)+'</div>'+
+      '<div class="dep-col ap-col-cash"><div class="dep-col-h">Top vendors owed</div>'+apPanel(w)+'</div>'+
       '</div>';}
 
   /* ---- Glance ------------------------------------------------------- */
@@ -12779,16 +12788,35 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
       '</div></div>';}
 
   /* ---- skeleton (table rows; loading is data-fetch only) ------------ */
-  function apSkeleton(){var rows="";[82,58,70,48,64].forEach(function(wd){rows+='<div class="ap-sk-row"><span class="sk" style="flex:1;height:12px;border-radius:var(--cornerradius-small)"></span><span class="sk" style="width:72px;height:12px;border-radius:var(--cornerradius-small)"></span><span class="sk" style="width:'+wd+'px;height:12px;border-radius:var(--cornerradius-small)"></span></div>';});return '<div class="ap-skel">'+rows+'</div>';}
+  function apSkeleton(){var rows="";[82,58,70,48,64].forEach(function(wd){rows+='<div class="ap-sk-row"><span class="sk" style="flex:1;height:12px;border-radius:4px"></span><span class="sk" style="width:72px;height:12px;border-radius:4px"></span><span class="sk" style="width:'+wd+'px;height:12px;border-radius:4px"></span></div>';});return '<div class="ap-skel">'+rows+'</div>';}
 
   /* ---- entry point (single apContent) ------------------------------- */
+  /* W16: one aging-horizon filter as tappable cards under the KPI (widget-wide): Overdue (emphasised),
+     Due this week, Due this month, Later, plus All. Amount-led + count; reuses the ap-set-due handler. */
+  function apBucketCards(w){
+    var sel=apSel(w),grand=apTotalDue(w),bd=apBandData(w),n=apData(w).length;
+    function tile(id,label,icon,tone,amt,cnt){var isSel=(sel===id);
+      return '<button class="ap-tile ap-tile-'+tone+(isSel?" sel":"")+'" data-action="ap-set-due" data-due="'+id+'" data-id="'+w.id+'" aria-pressed="'+isSel+'">'+
+        '<span class="ap-tile-top"><span class="ap-tile-ic material-symbols-rounded" aria-hidden="true">'+icon+'</span><span class="ap-tile-lbl">'+label+'</span></span>'+
+        '<span class="ap-tile-amt">'+apMoney(amt)+'</span>'+
+        '<span class="ap-tile-cnt">'+cnt+' invoice'+(cnt===1?"":"s")+'</span>'+
+      '</button>';}
+    /* Filters most-urgent first, each with its own icon + tone: Overdue (negative/red), Due this week
+       (attention/orange), Due this month (neutral). Colour reinforces the label, it does not carry it alone. */
+    var wkT=apDueWithin(w,0,7),wkC=apData(w).filter(function(x){var d=apDiffDays(x.due);return d>=0&&d<=7;}).length;
+    var cards=tile("total","All dates","receipt_long","neutral",grand,n)+
+      tile("overdue","Overdue","error","over",bd.overdue.total,bd.overdue.count)+
+      tile("week","Due this week","event","week",wkT,wkC)+
+      tile("month","Due this month","calendar_month","neutral",bd.month.total,bd.month.count);
+    return '<div class="ap-tiles" role="group" aria-label="Filter by due date">'+cards+'</div>';
+  }
   function apContent(w){
     if(w.size==="kpi")return apGlance(w);
     if(w.state==="empty"||!apData(w).length){var ec=EMPTY_COPY.payables;return '<div class="state" data-kind="empty">'+ICON("task_alt")+'<div class="state-title">'+ec.title+'</div><div class="state-sub">'+ec.sub+'</div></div>';}
     if(w.aploading)return apHeaderBlock(w,"loading")+apSkeleton();
-    var mh=apHeaderBlock(w);
-    if(w.size==="xwide")return mh+apFull(w);
-    return mh+apTable(w);
+    var mh=apHeaderBlock(w),cards=apBucketCards(w);
+    if(w.size==="xwide")return mh+cards+apFull(w);
+    return mh+cards+apTable(w);
   }
 
   /* ---- loading: only on a data-fetch (filter change), never on sort -- */
@@ -12799,7 +12827,9 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(a==="ap-due"){apDueQuery="";pop=(pop&&pop.type==="ap-due"&&pop.id===id)?null:{type:"ap-due",id:id};render();return true;}
     if(a==="ap-set-due"){var wad=find(id);if(wad){var nv=t.getAttribute("data-due"),cur=apSel(wad);if(nv!==cur){wad.apDue=nv;apLoad(wad);}}pop=null;render();return true;}
     if(a==="ap-sort"){var was=find(id),k=t.getAttribute("data-k");if(was){var cs=(was.apsort||"due-asc").split("-");was.apsort=(cs[0]===k)?(k+"-"+(cs[1]==="asc"?"desc":"asc")):(k+"-"+((k==="vendor"||k==="inv"||k==="due")?"asc":"desc"));}render();return true;}
-    if(a==="ap-open"){var _inv=t.getAttribute("data-inv"),_vn=t.getAttribute("data-vendor"),_du=t.getAttribute("data-due"),_am=t.getAttribute("data-amt"),_st=t.getAttribute("data-status");showModal("Invoice "+_inv,'<div class="pur-po-facts"><div class="pur-po-fact"><span class="pur-po-fact-k">Vendor</span><span class="pur-po-fact-v">'+_vn+'</span></div><div class="pur-po-fact"><span class="pur-po-fact-k">Invoice #</span><span class="pur-po-fact-v">'+_inv+'</span></div><div class="pur-po-fact"><span class="pur-po-fact-k">Due date</span><span class="pur-po-fact-v">'+_du+'</span></div><div class="pur-po-fact"><span class="pur-po-fact-k">Status</span><span class="pur-po-fact-v">'+_st+'</span></div><div class="pur-po-fact"><span class="pur-po-fact-k">Amount</span><span class="pur-po-fact-v">'+_am+'</span></div></div>');return true;}
+    if(a==="ap-open"){var _inv=t.getAttribute("data-inv"),_vn=t.getAttribute("data-vendor"),_iso=t.getAttribute("data-dueiso"),_am=t.getAttribute("data-amt");showModal("Invoice "+_inv,'<div class="pur-po-facts"><div class="pur-po-fact"><span class="pur-po-fact-k">Vendor</span><span class="pur-po-fact-v">'+_vn+'</span></div><div class="pur-po-fact"><span class="pur-po-fact-k">Invoice #</span><span class="pur-po-fact-v">'+_inv+'</span></div><div class="pur-po-fact"><span class="pur-po-fact-k">Due date</span><span class="pur-po-fact-v">'+apFmtLong(_iso)+'</span></div><div class="pur-po-fact"><span class="pur-po-fact-k">Status</span><span class="pur-po-fact-v">'+apDaysLabel(_iso)+'</span></div><div class="pur-po-fact"><span class="pur-po-fact-k">Amount</span><span class="pur-po-fact-v">'+_am+'</span></div></div>');return true;}
+
+
     if(a==="ap-pick-date"){var wap=find(id);if(wap){var iso=t.getAttribute("data-iso"),cur=apSel(wap);if(iso!==cur){wap.apDue=iso;apLoad(wap);}}pop=null;render();return true;}
     return false;
   }
@@ -12819,7 +12849,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
       return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-action="ap-set-due" data-due="'+b.id+'" data-id="'+w.id+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm-stack"><span class="mi-nm">'+b.label+'</span><span class="mi-acctno'+(over?" ap-over":"")+'">'+d.count+' invoice'+(d.count===1?"":"s")+'</span></span>'+(over?'<span class="bank-tag-over">Overdue</span>':'')+'<span class="ap-mi-amt'+(over?" ap-over":"")+'">'+apMoney(d.total)+'</span></button>';}).join("");}
     var dMatch=dates.filter(function(d){return !q||apFmtLong(d.iso).toLowerCase().indexOf(q)>-1;});
     if(dMatch.length){out+='<div class="cap">Specific due date (earliest first)</div>'+dMatch.map(function(d){var on=sel===d.iso;return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-action="ap-set-due" data-due="'+d.iso+'" data-id="'+w.id+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm-stack"><span class="mi-nm">'+apFmtLong(d.iso)+'</span><span class="mi-acctno'+(d.overdue?" ap-over":"")+'">'+apDaysLabel(d.iso)+', '+d.count+' invoice'+(d.count===1?"":"s")+'</span></span>'+(d.overdue?'<span class="bank-tag-over">Overdue</span>':'')+'<span class="ap-mi-amt'+(d.overdue?" ap-over":"")+'">'+apMoney(d.total)+'</span></button>';}).join("");}
-    if(showSearch&&q&&!bMatch.length&&!dMatch.length&&"all due dates total".indexOf(q)<0)out+='<div class="mi-note" style="color:var(--txt-subtle);padding:var(--padding-tight) var(--padding-tight)">No due dates match "'+apEsc(apDueQuery||"")+'"</div>';
+    if(showSearch&&q&&!bMatch.length&&!dMatch.length&&"all due dates total".indexOf(q)<0)out+='<div class="mi-note" style="color:var(--txt-subtle);padding:8px 10px">No due dates match "'+apEsc(apDueQuery||"")+'"</div>';
     return out+'</div>';
   }
 
