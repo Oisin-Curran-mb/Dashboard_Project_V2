@@ -90,7 +90,7 @@ const W = {
       { num: "04", label: "Explore - Encumbrances table", size: "wide", steps: [{ click: '[data-purf="view"][data-v="enc"]' }, { click: '[data-purf="enc-view"][data-v="table"]' }] },
       { num: "05", label: "Detail", size: "xwide" },
       { num: "06", label: "Detail - Encumbrances", size: "xwide", steps: [{ click: '[data-purf="view"][data-v="enc"]' }] },
-      { num: "07", label: "Pop-up - Purchase order", size: "wide", steps: [{ click: '[data-purf="open"]' }], target: ["#purfModalRoot .modal", "#purfModalRoot [role=dialog]"] },
+      { num: "07", label: "Pop-up - Purchase order", size: "wide", steps: [{ click: '[data-purf="open"]:has(.purf-stchip-next)' }], target: ["#purfModalRoot .modal", "#purfModalRoot [role=dialog]"] },
     ] } },
   W14: { name: "Main Content Tasks", kind: "tasks",
     v1: { ids: { kpi: "mct4", wide: "mct", xwide: "mct2", wide2: "mct3" }, shots: [
