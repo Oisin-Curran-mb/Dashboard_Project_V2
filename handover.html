@@ -915,7 +915,7 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 </ul>
 </div></section>
 <section id="w15" class="widget">
-<header class="wh"><div><span class="wid">W15</span><h2>Bank Balances</h2></div><div class="badges"><span class="ctype t-feature">New Feature or Logic</span><span class="rev">Draft 6 Oct 2026</span></div></header>
+<header class="wh"><div><span class="wid">W15</span><h2>Bank Balances</h2></div><div class="badges"><span class="ctype t-feature">New Feature or Logic</span><span class="rev">Draft 9 Oct 2026</span></div></header>
 
 <details class="shots" open><summary>Screenshots <span class="count">14 of 14 saved</span></summary>
 <div class="pair"><h4><span class="num">01</span>Glance</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W15%20-%20Bank%20Balances/W15-V1-01%20Glance.png" aria-label="Enlarge V1 Glance"><img src="docs/Pics/Version%201/W15%20-%20Bank%20Balances/W15-V1-01%20Glance.png" alt="V1 Glance" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W15%20-%20Bank%20Balances/W15-V2-01%20Glance.png" aria-label="Enlarge V2 Glance"><img src="docs/Pics/Version%202/W15%20-%20Bank%20Balances/W15-V2-01%20Glance.png" alt="V2 Glance" loading="lazy"></button></figure></div></div>
@@ -928,7 +928,7 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 </details>
 
 <div class="prose"><h3>Overview</h3>
-<p>V2 keeps V1's account picker, the headline balance, the account table with its search box and sortable Account / Balance / Type columns, the overdrawn filter and its "Overdrawn total" strip, the one-account statement with its Table / Bars switch, the loading, empty and error states, and the export actions. It changes six things:</p>
+<p>V2 keeps V1's account picker, the headline balance, the account table with its search box and sortable Account and Balance columns (Type as well at Detail), the overdrawn filter and its "Overdrawn total" strip, the one-account statement with its Table / Bars switch, the loading, empty and error states, and the export actions. It changes six things:</p>
 <ol>
 <li><strong>The Glance is live.</strong> The chip opens the real picker, the amount is compact ($4.9M, exact on hover) beside a twelve-month sparkline, and a "2 overdrawn ›" pill and a delta pill against a year ago sit underneath. V1 showed a label, the full amount and an inert red count.</li>
 <li><strong>A Bars view for all accounts.</strong> Explore gains a Table / Bars switch; Detail shows "Balances" and "Balance comparison" side by side. V1 had the table only; its Table / Chart switch appeared once one account was chosen.</li>
@@ -958,7 +958,7 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 <h4>One account</h4>
 <ul>
 <li><strong>Explore - One account, Detail:</strong> sortable Type / Amount headers (Amount, largest first, by default), "Beginning balance" pinned above the movements, Deposits, Voids, Checks, Withdrawals and EFT signed and coloured (+ green, − red), "Ending balance" as the total with an OVERDRAWN tag if negative. V1 listed the six lines in a fixed order with "· inflow" or "· outflow" after each name. At Detail the heading is "Balance movement since last reconciliation"; V1 read "Activity since last reconciliation".</li>
-<li><strong>Explore - One account chart:</strong> the switch reads Table / Bars; no legend, red outflow bars, the signed value under each label, a hover card of type and signed amount. V1 read Table / Chart, had an "Inflow (money in) / Outflow (money out)" legend, light-purple outflows and a hover card with "Money in / Money out" and a note.</li>
+<li><strong>Explore - One account chart:</strong> the switch reads Table / Bars; no legend, red outflow bars, the signed value under each label, a hover card of type and signed amount. Four bars, Deposits, Voids, Checks and Withdrawals: EFT is in the table and in the ending balance but not in the chart, as in V1. V1 read Table / Chart, had an "Inflow (money in) / Outflow (money out)" legend, light-purple outflows and a hover card with "Money in / Money out" and a note.</li>
 </ul>
 <h3>Developer Notes</h3>
 <p>One new piece of data is needed, the month-end balance for each of the last twelve months, in total and per account, for the Glance sparkline and delta. Everything else is presentation over the data V1 used.</p>
@@ -984,6 +984,7 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 <li>What a month-end point is: the calendar month-end balance, or the balance at the last reconciliation in that month.</li>
 <li>Opening the pop-up from the Glance pill switches the widget's overdrawn filter on and Close does not switch it off, so the card arrives filtered if resized to Explore. Decide whether Close should clear it.</li>
 <li>At Detail the table loads 20 at a time but the Balance comparison bars list every account. Decide whether the bars should follow the pages.</li>
+<li>The one-account chart leaves EFT out while the table and the ending balance include it, in V1 and V2 alike. Decide whether the chart gets a fifth bar.</li>
 </ul>
 </div></section>
 <section id="w16" class="widget"><header class="wh"><div><span class="wid">W16</span><h2>Accounts Payable By Due Date</h2></div><div class="badges"><span class="ctype t-feature">New Feature or Logic</span><span class="rev">Draft 6 Oct 2026</span></div></header>
