@@ -987,7 +987,7 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 <li>The one-account chart leaves EFT out while the table and the ending balance include it, in V1 and V2 alike. Decide whether the chart gets a fifth bar.</li>
 </ul>
 </div></section>
-<section id="w16" class="widget"><header class="wh"><div><span class="wid">W16</span><h2>Accounts Payable By Due Date</h2></div><div class="badges"><span class="ctype t-feature">New Feature or Logic</span><span class="rev">Draft 6 Oct 2026</span></div></header>
+<section id="w16" class="widget"><header class="wh"><div><span class="wid">W16</span><h2>Accounts Payable By Due Date</h2></div><div class="badges"><span class="ctype t-feature">New Feature or Logic</span><span class="rev">Draft 9 Oct 2026</span></div></header>
 <details class="shots" open><summary>Screenshots <span class="count">8 of 8 saved</span></summary>
 <div class="pair"><h4><span class="num">01</span>Glance</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W16%20-%20Accounts%20Payable%20By%20Due%20Date/W16-V1-01%20Glance.png" aria-label="Enlarge V1 Glance"><img src="docs/Pics/Version%201/W16%20-%20Accounts%20Payable%20By%20Due%20Date/W16-V1-01%20Glance.png" alt="V1 Glance" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W16%20-%20Accounts%20Payable%20By%20Due%20Date/W16-V2-01%20Glance.png" aria-label="Enlarge V2 Glance"><img src="docs/Pics/Version%202/W16%20-%20Accounts%20Payable%20By%20Due%20Date/W16-V2-01%20Glance.png" alt="V2 Glance" loading="lazy"></button></figure></div></div>
 <div class="pair"><h4><span class="num">02</span>Explore - Table</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W16%20-%20Accounts%20Payable%20By%20Due%20Date/W16-V1-02%20Explore%20-%20Table.png" aria-label="Enlarge V1 Explore - Table"><img src="docs/Pics/Version%201/W16%20-%20Accounts%20Payable%20By%20Due%20Date/W16-V1-02%20Explore%20-%20Table.png" alt="V1 Explore - Table" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W16%20-%20Accounts%20Payable%20By%20Due%20Date/W16-V2-02%20Explore%20-%20Table.png" aria-label="Enlarge V2 Explore - Table"><img src="docs/Pics/Version%202/W16%20-%20Accounts%20Payable%20By%20Due%20Date/W16-V2-02%20Explore%20-%20Table.png" alt="V2 Explore - Table" loading="lazy"></button></figure></div></div>
@@ -995,39 +995,65 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 <div class="pair"><h4><span class="num">04</span>Pop-up - Invoice</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W16%20-%20Accounts%20Payable%20By%20Due%20Date/W16-V1-04%20Pop-up%20-%20Invoice.png" aria-label="Enlarge V1 Pop-up - Invoice"><img src="docs/Pics/Version%201/W16%20-%20Accounts%20Payable%20By%20Due%20Date/W16-V1-04%20Pop-up%20-%20Invoice.png" alt="V1 Pop-up - Invoice" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W16%20-%20Accounts%20Payable%20By%20Due%20Date/W16-V2-04%20Pop-up%20-%20Invoice.png" aria-label="Enlarge V2 Pop-up - Invoice"><img src="docs/Pics/Version%202/W16%20-%20Accounts%20Payable%20By%20Due%20Date/W16-V2-04%20Pop-up%20-%20Invoice.png" alt="V2 Pop-up - Invoice" loading="lazy"></button></figure></div></div>
 </details>
 <div class="prose"><h3>Overview</h3>
-<p>V2 keeps V1's widget as it was: the "All due dates ⌄" due-date chip and its pop-up (All due dates, then By aging, then Specific due date, earliest first, with a search box once there are many dates), the total payable with its red "$7,670.50 overdue" pill (or a green "Nothing overdue" when nothing is late), the "Search invoices or vendors" box, the invoice table grouped into Overdue / Due this week / Due this month / Due later with a subtotal per band and an "Overdue 13d" or "Due 2d" status pill on every row, the five sortable columns, the Detail layout with Outstanding invoices on the left and Cash requirements plus Top vendors owed on the right, and the Pop-up - Invoice. It changes two things:</p>
+<p>V2 keeps V1's shape: the due-date chip and its menu, the total payable with its overdue pill, a sortable five-column invoice table with a footer that names the selection and totals it, a two-column Detail with Outstanding invoices on the left, the invoice pop-up when a row is tapped, and the loading, empty and error states. It changes six things:</p>
 <ol>
-<li><strong>A "due this week" pill.</strong> Beside the overdue pill, at every size, V2 adds "$3,720.75 due this week": the money falling due in the next seven days. It is shown only when something is due this week. V1 showed the overdue pill on its own.</li>
-<li><strong>The Cash requirements panel loses its intro line.</strong> V1 opened the panel with "How much cash is needed, and when. Pick a band to filter the invoice list." V2 starts straight at the All due dates row. The band rows still act as the filter.</li>
+<li><strong>Filter tiles.</strong> Four tappable tiles sit under the header: All dates, Overdue, Due this week and Due this month, each with its amount and invoice count. One tap filters the table. The chip stays and drives the same filter, so picking a tile relabels the chip and picking a chip option selects the matching tile. The chip's menu is All due dates and every specific due date; the aging bands left the menu because the tiles carry them.</li>
+<li><strong>Header.</strong> The total figure is gone from the Explore and Detail header (the All dates tile carries it), and a search box is always shown beside the chip. It finds a vendor, an invoice number or a due date typed in plain words. V1 showed a search above the table only when more than six rows were listed, and it matched vendor and invoice only.</li>
+<li><strong>Table.</strong> One flat sorted list under every filter, with a status badge on every row. V1 grouped the rows under aging band subheaders with a subtotal each when All due dates was selected.</li>
+<li><strong>Detail.</strong> The right column is Top vendors owed alone: the six largest vendors by amount owed, named in red when any of their invoices is overdue, with the invoice count and overdue amount on hover. V1's Cash requirements panel, the band rows with share bars that doubled as the filter, is gone; the tiles do that job at both sizes.</li>
+<li><strong>Glance.</strong> The "Accounts payable" chip is removed, and a "due this week" pill sits beside the overdue pill when anything falls due in the next seven days.</li>
+<li><strong>Pop-up.</strong> The same facts card, with the dashboard's standard footer: Open in Accounts Payable on the left and Close on the right. V1 closed with Got it only.</li>
 </ol>
-<p>Everything else (the chip and its pop-up, the sorting, the band grouping and subtotals, the per-row status pills, the search, the Top vendors owed list, the invoice pop-up with its "Got it" button, the "Nothing outstanding" empty state) is unchanged and in the same place as V1. Both demos use the same sample invoices, so the figures in the screenshots match.</p>
+<p>Everything else (the chip, the per-row sorting, the footer with count and total, the invoice facts, the Nothing outstanding empty state, the loading skeleton) is unchanged and in the same place as V1. Both demos use the same sample invoices, so the figures in the screenshots match.</p>
 <h3>What's Different</h3>
-<h4>Header</h4>
+<h4>Header and filters</h4>
 <ul>
-<li><strong>Glance, Explore - Table, Detail:</strong> a second pill, "$3,720.75 due this week" with a calendar glyph, sits to the right of the overdue pill (under the total at Glance, in the header row at Explore and Detail). Hovering it reads "$3,720.75 across 3 invoices falls due this week." It is plain text, not red: only the overdue pill is red. If nothing is due in the next seven days the pill is not shown at all. V1 had only the overdue pill.</li>
+<li><strong>Explore - Table, Detail:</strong> one header row: the "All due dates" chip on the left, the search box on the right with the placeholder "Search vendor, invoice or date". No total figure and no overdue pill in the header. V1 had two rows: the chip, then the total with the overdue pill beneath, and no header search.</li>
+<li><strong>Explore - Table, Detail:</strong> under the header, four tiles: "All dates", "Overdue" (negative tint), "Due this week" (saffron), "Due this month" (attention tint), each with an icon, the label, the amount in bold and "N invoices". The selected tile is outlined; tapping one filters the table and shows the loading skeleton briefly, as a filter change does in V1. There is no tile for later dates; those invoices show under All dates or by picking their date in the chip. New in V2.</li>
+<li><strong>Explore - Table, Detail:</strong> the chip's menu lists "All due dates" with the total, then "Specific due date (earliest first)" with each date's days-to-due, invoice count and amount, overdue dates tagged, and a search box once there are many dates. V1's menu also had a "By aging" group (Overdue, Due this week, Due this month, Due later); the tiles replace it.</li>
 </ul>
-<h4>Cash requirements</h4>
+<h4>Table</h4>
 <ul>
-<li><strong>Detail:</strong> the panel begins with the All due dates row. V1 had a one-line explanation above it, "How much cash is needed, and when. Pick a band to filter the invoice list." Nothing else in the panel moves: All due dates, the four band rows with their share bars and "N invoices, N% of total" notes, then Top vendors owed.</li>
+<li><strong>Explore - Table, Detail:</strong> Vendor, Invoice, Due date, Status, Amount, every header sortable, due date ascending by default; a text or date header opens ascending, Amount largest first. Under every filter the rows are one flat list; the footer reads the selection and its total, "Due this week (3 invoices)". V1 grouped the rows under grey band subheaders (band name, count, subtotal, Overdue in red) when All due dates was selected and showed a flat list only under a filter.</li>
+<li><strong>Explore - Table, Detail:</strong> the Status column is a badge: "Overdue 13d" on the negative tint (weeks once past two weeks, "Overdue 3w"), "Due today" or "Due in 2d" on the attention tint within a month, and a neutral badge beyond ("Due in 3w", "Due in 2mo"). V1 showed "Overdue 13d" or "Due 2d" in a small pill, red only when overdue.</li>
+<li><strong>Explore - Table, Detail:</strong> the due date reads "25 Jul", with the year added only when it is not this year, and the Amount header sits over the right-aligned amounts. Searching filters the visible rows as you type; the footer keeps the full selection's count and total.</li>
 </ul>
-<h4>Dashboard only</h4>
+<h4>Detail</h4>
 <ul>
-<li>V1's dashboard carried four Explore-size tiles of this widget: the main one plus "(Total view)", "(single due date)" and "(nothing outstanding)" demo copies. V2 carries one tile per size, Glance, Explore and Detail, all titled Accounts Payable By Due Date. The widget itself is the same; the empty state still exists, it just no longer has a tile of its own.</li>
+<li><strong>Detail:</strong> the right column is "Top vendors owed": up to six vendors, largest amount first, the name in red when any of that vendor's invoices is overdue, the amount on the right; hovering a row reads "N invoices · $X overdue" or "none overdue". The rows do not click. V1 had "Cash requirements" above the vendors: an intro line, an All due dates row and four band rows with share bars and "N invoices, N% of total" that set the filter, then five vendors with bars.</li>
+</ul>
+<h4>Glance</h4>
+<ul>
+<li><strong>Glance:</strong> the total, then two pills: "$X overdue" in red (or "Nothing overdue" when nothing is late) and "$X due this week" in saffron with a calendar glyph, shown only when something falls due in the next seven days. Hovering either reads the amount across N invoices. V1 had a static "Accounts payable" chip above the total and the overdue pill alone.</li>
+</ul>
+<h4>Pop-up</h4>
+<ul>
+<li><strong>Pop-up - Invoice:</strong> tapping a row opens "Invoice INV-0003" with Vendor, Invoice #, Due date in full, Status in words ("Overdue by 13 days", "Due in 2 days") and Amount. The footer has "Open in Accounts Payable" on the left, which takes the user to the full bill, and "Close" on the right. V1 showed the same facts with a Got it button and no way out to the bill.</li>
 </ul>
 <h3>Developer Notes</h3>
-<p>No new data is needed: the pill is a sum of invoices the card already has. Everything else is presentation.</p>
-<h4>The "due this week" rule</h4>
+<h4>Data</h4>
+<p>No new field on an invoice. Per outstanding invoice: vendor name, invoice number, due date and outstanding amount, for posted, unpaid invoices that have a due date. The tiles, the pills, the footer total and the vendor list are sums over that list and can be computed in the browser, as the demo does; serve them pre-aggregated only if the list is paged.</p>
+<h4>Windows and badges</h4>
 <ul>
-<li>An invoice is <strong>due this week</strong> when its due date is today or within the next 7 days (0 to 7 days ahead, inclusive). Anything before today is Overdue and is not counted; day 8 onward is Due this month or Due later. This is the same band the table and the Cash requirements panel already use; "this week" means the next seven days, not the calendar week, in both builds.</li>
-<li>The pill shows the total of those invoices to the cent, with the tooltip "$X across N invoices falls due this week" (singular "invoice" when N is 1). When the total is $0 the pill is omitted, not shown as "$0.00".</li>
-<li>Example (today 23 Jul 2026): INV-3310 $2,100.00, INV-3311 $640.75 and INV-3312 $980.00 are all due 25 Jul, 2 days ahead, so the pill reads $3,720.75 due this week. INV-4400 ($8,400.00, due 1 Aug) is 9 days ahead, so it is Due this month and not counted. The three overdue invoices ($7,670.50) are not counted either.</li>
-<li>The pill, the Due this week subtotal in the table, the Due this week row in Cash requirements and the Due this week entry under By aging in the chip's pop-up are one number. Work the bands out once per load from the same invoice list so the four can never disagree.</li>
-<li>The pill is the same at every size and ignores the chip's current filter, as does the overdue pill: both describe all outstanding invoices, while the table and its total follow the filter.</li>
-<li>Today is the browser's date. The demo pins it to 23 Jul 2026 so the bands stay stable in screenshots; the real build uses today.</li>
+<li>Overdue = due date before today. Due this week = today to today plus 7 days. Due this month = today to today plus 30 days, so it includes this week. A due date beyond 30 days has no tile: it shows under All dates or by picking its date in the chip. In V1 the month band was 8 to 30 days and the bands did not overlap.</li>
+<li>The chip and the tiles are one filter with one stored value; the chip label and the selected tile are both read from it. The pills at Glance and the vendor list describe all outstanding invoices and ignore the filter; the table and its footer follow it.</li>
+<li>Badge wording: overdue reads in days up to 13 and in weeks from 14 days; upcoming reads "Due today", then days up to 13, weeks up to 55 days, months beyond. The pop-up uses the long form, "Overdue by N days" and "Due in N days".</li>
+<li>Search matches the vendor name, the invoice number and the due date in several spellings: "25 Jul", "July 25", "25 July", "July 2026" and the month alone.</li>
+<li>Sort: default due date ascending; a text or date header opens ascending, Amount opens descending; clicking the active header flips it. Sorting does not refetch; a filter change does, hence the skeleton.</li>
+<li>Today is the browser's date. The demo pins it to 23 Jul 2026 so the windows and badges stay stable in screenshots.</li>
+<li>Top vendors owed = outstanding amount summed per vendor, largest first, six shown; a vendor's overdue amount is the sum of its overdue invoices.</li>
 </ul>
-<h4>Cash requirements</h4>
+<h4>Hooks</h4>
 <ul>
-<li>Remove the intro sentence only. As in V1, the All due dates row and the four band rows are buttons that set the due-date filter (a band with nothing in it is shown greyed and cannot be picked), and the Top vendors owed rows are not clickable.</li>
+<li>Open in Accounts Payable opens the invoice record in Accounts Payable. It should respect the same access as the Accounts Payable module.</li>
+</ul>
+<h4>Still open</h4>
+<ul>
+<li>Due this month includes Due this week, so a reader who adds the tiles up double counts. Keep them as windows, or make the month tile 8 to 30 days as V1 had it.</li>
+<li>Invoices due beyond 30 days have no tile and no menu band; they are reached under All dates or by their specific date. Decide whether a Later tile should return.</li>
+<li>Aging basis: confirm the due date, not the invoice date, is the field the business expects.</li>
+<li>Where Open in Accounts Payable goes: the dashboard has no route to the invoice record yet.</li>
+<li>Whether "today" is the browser's or the server's date, and whether search runs over a paged list on large organisations.</li>
 </ul>
 </div></section>
 <section id="w17" class="widget">
