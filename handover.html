@@ -1057,7 +1057,7 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 </ul>
 </div></section>
 <section id="w17" class="widget">
-<header class="wh"><div><span class="wid">W17</span><h2>Gifts Pledges</h2></div><div class="badges"><span class="ctype t-complete">Complete Change</span><span class="rev">Draft 6 Oct 2026</span></div></header>
+<header class="wh"><div><span class="wid">W17</span><h2>Gifts Pledges</h2></div><div class="badges"><span class="ctype t-complete">Complete Change</span><span class="rev">Draft 9 Oct 2026</span></div></header>
 
 <details class="shots" open><summary>Screenshots <span class="count">12 of 12 saved</span></summary>
 <div class="pair"><h4><span class="num">01</span>Glance</h4><div class="pair-grid"><figure class="shot"><figcaption>V1</figcaption><button class="zoom" data-src="docs/Pics/Version%201/W17%20-%20Gifts%20Pledges/W17-V1-01%20Glance.png" aria-label="Enlarge V1 Glance"><img src="docs/Pics/Version%201/W17%20-%20Gifts%20Pledges/W17-V1-01%20Glance.png" alt="V1 Glance" loading="lazy"></button></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W17%20-%20Gifts%20Pledges/W17-V2-01%20Glance.png" aria-label="Enlarge V2 Glance"><img src="docs/Pics/Version%202/W17%20-%20Gifts%20Pledges/W17-V2-01%20Glance.png" alt="V2 Glance" loading="lazy"></button></figure></div></div>
@@ -1076,7 +1076,7 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 <li><strong>The date control.</strong> V1 had one "received through" date (Today, End of last month, custom). V2 keeps "Gifts received through" as the default and adds Year to date, This quarter, This month and Custom dates.</li>
 <li><strong>The Giving bars.</strong> Three segments that always fill the track (pledge payments, still expected, gifts), most received first, with a figures line under each. V1 drew a thermometer with a hatched shortfall, a due marker and a % fulfilled.</li>
 <li><strong>The Summary Table splits in two.</strong> Pledges reproduces the legacy Gifts and Pledges panel column for column; Gifts lists the money with no pledge. Neither is sortable. V1 had one sortable table.</li>
-<li><strong>The pop-up becomes a giving ledger.</strong> Every gift and pledge for the purpose, largest first, with an All / Pledges / Gifts filter, a search box and rows that open to their history. V1 listed donors most behind first.</li>
+<li><strong>The pop-up becomes a giving ledger.</strong> Every gift and pledge for the purpose, largest first, with an All / Pledges / Gifts filter, a search box, rows that open to their history, and a download control top right. V1 listed donors most behind first.</li>
 <li><strong>Detail and Glance.</strong> Detail gains the view switch (V1 showed only "Progress toward goal" there). Glance drops the purpose chip and the "N purposes behind schedule" line for a split bar and a one-line split.</li>
 </ol>
 <p>Everything else (the card menu, the chip row, the view switch top right, the loading skeleton, the empty state, Close) is in the same place as V1. The demos use different sample data and anchor dates, so every figure, name and row count in the screenshots differs for that reason alone.</p>
@@ -1104,7 +1104,7 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 </ul>
 <h4>Pop-up</h4>
 <ul>
-<li><strong>Pop-up - Giving ledger:</strong> titled "CODE: Name"; a summary strip (Pledge Total, Pledge Due, Pledge payments, Gifts, Received, status badge); All / Pledges / Gifts and a search over donor, pledge and reference; columns Donor, Pledged, Received, Due Remaining, Type. A pledge row shows its pace status ("Fully paid", "Up to date", "About a month behind") and a Pledge tag; a gift row reads "No pledge" with a Gift tag. A pledge opens to its instalment schedule (Fallen due or Not yet due) and the gifts applied to it; a gift opens to its one line. The list scrolls inside the pop-up; footer "Open in Gifts and Pledges" and Close. V1 had the donors most behind first, All donors / Behind only, Export to Excel and a drawer per donor; its "Paid in full" on a merely current pledge is now "Up to date".</li>
+<li><strong>Pop-up - Giving ledger:</strong> titled "CODE: Name"; a summary strip (Pledge Total, Pledge Due, Pledge payments, Gifts, Received, status badge); All / Pledges / Gifts and a search over donor, pledge and reference; columns Donor, Pledged, Received, Due Remaining, Type. A pledge row shows its pace status ("Fully paid", "Up to date", "About a month behind") and a Pledge tag; a gift row reads "No pledge" with a Gift tag. A pledge opens to its instalment schedule (Fallen due or Not yet due) and the gifts applied to it; a gift opens to its one line. The list scrolls inside the pop-up; a download icon sits top right beside the close control, "Export to Excel" on hover, and downloads the ledger as shown (All, Pledges or Gifts); footer "Open in Gifts and Pledges" and Close. V1 had the donors most behind first, All donors / Behind only, Export to Excel and a drawer per donor; its "Paid in full" on a merely current pledge is now "Up to date".</li>
 </ul>
 <h3>Developer Notes</h3>
 <p>New data is needed: each purpose's gift lines with their pledge link, posted and undone flags, how each arrived and its reference; and each active pledge's begin date, end date, frequency and instalment count. Everything else is presentation.</p>
@@ -1125,12 +1125,18 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 <li><strong>Bar:</strong> pledge payments in the window; still expected = Pledge Total − pledge payments, never below zero; gifts in the window. Scale = the larger of Pledge Total and payments, plus gifts, so an over-paid pledge cannot run off the track.</li>
 <li><strong>Tables and ledger:</strong> Pledges lists purposes with an active pledge, largest Pledge Total first (the panel's order). Gifts lists purposes with an unlinked gift in the window; Donors counts a donor once per purpose, once across purposes in the totals row. The ledger is the same two reads for one purpose, sorted by amount. Per-pledge pace: Fully paid (payments ≥ pledge), Up to date (Due Remaining ≤ 0), else banded by (share paid − share due) × term days: 30+ days ahead, On track, About a month behind, 60+ days behind.</li>
 </ul>
+<h4>Hooks</h4>
+<ul>
+<li>Export to Excel on the ledger pop-up: the rows as filtered and sorted on screen (Donor, reference, pace status, Pledged, Received, Due Remaining, Type) for one purpose, as an Excel file.</li>
+<li>Open in Gifts and Pledges: the purpose's record in the Gifts and Pledges module.</li>
+</ul>
 <h4>Still open</h4>
 <ul>
 <li>Whether the Summary Table captions are wanted.</li>
 <li>Whether the dashboard endpoint can supply how a gift arrived and its reference; the API spec still describes the earlier blended basis.</li>
 <li>The headline pill still carries a percentage, and the amount given appears twice on a Giving row; the owner has been asked which to keep.</li>
 <li>Where "Open in Gifts and Pledges" should go. Don't assume a target page exists.</li>
+<li>Which service produces the ledger's Excel file; no export endpoint exists yet.</li>
 </ul>
 </div></section>
 <section id="w18" class="widget"><header class="wh"><div><span class="wid">W18</span><h2>Financial KPI</h2></div><div class="badges"><span class="ctype t-new">New Widget</span><span class="rev ok">Finalised 28 Sep 2026</span></div></header>

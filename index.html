@@ -10859,6 +10859,7 @@ function gpFLedgerModalHTML(){
   var note=rows.length?(rows.length+' entr'+(rows.length===1?'y':'ies')+', largest first. Open one to see its history.'):'';
   return '<div class="modal-backdrop" data-gpf="detail-close"><div class="modal modal-wide gpf-detail-modal gpf-modal" data-gpf="stop" role="dialog" aria-modal="true" aria-label="'+gpFEsc(comp.label+', every gift and pledge')+'">'+
     '<div class="modal-h gpf-detail-h"><span class="modal-title"><span class="material-symbols-rounded gpf-detail-ic">volunteer_activism</span>'+comp.label+'</span><span class="gpf-dsub">every gift and pledge, '+gpFRangePhrase(w).toLowerCase()+'</span><span class="gpf-dh-spacer"></span>'+
+      '<button class="iconbtn" data-gpf="ledger-export" data-c="'+gpFEsc(comp.label)+'" aria-label="Export to Excel" data-tip="Export to Excel: download this ledger as shown" data-tip-plain>'+ICON('download')+'</button>'+
       '<button class="iconbtn" data-gpf="detail-close" aria-label="Close">'+ICON('close')+'</button></div>'+
     '<div class="modal-b gpf-detail-b">'+summary+bar+
       (note?('<div class="gpf-ctx gpf-cap">'+ICON('receipt_long')+'<span>'+note+'</span></div>'):'')+list+'</div>'+
@@ -10893,6 +10894,7 @@ function gpFOnClick(e){
   if(a==='ledger-filter'){if(GPF_MODAL){GPF_MODAL.filter=t.getAttribute('data-v');gpFRenderModal();}return;}
   if(a==='detail-close'){GPF_MODAL=null;gpFRenderModal();return;}
   if(a==='open-record'){setStatus('Opening '+t.getAttribute('data-c')+' in the Gifts and Pledges module (stub, no navigation backend in this shell).');return;}
+  if(a==='ledger-export'){var lf=GPF_MODAL&&GPF_MODAL.filter;setStatus('Exporting the giving ledger for '+t.getAttribute('data-c')+(lf&&lf!=='all'?' ('+lf+' only)':'')+' to Excel, as shown (stub, no export endpoint in this shell).');return;}
 }
 var GPF_WIRED=false;
 (function(){

@@ -769,12 +769,25 @@ A.cssDeclares(shell.css, [
   /* The header export went on 28 Sep (owner). The drill keeps its own
      purpose-scoped export, and it is still a labelled stub. */
   const n1 = env.log.status.length;
-  /* Both export stubs are gone: the header one on 28 Sep at the owner's
-     request, the drill's when the drill was replaced by the pop-up. There is
-     no export control left on this widget. */
+  /* The header export went on 28 Sep (owner) and the inline drill's export with the drill. On 9 Oct the owner
+     asked for a download on the ledger pop-up itself: Export to Excel, top right beside Close, a labelled stub. */
   gfire("export-donors", { "data-id": "gpF", "data-c": LABELS[2] });
   A.eq(env.log.status.length, n1, "the retired drill export reports nothing, because it is gone");
-  A.absent(shell.script, 'data-gpf="export', "no export action survives in the block");
+  A.absent(shell.script, 'data-gpf="export"', "the header export stays gone");
+  gfire("baropen", { "data-id": "gpF", "data-c": LABELS[2] });
+  const mx = shim.captured["gpfModalRoot"];
+  A.contains(mx, 'class="iconbtn" data-gpf="ledger-export"', "the ledger pop-up carries a download control, an icon button like Close beside it (owner, 9 Oct; the labelled button made the title wrap at 860px)");
+  A.contains(mx, 'aria-label="Export to Excel" data-tip="Export to Excel: download this ledger as shown" data-tip-plain>', "named Export to Excel for screen readers and on hover, with the download glyph"); A.contains(mx, ">download</span></button>", "download glyph");
+  A.ok(mx.indexOf('data-gpf="ledger-export"') < mx.indexOf('class="modal-b gpf-detail-b"') && mx.indexOf('data-gpf="ledger-export"') < mx.indexOf('data-gpf="detail-close" aria-label="Close"'), "it sits in the header, before the Close control");
+  const n2 = env.log.status.length;
+  gfire("ledger-export", { "data-id": "gpF", "data-c": LABELS[2] });
+  const saidX = env.log.status[env.log.status.length - 1];
+  A.ok(env.log.status.length > n2, "activating the export reported status");
+  A.contains(saidX, "stub", "the export SAYS it is a stub (no export endpoint)"); A.contains(saidX, LABELS[2], "and names the purpose"); A.contains(saidX, "Excel", "and the format");
+  gfire("ledger-filter", { "data-id": "gpF", "data-v": "gifts" });
+  gfire("ledger-export", { "data-id": "gpF", "data-c": LABELS[2] });
+  A.contains(env.log.status[env.log.status.length - 1], "(gifts only)", "the export follows the ledger's type filter");
+  gfire("detail-close", { "data-id": "gpF" });
   A.eq(typeof ctx.gpFExportBtn, "undefined", "the header export builder is deleted, not merely unused");
   /* NO invented workflow action anywhere on the card (the standing constraint) */
   const surfaces = ["kpi", "wide", "xwide"].map(function (sz) {
