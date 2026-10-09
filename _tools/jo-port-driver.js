@@ -115,7 +115,8 @@ function makeShim(opts) {
       id: id || "",
       tagName: (tag || "div").toUpperCase(),
       className: "",
-      style: {},
+      /* setProperty/getPropertyValue: popover positioners set --caret-x on the .pop (shell standard) */
+      style: { setProperty: function (k, v) { this[k] = String(v); }, getPropertyValue: function (k) { return this[k] || ""; }, removeProperty: function (k) { delete this[k]; } },
       children: [],
       _attrs: {},
       _html: "",

@@ -50,7 +50,11 @@ copies differ in what the user sees.
   zero-clamping are deliberate per widget.
 - **Popover positioning**, six near-copies. Five clamp to the viewport; W07
   flips to the right edge and tries an upward placement first. Five could share;
-  W07 must not.
+  W07 must not. Update 8 Oct 2026: W09 now follows the shell's placement
+  exactly, the same rule as W07. Every widget that builds its own `.pop`
+  (W07, W09, W10, W13) now also sets `data-dir` and `--caret-x` as the shell
+  does. Without them the `.pop::before` caret has no edge to sit on and shows
+  as a diamond inside the menu. W11's `.faf-pop` has no caret.
 - **Popover open and close**, six copies. Only W13 toggles when the same
   control is pressed twice. The others reopen. That is a behavioural difference
   to rule on, not to paper over.

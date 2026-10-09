@@ -47,7 +47,7 @@ payOn(true);
 /* ---------- 1. model ---------------------------------------------------- */
 A.eq(env.get("PURF_STAGES").join(","), "Pending,Approved", "record status vocabulary is Pending / Approved (Rejected is not a status)");
 A.eq(env.get("PURF_LANES").join("|"), "Pending approval|Payment approval|Ready to pay|Paid", "the four derived lanes");
-A.eq(env.get("PURF_SCOPES").join("|"), "Awaiting my approval next|Awaiting my approval|All requests", "scope uses the legacy queue vocabulary");
+A.eq(env.get("PURF_STATUS_OPTS").join("|"), "All requests|Awaiting my approval next|Awaiting my approval|Unapproved|Approved", "one status chip: All requests, then V1's four options (owner, 9 Oct)");
 A.ok(PATHS["QA Path"].steps[0].users.length === 2, "an Or level holds two interchangeable approvers (QA Path level 1)");
 /* the owner's real Education Ministry path: Start with Alfred >= $500, Then Jim or Lanette >= $2,000, Ends with Pastor Bob >= $5,000 */
 A.eq(PATHS["Education Ministry"].steps.map(function (s) { return s.users.length + ":" + s.mins.join("/"); }).join(" "), "1:500 2:2000/2000 1:5000", "per-approver minimums on every level");
@@ -76,30 +76,46 @@ A.eq(turn("PO-2861").kind, "none", "PO-2861: approved for payment, nobody's turn
 const lane = function (ref) { return C("purFLane", po(ref)); };
 A.eq(lane("PO-2893"), "Pending approval", "pending request lane"); A.eq(lane("PO-2902"), "Pending approval", "a rejected request stays in Pending approval");
 A.eq(lane("PO-2872"), "Payment approval", "approved with open payment steps"); A.eq(lane("PO-2861"), "Ready to pay", "payment approved, no check yet"); A.eq(lane("PO-2864"), "Paid", "paid");
-A.eq(C("purFMineSet", wide).length, 10, "ten requests await me (next or later, incl. the release case) across both paths");
-A.eq(C("purFPendingCount", wide), 13, "thirteen requests pending approval");
+A.eq(C("purFMineSet", wide).length, 25, "twenty-five requests await me with the payment process on: 15 on request paths plus the ten approved, unpaid January to May orders (9 Oct) whose payment path reaches me");
+A.eq(C("purFPendingCount", wide), 17, "seventeen requests pending approval");
 
 /* ---------- 2. render ---------------------------------------------------- */
 /* The table is the default view; the Kanban board was removed on 5 Oct 2026 (owner: it did not work). */
 [wide, kpi, xw].forEach(function (w) { const h = C("purFContent", w); A.ok(h && h.length > 800, w.id + " (" + w.size + ") renders (" + h.length + " bytes)"); A.noEmDash(h, w.id); if (/wt-head/.test(h)) A.headMatchesBody(h, w.id + " table (D12)"); });
 let h = C("purFContent", xw);
-A.contains(h, '<span class="metric-value">10</span><span class="bank-pill">need your approval</span>', "Detail headline: requests awaiting me");
+A.contains(h, '<span class="metric-value">25</span><span class="bank-pill">need your approval</span>', "Detail headline: requests awaiting me (25 with the payment process on, after the 9 Oct sample additions)");
 A.absent(h, "data-purf-drop=", "no board drop zones anywhere (Kanban removed 5 Oct)"); A.absent(h, "purf-kcard", "no cards");
-A.contains(h, "purf-turn purf-turn-next", "rows carry a next-turn badge"); A.contains(h, "purf-turn purf-turn-waiting", "waiting badge");
+A.absent(h.slice(h.indexOf('class="purf-tbl"')), "purf-turn", "table rows carry no turn badge: the Status column is a short word, not the old badge (owner, 9 Oct)");
 A.absent(h, "draggable=", "nothing is draggable: the board is gone");
-A.contains(h, 'data-purf="scope"', "scope chip present"); A.contains(h, ">All requests<", "scope defaults to All requests");
+A.absent(h, 'data-purf="scope"', "no separate scope chip: merged into the status chip (owner, 9 Oct)"); A.contains(h, '<span class="fc-label">All requests</span>', "status chip defaults to All requests (owner, 9 Oct: the demo opens with every status on show)");
+{ const kinds = (C("purFTable", wide).match(/purf-stchip purf-stchip-([a-z]+)"/g) || []).map(function (m) { return m.replace(/.*-/, "").replace('"', ""); }); const uniq = kinds.filter(function (k, i) { return kinds.indexOf(k) === i; }); A.ok(uniq.length >= 4, "Explore under All requests shows at least four different status chips (" + uniq.join(", ") + ")"); }
+A.ok(/role="columnheader"><button[^>]*data-k="num"[^>]*>Requisition #[\s\S]*?role="columnheader"><button[^>]*data-k="vendor"[^>]*>Vendor[\s\S]*?role="columnheader"><button[^>]*data-k="issued"[^>]*>Issued[\s\S]*?role="columnheader"><button[^>]*data-k="age"[^>]*>Age[\s\S]*?role="columnheader"><button[^>]*data-k="status"[^>]*>Status[\s\S]*?role="columnheader"><button[^>]*data-k="amt"[^>]*>Amount [\s\S]*?<\/button><\/span><\/div>/.test(h), "table columns: Requisition #, Vendor, Issued, Age, Status, Amount last, each a sort header (owner, 9 Oct)");
+A.ok(/<span class="purf-c-num" role="cell">\d{4}<\/span>/.test(h), "requisition shows the number alone, no PO- prefix (owner, 9 Oct)"); A.absent(h.slice(h.indexOf('class="purf-tbl"')), '"purf-c-num" role="cell">PO-', "no PO- prefix in the column");
+A.ok(/<span class="purf-c-date" role="cell">[A-Z][a-z]{2} \d{1,2}<\/span>/.test(h), "Issued shows month and day, no year (owner, 9 Oct)");
+A.ok(/<span class="purf-c-st" role="cell"><span class="purf-stchip purf-stchip-(next|mine|pending|approved|rejected|hold|other)"><span class="material-symbols-rounded"[^>]*>(hourglass_top|how_to_reg|schedule|check_circle|block|lock|circle)<\/span><span class="purf-stchip-t">(Your turn|Coming to you|Pending|Approved|Rejected|On hold)<\/span><\/span><\/span>/.test(h), "Status cell: Jo-style chip, icon and short word in its own span (ellipsizes in a tight column)");
+["pending:attention", "next:brand", "approved:positive", "rejected:negative", "hold:severe"].forEach(function (p) { const k = p.split(":")[0], t = p.split(":")[1]; A.contains(css, ".purf-root .purf-stchip-" + k + "{color:var(--semantic-color-foreground-static-" + t + "-on-subtle);background:var(--semantic-color-fill-static-" + t + "-subtle);}", "chip " + k + " on the " + t + " semantic tokens"); });
+A.contains(css, ".purf-root .purf-stchip-mine{color:var(--txt-secondary);background:var(--semantic-color-fill-static-neutral-subtle);}", "Coming to you on the neutral tint");
+{ const sw = function (ref) { return C("purFStatusWord", po(ref)); }; A.eq(sw("PO-2885").w, "Your turn", "my level acts next reads Your turn"); A.eq(sw("PO-2888").w, "Coming to you", "my later level reads Coming to you"); A.ok(POS.some(function (p) { return C("purFStatusWord", p).w === "Pending"; }), "someone else's turn reads Pending"); A.ok(POS.some(function (p) { return C("purFStatusWord", p).w === "Approved"; }), "a completed path reads Approved"); }
+A.ok(/<span class="purf-c-age" role="cell" data-tip="Waiting \d+ days? since it was issued\." data-tip-plain><span class="material-symbols-rounded"[^>]*>schedule<\/span><span class="purf-age-n( purf-age-warn)?">\d+d<\/span><span class="sr-only"> waiting<\/span><\/span>/.test(h), "Age cell: clock glyph, Nd, hover wording, as V1"); A.contains(h, 'class="purf-age-n purf-age-warn"', "an age of 30 days or more is emphasised, as V1");
+A.absent(h, 'role="columnheader">Department<', "no Department column"); A.contains(h, 'data-k="status"', "Status column present (owner, 9 Oct)"); A.contains(h, 'aria-colcount="6"', "six columns, no open-record control (owner, 9 Oct)"); A.absent(h, "purf-c-go", "no edit icon column"); A.absent(h, "purf-ovflag", "no Overdue flag in the Issued cell"); A.absent(h, "purf-ovrow", "no overdue row tint"); A.absent(h, 'data-purf="ov"', "no Overdue only chip (owner, 9 Oct: removed completely)"); A.absent(blockRaw, "purFOvChip", "and no Overdue code left");
+xw.purfStatus = "Awaiting my approval next"; A.contains(C("purFHeaderBlock", xw), 'data-purf="path"', "the approval path chip shows at Detail under every status (owner, 9 Oct)"); xw.purfStatus = null; A.contains(h, 'data-purf="open"', "rows still open the record on click"); A.contains(css, ".purf-root .purf-trow .lr-main{flex:1 1 120px;min-width:64px;max-width:240px;}", "Vendor is bounded, 64px to 240px, and gives first (owner, 9 Oct)"); A.contains(css, ".purf-root .purf-c-date{flex:0 1 76px;min-width:48px;overflow:hidden;", "Issued shrinks to a floor and clips rather than running under Age (owner, 9 Oct)"); A.contains(css, ".purf-root .purf-tbl{min-width:0;}", "no table floor: the table never scrolls sideways (owner, 9 Oct)");
+A.ok(/<span class="lr-main purf-c-vendor" role="cell" data-vendor="[^"]+" data-tip-plain>/.test(h), "vendor cell carries its full name for the hover"); A.contains(blockRaw, 'if(c.scrollWidth>c.clientWidth+1)c.setAttribute("data-tip",c.getAttribute("data-vendor"));else c.removeAttribute("data-tip");', "the hover shows the full name only when the text is actually cut");
+A.contains(h, "Cleaning Services of Greater Springfield and Surrounding Counties Inc", "one sample vendor is long enough to be cut (owner, 9 Oct)"); A.absent(h, "Cleaning Svcs", "the short name is gone");
 const hk = C("purFContent", kpi); const glOpen = POS.filter(function (p) { const l = C("purFLane", p); return l === "Pending approval" || l === "Payment approval" || l === "Ready to pay"; }).length;
 A.contains(hk, '<span class="metric-value">' + glOpen + '</span>', "Glance headline: everything waiting for someone to act (owner, 27 Sep)"); A.contains(hk, ">waiting for action<", "headline pill"); A.contains(hk, 'title="Everything waiting for someone to act: ', "headline hover explains itself");
 A.contains(hk, ">My approval<", "tile: Awaiting my approval next"); A.contains(hk, ">Coming to me<", "tile: Awaiting my approval, later"); A.contains(hk, ">To be paid<", "tile: Ready to pay");
-A.contains(hk, 'title="Awaiting my approval next: 9 requests where your level is the next one to act."', "tile hover: full meaning with the count"); A.contains(hk, 'title="Awaiting my approval: 1 request on a path you are on', "tile hover: later"); A.contains(hk, 'title="Ready to pay: 1 order with payment approval complete', "tile hover: to be paid");
-A.absent(hk, " pending, ", "caption is the outstanding figure only"); A.contains(hk, "$14,397.50 outstanding</span>", "caption: outstanding dollars"); A.absent(hk, "need your approval", "old headline gone");
+A.ok(/title="Awaiting my approval: \d+ requests? where your level acts now\."/.test(hk), "tile hover: My approval = your level acts now, with the count (owner, 9 Oct)"); A.ok(/title="Awaiting my approval next: \d+ requests? on a path you are on/.test(hk), "tile hover: Coming to me = Awaiting my approval next, an earlier level acts first"); A.contains(hk, 'title="Ready to pay: 1 order with payment approval complete', "tile hover: later"); A.contains(hk, 'title="Ready to pay: 1 order with payment approval complete', "tile hover: to be paid");
+A.absent(hk, " pending, ", "caption is the outstanding figure only"); A.ok(/\$[\d,]+\.\d{2} outstanding<\/span>/.test(hk), "caption: outstanding dollars"); A.absent(hk, "need your approval", "old headline gone");
 /* scope filter */
-xw.purfScope = "Awaiting my approval next"; h = C("purFContent", xw); A.ok(/purf-turn-next/.test(h), "'Awaiting my approval next' shows next-turn rows"); A.absent(h, "purf-turn-waiting", "no waiting rows under 'next'");
-xw.purfScope = "Awaiting my approval"; h = C("purFContent", xw); A.ok(/purf-turn-mine/.test(h) && !/purf-turn-waiting/.test(h), "'Awaiting my approval' adds my later levels, still no waiting rows");
-xw.purfScope = "All requests";
+{ const kinds = function () { return C("purFTableRows", xw).map(function (p) { return C("purFTurn", p).kind; }); }; const stages = function () { return C("purFTableRows", xw).map(function (p) { return p.stage; }); };
+  xw.purfStatus = "Awaiting my approval"; A.ok(kinds().length > 0 && kinds().every(function (k) { return k === "next"; }), "'Awaiting my approval' lists only requests where my level acts now, the Your turn rows (" + kinds().length + ")");
+  xw.purfStatus = "Awaiting my approval next"; A.ok(kinds().length > 0 && kinds().every(function (k) { return k === "mine"; }), "'Awaiting my approval next' lists only the Coming to you rows, an earlier level acts first (" + kinds().length + ")");
+  xw.purfStatus = "Unapproved"; A.ok(kinds().indexOf("waiting") > -1 && stages().every(function (st) { return st === "Pending"; }), "'Unapproved' lists every pending request, other people's turns included, and no approved order");
+  xw.purfStatus = "Approved"; A.ok(stages().length > 0 && stages().every(function (st) { return st === "Approved"; }), "'Approved' lists approved orders only (" + stages().length + ")");
+  xw.purfStatus = null; }
 /* status chip means the derived status in the table */
-xw.purfStatus = "Payment approval"; h = C("purFContent", xw); A.contains(h, "PO-2872", "Payment approval filter shows its rows"); xw.purfStatus = null;
-h = C("purFContent", xw); A.contains(h, ">Payment approval</span>", "table status cell names the derived status"); A.contains(h, "purf-turn", "table rows carry the turn badge"); if (/wt-head/.test(h)) A.headMatchesBody(h, "table (D12)"); xw.purfView = null;
+xw.purfStatus = "Approved"; h = C("purFContent", xw); A.contains(h, "PO-2872", "an approved order awaiting payment approval is listed under Approved"); xw.purfStatus = null; h = C("purFContent", xw);
+if (/wt-head/.test(h)) A.headMatchesBody(h, "table (D12)"); xw.purfView = null;
 
 /* ---------- 3. actions on the live path --------------------------------- */
 /* PO-2893: my level 2 is next; approving completes the request path */
@@ -135,144 +151,78 @@ A.eq(C("purFApplyHold", wide, "PO-2904", "hold", "Budget check"), true, "holding
 A.eq(C("purFApplyHold", wide, "PO-2904", "unhold", ""), true, "removing the hold"); A.eq(turn("PO-2904").kind, "next", "PO-2904 is my turn again");
 reset();
 
-/* ---------- 4. Record screen: Requests/Update one to one (owner, 27 Sep) --- */
-const openTab = function (ref, tab) { C("purFOpenPO", xw, ref); const m = env.get("PURF_MODAL"); m.tab = tab || "approvals"; return C("purFModalHTML"); };
-const draft = function () { return env.get("PURF_MODAL").draft; };
+/* ---------- 4. Record pop-up: read-only, Approve / Hold / Reject (owner, 9 Oct) --- */
+const openTab = function (ref, tab) { C("purFOpenPO", xw, ref); const m = env.get("PURF_MODAL"); if (tab) m.tab = tab; return C("purFModalHTML"); };
+const modal = function () { return env.get("PURF_MODAL"); };
+const gridRows = function (ref) { const p = po(ref); return C("purFGridRows", p, p.path, p.appr || [], true); };
+const tapPurf = function (attrs) { const el = env.shim.mkTarget(attrs, "button"); el.closest = function (sel) { return sel.indexOf("data-purf") > -1 ? el : null; }; C("purFHandleClick", { target: el }); };
+const act = function (ref, kind, note) { tapPurf({ "data-purf": "po-act", "data-v": kind, "data-purf-ref": ref, "data-id": xw.id }); if (note !== undefined) modal().note = note; tapPurf({ "data-purf": "po-act-confirm", "data-v": kind, "data-purf-ref": ref, "data-id": xw.id }); };
 reset();
-/* header, tabs, footer, scroll */
-let mh = openTab("PO-2893", "detail"); A.ok(mh.length > 3000, "record renders");
-["Vendor", "Ship To", ">Email<", ">Type<", ">Status<", "Approval Path", "Requisition #", "Purchase Order #", "Purchase Order Date", "Issued To", ">Agent<", ">Shipping<", "Date Requested"].forEach(function (f) { A.contains(mh, f, "header field " + f); });
-A.contains(mh, "<strong>Terms:</strong>", "vendor terms line"); A.contains(mh, "purf-m-scroll", "scrolling body"); A.contains(mh, 'data-purf="record-save"', "Save button"); A.contains(mh, ">Cancel</button>", "Cancel button");
-A.ok(mh.indexOf(">Cancel</button>") < mh.indexOf('data-purf="record-save"'), "Cancel then Save, bottom right"); A.absent(mh, ">Update</button>", "no Update button");
-A.contains(mh, 'data-v="detail"', "tab Detail"); A.contains(mh, 'data-v="approvals"', "tab Approvals"); A.contains(mh, 'data-v="attachments"', "tab Attachments"); A.contains(mh, 'data-v="note"', "tab Note"); A.absent(mh, 'data-v="payment"', "no Payment Approval tab while Unapproved");
-A.contains(mh, 'data-purf-sel="status"', "Status is a dropdown"); A.contains(mh, 'data-purf-sel="path"', "Approval Path is a dropdown"); A.contains(mh, 'data-purf-sel="type"', "Type is a dropdown");
-A.absent(mh, 'data-purf="submit-toggle"', "PO-2893 has an approved row, so Submit for Approval is hidden (submitForApproval())");
-mh = openTab("PO-2888", "detail"); A.contains(mh, 'data-purf="submit-toggle"', "Submit for Approval shown while Unapproved with nothing approved"); A.contains(mh, "Leaving this check box unchecked will put this request on hold", "the page's hover text");
-/* grid: one row per approver, legacy wording */
-mh = openTab("PO-2893"); A.contains(mh, "Starts with Alberto Allen", "creator row at level 0 when the creator is not on the path"); A.contains(mh, "Then Nitzi Wright", "then the path in order"); A.contains(mh, "Ends with Oisin Curran (you)", "last row reads Ends with");
+/* header: requisition number and vendor, the table's status chip, Open request top right, Close */
+let mh = openTab("PO-2885"); A.ok(mh.length > 3000, "pop-up renders"); A.eq(modal().tab, "approvals", "a request I can act on opens on Approvals");
+A.contains(mh, "Requisition 2885 &middot; Facilities Plus", "title is the requisition number and vendor"); A.contains(mh, 'class="purf-stchip purf-stchip-next"', "the table's status chip sits in the title");
+A.contains(mh, 'data-purf="open-record"', "Open request link in the header"); A.ok(mh.indexOf('data-purf="open-record"') < mh.indexOf('data-purf="close-modal" aria-label="Close"'), "Open request sits left of Close, top right");
+A.contains(mh, "purf-m-scroll", "scrolling body under a fixed header and footer");
+/* everything read-only: no form controls, no Save, no Submit for Approval */
+A.absent(mh, "<select", "no dropdowns"); A.absent(mh, '<input class="purf-fin', "no text boxes"); A.absent(mh, 'data-purf="record-save"', "no Save"); A.absent(mh, 'data-purf="submit-toggle"', "no Submit for Approval"); A.absent(mh, 'data-purf="grid-tick"', "no tickable boxes"); A.absent(mh, 'data-purf="pick-stub"', "no pickers");
+/* the page's header fields, in its order, as facts */
+const FACTS = ["Vendor", "Ship To", "Email", "Type", "Status", "Approval Path", "Requisition #", "Purchase Order #", "Purchase Order Date", "Issued To", "Agent", "Shipping", "Date Requested"];
+let last = -1; FACTS.forEach(function (f) { const i = mh.indexOf('class="purf-po-fact-k">' + f + '<'); A.ok(i > last, "fact " + f + " present, in the page's order"); last = i; });
+A.contains(mh, "<strong>Terms:</strong>", "vendor terms line"); A.contains(mh, 'class="purf-po-fact-v">2885<', "Requisition # is the bare number"); A.contains(mh, 'class="purf-po-empty">Not set<', "an empty field reads Not set, not an empty box");
+A.contains(mh, 'class="purf-po-fact-v">Unapproved<', "Status uses the page's vocabulary");
+/* tabs: Detail, Approvals, Attachments with its count, Note; no Payment Approval */
+A.contains(mh, 'data-v="detail"', "tab Detail"); A.contains(mh, 'data-v="approvals"', "tab Approvals"); A.contains(mh, 'data-v="attachments"', "tab Attachments"); A.contains(mh, 'data-v="note"', "tab Note"); A.absent(mh, 'data-v="payment"', "no Payment Approval tab");
+A.contains(mh, ">Attachments (2)<", "the Attachments tab carries its file count (owner, 9 Oct: the invoice lives there)"); A.contains(mh, 'class="purf-tab on"', "Jo's segmented tab style, one tab on");
+/* Detail: the line, account with fund and department beneath, totals row */
+mh = openTab("PO-2885", "detail"); A.contains(mh, 'class="purf-po-acct">50510 Building Maintenance<', "account on the line"); A.contains(mh, "Fund 1 Church &middot; Department 140 Facilities", "fund and department beneath it");
+A.contains(mh, 'role="cell">6 June<', "period from the issue date"); A.contains(mh, '<span class="purf-po-tot-k">Tax</span> $0.00', "Tax in the totals row"); A.contains(mh, '<span class="purf-po-tot-k">Total</span>', "Total in the totals row"); A.contains(mh, "$1,975.00", "the amount");
+/* Attachments: the files, each with Open; none editable */
+mh = openTab("PO-2885", "attachments"); A.contains(mh, "FacilitiesPlus-Invoice-88214.pdf", "invoice listed"); A.contains(mh, "Quote-roof-repair.pdf", "quote listed"); A.eq((mh.match(/data-purf="att-open"/g) || []).length, 2, "one Open per file"); A.absent(mh, "Add New Attachment", "no upload: read-only");
+A.contains(mh, "Invoice &middot; 184 KB &middot; Jun 4, 2026 &middot; Nitzi Wright", "file meta: kind, size, date, who");
+mh = openTab("PO-2899", "attachments"); A.contains(mh, "No attachments on this request.", "empty state"); A.contains(mh, ">Attachments<", "no count when there are none");
+/* Note: the one field that edits here, with Save note; the activity log beneath */
+mh = openTab("PO-2885", "note"); A.contains(mh, 'data-purf-field="note"', "note textarea"); A.absent(mh, "readonly", "note is writable"); A.contains(mh, 'data-purf="note-save"', "Save note button"); A.contains(mh, ">Activity<", "activity log");
+C("purFFieldSet", po("PO-2885"), "note", "Call the vendor about delivery"); mh = openTab("PO-2885", "note"); A.contains(mh, ">Note (1)<", "the Note tab shows a note exists"); C("purFFieldSet", po("PO-2885"), "note", "");
+/* Approvals grid: one row per approver, the page's wording and columns, marks not boxes */
+mh = openTab("PO-2893", "approvals"); A.contains(mh, "Starts with Alberto Allen", "creator row at level 0 when the creator is not on the path"); A.contains(mh, "Then Nitzi Wright", "then the path in order"); A.contains(mh, "Ends with Oisin Curran (you)", "last row reads Ends with");
 A.contains(mh, "Approval Needed By:", "column 1"); A.contains(mh, ">Approved<", "column Approved"); A.contains(mh, ">Rejected<", "column Rejected"); A.contains(mh, ">Hold<", "column Hold"); A.contains(mh, "Approval Updated By:", "column Approval Updated By"); A.eq((mh.match(/>Reason</g) || []).length, 2, "two Reason columns");
-A.contains(mh, 'role="cell">Nitzi Wright Jul 3, 2026</span>', "Approval Updated By carries actor and date"); A.absent(mh, "(from $", "no per-approver minimum text (the page has none)"); A.absent(mh, "Skipped:", "no skipped wording (the page has none)");
-mh = openTab("PO-2899"); A.contains(mh, "Then Lanette Stewart", "Or level: first approver as Then"); A.contains(mh, '<span class="purf-a-or"></span>Or Jim AndersonAndMoreLetters', "second approver on the same level indented as Or"); A.contains(mh, "out of office until Sep 5, 2026", "out-of-office flag from user meta"); A.contains(mh, "Ends with Pastor Bob", "Ends with the last level");
-/* enablement (setApprovalRows) */
-let rows = draft().rows; let en = C("purFGridEnable", rows, true);
-A.eq(en.noRight, true, "PO-2899: I am not on Education Ministry, so Approved and Rejected are read-only"); A.ok(rows.every(function (r) { return !r.canApprove && !r.canReject; }), "no Approved/Rejected box enabled");
-mh = openTab("PO-2893"); rows = draft().rows; en = C("purFGridEnable", rows, true);
+A.eq((mh.match(/purf-po-mark-approve/g) || []).length, 2, "two approved marks: the submitted creator row and Nitzi's level"); A.contains(mh, 'role="cell">Nitzi Wright Jul 3, 2026</span>', "Approval Updated By carries actor and date");
+A.absent(mh, "(from $", "no per-approver minimum text (the page has none)"); A.absent(mh, "Skipped:", "no skipped wording (the page has none)");
+mh = openTab("PO-2899", "approvals"); A.contains(mh, "Then Lanette Stewart", "Or level: first approver as Then"); A.contains(mh, '<span class="purf-a-or"></span>Or Jim AndersonAndMoreLetters', "second approver on the same level indented as Or"); A.contains(mh, "out of office until Sep 5, 2026", "out-of-office flag from user meta");
+mh = openTab("PO-2902", "approvals"); A.contains(mh, "purf-po-mark-reject", "a rejected row shows the reject mark"); A.contains(mh, 'role="cell">Duplicate of PO-2891</span>', "and its reason as text");
+mh = openTab("PO-2891", "approvals"); A.contains(mh, "purf-po-mark-hold", "a held row shows the hold mark"); A.contains(mh, "Waiting on budget confirmation", "and its reason");
+/* enablement (setApprovalRows) and the cascade (checkApproved) stay the page's, as pure rules */
+let rows = gridRows("PO-2899"); let en = C("purFGridEnable", rows, true);
+A.eq(en.noRight, true, "PO-2899: I am not on Education Ministry, so nothing is enabled"); A.ok(rows.every(function (r) { return !r.canApprove && !r.canReject; }), "no Approved/Rejected enabled");
+rows = gridRows("PO-2893"); en = C("purFGridEnable", rows, true);
 A.eq(rows[0].creator, true, "row 0 is the creator"); A.eq(rows[0].approved, true, "creator row ticked = submitted"); A.eq(rows[1].approved, true, "Nitzi's level 1 is approved"); A.eq(rows[2].user, ME, "row 2 is mine"); A.eq(rows[2].canApprove, true, "my row is enabled");
-mh = openTab("PO-2888"); rows = draft().rows; en = C("purFGridEnable", rows, true);
+rows = gridRows("PO-2888"); en = C("purFGridEnable", rows, true);
 A.eq(rows.filter(function (r) { return !r.creator; }).every(function (r) { return r.canApprove; }), true, "PO-2888: nothing acted, every level down to mine is enabled");
-/* cascade (checkApproved click) */
 C("purFGridTick", rows, 2, "approve", true); A.ok(rows[1].approved && rows[2].approved, "ticking my level ticks the level below"); A.eq(rows[1].rejected || rows[1].hold, false, "and clears its Rejected and Hold");
 C("purFGridTick", rows, 1, "approve", false); A.ok(!rows[1].approved && !rows[2].approved, "unticking a level clears it and every level above");
-C("purFGridTick", rows, 1, "reject", true); en = C("purFGridEnable", rows, true); A.eq(rows[1].canApprove, false, "a rejected row disables its Approved"); A.eq(rows[1].canRejReason, true, "its Reason is editable while ticked"); A.eq(rows[1].canHold, false, "and its Hold");
-C("purFGridTick", rows, 1, "reject", false); C("purFGridTick", rows, 1, "hold", true); en = C("purFGridEnable", rows, true); A.eq(rows[1].canHoldReason, true, "hold reason editable while Hold is ticked"); A.eq(rows[1].canApprove, false, "hold disables Approved on the row");
-/* a later level acted locks Approved and Rejected everywhere */
 const fake = [{ seq: 1, user: "Nitzi Wright", min: 0, pre: "Starts with " }, { seq: 2, user: ME, min: 0, pre: "Then " }, { seq: 3, user: "Pastor Bob", min: 0, pre: "Ends with ", approved: true }];
-en = C("purFGridEnable", fake, true); A.eq(en.lockedAbove, true, "an acted row on a later level locks"); A.ok(fake.every(function (r) { return !r.canApprove && !r.canReject; }), "every Approved and Rejected box disabled");
-/* status options */
-let opts = C("purFStatusOptions", po("PO-2893"), "Unapproved", draft().rows); A.eq(opts.filter(function (o) { return o.enabled; }).map(function (o) { return o.value; }).join(","), "Unapproved,Closed", "Unapproved: current and Closed only");
-opts = C("purFStatusOptions", po("PO-2872"), "Approved", []); A.eq(opts.filter(function (o) { return o.enabled; }).map(function (o) { return o.value; }).join(","), "Approved,Closed", "Approved on Everyone (creator not on path): Voided stays disabled, as LoadApprovals does");
-opts = C("purFStatusOptions", po("PO-2610"), "Closed", []); A.ok(opts.filter(function (o) { return o.value === "Approved"; })[0].enabled, "Closed offers Approved (reopen)");
-/* Save applies the draft; Cancel discards */
-reset(); mh = openTab("PO-2888"); rows = draft().rows; C("purFGridTick", rows, 2, "approve", true);
-C("purFRecordSave", xw, po("PO-2888"), draft()); A.eq(po("PO-2888").stage, "Approved", "Save: my approval with the cascade completes the path"); A.ok(po("PO-2888").appr.some(function (a) { return a.user === "Nitzi Wright" && a.by === ME; }), "the cascaded row is stored with me as the actor"); A.contains(po("PO-2888").log[po("PO-2888").log.length - 1].note, "Record saved", "activity logged");
-reset(); mh = openTab("PO-2888"); const d2 = draft(); d2.submit = false; C("purFRecordSave", xw, po("PO-2888"), d2); A.eq(po("PO-2888").submitted, false, "Save unticked: not submitted"); A.eq(turn("PO-2888").kind, "hold", "not submitted shows as a hold on the approval process (the page's hover text)"); A.eq(C("purFMoveCheck", po("PO-2888"), "Payment approval").ok, false, "and cannot be approved from the board (Close and Void stay possible, as on the page)");
-mh = openTab("PO-2888"); A.contains(mh, "Not submitted for approval", "turn line says so"); A.eq(draft().submit, false, "checkbox reflects it"); const d3 = draft(); d3.submit = true; C("purFRecordSave", xw, po("PO-2888"), d3); A.eq(po("PO-2888").submitted, true, "re-submitted"); A.eq(turn("PO-2888").kind, "mine", "back on the path");
-reset(); mh = openTab("PO-2893", "detail"); C("purFFieldSet", po("PO-2893"), "email", "x@y.z"); C("purFRecordCancel", po("PO-2893"), draft()); A.eq(C("purFF", po("PO-2893"), "email"), "", "Cancel restores header fields");
-/* status dropdown on save */
-reset(); mh = openTab("PO-2903"); const d4 = draft(); d4.status = "Closed"; C("purFRecordSave", xw, po("PO-2903"), d4); A.eq(po("PO-2903").stage, "Closed", "Closed is always offered on the record, as on the page");
-reset(); mh = openTab("PO-2903"); const d5 = draft(); d5.status = "Voided"; C("purFRecordSave", xw, po("PO-2903"), d5); A.eq(po("PO-2903").stage, "Pending", "Voided is refused from Unapproved (not offered)");
-/* header lock once a row acted */
-reset(); mh = openTab("PO-2893", "detail"); A.contains(mh, 'aria-label="Approval Path" disabled', "Approval Path locked once a row has acted"); A.contains(mh, 'aria-label="Type" disabled', "Type locked too"); A.contains(mh, "Lines, Type, Approval Path, Vendor and Ship To are locked", "lines locked note");
-mh = openTab("PO-2888", "detail"); A.contains(mh, 'aria-label="Approval Path" disabled', "submitted: the creator row counts as acted, so the path is locked (setApprovalRows)"); po("PO-2888").submitted = false; mh = openTab("PO-2888", "detail"); A.absent(mh, 'aria-label="Approval Path" disabled', "not submitted: nothing acted, path editable"); po("PO-2888").submitted = true;
-/* read-only records */
-mh = openTab("PO-2610"); A.contains(mh, "Read-only: this order is approved and paid", "paid order grid is read-only"); A.contains(mh, 'data-v="payment"', "Payment Approval tab once Approved/Closed");
-mh = openTab("PO-2872", "payment"); A.contains(mh, "Payment Approval Path: Administration", "payment grid lives on the Payment Approval tab"); A.contains(mh, "Add Invoice Payment Approval", "invoice grid follows");
-/* an approval from the Approvals grid writes the same rows Save writes */
-reset(); C("purFApplyMove", wide, "PO-2888", "Payment approval", ""); A.eq(po("PO-2888").stage, "Approved", "grid approval: approved"); A.ok(po("PO-2888").appr.some(function (a) { return a.user === "Nitzi Wright" && a.by === ME; }) && po("PO-2888").appr.some(function (a) { return a.user === ME; }), "stores the cascaded rows like Save");
-C("purFCloseModal"); reset();
-
-/* ---------- 4b. legend (owner, 27 Sep): info icon top right, Explore and Detail only ---- */
-const hdWide = C("purFHeaderBlock", wide), hdX = C("purFHeaderBlock", xw), glance = C("purFContent", kpi);
-A.absent(hdWide, 'data-purf="legend"', "Explore header has no legend icon (owner, 6 Oct)"); A.absent(hdX, 'data-purf="legend"', "Detail header has no legend icon (owner, 6 Oct)");
-A.absent(glance, 'data-purf="legend"', "Glance has no legend icon");
-C("purFOpenPop", "legend", xw.id, null); A.eq(env.get("PURF_POP").type, "legend", "the icon opens the legend pop-up");
-const lg = C("purFPopContent");
-["Status", "Badges: whose turn it is", "Issued column"].forEach(function (c) { A.contains(lg, '<div class="cap">' + c + "</div>", "legend section " + c); });
-env.get("PURF_LANES").forEach(function (l) { A.contains(lg, ">" + l + "</span>", "legend names status " + l); });
-["next", "mine", "waiting", "rejected", "hold"].forEach(function (k) { A.contains(lg, "purf-turn purf-turn-" + k, "legend shows the " + k + " badge with its real class"); });
-["purf-card-", "purf-fin-close", "Moving a card", "Drag the card"].forEach(function (k) { A.absent(lg, k, "legend has no board item " + k + " (Kanban removed 5 Oct)"); });
-A.noEmDash(lg, "legend");
-C("purFClosePop"); A.eq(env.get("PURF_POP"), null, "legend closes");
-
-
-/* ---------- 4d. Encumbrances view (owner, 27 Sep) ----------------------- */
-reset();
-A.contains(C("purFViewToggle", wide), 'data-v="enc"', "toggle offers Encumbrances"); A.contains(C("purFViewToggle", xw), ">Encumbrances<", "segment label at Detail (Explore is icon-only)");
-wide.purfView = "enc"; xw.purfView = "enc"; wide.purfPath = null; xw.purfPath = null;
-A.eq(C("purFViewCur", wide), "enc", "view resolves to enc");
-const encRows = C("purFEncRows", wide), all = env.get("PURF_POS");
-A.ok(encRows.length > 0, "there are open encumbrances");
-A.ok(encRows.every(function (p) { return (p.stage === "Pending" || p.stage === "Approved") && !p.paid && p.pay !== "paid" && !(p.appr || []).some(function (a) { return a.state === "rejected"; }); }), "open = pending or approved, unpaid, no rejected row (GLAccountRepository.cs:2220)");
-A.eq(all.filter(function (p) { return p.stage === "Closed" || p.stage === "Voided" || p.paid; }).filter(function (p) { return encRows.indexOf(p) > -1; }).length, 0, "closed, voided and paid orders never encumber");
-A.ok(encRows.some(function (p) { return p.hold; }), "held orders still count (no legacy hold exclusion)");
-A.eq(C("purFEncTotal", wide), encRows.reduce(function (s, p) { return s + p.amt; }, 0), "total = sum of open order totals");
-const pers = C("purFEncPeriods", wide);
-A.ok(pers.length > 1, "more than one accounting period"); A.eq(pers.map(function (r) { return r.key; }).join(","), pers.map(function (r) { return r.key; }).sort().join(","), "periods in chronological order");
-A.eq(pers.reduce(function (s, r) { return s + r.n; }, 0), encRows.length, "every open order lands in exactly one period");
-A.ok(/^[A-Z][a-z]{2} 20\d\d$/.test(pers[0].label), "period label is Mon YYYY");
-const hdE = C("purFHeaderBlock", wide);
-A.contains(hdE, "encumbered, not yet paid", "headline is the encumbered total"); A.absent(hdE, 'data-purf="status"', "status chip hidden in the Encumbrances view");
-A.contains(hdE, 'data-purf="path"', "approval path chip stays"); A.contains(hdE, "open order", "context line counts open orders");
-const encW = C("purFEncView", wide), encX = C("purFEncView", xw);
-A.absent(encW, 'data-purf="enc-view"', "Explore: the Chart / Table sub-toggle is not in the body"); A.contains(C("purFHeaderBlock", wide), 'data-purf="enc-view"', "Explore: the sub-toggle sits on the headline row, level with the total (owner, 27 Sep)"); A.absent(C("purFHeaderBlock", xw), 'data-purf="enc-view"', "Detail header has no sub-toggle"); A.contains(encW, "purf-enc-col", "Explore: chart bars");
-A.eq((encW.match(/purf-enc-col"/g) || []).length, pers.length, "one bar per period");
-A.contains(encX, "purf-enc-split", "Detail: chart and table side by side"); A.contains(encX, "Total encumbered, not yet paid", "Detail: table total row");
-A.absent(encX, 'data-purf="enc-view"', "Detail has no sub-toggle");
-wide.purfEncView = "table"; const encT = C("purFEncView", wide); A.contains(encT, "purf-enc-tbl", "Explore table on demand");
-A.eq((encT.match(/purf-enc-trow/g) || []).length, pers.length, "one table row per period");
-env.get("PURF_POP"); C("purFClosePop");
-/* bar pop-up lists the orders behind a period with their lane */
-const body = C("purFBody", wide); A.contains(body, "purf-enc", "body renders the view");
-xw.purfView = "table"; wide.purfView = null; wide.purfEncView = null;
-A.absent(C("purFLegendHTML", wide), "Encumbrances view", "legend carries no Encumbrances note (icon is hidden in that view)");
-A.contains(css, ".purf-root .purf-enc-bar{", "chart CSS copied as purf-enc-*"); A.absent(block, ".pur-bar", "no dependency on her .pur-bar class");
-reset();
-
-/* ---------- 4e. legend by view; no Kanban at any tier (owner, 5 Oct) ------ */
-reset(); wide.purfView = null; xw.purfView = null; wide.purfEncView = null;
-A.absent(C("purFViewToggle", wide), 'data-v="kanban"', "Explore toggle has no Kanban"); A.contains(C("purFViewToggle", wide), 'data-v="table"', "Explore offers Table"); A.contains(C("purFViewToggle", wide), 'data-v="enc"', "Explore offers Encumbrances");
-A.absent(C("purFViewToggle", xw), 'data-v="kanban"', "Detail toggle has no Kanban either (removed 5 Oct)"); A.absent(C("purFViewToggle", xw), ">Kanban<", "no Kanban label");
-A.eq(C("purFViewCur", wide), "table", "Explore default view is the table"); A.eq(C("purFViewCur", xw), "table", "Detail default view is the table too (owner, 27 Sep)"); xw.purfView = "kanban"; A.eq(C("purFViewCur", xw), "table", "a stored kanban view resolves to the table at Detail (board removed 5 Oct)"); xw.purfView = null;
-wide.purfView = "kanban"; A.eq(C("purFViewCur", wide), "table", "a stored kanban view resolves to table at Explore"); wide.purfView = null;
-xw.purfView = "enc"; A.absent(C("purFHeaderBlock", xw), 'data-purf="legend"', "no legend icon in the Encumbrances view"); xw.purfView = "table";
-A.absent(C("purFHeaderBlock", xw), 'data-purf="legend"', "no legend icon in the Table view either (owner, 6 Oct)");
-C("purFOpenPop", "legend", xw.id, null); const lgT = C("purFPopContent"); C("purFClosePop");
-A.contains(lgT, '<div class="cap">Status</div>', "table legend: Status section"); A.contains(lgT, ">Closed</span>", "table legend names Closed"); A.contains(lgT, ">Voided</span>", "table legend names Voided");
-A.contains(lgT, "purf-ovflag", "table legend shows the Overdue flag"); A.contains(lgT, "purf-turn purf-turn-next", "table legend keeps the badges");
-["purf-card-", "purf-fin-close", "Moving a card", "Drag the card", "Encumbrances view", "purf-age-hot"].forEach(function (k) { A.absent(lgT, k, "table legend has no board-only item " + k); });
-xw.purfView = null; reset();
-
-/* ---------- 4f. Table first; short chip labels at Explore (owner, 27 Sep) -- */
-reset(); wide.purfView = null; xw.purfView = null; wide.purfScope = null; xw.purfScope = null;
-const tgX = C("purFViewToggle", xw); A.ok(tgX.indexOf('data-v="table"') < tgX.indexOf('data-v="enc"'), "Detail toggle order: Table, Encumbrances"); A.eq((tgX.match(/data-v=/g) || []).length, 2, "two views only");
-const tgW = C("purFViewToggle", wide); A.ok(tgW.indexOf('data-v="table"') < tgW.indexOf('data-v="enc"'), "Explore toggle order: Table, Encumbrances");
-const hW = C("purFHeaderBlock", wide), hX = C("purFHeaderBlock", xw);
-A.contains(hW, '<span class="fc-label">All statuses</span>', "Explore status chip drops the Status: prefix"); A.contains(hX, '<span class="fc-label">Status: All statuses</span>', "Detail status chip unchanged");
-A.contains(hW, '<span class="fc-label">All paths</span>', "Explore path chip reads All paths"); A.contains(hX, '<span class="fc-label">All approval paths</span>', "Detail path chip unchanged");
-A.contains(hW, 'aria-label="Approval path, currently All approval paths"', "Explore aria keeps the full wording");
-wide.purfScope = "Awaiting my approval next"; A.contains(C("purFHeaderBlock", wide), '<span class="fc-label">My approval next</span>', "Explore scope: My approval next");
-wide.purfScope = "Awaiting my approval"; A.contains(C("purFHeaderBlock", wide), '<span class="fc-label">My approval</span>', "Explore scope: My approval");
-xw.purfScope = "Awaiting my approval next"; A.contains(C("purFHeaderBlock", xw), '<span class="fc-label">Awaiting my approval next</span>', "Detail scope unchanged");
-wide.purfScope = null; xw.purfScope = null; reset();
-
-/* ---------- 4g. Explore header: one layout at both tiers (owner, 27 Sep: "fix this to way it was before") -- */
-reset(); wide.purfView = null; xw.purfView = null;
-const hsW = C("purFHeaderBlock", wide), hsX = C("purFHeaderBlock", xw);
-[hsW, hsX].forEach(function (h, i) { const n = i ? "Detail" : "Explore"; A.contains(h, 'class="dep-hd-toggle"', n + ": labelled toggle on the chip line"); A.contains(h, ">Encumbrances</button>", n + ": toggle keeps its labels"); });
-A.absent(hsW, "purf-hd-acts", "no stacked actions cell"); A.absent(css, "purf-vtoggle-ic", "no icon-only toggle CSS");
-A.contains(css, "justify-self:stretch;align-self:center;}", "chip row stretches to its track (was start-justified and overflowed under the toggle)");
-A.contains(css, '.purf-root[data-tier="wide"] .purf-chip::before{display:none;}', "Explore chips drop the leading filter glyph");
-wide.purfView = "enc"; A.absent(C("purFHeaderBlock", wide), 'data-purf="legend"', "Explore enc view hides the legend"); wide.purfView = null; reset();
+en = C("purFGridEnable", fake, true); A.eq(en.lockedAbove, true, "an acted row on a later level locks"); A.ok(fake.every(function (r) { return !r.canApprove && !r.canReject; }), "every Approved and Rejected disabled");
+/* footer by state: the three decisions when my level may act, Close otherwise */
+reset(); mh = openTab("PO-2885"); ["approve", "hold", "reject"].forEach(function (k) { A.contains(mh, 'data-purf="po-act" data-v="' + k + '"', "Your turn: " + k + " offered"); });
+A.ok(mh.indexOf('data-v="reject"') < mh.indexOf('data-v="hold"') && mh.indexOf('data-v="hold"') < mh.indexOf('data-v="approve"'), "order Reject, Hold, Approve, Approve primary at the right");
+mh = openTab("PO-2888"); A.eq(turn("PO-2888").kind, "mine", "PO-2888: Coming to you"); A.contains(mh, 'data-v="approve"', "Coming to you may still act: the page enables rows down to mine, and Approve cascades below");
+mh = openTab("PO-2899"); A.absent(mh, 'data-purf="po-act"', "not on the path: no decisions"); A.contains(mh, '>Close</button>', "Close instead"); A.eq(modal().tab, "detail", "and it opens on Detail"); A.contains(mh, "Waiting on Alfred Johnson", "the footer lead says whose turn it is");
+mh = openTab("PO-2891"); A.absent(mh, 'data-v="unhold"', "held by Lanette: I cannot remove her hold"); A.contains(mh, "On hold by Lanette Stewart.", "footer names who holds it");
+mh = openTab("PO-2902"); A.absent(mh, 'data-v="unreject"', "rejected by Nitzi: I cannot clear her rejection"); A.contains(mh, "Rejected by Nitzi Wright.", "footer names who rejected");
+mh = openTab("PO-2872"); A.absent(mh, 'data-purf="po-act"', "an approved order has no decisions"); A.contains(mh, "nothing to decide here", "and says so");
+/* the confirm strip: reason first, then the act, through the page's own rules */
+reset(); mh = openTab("PO-2885"); tapPurf({ "data-purf": "po-act", "data-v": "approve", "data-purf-ref": "PO-2885", "data-id": xw.id }); mh = C("purFModalHTML");
+A.eq(modal().confirm, "approve", "Approve opens the confirm strip"); A.contains(mh, 'id="purfPoNote"', "with a note field"); A.contains(mh, ">Confirm approve</button>", "and Confirm approve"); A.contains(mh, "This completes the path: the request becomes Approved.", "it says what approving at level 2 of 2 does"); A.absent(mh, 'data-purf="po-act"', "the three buttons are gone while confirming");
+tapPurf({ "data-purf": "po-act-cancel", "data-id": xw.id }); A.eq(modal().confirm, null, "Cancel closes the strip"); A.eq(po("PO-2885").stage, "Pending", "and nothing happened");
+act("PO-2885", "approve", "Looks fine"); A.eq(po("PO-2885").stage, "Approved", "Confirm approve: my level with the cascade completes the path"); A.eq(po("PO-2885").log[po("PO-2885").log.length - 1].note, "Looks fine", "the note is logged"); A.eq(modal().confirm, null, "strip closed"); A.eq(modal().tab, "approvals", "pop-up stays open on Approvals"); A.contains(C("purFModalHTML"), "purf-stchip-approved", "title chip now Approved");
+reset(); openTab("PO-2888"); act("PO-2888", "reject", ""); A.eq(turn("PO-2888").kind, "rejected", "Confirm reject: the request reads Rejected"); A.eq(po("PO-2888").appr.filter(function (r) { return r.state === "rejected"; })[0].reason, "unknown", "a blank reason is saved as unknown, as the page does");
+mh = C("purFModalHTML"); A.contains(mh, 'data-v="unreject"', "my own rejection offers Clear rejection"); act("PO-2888", "unreject", ""); A.eq(turn("PO-2888").kind, "mine", "cleared: back on the path");
+reset(); openTab("PO-2888"); act("PO-2888", "hold", "Budget check"); A.eq(po("PO-2888").hold, true, "Confirm hold: on hold"); A.eq(turn("PO-2888").kind, "hold", "turn reads hold"); A.eq(po("PO-2888").appr.filter(function (r) { return r.state === "hold"; })[0].reason, "Budget check", "with the reason");
+mh = C("purFModalHTML"); A.contains(mh, 'data-v="unhold"', "my own hold offers Remove hold"); act("PO-2888", "unhold", ""); A.eq(po("PO-2888").hold, false, "hold removed"); A.eq(turn("PO-2888").kind, "mine", "back on the path");
+reset(); env.ctx.PURF_MODAL = null;
+/* CSS: Jo's pop-up pieces on tokens; the form styles are gone */
+A.contains(css, ".purf-root .purf-po-facts{display:grid;grid-template-columns:repeat(4,1fr);", "four-column fact grid"); A.contains(css, ".purf-root .purf-po-fact-v{font-size:var(--type-size-12);", "fact values at the table's 12px (owner, 9 Oct: one text scale)"); A.absent(C("purFModalHTML"), "Your level can act.", "no grid note under the Approvals grid (owner struck it out)"); A.contains(css, ".purf-root .purf-tab.on{", "segmented tab CSS present (the tabs had none)"); A.contains(css, ".purf-root .purf-po-mark-approve{color:var(--semantic-color-foreground-static-positive-on-subtle);}", "approved mark on the positive token");
+A.contains(css, ".purf-root .purf-po-danger{background:var(--red-100);", "Confirm reject in Jo's danger style"); A.absent(css, ".purf-root .purf-fin{", "no text-box CSS"); A.absent(css, ".purf-root .purf-sel{", "no dropdown CSS"); A.absent(css, ".purf-root .purf-box{", "no checkbox CSS");
 
 /* ---------- 5. hygiene --------------------------------------------------- */
 A.noEmDash(block.replace(/\/\*[\s\S]*?\*\//g, ""), "block code");
@@ -287,14 +237,15 @@ A.absent(css, ".purf-paybadge", "the dead pay badge CSS is gone"); A.absent(css,
    path itself. The Kanban that drew it as columns is gone; the column model (purFCols / purFColOf) still drives the
    move rules behind the Approvals grid. Everything above this line describes the same widget with the constant flipped on. */
 payOn(false); reset();
-xw.purfView = null; xw.purfPath = null; xw.purfScope = null; xw.purfStatus = null;
+xw.purfView = null; xw.purfPath = null; xw.purfStatus = null;
 const col = function (ref) { return C("purFColOf", po(ref)); };
 const chk6 = function (ref, to) { return C("purFMoveCheck", po(ref), to); };
 
 /* 6a. paths and statuses with no board: the table keeps both chips */
 A.eq(C("purFPathVals", xw).slice().sort().join("|"), "Administration|Education Ministry|Everyone|QA Path", "every approval path with rows is offered");
 A.eq(C("purFPathCur", xw), "All approval paths", "the table defaults to all paths (the board that needed one is gone)");
-A.eq(C("purFStatusVals", xw, "table").join("|"), "All statuses|Pending|Approved", "status filter is All / Pending / Approved only (owner, 6 Oct)");
+A.eq(C("purFStatusVals", xw, "table").join("|"), "All requests|Awaiting my approval next|Awaiting my approval|Unapproved|Approved", "status filter: All requests plus V1's four (owner, 9 Oct); Closed and Voided are not options");
+{ C("purFOpenPop", "status", xw.id, null); const pm = C("purFPopContent"); C("purFClosePop"); A.contains(pm, '<div class="cap">Show</div>', "status menu opens"); A.absent(pm, "mi-ic", "status menu options carry no icons (owner, 9 Oct)"); A.eq((pm.match(/class="mi check"/g) || []).length, 1, "one tick marks the current option"); A.absent(pm, "purf-popnote", "no explanatory note in the menu"); }
 const h6 = C("purFHeaderBlock", xw);
 A.contains(h6, 'data-purf="status"', "status chip on the table");
 A.contains(h6, 'data-purf="path"', "path chip on the table");
@@ -356,16 +307,16 @@ reset();
 
 /* 6g. the rest of the widget follows, as the legacy page does */
 xw.purfView = "table";
-A.contains(C("purFTable", xw), ">Pending approval</span>", "the table status cell still names the derived state");
+A.absent(C("purFTable", xw), "purf-chip-st", "no old status chip markup; the Status column is the short word (owner, 9 Oct)");
 A.absent(C("purFTable", xw), ">Payment approval</span>", "but never a payment one");
 kpi.purfLoading = false; const gl6 = C("purFGlance", kpi);
 A.contains(gl6, ">Waiting on others<", "Glance's third tile replaces To be paid, which has no meaning here");
 A.absent(gl6, ">To be paid<", "so the payment tile is gone");
 A.contains(gl6, "still on an approval path.", "and the headline hover says what it counts");
-env.ctx.PURF_MODAL = { id: xw.id, ref: "PO-2861", tab: "detail", draft: C("purFRecordDraft", po("PO-2861")) };
+env.ctx.PURF_MODAL = { id: xw.id, ref: "PO-2861", tab: "detail", confirm: null, note: "" };
 const rm6 = C("purFModalHTML");
 A.absent(rm6, 'data-v="payment"', "the record pop-up has no Payment Approval tab (Requests/Update.aspx:93)");
-A.absent(rm6, "Payment Approval Path", "and no payment-path dropdown");
+A.absent(rm6, "Payment Approval Path", "and no payment-path fact");
 A.contains(rm6, 'data-v="approvals"', "the Approvals tab is untouched");
 env.ctx.PURF_MODAL = null;
 A.absent(C("purFAbout"), "column", "the about text no longer describes a board"); A.contains(C("purFAbout"), "whose approval is next", "it describes the table");
@@ -387,4 +338,29 @@ const encOff = C("purFEncTotal", xw); payOn(true); const encOn = C("purFEncTotal
 A.eq(encOff, encOn, "the encumbrance total is the same either way (GLAccountRepository.cs:2220 keys off Status, not payment)");
 xw.purfView = null; xw.purfPath = null; reset();
 
+/* owner (8 Oct): the menu caret sits on the edge facing its chip and points at it, like every shell .pop (data-dir + --caret-x); without them it showed as a diamond inside the menu */
+{ const src = blockRaw, at = src.indexOf("function purFPositionPop(el,anchor){"); A.ok(at > -1, "purFPositionPop present");
+  const body = at > -1 ? src.slice(at, src.indexOf("function ", at + 10)) : "";
+  A.ok(/setAttribute\("data-dir"/.test(body), "purFPositionPop sets data-dir so the caret sits on the edge"); A.ok(/setProperty\("--caret-x"/.test(body), "purFPositionPop points the caret at the chip (--caret-x)"); }
+A.contains(css, ".purf-root .purf-c-num{flex:0 1 100px;min-width:48px;", "Requisition # column shrinks to a floor and ellipsizes (owner, 9 Oct: no sideways scroll)");
+/* owner (9 Oct): the table sorts from its headers like Budget Compared to Actual, lists every row, and scrolls */
+{ xw.purfStatus = null; xw.purfSort = null; const th = C("purFTable", xw);
+  A.ok(/<span class="purf-c-date" role="columnheader"><button class="wt-sort on" data-purf="sort" data-id="[^"]+" data-k="issued"[^>]*>Issued <span class="material-symbols-rounded" aria-hidden="true">arrow_upward<\/span><\/button>/.test(th), "default sort: Issued ascending, oldest first, marked on the header");
+  A.eq((th.match(/class="wt-sort/g) || []).length, 6, "every header sorts"); A.eq((th.match(/class="wt-row purf-trow purf-rowclick"/g) || []).length, C("purFTableRows", xw).length, "every row is listed, no cap");
+  const tap = function (k) { const el = env.shim.mkTarget({ "data-purf": "sort", "data-id": xw.id, "data-k": k }, "button"); el.closest = function (sel) { return sel.indexOf("data-purf") > -1 ? el : null; }; C("purFHandleClick", { target: el }); };
+  tap("issued"); A.eq(xw.purfSort, "issued-desc", "clicking the active header flips it"); tap("amt"); A.eq(xw.purfSort, "amt-desc", "a number header opens largest first"); const amts = C("purFTableRows", xw).map(function (p) { return p.amt; }); A.ok(amts.every(function (v, i) { return i === 0 || amts[i - 1] >= v; }), "rows follow the sort");
+  tap("vendor"); A.eq(xw.purfSort, "vendor-asc", "a text header opens ascending"); xw.purfSort = null;
+  /* Encumbrances (owner, 9 Oct): the status chip shows and filters the bars, and every month to the current one has a bar */
+  xw.purfView = "enc"; xw.purfStatus = null; xw.purfPath = null;
+  A.contains(C("purFHeaderBlock", xw), 'data-purf="status"', "the status chip is shown on the Encumbrances view too, as V1's Committed view had it");
+  let per = C("purFEncPeriods", xw); A.eq(per.length, 8, "one period per month from the first open order (January 2026) to the current month (August 2026)");
+  A.eq(per[0].key, "2026-01", "starts at January"); A.eq(per[per.length - 1].key, "2026-08", "ends at the current month");
+  A.ok(per.every(function (r, i) { return i === 0 || (+r.key.slice(5)) === (+per[i - 1].key.slice(5)) + 1; }), "months are consecutive: a quiet month would show as $0, not vanish");
+  A.contains(C("purFEncCtx", xw), "across 8 accounting periods", "the context line counts them");
+  const encAll = C("purFEncTotal", xw); xw.purfStatus = "Approved"; const encApproved = C("purFEncTotal", xw); A.ok(encApproved > 0 && encApproved < encAll, "Approved narrows the bars to approved, unpaid orders");
+  A.ok(C("purFEncRows", xw).every(function (p) { return p.stage === "Approved"; }), "and every bar order is approved"); A.contains(C("purFEncCtx", xw), "Approved, unpaid.", "the context line says so");
+  xw.purfStatus = "Awaiting my approval"; A.ok(C("purFEncRows", xw).length > 0 && C("purFEncRows", xw).every(function (p) { return C("purFTurn", p).kind === "next"; }), "Awaiting my approval: the bars sum only the requests at my level");
+  xw.purfStatus = "Unapproved"; A.contains(C("purFEncCtx", xw), "Pending, not rejected.", "Unapproved: pending orders only, and the line says so");
+  xw.purfStatus = null; xw.purfView = null;
+  A.contains(css, ".purf-root .purf-tscroll{flex:1 1 auto;min-height:0;overflow:auto;}", "the table body scrolls"); }
 process.exit(A.report());

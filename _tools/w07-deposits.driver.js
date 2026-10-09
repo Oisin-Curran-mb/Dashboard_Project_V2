@@ -195,4 +195,8 @@ const fx = H.extractRegistry(S, "deposits"); ["depO4", "depO5"].forEach(function
   A.contains(th, 'class="lr-acctno"', "account number stays attached to the name");
   w.filter = keep.filter; w.tsort = keep.tsort; w.acct = keep.acct;
 })();
+/* owner (8 Oct): the menu caret sits on the edge facing its chip and points at it, like every shell .pop (data-dir + --caret-x); without them it showed as a diamond inside the menu */
+{ const src = js, at = src.indexOf("function depOPositionPop(el,anchor){"); A.ok(at > -1, "depOPositionPop present");
+  const body = at > -1 ? src.slice(at, src.indexOf("function ", at + 10)) : "";
+  A.ok(/setAttribute\("data-dir"/.test(body), "depOPositionPop sets data-dir so the caret sits on the edge"); A.ok(/setProperty\("--caret-x"/.test(body), "depOPositionPop points the caret at the chip (--caret-x)"); }
 process.exit(A.report());

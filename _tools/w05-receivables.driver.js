@@ -120,4 +120,6 @@ if (open) {
 /* fixtures */
 const fx = H.extractRegistry(S, "receivables"); ["arO3", "arO4", "arO5"].forEach(function (id) { const r = fx.filter(function (x) { return x.id === id; })[0]; A.ok(!!r, "fixture " + id + " readable"); if (r) { settle(r); const h = EX.contentHTML(r); A.ok(h.length > 150, id + " renders (" + h.length + " bytes)"); } });
 
+/* owner (8 Oct): the Glance bar spans the card like V1; without align-self:stretch the .kpi-num column left it as wide as its caption */
+A.contains(css, ".arO-glance-read{display:flex;flex-direction:column;gap:var(--gap-xtight);margin-top:var(--padding-tight);min-width:0;align-self:stretch;}", "Receivables Glance bar wrapper stretches to the column");
 process.exit(A.report());

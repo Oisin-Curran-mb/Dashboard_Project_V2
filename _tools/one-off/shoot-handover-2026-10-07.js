@@ -19,7 +19,7 @@ const ROOT = path.join(__dirname, "..", ".."), PORT = Number(process.env.PORT ||
 const CHROME = "C:/Program Files/Google/Chrome/Application/chrome.exe";
 const V1_URL = `http://127.0.0.1:${PORT}/_ref/v1-main-e0a04c5.html`;
 const V2_URL = `http://127.0.0.1:${PORT}/index.html`;
-const SUPERSEDED = "_superseded/2026-10-07";
+const SUPERSEDED = process.env.SUPERSEDED || "_superseded/2026-10-07"; /* e.g. SUPERSEDED=_superseded/2026-10-08 for a later retake */
 
 const SHELL_MODAL = ["#modalRoot .modal", "#modalRoot [role=dialog]"];
 const W = {
@@ -40,13 +40,15 @@ const W = {
       { num: "06", label: "Detail - Leave Calendar", size: "xwide", steps: [{ click: '[data-pto="pto-view"][data-v="calendar"]' }] },
       { num: "07", label: "Pop-up - Person info", size: "wide", steps: [{ click: '[data-pto="pto-person"]' }, { click: '[data-pto="pto-info"]' }], target: ["#ptofOverlayRoot .modal", "#ptofOverlayRoot [role=dialog]"] },
       { num: "08", label: "Pop-up - Calendar day", size: "wide", steps: [{ click: '[data-pto="pto-view"][data-v="calendar"]' }, { click: '[data-pto="pto-mark"]', or: '[data-pto="pto-day"]' }], target: ["#ptofOverlayRoot .modal", "#ptofOverlayRoot [role=dialog]"] },
+      { num: "09", label: "Pop-up - Approve confirmation", size: "wide", steps: [{ click: '[data-pto="pto-person"]' }, { click: '[data-pto="pto-approve"]' }], target: ["#ptofOverlayRoot .modal", "#ptofOverlayRoot [role=dialog]"] },
+      { num: "10", label: "Explore - Leave Calendar filter", size: "wide", steps: [{ click: '[data-pto="pto-view"][data-v="calendar"]' }, { click: '[data-pto="pto-dept"]' }] },
     ] } },
   W10: { name: "Loans With Balance Due", kind: "loans",
     v1: { id: "loan", shots: [
       { num: "01", label: "Glance", size: "kpi" },
       { num: "02", label: "Explore - Table", size: "wide" },
       { num: "05", label: "Detail", size: "xwide" },
-      { num: "07", label: "Pop-up - Loan detail", size: "wide", steps: [{ click: '[data-action="loan-open"]' }], target: SHELL_MODAL },
+      { num: "08", label: "Pop-up - Loan detail", size: "wide", steps: [{ click: '[data-action="loan-open"]' }], target: SHELL_MODAL },
     ] },
     v2: { ids: { kpi: "lonF_k", wide: "lonF", xwide: "lonF_x" }, shots: [
       { num: "01", label: "Glance", size: "kpi" },
@@ -54,8 +56,9 @@ const W = {
       { num: "03", label: "Explore - Pie", size: "wide", steps: [{ click: '[data-lon="lon-view"][data-v="pie"]' }] },
       { num: "04", label: "Explore - Bands", size: "wide", steps: [{ click: '[data-lon="lon-view"][data-v="bands"]' }] },
       { num: "05", label: "Detail", size: "xwide" },
-      { num: "06", label: "Detail - Bands", size: "xwide", steps: [{ click: '[data-lon="lon-side"][data-s="bands"]' }] },
-      { num: "07", label: "Pop-up - Loan detail", size: "wide", steps: [{ click: '[data-lon="lon-open"]' }], target: ["#lonModalRoot .modal", "#lonModalRoot [role=dialog]"] },
+      { num: "06", label: "Detail - Pie, range selected", size: "xwide", steps: [{ click: '.lon-leg[data-bucket="cur"]' }] },
+      { num: "07", label: "Detail - Bands", size: "xwide", steps: [{ click: '[data-lon="lon-side"][data-s="bands"]' }] },
+      { num: "08", label: "Pop-up - Loan detail", size: "wide", steps: [{ click: '[data-lon="lon-open"]' }], target: ["#lonModalRoot .modal", "#lonModalRoot [role=dialog]"] },
     ] } },
   W11: { name: "Fixed Asset Values", kind: "fixedassets",
     v1: { id: "fa1", shots: [

@@ -1274,4 +1274,7 @@ A.eq((shell.script.match(/gpFRange:"thru"/g) || []).length, 3,
 
 
 /* ---------------------------------------------------------------- report */
+/* owner (9 Oct): the Glance bar spans the card; without align-self:stretch the .kpi-num column left it as wide as its caption */
+{ const c17 = shell.css.slice(shell.css.indexOf(CSS_START), shell.css.indexOf(CSS_END) + CSS_END.length);
+  A.contains(c17, ".gpf-root .gpf-glance-read{display:flex;flex-direction:column;gap:var(--gap-xxtight);margin-top:var(--padding-tight);align-self:stretch;}", "Gifts Pledges Glance bar wrapper stretches to the column"); }
 process.exit(A.report());

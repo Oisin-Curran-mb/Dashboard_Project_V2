@@ -79,7 +79,10 @@ A.absent(html, 'data-faf="page-next"', "no page-next control"); A.absent(html, "
 })();
 A.ok(/data-faf="open-table"/.test(html), "a row offers the full seven-column table");
 click({ "data-faf": "open-table", "data-id": w.id }); A.eq(EX.getModal() && EX.getModal().type, "fafTable", "full table modal opened");
-const mh = EX.modalHTML(); A.ok(mh && mh.length > 800, "full table renders via WIDGETS.modal() (" + (mh || "").length + " bytes)"); A.noEmDash(mh, "full table modal"); if (/wt-head/.test(mh)) A.headMatchesBody(mh, "full table (D12)"); EX.setModal(null);
+const mh = EX.modalHTML(); A.ok(mh && mh.length > 800, "full table renders via WIDGETS.modal() (" + (mh || "").length + " bytes)");
+/* owner (9 Oct): Export to Excel in the pop-up header beside the close button, as the other pop-ups */
+A.ok(/<span class="faf-modal-acts"><button class="btn naked sm" data-faf="export" data-id="[^"]+"[^>]*>[\s\S]*?Export to Excel<\/button><button class="iconbtn" data-action="modal-close"/.test(mh), "pop-up header: Export to Excel, then the close button");
+A.contains(js, "if(a==='export'){setStatus(", "export is handled (placeholder status, no endpoint yet)"); A.absent(mh.slice(mh.indexOf('class="modal-f"')), "Export", "footer stays Close only"); A.noEmDash(mh, "full table modal"); if (/wt-head/.test(mh)) A.headMatchesBody(mh, "full table (D12)"); EX.setModal(null);
 const wx = rows.filter(function (x) { return x.size === "xwide"; })[0]; A.ok(EX.contentHTML(wx).length > 800, "Detail renders");
 /* fixtures */
 const fx = H.extractRegistry(S, "fixedassets"); ["faF2", "faF3", "faF4", "faF5"].forEach(function (id) { const r = fx.filter(function (x) { return x.id === id; })[0]; A.ok(!!r, "fixture " + id + " readable"); if (r) { settle(r); const h = EX.contentHTML(r); A.ok(h.length > 100, id + " renders (" + h.length + " bytes)"); } });
