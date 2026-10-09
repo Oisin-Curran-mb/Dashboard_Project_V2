@@ -57,27 +57,27 @@ A.eq(C("purFSteps", "Education Ministry", 3150).map(function (s) { return s.user
 A.eq(C("purFSteps", "Education Ministry", 5000).length, 3, "$5,000: all three levels");
 A.eq(C("purFStepUsers", { users: ["A", "B"], mins: [1000, 3000] }, 1500).join(","), "A", "an Or level with different minimums keeps only the approvers whose minimum the total reaches");
 A.eq(POS.filter(function (p) { return p.stage === "Rejected"; }).length, 0, "no order carries a Rejected stage");
-A.eq(POS.filter(function (p) { return (p.appr || []).some(function (a) { return a.state === "rejected"; }); }).length, 2, "two orders carry a rejected approval row");
+A.eq(POS.filter(function (p) { return (p.appr || []).some(function (a) { return a.state === "rejected"; }); }).length, 2, "two sample orders carry a rejected approval row"); A.eq(C("purFDataset", wide).filter(function (p) { return (p.appr || []).some(function (a) { return a.state === "rejected"; }); }).length, 0, "and neither reaches the widget's data (owner, 9 Oct)");
 /* turn per demo record */
 const turn = function (ref) { return C("purFTurn", po(ref)); };
 A.eq(turn("PO-2893").kind, "next", "PO-2893: Nitzi approved level 1, my level 2 is next");
 A.eq(turn("PO-2888").kind, "mine", "PO-2888: nobody has acted, I am on level 2, so awaiting me later");
 A.eq(turn("PO-2899").kind, "waiting", "PO-2899 ($640): waiting on Alfred Johnson, the only applying approver"); A.ok(/Alfred Johnson \(level 1 of 1\)/.test(turn("PO-2899").label), "the label names Alfred and a one-level path at this amount");
-A.eq(turn("PO-2891").kind, "hold", "PO-2891 ($3,150): Lanette holds at the Or level");
+A.eq(turn("PO-2891").kind, "waiting", "PO-2891 ($3,150): Lanette holds at the Or level; someone else's hold leaves the request where the approved rows put it (owner, 9 Oct)"); A.eq(turn("PO-2891").hold, "Lanette Stewart", "and the turn carries who holds it");
 A.ok(turn("PO-2907").none === true && turn("PO-2907").kind === "next", "PO-2907 ($430): no approver required, offered for release");
 A.eq(turn("PO-2897").kind, "next", "PO-2897: QA Path level 1 is Feargal OR me, so it is my turn");
-A.eq(turn("PO-2902").kind, "rejected", "PO-2902: rejected row surfaces as the turn");
-A.eq(turn("PO-2891").kind, "hold", "PO-2891: hold row surfaces as the turn");
+A.eq(C("purFHidden", po("PO-2902")), true, "PO-2902: a rejected row hides the request from the widget, as the data panel does (owner, 9 Oct)"); A.eq(C("purFPO", wide, "PO-2902"), null, "so the widget cannot find it");
+A.eq(C("purFStatusWord", po("PO-2891")).w, "On hold", "PO-2891: the chip still reads On hold");
 A.eq(turn("PO-2872").kind, "next", "PO-2872: approved; payment path level 2 is mine and next");
 A.eq(turn("PO-2879").kind, "waiting", "PO-2879: payment path Education Ministry, waiting on Ben Lane");
 A.ok(/level 2 of 2, payment/.test(turn("PO-2872").label), "payment turn is labelled as payment");
 A.eq(turn("PO-2861").kind, "none", "PO-2861: approved for payment, nobody's turn");
 /* lanes per demo record */
 const lane = function (ref) { return C("purFLane", po(ref)); };
-A.eq(lane("PO-2893"), "Pending approval", "pending request lane"); A.eq(lane("PO-2902"), "Pending approval", "a rejected request stays in Pending approval");
+A.eq(lane("PO-2893"), "Pending approval", "pending request lane");
 A.eq(lane("PO-2872"), "Payment approval", "approved with open payment steps"); A.eq(lane("PO-2861"), "Ready to pay", "payment approved, no check yet"); A.eq(lane("PO-2864"), "Paid", "paid");
 A.eq(C("purFMineSet", wide).length, 25, "twenty-five requests await me with the payment process on: 15 on request paths plus the ten approved, unpaid January to May orders (9 Oct) whose payment path reaches me");
-A.eq(C("purFPendingCount", wide), 17, "seventeen requests pending approval");
+A.eq(C("purFPendingCount", wide), 15, "fifteen requests pending approval (the two with a rejected row are hidden)");
 
 /* ---------- 2. render ---------------------------------------------------- */
 /* The table is the default view; the Kanban board was removed on 5 Oct 2026 (owner: it did not work). */
@@ -92,8 +92,8 @@ A.absent(h, 'data-purf="scope"', "no separate scope chip: merged into the status
 A.ok(/role="columnheader"><button[^>]*data-k="num"[^>]*>Requisition #[\s\S]*?role="columnheader"><button[^>]*data-k="vendor"[^>]*>Vendor[\s\S]*?role="columnheader"><button[^>]*data-k="issued"[^>]*>Issued[\s\S]*?role="columnheader"><button[^>]*data-k="age"[^>]*>Age[\s\S]*?role="columnheader"><button[^>]*data-k="status"[^>]*>Status[\s\S]*?role="columnheader"><button[^>]*data-k="amt"[^>]*>Amount [\s\S]*?<\/button><\/span><\/div>/.test(h), "table columns: Requisition #, Vendor, Issued, Age, Status, Amount last, each a sort header (owner, 9 Oct)");
 A.ok(/<span class="purf-c-num" role="cell">\d{4}<\/span>/.test(h), "requisition shows the number alone, no PO- prefix (owner, 9 Oct)"); A.absent(h.slice(h.indexOf('class="purf-tbl"')), '"purf-c-num" role="cell">PO-', "no PO- prefix in the column");
 A.ok(/<span class="purf-c-date" role="cell">[A-Z][a-z]{2} \d{1,2}<\/span>/.test(h), "Issued shows month and day, no year (owner, 9 Oct)");
-A.ok(/<span class="purf-c-st" role="cell"><span class="purf-stchip purf-stchip-(next|mine|pending|approved|rejected|hold|other)"><span class="material-symbols-rounded"[^>]*>(hourglass_top|how_to_reg|schedule|check_circle|block|lock|circle)<\/span><span class="purf-stchip-t">(Your turn|Coming to you|Pending|Approved|Rejected|On hold)<\/span><\/span><\/span>/.test(h), "Status cell: Jo-style chip, icon and short word in its own span (ellipsizes in a tight column)");
-["pending:attention", "next:brand", "approved:positive", "rejected:negative", "hold:severe"].forEach(function (p) { const k = p.split(":")[0], t = p.split(":")[1]; A.contains(css, ".purf-root .purf-stchip-" + k + "{color:var(--semantic-color-foreground-static-" + t + "-on-subtle);background:var(--semantic-color-fill-static-" + t + "-subtle);}", "chip " + k + " on the " + t + " semantic tokens"); });
+A.ok(/<span class="purf-c-st" role="cell"><span class="purf-stchip purf-stchip-(next|mine|pending|approved|hold|other)"><span class="material-symbols-rounded"[^>]*>(hourglass_top|how_to_reg|schedule|check_circle|lock|circle)<\/span><span class="purf-stchip-t">(Your turn|Coming to you|Pending|Approved|On hold)<\/span><\/span><\/span>/.test(h), "Status cell: Jo-style chip, icon and short word in its own span (ellipsizes in a tight column)");
+["pending:attention", "next:brand", "approved:positive", "hold:severe"].forEach(function (p) { const k = p.split(":")[0], t = p.split(":")[1]; A.contains(css, ".purf-root .purf-stchip-" + k + "{color:var(--semantic-color-foreground-static-" + t + "-on-subtle);background:var(--semantic-color-fill-static-" + t + "-subtle);}", "chip " + k + " on the " + t + " semantic tokens"); });
 A.contains(css, ".purf-root .purf-stchip-mine{color:var(--txt-secondary);background:var(--semantic-color-fill-static-neutral-subtle);}", "Coming to you on the neutral tint");
 { const sw = function (ref) { return C("purFStatusWord", po(ref)); }; A.eq(sw("PO-2885").w, "Your turn", "my level acts next reads Your turn"); A.eq(sw("PO-2888").w, "Coming to you", "my later level reads Coming to you"); A.ok(POS.some(function (p) { return C("purFStatusWord", p).w === "Pending"; }), "someone else's turn reads Pending"); A.ok(POS.some(function (p) { return C("purFStatusWord", p).w === "Approved"; }), "a completed path reads Approved"); }
 A.ok(/<span class="purf-c-age" role="cell" data-tip="Waiting \d+ days? since it was issued\." data-tip-plain><span class="material-symbols-rounded"[^>]*>schedule<\/span><span class="purf-age-n( purf-age-warn)?">\d+d<\/span><span class="sr-only"> waiting<\/span><\/span>/.test(h), "Age cell: clock glyph, Nd, hover wording, as V1"); A.contains(h, 'class="purf-age-n purf-age-warn"', "an age of 30 days or more is emphasised, as V1");
@@ -102,10 +102,19 @@ xw.purfStatus = "Awaiting my approval next"; A.contains(C("purFHeaderBlock", xw)
 A.ok(/<span class="lr-main purf-c-vendor" role="cell" data-vendor="[^"]+" data-tip-plain>/.test(h), "vendor cell carries its full name for the hover"); A.contains(blockRaw, 'if(c.scrollWidth>c.clientWidth+1)c.setAttribute("data-tip",c.getAttribute("data-vendor"));else c.removeAttribute("data-tip");', "the hover shows the full name only when the text is actually cut");
 A.contains(h, "Cleaning Services of Greater Springfield and Surrounding Counties Inc", "one sample vendor is long enough to be cut (owner, 9 Oct)"); A.absent(h, "Cleaning Svcs", "the short name is gone");
 const hk = C("purFContent", kpi); const glOpen = POS.filter(function (p) { const l = C("purFLane", p); return l === "Pending approval" || l === "Payment approval" || l === "Ready to pay"; }).length;
-A.contains(hk, '<span class="metric-value">' + glOpen + '</span>', "Glance headline: everything waiting for someone to act (owner, 27 Sep)"); A.contains(hk, ">waiting for action<", "headline pill"); A.contains(hk, 'title="Everything waiting for someone to act: ', "headline hover explains itself");
-A.contains(hk, ">My approval<", "tile: Awaiting my approval next"); A.contains(hk, ">Coming to me<", "tile: Awaiting my approval, later"); A.contains(hk, ">To be paid<", "tile: Ready to pay");
-A.ok(/title="Awaiting my approval: \d+ requests? where your level acts now\."/.test(hk), "tile hover: My approval = your level acts now, with the count (owner, 9 Oct)"); A.ok(/title="Awaiting my approval next: \d+ requests? on a path you are on/.test(hk), "tile hover: Coming to me = Awaiting my approval next, an earlier level acts first"); A.contains(hk, 'title="Ready to pay: 1 order with payment approval complete', "tile hover: later"); A.contains(hk, 'title="Ready to pay: 1 order with payment approval complete', "tile hover: to be paid");
-A.absent(hk, " pending, ", "caption is the outstanding figure only"); A.ok(/\$[\d,]+\.\d{2} outstanding<\/span>/.test(hk), "caption: outstanding dollars"); A.absent(hk, "need your approval", "old headline gone");
+/* Glance (owner, 9 Oct): three tiles in Jo's Phase 2 tile shape, no headline or caption. Labels are V1's filter terms shortened; the last tile is every unapproved request, not "waiting on others". */
+A.absent(hk, "metric-value", "Glance has no headline figure (owner, 9 Oct: three tiles only)"); A.absent(hk, "waiting for action", "the waiting-for-action pill is gone"); A.absent(hk, " outstanding<", "and so is the outstanding caption: the Unapproved tile carries the dollars");
+A.contains(hk, ">Your turn<", "tile 1: the Your turn status word (owner, 9 Oct)"); A.contains(hk, ">Coming to you<", "tile 2: Coming to you"); A.contains(hk, ">Pending<", "tile 3: Pending, every request still on a path (owner, 9 Oct)");
+A.absent(hk, ">Coming to me<", "old tile label gone"); A.absent(hk, ">My approval<", "no shortened filter term as a label: the status word is the label, the filter term is the hover"); A.absent(hk, ">To be paid<", "no payment tile at Glance"); A.absent(hk, ">Waiting on others<", "no waiting-on-others tile (owner, 9 Oct)");
+A.contains(hk, "purf-gtile-next", "tile 1 on the brand tone, as the Your turn status chip"); A.contains(hk, "purf-gtile-mine", "tile 2 on the neutral sheet, as the Coming to you chip"); A.contains(hk, "purf-gtile-pending", "tile 3 on the attention tone, as the Pending chip and Jo's Pending tile");
+["Awaiting my approval", "Awaiting my approval next", "Unapproved"].forEach(function (st) { const l = C("purFDataset", kpi).filter(function (p) { return C("purFMatchStatus", kpi, p, st); }); A.contains(hk, '<span class="purf-gnum">' + l.length + "</span>", "tile count for " + st + " equals what the filter lists (" + l.length + ")"); A.contains(hk, '<span class="purf-gamt">' + C("purFMoneyShort", Math.round(C("purFSum", l))) + "</span>", "tile dollars for " + st + " are the sum of those requests, whole dollars as on Jo's tiles (cents in the hover)"); });
+{ const pend = C("purFDataset", kpi).filter(function (p) { return C("purFMatchStatus", kpi, p, "Unapproved"); }), tot = pend.length, totAmt = C("purFMoney", C("purFSum", pend));
+  A.ok(new RegExp('data-tip="Awaiting my approval: \\d+ of ' + tot + ' requests where your level acts now\\. Amount of all \\d+ requests: \\$[\\d,]+\\.\\d{2}\\." data-tip-plain data-tip-narrow').test(hk), "tile hover is the shell tooltip (data-tip, plain, narrow): V1's term, n of all pending, the rule, then the amount of all n requests (owner, 9 Oct)");
+  A.ok(/data-tip="Awaiting my approval next: \d+ of \d+ requests on a path you are on, where an earlier level has to act first\. Amount of all /.test(hk), "tile hover: an earlier level acts first, with the amount named");
+  A.ok(new RegExp('data-tip="Unapproved: all ' + tot + ' requests still on an approval path, whoever has to act\\. Amount of all ' + tot + ' requests: ' + totAmt.replace(/[$.]/g, "\\$&") + '\\."').test(hk), "tile hover: Pending is all pending requests with their amount");
+  A.absent(hk, " pending total ", "no total-of-all-pending sentence (owner, 9 Oct: not needed)");
+  A.absent(hk, "material-symbols", "no icons on the tiles: the label has the room (owner, 9 Oct)"); } A.absent(hk, ' title="', "no browser title tooltips on the tiles"); A.eq((hk.match(/tabindex="0"/g) || []).length, 3, "each tile is focusable so the tooltip shows on keyboard focus too");
+A.absent(hk, "need your approval", "old headline gone"); A.absent(hk, "purf-gcard", "old card markup gone");
 /* scope filter */
 { const kinds = function () { return C("purFTableRows", xw).map(function (p) { return C("purFTurn", p).kind; }); }; const stages = function () { return C("purFTableRows", xw).map(function (p) { return p.stage; }); };
   xw.purfStatus = "Awaiting my approval"; A.ok(kinds().length > 0 && kinds().every(function (k) { return k === "next"; }), "'Awaiting my approval' lists only requests where my level acts now, the Your turn rows (" + kinds().length + ")");
@@ -131,9 +140,8 @@ ok = C("purFApplyMove", wide, "PO-2897", "Payment approval", ""); A.eq(ok && po(
 let chk = C("purFMoveCheck", po("PO-2899"), "Payment approval"); A.eq(chk.ok, false, "cannot approve a request I am not on"); A.ok(/Not your approval/.test(chk.msg), "the refusal names the turn");
 /* PO-2907: no applying approver at $430, released by the viewer */
 ok = C("purFApplyMove", wide, "PO-2907", "Payment approval", ""); A.eq(ok && po("PO-2907").stage === "Approved", true, "a request no level applies to is released on approval");
-/* PO-2902: rejected */
-chk = C("purFMoveCheck", po("PO-2902"), "Payment approval"); A.eq(chk.ok, false, "a rejected request cannot be approved until the rejection is cleared");
-A.eq(C("purFClearReject", po("PO-2902")), true, "clearing the rejection"); A.eq(turn("PO-2902").kind, "mine", "after clearing, the path restarts at Nitzi's level 1 with me later at level 2");
+/* PO-2902: rejected, so hidden (owner, 9 Oct) */
+A.absent(blockRaw, "purFClearReject", "no clear-rejection act: a rejected request is handled on the Requests page");
 /* PO-2891: hold */
 chk = C("purFMoveCheck", po("PO-2891"), "Payment approval"); A.eq(chk.ok, false, "a held request cannot move");
 /* skipping a lane */
@@ -146,7 +154,7 @@ ok = C("purFApplyMove", wide, "PO-2872", "Closed", "done"); A.eq(ok, true, "a pa
 chk = C("purFMoveCheck", po("PO-2864"), "Voided"); A.eq(chk.ok, false, "a paid order cannot be voided here");
 chk = C("purFMoveCheck", po("PO-2903"), "Voided"); A.eq(chk.ok, true, "an unpaid request can be voided");
 /* reject and hold as rows */
-A.eq(C("purFRejectStep", wide, po("PO-2901"), "Wrong vendor"), true, "rejecting my level"); A.eq(turn("PO-2901").kind, "rejected", "PO-2901 shows rejected"); A.eq(po("PO-2901").stage, "Pending", "and stays Unapproved");
+A.eq(C("purFRejectStep", wide, po("PO-2901"), "Wrong vendor"), true, "rejecting my level"); A.eq(C("purFHidden", po("PO-2901")), true, "PO-2901 is hidden from the widget from now on"); A.eq(po("PO-2901").stage, "Pending", "and stays Unapproved on the Requests page");
 A.eq(C("purFApplyHold", wide, "PO-2904", "hold", "Budget check"), true, "holding"); A.eq(turn("PO-2904").kind, "hold", "PO-2904 shows hold"); A.ok(po("PO-2904").appr.some(function (a) { return a.state === "hold"; }), "hold is a row on the live path");
 A.eq(C("purFApplyHold", wide, "PO-2904", "unhold", ""), true, "removing the hold"); A.eq(turn("PO-2904").kind, "next", "PO-2904 is my turn again");
 reset();
@@ -189,7 +197,12 @@ A.contains(mh, "Approval Needed By:", "column 1"); A.contains(mh, ">Approved<", 
 A.eq((mh.match(/purf-po-mark-approve/g) || []).length, 2, "two approved marks: the submitted creator row and Nitzi's level"); A.contains(mh, 'role="cell">Nitzi Wright Jul 3, 2026</span>', "Approval Updated By carries actor and date");
 A.absent(mh, "(from $", "no per-approver minimum text (the page has none)"); A.absent(mh, "Skipped:", "no skipped wording (the page has none)");
 mh = openTab("PO-2899", "approvals"); A.contains(mh, "Then Lanette Stewart", "Or level: first approver as Then"); A.contains(mh, '<span class="purf-a-or"></span>Or Jim AndersonAndMoreLetters', "second approver on the same level indented as Or"); A.contains(mh, "out of office until Sep 5, 2026", "out-of-office flag from user meta");
-mh = openTab("PO-2902", "approvals"); A.contains(mh, "purf-po-mark-reject", "a rejected row shows the reject mark"); A.contains(mh, 'role="cell">Duplicate of PO-2891</span>', "and its reason as text");
+/* held by someone else at or below my level: stays in my list, chip On hold, no promotion, my row still enabled (owner, 9 Oct) */
+reset(); po("PO-2888").appr.push({ seq: 1, user: "Nitzi Wright", state: "hold", reason: "Checking budget", d: "2026-08-18" }); po("PO-2888").hold = true;
+A.eq(turn("PO-2888").kind, "mine", "Nitzi holds level 1: the request stays in my Awaiting my approval list"); A.eq(turn("PO-2888").hold, "Nitzi Wright", "the turn names who holds it"); A.eq(C("purFStatusWord", po("PO-2888")).w, "On hold", "the chip reads On hold");
+A.eq(C("purFMatchStatus", xw, po("PO-2888"), "Awaiting my approval next"), true, "listed under Awaiting my approval next (the owner's label for Coming to you)"); A.eq(C("purFMatchStatus", xw, po("PO-2888"), "Awaiting my approval"), false, "not promoted into Awaiting my approval, the Your turn list (the legacy Max+1 quirk is not copied)");
+mh = openTab("PO-2888", "approvals"); A.contains(mh, "purf-po-mark-hold", "her hold mark shows"); A.contains(mh, 'role="cell">Checking budget</span>', "with her reason"); A.contains(mh, 'data-v="approve"', "my row is still enabled, so Approve is offered"); A.contains(mh, "(on hold by Nitzi Wright)", "the turn line says it is held");
+act("PO-2888", "approve", ""); A.eq(po("PO-2888").stage, "Approved", "approving at my level clears her hold through the cascade and completes the path, as the page does"); reset();
 mh = openTab("PO-2891", "approvals"); A.contains(mh, "purf-po-mark-hold", "a held row shows the hold mark"); A.contains(mh, "Waiting on budget confirmation", "and its reason");
 /* enablement (setApprovalRows) and the cascade (checkApproved) stay the page's, as pure rules */
 let rows = gridRows("PO-2899"); let en = C("purFGridEnable", rows, true);
@@ -208,15 +221,14 @@ A.ok(mh.indexOf('data-v="reject"') < mh.indexOf('data-v="hold"') && mh.indexOf('
 mh = openTab("PO-2888"); A.eq(turn("PO-2888").kind, "mine", "PO-2888: Coming to you"); A.contains(mh, 'data-v="approve"', "Coming to you may still act: the page enables rows down to mine, and Approve cascades below");
 mh = openTab("PO-2899"); A.absent(mh, 'data-purf="po-act"', "not on the path: no decisions"); A.contains(mh, '>Close</button>', "Close instead"); A.eq(modal().tab, "detail", "and it opens on Detail"); A.contains(mh, "Waiting on Alfred Johnson", "the footer lead says whose turn it is");
 mh = openTab("PO-2891"); A.absent(mh, 'data-v="unhold"', "held by Lanette: I cannot remove her hold"); A.contains(mh, "On hold by Lanette Stewart.", "footer names who holds it");
-mh = openTab("PO-2902"); A.absent(mh, 'data-v="unreject"', "rejected by Nitzi: I cannot clear her rejection"); A.contains(mh, "Rejected by Nitzi Wright.", "footer names who rejected");
 mh = openTab("PO-2872"); A.absent(mh, 'data-purf="po-act"', "an approved order has no decisions"); A.contains(mh, "nothing to decide here", "and says so");
 /* the confirm strip: reason first, then the act, through the page's own rules */
 reset(); mh = openTab("PO-2885"); tapPurf({ "data-purf": "po-act", "data-v": "approve", "data-purf-ref": "PO-2885", "data-id": xw.id }); mh = C("purFModalHTML");
 A.eq(modal().confirm, "approve", "Approve opens the confirm strip"); A.contains(mh, 'id="purfPoNote"', "with a note field"); A.contains(mh, ">Confirm approve</button>", "and Confirm approve"); A.contains(mh, "This completes the path: the request becomes Approved.", "it says what approving at level 2 of 2 does"); A.absent(mh, 'data-purf="po-act"', "the three buttons are gone while confirming");
 tapPurf({ "data-purf": "po-act-cancel", "data-id": xw.id }); A.eq(modal().confirm, null, "Cancel closes the strip"); A.eq(po("PO-2885").stage, "Pending", "and nothing happened");
 act("PO-2885", "approve", "Looks fine"); A.eq(po("PO-2885").stage, "Approved", "Confirm approve: my level with the cascade completes the path"); A.eq(po("PO-2885").log[po("PO-2885").log.length - 1].note, "Looks fine", "the note is logged"); A.eq(modal().confirm, null, "strip closed"); A.eq(modal().tab, "approvals", "pop-up stays open on Approvals"); A.contains(C("purFModalHTML"), "purf-stchip-approved", "title chip now Approved");
-reset(); openTab("PO-2888"); act("PO-2888", "reject", ""); A.eq(turn("PO-2888").kind, "rejected", "Confirm reject: the request reads Rejected"); A.eq(po("PO-2888").appr.filter(function (r) { return r.state === "rejected"; })[0].reason, "unknown", "a blank reason is saved as unknown, as the page does");
-mh = C("purFModalHTML"); A.contains(mh, 'data-v="unreject"', "my own rejection offers Clear rejection"); act("PO-2888", "unreject", ""); A.eq(turn("PO-2888").kind, "mine", "cleared: back on the path");
+reset(); openTab("PO-2888"); act("PO-2888", "reject", ""); A.eq(C("purFHidden", po("PO-2888")), true, "Confirm reject: the request is hidden from the widget"); A.eq(po("PO-2888").appr.filter(function (r) { return r.state === "rejected"; })[0].reason, "unknown", "a blank reason is saved as unknown, as the page does");
+A.eq(modal(), null, "the pop-up closes, since the request is no longer in the table"); A.eq(C("purFPO", xw, "PO-2888"), null, "and the row is gone"); A.absent(C("purFTable", xw), "Rejected", "the table never shows the word");
 reset(); openTab("PO-2888"); act("PO-2888", "hold", "Budget check"); A.eq(po("PO-2888").hold, true, "Confirm hold: on hold"); A.eq(turn("PO-2888").kind, "hold", "turn reads hold"); A.eq(po("PO-2888").appr.filter(function (r) { return r.state === "hold"; })[0].reason, "Budget check", "with the reason");
 mh = C("purFModalHTML"); A.contains(mh, 'data-v="unhold"', "my own hold offers Remove hold"); act("PO-2888", "unhold", ""); A.eq(po("PO-2888").hold, false, "hold removed"); A.eq(turn("PO-2888").kind, "mine", "back on the path");
 reset(); env.ctx.PURF_MODAL = null;
@@ -271,7 +283,6 @@ A.eq(col("PO-2893"), "Level 2", "PO-2893: Nitzi approved level 1, so it waits at
 A.eq(col("PO-2888"), "Level 1", "PO-2888: nobody has acted, so it sits at level 1 even though my level is 2");
 A.eq(col("PO-2899"), "Level 1", "PO-2899 ($640): Alfred's level is the only one the amount reaches");
 A.eq(col("PO-2891"), "Level 2", "PO-2891 ($3,150) is held at Lanette's level 2, NOT parked in Pastor Bob's $5,000 column");
-A.eq(col("PO-2902"), "Level 2", "a rejected request stays in the column it was rejected at");
 A.eq(col("PO-2907"), "Level 1", "PO-2907 ($430): no level applies, so it sits in the first column");
 A.eq(col("PO-2633"), "Approved", "PO-2633 was released and is out of the flow");
 A.eq(col("PO-2864"), "Approved", "a paid fixture reads simply as Approved: nothing reads the pay fields");
@@ -282,7 +293,6 @@ A.eq(chk6("PO-2893", "Approved").ok, true, "my level can be approved onto Approv
 A.eq(chk6("PO-2888", "Level 2").ok, true, "and onto a later level");
 A.eq(chk6("PO-2893", "Level 1").ok, false, "a backward move is refused");
 A.contains(chk6("PO-2893", "Level 1").msg, "Approval moves forward only", "and says so");
-A.eq(chk6("PO-2902", "Approved").ok, false, "a rejected request cannot be approved");
 A.contains(chk6("PO-2899", "Level 2").msg, "Not your approval", "someone else's turn is refused by name");
 A.eq(chk6("PO-2891", "Level 3").ok, false, "a held request does not move forward");
 A.eq(chk6("PO-2891", "Closed").ok, true, "but Close is offered from any column, on hold or not (owner, 27 Sep)");
@@ -310,9 +320,9 @@ xw.purfView = "table";
 A.absent(C("purFTable", xw), "purf-chip-st", "no old status chip markup; the Status column is the short word (owner, 9 Oct)");
 A.absent(C("purFTable", xw), ">Payment approval</span>", "but never a payment one");
 kpi.purfLoading = false; const gl6 = C("purFGlance", kpi);
-A.contains(gl6, ">Waiting on others<", "Glance's third tile replaces To be paid, which has no meaning here");
+A.contains(gl6, ">Pending<", "Glance's third tile is every unapproved request with the payment process on or off (owner, 9 Oct)"); A.absent(gl6, ">Waiting on others<", "no waiting-on-others tile");
 A.absent(gl6, ">To be paid<", "so the payment tile is gone");
-A.contains(gl6, "still on an approval path.", "and the headline hover says what it counts");
+A.contains(gl6, 'data-tip="Unapproved: ', "and the Pending tile hover says what it counts");
 env.ctx.PURF_MODAL = { id: xw.id, ref: "PO-2861", tab: "detail", confirm: null, note: "" };
 const rm6 = C("purFModalHTML");
 A.absent(rm6, 'data-v="payment"', "the record pop-up has no Payment Approval tab (Requests/Update.aspx:93)");
@@ -345,10 +355,10 @@ xw.purfView = null; xw.purfPath = null; reset();
 A.contains(css, ".purf-root .purf-c-num{flex:0 1 100px;min-width:48px;", "Requisition # column shrinks to a floor and ellipsizes (owner, 9 Oct: no sideways scroll)");
 /* owner (9 Oct): the table sorts from its headers like Budget Compared to Actual, lists every row, and scrolls */
 { xw.purfStatus = null; xw.purfSort = null; const th = C("purFTable", xw);
-  A.ok(/<span class="purf-c-date" role="columnheader"><button class="wt-sort on" data-purf="sort" data-id="[^"]+" data-k="issued"[^>]*>Issued <span class="material-symbols-rounded" aria-hidden="true">arrow_upward<\/span><\/button>/.test(th), "default sort: Issued ascending, oldest first, marked on the header");
+  A.ok(/<span class="purf-c-date" role="columnheader"><button class="wt-sort on" data-purf="sort" data-id="[^"]+" data-k="issued"[^>]*>Issued <span class="material-symbols-rounded" aria-hidden="true">arrow_downward<\/span><\/button>/.test(th), "default sort: Issued descending, newest first, marked on the header (owner, 9 Oct)");
   A.eq((th.match(/class="wt-sort/g) || []).length, 6, "every header sorts"); A.eq((th.match(/class="wt-row purf-trow purf-rowclick"/g) || []).length, C("purFTableRows", xw).length, "every row is listed, no cap");
   const tap = function (k) { const el = env.shim.mkTarget({ "data-purf": "sort", "data-id": xw.id, "data-k": k }, "button"); el.closest = function (sel) { return sel.indexOf("data-purf") > -1 ? el : null; }; C("purFHandleClick", { target: el }); };
-  tap("issued"); A.eq(xw.purfSort, "issued-desc", "clicking the active header flips it"); tap("amt"); A.eq(xw.purfSort, "amt-desc", "a number header opens largest first"); const amts = C("purFTableRows", xw).map(function (p) { return p.amt; }); A.ok(amts.every(function (v, i) { return i === 0 || amts[i - 1] >= v; }), "rows follow the sort");
+  tap("issued"); A.eq(xw.purfSort, "issued-asc", "clicking the active header flips it to oldest first"); tap("amt"); A.eq(xw.purfSort, "amt-desc", "a number header opens largest first"); const amts = C("purFTableRows", xw).map(function (p) { return p.amt; }); A.ok(amts.every(function (v, i) { return i === 0 || amts[i - 1] >= v; }), "rows follow the sort");
   tap("vendor"); A.eq(xw.purfSort, "vendor-asc", "a text header opens ascending"); xw.purfSort = null;
   /* Encumbrances (owner, 9 Oct): the status chip shows and filters the bars, and every month to the current one has a bar */
   xw.purfView = "enc"; xw.purfStatus = null; xw.purfPath = null;
@@ -360,7 +370,7 @@ A.contains(css, ".purf-root .purf-c-num{flex:0 1 100px;min-width:48px;", "Requis
   const encAll = C("purFEncTotal", xw); xw.purfStatus = "Approved"; const encApproved = C("purFEncTotal", xw); A.ok(encApproved > 0 && encApproved < encAll, "Approved narrows the bars to approved, unpaid orders");
   A.ok(C("purFEncRows", xw).every(function (p) { return p.stage === "Approved"; }), "and every bar order is approved"); A.contains(C("purFEncCtx", xw), "Approved, unpaid.", "the context line says so");
   xw.purfStatus = "Awaiting my approval"; A.ok(C("purFEncRows", xw).length > 0 && C("purFEncRows", xw).every(function (p) { return C("purFTurn", p).kind === "next"; }), "Awaiting my approval: the bars sum only the requests at my level");
-  xw.purfStatus = "Unapproved"; A.contains(C("purFEncCtx", xw), "Pending, not rejected.", "Unapproved: pending orders only, and the line says so");
+  xw.purfStatus = "Unapproved"; A.contains(C("purFEncCtx", xw), "Pending, unpaid.", "Unapproved: pending orders only, and the line says so");
   xw.purfStatus = null; xw.purfView = null;
   A.contains(css, ".purf-root .purf-tscroll{flex:1 1 auto;min-height:0;overflow:auto;}", "the table body scrolls"); }
 process.exit(A.report());

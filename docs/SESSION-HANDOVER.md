@@ -19,7 +19,7 @@ owner saying so; the 8 and 9 October work was pushed as `c7af686` on his instruc
 | The owner rules on design | No defaults that override him. Defects (lint findings, overlaps, missing CSS) are fixed without asking and logged in the widget's decision record. |
 | Widget names, never W-numbers **(owner)** | Anything a reader sees (handover prose, captions, comments the reader may hit) names widgets by their defined names. The `W13` badge and `id="w13"` in `handover.html` stay as they are. |
 | Tokens only **(owner)** | Every style value comes from Pathway tokens (`--type-size-*`, `--padding-*`, `--gap-*`, `--cornerradius-*`, `--wn-*`, `--semantic-color-*`). Padding especially. Column widths in px are the one accepted exception. `node _tools/lint.js` reports undeclared tokens. |
-| Jo Phase 2 is the styling authority | When the owner says "like Jo's" the source is `_ref/jo-phase2-e77c188.html` (her latest, untracked copy). Copy her markup and CSS, then swap her raw values for tokens. |
+| Jo Phase 2 is the styling authority | When the owner says "like Jo's" the source is `_ref/jo-phase2-d7f33b0.html` (her latest, untracked copy). Copy her markup and CSS, then swap her raw values for tokens. |
 | No handover work unless asked | On 9 Oct the owner said "dont worry about the handover document" for the Purchasing pop-up. Ask before spending time there. |
 | Memory | Append a dated line to `~/.claude/projects/C--Users-ocurran/memory/project-v2-final-complete-version-2.md` when a widget's state changes. |
 
@@ -38,7 +38,7 @@ owner saying so; the 8 and 9 October work was pushed as `c7af686` on his instruc
 | Per-widget drivers (the executable spec) | `_tools/wNN-name.driver.js`, run by `_tools/verify.js` |
 | Capture script | `_tools/one-off/shoot-handover-2026-10-07.js` |
 | V1 (what Value Labs has today) | `_ref/v1-main-e0a04c5.html`, identical to Jo's live main |
-| Jo Phase 2 (latest) | `_ref/jo-phase2-e77c188.html` |
+| Jo Phase 2 (latest) | `_ref/jo-phase2-d7f33b0.html` |
 | Legacy product code (read-only) | `C:\Users\ocurran\source\repos\MBAccounting` (e.g. `Shelby.Web.Financials\PurchasingManagement\Requests\Update.aspx`, `Content\scripts\Controls\POApprovalsGrid.js`) |
 | Public handover repo | `..\Dashboard_V2_Handover` (published copy; publish = copy `index.html`, `handover.html`, `docs/Pics` unchanged, only when the owner says) |
 | Live links | V1 `https://helloimjolopez-collab.github.io/design-sandbox/Widget%20Container%20Demo/`, Jo Phase 2 `.../design-sandbox/phase-2/Widget%20Container%20Demo/`, V2 `https://oisin-curran-mb.github.io/Dashboard_Project_V2/` |
