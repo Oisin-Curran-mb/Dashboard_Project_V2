@@ -6,7 +6,7 @@ rule came from the owner (Oisin Curran) it is marked **(owner)**.
 
 Repo: `C:\Users\ocurran\Desktop\For Dashboard\Step 7 - Version 2\Complete Version 2`
 (the working repo, GitHub `Dashboard_Project_V2`). Nothing is committed or pushed without the
-owner saying so; the whole of 8 and 9 October is still uncommitted local work.
+owner saying so; the 8 and 9 October work was pushed as `c7af686` on his instruction.
 
 ---
 
@@ -54,7 +54,7 @@ All local clones sit under `C:\Users\ocurran\Desktop\For Dashboard\Step 7 - Vers
 
 | Repo (remote) | Local folder | Branch | Purpose | What is pushed, and when |
 |---|---|---|---|---|
-| `Oisin-Curran-mb/Dashboard_Project_V2` | `Complete Version 2` | `main` | **The working repo.** The build (`index.html`), the handover source (`handover.html`), screenshots, decision records, drivers, tools, this document. Everything is edited here and only here. GitHub Pages serves it at `https://oisin-curran-mb.github.io/Dashboard_Project_V2/` (all widgets on; this is the owner's own demo link, not the Value Labs one). | Commits on the owner's say-so, one per finished widget ("Purchasing Management: ..."). Push only when he says push. **As of 9 Oct evening nothing since commit `6f897d3` (7 Oct) is committed: 47 changed or new paths, see `git status`.** The untracked `_ref/jo-phase2-e77c188.html` is a reference copy; ask before committing it. |
+| `Oisin-Curran-mb/Dashboard_Project_V2` | `Complete Version 2` | `main` | **The working repo.** The build (`index.html`), the handover source (`handover.html`), screenshots, decision records, drivers, tools, this document. Everything is edited here and only here. GitHub Pages serves it at `https://oisin-curran-mb.github.io/Dashboard_Project_V2/` (all widgets on; this is the owner's own demo link, not the Value Labs one). | Commits on the owner's say-so, one per finished widget ("Purchasing Management: ..."). Push only when he says push. Last push: `c7af686` (9 Oct, the whole 8 and 9 Oct round, owner's instruction); the tree was clean after it. |
 | `Oisin-Curran-mb/Dashboard_V2_Handover` | `Handover W01-W04 (public repo)` (folder name is historical) | `main` | **The public handover home** given to Value Labs, Confluence and SharePoint: `https://oisin-curran-mb.github.io/Dashboard_V2_Handover/` and `/handover.html`. Holds only `index.html`, `handover.html`, `README.md`, `docs/Pics` and the Financial KPI spec page (`.gitignore` keeps everything else out). Never edited directly. | A **release**: built from the working repo at publish time, never committed back to it. (1) copy `index.html` and flip the `WIDGET_SWITCH` entries (shell section "widget switchboard", `WIDGET_SWITCH={W01:true,...}`) to `false` for every widget not yet released; (2) filter `handover.html` to the released sections with a release intro and legend; (3) copy only the referenced `docs/Pics/Version 1|2/<widget>` folders, skipping `_superseded`; (4) commit "Handover: ...", push. Current public set (commit `f36b180`, 7 Oct): Budget Compared to Actual through My Status plus Financial KPI; Alerts & Actions withdrawn. The release transform lived in a session scratchpad (`build_release.py`); it is not in the repo, so rebuild it from this description or ask the owner for the copy. |
 | `Oisin-Curran-mb/Dashboard_Project` | `Aditya KPI branch\Dashboard_Project` | `main` | Aditya's fork of the shell: `Aditya_Widget_Design\Demo V2.html` with the Financial KPI variants and Alerts & Actions. **Read-only source** for Financial KPI and Alerts & Actions. | Nothing. We never push here. |
 | `helloimjolopez-collab/design-sandbox` @ `main` | `Phase 1 branch\design-sandbox` | `main` | **V1**: Jo's `Widget Container Demo/index.html` as Value Labs has it (identical to `_ref/v1-main-e0a04c5.html`, which is what the capture script shoots). Live: `https://helloimjolopez-collab.github.io/design-sandbox/Widget%20Container%20Demo/`. | Nothing. Pull only, and only to confirm V1 has not moved. |
@@ -289,8 +289,7 @@ Out:
 - Open question put to the owner, unanswered: whether a "Coming to you" request should also offer
   Approve (it does now, as the legacy screen enables rows down to yours and cascades), and whether
   the request table should still default to oldest first now that January orders sit on top.
-- Backups of `index.html` before the pop-up rebuild are in the session scratchpad only
-  (`index.before-popup.html`); they vanish with the session.
+- Everything above is in commit `c7af686` on `main`, pushed 9 Oct; the pre-rebuild `index.html` is `6f897d3`.
 
 ---
 
