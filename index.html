@@ -12773,7 +12773,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(w.state==="empty"||!apData(w).length){var ec=EMPTY_COPY.payables;return '<div class="state" data-kind="empty">'+ICON("task_alt")+'<div class="state-title">'+ec.title+'</div></div>';}
     var tot=apTotalDue(w);
     return '<div class="kpi-row"><div class="kpi-num">'+
-      '<span class="scope-chip" style="cursor:default"><span class="sc-nm">Accounts payable</span></span>'+
       '<div class="metric-value">'+apMoney(tot)+'</div>'+
       '<div class="gl-sub">'+apBadge(w)+apWeekPill(w)+'</div>'+
       '</div></div>';}
@@ -12813,12 +12812,23 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
   /* ---- loading: only on a data-fetch (filter change), never on sort -- */
   function apLoad(w){w.aploading=true;clearTimeout(timers["ap-"+w.id]);timers["ap-"+w.id]=setTimeout(function(){w.aploading=false;w.updated="just now";render();},800);}
 
+  /* ---- invoice pop-up: the dashboard's standard card (title, facts, Open in ... and Close) ---- */
+  function apInvoiceModalHTML(){var m=modal;
+    function fact(k,v){return '<div class="pur-po-fact"><span class="pur-po-fact-k">'+k+'</span><span class="pur-po-fact-v">'+v+'</span></div>';}
+    var facts='<div class="pur-po-facts">'+fact("Vendor",apEsc(m.vendor))+fact("Invoice #",apEsc(m.inv))+fact("Due date",apFmtLong(m.dueiso))+fact("Status",apDaysLabel(m.dueiso))+fact("Amount",apEsc(m.amt))+'</div>';
+    return '<div class="modal-backdrop" data-action="modal-close"><div class="modal" data-action="stop" role="dialog" aria-modal="true" aria-label="Invoice '+apEsc(m.inv)+'">'+
+      '<div class="modal-h"><span class="modal-title">Invoice '+apEsc(m.inv)+'</span><button class="iconbtn" data-action="modal-close" aria-label="Close">'+ICON("close")+'</button></div>'+
+      '<div class="modal-b">'+facts+'</div>'+
+      '<div class="modal-f"><button class="btn naked sm" data-action="ap-openbill" data-inv="'+apEsc(m.inv)+'">'+ICON("open_in_new")+'Open in Accounts Payable</button><button class="btn primary sm" data-action="modal-close">Close</button></div>'+
+    '</div></div>';}
+
   /* ---- 3. CLICK HANDLER (branch: a starts with "ap-") ---------------- */
   function apHandleClick(a,id,t){
     if(a==="ap-due"){apDueQuery="";pop=(pop&&pop.type==="ap-due"&&pop.id===id)?null:{type:"ap-due",id:id};render();return true;}
     if(a==="ap-set-due"){var wad=find(id);if(wad){var nv=t.getAttribute("data-due"),cur=apSel(wad);if(nv!==cur){wad.apDue=nv;apLoad(wad);}}pop=null;render();return true;}
     if(a==="ap-sort"){var was=find(id),k=t.getAttribute("data-k");if(was){var cs=(was.apsort||"due-asc").split("-");was.apsort=(cs[0]===k)?(k+"-"+(cs[1]==="asc"?"desc":"asc")):(k+"-"+((k==="vendor"||k==="inv"||k==="due")?"asc":"desc"));}render();return true;}
-    if(a==="ap-open"){var _inv=t.getAttribute("data-inv"),_vn=t.getAttribute("data-vendor"),_iso=t.getAttribute("data-dueiso"),_am=t.getAttribute("data-amt");showModal("Invoice "+_inv,'<div class="pur-po-facts"><div class="pur-po-fact"><span class="pur-po-fact-k">Vendor</span><span class="pur-po-fact-v">'+_vn+'</span></div><div class="pur-po-fact"><span class="pur-po-fact-k">Invoice #</span><span class="pur-po-fact-v">'+_inv+'</span></div><div class="pur-po-fact"><span class="pur-po-fact-k">Due date</span><span class="pur-po-fact-v">'+apFmtLong(_iso)+'</span></div><div class="pur-po-fact"><span class="pur-po-fact-k">Status</span><span class="pur-po-fact-v">'+apDaysLabel(_iso)+'</span></div><div class="pur-po-fact"><span class="pur-po-fact-k">Amount</span><span class="pur-po-fact-v">'+_am+'</span></div></div>');return true;}
+    if(a==="ap-open"){modal={type:"apbill",inv:t.getAttribute("data-inv"),vendor:t.getAttribute("data-vendor"),dueiso:t.getAttribute("data-dueiso"),amt:t.getAttribute("data-amt")};modalMounted=false;pop=null;render();return true;}
+    if(a==="ap-openbill"){setStatus("Opens Accounts Payable, Invoices, for invoice "+t.getAttribute("data-inv")+", the full bill with its lines and attachments. No dashboard route to it exists yet.");return true;}
 
 
     if(a==="ap-pick-date"){var wap=find(id);if(wap){var iso=t.getAttribute("data-iso"),cur=apSel(wap);if(iso!==cur){wap.apDue=iso;apLoad(wap);}}pop=null;render();return true;}
@@ -13121,7 +13131,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
 
 
   /* Registered so the shell (and the review viewer) find her block through WIDGETS; her click, pop and trigger hooks stay as they are. */
-  WIDGETS.register("payables",{content:apContent});
+  WIDGETS.register("payables",{content:apContent,modals:{apbill:apInvoiceModalHTML}});
 
 /* ===== W18 Financial KPI V2 ===== */
 
