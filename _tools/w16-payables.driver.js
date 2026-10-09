@@ -47,11 +47,13 @@ const wide = rows.filter(function (w) { return w.size === "wide"; })[0], xw = ro
 
 /* ---------- 4. her controls are intact ---------------------------------- */
 const e = EX.contentHTML(wide), d = EX.contentHTML(xw);
-/* Jo phase-2 d7f33b0 (owner, 9 Oct: her widget one to one, except the Glance and the invoice pop-up): the header is
-   the total with a "Total due" eyebrow and an inline search; the due-date chip gave way to four filter tiles. */
+/* Jo phase-2 d7f33b0 (owner, 9 Oct: her widget one to one, except the Glance and the invoice pop-up), then the owner's
+   header ruling: no total in the header; the old due-date chip sits where it was, beside her inline search, and her four
+   filter tiles under it drive the same filter. */
 ["All dates", "Overdue", "Due this week", "Due this month"].forEach(function (lbl) { A.contains(e, '<span class="ap-tile-lbl">' + lbl + "</span>", "Explore: filter tile " + lbl); A.contains(d, '<span class="ap-tile-lbl">' + lbl + "</span>", "Detail: filter tile " + lbl); });
-A.contains(e, 'data-action="ap-set-due" data-due="week"', "the tiles reuse her ap-set-due handler"); A.absent(e, 'data-action="ap-due"', "no due-date chip in the header any more (her phase-2 header)");
-A.contains(e, '<span class="kpi-eyebrow">Total due</span>', "Explore: Total due eyebrow over the total"); A.contains(e, 'placeholder="Search vendor, invoice or date"', "Explore: inline search in the header");
+A.contains(e, 'data-action="ap-set-due" data-due="week"', "the tiles reuse her ap-set-due handler"); A.contains(e, 'data-action="ap-due"', "Explore: the due-date chip is back in the header (owner, 9 Oct)"); A.contains(d, 'data-action="ap-due"', "Detail: due-date chip");
+A.absent(e, "kpi-eyebrow", "no Total due in the header (owner, 9 Oct: the All dates tile carries it)"); A.absent(e, "ap-hd-kpi", "no header total cell"); A.contains(e, 'placeholder="Search vendor, invoice or date"', "Explore: inline search in the header");
+wide.apDue = "week"; const ew = EX.contentHTML(wide); A.contains(ew, '<span class="fc-label">Due this week</span>', "picking the Due this week tile relabels the chip: one filter, two controls"); A.contains(ew, 'data-due="week" data-id="' + wide.id + '" aria-pressed="true"', "and the tile shows selected"); wide.apDue = "total";
 A.contains(e, 'class="ap-sbadge ap-sbadge-over"', "Explore: overdue rows carry her negative status badge"); A.contains(e, "ap-sbadge-warn", "and due-within-a-month rows the attention badge");
 A.contains(e, '<span class="ap-c-inv">', "invoice number is plain text (no code-copy helper in this shell)"); A.absent(e, "codecopy", "no codecopy markup");
 A.contains(d, '<div class="dep-col-h">Top vendors owed</div>', "Detail: the right column is Top vendors owed"); A.absent(d, "ap-vendor-drill", "vendor rows do not drill (owner: our pop-up only, not hers)"); A.absent(d, "ap-sum-click", "no drill styling on vendor rows");

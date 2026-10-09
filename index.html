@@ -936,7 +936,6 @@
 /* ---- header, filter tiles, status badge (Jo phase-2) ---- */
 /* AP header: KPI left, small search inline right. */
 .ap-hd-row{display:flex;align-items:center;gap:var(--gap-medium);padding:var(--padding-xxxtight) var(--padding-xxxtight) 0;}
-.ap-hd-kpi{display:flex;align-items:baseline;gap:var(--gap-tight);min-width:0;}
 .ap-hd-search{margin-left:auto;}
 /* AP filter tiles: icon + tone colour + readable text. */
 .ap-tiles{display:flex;gap:var(--gap-tight);flex-wrap:wrap;padding:var(--padding-tight) var(--padding-medium) var(--padding-medium);}
@@ -972,9 +971,6 @@
 /* Amount column: header right-aligned over the right-aligned amounts. */
 .ap-c-amt{text-align:right;}
 .wt-head .ap-c-amt .wt-sort{justify-content:flex-end;width:100%;}
-/* KPI eyebrow over the total, as Jo's shell draws it (scoped here; the shell has no such rule) */
-.ap-hd-kpi .kpi-eyegrp{display:inline-flex;flex-direction:column;align-items:flex-start;gap:var(--gap-xxxtight);min-width:0;}
-.ap-hd-kpi .kpi-eyebrow{display:block;font-size:var(--type-size-10);font-weight:500;line-height:1.4;letter-spacing:0.6px;color:var(--txt-subtle);}
 
   .mi .mi-sub{margin-left:auto;font-size:11px;color:var(--txt-subtle);font-variant-numeric:tabular-nums;}
   /* Consistent table header styling across every widget */
@@ -12713,15 +12709,10 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
      payable + overdue badge (LEFT), one quiet context line under it stating
      count, cash-needed-within-7-days, and "as of". */
   function apHeaderBlock(w,mode){
-    var kpi;
-    if(mode==="loading"){
-      kpi='<span class="sk" style="width:150px;height:26px;border-radius:6px"></span>';
-    }else{
-      kpi='<span class="kpi-eyegrp"><span class="kpi-eyebrow">Total due</span><span class="metric-value">'+apMoney(apTotalDue(w))+'</span></span>';
-    }
-    /* KPI on the left; a small search inline on the right (type a vendor, invoice or date). */
+    /* Due-date chip on the left (the same filter the tiles below drive; the All dates tile carries the total),
+       a small search inline on the right (type a vendor, invoice or date). */
     var search='<div class="dep-search hd-search ap-hd-search"><span class="material-symbols-rounded" aria-hidden="true">search</span><input class="dep-q" placeholder="Search vendor, invoice or date" aria-label="Search invoices by vendor, invoice number or date"></div>';
-    return '<div class="dep-hd"><div class="ap-hd-row"><div class="ap-hd-kpi">'+kpi+'</div>'+search+'</div></div>';}
+    return '<div class="dep-hd"><div class="ap-hd-row">'+apDueChip(w)+search+'</div></div>';}
 
   /* ---- the hero: dense due-date table, grouped by aging band --------- */
   /* One status badge used in the table AND the invoice detail: overdue = negative,
