@@ -66,6 +66,7 @@ A.contains(e, 'data-acct="', "rows carry her search text so the shell's header s
 EX.setPop({ type: "ap-due", id: wide.id });
 A.eq(EX.triggerSelector(), '[data-action="ap-due"][data-id="' + wide.id + '"]', "trigger selector for her pop-up");
 const pc = EX.popContent(); A.ok(pc && pc.length > 100, "her pop-up content renders through the shell (" + (pc || "").length + " bytes)");
+A.absent(pc, ">By aging<", "chip menu has no aging bands: the tiles above the table are the bands (owner, 9 Oct)"); A.absent(pc, 'data-due="overdue"', "no Overdue option in the menu"); A.contains(pc, ">All due dates<", "All due dates stays"); A.contains(pc, ">Specific due date (earliest first)<", "and the specific dates stay");
 EX.setPop(null);
 
 process.exit(A.report());
