@@ -290,6 +290,13 @@ Out:
   Approve (it does now, as the legacy screen enables rows down to yours and cascades), and whether
   the request table should still default to oldest first now that January orders sit on top.
 - Everything above is in commit `c7af686` on `main`, pushed 9 Oct; the pre-rebuild `index.html` is `6f897d3`.
+- Later on 9 Oct, commit `8e36ab1` built the four rulings from `docs/logic/Purchasing Management - original
+  panel, record screen and the V2 pop-up.md` (rejected-row requests hidden from the whole widget, holds per
+  row with held-by-others left in the viewer's lists, Coming to you keeps Approve, newest first). The owner
+  had wanted those rulings recorded in the document only, not built: "stop changing logic this only supposed
+  to MD file". He has not yet said whether to keep `8e36ab1`'s build changes or revert `index.html` and the
+  W13 driver to `d35f13c`. Ask before touching either. From this point the previous session was used only
+  to prepare documents for you; the build work is yours.
 
 ---
 
