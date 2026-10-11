@@ -315,3 +315,13 @@ Out:
   9 Oct: when copying a Jo component, copy its CSS too and grep that every class in the new
   markup has a rule.
 - The owner reads at about 125% zoom; verify layouts at 1536 px viewport width as well as 1920.
+- 11 Oct 2026: Aditya pushed `ba64ad5` ("Resolve merge conflict: accept remote index.html") built on a 7 Oct copy
+  of `index.html`: it carried his new Alerts & Actions work (a second copy of the widget, kind `alerts2`, with a
+  Detail split pane) but none of the 8 to 11 Oct rounds, and a plain merge reported no conflict while silently
+  reverting them. Handled as: `git merge -s ours origin/main` (our tree kept), then his six Alerts & Actions hunks
+  (his diff against `d957bab`) ported onto our file by anchor, em dashes replaced as on 7 Oct, one icon size put on
+  a token. Not ported, because they belonged to his stale base rather than to his work: a deleted W09 status-column
+  width rule, a duplicate `.ptof-info-cap` rule, `W09:false` in the switchboard, a Deposits pop-up min-height and
+  two Payroll Scheduled Time Off pop-up hunks. If Aditya meant any of those, he should say. Rule for next time:
+  never merge a teammate's `index.html` without checking it still contains the latest owner rounds (grep a
+  recent marker such as `purf-gtile`); prefer porting their block onto ours.
