@@ -1072,12 +1072,12 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 <p>V2 keeps V1's frame: a date chip and a purpose chip, a two-way view switch (V1 called the views Progress and Table; V2 calls them Giving and Summary Table), one bar per purpose, a purpose table with totals, and a pop-up opened from a bar or a row (V1's listed the donors behind a purpose; V2's is "Pop-up - Giving ledger"). It changes seven things:</p>
 <ol>
 <li><strong>What counts.</strong> V2 shows all money given to a purpose in two named parts: payments against a pledge, and gifts with no pledge. A purpose with gifts but no pledge now appears. V1 counted pledge payments only.</li>
-<li><strong>The goal is retired.</strong> V1 measured each purpose against a "goal" (its pledge total): "% of goal", "$5,050 behind", "Fully funded". V2 states the money given; the only percentage left is the headline's pledge payments over the pledge total. Each purpose and each pledge carries one of three words instead: Finished, On track, or Behind by the amount.</li>
+<li><strong>The goal is retired.</strong> V1 measured each purpose against a "goal" (its pledge total): "% of goal", "$5,050 behind", "Fully funded". V2 states the money given; the only percentage left is the headline's pledge payments over the pledge total. Each purpose carries one of three words instead, in the header badge, on its Giving row and in the ledger, and so does each pledge: Finished, On track, or Behind by the amount.</li>
 <li><strong>The date control.</strong> One "Gifts received through" date, as V1 had it (Today, End of last month, or a chosen date), now on the dashboard's standard chip and menu, the same control Remittance Pledges uses. Every figure is read as of that date.</li>
 <li><strong>The Giving bars.</strong> Three segments that always fill the track (pledge payments, still expected, gifts), most received first, with a figures line under each. V1 drew a thermometer with a hatched shortfall, a due marker and a % fulfilled.</li>
 <li><strong>The Summary Table splits in two.</strong> Pledges reproduces the legacy Gifts and Pledges panel column for column; Gifts lists the money with no pledge. Neither is sortable. V1 had one sortable table.</li>
 <li><strong>The pop-up becomes a giving ledger.</strong> Every gift and pledge for the purpose, largest first, with an All / Pledges / Gifts filter, a search box, sortable columns, rows that open to their history, and a download control top right. V1 listed donors most behind first.</li>
-<li><strong>Detail and Glance.</strong> Detail gains the view switch (V1 showed only "Progress toward goal" there). Glance drops the purpose chip and the "N purposes behind schedule" line for a split bar and a one-line split.</li>
+<li><strong>Detail and Glance.</strong> Detail gains the view switch (V1 showed only "Progress toward goal" there). Glance keeps the purpose chip and replaces the "N purposes behind schedule" line with a split bar and a one-line split.</li>
 </ol>
 <p>Everything else (the card menu, the chip row, the view switch top right, the loading skeleton, the empty state, Close) is in the same place as V1. The demos use different sample data and anchor dates, so every figure, name and row count in the screenshots differs for that reason alone.</p>
 <h3>What's Different</h3>
@@ -1089,7 +1089,7 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 <h4>Headline</h4>
 <ul>
 <li><strong>Glance, Explore, Detail:</strong> the big figure is everything given; a pill reads "81.45% of $400,200 pledged" and a grey chip splits it, "$325,951 from pledges, $56,940 from gifts". V1 showed pledge payments, a status pill ("$5,050 behind", "On track", "Fully funded") and "58% of goal".</li>
-<li><strong>Glance:</strong> a three-segment bar and a one-line caption ("$325,951 from pledges, $56,940 from gifts"). V1 had the All purposes chip, a small bar with a due marker and "3 purposes behind schedule".</li>
+<li><strong>Glance:</strong> the purpose chip first, where Deposits on Hand and Payroll Distributions put theirs, then the total with the pledged pill beside it, a three-segment bar and a one-line caption ("$325,951 from pledges, $56,940 from gifts"). V1 had the same chip, a small bar with a due marker and "3 purposes behind schedule".</li>
 </ul>
 <h4>Giving</h4>
 <ul>
@@ -1099,7 +1099,7 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 <h4>Table</h4>
 <ul>
 <li><strong>Explore - Summary Table, Detail:</strong> a Pledges / Gifts switch on its own line under the view switch, right-aligned, only while the table is up. New in V2.</li>
-<li><strong>Explore - Summary Table:</strong> Pledges has Purpose, Pledge Total, Pledge Due, Received, Due Remaining, Percent Due at Detail only, and Status (Finished, On track, or Behind by the amount); amounts to the cent; largest Pledge Total first; over-received Due Remaining in green parentheses; a caption; a "Total (6 purposes)" row. Only purposes with an active pledge are listed. V1 had Pledged, Due by date, Received, Remaining and % Fulfilled, every header sortable, in whole dollars.</li>
+<li><strong>Explore - Summary Table:</strong> Pledges has the panel's six columns at every size: Purpose, Pledge Total, Pledge Due, Received, Due Remaining and Percent Due; amounts to the cent; largest Pledge Total first; over-received Due Remaining in green parentheses; a caption; a "Total (6 purposes)" row. Only purposes with an active pledge are listed. V1 had Pledged, Due by date, Received, Remaining and % Fulfilled, every header sortable, in whole dollars.</li>
 <li><strong>Explore - Summary Table gifts:</strong> Gifts has Purpose ("Also has pledges" or "No pledges" beneath), Gifts, Donors and Total, left-aligned, largest first, with its own totals row. A row opens the ledger filtered to Gifts. Not in V1.</li>
 </ul>
 <h4>Pop-up</h4>

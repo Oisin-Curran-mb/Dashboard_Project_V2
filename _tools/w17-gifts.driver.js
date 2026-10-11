@@ -131,7 +131,7 @@ A.eq(CAMPS[6].pledgeTotal, 0, "Memorial Gifts has no pledge"); A.ok(CAMPS[6].oth
       A.contains(html, "of $", "Glance shows the overall pledged read at " + v);
       A.contains(html, "from pledges", "Glance names the split at " + v);
       A.absent(html, 'data-gpf="view"', "no view toggle at Glance (" + v + ")");
-      A.absent(html, 'data-action="gpF-camp"', "no purpose chip at Glance (" + v + ")"); A.absent(html, 'data-action="gpF-thru"', "no date chip at Glance (" + v + ")");
+      A.contains(html, '<div class="kpi-num">' + ctx.gpFCampChip(w), "the purpose chip leads the Glance, where Deposits on Hand and Payroll Distributions put theirs (owner, 11 Oct)"); A.absent(html, 'data-action="gpF-thru"', "no date chip at Glance (" + v + ")");
       A.absent(html, 'data-gpf="export"', "no export at Glance (" + v + ")");
       A.absent(html, "Gifts and Pledges", "Glance does not repeat the card title inside itself (owner, 28 Sep)");
       A.absent(html, "scope-chip", "and carries no scope chip at all (" + v + ")");
@@ -178,8 +178,10 @@ A.eq(CAMPS[6].pledgeTotal, 0, "Memorial Gifts has no pledge"); A.ok(CAMPS[6].oth
 });
 /* the six baseline columns, in the live product's order */
 const tbl = ctx.gpFContentRoot(fresh("gpF", { size: "xwide", gpFView: "table" }));
-["Purpose", "Pledge Total", "Pledge Due", "Received", "Due Remaining", "Percent Due", "Status"]
+["Purpose", "Pledge Total", "Pledge Due", "Received", "Due Remaining", "Percent Due"]
   .forEach(function (c) { A.contains(tbl, ">" + c + "<", "summary column present: " + c); });
+A.absent(tbl, ">Status<", "no Status column in the Pledges table (owner, 11 Oct: the panel's six columns, Percent Due included)");
+A.contains(ctx.gpFContentRoot(fresh("gpF", { size: "wide", gpFView: "table" })), ">Percent Due<", "Percent Due shows at Explore as well as Detail (owner, 11 Oct)");
 A.contains(tbl, "gpf-total-row", "totals row rendered (her total row class)");
 /* totals sum the first four money columns; Percent Due is NOT summed */
 const totCells = /gpf-sumtotal"[\s\S]*?<\/div>\s*$/.test(tbl) || tbl.indexOf("gpf-sumtotal") > -1;
@@ -747,7 +749,7 @@ A.cssDeclares(shell.css, [
   "gpf-cap", "gpf-tblwrap", "gpf-scroll", "gpf-sumrow", "gpf-sumtotal", "gpf-caret",
   "gpf-nmtxt", "gpf-nm", "gpf-nmsub", "gpf-drill-tbl", "gpf-drawer",
   "gpf-grow", "gpf-gref", "gpf-giftfoot", 
-  "gpf-mi-date", "gpf-datepick", "gpf-date-input", "gpf-c-st", "gpf-thru-long", "gpf-thru-short", "gpf-modal", "gpf-panel", "gpf-panel-h", "gpf-panel-big", "gpf-dot"
+  "gpf-mi-date", "gpf-datepick", "gpf-date-input", "gpf-thru-long", "gpf-thru-short", "gpf-modal", "gpf-panel", "gpf-panel-h", "gpf-panel-big", "gpf-dot"
 ], "every gpf- class our markup uses is declared");
 
 /* ------------------------- 9. the Rule 11 stub, present and labelled */
@@ -1265,8 +1267,8 @@ A.eq((shell.script.match(/gpFCamp:"All purposes",gpFPlExp:\{\}/g) || []).length,
      of the 166px it needs. It is derivable from two columns in the same row, and it stays in
      every row's screen-reader line at every size, so nothing is lost, only moved. */
   const pWide = ctx.gpFPledgesTable(fresh("gpF", { size: "wide", gpFView: "table" }), false);
-  A.absent(pWide, "Percent Due", "Explore drops the Percent Due column");
-  A.absent(pWide, "gpf-c-pct", "and its cells with it, header, rows and totals alike");
+  A.contains(pWide, "Percent Due", "Explore shows the Percent Due column too (owner, 11 Oct: the panel's six columns at every size)");
+  A.contains(pWide, "gpf-c-pct", "with its cells, header, rows and totals alike");
   A.contains(pWide, "percent due ", "while every row still says it to a screen reader");
   A.contains(pTbl, "Percent Due", "Detail keeps the column");
   ["Pledge Total", "Pledge Due", "Received", "Due Remaining"].forEach(function (h) {
@@ -1299,14 +1301,15 @@ A.eq((shell.script.match(/gpFCamp:"All purposes",gpFPlExp:\{\}/g) || []).length,
   A.eq(ctx.gpFStatusLabelRow("gifts", 0), "Gifts only, no pledge", "a gifts-only purpose keeps its own words");
   A.eq(typeof ctx.gpFStatusLabel, "undefined", "the pace-band labeller is gone"); A.eq(typeof ctx.gpFBandFromDays, "undefined", "and the day bands with it");
   ["Fully paid", "Up to date", "30+ days ahead", "About a month behind", "60+ days behind", "Fully funded"].forEach(function (s) { A.absent(block, "'" + s + "'", "old status word gone from the block: " + s); });
-  /* the Status column in the Pledges table */
+  /* the Pledges table stays the panel's own six columns; the status words live in the header badge,
+     the Giving rows and the ledger (owner, 11 Oct, second round: "Remove Status from the table on
+     pledges and change to Percent Due") */
   const pTable = ctx.gpFPledgesTable(tw, false);
-  A.contains(pTable, '<span class="gpf-c-st">Status</span>', "the Pledges table has a Status header (owner, 11 Oct)");
-  A.eq((pTable.match(/class="gpf-c-st"><span class="gpf-dstatus /g) || []).length, rows.length, "and a status chip on every row");
-  A.ok(/gpf-sumtotal[\s\S]*?<span class="gpf-c-st"><\/span>/.test(pTable), "the totals row leaves Status blank");
-  A.headMatchesBody(pTable, "header and body carry the Status cell alike (D12)");
-  A.contains(ctx.gpFPledgesTable(fresh("gpF", { size: "wide", gpFView: "table" }), false), '<span class="gpf-c-st">Status</span>', "Status shows at Explore too");
-  A.contains(shell.css, ".gpf-root .gpf-c-st{", "and has its column rule");
+  A.absent(pTable, "gpf-c-st", "no Status column in the Pledges table"); A.absent(pTable, "gpf-dstatus", "and no status chip in its rows");
+  A.eq(typeof ctx.gpFRowChip, "undefined", "the row chip builder is gone"); A.absent(shell.css, ".gpf-c-st", "and its column rule");
+  A.contains(ctx.gpFPledgesTable(fresh("gpF", { size: "wide", gpFView: "table" }), false), '<span class="gpf-c-n gpf-c-pct">Percent Due</span>', "Percent Due shows at Explore");
+  A.ok(ctx.gpFWidePct(fresh("gpF", { size: "wide" })) === true, "at every size");
+  A.headMatchesBody(pTable, "header and body cells still match (D12)");
   /* per pledge: the same three words, from the pace object */
   const purpose = ctx.gpFCampByLabel(tw, LABELS[2]), thru = ctx.gpFThru(tw);
   const paces = ctx.gpFDonorsFor(purpose).map(function (pl) { return ctx.gpFDonorPace(pl, thru); });
