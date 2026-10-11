@@ -2034,6 +2034,7 @@
   /* SUMMARY TABLE. Her row grid and cells do all the column work; this only
      gives the table a scrolling body with the totals row pinned below it. */
   .gpf-root .gpf-tblwrap{flex:1;min-height:0;display:flex;flex-direction:column;min-width:0;}
+  .gpf-root .gpf-tblwrap .gpf-cap{color:var(--txt-primary);} /* the table captions in plain text, no colour (owner, 11 Oct) */
   .gpf-root .gpf-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;}
   .gpf-root .gpf-sumrow{align-items:center;}
   .gpf-root .gpf-sumtotal{font-weight:700;}
@@ -10503,7 +10504,7 @@ function gpFPledgesTable(w,trim){
     '<span class="gpf-c-n">'+gpFDueCell(t.dueRem)+'</span>'+
     (gpFWidePct(w)?'<span class="gpf-c-n gpf-c-pct"></span>':'')+
   '</div>');
-  var cap='<div class="gpf-ctx gpf-cap"><span>The pledged position for every purpose with an active pledge, as the Gifts and Pledges panel reports it. Gifts with no pledge behind them are under Gifts. Pledge Due is each donor pledge paced on its own begin to end term, and the full pledge once past its end date.'+(gpFWidePct(w)?' Percent Due is Due Remaining over Pledge Due, so a negative value means over received.':'')+(trim?' Largest pledges first.':'')+'</span></div>';
+  var cap='<div class="gpf-ctx gpf-cap"><span>Purposes with an active pledge, and the money given against those pledges.'+(trim?' Largest pledges first.':'')+'</span></div>';
   return '<div class="gpf-tblwrap">'+cap+'<div class="scroll gpf-scroll">'+gpFSummaryHead(w)+body+'</div>'+tot+'</div>';
 }
 /* GIFTS: gift lines with no pledge behind them, per purpose, up to the through date. The
@@ -10543,7 +10544,7 @@ function gpFGiftsTable(w,trim){
     '<span class="gpf-c-n gpf-c-lft">'+t.giftDonors+'</span>'+
     '<span class="gpf-c-n gpf-c-lft">'+gpFMoney(t.other)+'</span>'+
   '</div>');
-  var cap='<div class="gpf-ctx gpf-cap"><span>Money given to a purpose that is not against any pledge. A purpose appears here whether or not it also has pledges, and its pledged position is under Pledges. Donors are counted once each.'+(trim?' Largest first.':'')+'</span></div>';
+  var cap='<div class="gpf-ctx gpf-cap"><span>Purposes with money given that is not against any pledge.'+(trim?' Largest first.':'')+'</span></div>';
   return '<div class="gpf-tblwrap">'+cap+'<div class="scroll gpf-scroll">'+gpFGiftsHead()+body+'</div>'+tot+'</div>';
 }
 /* DONOR BREAKDOWN, expanded inline under a purpose row, most behind pace first, 20
