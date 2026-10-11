@@ -3,7 +3,7 @@
 
    Rebuilt 2026-09-28 on the owner's three rulings: the row unit is the
    PURPOSE, Received carries both pledge payments and other gifts, and
-   every money figure obeys the date window. The invented per-row goal,
+   every money figure is read as of one through date (11 Oct). The invented per-row goal,
    its bands and the top-5 most-behind modal are gone.
 
    Widget: Gifts Pledges, kind "gifts", prefix gpF / GPF_,
@@ -68,6 +68,9 @@ function gfire(action, attrs) {
   (shim.listeners.click || []).forEach(function (fn) { fn(ev); });
   return ev;
 }
+/* A target for the shell-dispatched actions (data-action, gpF- prefix): the shell's WIDGETS.click
+   hands them to gpFHandleClick(a,id,t), which only reads attributes off t. */
+function T(attrs) { const bag = attrs || {}; return { getAttribute: function (k) { return bag[k] == null ? null : String(bag[k]); } }; }
 /* Typing into the ledger search box. The block's listener reads the
    target's id and value and re-renders in place, so a plain bag is enough. */
 function gtype(v) {
@@ -128,7 +131,7 @@ A.eq(CAMPS[6].pledgeTotal, 0, "Memorial Gifts has no pledge"); A.ok(CAMPS[6].oth
       A.contains(html, "of $", "Glance shows the overall pledged read at " + v);
       A.contains(html, "from pledges", "Glance names the split at " + v);
       A.absent(html, 'data-gpf="view"', "no view toggle at Glance (" + v + ")");
-      A.absent(html, 'data-gpf="camp"', "no campaign chip at Glance (" + v + ")");
+      A.absent(html, 'data-action="gpF-camp"', "no purpose chip at Glance (" + v + ")"); A.absent(html, 'data-action="gpF-thru"', "no date chip at Glance (" + v + ")");
       A.absent(html, 'data-gpf="export"', "no export at Glance (" + v + ")");
       A.absent(html, "Gifts and Pledges", "Glance does not repeat the card title inside itself (owner, 28 Sep)");
       A.absent(html, "scope-chip", "and carries no scope chip at all (" + v + ")");
@@ -139,17 +142,17 @@ A.eq(CAMPS[6].pledgeTotal, 0, "Memorial Gifts has no pledge"); A.ok(CAMPS[6].oth
       /* the VISIBLE caption is the compact form; the screen-reader line below it
          keeps the full wording on purpose, so this reads the caption alone */
       const capTxt = html.slice(html.indexOf("gpf-glance-cap")).split("</span>")[0];
-      /* both forms say "gifts" since 28 Sep, so the discriminator is the
-         phrasing: the full line reads "from pledges", the compact "pledged," */
-      A.absent(capTxt, "from pledges", "the visible Glance caption is the compact form (" + v + ")");
-      A.contains(capTxt, "pledged,", "which reads pledged rather than from pledges (" + v + ")");
-      A.contains(capTxt, "gifts", "and still names both parts (" + v + ")");
+      /* the compact form says "from pledges" too since 11 Oct: "pledged" named the payments and
+         read as the pledge total (owner) */
+      A.contains(capTxt, "from pledges", "the visible Glance caption says from pledges (" + v + ")");
+      A.absent(capTxt, " pledged,", "and never pledged, which named the wrong figure (" + v + ")");
+      A.contains(capTxt, "from gifts", "and still names both parts (" + v + ")");
       A.contains(html.slice(html.indexOf("sr-only")), "from gifts",
         "while the screen-reader line keeps the full wording (" + v + ")");
     } else {
       A.contains(html, 'data-gpf="view"', "view toggle present at " + sz + "/" + v);
-      A.contains(html, 'data-gpf="camp"', "campaign chip present at " + sz + "/" + v);
-      A.contains(html, 'data-gpf="range"', "date-range chip present at " + sz + "/" + v);
+      A.contains(html, 'data-action="gpF-camp"', "purpose chip present at " + sz + "/" + v);
+      A.contains(html, 'data-action="gpF-thru"', "through-date chip present at " + sz + "/" + v);
       /* v1.2 view separation. Asserted on the BODY markers, not on the words:
          the toggle's own tooltip names the table's columns, so "Percent Due"
          legitimately appears in the goal view's header and is not evidence of
@@ -175,7 +178,7 @@ A.eq(CAMPS[6].pledgeTotal, 0, "Memorial Gifts has no pledge"); A.ok(CAMPS[6].oth
 });
 /* the six baseline columns, in the live product's order */
 const tbl = ctx.gpFContentRoot(fresh("gpF", { size: "xwide", gpFView: "table" }));
-["Purpose", "Pledge Total", "Pledge Due", "Received", "Due Remaining", "Percent Due"]
+["Purpose", "Pledge Total", "Pledge Due", "Received", "Due Remaining", "Percent Due", "Status"]
   .forEach(function (c) { A.contains(tbl, ">" + c + "<", "summary column present: " + c); });
 A.contains(tbl, "gpf-total-row", "totals row rendered (her total row class)");
 /* totals sum the first four money columns; Percent Due is NOT summed */
@@ -267,8 +270,8 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
 (function () {
   const w = W("gpF");
   const t0 = env.log.timers;
-  gfire("set-camp", { "data-id": "gpF", "data-v": LABELS[1] });
-  A.eq(w.gpFCamp, LABELS[1], "set-camp updates the widget's campaign");
+  ctx.gpFHandleClick("gpF-set-camp", "gpF", T({ "data-v": LABELS[1] }));
+  A.eq(w.gpFCamp, LABELS[1], "set-camp updates the widget's purpose (through the shell's dispatch)");
   A.eq(w.gpFLoading, true, "a campaign change fetches (loading flag set)");
   A.ok(env.log.timers > t0, "a campaign change scheduled a load timer");
   A.contains(ctx.gpFContent(w), "gpf-skel", "and the skeleton renders while loading");
@@ -284,76 +287,71 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   /* restore */
   w.gpFCamp = "All purposes"; w.gpFView = "goal"; w.gpFPlExp = {};
 })();
-/* the campaign popover lists All plus every campaign, and marks the current one */
+/* the purpose menu, on the shell's pop-over: All plus every purpose, the current one marked */
 (function () {
-  const w = W("gpF");
-  gfire("camp", { "data-id": "gpF" });
-  const popHTML = shim.captured["gpfPop"];
-  A.ok(popHTML && popHTML.length > 50, "the campaign popover opened and rendered");
-  A.contains(popHTML, "All purposes", "popover offers All purposes");
-  LABELS.forEach(function (l) { A.contains(popHTML, l, "popover offers " + l); });
+  ctx.pop = { type: "gpF-camp", id: "gpF" };
+  const popHTML = ctx.gpFPopContent();
+  A.ok(popHTML && popHTML.length > 50, "the purpose menu renders through the shell's pop-over");
+  A.contains(popHTML, "All purposes", "menu offers All purposes");
+  LABELS.forEach(function (l) { A.contains(popHTML, l, "menu offers " + l); });
   A.eq((popHTML.match(/role="option"/g) || []).length, 8, "eight purpose options (All plus seven)");
   A.contains(popHTML, 'aria-selected="true"', "the current purpose is marked selected");
-  gfire("camp", { "data-id": "gpF" });
-  A.eq(shim.document.getElementById("gpfPop"), null, "a second click closes the campaign popover");
+  A.contains(popHTML, 'data-action="gpF-set-camp"', "its options are shell actions");
+  ctx.pop = null;
+  ctx.gpFHandleClick("gpF-camp", "gpF", T({}));
+  A.ok(!!ctx.pop && ctx.pop.type === "gpF-camp" && ctx.pop.id === "gpF", "the purpose chip opens its menu on the shell's pop state");
+  ctx.gpFHandleClick("gpF-camp", "gpF", T({}));
+  A.eq(ctx.pop, null, "a second click closes it");
+  ["GPF_POP", "gpfPop", "gpFOpenPop", "gpFClosePop", "gpFSyncPop", "GPF_FOCUS_ID"].forEach(function (s) { A.absent(block, s, "no private pop-over code survives: " + s); });
+  A.absent(shell.css, ".gpf-root.gpf-pop", "and no private pop-over styling");
 })();
-/* the date-range popover, its three presets and the custom From/To reveal */
+/* the through date (owner, 11 Oct): Remittance Pledges' control. One date, no start, no ranges. */
 (function () {
   const w = W("gpF");
-  gfire("range", { "data-id": "gpF" });
-  let popHTML = shim.captured["gpfPop"];
-  ["Gifts received through", "Year to date", "This quarter", "This month", "Custom dates"].forEach(function (o) {
-    A.contains(popHTML, o, "the dates popover offers " + o);
-  });
-  A.absent(popHTML, "gpf-date-input", "no From/To inputs until Custom is chosen");
-  A.absent(ctx.gpFContent(w), "Refresh", "no Refresh control on the filter (Step 4)");
-  gfire("set-range", { "data-id": "gpF", "data-r": "custom" });
-  A.eq(w.gpFRange, "custom", "Custom range selected");
-  popHTML = shim.captured["gpfPop"];
-  A.contains(popHTML, "gpf-date-input", "Custom reveals the From/To inputs in place");
-  A.eq((popHTML.match(/gpf-date-input/g) || []).length, 2, "exactly two date inputs (From and To)");
-  /* the range END is the as-of cutoff; an earlier To drops later gifts */
-  const late = ctx.gpFTotals(Object.assign(fresh("gpF"), { gpFRange: "custom", gpFStart: "2026-01-01", gpFEnd: "2026-08-19" }));
-  const early = ctx.gpFTotals(Object.assign(fresh("gpF"), { gpFRange: "custom", gpFStart: "2026-01-01", gpFEnd: "2024-01-01" }));
-  A.ok(early.totalIn < late.totalIn, "an earlier range end scopes the giving down (the end is the cutoff)");
-  /* the range START frames the chip only and windows no figure (Step 5 v2) */
-  /* the START now windows every figure; a wider start takes in more (owner ruling, 28 Sep) */
-  const wideStart = ctx.gpFTotals(Object.assign(fresh("gpF"), { gpFRange: "custom", gpFStart: "2000-01-01", gpFEnd: "2026-08-19" }));
-  A.ok(wideStart.totalIn > late.totalIn, "a wider start takes in more giving; the START is not cosmetic");
-  const thru = ctx.gpFTotals(Object.assign(fresh("gpF"), { gpFRange: "thru", gpFEnd: "2026-08-19" }));
-  A.eq(thru.totalIn, wideStart.totalIn, "the default through-date preset has no start, so it matches an all-time window");
-  A.ok(thru.fromPledges > 0 && thru.other > 0, "the model carries both parts: pledge payments and gifts with no pledge");
-  A.eq(Math.round((thru.fromPledges + thru.other) * 100) / 100, thru.totalIn, "the two parts sum to the purpose total, which is what Giving shows");
-  /* the pledged side never moves with the window START (owner, 28 Sep, after Edd) */
-  A.eq(thru.pledgeTotal, late.pledgeTotal, "Pledge Total is the full active pledge whatever the preset");
-  A.eq(thru.fromPledgesThru, late.fromPledgesThru, "and the legacy Received reads to the thru date, not the window start");
-  /* read the default phrase off a CLEAN widget: this block has just fired
-     set-range custom, so the shared registry entry is no longer at default. */
-  /* The CHIP shows only the dates since 28 Sep (owner: "just the dates ... so
-     it is smaller and fit better"). The full sentence stays in the aria-label
-     and in the ledger's subtitle, where there is room for it. */
-  const cleanThru = Object.assign(fresh("gpF"), { gpFRange: "thru", gpFEnd: "2026-08-19" });
-  A.eq(ctx.gpFRangeShort(cleanThru), "Aug 19, 2026", "the default chip shows the date alone");
-  A.eq(ctx.gpFRangeShort(Object.assign(fresh("gpF"), { gpFRange: "ytd" })), "Jan 1 to Aug 19, 2026",
-    "a windowed chip shows the two dates alone");
-  A.contains(ctx.gpFRangePhrase(cleanThru), "Gifts received through", "the full sentence survives for the aria-label");
-  A.contains(ctx.gpFRangePhrase(Object.assign(fresh("gpF"), { gpFRange: "ytd" })), "Gifts from", "and for a windowed range");
-  const chip = ctx.gpFRangeChip(cleanThru);
-  A.contains(chip, 'aria-label="Gifts received through Aug 19, 2026, tap to change the dates"', "the chip's aria-label carries the meaning");
-  A.contains(chip, '<span class="fc-label">Aug 19, 2026</span>', "and its visible label carries only the date");
-  /* choosing a non-custom preset closes the popover on its own... */
-  gfire("set-range", { "data-id": "gpF", "data-r": "year" });
-  A.eq(shim.document.getElementById("gpfPop"), null, "choosing a preset closes the range popover");
-  /* ...and the chip itself is a true toggle: open, then closed. */
-  gfire("range", { "data-id": "gpF" });
-  A.ok(shim.document.getElementById("gpfPop") !== null, "the chip reopens the range popover");
-  gfire("range", { "data-id": "gpF" });
-  A.eq(shim.document.getElementById("gpfPop"), null, "a second click on the chip toggles it closed");
-  /* an outside click closes it too */
-  gfire("range", { "data-id": "gpF" });
-  shim.fireOutside();
-  A.eq(shim.document.getElementById("gpfPop"), null, "an outside click closes the range popover");
-  w.gpFRange = "year"; delete w.gpFStart; delete w.gpFEnd; w.gpFLoading = false;
+  A.eq(ctx.gpFThru(fresh("gpF")), "2026-08-19", "the default through date is today, the demo's anchor");
+  A.eq(ctx.gpFThru(fresh("gpF", { gpFThru: "2026-06-30" })), "2026-06-30", "a chosen date is honoured");
+  A.eq(ctx.gpFThru(fresh("gpF", { gpFThru: "junk" })), "2026-08-19", "and a malformed one falls back to today");
+  A.eq(ctx.gpFPhrase(fresh("gpF")), "Gifts received through Aug 19, 2026", "the phrase");
+  const chip = ctx.gpFThruChip(fresh("gpF"));
+  A.contains(chip, 'data-action="gpF-thru"', "the chip is a shell action");
+  A.contains(chip, '<span class="fc-label"><span class="gpf-thru-long">Gifts received through </span><span class="gpf-thru-short">Through </span>Aug 19, 2026</span>', "and reads the whole phrase, as Remittance's chip does, with a short form the stylesheet shows below 1600px so the chip row never wraps");
+  A.contains(shell.css, "@media (max-width:1600px){.gpf-root .gpf-thru-long{display:none;}.gpf-root .gpf-thru-short{display:inline;}}", "the short form is a stylesheet rule, not a second label");
+  A.contains(chip, 'aria-label="Gifts received through Aug 19, 2026, tap to change"', "with the same words for assistive tech");
+  ctx.pop = { type: "gpF-thru", id: "gpF" };
+  const popHTML = ctx.gpFPopContent();
+  A.contains(popHTML, '<div class="cap">Count gifts through</div>', "menu caption");
+  ["Today", "End of last month"].forEach(function (o) { A.contains(popHTML, '<span class="mi-nm">' + o + "</span>", "preset " + o); });
+  A.contains(popHTML, '<span class="gpf-mi-date">Aug 19, 2026</span>', "Today shows its date on the right");
+  A.contains(popHTML, '<span class="gpf-mi-date">Jul 31, 2026</span>', "End of last month shows its date");
+  A.contains(popHTML, 'data-action="gpF-set-thru" data-id="gpF" data-iso="2026-07-31"', "and carries the ISO date to set");
+  A.contains(popHTML, '<div class="cap">Or choose a date</div>', "the date picker caption");
+  A.eq((popHTML.match(/gpf-date-input/g) || []).length, 1, "one date input");
+  A.contains(popHTML, 'max="2026-08-19"', "which cannot go past today");
+  ["Year to date", "This quarter", "This month", "Custom dates", ">Dates<"].forEach(function (o) { A.absent(popHTML, o, "no range preset: " + o); });
+  ctx.pop = null;
+  /* committing a date fetches, resets the expanded rows, says so, and refuses junk or the same date */
+  const t0 = env.log.timers, s0 = env.log.status.length;
+  w.gpFPlExp = { x: true };
+  A.ok(ctx.gpFCommitThru(w, "2026-07-31"), "End of last month commits");
+  A.eq(w.gpFThru, "2026-07-31", "and is stored on the widget"); A.eq(w.gpFLoading, true, "a date change fetches");
+  A.ok(env.log.timers > t0, "and schedules the load timer"); A.eq(Object.keys(w.gpFPlExp).length, 0, "and collapses any open pledge history");
+  A.ok(env.log.status.length > s0, "and reports status"); A.contains(env.log.status[env.log.status.length - 1], "Counting gifts through Jul 31, 2026.", "saying what it is doing");
+  A.eq(ctx.gpFCommitThru(w, "2026-07-31"), false, "the same date again is a no-op");
+  A.eq(ctx.gpFCommitThru(w, "31/07/2026"), false, "and a non-ISO value is refused");
+  A.contains(ctx.gpFThruChip(w), "Gifts received through Jul 31, 2026", "the chip follows the chosen date");
+  w.gpFLoading = false;
+  /* an earlier date scopes everything down: the gifts and the pledge payments alike */
+  const now = ctx.gpFTotals(fresh("gpF")), early = ctx.gpFTotals(fresh("gpF", { gpFThru: "2024-01-01" }));
+  A.ok(early.totalIn < now.totalIn, "an earlier through date counts less giving");
+  A.ok(early.fromPledges < now.fromPledges, "pledge payments too: there is one date for everything");
+  A.eq(early.pledgeTotal, now.pledgeTotal, "while Pledge Total is the full promise whatever the date");
+  A.ok(early.pledgeDue <= now.pledgeDue, "and Pledge Due is prorated to the chosen date");
+  A.ok(now.fromPledges > 0 && now.other > 0, "the model carries both parts: pledge payments and gifts with no pledge");
+  A.eq(Math.round((now.fromPledges + now.other) * 100) / 100, now.totalIn, "the two parts sum to the purpose total, which is what Giving shows");
+  /* the menu's own action through the handler */
+  ctx.gpFHandleClick("gpF-set-thru", "gpF", T({ "data-iso": "2026-08-19" }));
+  A.eq(w.gpFThru, "2026-08-19", "Today through the handler"); A.eq(ctx.pop, null, "and the menu closes");
+  w.gpFLoading = false; delete w.gpFThru;
 })();
 
 /* ------------------------- 4. a bar click opens the giving ledger (28 Sep) */
@@ -390,18 +388,19 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   A.contains(m, 'id="gpfLedgerQ"', "the ledger carries a search box");
   /* the campaign summary cells, on the copied summary-cell primitives */
   A.contains(m, "gpf-dsum", "the modal summary uses the copied summary-cell primitive");
-  ["Pledge Total", "Pledge Due", "Received", "Due Remaining", "Pledge payments", "Gifts"].forEach(function (k) {
-    A.contains(m, ">" + k + "<", "modal summary cell: " + k);
+  ["Pledge Total", "Pledge Due", "Total given", "Pledge payments", "Gifts"].forEach(function (k) {
+    A.contains(m, '<span class="gpf-dsum-k">' + k + "</span>", "modal summary cell: " + k);
   });
+  A.absent(m, '<span class="gpf-dsum-k">Received</span>', "the sum is Total given, not Received, which names pledge payments elsewhere (owner, 11 Oct)");
   /* The ledger lists EVERYTHING that came in for the purpose. It replaced the
      top-5 most-behind modal, which duplicated W04 Remittance Pledges. */
   const purpose = ctx.gpFCampByLabel(w, LABELS[2]);
-  const win = ctx.gpFWindow(w);
-  const model = ctx.gpFLedgerRows(w, purpose, win);
+  const thru = ctx.gpFThru(w);
+  const model = ctx.gpFLedgerRows(w, purpose, thru);
   const rows = grows(m);
   A.eq(rows, model.length, "the ledger renders one row per entry, uncapped");
   A.ok(rows > 5, "the fixture gives the ledger more than a handful of entries (got " + rows + ")");
-  A.contains(m, rows + " entries, largest first", "the note states the entry count");
+  A.contains(m, rows + " entries, sorted by Received, largest first", "the note states the entry count and the sort");
   A.ok(model.every(function (it, i) { return i === 0 || model[i - 1].amount >= it.amount; }),
     "the ledger is ordered largest first");
   /* the two type filters PARTITION the unfiltered list: nothing lost, nothing counted twice */
@@ -449,9 +448,9 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   /* A PLEDGE SHOWS ITS SCHEDULE, then its payments. The rebuild plan called for
      both; only the payments were built, so a pledge behind pace showed what had
      arrived with nothing to compare it against. */
-  const pledgeRow = ctx.gpFLedgerRows(w, purpose, win).filter(function (it) { return it.kind === "pledge"; })[0];
+  const pledgeRow = ctx.gpFLedgerRows(w, purpose, thru).filter(function (it) { return it.kind === "pledge"; })[0];
   A.ok(!!pledgeRow, "the ledger has a pledge entry to open");
-  const hist = ctx.gpFPledgeHistory(pledgeRow.pledge, win);
+  const hist = ctx.gpFPledgeHistory(pledgeRow.pledge, thru);
   A.contains(hist, "Pledge schedule", "a pledge's history opens with its schedule");
   A.contains(hist, "Gifts applied to this pledge", "and then its payments");
   A.ok(hist.indexOf("Pledge schedule") < hist.indexOf("Gifts applied to this pledge"),
@@ -466,7 +465,7 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   A.eq(sched.length, Math.max(1, pledgeRow.pledge.inst || 1), "one row per instalment");
   A.near(sched.reduce(function (a, r) { return a + r.amount; }, 0), pledgeRow.pledge.pledge, 0.02,
     "the instalments sum to the pledge");
-  const dueByNow = sched.filter(function (r) { return r.date <= win.end; })
+  const dueByNow = sched.filter(function (r) { return r.date <= thru; })
                         .reduce(function (a, r) { return a + r.amount; }, 0);
   A.near(dueByNow, pledgeRow.pace.due, 0.02, "the instalments fallen due sum to the row's Pledge Due");
   /* both states are reachable in the fixture, so neither branch is dead */
@@ -474,17 +473,17 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
     let future = 0, past = 0;
     ctx.GPF_PURPOSES.forEach(function (p) {
       ctx.gpFDonorsFor(p).forEach(function (pl) {
-        ctx.gpFScheduleRows(pl).forEach(function (r) { if (r.date > win.end) future++; else past++; });
+        ctx.gpFScheduleRows(pl).forEach(function (r) { if (r.date > thru) future++; else past++; });
       });
     });
     A.ok(past > 0, "the fixture has instalments already fallen due (" + past + ")");
     A.ok(future > 0, "and instalments not yet due, so that branch is not dead (" + future + ")");
   })();
   /* a gift has no schedule: there is nothing promised behind it */
-  const giftRow = ctx.gpFLedgerRows(w, purpose, win).filter(function (it) { return it.kind === "gift"; })[0];
+  const giftRow = ctx.gpFLedgerRows(w, purpose, thru).filter(function (it) { return it.kind === "gift"; })[0];
   A.ok(!!giftRow, "the ledger has an other-gift entry");
   const gw = Object.assign(fresh("gpF"), { gpFPlExp: { [giftRow.id]: true } });
-  const gRow = ctx.gpFLedgerRowHTML(giftRow, gw, win);
+  const gRow = ctx.gpFLedgerRowHTML(giftRow, gw, thru);
   A.absent(gRow, "Pledge schedule", "an other gift shows no schedule; nothing was promised behind it");
   A.contains(gRow, "Gift date", "it shows its own detail instead");
 
@@ -495,7 +494,7 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
      pop-up scoped to one purpose it could print a motivation belonging
      elsewhere. The MODEL keeps the field, so restoring the column is markup. */
   const giftCols = ["Gift date", "Arrived by", "Reference", "Amount"];
-  [gRow, ctx.gpFPledgeHistory(pledgeRow.pledge, win)].forEach(function (h, i) {
+  [gRow, ctx.gpFPledgeHistory(pledgeRow.pledge, thru)].forEach(function (h, i) {
     A.absent(h, "Prompted by", "no motivation column, view " + i);
     giftCols.forEach(function (c) { A.contains(h, ">" + c + "<", "gift column " + c + ", view " + i); });
   });
@@ -505,7 +504,7 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
     "and every gift still has one seeded");
   /* the search matches only what is on screen: media yes, motivation no */
   const anyMotive = ctx.GPF_MOTIVATIONS[0].name.toLowerCase();
-  const byMotive = ctx.gpFLedgerRows(w, purpose, win);
+  const byMotive = ctx.gpFLedgerRows(w, purpose, thru);
   A.ok(byMotive.every(function (it) { return String(it.refs || "").toLowerCase().indexOf(anyMotive) < 0; }),
     "the motivation is out of the search haystack, so the search matches only visible text");
   A.ok(ctx.gpFOtherGiftsFor(purpose).length === 0 ||
@@ -594,7 +593,7 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
 
   /* WHAT THE RETIRED DRILL PROVED, asserted against the pop-up instead: the
      purpose's own figures agree with the pledges behind it. */
-  const win = ctx.gpFWindow(row);
+  const thru = ctx.gpFThru(row);
   const purpose = ctx.gpFCampByLabel(row, LABELS[2]);
   const comp = ctx.gpFCampCompute(row).filter(function (r) { return r.label === LABELS[2]; })[0];
   A.ok(!!comp, "the purpose row was located");
@@ -602,7 +601,7 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   A.ok(pledges.length > 40, "the purpose has a real pledge set behind it (" + pledges.length + ")");
   let sumRec = 0, sumDue = 0;
   pledges.forEach(function (pl) {
-    const pace = ctx.gpFDonorPace(pl, ctx.gpFParse(win.end), win.end, win);
+    const pace = ctx.gpFDonorPace(pl, thru);
     sumRec += pace.received; sumDue += pace.due;
   });
   A.near(sumRec, comp.fromPledges, 0.02, "the pledges' received sums to the purpose's pledge payments");
@@ -610,11 +609,11 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   A.near(comp.fromPledges + comp.other, comp.totalIn, 0.02, "the two parts still sum to the purpose total");
   /* every one of those pledges is reachable in the ledger, which is the point
      of replacing a paged drill with one scrolling list */
-  const ledger = ctx.gpFLedgerRows(row, purpose, win);
+  const ledger = ctx.gpFLedgerRows(row, purpose, thru);
   const pledgeEntries = ledger.filter(function (it) { return it.kind === "pledge"; });
   const withActivity = pledges.filter(function (pl) {
-    const r = ctx.gpFDonorPace(pl, ctx.gpFParse(win.end), win.end, win);
-    return r.pledged > 0 || r.receivedThru > 0;
+    const r = ctx.gpFDonorPace(pl, thru);
+    return r.pledged > 0 || r.received > 0;
   });
   A.eq(pledgeEntries.length, withActivity.length, "every pledge with activity appears in the ledger, unpaged");
   gfire("detail-close", { "data-id": "gpF" });
@@ -636,7 +635,7 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
      28 Sep, which orders by amount received, largest first, because it lists
      gifts and pledges together and "behind pace" means nothing for a gift. */
   const camp = ctx.gpFCampByLabel(w, LABELS[2]);
-  const led = ctx.gpFLedgerRows(w, camp, ctx.gpFWindow(w));
+  const led = ctx.gpFLedgerRows(w, camp, ctx.gpFThru(w));
   A.ok(led.every(function (it, i) { return i === 0 || led[i - 1].amount >= it.amount; }),
     "the ledger is ordered largest first");
   A.ok(led[0].amount > led[led.length - 1].amount, "and the spread is real");
@@ -653,14 +652,14 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   A.eq(tOrder.join("|"), byPledged.join("|"), "the Pledges table renders largest pledge first, as the legacy query orders it");
   A.ok(tOrder.join("|") !== LABELS.slice().sort().join("|"),
     "and that order is demonstrably NOT alphabetical");
-  /* NO alphabetical sort, and no sort control, anywhere */
+  /* no sort control on the card itself; the ledger pop-up sorts since 11 Oct (owner), see 17 */
   A.absent(block, "localeCompare", "the block contains no locale-aware string comparison");
   A.absent(block, ".sort(function(a,b){return a.label", "no label-alphabetical sort in the block");
-  const everything = ["goal", "table"].map(function (v) {
+  const cardOnly = ["goal", "table"].map(function (v) {
     return ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: v }));
-  }).join("") + shim.captured["gpfModalRoot"];
+  }).join("");
   ["wt-sort", 'data-gpf="sort"', "unfold_more", "arrow_upward", "arrow_downward"].forEach(function (s) {
-    A.absent(everything, s, "no sort control anywhere: " + s);
+    A.absent(cardOnly, s, "no sort control on the card: " + s);
   });
   A.eq(registry.filter(function (r) { return r.gpFSort !== undefined; }).length, 0,
     "no registry entry carries a sort key (there is no sort)");
@@ -675,11 +674,7 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
     A.absent(html, "remf-root", "no W04 root class on our root at " + sz);
     A.absent(html, "remf-", "no W04-prefixed class anywhere in our markup at " + sz);
   });
-  /* the popover and the modal roots are also decoupled */
-  gfire("camp", { "data-id": "gpF" });
-  A.eq(shim.document.getElementById("gpfPop").className, "gpf-root gpf-pop",
-    "the popover root is ours alone, with no W04 root");
-  gfire("camp", { "data-id": "gpF" });
+  /* the modal root is decoupled too (the menus are the shell's pop-over now) */
   gfire("baropen", { "data-id": "gpF", "data-c": LABELS[0] });
   A.absent(shim.captured["gpfModalRoot"], "remf-", "the modal root carries no W04 class");
   gfire("detail-close", { "data-id": "gpF" });
@@ -713,8 +708,12 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
     const t = l.trim();
     return t.charAt(0) === "." && t.indexOf("{") > -1;
   });
-  const unscoped = rules.filter(function (l) { return l.trim().indexOf(".gpf-root") !== 0; });
-  A.eq(unscoped.length, 0, "every rule in our CSS block is .gpf-root scoped");
+  /* the chips' menus render inside the shell's pop-over (#overlay), outside any .gpf-root, so their
+     four rules are scoped to .pop instead (11 Oct); everything else stays under our root */
+  const popRules = rules.filter(function (l) { return l.trim().indexOf(".pop .gpf-") === 0; });
+  A.eq(popRules.length, 4, "exactly four rules style the menu inside the shell pop-over");
+  const unscoped = rules.filter(function (l) { const t = l.trim(); return t.indexOf(".gpf-root") !== 0 && t.indexOf(".pop .gpf-") !== 0; });
+  A.eq(unscoped.length, 0, "every other rule in our CSS block is .gpf-root scoped");
   A.ok(rules.length > 40, "our CSS block declares a real rule set (" + rules.length + " rules)");
   /* (f) and it declares ZERO of Jo's selectors: her classes appear only as
      descendants of our root, never as the subject of a rule */
@@ -748,7 +747,7 @@ A.cssDeclares(shell.css, [
   "gpf-cap", "gpf-tblwrap", "gpf-scroll", "gpf-sumrow", "gpf-sumtotal", "gpf-caret",
   "gpf-nmtxt", "gpf-nm", "gpf-nmsub", "gpf-drill-tbl", "gpf-drawer",
   "gpf-grow", "gpf-gref", "gpf-giftfoot", 
-  "gpf-pop", "gpf-dates", "gpf-modal", "gpf-panel", "gpf-panel-h", "gpf-panel-big", "gpf-dot"
+  "gpf-mi-date", "gpf-datepick", "gpf-date-input", "gpf-c-st", "gpf-thru-long", "gpf-thru-short", "gpf-modal", "gpf-panel", "gpf-panel-h", "gpf-panel-big", "gpf-dot"
 ], "every gpf- class our markup uses is declared");
 
 /* ------------------------- 9. the Rule 11 stub, present and labelled */
@@ -887,20 +886,15 @@ A.cssDeclares(shell.css, [
       A.noEmDash(ctx.gpFContentRoot(Object.assign({}, W("gpF"), f, { size: sz })), f.id + " / " + sz); n++;
     });
   });
-  /* both popovers, all three range presets, and the modal */
-  gfire("camp", { "data-id": "gpF" });
-  A.noEmDash(shim.captured["gpfPop"], "the campaign popover"); n++;
-  gfire("camp", { "data-id": "gpF" });
-  ["year", "last30", "custom"].forEach(function (r) {
-    const w = W("gpF");
-    gfire("range", { "data-id": "gpF" });
-    gfire("set-range", { "data-id": "gpF", "data-r": r });
-    A.noEmDash(shim.captured["gpfPop"], "the date-range popover (" + r + ")"); n++;
-    A.noEmDash(ctx.gpFRangePhrase(w), "the range chip phrase (" + r + ")"); n++;
-    if (shim.document.getElementById("gpfPop")) gfire("range", { "data-id": "gpF" });
-    w.gpFLoading = false;
+  /* both menus on the shell's pop-over, both presets, and the modal */
+  ctx.pop = { type: "gpF-camp", id: "gpF" }; A.noEmDash(ctx.gpFPopContent(), "the purpose menu"); n++;
+  ctx.pop = { type: "gpF-thru", id: "gpF" }; A.noEmDash(ctx.gpFPopContent(), "the dates menu"); n++;
+  ctx.pop = null;
+  ["2026-08-19", "2026-07-31"].forEach(function (iso) {
+    const w = fresh("gpF", { gpFThru: iso });
+    A.noEmDash(ctx.gpFPhrase(w), "the chip phrase (" + iso + ")"); n++;
+    A.noEmDash(ctx.gpFThruChip(w), "the chip (" + iso + ")"); n++;
   });
-  W("gpF").gpFRange = "year"; delete W("gpF").gpFStart; delete W("gpF").gpFEnd;
   LABELS.forEach(function (l) {
     gfire("baropen", { "data-id": "gpF", "data-c": l });
     A.noEmDash(shim.captured["gpfModalRoot"], "the giving ledger for " + l); n++;
@@ -940,17 +934,17 @@ A.eq(registry.filter(function (w) { return w.state === "empty"; }).length, 0, "n
    keys have moved by the time this runs. */
 A.eq((shell.script.match(/title:"Gifts Pledges",\s*kind:"gifts"/g) || []).length, 3,
   "all three rows are titled Gifts Pledges under kind gifts");
-A.eq((shell.script.match(/gpFRange:"thru"/g) || []).length, 3,
-  "all three open on the default through-date basis");
+A.eq((shell.script.match(/gpFRange|gpFStart|gpFEnd\b|GPF_RANGES|gpFWindow/g) || []).length, 0, "no range model survives in the file (11 Oct)");
+A.eq((shell.script.match(/gpFCamp:"All purposes",gpFPlExp:\{\}/g) || []).length, 3,
+  "all three rows seed the purpose and the expansion map only; the through date defaults to today");
 
 /* ------------------- 14. the owner's 28 Sep header trim, held in place */
 (function () {
   /* the compact split line says the same thing in fewer words, and the full
      wording still reaches Explore, Detail and every aria string */
-  const tot = ctx.gpFTotals(fresh("gpF", { gpFRange: "thru", gpFEnd: "2026-08-19" }));
+  const tot = ctx.gpFTotals(fresh("gpF"));
   const shortLine = ctx.gpFSplitLineShort(tot), fullLine = ctx.gpFSplitLine(tot);
-  A.changed(shortLine, fullLine, "the Glance caption is not the full wording");
-  A.ok(shortLine.length < fullLine.length, "it is shorter (" + shortLine.length + " against " + fullLine.length + ")");
+  A.eq(shortLine, fullLine, "the Glance caption says exactly what the header line says: from pledges, from gifts (owner, 11 Oct; it used to read pledged for the payments)");
   [ctx.gpFMoney0(tot.fromPledges), ctx.gpFMoney0(tot.other)].forEach(function (n) {
     A.contains(shortLine, n, "the compact caption still carries " + n);
   });
@@ -981,7 +975,7 @@ A.eq((shell.script.match(/gpFRange:"thru"/g) || []).length, 3,
   /* THE TWO SEGMENTS (owner, 28 Sep): the gifts part is straight where it meets
      the pledge payments and curved at the open end, and each part says its own
      amount on hover through the shell's delegated [data-tip]. */
-  const barRow = ctx.gpFTotals(fresh("gpF", { gpFRange: "thru", gpFEnd: "2026-08-19" }));
+  const barRow = ctx.gpFTotals(fresh("gpF"));
   const bar = ctx.gpFSplitBar(barRow);
   A.contains(bar, "gpf-seg-pledge", "the bar has a pledge-payments segment");
   A.contains(bar, "gpf-seg-exp", "a white still-expected segment in the middle");
@@ -1044,7 +1038,7 @@ A.eq((shell.script.match(/gpFRange:"thru"/g) || []).length, 3,
    and money the legacy repository excludes reaches no figure anywhere. */
 (function () {
   const tw = fresh("gpF", { size: "xwide", gpFView: "table" });
-  const win = ctx.gpFWindow(tw);
+  const thru = ctx.gpFThru(tw);
 
   /* ---- the control, in the header's top right, table view only ---- */
   A.eq(ctx.gpFTblMode(tw), "pledges", "the table opens on Pledges, the read the panel gives today");
@@ -1082,28 +1076,30 @@ A.eq((shell.script.match(/gpFRange:"thru"/g) || []).length, 3,
     pls.forEach(function (pl) {
       pt += pl.pledge;
       (pl.gifts || []).forEach(function (g) {
-        if (g.posted !== false && g.undone !== true && g.date <= win.end) rec += g.amount;
+        if (g.posted !== false && g.undone !== true && g.date <= thru) rec += g.amount;
       });
     });
     A.near(r.pledgeTotal, pt, 0.02, r.code + ": Pledge Total is Sum(Pledge) over the active pledges");
-    A.near(r.fromPledgesThru, rec, 0.02, r.code + ": Received is the posted, not-undone, pledge-linked money to the thru date");
-    A.near(r.dueRem, r.pledgeDue - r.fromPledgesThru, 0.02, r.code + ": Due Remaining is Pledge Due minus Received");
+    A.near(r.fromPledges, rec, 0.02, r.code + ": Received is the posted, not-undone, pledge-linked money to the through date");
+    A.near(r.dueRem, r.pledgeDue - r.fromPledges, 0.02, r.code + ": Due Remaining is Pledge Due minus Received");
     A.near(r.percentDue, r.dueRem / r.pledgeDue, 0.0001, r.code + ": Percent Due is Due Remaining over Pledge Due");
     /* the legacy routine returns the whole pledge once the date is past EndDate */
-    pls.filter(function (pl) { return pl.end <= win.end; }).slice(0, 3).forEach(function (pl) {
-      const pace = ctx.gpFDonorPace(pl, ctx.gpFParse(win.end), win.end, win);
+    pls.filter(function (pl) { return pl.end <= thru; }).slice(0, 3).forEach(function (pl) {
+      const pace = ctx.gpFDonorPace(pl, thru);
       A.near(pace.due, pl.pledge, 0.01, r.code + ": a pledge past its end date is fully due");
     });
   });
-  /* the pledged side is blind to the window START, which is what keeps the mode one to one */
-  const ytd = fresh("gpF", { size: "xwide", gpFView: "table", gpFRange: "ytd" });
-  const ytdRows = ctx.gpFPurposeCompute(ytd).filter(function (r) { return r.hasPledges; });
-  ytdRows.forEach(function (r, i) {
-    A.eq(r.pledgeTotal, rows[i] && rows[i].pledgeTotal, r.code + ": Pledge Total is the same under Year to date");
-    A.eq(r.fromPledgesThru, rows[i] && rows[i].fromPledgesThru, r.code + ": and so is the legacy Received");
+  /* an earlier through date moves every pledge figure together: Pledge Total stays, Pledge Due and
+     Received can only fall (there is no start date to make the two reads differ) */
+  const earlier = fresh("gpF", { size: "xwide", gpFView: "table", gpFThru: "2025-12-31" });
+  const eRows = ctx.gpFPurposeCompute(earlier).filter(function (r) { return r.hasPledges; });
+  eRows.forEach(function (r, i) {
+    A.eq(r.pledgeTotal, rows[i] && rows[i].pledgeTotal, r.code + ": Pledge Total is the same at an earlier date");
+    A.ok(r.pledgeDue <= (rows[i] ? rows[i].pledgeDue : 0) + 0.01, r.code + ": Pledge Due is no larger at an earlier date");
+    A.ok(r.fromPledges <= (rows[i] ? rows[i].fromPledges : 0) + 0.01, r.code + ": and neither is Received");
   });
-  A.ok(ytdRows.some(function (r, i) { return rows[i] && r.fromPledges < rows[i].fromPledges; }),
-    "while the windowed figure Giving reads DOES narrow, so the two are genuinely different reads");
+  A.ok(eRows.some(function (r, i) { return rows[i] && r.fromPledges < rows[i].fromPledges; }),
+    "the earlier date genuinely drops some pledge payments");
 
   /* ---- no gift money anywhere in the Pledges table ---- */
   const pTable = ctx.gpFPledgesTable(tw, false);
@@ -1119,12 +1115,12 @@ A.eq((shell.script.match(/gpFRange:"thru"/g) || []).length, 3,
   A.absent(pTable, giftsOnly.label,
     "it cannot appear in the Pledges table, exactly as it cannot appear in the panel");
   rows.forEach(function (r) {
-    if (r.other > 0 && r.totalIn !== r.fromPledgesThru) {
+    if (r.other > 0 && r.totalIn !== r.fromPledges) {
       A.absent(pTable, ctx.gpFMoney(r.totalIn), r.code + ": no blended figure in the Pledges table");
     }
   });
   const pTot = ctx.gpFSumRows(rows);
-  A.contains(pTable, ctx.gpFMoney(pTot.fromPledgesThru), "the totals row sums the pledge-linked money");
+  A.contains(pTable, ctx.gpFMoney(pTot.fromPledges), "the totals row sums the pledge-linked money");
   A.contains(pTable, "Total (6 purposes)", "and counts only the rows it shows");
   A.headMatchesBody(pTable, "the Pledges header cells sit over their columns (D12)");
 
@@ -1186,19 +1182,19 @@ A.eq((shell.script.match(/gpFRange:"thru"/g) || []).length, 3,
   const allGifts = ctx.gpFOtherGiftsFor(purpose);
   const unposted = allGifts.filter(function (g) { return g.posted === false; });
   const undone = allGifts.filter(function (g) { return g.undone === true; });
-  const future = allGifts.filter(function (g) { return g.date > win.end; });
+  const future = allGifts.filter(function (g) { return g.date > thru; });
   A.eq(unposted.length, 1, "the fixture seeds an unposted gift");
   A.eq(undone.length, 1, "and an undone gift");
   A.eq(future.length, 1, "and one dated past the as-of anchor");
   const row2 = ctx.gpFPurposeCompute(tw).filter(function (r) { return r.label === LABELS[2]; })[0];
-  const counted = allGifts.filter(function (g) { return ctx.gpFCounts(g, win); });
+  const counted = allGifts.filter(function (g) { return ctx.gpFCounts(g, thru); });
   A.eq(counted.length, allGifts.length - 3, "exactly those three are excluded by the counting rule");
   A.near(row2.other, counted.reduce(function (n, g) { return n + g.amount; }, 0), 0.02,
     "the purpose's gift figure counts only the countable lines");
   A.eq(row2.giftN, counted.length, "and so does its gift count");
-  const led2 = ctx.gpFLedgerRows(tw, purpose, win);
+  const led2 = ctx.gpFLedgerRows(tw, purpose, thru);
   [unposted[0], undone[0], future[0]].forEach(function (g) {
-    A.ok(!ctx.gpFCounts(g, win), "excluded from every figure: " + g.id);
+    A.ok(!ctx.gpFCounts(g, thru), "excluded from every figure: " + g.id);
     A.ok(led2.every(function (it) { return it.id !== g.id; }), "and unreachable in the ledger: " + g.id);
   });
   /* the countable gifts still tie to the fixture's own figure, which is what proves the
@@ -1290,4 +1286,90 @@ A.eq((shell.script.match(/gpFRange:"thru"/g) || []).length, 3,
 /* owner (9 Oct): the Glance bar spans the card; without align-self:stretch the .kpi-num column left it as wide as its caption */
 { const c17 = shell.css.slice(shell.css.indexOf(CSS_START), shell.css.indexOf(CSS_END) + CSS_END.length);
   A.contains(c17, ".gpf-root .gpf-glance-read{display:flex;flex-direction:column;gap:var(--gap-xxtight);margin-top:var(--padding-tight);align-self:stretch;}", "Gifts Pledges Glance bar wrapper stretches to the column"); }
+
+/* ------------------------- 17. the owner's 11 Oct round: three status words, a Status column,
+   a sortable ledger with Total given, and sample data whose pledges add up */
+(function () {
+  const tw = fresh("gpF", { size: "xwide", gpFView: "table" });
+  const words = ["Finished", "On track", "Behind by $"];
+  const rows = ctx.gpFPurposeCompute(tw).filter(function (r) { return r.hasPledges; });
+  rows.forEach(function (r) { const l = ctx.gpFStatusLabelRow(r.status, r.dueRem); A.ok(words.some(function (wd) { return l.indexOf(wd) === 0; }), r.code + ": status reads as one of the three words: " + l); });
+  A.eq(ctx.gpFStatusLabelRow("behind", 1234.5), "Behind by $1,235", "Behind carries the amount, whole dollars");
+  A.eq(ctx.gpFStatusLabelRow("funded", 0), "Finished", "Finished"); A.eq(ctx.gpFStatusLabelRow("ontrack", -5), "On track", "On track");
+  A.eq(ctx.gpFStatusLabelRow("gifts", 0), "Gifts only, no pledge", "a gifts-only purpose keeps its own words");
+  A.eq(typeof ctx.gpFStatusLabel, "undefined", "the pace-band labeller is gone"); A.eq(typeof ctx.gpFBandFromDays, "undefined", "and the day bands with it");
+  ["Fully paid", "Up to date", "30+ days ahead", "About a month behind", "60+ days behind", "Fully funded"].forEach(function (s) { A.absent(block, "'" + s + "'", "old status word gone from the block: " + s); });
+  /* the Status column in the Pledges table */
+  const pTable = ctx.gpFPledgesTable(tw, false);
+  A.contains(pTable, '<span class="gpf-c-st">Status</span>', "the Pledges table has a Status header (owner, 11 Oct)");
+  A.eq((pTable.match(/class="gpf-c-st"><span class="gpf-dstatus /g) || []).length, rows.length, "and a status chip on every row");
+  A.ok(/gpf-sumtotal[\s\S]*?<span class="gpf-c-st"><\/span>/.test(pTable), "the totals row leaves Status blank");
+  A.headMatchesBody(pTable, "header and body carry the Status cell alike (D12)");
+  A.contains(ctx.gpFPledgesTable(fresh("gpF", { size: "wide", gpFView: "table" }), false), '<span class="gpf-c-st">Status</span>', "Status shows at Explore too");
+  A.contains(shell.css, ".gpf-root .gpf-c-st{", "and has its column rule");
+  /* per pledge: the same three words, from the pace object */
+  const purpose = ctx.gpFCampByLabel(tw, LABELS[2]), thru = ctx.gpFThru(tw);
+  const paces = ctx.gpFDonorsFor(purpose).map(function (pl) { return ctx.gpFDonorPace(pl, thru); });
+  paces.forEach(function (p) { const l = ctx.gpFPaceLabel(p); A.ok(l === "Finished" || l === "On track" || l.indexOf("Behind by $") === 0, "pledge status is one of the three words: " + l); A.eq(p.receivedThru, undefined, "no second received figure on a pledge"); });
+  A.ok(paces.some(function (p) { return p.status === "behind"; }) && paces.some(function (p) { return p.status !== "behind"; }), "the purpose has pledges on both sides of the line");
+  A.eq(ctx.gpFPaceLabel({ status: "behind", dueRem: 250 }), "Behind by $250", "a pledge behind says by how much"); A.eq(ctx.gpFPaceLabel({ status: "neutral" }), "No pledge", "a gift row says No pledge");
+  /* the data: no pledge paid beyond itself unless the purpose over-pays; rows sum to the purpose */
+  let behindN = 0, pledgeN = 0;
+  CAMPS.forEach(function (c) {
+    const pls = ctx.gpFDonorsFor(c); if (!pls.length) return;
+    const over = c.pledgePaid > c.pledgeTotal;
+    const sumPaid = pls.reduce(function (n, pl) { return n + pl.paid; }, 0), sumPledge = pls.reduce(function (n, pl) { return n + pl.pledge; }, 0);
+    A.eq(sumPaid, c.pledgePaid, c.code + ": the pledges' paid amounts sum exactly to the purpose's pledge payments");
+    A.eq(sumPledge, c.pledgeTotal, c.code + ": and their pledges to its Pledge Total");
+    if (!over) A.ok(pls.every(function (pl) { return pl.paid <= pl.pledge; }), c.code + ": no pledge is paid beyond its own amount");
+    if (!c.allPast) pls.forEach(function (pl) { const p = ctx.gpFDonorPace(pl, thru); pledgeN++; if (p.status === "behind") behindN++; });
+  });
+  const share = behindN / pledgeN;
+  A.ok(share >= 0.2 && share <= 0.5, "roughly a third of the current pledges read Behind (" + behindN + " of " + pledgeN + ")");
+  /* the ledger: sortable headers, Received largest first by default, the subtitle's date */
+  gfire("baropen", { "data-id": "gpF", "data-c": LABELS[2] });
+  let m = shim.captured["gpfModalRoot"];
+  ["donor", "pledged", "received", "due", "type"].forEach(function (k) { A.contains(m, 'class="wt-sort' + (k === "received" ? " on" : "") + '" data-gpf="ledger-sort" data-k="' + k + '"', "sort header for " + k + (k === "received" ? " (active)" : "")); });
+  A.contains(m, 'data-k="received" aria-label="Sort by Received, descending" aria-sort="descending"', "Received, largest first, is the default");
+  A.contains(m, "gifts received through aug 19, 2026", "the subtitle carries the through date");
+  const ledgerOrder = function (html) { return (html.match(/aria-label="([^"]*?), (?:pledge|gift) /g) || []).map(function (x) { return /aria-label="([^"]*?), /.exec(x)[1]; }); };
+  gfire("ledger-sort", { "data-id": "gpF", "data-k": "donor" });
+  m = shim.captured["gpfModalRoot"];
+  A.contains(m, 'data-k="donor" aria-label="Sort by Donor, ascending" aria-sort="ascending"', "Donor opens A to Z");
+  A.contains(m, "sorted by Donor, A to Z", "and the note follows");
+  const names = ledgerOrder(m); A.ok(names.length > 5, "names read off the rows (" + names.length + ")");
+  A.ok(names.every(function (nm, i) { return i === 0 || names[i - 1].toLowerCase() <= nm.toLowerCase(); }), "rows are in donor order");
+  gfire("ledger-sort", { "data-id": "gpF", "data-k": "donor" });
+  m = shim.captured["gpfModalRoot"]; A.contains(m, 'data-k="donor" aria-label="Sort by Donor, descending" aria-sort="descending"', "clicking the active header flips it"); A.contains(m, "Z to A", "and the note says so");
+  gfire("ledger-sort", { "data-id": "gpF", "data-k": "pledged" });
+  const led = ctx.gpFLedgerRows(W("gpF"), purpose, thru);
+  const pledgedVals = led.filter(function (it) { return it.kind === "pledge"; }).map(function (it) { return it.pace.pledged; });
+  A.ok(pledgedVals.every(function (v, i) { return i === 0 || pledgedVals[i - 1] >= v; }), "Pledged sorts largest first");
+  const firstGift = led.map(function (it) { return it.kind; }).indexOf("gift");
+  A.ok(firstGift > 0 && led.slice(firstGift).every(function (it) { return it.kind === "gift"; }), "gift rows, which have no pledged figure, sort after every pledge");
+  gfire("ledger-sort", { "data-id": "gpF", "data-k": "received" });
+  A.contains(shim.captured["gpfModalRoot"], "sorted by Received, largest first", "back to the default");
+  gfire("detail-close", { "data-id": "gpF" });
+  A.contains(shell.css, ".gpf-root .gpf-drow.wt-head .gpf-dc1 .wt-sort", "money sort headers sit over their numbers");
+  A.contains(shell.css, ".pop .gpf-datepick{", "the date picker is styled inside the shell pop-over"); A.absent(shell.css, ".gpf-root .gpf-dates", "and the old From/To rules are gone");
+})();
+
+/* ------------------------- 18. the chips are registered on the shell's pop-over (hosted shell) */
+(function () {
+  const TAIL = H.TAIL;
+  const EXPORTS = "\r\n  __EX={WIDGETS:WIDGETS,popContent:popContent,triggerSelector:triggerSelector,setPop:function(p){pop=p;},stubRender:function(){render=function(){};renderModal=function(){};renderOverlay=function(){};}};\r\n  try{render();}catch(e){__EX.renderErr=String(e&&e.message);}\r\n})();\r\n";
+  const S = shell.script;
+  const henv = H.runBlock(S.slice(0, -TAIL.length) + EXPORTS, { dataAttr: "data-action", globals: H.NODE_GLOBALS() });
+  const EX = henv.ctx.__EX;
+  A.ok(EX && EX.WIDGETS, "the whole shell runs with the block in it"); EX.stubRender();
+  A.ok(!!EX.WIDGETS.pops["gpF-thru"] && !!EX.WIDGETS.pops["gpF-camp"], "both menus are registered pops");
+  EX.setPop({ type: "gpF-thru", id: "gpF" });
+  A.eq(EX.triggerSelector(), '[data-action="gpF-thru"][data-id="gpF"]', "the shell anchors the dates menu on the chip");
+  A.contains(EX.popContent(), "Count gifts through", "and renders it through the shell's popContent");
+  EX.setPop({ type: "gpF-camp", id: "gpF" });
+  A.eq(EX.triggerSelector(), '[data-action="gpF-camp"][data-id="gpF"]', "the purpose menu too");
+  A.contains(EX.popContent(), "All purposes", "with its content");
+  EX.setPop(null);
+})();
+
 process.exit(A.report());

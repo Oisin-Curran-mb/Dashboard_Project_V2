@@ -1889,7 +1889,15 @@
   /* the date is short and fixed, so it does not shrink into an ellipsis for
      the sake of a pixel, which is what the shared .fc-label was doing */
   .gpf-root .gpf-datechip .fc-label{font-variant-numeric:tabular-nums;flex:0 0 auto;overflow:visible;text-overflow:clip;white-space:nowrap;}
+  /* the whole phrase where it fits; from the owner's 125% zoom down (a 1536px viewport) the chip reads "Through <date>" so the chip row stays on one line */
+  .gpf-root .gpf-thru-short{display:none;}
+  @media (max-width:1600px){.gpf-root .gpf-thru-long{display:none;}.gpf-root .gpf-thru-short{display:inline;}}
   .gpf-root .gpf-purpchip{max-width:200px;}
+  /* the chips' menus live in the shell's pop-over (#overlay), so these are not scoped to .gpf-root */
+  .pop .gpf-mi-date{margin-left:auto;font-size:var(--type-size-11);color:var(--txt-subtle);font-variant-numeric:tabular-nums;}
+  .pop .gpf-datepick{display:flex;align-items:center;gap:var(--gap-tight);padding:var(--padding-xxtight) var(--padding-tight) var(--padding-xxxtight);}
+  .pop .gpf-date-input{flex:1;min-width:0;font-family:inherit;font-size:var(--type-size-12);padding:var(--padding-xxtight) var(--padding-tight);border:1px solid var(--stroke-widget);border-radius:var(--cornerradius-medium);background:var(--surface-widget);color:var(--txt-primary);}
+  .pop .gpf-date-input:focus{outline:none;border-color:var(--am-400);box-shadow:0 0 0 2px var(--am-100);}
   .gpf-root .gpf-body{display:block;}
   .gpf-root .gpf-bars{display:flex;flex-direction:column;gap:var(--gap-medium);padding:var(--padding-medium) var(--padding-medium) var(--padding-xxtight);}
   .gpf-root .gpf-prow{display:flex;flex-direction:column;gap:var(--gap-xtight);border-radius:var(--cornerradius-medium);padding:var(--padding-xxtight);margin:calc(var(--padding-xxtight) * -1);}
@@ -1911,6 +1919,7 @@
   .gpf-root .gpf-c-nm{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;}
   .gpf-root .gpf-c-n{flex:0 0 auto;width:82px;text-align:right;font-variant-numeric:tabular-nums;}
   .gpf-root .gpf-c-pct{width:70px;font-weight:650;color:var(--am-700);}
+  .gpf-root .gpf-c-st{flex:0 0 auto;width:132px;display:inline-flex;justify-content:flex-end;}
   .gpf-root .gpf-trow.gpf-clickable:hover{background:var(--wn-100);}
   /* align-self:stretch (owner, 9 Oct): .kpi-num aligns children to content width, which left the bar as wide as its caption */
   .gpf-root .gpf-glance-read{display:flex;flex-direction:column;gap:var(--gap-xxtight);margin-top:var(--padding-tight);align-self:stretch;}
@@ -1939,6 +1948,7 @@
   .gpf-root .gpf-dc3{width:110px;}
   .gpf-root .gpf-dc5{flex:0 0 auto;width:96px;text-align:right;color:var(--txt-secondary);}
   .gpf-root .gpf-drow.wt-head .gpf-dc{color:var(--txt-subtle);font-weight:600;font-size:var(--type-size-11);}
+  .gpf-root .gpf-drow.wt-head .gpf-dc1 .wt-sort,.gpf-root .gpf-drow.wt-head .gpf-dc2 .wt-sort,.gpf-root .gpf-drow.wt-head .gpf-dc3 .wt-sort,.gpf-root .gpf-drow.wt-head .gpf-dstat-h .wt-sort{justify-content:flex-end;width:100%;}
   .gpf-root .gpf-dstat-h{flex:0 0 auto;width:80px;display:inline-flex;justify-content:flex-end;}
   .gpf-root .gpf-dstatus{font-size:var(--type-size-11);font-weight:600;border-radius:var(--cornerradius-full);padding:var(--padding-xxxtight) var(--padding-tight);}
   .gpf-root .gpf-dstatus-behind{background:var(--am-100);color:var(--am-700);}
@@ -2058,10 +2068,6 @@
   /* the body-mounted filter popover, same chrome as the other ported widgets'
      pickers. Everything inside it, the captions, menu items and separator, is
      hers. */
-  .gpf-root.gpf-pop{position:fixed;z-index:3000;background:var(--surface-widget);border:1px solid var(--stroke-widget);border-radius:var(--cornerradius-medium);box-shadow:0 14px 36px color-mix(in srgb,var(--wn-950) 24%,transparent),0 3px 10px color-mix(in srgb,var(--wn-950) 14%,transparent);padding:var(--padding-xtight);min-width:250px;max-width:min(400px,calc(100vw - 16px));display:block;}
-  .gpf-root .gpf-dates{display:flex;gap:var(--gap-tight);padding:var(--padding-xxtight) var(--padding-tight) var(--padding-tight);}
-  .gpf-root .gpf-dates label{display:flex;flex-direction:column;gap:var(--gap-xxxtight);font-size:var(--type-size-11);color:var(--txt-subtle);}
-  .gpf-root .gpf-dates input{font-family:inherit;font-size:var(--type-size-12);color:var(--txt-primary);background:var(--surface-widget);border:1px solid var(--stroke-widget);border-radius:var(--cornerradius-medium);padding:var(--padding-xxtight) var(--padding-xtight);}
   /* the drill modal: her modal shell and her detail header and body do the work,
      so this only lets the long donor list scroll inside the dialog. */
   .gpf-root .gpf-modal .modal-b{max-height:min(70vh,620px);overflow-y:auto;}
@@ -2136,7 +2142,6 @@
   .gpf-root .gpf-modal .gpf-ldr-exp .gpf-grow{display:grid;grid-template-columns:1fr 1fr 1.2fr auto;gap:var(--gap-tight);}
   /* Declared: both were used by our markup and never had a rule (found 28 Sep). */
   .gpf-root .gpf-empty{padding:var(--padding-base) var(--padding-base);font-size:var(--type-size-12);color:var(--txt-subtle);text-align:center;}
-  .gpf-root .gpf-date-input{font-family:inherit;font-size:var(--type-size-12);padding:var(--padding-xxtight) var(--padding-xtight);border:1px solid var(--stroke-widget);border-radius:var(--cornerradius-medium);background:var(--surface-widget);color:var(--txt-primary);}
   .gpf-root .gpf-ldr-hist,.gpf-modal .gpf-ldr-hist{display:grid;grid-template-columns:1fr 1fr 1.2fr auto;gap:var(--gap-tight);}
   /* the pledge schedule, shown above the payments in the ledger */
   .gpf-root .gpf-modal .gpf-sched-row{display:grid;grid-template-columns:1fr 1.2fr 1fr auto;gap:var(--gap-tight);}
@@ -9916,7 +9921,7 @@ WIDGETS.register("purchasing",{content:purFContent,about:function(w){return {h:w
 
    SHELL CONFORMANCE (not design changes). The Final's global GPF_STATE
    singleton becomes PER-WIDGET registry state (gpFView / gpFCamp /
-   gpFRange / gpFStart / gpFEnd / gpFLoading /
+   gpFThru / gpFLoading /
    gpFPlExp, every one gpF-prefixed so none can collide with any of the
    five state keys her own gifts entries seed), so several cards coexist;
    gpFRerender
@@ -9926,7 +9931,7 @@ WIDGETS.register("purchasing",{content:purFContent,about:function(w){return {h:w
    decimals because her money() prints whole dollars and this widget's
    verified figures carry cents (Stoke Sell 1,855.00, Percent Due
    90.40%). Handlers are a self-contained subsystem behind GPF_WIRED
-   keyed to data-gpf with its own popover and modal roots, matching
+   keyed to data-gpf with its own modal root (the chips use the shell's pop-over), matching
    W07/W09/W10/W13/W15/W16, so her renderModal, popContent and
    triggerSelector chains are NOT touched; the only shared-region edits
    are the two dispatch lines (contentHTML, aboutOf).
@@ -9953,7 +9958,7 @@ WIDGETS.register("purchasing",{content:purFContent,about:function(w){return {h:w
 // ===== DATA ==========================================================
 var GPF_TODAY=new Date(2026,7,19); /* 19 Aug 2026, the deterministic as-of anchor */
 var GPF_MON=MONTHS.slice();
-var GPF_ABOUT="What each purpose has received, and how much of what was pledged is still due, over the dates you choose. Giving shows all the money that came to a purpose, with payments against a pledge and gifts that have no pledge behind them as the two parts of the bar. The table takes one at a time: Pledges is the pledged position, matching the Gifts and Pledges panel figure for figure, and Gifts is money given to the purpose that answers to no pledge. Open a purpose to see every gift and pledge behind it, and open one of those to see its history.";
+var GPF_ABOUT="What each purpose has received, and how much of what was pledged is still due, through the date you choose. Giving shows all the money that came to a purpose, with payments against a pledge and gifts that have no pledge behind them as the two parts of the bar. The table takes one at a time: Pledges is the pledged position, matching the Gifts and Pledges panel figure for figure, and Gifts is money given to the purpose that answers to no pledge. Open a purpose to see every gift and pledge behind it, and open one of those to see its history.";
 /* Donor names in "Last, First" form (CorePerson.DisplayNameLastFirst), matching the
    legacy Gifts and Pledges donor column. Shared pool; each purpose's donor SET is
    its own deterministically-seeded slice. */
@@ -10000,7 +10005,7 @@ function gpFRefFor(media,rng){
   if(media==="Bank transfer")return "ACH";
   return "EFT "+(100000+Math.floor(rng()*900000));
 }
-var GPF_POP=null,GPF_MODAL=null,GPF_FOCUS_ID=null;
+var GPF_MODAL=null;
 
 /* ---- helpers ------------------------------------------------------- */
 function gpFEsc(s){return escAttr(s);}
@@ -10013,50 +10018,19 @@ function gpFPctCell(x){if(x==null)return '<span class="gpf-muted">n/a</span>';va
 function gpFParse(iso){return parseISO(iso);}
 function gpFISO(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
 function gpFFmtDate(iso){return fmtDateLong(iso);}
-/* One window governs every figure. The default preset has NO start, so the widget reproduces
-   the legacy panel exactly (full pledge amounts, gifts inception-to-date) and can still be
-   reconciled against it. Narrower presets set a start, and then every figure is windowed:
-   Pledged becomes the instalments scheduled inside the window. The word fiscal is avoided;
-   gifts run on the calendar and fiscal implies the General Ledger year (owner, 28 Sep). */
-function gpFWindow(w){
-  var todayIso=gpFISO(GPF_TODAY),r=(w&&w.gpFRange)||'thru',y=GPF_TODAY.getFullYear(),m=GPF_TODAY.getMonth();
-  if(r==='ytd')return {key:r,start:gpFISO(new Date(y,0,1)),end:todayIso};
-  if(r==='quarter')return {key:r,start:gpFISO(new Date(y,Math.floor(m/3)*3,1)),end:todayIso};
-  if(r==='month')return {key:r,start:gpFISO(new Date(y,m,1)),end:todayIso};
-  if(r==='custom')return {key:r,start:(w&&w.gpFStart)||gpFISO(new Date(y,0,1)),end:(w&&w.gpFEnd)||todayIso};
-  return {key:'thru',start:null,end:(w&&w.gpFEnd)||todayIso};
-}
-function gpFRangeBounds(w){return gpFWindow(w);}
-
-/* The chip shows only the dates: the sentence around them is what pushed the
-   chip row into the view toggle at Explore. gpFRangePhrase keeps the full
-   sentence for the aria-label and for the pop-up subtitle. (28 Sep 2026) */
-function gpFRangeShort(w){
-  var b=gpFWindow(w),ed=gpFParse(b.end);
-  var endTxt=GPF_MON[ed.getMonth()]+" "+ed.getDate()+", "+ed.getFullYear();
-  if(!b.start)return endTxt;
-  var sd=gpFParse(b.start);
-  var st=GPF_MON[sd.getMonth()]+" "+sd.getDate();if(sd.getFullYear()!==ed.getFullYear())st+=", "+sd.getFullYear();
-  return st+" to "+endTxt;
-}
-function gpFRangePhrase(w){
-  var b=gpFWindow(w),ed=gpFParse(b.end);
-  var endTxt=GPF_MON[ed.getMonth()]+" "+ed.getDate()+", "+ed.getFullYear();
-  if(!b.start)return "Gifts received through "+endTxt;
-  var sd=gpFParse(b.start);
-  var st=GPF_MON[sd.getMonth()]+" "+sd.getDate();if(sd.getFullYear()!==ed.getFullYear())st+=", "+sd.getFullYear();
-  return "Gifts from "+st+" to "+endTxt;
-}
-/* true when a gift date falls inside the window (no start means everything up to the end) */
-function gpFInWindow(iso,win){return iso<=win.end&&(!win.start||iso>=win.start);}
+/* One date governs every figure: the legacy panel's own Date Gifts Thru. Every posted, not-undone
+   gift up to that date counts, and each pledge's position is read as of it. There is no start
+   date, so the widget reproduces GFPledgeRepository.GetWidgetData exactly and reconciles with it. */
+function gpFThru(w){var v=w&&w.gpFThru;return (v&&/^\d{4}-\d{2}-\d{2}$/.test(v))?v:gpFISO(GPF_TODAY);}
+function gpFThruText(iso){return fmtDateLong(iso);}
+function gpFPhrase(w){return "Gifts received through "+gpFThruText(gpFThru(w));}
+function gpFEndOfLastMonth(base){var d=new Date(base.getFullYear(),base.getMonth(),1);return gpFISO(new Date(d-86400000));}
 /* Whether a gift line counts at all. Posted and not-undone are part of the DEFINITION of
    every money figure here, not a detail: the legacy repository filters each money column on
    GFBatch.Posted and GFHistory.UnDoJournalID before it sums anything. A line with neither
    flag set counts, which is why the generated fixture lines need no flags. */
-function gpFCounts(g,win){return g.posted!==false&&g.undone!==true&&gpFInWindow(g.date,win);}
-/* The same line, measured to the thru date alone. A pledge is a cumulative promise, so its
-   position is always read inception-to-date; only gift TRANSACTIONS obey a window start. */
-function gpFCountsThru(g,win){return gpFCounts(g,{start:null,end:win.end});}
+function gpFCounts(g,thru){return g.posted!==false&&g.undone!==true&&g.date<=thru;}
+
 
 /* Row status from the data the system actually holds: is the money that was due by now here?
    Only PLEDGE PAYMENTS move it, because only they answer to the pledge being measured; a gift
@@ -10075,12 +10049,12 @@ function gpFRowStatus(pledged,due,paid,totalIn){
 function gpFStatusColor(s){return {funded:'var(--pos-100)',ontrack:'var(--brand-100)',behind:'var(--primitive-color-saffron-300)',
   gifts:'var(--am-500)',none:'var(--txt-subtle)'}[s]||'var(--txt-subtle)';}
 
-function gpFStatusLabelRow(s){return {funded:'Fully funded',ontrack:'On track',behind:'Behind',
+/* Three plain words for a purpose or a pledge (owner, 11 Oct): Finished when the money received
+   covers the pledge, Behind when something that was due by the date has not arrived (said with the
+   amount), On track otherwise. Paired with a glyph wherever colour is used. */
+function gpFStatusLabelRow(s,dueRem){return {funded:'Finished',ontrack:'On track',behind:'Behind'+(dueRem>0?' by '+gpFMoney0(dueRem):''),
   gifts:'Gifts only, no pledge',none:'Nothing pledged'}[s]||'';}
-
-/* ---- per-pledge pacing bands: paired text, never colour alone ---- */
-function gpFBandFromDays(d){return bandFromDays(d);}
-function gpFStatusLabel(s){return {neutral:'No pledge',funded:'Fully paid',current:'Up to date',full:'Up to date',ahead:'30+ days ahead',onpace:'On track',behind:'About a month behind',farbehind:'60+ days behind'}[s]||'';}
+function gpFPaceLabel(p){if(!p||p.status==='neutral')return 'No pledge';if(p.status==='funded')return 'Finished';if(p.status==='behind')return 'Behind by '+gpFMoney0(p.dueRem);return 'On track';}
 /* deterministic PRNG (mulberry32) so a purpose always seeds the same donor set */
 function gpFRng(seed){var s=seed>>>0;return function(){s=s+0x6D2B79F5|0;var t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
 /* each donor pledge gets its OWN term. allPast purposes end before the anchor, so
@@ -10166,13 +10140,19 @@ function gpFDonorsFor(camp){
   for(i=0;i<n;i++){var val=camp.pledgeTotal*raw[i]/sw;var f=Math.floor(val);floors.push(f);frac.push([val-f,i]);sumFloor+=f;}
   var rem=camp.pledgeTotal-sumFloor;frac.sort(function(a,b){return b[0]-a[0];});
   for(i=0;i<rem&&i<n;i++)floors[frac[i][1]]+=1;
-  /* paids: spread received across donors by weight, allowing paid greater than the
-     pledge, because a single pledge CAN be over-received (linked gifts exceeding the
-     pledge), which is why a purpose's Received can exceed its Pledge Total. */
-  var pw=[],pws=0;for(i=0;i<n;i++){var q2=0.15+rng()*1.15;pw.push(q2);pws+=q2;}
-  var paids=[],psum=0;for(i=0;i<n;i++){var pv=Math.max(0,Math.round(camp.pledgePaid*pw[i]/pws));paids.push(pv);psum+=pv;}
-  var pdiff=camp.pledgePaid-psum,pj=0,pstep=pdiff>0?1:-1,pg=0;
-  while(pdiff!==0&&pg<n*40000){var pidx=pj%n;var np=paids[pidx]+pstep;if(np>=0){paids[pidx]=np;pdiff-=pstep;}pj++;pg++;}
+  /* paids: spread what the purpose has received across its pledges in proportion to each
+     pledge, two in three weighted up so they finish and one in three weighted down so it reads
+     Behind, and no pledge paid beyond its own amount: the clipped remainder flows to pledges with room until the rows sum exactly to
+     the purpose's figure. Only a purpose whose receipts exceed its pledges (FRNKSTOK,
+     MISSION26) over-pays, because its total forces it, and then the surplus spreads by weight. */
+  var over=camp.pledgePaid>camp.pledgeTotal;
+  var pw=[],pws=0;for(i=0;i<n;i++){var q2=raw[i]*((i%3===0)?0.45:1.25);pw.push(q2);pws+=q2;}
+  var paids=[],psum=0;for(i=0;i<n;i++){var pv=Math.max(0,Math.round(camp.pledgePaid*pw[i]/pws));if(!over&&pv>floors[i])pv=floors[i];paids.push(pv);psum+=pv;}
+  var pdiff=camp.pledgePaid-psum,pg=0;
+  while(pdiff>0&&!over&&pg<60){var room=[],rs=0;for(i=0;i<n;i++){if(paids[i]<floors[i]){room.push(i);rs+=pw[i];}}if(!room.length)break;
+    room.forEach(function(k){if(pdiff<=0)return;var add=Math.min(floors[k]-paids[k],Math.max(1,Math.round(pdiff*pw[k]/rs)),pdiff);paids[k]+=add;pdiff-=add;});pg++;}
+  if(pdiff>0){for(i=0;i<n;i++){var ex=Math.round(pdiff*pw[i]/pws);paids[i]+=ex;}var s2=0;for(i=0;i<n;i++)s2+=paids[i];paids[0]+=camp.pledgePaid-s2;}
+  var pj=0,pg2=0;while(pdiff<0&&pg2<n*40000){var pidx=pj%n;if(paids[pidx]>0){paids[pidx]-=1;pdiff+=1;}pj++;pg2++;}
   var pls=[];
   for(i=0;i<n;i++){
     var term=gpFPledgeTerm(rng,camp.allPast);
@@ -10209,40 +10189,30 @@ function gpFCycles(b,asOf,freq){
    two widgets' maths. Anchored on the SELECTED as-of date (the range end), which is
    what the code should do; the shipped legacy code anchors the cycle count on today,
    a known defect not reproduced here. */
-/* One pledge. Pledged is the FULL pledge and Pledge Due the legacy proration on the thru
-   date: neither is re-scoped by a window start, because no such proration exists in the data.
-   receivedThru is everything that arrived against it up to the thru date, which is the legacy
-   panel's Received and the basis of every pace figure here. received is the same sum narrowed
-   to the window, which is what a transaction list shows. */
-function gpFDonorPace(pl,asOf,asOfIso,win){
-  win=win||{start:null,end:asOfIso};
-  var b=gpFParse(pl.begin),e=gpFParse(pl.end);
-  var termDays=Math.max(1,Math.round((e-b)/86400000));
+/* One pledge, as of the through date. Pledged is the FULL pledge and Pledge Due the legacy
+   proration on that date; received is everything that arrived against it up to that date, the
+   legacy panel's Received. Status is the three-word rule above. */
+function gpFDonorPace(pl,thru){
+  thru=thru||gpFISO(GPF_TODAY);
+  var b=gpFParse(pl.begin);
   var pledged=pl.pledge;
   var due;
-  if(win.end>=pl.end){due=pl.pledge;}
+  if(thru>=pl.end){due=pl.pledge;}
   else{
     var duration=Math.max(1,pl.inst||1),periodic=pl.pledge/duration;
-    var iterations=gpFCycles(b,gpFParse(win.end),pl.freq)+1;
+    var iterations=gpFCycles(b,gpFParse(thru),pl.freq)+1;
     if(iterations<0)iterations=0;
     if(iterations>duration)iterations=duration;
     due=(iterations>=duration)?pl.pledge:periodic*iterations;
   }
-  var received=0,receivedThru=0;
-  (pl.gifts||[]).forEach(function(g){
-    if(!gpFCountsThru(g,win))return;
-    receivedThru+=g.amount;
-    if(gpFCounts(g,win))received+=g.amount;
-  });
-  received=Math.round(received*100)/100;receivedThru=Math.round(receivedThru*100)/100;
-  var dueRem=Math.round((due-receivedThru)*100)/100;
-  var pctPaid=pledged>0?receivedThru/pledged:null;
-  var expectedFrac=pledged>0?due/pledged:0;
-  var daysAhead=(pctPaid==null)?null:(pctPaid-expectedFrac)*termDays;
-  var status=(pledged<=0)?'neutral':(receivedThru>=pledged?'funded':(dueRem<=0?'current':gpFBandFromDays(daysAhead)));
-  return {due:due,received:received,receivedThru:receivedThru,dueRem:dueRem,pledged:pledged,
-    outstanding:Math.max(0,pledged-receivedThru),pctPaid:pctPaid,daysAhead:daysAhead,status:status,termDays:termDays};
+  var received=0;
+  (pl.gifts||[]).forEach(function(g){if(gpFCounts(g,thru))received+=g.amount;});
+  received=Math.round(received*100)/100;
+  var dueRem=Math.round((due-received)*100)/100;
+  var status=(pledged<=0)?'neutral':(received>=pledged?'funded':(dueRem>0?'behind':'ontrack'));
+  return {due:due,received:received,dueRem:dueRem,pledged:pledged,outstanding:Math.max(0,pledged-received),status:status};
 }
+
 
 /* donor rows ordered MOST BEHIND FIRST (Due Remaining descending). Fixed: there is no
    user-selectable ordering here, and no alphabetical order anywhere in this widget. */
@@ -10257,83 +10227,73 @@ function gpFData(w){
   return (c==='All purposes')?pool:pool.filter(function(x){return (x.code+": "+x.name)===c;});
 }
 
-/* One row per PURPOSE, carrying every figure the widget can show and no blended one. The
-   pledged side (pledgeTotal, pledgeDue, fromPledgesThru, dueRem, percentDue, fulfilled) is
-   always read to the thru date, which makes it one to one with GFPledgeRepository.GetWidgetData.
-   The gift side (fromPledges, other, totalIn and the three gift counts) obeys the whole window,
-   because those are transactions. */
+/* One row per PURPOSE, carrying every figure the widget can show and no blended one, all read
+   as of the through date. The pledged side (pledgeTotal, pledgeDue, fromPledges, dueRem,
+   percentDue, fulfilled) is one to one with GFPledgeRepository.GetWidgetData; the gift side
+   (other, totalIn and the gift counts) is the purpose's gift lines with no pledge behind them. */
 function gpFPurposeCompute(w){
-  var win=gpFWindow(w),asOf=gpFParse(win.end);
+  var thru=gpFThru(w);
   return gpFData(w).map(function(p){
-    var due=0,fromPledges=0,fromPledgesThru=0,pledged=0;
+    var due=0,fromPledges=0,pledged=0;
     gpFDonorsFor(p).forEach(function(pl){
-      var r=gpFDonorPace(pl,asOf,win.end,win);
-      due+=r.due;fromPledges+=r.received;fromPledgesThru+=r.receivedThru;pledged+=r.pledged;
+      var r=gpFDonorPace(pl,thru);
+      due+=r.due;fromPledges+=r.received;pledged+=r.pledged;
     });
     var other=0,giftN=0,donors={},donorN=0;
     gpFOtherGiftsFor(p).forEach(function(g){
-      if(!gpFCounts(g,win))return;
+      if(!gpFCounts(g,thru))return;
       other+=g.amount;giftN++;
       if(!donors[g.donor]){donors[g.donor]=1;donorN++;}
     });
     due=Math.round(due*100)/100;fromPledges=Math.round(fromPledges*100)/100;
-    fromPledgesThru=Math.round(fromPledgesThru*100)/100;
     other=Math.round(other*100)/100;pledged=Math.round(pledged*100)/100;
     var totalIn=Math.round((fromPledges+other)*100)/100;
-    var dueRem=Math.round((due-fromPledgesThru)*100)/100;
+    var dueRem=Math.round((due-fromPledges)*100)/100;
     return {code:p.code,name:p.name,label:p.code+": "+p.name,
-      pledgeTotal:pledged,pledgeDue:due,fromPledges:fromPledges,fromPledgesThru:fromPledgesThru,
+      pledgeTotal:pledged,pledgeDue:due,fromPledges:fromPledges,
       other:other,totalIn:totalIn,giftN:giftN,giftDonors:donorN,giftDonorList:Object.keys(donors),
       dueRem:dueRem,percentDue:(due>0?dueRem/due:null),
-      fulfilled:(pledged>0?fromPledgesThru/pledged:null),windowed:!!win.start,
+      fulfilled:(pledged>0?fromPledges/pledged:null),
       hasPledges:gpFDonorsFor(p).length>0,
-      closed:p.closed,status:gpFRowStatus(pledged,due,fromPledgesThru,totalIn),purpose:p,camp:p};
+      closed:p.closed,status:gpFRowStatus(pledged,due,fromPledges,totalIn),purpose:p,camp:p};
   });
 }
 function gpFCampCompute(w){return gpFPurposeCompute(w);}
 
 /* Sums a row set. Both table modes total their OWN rows with this, so a totals line can
    never include a purpose its table does not show. Donors come from each row's own list of
-   donors inside the window, unioned, because a donor who gives to two purposes is one
-   donor and a donor outside the window is not there at all. */
-function gpFSumRows(rows,windowed){
-  var pt=0,pd=0,fp=0,fpt=0,ot=0,ti=0,gn=0,dset={},dn=0;
+   donors, unioned, because a donor who gives to two purposes is one donor. */
+function gpFSumRows(rows){
+  var pt=0,pd=0,fp=0,ot=0,ti=0,gn=0,dset={},dn=0;
   rows.forEach(function(r){
-    pt+=r.pledgeTotal;pd+=r.pledgeDue;fp+=r.fromPledges;fpt+=r.fromPledgesThru;
+    pt+=r.pledgeTotal;pd+=r.pledgeDue;fp+=r.fromPledges;
     ot+=r.other;ti+=r.totalIn;gn+=r.giftN;
     (r.giftDonorList||[]).forEach(function(d){if(!dset[d]){dset[d]=1;dn++;}});
   });
-  return {pledgeTotal:pt,pledgeDue:pd,fromPledges:fp,fromPledgesThru:fpt,other:ot,totalIn:ti,
-    giftN:gn,giftDonors:dn,dueRem:Math.round((pd-fpt)*100)/100,
-    fulfilled:(pt>0?fpt/pt:null),windowed:!!windowed,
-    status:gpFRowStatus(pt,pd,fpt,ti),count:rows.length,rows:rows};
+  return {pledgeTotal:pt,pledgeDue:pd,fromPledges:fp,other:ot,totalIn:ti,
+    giftN:gn,giftDonors:dn,dueRem:Math.round((pd-fp)*100)/100,
+    fulfilled:(pt>0?fp/pt:null),
+    status:gpFRowStatus(pt,pd,fp,ti),count:rows.length,rows:rows};
 }
-function gpFTotals(w){return gpFSumRows(gpFPurposeCompute(w),gpFWindow(w).start);}
+function gpFTotals(w){return gpFSumRows(gpFPurposeCompute(w));}
+
 
 function gpFAllPurposes(w){return (w&&w.dataset==="single")?GPF_PURPOSES_SINGLE:GPF_PURPOSES;}
 function gpFCampByLabel(w,label){var pool=gpFAllPurposes(w);for(var i=0;i<pool.length;i++)if((pool[i].code+": "+pool[i].name)===label)return pool[i];return null;}
 
 // ===== RENDER ========================================================
-/* Controls. Both are her filter chips: the date-range chip reuses her .gpf-datechip,
-   which overrides the shared filter-chip glyph with a calendar, and the purpose chip
-   reuses her .gpf-purpchip. No new chip chrome. */
-function gpFRangeChip(w){
-  var spin=w.gpFLoading?'<span class="bgt-spin" aria-hidden="true"></span>':'';
-  var phrase=gpFRangePhrase(w),shown=gpFRangeShort(w);
-  return '<button class="filter-chip gpf-datechip" data-gpf="range" data-id="'+w.id+'" aria-haspopup="dialog" aria-expanded="'+(GPF_POP&&GPF_POP.type==='range'&&GPF_POP.id===w.id?'true':'false')+'" aria-label="'+gpFEsc(phrase)+', tap to change the dates">'+spin+ICON('event')+'<span class="fc-label">'+shown+'</span>'+ICON('expand_more')+'</button>';
+/* Controls, both the shell's filter chips on the shell's pop-over: the through-date chip (the
+   Remittance Pledges pattern: Today, End of last month, or a chosen date) and the purpose chip.
+   Both carry the shell's own filter glyph, as every filter chip does; .gpf-purpchip bounds the purpose name. */
+function gpFThruChip(w){
+  var iso=gpFThru(w),spin=w.gpFLoading?'<span class="bgt-spin" aria-hidden="true"></span>':'';
+  return '<button class="filter-chip gpf-datechip" data-action="gpF-thru" data-id="'+w.id+'" aria-haspopup="dialog" aria-expanded="'+(pop&&pop.type==="gpF-thru"&&pop.id===w.id?'true':'false')+'" aria-label="'+gpFEsc(gpFPhrase(w))+', tap to change">'+spin+'<span class="fc-label"><span class="gpf-thru-long">Gifts received through </span><span class="gpf-thru-short">Through </span>'+gpFThruText(iso)+'</span>'+ICON('expand_more')+'</button>';
 }
-var GPF_RANGES=[
-  ['thru','Gifts received through','Every gift up to the date, and the full pledge amounts. This is the shipped widget\u2019s own basis, so the figures reconcile with it.'],
-  ['ytd','Year to date','1 January to today. Pledged becomes the instalments scheduled this year.'],
-  ['quarter','This quarter','The current quarter to today, on the same rule.'],
-  ['month','This month','The current month to today, on the same rule.'],
-  ['custom','Custom dates','Choose your own start and end.']
-];
-
 function gpFCampChip(w){
   var c=w.gpFCamp||'All purposes';
-  return '<button class="filter-chip gpf-purpchip" data-gpf="camp" data-id="'+w.id+'" aria-haspopup="listbox" aria-expanded="'+(GPF_POP&&GPF_POP.type==='camp'&&GPF_POP.id===w.id?"true":"false")+'" aria-label="Purpose, tap to change"><span class="fc-label">'+(c==='All purposes'?'All purposes':gpFEsc(c))+'</span>'+ICON("expand_more")+'</button>';
+  return '<button class="filter-chip gpf-purpchip" data-action="gpF-camp" data-id="'+w.id+'" aria-haspopup="listbox" aria-expanded="'+(pop&&pop.type==="gpF-camp"&&pop.id===w.id?"true":"false")+'" aria-label="Purpose, tap to change"><span class="fc-label">'+(c==='All purposes'?'All purposes':gpFEsc(c))+'</span>'+ICON("expand_more")+'</button>';
 }
+
 /* Maps a stale "donut" value back to "goal". The retired view has no control and no
    reachable state. */
 function gpFView(w){var v=w.gpFView||"goal";return (v==="donut")?"goal":v;}
@@ -10350,7 +10310,7 @@ function gpFTableToggle(w){
   }
   return '<div class="vtoggle" role="group" aria-label="Table">'+
     seg('pledges','Pledges','The pledged position for every purpose that has an active pledge: Pledge Total, Pledge Due, Received against those pledges, Due Remaining and Percent Due. One to one with the Gifts and Pledges panel.')+
-    seg('gifts','Gifts','Money given to a purpose that is not against any pledge, by purpose, over the dates you choose.')+
+    seg('gifts','Gifts','Money given to a purpose that is not against any pledge, by purpose, through the date you choose.')+
   '</div>';
 }
 function gpFViewToggle(w){
@@ -10368,9 +10328,9 @@ function gpFViewToggle(w){
    The full wording is kept for Explore, Detail and every aria string. */
 function gpFSplitLineShort(r){
   if(!(r.totalIn>0))return 'Nothing received';
-  if(!(r.fromPledges>0))return gpFMoney0(r.other)+' gifts, no pledge';
-  if(!(r.other>0))return gpFMoney0(r.fromPledges)+' all pledged';
-  return gpFMoney0(r.fromPledges)+' pledged, '+gpFMoney0(r.other)+' gifts';
+  if(!(r.fromPledges>0))return gpFMoney0(r.other)+' from gifts, no pledge';
+  if(!(r.other>0))return gpFMoney0(r.fromPledges)+' all from pledges';
+  return gpFMoney0(r.fromPledges)+' from pledges, '+gpFMoney0(r.other)+' from gifts';
 }
 /* The line under a bar, in the order the owner listed it: the total given to the purpose,
    then where it came from, then what is still expected against the pledges. A purpose with no
@@ -10384,7 +10344,7 @@ function gpFBarFoot(r){
   return parts.join(' \u00b7 ');
 }
 function gpFSplitLine(r){
-  if(!(r.totalIn>0))return 'Nothing received in this window';
+  if(!(r.totalIn>0))return 'Nothing received';
   if(!(r.fromPledges>0))return gpFMoney0(r.other)+' from gifts, none against a pledge';
   if(!(r.other>0))return gpFMoney0(r.fromPledges)+' all from pledge payments';
   return gpFMoney0(r.fromPledges)+' from pledges, '+gpFMoney0(r.other)+' from gifts';
@@ -10413,35 +10373,33 @@ function gpFHeaderBlock(w,mode){
   /* The Pledges / Gifts toggle takes its own line under the view toggle, which keeps the
      corner as it was (owner, 28 Sep). It is there only while the table view is up. */
   var tblrow=(gpFView(w)==="table"&&mode!=="loading")?('<div class="gpf-tblrow">'+gpFTableToggle(w)+'</div>'):'';
-  var top='<div class="dep-hd-top"><div class="gpf-ctlrow">'+gpFCampChip(w)+gpFRangeChip(w)+'</div>'+toggle+'</div>'+tblrow;
+  var top='<div class="dep-hd-top"><div class="gpf-ctlrow">'+gpFCampChip(w)+gpFThruChip(w)+'</div>'+toggle+'</div>'+tblrow;
   if(mode==="loading"){
     var sk='<div class="dep-hd-kpigrp"><span class="sk" style="width:110px;height:22px;border-radius:var(--cornerradius-small)"></span><span class="sk" style="width:130px;height:20px;border-radius:var(--cornerradius-full)"></span></div>';
     return '<div class="dep-hd gpf-hd">'+top+'<div class="dep-hd-num"><div class="gpf-numwrap">'+sk+'</div></div></div>';
   }
-  var lbl=gpFStatusLabelRow(t.status),col=gpFStatusColor(t.status);
+  var lbl=gpFStatusLabelRow(t.status,t.dueRem),col=gpFStatusColor(t.status);
   var pill=gpFPledgedPill(t,col);
   var num='<div class="dep-hd-kpigrp"><span class="metric-value">'+gpFMoney0(t.totalIn)+'</span>'+pill+'<span class="gpf-goalpill">'+gpFSplitLine(t)+'</span></div>';
   return '<div class="dep-hd gpf-hd">'+top+'<div class="dep-hd-num"><div class="gpf-numwrap">'+num+'</div>'+
     '<span class="sr-only">'+gpFMoney0(t.totalIn)+' received across '+t.count+' purpose'+(t.count===1?'':'s')+'. '+gpFSplitLine(t)+'. '+gpFPledgedRead(t)+' '+lbl+'.</span></div></div>';
 }
-/* The pledged pill, and the one rule that governs it: a percentage of what was pledged is
-   shown only when the window has no start. With a start, the money on screen is this window's
-   while the pledge behind it is the whole promise, and a ratio across the two dates would be
-   a number the data does not hold. The pledged amount itself still shows. */
+/* The pledged pill: the share of what was pledged that has arrived as pledge payments, with the
+   pledged amount. Read as of the through date, like everything else. */
 function gpFPledgedPill(t,col,bare){
-  if(!(t.pledgeTotal>0))return bare?'<span class="gpf-goalpill">no pledges in this window</span>':'';
+  if(!(t.pledgeTotal>0))return bare?'<span class="gpf-goalpill">no pledges</span>':'';
   var of=gpFMoney0(t.pledgeTotal)+' pledged';
-  if(t.windowed)return '<span class="gpf-goalpill">'+(bare?'of ':'')+of+'</span>';
   var p='<span class="gpf-pill" style="background:'+col+'">'+ICON(t.status==='funded'?'check_circle':'flag')+gpFPct(t.fulfilled)+'</span>';
   return bare?(p+'<span class="gpf-goalpill">of '+of+'</span>')
              :('<span class="gpf-pill" style="background:'+col+'">'+ICON(t.status==='funded'?'check_circle':'flag')+gpFPct(t.fulfilled)+' of '+of+'</span>');
 }
 function gpFPledgedRead(t){
   if(!(t.pledgeTotal>0))return 'Nothing pledged.';
-  return gpFMoney0(t.pledgeTotal)+' pledged'+(t.windowed?'':(', '+gpFPct(t.fulfilled)+' fulfilled'))+'.';
+  return gpFMoney0(t.pledgeTotal)+' pledged, '+gpFPct(t.fulfilled)+' fulfilled.';
 }
+
 function gpFGlance(w){
-  var t=gpFTotals(w),lbl=gpFStatusLabelRow(t.status),col=gpFStatusColor(t.status);
+  var t=gpFTotals(w),lbl=gpFStatusLabelRow(t.status,t.dueRem),col=gpFStatusColor(t.status);
   var pill=gpFPledgedPill(t,col,true);
   return '<div class="kpi-row"><div class="kpi-num">'+
     '<div class="metric-value">'+gpFMoney0(t.totalIn)+'</div>'+
@@ -10464,7 +10422,7 @@ function gpFGivingBars(w){
   if(!rows.length)return '<div class="gpf-zeroline">'+ICON("info")+'No gift or pledge purposes match this selection.</div>';
   rows.sort(function(a,b){return b.totalIn-a.totalIn;});
   var body=rows.map(function(r){
-    var col=gpFStatusColor(r.status),lbl=gpFStatusLabelRow(r.status);
+    var col=gpFStatusColor(r.status),lbl=gpFStatusLabelRow(r.status,r.dueRem);
     /* No percentage: the row states the money given, and the line under it accounts for it
        (owner, 28 Sep). A share of a pledge was a second basis on a bar that now carries
        three. */
@@ -10506,23 +10464,30 @@ function gpFSummaryHead(w){
     '<span class="gpf-c-n">Received</span>'+
     '<span class="gpf-c-n">Due Remaining</span>'+
     (gpFWidePct(w)?'<span class="gpf-c-n gpf-c-pct">Percent Due</span>':'')+
+    '<span class="gpf-c-st">Status</span>'+
   '</div>';
+}
+/* The purpose's status as a chip: Finished, On track, or Behind with the amount (owner, 11 Oct). */
+function gpFRowChip(r){
+  var behind=(r.status==='behind'),ic={funded:'check_circle',ontrack:'check',behind:'schedule'}[r.status]||'remove';
+  return '<span class="gpf-dstatus '+(behind?'gpf-dstatus-behind':'gpf-dstatus-ok')+'">'+ICON(ic)+gpFStatusLabelRow(r.status,r.dueRem)+'</span>';
 }
 /* A row opens the giving ledger, the same pop-up the Giving bars open, so a
    purpose behaves the same way wherever it is selected. It used to expand an
    inline donor drill below itself; the owner replaced that on 28 Sep 2026. */
 function gpFSummaryRow(w,r){
   var badge=r.closed?'<span class="gpf-closed">Closed</span>':'';
-  var sr=r.label+", pledge total "+gpFMoney(r.pledgeTotal)+", pledge due "+gpFMoney(r.pledgeDue)+", received "+gpFMoney(r.fromPledgesThru)+", due remaining "+gpFMoney(r.dueRem)+", percent due "+gpFPct(r.percentDue)+". Open every gift and pledge behind this purpose.";
+  var sr=r.label+", pledge total "+gpFMoney(r.pledgeTotal)+", pledge due "+gpFMoney(r.pledgeDue)+", received "+gpFMoney(r.fromPledges)+", due remaining "+gpFMoney(r.dueRem)+", percent due "+gpFPct(r.percentDue)+". "+gpFStatusLabelRow(r.status,r.dueRem)+". Open every gift and pledge behind this purpose.";
   return '<div class="wt-row gpf-trow gpf-clickable gpf-sumrow" data-gpf="baropen" data-id="'+w.id+'" data-c="'+gpFEsc(r.label)+'" role="button" tabindex="0" aria-haspopup="dialog" aria-label="'+gpFEsc(sr)+'">'+
     /* No sub-line: every figure this row can state is in its own cell, and a second
        percentage beside Percent Due would be two numbers about one pledge. */
     '<span class="gpf-c-nm"><span class="gpf-caret" aria-hidden="true">'+ICON('chevron_right')+'</span><span class="gpf-nmtxt"><span class="gpf-nm">'+r.label+badge+'</span></span></span>'+
     '<span class="gpf-c-n">'+gpFMoney(r.pledgeTotal)+'</span>'+
     '<span class="gpf-c-n">'+gpFMoney(r.pledgeDue)+'</span>'+
-    '<span class="gpf-c-n">'+gpFMoney(r.fromPledgesThru)+'</span>'+
+    '<span class="gpf-c-n">'+gpFMoney(r.fromPledges)+'</span>'+
     '<span class="gpf-c-n">'+gpFDueCell(r.dueRem)+'</span>'+
     (gpFWidePct(w)?('<span class="gpf-c-n gpf-c-pct">'+gpFPctCell(r.percentDue)+'</span>'):'')+
+    '<span class="gpf-c-st">'+gpFRowChip(r)+'</span>'+
   '</div>';
 }
 /* The table view dispatches to one read or the other. Neither borrows a figure from the
@@ -10531,7 +10496,7 @@ function gpFSummaryTable(w,trim){
   return (gpFTblMode(w)==='gifts')?gpFGiftsTable(w,trim):gpFPledgesTable(w,trim);
 }
 /* PLEDGES: the shipped panel. Rows are purposes with an active pledge, ordered by Pledge
-   Total descending as the legacy query orders them. The window start does not act. */
+   Total descending as the legacy query orders them. */
 function gpFPledgesTable(w,trim){
   var rows=gpFCampCompute(w).filter(function(r){return r.hasPledges;});
   if(!rows.length)return '<div class="gpf-zeroline">'+ICON("info")+'No purpose in this selection has an active pledge. Switch to Gifts to see money given without one.</div>';
@@ -10543,14 +10508,15 @@ function gpFPledgesTable(w,trim){
     '<span class="gpf-c-nm">Total ('+t.count+' purpose'+(t.count===1?'':'s')+')</span>'+
     '<span class="gpf-c-n">'+gpFMoney(t.pledgeTotal)+'</span>'+
     '<span class="gpf-c-n">'+gpFMoney(t.pledgeDue)+'</span>'+
-    '<span class="gpf-c-n">'+gpFMoney(t.fromPledgesThru)+'</span>'+
+    '<span class="gpf-c-n">'+gpFMoney(t.fromPledges)+'</span>'+
     '<span class="gpf-c-n">'+gpFDueCell(t.dueRem)+'</span>'+
     (gpFWidePct(w)?'<span class="gpf-c-n gpf-c-pct"></span>':'')+
+    '<span class="gpf-c-st"></span>'+
   '</div>');
   var cap='<div class="gpf-ctx gpf-cap"><span>The pledged position for every purpose with an active pledge, as the Gifts and Pledges panel reports it. Gifts with no pledge behind them are under Gifts. Pledge Due is each donor pledge paced on its own begin to end term, and the full pledge once past its end date.'+(gpFWidePct(w)?' Percent Due is Due Remaining over Pledge Due, so a negative value means over received.':'')+(trim?' Largest pledges first.':'')+'</span></div>';
   return '<div class="gpf-tblwrap">'+cap+'<div class="scroll gpf-scroll">'+gpFSummaryHead(w)+body+'</div>'+tot+'</div>';
 }
-/* GIFTS: gift lines with no pledge behind them, per purpose, over the whole window. The
+/* GIFTS: gift lines with no pledge behind them, per purpose, up to the through date. The
    columns are the Purpose List report's own: how many gifts, how many donors, the last one
    and the total. */
 /* Left aligned throughout, header and data, on the owner's instruction of 28 Sep. Header and
@@ -10594,26 +10560,14 @@ function gpFGiftsTable(w,trim){
    per page. Built on her eight-slot .gpf-drow donor row: her caret slot, her six data
    cells for Name, Begin, End, Pledge, Received and Due Remaining, and her status slot.
    Zero new row geometry. */
-function gpFDayPhrase(p){
-  if(p.status==="neutral")return "No pledge amount set";
-  if(p.status==="full")return "Fully received for its term";
-  var d=Math.round(p.daysAhead);
-  if(d>0)return "About "+d+" day"+(d===1?"":"s")+" ahead of schedule";
-  if(d<0)return "About "+(-d)+" day"+((-d)===1?"":"s")+" behind schedule";
-  return "On schedule";
+/* Her own donor status chip, reused unrestyled, carrying the three words. Behind takes her behind
+   variant (amethyst, never red); Finished and On track her positive variant. */
+function gpFDonorChip(p){
+  var behind=(p.status==='behind');
+  var ic={neutral:"remove",funded:"check_circle",ontrack:"check",behind:"schedule"}[p.status]||"remove";
+  return '<span class="gpf-dstatus '+(behind?'gpf-dstatus-behind':'gpf-dstatus-ok')+'" data-tip="'+gpFEsc(gpFPaceLabel(p))+'" data-tip-plain>'+ICON(ic)+gpFPaceLabel(p)+'</span>';
 }
-/* Her own donor status chip, reused unrestyled. Behind states take her behind variant
-   (amethyst, never red); everything else her positive variant. */
-function gpFDonorChip(status){
-  var behind=(status==='behind'||status==='farbehind');
-  /* every status gpFDonorPace can return needs an entry here, or ICON() is
-     handed undefined and emits the word. "current" is what an up-to-date pledge
-     gets and was missing; "full" is kept as an alias because saved card state
-     may still carry it. (28 Sep 2026) */
-  var ic={neutral:"remove",current:"check_circle",full:"check_circle",funded:"check_circle",
-          ahead:"trending_up",onpace:"check",behind:"schedule",farbehind:"error"}[status]||"remove";
-  return '<span class="gpf-dstatus '+(behind?'gpf-dstatus-behind':'gpf-dstatus-ok')+'" data-tip="'+gpFEsc(gpFStatusLabel(status))+'" data-tip-plain>'+ICON(ic)+gpFStatusLabel(status)+'</span>';
-}
+
 /* THE GIFT LEVEL, the deepest drill and the level the owner asked for. The gifts shown
    are exactly those recognised within the current range (gated on the same recognition
    date Received keys off), so their total always equals the pledge's displayed
@@ -10637,8 +10591,8 @@ function gpFScheduleRows(pl){
   }
   return out;
 }
-function gpFSchedulePanel(pl,win){
-  var rows=gpFScheduleRows(pl),end=win&&win.end?win.end:gpFISO(GPF_TODAY);
+function gpFSchedulePanel(pl,thru){
+  var rows=gpFScheduleRows(pl),end=thru||gpFISO(GPF_TODAY);
   var due=0,dueN=0;
   rows.forEach(function(r){if(r.date<=end){due+=r.amount;dueN++;}});
   var freq=GPF_FREQ_LBL[pl.freq]||("every "+Math.round(12/(pl.freq||1))+" months");
@@ -10654,17 +10608,17 @@ function gpFSchedulePanel(pl,win){
 /* A pledge's history in the ledger: what was promised, then what arrived. The
    in-card drill keeps the payments alone, because it is a pace read and the
    schedule would double its row height at twenty rows to a page. */
-function gpFPledgeHistory(pl,win){
+function gpFPledgeHistory(pl,thru){
   return '<div class="gpf-drawer gpf-ldr-drawer" role="region" aria-label="'+gpFEsc('Schedule and gifts for the '+pl.donor+' pledge')+'">'+
-    gpFSchedulePanel(pl,win)+gpFGiftPanel(pl,(win&&win.end)||gpFISO(GPF_TODAY),win,true)+'</div>';
+    gpFSchedulePanel(pl,thru)+gpFGiftPanel(pl,thru,true)+'</div>';
 }
-function gpFGiftPanel(pl,iso,win,inner){
-  win=win||{start:null,end:iso};
-  var gifts=(pl.gifts||[]).filter(function(g){return gpFInWindow(g.date,win);});
+function gpFGiftPanel(pl,thru,inner){
+  thru=thru||gpFISO(GPF_TODAY);
+  var gifts=(pl.gifts||[]).filter(function(g){return gpFCounts(g,thru);});
   var sum=0;gifts.forEach(function(g){sum+=g.amount;});
   var head='<div class="gpf-drawer-h">Gifts applied to this pledge</div>';
   if(!gifts.length){
-    var emptyBody=head+'<div class="gpf-tab-empty">'+ICON('volunteer_activism')+'No gifts have been applied to this pledge inside the current dates.</div>';
+    var emptyBody=head+'<div class="gpf-tab-empty">'+ICON('volunteer_activism')+'No gifts have been applied to this pledge through '+gpFThruText(thru)+'.</div>';
     if(inner)return emptyBody;
     return '<div class="gpf-drawer gpf-drawer" role="region" aria-label="'+gpFEsc('Gifts applied to the '+pl.donor+' pledge')+'">'+emptyBody+'</div>';
   }
@@ -10688,7 +10642,7 @@ function gpFEmpty(w){
   if(w.size==="kpi")return '<div class="kpi-row"><div class="kpi-num"><div class="dep-hd-kpigrp"><span class="metric-value gpf-allset">'+ICON("volunteer_activism")+'None set up</span></div><div class="gl-sub"><span class="gpf-glance-cap">no purposes to show yet</span></div></div></div>';
   return '<div class="state gpf-empty" data-kind="empty">'+ICON("volunteer_activism")+'<div class="state-title">No gift or pledge purposes yet</div><div class="state-sub">Once purposes are set up, you will see pledged, due and received totals, each purpose giving, and the donor pledges behind every purpose.</div></div>';
 }
-/* Her skeleton, reused. A purpose or date-range change fetches; view switches, drills
+/* Her skeleton, reused. A purpose or date change fetches; view switches, drills
    and paging are pure client re-renders and never show a loading state. */
 function gpFSkeleton(){
   var rows="";[92,70,54,38,64].forEach(function(wd){rows+='<div class="gpf-sk-row"><span class="sk" style="width:120px;height:12px;border-radius:var(--cornerradius-small)"></span><span class="sk gpf-sk-bar" style="width:'+wd+'%"></span></div>';});
@@ -10709,110 +10663,106 @@ function gpFContent(w){
 function gpFContentRoot(w){return '<div class="gpf-root" data-tier="'+(w.size||'wide')+'">'+gpFContent(w)+'</div>';}
 
 // ===== HANDLERS ======================================================
-/* A self-contained subsystem behind GPF_WIRED, keyed to data-gpf, with its own popover
-   and modal roots, exactly as W07/W09/W10/W13/W15/W16 do. Her renderModal, popContent
-   and triggerSelector chains are NOT touched. Only a purpose or date-range change
-   fetches. */
+/* A self-contained subsystem behind GPF_WIRED, keyed to data-gpf, with its own modal root. The
+   two chips and their menus use the shell's pop-over through WIDGETS.register (gpF- actions), as
+   Remittance Pledges does. Only a purpose or date change fetches. */
 function gpFLoad(w){
   w.gpFLoading=true;
   clearTimeout(timers["gpF-"+w.id]);
   timers["gpF-"+w.id]=setTimeout(function(){w.gpFLoading=false;render();},800);
 }
 function gpFPopContent(){
-  if(!GPF_POP)return "";
-  var w=find(GPF_POP.id);if(!w)return "";
-  if(GPF_POP.type==='camp'){
+  if(!pop)return "";
+  var w=find(pop.id);if(!w)return "";
+  if(pop.type==='gpF-camp'){
     var cur=w.gpFCamp||'All purposes';
     var opts=[['All purposes','All purposes']].concat(gpFAllPurposes(w).map(function(c){var l=c.code+": "+c.name;return [l,l];}));
     return '<div class="cap">Purpose</div><div role="listbox" aria-label="Purpose">'+opts.map(function(o){
       var on=cur===o[0];
-      return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-gpf="set-camp" data-id="'+w.id+'" data-v="'+gpFEsc(o[0])+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm">'+o[1]+'</span></button>';
+      return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-action="gpF-set-camp" data-id="'+w.id+'" data-v="'+gpFEsc(o[0])+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm">'+o[1]+'</span></button>';
     }).join("")+'</div>';
   }
-  var r=w.gpFRange||'thru',b=gpFWindow(w),todayIso=gpFISO(GPF_TODAY);
-  var out='<div class="cap">Dates</div><div role="listbox" aria-label="Dates">';
-  out+=GPF_RANGES.map(function(o){
-    var on=r===o[0];
-    return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-gpf="set-range" data-id="'+w.id+'" data-r="'+o[0]+'" data-tip="'+gpFEsc(o[2])+'" data-tip-plain>'+(on?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm">'+o[1]+'</span></button>';
-  }).join("")+'</div>';
-  if(r==='custom'){
-    out+='<div class="sep"></div><div class="cap">Custom dates</div><div class="gpf-dates">'+
-      '<label>From<input type="date" id="gpfFrom-'+w.id+'" class="gpf-date-input" data-id="'+w.id+'" data-which="start" value="'+(b.start||todayIso)+'" max="'+todayIso+'"></label>'+
-      '<label>To<input type="date" id="gpfTo-'+w.id+'" class="gpf-date-input" data-id="'+w.id+'" data-which="end" value="'+b.end+'" max="'+todayIso+'"></label></div>';
-  }
+  if(pop.type!=='gpF-thru')return "";
+  var curIso=gpFThru(w),todayIso=gpFISO(GPF_TODAY),lastMo=gpFEndOfLastMonth(GPF_TODAY);
+  var presets=[["Today",todayIso],["End of last month",lastMo]];
+  var out='<div class="cap">Count gifts through</div>';
+  out+=presets.map(function(p){var on=curIso===p[1];return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-action="gpF-set-thru" data-id="'+w.id+'" data-iso="'+p[1]+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm">'+p[0]+'</span><span class="gpf-mi-date">'+gpFThruText(p[1])+'</span></button>';}).join("");
+  out+='<div class="sep"></div><div class="cap">Or choose a date</div>'+
+    '<div class="gpf-datepick"><input type="date" id="gpfq-'+w.id+'" class="gpf-date-input" data-id="'+w.id+'" value="'+curIso+'" max="'+todayIso+'" aria-label="Gifts received through date"></div>';
   return out;
 }
-function gpFOpenPop(anchor,type,id){
-  GPF_POP={type:type,id:id};
-  var el=document.getElementById('gpfPop');
-  if(!el){el=document.createElement('div');el.id='gpfPop';document.body.appendChild(el);}
-  el.setAttribute('data-gpf','stop');
-  el.className='gpf-root gpf-pop';
-  el.innerHTML=gpFPopContent();
-  var rc=anchor.getBoundingClientRect(),M=8;
-  el.style.visibility='hidden';el.style.left='0px';el.style.top='0px';
-  var bw=el.offsetWidth,bh=el.offsetHeight;
-  var left=Math.min(Math.max(M,rc.left),window.innerWidth-bw-M);
-  var top=rc.bottom+6;if(top+bh>window.innerHeight-M)top=Math.max(M,rc.top-bh-6);
-  el.style.left=left+'px';el.style.top=top+'px';el.style.visibility='';
-  if(GPF_FOCUS_ID){var f=document.getElementById(GPF_FOCUS_ID);if(f){f.focus();try{var vl=(f.value||'').length;f.setSelectionRange(vl,vl);}catch(_e){}}}
+/* A new date fetches (the 800 ms skeleton) and collapses any open pledge history, because the
+   rows underneath may no longer be the same. */
+function gpFCommitThru(w,iso){if(iso&&/^\d{4}-\d{2}-\d{2}$/.test(iso)&&iso!==gpFThru(w)){w.gpFThru=iso;w.gpFPlExp={};gpFLoad(w);setStatus("Counting gifts through "+gpFThruText(iso)+".");return true;}return false;}
+/* The shell's click dispatch for the chips and their menus (data-action, gpF- prefix). */
+function gpFHandleClick(a,id,t){
+  if(a==="gpF-thru"||a==="gpF-camp"){pop=(pop&&pop.type===a&&pop.id===id)?null:{type:a,id:id};render();return true;}
+  if(a==="gpF-set-thru"){var ws=find(id);if(ws)gpFCommitThru(ws,t.getAttribute("data-iso"));pop=null;render();return true;}
+  if(a==="gpF-set-camp"){var wc=find(id);if(wc){wc.gpFCamp=t.getAttribute("data-v");wc.gpFPlExp={};gpFLoad(wc);}pop=null;render();return true;}
+  return false;
 }
-function gpFClosePop(){GPF_POP=null;var el=document.getElementById('gpfPop');if(el)el.remove();}
-function gpFSyncPop(){
-  if(!GPF_POP)return;var el=document.getElementById('gpfPop');if(!el)return;
-  el.innerHTML=gpFPopContent();
-  if(GPF_FOCUS_ID){var f=document.getElementById(GPF_FOCUS_ID);if(f&&document.activeElement!==f){f.focus();try{var vl=(f.value||'').length;f.setSelectionRange(vl,vl);}catch(_e){}}}
-}
-function gpFSetRange(w,r){
-  if(r==='custom'){var b=gpFWindow(w);if(!w.gpFStart)w.gpFStart=b.start||gpFISO(new Date(GPF_TODAY.getFullYear(),0,1));if(!w.gpFEnd)w.gpFEnd=b.end;}
-  w.gpFRange=r;gpFLoad(w);setStatus(gpFRangePhrase(w)+".");
-}
-function gpFSetCustomDate(w,which,val){
-  if(!(val&&/^\d{4}-\d{2}-\d{2}$/.test(val)))return false;
-  w.gpFRange='custom';if(which==='start')w.gpFStart=val;else w.gpFEnd=val;
-  gpFLoad(w);return true;
-}
+
 /* The giving ledger for one purpose: every pledge and every gift that money came through,
    filterable by type, searchable by donor, pledge or reference, each row expanding to its own
    history. This replaces the old 'donors behind pace' list, which asked Remittance Pledges'
    question rather than this widget's (owner, 28 Sep). */
-function gpFLedgerRows(w,p,win){
+var GPF_LEDGER_SORTS={donor:['Donor',1],pledged:['Pledged',-1],received:['Received',-1],due:['Due Remaining',-1],type:['Type',1]};
+function gpFLedgerSort(){var m=GPF_MODAL||{};var k=GPF_LEDGER_SORTS[m.sort]?m.sort:'received';return {key:k,dir:(m.dir===1||m.dir===-1)?m.dir:GPF_LEDGER_SORTS[k][1]};}
+function gpFLedgerSortWord(so){return (so.key==='donor'||so.key==='type')?(so.dir>0?'A to Z':'Z to A'):(so.dir<0?'largest first':'smallest first');}
+function gpFLedgerSortBtn(k){
+  var so=gpFLedgerSort(),on=so.key===k,lbl=GPF_LEDGER_SORTS[k][0],ic=on?(so.dir<0?'arrow_downward':'arrow_upward'):'unfold_more';
+  return '<button class="wt-sort'+(on?' on':'')+'" data-gpf="ledger-sort" data-k="'+k+'" aria-label="Sort by '+lbl+(on?(so.dir<0?', descending':', ascending'):'')+'"'+(on?' aria-sort="'+(so.dir<0?'descending':'ascending')+'"':'')+'>'+lbl+' '+ICON(ic)+'</button>';
+}
+/* The ledger's rows, sorted by the chosen header (Received, largest first, by default). A gift
+   row has no pledged or due figure, so under those headers it sorts after every pledge. */
+function gpFLedgerRows(w,p,thru){
   var f=(GPF_MODAL&&GPF_MODAL.filter)||'all',q=((GPF_MODAL&&GPF_MODAL.q)||'').trim().toLowerCase();
-  var asOf=gpFParse(win.end),out=[];
+  var out=[];
   if(f!=='gifts'){
     gpFDonorsFor(p).forEach(function(pl){
-      var r=gpFDonorPace(pl,asOf,win.end,win);
-      if(r.pledged<=0&&r.receivedThru<=0)return;
-      out.push({kind:'pledge',id:pl.id,donor:pl.donor,pledge:pl,pace:r,amount:r.receivedThru,
+      var r=gpFDonorPace(pl,thru);
+      if(r.pledged<=0&&r.received<=0)return;
+      out.push({kind:'pledge',id:pl.id,donor:pl.donor,pledge:pl,pace:r,amount:r.received,
         date:(pl.gifts&&pl.gifts.length?pl.gifts[pl.gifts.length-1].date:pl.begin),
         refs:(pl.gifts||[]).map(function(g){return g.ref;}).join(' ')});
     });
   }
   if(f!=='pledges'){
     gpFOtherGiftsFor(p).forEach(function(g){
-      if(!gpFCounts(g,win))return;
+      if(!gpFCounts(g,thru))return;
       out.push({kind:'gift',id:g.id,donor:g.donor,gift:g,amount:g.amount,date:g.date,refs:g.ref+' '+g.media});
     });
   }
   if(q)out=out.filter(function(it){
     return (it.donor+' '+it.id+' '+it.refs).toLowerCase().indexOf(q)>-1;
   });
-  out.sort(function(a,b){return b.amount-a.amount;});
+  var so=gpFLedgerSort();
+  function val(it){
+    if(so.key==='donor')return it.donor.toLowerCase();
+    if(so.key==='type')return it.kind;
+    if(so.key==='received')return it.amount;
+    if(it.kind!=='pledge')return null;
+    return so.key==='pledged'?it.pace.pledged:it.pace.dueRem;
+  }
+  out.sort(function(a,b){var x=val(a),y=val(b);
+    if(x==null&&y==null)return b.amount-a.amount;if(x==null)return 1;if(y==null)return -1;
+    if(x<y)return -so.dir;if(x>y)return so.dir;return b.amount-a.amount;});
   return out;
 }
-function gpFLedgerRowHTML(it,w,win){
+
+function gpFLedgerRowHTML(it,w,thru){
   var exp=!!(w.gpFPlExp&&w.gpFPlExp[it.id]);
   if(it.kind==='pledge'){
-    var p=it.pace,chip=gpFDonorChip(p.status);
-    var sr=it.donor+', pledge '+it.id+'. Pledged '+gpFMoney(p.pledged)+', received '+gpFMoney(p.receivedThru)+', due remaining '+gpFMoney(p.dueRem)+'. '+gpFStatusLabel(p.status)+'.';
+    var p=it.pace,chip=gpFDonorChip(p);
+    var sr=it.donor+', pledge '+it.id+'. Pledged '+gpFMoney(p.pledged)+', received '+gpFMoney(p.received)+', due remaining '+gpFMoney(p.dueRem)+'. '+gpFPaceLabel(p)+'.';
     return '<button class="gpf-drow gpf-clickable gpf-ldr-row" data-gpf="gopen" data-id="'+w.id+'" data-plid="'+gpFEsc(it.id)+'" aria-expanded="'+exp+'" aria-label="'+gpFEsc(sr)+'">'+
       '<span class="gpf-dexp">'+ICON(exp?'expand_more':'chevron_right')+'</span>'+
       '<span class="gpf-dc gpf-dc0"><span class="gpf-ldr-nm">'+it.donor+'</span><span class="gpf-ldr-sub">'+ICON('handshake')+it.id+'<span class="gpf-ldr-stat">'+chip+'</span></span></span>'+
       '<span class="gpf-dc gpf-dc1">'+gpFMoney(p.pledged)+'</span>'+
-      '<span class="gpf-dc gpf-dc2">'+gpFMoney(p.receivedThru)+'</span>'+
+      '<span class="gpf-dc gpf-dc2">'+gpFMoney(p.received)+'</span>'+
       '<span class="gpf-dc gpf-dc3">'+gpFDueCell(p.dueRem)+'</span>'+
       '<span class="gpf-dstat-h"><span class="gpf-tag gpf-seg-pledge-tag">Pledge</span></span>'+
-    '</button>'+(exp?gpFPledgeHistory(it.pledge,win):'');
+    '</button>'+(exp?gpFPledgeHistory(it.pledge,thru):'');
   }
   var g=it.gift;
   var sr2=it.donor+', gift of '+gpFMoney(g.amount)+' on '+gpFFmtDate(g.date)+' by '+g.media+', reference '+g.ref+'.';
@@ -10830,8 +10780,8 @@ function gpFLedgerModalHTML(){
   if(!GPF_MODAL)return '';
   var w=find(GPF_MODAL.id);if(!w)return '';
   var p=gpFCampByLabel(w,GPF_MODAL.label);if(!p)return '';
-  var win=gpFWindow(w);
-  var comp=gpFPurposeCompute({id:w.id,size:w.size,dataset:w.dataset,gpFCamp:p.code+': '+p.name,gpFRange:w.gpFRange,gpFStart:w.gpFStart,gpFEnd:w.gpFEnd})[0];
+  var thru=gpFThru(w);
+  var comp=gpFPurposeCompute({id:w.id,size:w.size,dataset:w.dataset,gpFCamp:p.code+': '+p.name,gpFThru:w.gpFThru})[0];
   if(!comp)return '';
   var col=gpFStatusColor(comp.status);
   var summary='<div class="gpf-dsum">'+
@@ -10839,8 +10789,8 @@ function gpFLedgerModalHTML(){
     '<span class="gpf-dsum-i"><span class="gpf-dsum-k">Pledge Due</span><span class="gpf-dsum-v">'+gpFMoney(comp.pledgeDue)+'</span></span>'+
     '<span class="gpf-dsum-i"><span class="gpf-dsum-k">Pledge payments</span><span class="gpf-dsum-v">'+gpFMoney(comp.fromPledges)+'</span></span>'+
     '<span class="gpf-dsum-i"><span class="gpf-dsum-k">Gifts</span><span class="gpf-dsum-v">'+gpFMoney(comp.other)+'</span></span>'+
-    '<span class="gpf-dsum-i"><span class="gpf-dsum-k">Received</span><span class="gpf-dsum-v">'+gpFMoney(comp.totalIn)+'</span></span>'+
-    '<span class="gpf-dsum-i"><span class="gpf-badge" style="color:'+col+';border-color:'+col+'">'+ICON(comp.status==='funded'?'check_circle':'flag')+gpFStatusLabelRow(comp.status)+'</span></span>'+
+    '<span class="gpf-dsum-i"><span class="gpf-dsum-k">Total given</span><span class="gpf-dsum-v">'+gpFMoney(comp.totalIn)+'</span></span>'+
+    '<span class="gpf-dsum-i"><span class="gpf-badge" style="color:'+col+';border-color:'+col+'">'+ICON(comp.status==='funded'?'check_circle':'flag')+gpFStatusLabelRow(comp.status,comp.dueRem)+'</span></span>'+
   '</div>';
   var f=(GPF_MODAL.filter)||'all',q=GPF_MODAL.q||'';
   /* the labels name row TYPES; the summary strip above names money figures and
@@ -10850,16 +10800,16 @@ function gpFLedgerModalHTML(){
   }).join('');
   var search='<div class="gpf-ldr-search">'+ICON('search')+'<input type="text" id="gpfLedgerQ" class="gpf-ldr-input" placeholder="Search donor, pledge or reference" value="'+gpFEsc(q)+'" aria-label="Search this purpose"></div>';
   var bar='<div class="gpf-ldr-bar"><div class="vtoggle" role="group" aria-label="Type">'+tabs+'</div>'+search+'</div>';
-  var rows=gpFLedgerRows(w,p,win);
-  var head='<div class="gpf-drow wt-head"><span class="gpf-dexp"></span><span class="gpf-dc gpf-dc0">Donor</span>'+
-    '<span class="gpf-dc gpf-dc1">Pledged</span><span class="gpf-dc gpf-dc2">Received</span>'+
-    '<span class="gpf-dc gpf-dc3">Due Remaining</span><span class="gpf-dstat-h">Type</span></div>';
+  var rows=gpFLedgerRows(w,p,thru),so=gpFLedgerSort();
+  var head='<div class="gpf-drow wt-head"><span class="gpf-dexp"></span><span class="gpf-dc gpf-dc0">'+gpFLedgerSortBtn('donor')+'</span>'+
+    '<span class="gpf-dc gpf-dc1">'+gpFLedgerSortBtn('pledged')+'</span><span class="gpf-dc gpf-dc2">'+gpFLedgerSortBtn('received')+'</span>'+
+    '<span class="gpf-dc gpf-dc3">'+gpFLedgerSortBtn('due')+'</span><span class="gpf-dstat-h">'+gpFLedgerSortBtn('type')+'</span></div>';
   var list=rows.length
-    ? '<div class="gpf-drill-tbl gpf-ldr-list">'+head+rows.map(function(it){return gpFLedgerRowHTML(it,w,win);}).join('')+'</div>'
-    : '<div class="gpf-tab-empty">'+ICON('search_off')+(q?('Nothing matches "'+gpFEsc(q)+'" in this purpose.'):'Nothing received for this purpose in this window.')+'</div>';
-  var note=rows.length?(rows.length+' entr'+(rows.length===1?'y':'ies')+', largest first. Open one to see its history.'):'';
+    ? '<div class="gpf-drill-tbl gpf-ldr-list">'+head+rows.map(function(it){return gpFLedgerRowHTML(it,w,thru);}).join('')+'</div>'
+    : '<div class="gpf-tab-empty">'+ICON('search_off')+(q?('Nothing matches "'+gpFEsc(q)+'" in this purpose.'):'Nothing received for this purpose through '+gpFThruText(thru)+'.')+'</div>';
+  var note=rows.length?(rows.length+' entr'+(rows.length===1?'y':'ies')+', sorted by '+GPF_LEDGER_SORTS[so.key][0]+', '+gpFLedgerSortWord(so)+'. Open one to see its history.'):'';
   return '<div class="modal-backdrop" data-gpf="detail-close"><div class="modal modal-wide gpf-detail-modal gpf-modal" data-gpf="stop" role="dialog" aria-modal="true" aria-label="'+gpFEsc(comp.label+', every gift and pledge')+'">'+
-    '<div class="modal-h gpf-detail-h"><span class="modal-title"><span class="material-symbols-rounded gpf-detail-ic">volunteer_activism</span>'+comp.label+'</span><span class="gpf-dsub">every gift and pledge, '+gpFRangePhrase(w).toLowerCase()+'</span><span class="gpf-dh-spacer"></span>'+
+    '<div class="modal-h gpf-detail-h"><span class="modal-title"><span class="material-symbols-rounded gpf-detail-ic">volunteer_activism</span>'+comp.label+'</span><span class="gpf-dsub">every gift and pledge, '+gpFPhrase(w).toLowerCase()+'</span><span class="gpf-dh-spacer"></span>'+
       '<button class="iconbtn" data-gpf="ledger-export" data-c="'+gpFEsc(comp.label)+'" aria-label="Export to Excel" data-tip="Export to Excel: download this ledger as shown" data-tip-plain>'+ICON('download')+'</button>'+
       '<button class="iconbtn" data-gpf="detail-close" aria-label="Close">'+ICON('close')+'</button></div>'+
     '<div class="modal-b gpf-detail-b">'+summary+bar+
@@ -10876,23 +10826,16 @@ function gpFRenderModal(){
 }
 function gpFOnClick(e){
   var t=e.target.closest?e.target.closest('[data-gpf]'):null;
-  if(!t){if(GPF_POP&&!(e.target.closest&&e.target.closest('#gpfPop')))gpFClosePop();return;}
+  if(!t)return;
   if(!t.closest('.gpf-root'))return;
   var a=t.getAttribute('data-gpf'),id=t.getAttribute('data-id'),w=id?find(id):null;
   if(a==='stop')return;
-  if(a==='range'||a==='camp'){
-    if(!w)return;
-    if(GPF_POP&&GPF_POP.type===a&&GPF_POP.id===id&&document.getElementById('gpfPop'))gpFClosePop();
-    else gpFOpenPop(t,a,id);
-    return;
-  }
-  if(a==='set-camp'){if(!w)return;w.gpFCamp=t.getAttribute('data-v');w.gpFPlExp={};gpFClosePop();gpFLoad(w);render();return;}
-  if(a==='set-range'){if(!w)return;var rs=t.getAttribute('data-r');gpFSetRange(w,rs);if(rs==='custom')gpFSyncPop();else gpFClosePop();render();return;}
   if(a==='view'){if(!w)return;w.gpFView=t.getAttribute('data-v');render();return;}
   if(a==='tbl'){if(!w)return;w.gpFTbl=t.getAttribute('data-v');render();return;}
-  if(a==='gopen'){if(!w)return;var gid=t.getAttribute('data-plid');w.gpFPlExp=w.gpFPlExp||{};w.gpFPlExp[gid]=!w.gpFPlExp[gid];gpFClosePop();render();if(GPF_MODAL)gpFRenderModal();return;} /* the modal is body-mounted, so render() alone never redraws it (fixed 2026-09-28) */
-  if(a==='baropen'){if(!w)return;GPF_MODAL={id:id,label:t.getAttribute('data-c'),filter:t.getAttribute('data-f')||'all'};gpFClosePop();gpFRenderModal();return;} /* a Gifts row opens the ledger already filtered to gifts */
+  if(a==='gopen'){if(!w)return;var gid=t.getAttribute('data-plid');w.gpFPlExp=w.gpFPlExp||{};w.gpFPlExp[gid]=!w.gpFPlExp[gid];render();if(GPF_MODAL)gpFRenderModal();return;} /* the modal is body-mounted, so render() alone never redraws it (fixed 2026-09-28) */
+  if(a==='baropen'){if(!w)return;GPF_MODAL={id:id,label:t.getAttribute('data-c'),filter:t.getAttribute('data-f')||'all'};gpFRenderModal();return;} /* a Gifts row opens the ledger already filtered to gifts */
   if(a==='ledger-filter'){if(GPF_MODAL){GPF_MODAL.filter=t.getAttribute('data-v');gpFRenderModal();}return;}
+  if(a==='ledger-sort'){if(GPF_MODAL){var sk=t.getAttribute('data-k'),so=gpFLedgerSort();if(so.key===sk)GPF_MODAL.dir=-so.dir;else{GPF_MODAL.sort=sk;GPF_MODAL.dir=GPF_LEDGER_SORTS[sk]?GPF_LEDGER_SORTS[sk][1]:-1;}gpFRenderModal();}return;}
   if(a==='detail-close'){GPF_MODAL=null;gpFRenderModal();return;}
   if(a==='open-record'){setStatus('Opening '+t.getAttribute('data-c')+' in the Gifts and Pledges module (stub, no navigation backend in this shell).');return;}
   if(a==='ledger-export'){var lf=GPF_MODAL&&GPF_MODAL.filter;setStatus('Exporting the giving ledger for '+t.getAttribute('data-c')+(lf&&lf!=='all'?' ('+lf+' only)':'')+' to Excel, as shown (stub, no export endpoint in this shell).');return;}
@@ -10902,14 +10845,12 @@ var GPF_WIRED=false;
   if(GPF_WIRED)return;GPF_WIRED=true;
   document.addEventListener('click',gpFOnClick);
   document.addEventListener('keydown',function(e){
-    if(e.key==='Escape'){if(GPF_MODAL){GPF_MODAL=null;gpFRenderModal();}else if(GPF_POP){gpFClosePop();}return;}
+    if(e.key==='Escape'){if(GPF_MODAL){GPF_MODAL=null;gpFRenderModal();}return;}
     if((e.key==='Enter'||e.key===' ')&&e.target&&e.target.getAttribute){
       var ga=e.target.getAttribute('data-gpf');
       if((ga==='baropen'||ga==='gopen')&&e.target.closest&&e.target.closest('.gpf-root')&&e.target.tagName!=='BUTTON'){e.preventDefault();e.target.click();}
     }
   });
-  document.addEventListener('focus',function(e){if(e.target&&e.target.classList&&e.target.classList.contains('gpf-date-input'))GPF_FOCUS_ID=e.target.id;},true);
-  document.addEventListener('focusout',function(e){if(e.target&&e.target.classList&&e.target.classList.contains('gpf-date-input')&&e.target.id===GPF_FOCUS_ID)GPF_FOCUS_ID=null;},true);
   /* The ledger search filters in place and keeps focus and caret, so typing never blinks. */
   document.addEventListener('input',function(e){
     if(!(e.target&&e.target.id==='gpfLedgerQ'))return;
@@ -10919,14 +10860,15 @@ var GPF_WIRED=false;
     var el2=document.getElementById('gpfLedgerQ');
     if(el2){el2.focus();try{el2.setSelectionRange(pos,pos);}catch(x){}}
   });
+  /* The chosen date in the menu, as Remittance Pledges wires its own. */
   document.addEventListener('change',function(e){
     if(e.target&&e.target.classList&&e.target.classList.contains('gpf-date-input')){
       var wc=find(e.target.getAttribute('data-id'));
-      if(wc&&e.target.value&&gpFSetCustomDate(wc,e.target.getAttribute('data-which'),e.target.value)){gpFSyncPop();render();}
+      if(wc&&gpFCommitThru(wc,e.target.value))render();
     }
   });
 })();
-WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.title,b:GPF_ABOUT};}});
+WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.title,b:GPF_ABOUT};},click:function(a,id,t){return !!(a&&a.indexOf("gpF-")===0&&gpFHandleClick(a,id,t));},pops:{"gpF-thru":{content:gpFPopContent,trigger:function(){return '[data-action="gpF-thru"][data-id="'+pop.id+'"]';}},"gpF-camp":{content:gpFPopContent,trigger:function(){return '[data-action="gpF-camp"][data-id="'+pop.id+'"]';}}}});
 /* ===== end W17 Gifts Pledges V2 ===== */
 /* ===== W19 Alerts & Actions V2 ===== */
   /* Alerts & Actions: ported 1:1 from Aditya's client-approved Variation B4 (Aditya KPI branch, Dashboard_Project/Aditya_Widget_Design/Demo V2.html, kind "alerts-b4").
@@ -12134,9 +12076,9 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       ,{id:"purF_k",title:"Purchasing Management",           kind:"purchasing",size:"kpi",  tiers:["kpi","wide","xwide"],purfView:"table",purfStatus:"All statuses",purfPath:null,updated:"just now"}
       ,{id:"purF_x",title:"Purchasing Management",           kind:"purchasing",size:"xwide",tiers:["kpi","wide","xwide"],purfView:"table",purfStatus:"All statuses",purfPath:null,updated:"just now"}
       /* W17 Gifts Pledges (ours, prefix gpF) */
-      ,{id:"gpF",   title:"Gifts Pledges",             kind:"gifts",size:"wide", tiers:["kpi","wide","xwide"],gpFView:"goal", gpFCamp:"All purposes",gpFRange:"thru",gpFPlExp:{},updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]}
-      ,{id:"gpF_k", title:"Gifts Pledges",             kind:"gifts",size:"kpi",  tiers:["kpi","wide","xwide"],gpFView:"goal", gpFCamp:"All purposes",gpFRange:"thru",gpFPlExp:{},updated:"just now"}
-      ,{id:"gpF_x", title:"Gifts Pledges",             kind:"gifts",size:"xwide",tiers:["kpi","wide","xwide"],gpFView:"goal", gpFCamp:"All purposes",gpFRange:"thru",gpFPlExp:{},updated:"just now"}
+      ,{id:"gpF",   title:"Gifts Pledges",             kind:"gifts",size:"wide", tiers:["kpi","wide","xwide"],gpFView:"goal", gpFCamp:"All purposes",gpFPlExp:{},updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]}
+      ,{id:"gpF_k", title:"Gifts Pledges",             kind:"gifts",size:"kpi",  tiers:["kpi","wide","xwide"],gpFView:"goal", gpFCamp:"All purposes",gpFPlExp:{},updated:"just now"}
+      ,{id:"gpF_x", title:"Gifts Pledges",             kind:"gifts",size:"xwide",tiers:["kpi","wide","xwide"],gpFView:"goal", gpFCamp:"All purposes",gpFPlExp:{},updated:"just now"}
     ]},
     {id:"sys",name:"System dashboard",custom:false,widgets:[
       {id:"s1",title:"Deposits on Hand",kind:"deposits",size:"wide",tiers:["kpi","wide","xwide"],filter:"All types",view:"table",range:"Q",bd:"group",tpage:1,tsort:"net-desc",trIso:null}
