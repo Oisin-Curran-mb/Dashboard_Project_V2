@@ -10009,8 +10009,8 @@ var GPF_MODAL=null;
 function gpFEsc(s){return escAttr(s);}
 function gpFMoney(n){var neg=n<0,v=Math.abs(n);var s="$"+v.toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});return neg?("-"+s):s;}
 function gpFMoney0(n){var neg=n<0,v=Math.abs(Math.round(n));var s="$"+v.toLocaleString("en-US");return neg?("-"+s):s;}
-/* Over-received (a negative Due Remaining) renders parenthesised and is FAVOURABLE. */
-function gpFDueCell(n){if(n<-0.005)return '('+gpFMoney(Math.abs(n))+')';return gpFMoney(n);}
+/* Over-received (a negative Due Remaining) renders with a plus sign: more has arrived than was due (owner, 11 Oct). */
+function gpFDueCell(n){if(n<-0.005)return '+'+gpFMoney(Math.abs(n));return gpFMoney(n);}
 function gpFPct(x){if(x==null)return "n/a";return (Math.round(x*10000)/100).toFixed(2)+"%";}
 function gpFPctCell(x){return gpFPct(x);}
 function gpFParse(iso){return parseISO(iso);}
@@ -10303,12 +10303,12 @@ function gpFTblMode(w){return (w&&w.gpFTbl==='gifts')?'gifts':'pledges';}
    and an icon apiece does not fit. */
 function gpFTableToggle(w){
   var m=gpFTblMode(w);
-  function seg(val,lbl,tip){
-    return '<button class="vt'+(m===val?" on":"")+'" data-gpf="tbl" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(m===val)+'" data-tip="'+gpFEsc(tip)+'" data-tip-plain>'+lbl+'</button>';
+  function seg(val,lbl){
+    return '<button class="vt'+(m===val?" on":"")+'" data-gpf="tbl" data-id="'+w.id+'" data-v="'+val+'" aria-pressed="'+(m===val)+'">'+lbl+'</button>';
   }
   return '<div class="vtoggle" role="group" aria-label="Table">'+
-    seg('pledges','Pledges','The pledged position for every purpose that has an active pledge: Pledge Total, Pledge Due, Received against those pledges, Due Remaining and Percent Due. One to one with the Gifts and Pledges panel.')+
-    seg('gifts','Gifts','Money given to a purpose that is not against any pledge, by purpose, through the date you choose.')+
+    seg('pledges','Pledges')+
+    seg('gifts','Gifts')+
   '</div>';
 }
 function gpFViewToggle(w){
