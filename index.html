@@ -2076,6 +2076,8 @@
      and the column header sticks so they stay labelled. (28 Sep 2026) */
   .gpf-root .gpf-modal .gpf-ldr-list{flex:1 1 auto;min-height:150px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;}
   .gpf-root .gpf-modal .gpf-ldr-list .wt-head{position:sticky;top:0;z-index:2;background:var(--surface-widget);padding:var(--padding-tight) var(--padding-medium);}
+  .gpf-root .gpf-modal .gpf-ldr-more{display:flex;justify-content:center;padding:var(--padding-tight) 0;}
+  .gpf-root .gpf-modal .gpf-ldr-more-n{color:var(--txt-subtle);font-weight:400;margin-left:var(--gap-xxtight);}
   /* The ledger row is a <button>, so it needs the browser's centred text and
      default border undone. It used to borrow gpf-grow for its padding, which
      also brought a three-column grid and broke the columns. (28 Sep 2026) */
@@ -10696,6 +10698,10 @@ function gpFHandleClick(a,id,t){
    history. This replaces the old 'donors behind pace' list, which asked Remittance Pledges'
    question rather than this widget's (owner, 28 Sep). */
 var GPF_LEDGER_SORTS={donor:['Donor',1],pledged:['Pledged',-1],received:['Received',-1],due:['Due Remaining',-1],type:['Type',1]};
+/* The ledger loads twenty entries at a time, Load more for the next twenty, as the Fixed Asset Values pop-up
+   and the Bank table do (owner, 11 Oct). A new filter, search or sort starts again at the first twenty. */
+var GPF_LEDGER_CHUNK=20;
+function gpFLedgerShown(){var m=GPF_MODAL||{};return Math.max(GPF_LEDGER_CHUNK,m.shown||GPF_LEDGER_CHUNK);}
 function gpFLedgerSort(){var m=GPF_MODAL||{};var k=GPF_LEDGER_SORTS[m.sort]?m.sort:'received';return {key:k,dir:(m.dir===1||m.dir===-1)?m.dir:GPF_LEDGER_SORTS[k][1]};}
 function gpFLedgerSortWord(so){return (so.key==='donor'||so.key==='type')?(so.dir>0?'A to Z':'Z to A'):(so.dir<0?'largest first':'smallest first');}
 function gpFLedgerSortBtn(k){
@@ -10790,13 +10796,15 @@ function gpFLedgerModalHTML(){
   var search='<div class="gpf-ldr-search">'+ICON('search')+'<input type="text" id="gpfLedgerQ" class="gpf-ldr-input" placeholder="Search donor, pledge or reference" value="'+gpFEsc(q)+'" aria-label="Search this purpose"></div>';
   var bar='<div class="gpf-ldr-bar"><div class="vtoggle" role="group" aria-label="Type">'+tabs+'</div>'+search+'</div>';
   var rows=gpFLedgerRows(w,p,thru),so=gpFLedgerSort();
+  var shown=Math.min(rows.length,gpFLedgerShown()),remaining=rows.length-shown,chunk=Math.min(GPF_LEDGER_CHUNK,remaining);
+  var more=remaining>0?'<div class="gpf-ldr-more" role="row"><button class="btn outlined sm" data-gpf="ledger-more" aria-label="Load '+chunk+' more entries, '+remaining+' remaining">'+ICON('expand_more')+'Load '+chunk+' more<span class="gpf-ldr-more-n">'+remaining+' remaining</span></button></div>':'';
   var head='<div class="gpf-drow wt-head"><span class="gpf-dexp"></span><span class="gpf-dc gpf-dc0">'+gpFLedgerSortBtn('donor')+'</span>'+
     '<span class="gpf-dc gpf-dc1">'+gpFLedgerSortBtn('pledged')+'</span><span class="gpf-dc gpf-dc2">'+gpFLedgerSortBtn('received')+'</span>'+
     '<span class="gpf-dc gpf-dc3">'+gpFLedgerSortBtn('due')+'</span><span class="gpf-dstat-h">'+gpFLedgerSortBtn('type')+'</span></div>';
   var list=rows.length
-    ? '<div class="gpf-drill-tbl gpf-ldr-list">'+head+rows.map(function(it){return gpFLedgerRowHTML(it,w,thru);}).join('')+'</div>'
+    ? '<div class="gpf-drill-tbl gpf-ldr-list">'+head+rows.slice(0,shown).map(function(it){return gpFLedgerRowHTML(it,w,thru);}).join('')+more+'</div>'
     : '<div class="gpf-tab-empty">'+ICON('search_off')+(q?('Nothing matches "'+gpFEsc(q)+'" in this purpose.'):'Nothing received for this purpose through '+gpFThruText(thru)+'.')+'</div>';
-  var note=rows.length?(rows.length+' entr'+(rows.length===1?'y':'ies')+', sorted by '+GPF_LEDGER_SORTS[so.key][0]+', '+gpFLedgerSortWord(so)+'. Open one to see its history.'):'';
+  var note=rows.length?((remaining>0?('Showing '+shown+' of '):'')+rows.length+' entr'+(rows.length===1?'y':'ies')+', sorted by '+GPF_LEDGER_SORTS[so.key][0]+', '+gpFLedgerSortWord(so)+'. Open one to see its history.'):'';
   return '<div class="modal-backdrop" data-gpf="detail-close"><div class="modal modal-wide gpf-detail-modal gpf-modal" data-gpf="stop" role="dialog" aria-modal="true" aria-label="'+gpFEsc(comp.label+', every gift and pledge')+'">'+
     '<div class="modal-h gpf-detail-h"><span class="modal-title"><span class="material-symbols-rounded gpf-detail-ic">volunteer_activism</span>'+comp.label+'</span><span class="gpf-dsub">every gift and pledge, '+gpFPhrase(w).toLowerCase()+'</span><span class="gpf-dh-spacer"></span>'+
       '<button class="iconbtn" data-gpf="ledger-export" data-c="'+gpFEsc(comp.label)+'" aria-label="Export to Excel" data-tip="Export to Excel: download this ledger as shown" data-tip-plain>'+ICON('download')+'</button>'+
@@ -10823,8 +10831,9 @@ function gpFOnClick(e){
   if(a==='tbl'){if(!w)return;w.gpFTbl=t.getAttribute('data-v');render();return;}
   if(a==='gopen'){if(!w)return;var gid=t.getAttribute('data-plid');w.gpFPlExp=w.gpFPlExp||{};w.gpFPlExp[gid]=!w.gpFPlExp[gid];render();if(GPF_MODAL)gpFRenderModal();return;} /* the modal is body-mounted, so render() alone never redraws it (fixed 2026-09-28) */
   if(a==='baropen'){if(!w)return;GPF_MODAL={id:id,label:t.getAttribute('data-c'),filter:t.getAttribute('data-f')||'all'};gpFRenderModal();return;} /* a Gifts row opens the ledger already filtered to gifts */
-  if(a==='ledger-filter'){if(GPF_MODAL){GPF_MODAL.filter=t.getAttribute('data-v');gpFRenderModal();}return;}
-  if(a==='ledger-sort'){if(GPF_MODAL){var sk=t.getAttribute('data-k'),so=gpFLedgerSort();if(so.key===sk)GPF_MODAL.dir=-so.dir;else{GPF_MODAL.sort=sk;GPF_MODAL.dir=GPF_LEDGER_SORTS[sk]?GPF_LEDGER_SORTS[sk][1]:-1;}gpFRenderModal();}return;}
+  if(a==='ledger-filter'){if(GPF_MODAL){GPF_MODAL.filter=t.getAttribute('data-v');GPF_MODAL.shown=GPF_LEDGER_CHUNK;gpFRenderModal();}return;}
+  if(a==='ledger-more'){if(GPF_MODAL){var sc=t.closest?t.closest('.gpf-ldr-list'):null,top=sc?sc.scrollTop:0;GPF_MODAL.shown=gpFLedgerShown()+GPF_LEDGER_CHUNK;gpFRenderModal();var again=document.querySelector?document.querySelector('#gpfModalRoot .gpf-ldr-list'):null;if(again)again.scrollTop=top;}return;}
+  if(a==='ledger-sort'){if(GPF_MODAL){var sk=t.getAttribute('data-k'),so=gpFLedgerSort();if(so.key===sk)GPF_MODAL.dir=-so.dir;else{GPF_MODAL.sort=sk;GPF_MODAL.dir=GPF_LEDGER_SORTS[sk]?GPF_LEDGER_SORTS[sk][1]:-1;}GPF_MODAL.shown=GPF_LEDGER_CHUNK;gpFRenderModal();}return;}
   if(a==='detail-close'){GPF_MODAL=null;gpFRenderModal();return;}
   if(a==='open-record'){setStatus('Opening '+t.getAttribute('data-c')+' in the Gifts and Pledges module (stub, no navigation backend in this shell).');return;}
   if(a==='ledger-export'){var lf=GPF_MODAL&&GPF_MODAL.filter;setStatus('Exporting the giving ledger for '+t.getAttribute('data-c')+(lf&&lf!=='all'?' ('+lf+' only)':'')+' to Excel, as shown (stub, no export endpoint in this shell).');return;}
@@ -10844,7 +10853,7 @@ var GPF_WIRED=false;
   document.addEventListener('input',function(e){
     if(!(e.target&&e.target.id==='gpfLedgerQ'))return;
     if(!GPF_MODAL)return;
-    GPF_MODAL.q=e.target.value;
+    GPF_MODAL.q=e.target.value;GPF_MODAL.shown=GPF_LEDGER_CHUNK;
     var pos=e.target.selectionStart;gpFRenderModal();
     var el2=document.getElementById('gpfLedgerQ');
     if(el2){el2.focus();try{el2.setSelectionRange(pos,pos);}catch(x){}}

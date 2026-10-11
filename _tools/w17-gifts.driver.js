@@ -80,6 +80,8 @@ function gtype(v) {
   return shim.captured["gpfModalRoot"] || "";
 }
 function grows(html) { return (html.match(/data-gpf="gopen"/g) || []).length; }
+/* The ledger loads twenty entries at a time (11 Oct); this taps Load more until the list is complete. */
+function gloadAll() { let guard = 0; while (guard < 30 && (shim.captured["gpfModalRoot"] || "").indexOf('data-gpf="ledger-more"') > -1) { gfire("ledger-more", {}); guard++; } return shim.captured["gpfModalRoot"] || ""; }
 
 /* A keydown whose target behaves like a real element: the harness's generic
    node.click() rebuilds the target from the action alone and drops the rest of
@@ -361,7 +363,8 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   const w = W("gpF");
   A.eq(shim.captured["gpfModalRoot"], undefined, "no modal before a bar is clicked");
   gfire("baropen", { "data-id": "gpF", "data-c": LABELS[2] });
-  const m = shim.captured["gpfModalRoot"];
+  A.contains(shim.captured["gpfModalRoot"], 'data-gpf="ledger-more"', "the ledger opens on its first twenty entries with Load more (owner, 11 Oct)");
+  const m = gloadAll();
   A.ok(m && m.length > 200, "clicking a bar opened the modal");
   A.contains(m, "modal-backdrop", "the modal uses the copied backdrop primitive");
   A.contains(m, "gpf-detail-modal", "the modal reuses the copied gifts detail-modal shell");
@@ -400,21 +403,21 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   const thru = ctx.gpFThru(w);
   const model = ctx.gpFLedgerRows(w, purpose, thru);
   const rows = grows(m);
-  A.eq(rows, model.length, "the ledger renders one row per entry, uncapped");
+  A.eq(rows, model.length, "the ledger renders one row per entry once every chunk is loaded");
   A.ok(rows > 5, "the fixture gives the ledger more than a handful of entries (got " + rows + ")");
-  A.contains(m, rows + " entries, sorted by Received, largest first", "the note states the entry count and the sort");
+  A.contains(m, rows + " entries, sorted by Received, largest first", "the note states the entry count and the sort once all are loaded");
   A.ok(model.every(function (it, i) { return i === 0 || model[i - 1].amount >= it.amount; }),
     "the ledger is ordered largest first");
   /* the two type filters PARTITION the unfiltered list: nothing lost, nothing counted twice */
   const pOnly = (function () {
     gfire("ledger-filter", { "data-id": "gpF", "data-v": "pledges" });
-    const h = shim.captured["gpfModalRoot"];
+    const h = gloadAll();
     A.absent(h, "gpf-seg-other-tag", "the pledge-payments filter hides the other gifts");
     return grows(h);
   })();
   const gOnly = (function () {
     gfire("ledger-filter", { "data-id": "gpF", "data-v": "gifts" });
-    const h = shim.captured["gpfModalRoot"];
+    const h = gloadAll();
     A.contains(h, "gpf-seg-other-tag", "the other-gifts filter tags every row as an other gift");
     A.contains(h, "gpf-muted", "and an other gift shows no pledged figure and no due remaining");
     A.absent(h, "handshake", "no pledge rows survive the other-gifts filter");
@@ -423,15 +426,15 @@ A.absent(ctx.gpFContent(fresh("gpF", { size: "xwide", gpFView: "goal" })), "gpf-
   A.ok(pOnly > 0 && gOnly > 0, "both sides of the split hold something");
   A.eq(pOnly + gOnly, rows, "the two filters partition the unfiltered ledger exactly");
   gfire("ledger-filter", { "data-id": "gpF", "data-v": "all" });
-  A.eq(grows(shim.captured["gpfModalRoot"]), rows, "All restores every entry");
+  A.eq(grows(gloadAll()), rows, "All restores every entry");
   /* the search box narrows in place, and says so when nothing matches */
   const term = String(model[0].donor).split(" ").pop().toLowerCase();
-  const hit = grows(gtype(term));
+  gtype(term); const hit = grows(gloadAll());
   A.ok(hit > 0 && hit < rows, "a search term narrows the ledger (got " + hit + " of " + rows + ")");
   const miss = gtype("zzzznomatch");
   A.eq(grows(miss), 0, "a term matching nothing lists no rows");
   A.contains(miss, "Nothing matches", "and the ledger says so rather than going blank");
-  A.eq(grows(gtype("")), rows, "clearing the search restores every entry");
+  gtype(""); A.eq(grows(gloadAll()), rows, "clearing the search restores every entry");
   /* THE LIST MUST SCROLL. It inherits .gpf-drill-tbl from the in-card drill,
      which is paged at twenty rows and clips to keep its corners. The ledger is
      not paged: on 28 Sep it was measured at 5,786px of rows inside a 410px box
@@ -1383,5 +1386,35 @@ A.eq(ctx.gpFPctCell(-0.5458), "-54.58%", "Percent Due is the plain percentage");
 A.eq(/\.gpf-root \.gpf-c-pct\{([^}]*)\}/.exec(shell.css)[1], "width:70px;", "the Percent Due column carries only its width");
 
 A.absent(ctx.gpFTableToggle(fresh("gpF", { size: "wide", gpFView: "table" })), "data-tip", "the Pledges / Gifts tabs carry no hover text (owner, 11 Oct)");
+
+/* ------------------------- 19. the ledger loads lazily: twenty at a time, Load more (owner, 11 Oct) */
+(function () {
+  const w = W("gpF"), purpose = ctx.gpFCampByLabel(w, LABELS[2]);
+  const total = ctx.gpFLedgerRows(w, purpose, ctx.gpFThru(w)).length;
+  A.ok(total > 40, "the Building Fund ledger has more than two chunks of entries (" + total + ")");
+  gfire("baropen", { "data-id": "gpF", "data-c": LABELS[2] });
+  let m = shim.captured["gpfModalRoot"];
+  A.eq(grows(m), 20, "the pop-up opens on the first twenty entries");
+  A.contains(m, "Showing 20 of " + total + " entries, sorted by Received, largest first", "and the note says how many are showing");
+  A.contains(m, 'class="btn outlined sm" data-gpf="ledger-more" aria-label="Load 20 more entries, ' + (total - 20) + ' remaining"', "Load more names the chunk and the remainder, the Fixed Asset Values pattern");
+  A.contains(m, 'Load 20 more<span class="gpf-ldr-more-n">' + (total - 20) + ' remaining</span>', "with the remainder beside the label");
+  A.ok(m.lastIndexOf("gpf-ldr-more") > m.lastIndexOf('data-gpf="gopen"'), "the Load more row sits under the last loaded entry, inside the list");
+  gfire("ledger-more", {});
+  m = shim.captured["gpfModalRoot"];
+  A.eq(grows(m), 40, "Load more adds the next twenty");
+  A.contains(m, "Showing 40 of " + total, "and the note follows");
+  gfire("ledger-more", {});
+  m = shim.captured["gpfModalRoot"];
+  A.eq(grows(m), total, "the last chunk completes the list"); A.absent(m, 'data-gpf="ledger-more"', "and Load more goes");
+  A.contains(m, total + " entries, sorted by Received, largest first. Open one", "the note drops Showing once everything is loaded");
+  gfire("ledger-filter", { "data-id": "gpF", "data-v": "pledges" });
+  A.eq(grows(shim.captured["gpfModalRoot"]), 20, "a filter change starts again at twenty");
+  gfire("ledger-more", {}); gfire("ledger-sort", { "data-id": "gpF", "data-k": "donor" });
+  A.eq(grows(shim.captured["gpfModalRoot"]), 20, "so does a sort");
+  gfire("ledger-more", {}); gtype("a");
+  A.eq(grows(shim.captured["gpfModalRoot"]) <= 20, true, "and a search");
+  gtype(""); gfire("detail-close", { "data-id": "gpF" });
+  A.contains(shell.css, ".gpf-root .gpf-modal .gpf-ldr-more{", "the Load more row is styled"); A.eq(ctx.GPF_LEDGER_CHUNK, 20, "chunk of twenty, as the other tables");
+})();
 
 process.exit(A.report());
