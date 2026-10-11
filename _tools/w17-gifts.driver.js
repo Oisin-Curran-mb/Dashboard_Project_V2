@@ -744,7 +744,7 @@ A.cssDeclares(shell.css, [
 ], "every shell and copied class our markup uses is declared");
 /* and our own additions are declared too */
 A.cssDeclares(shell.css, [
-  "gpf-root", "gpf-body", "gpf-pill", "gpf-badge", "gpf-closed", "gpf-fav", "gpf-over", "gpf-muted",
+  "gpf-root", "gpf-body", "gpf-pill", "gpf-badge", "gpf-closed", "gpf-muted",
   "gpf-goalwrap", "gpf-barscroll", "gpf-legend", "gpf-lg-i", "gpf-lg-sw", "gpf-lg-n", "gpf-lg-rem",
   "gpf-cap", "gpf-tblwrap", "gpf-scroll", "gpf-sumrow", "gpf-sumtotal", "gpf-caret",
   "gpf-nmtxt", "gpf-nm", "gpf-nmsub", "gpf-drill-tbl", "gpf-drawer",
@@ -1374,5 +1374,12 @@ A.eq((shell.script.match(/gpFCamp:"All purposes",gpFPlExp:\{\}/g) || []).length,
   A.contains(EX.popContent(), "All purposes", "with its content");
   EX.setPop(null);
 })();
+
+/* owner, 11 Oct: Due Remaining and Percent Due read like every other column, plain text; an over-received
+   amount keeps its parentheses, as the legacy panel prints it */
+A.eq(ctx.gpFDueCell(-655), "($655.00)", "an over-received Due Remaining is parenthesised, plain"); A.eq(ctx.gpFDueCell(904), "$904.00", "a positive one is the plain amount");
+A.eq(ctx.gpFPctCell(-0.5458), "-54.58%", "Percent Due is the plain percentage"); A.eq(ctx.gpFPctCell(null), "n/a", "n/a when Pledge Due is zero");
+["gpf-fav", "gpf-over"].forEach(function (c) { A.absent(block, c, "no colour class on the figures: " + c); A.absent(shell.css, ".gpf-root ." + c + "{", "and no rule for it"); });
+A.eq(/\.gpf-root \.gpf-c-pct\{([^}]*)\}/.exec(shell.css)[1], "width:70px;", "the Percent Due column carries only its width");
 
 process.exit(A.report());
