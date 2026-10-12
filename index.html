@@ -12050,40 +12050,58 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
      Updates tab = all others (amber border). */
   var ALO2_ABOUT="Alerts that need your attention, split into Need Actions (items requiring immediate action) and Updates (informational alerts).";
   var ALO2_CATS=[
-    {id:"al2-cat-1",sev:"upd",action:false,title:"Restricted Fund Compliance Breach",sub:"Expenditure exceeds restricted income: immediate action required",
-      items:["Missions Fund, $35,200 over restricted income (135.8%)"]},
-    {id:"al2-cat-2",sev:"need",action:true,title:"Overdue Payables",sub:"3 AP invoices past due: $24,350 total outstanding",
+    {id:"al2-cat-1",sev:"upd",action:false,title:"Restricted Fund Compliance Breach",sub:"3 funds with expenditure exceeding restricted income",
       items:[
-        'AVID Pay · 1 invoice · $12,400',
-        'ACH · 1 invoice · $8,750',
-        'EFT · 1 invoice · $3,200'
+        "Missions Fund, $35,200 over restricted income (135.8%)",
+        "Youth Ministry Fund, $12,600 over restricted income (108.4%)",
+        "Capital Improvement Fund, $8,900 over restricted income (104.2%)"
       ]},
-    {id:"al2-cat-3",sev:"upd",action:false,title:"Unreconciled Bank Account",sub:"1 account exceeds the 30-day reconciliation threshold",
-      items:["Payroll Checking ··3355, last reconciled Jul 26, 2026 (31 days ago)"]},
-    {id:"al2-cat-4",sev:"upd",action:false,title:"Budget Exceeded",sub:"1 fund has exceeded its annual budget allocation",
-      items:["Worship Arts, $67,800 actual vs $60,500 budget (112%)"]},
-    {id:"al2-cat-5",sev:"need",action:true,title:"Purchase Order Queue",sub:"2 items waiting beyond the 5-business-day threshold",
+    {id:"al2-cat-2",sev:"need",action:true,title:"Overdue Payables",sub:"7 AP invoices past due: $56,350 total outstanding",
+      items:[
+        'AVID Pay · 3 invoices · $31,800',
+        'ACH · 2 invoices · $16,050',
+        'EFT · 2 invoices · $8,500'
+      ]},
+    {id:"al2-cat-3",sev:"upd",action:false,title:"Unreconciled Bank Account",sub:"3 accounts exceed the 30-day reconciliation threshold",
+      items:[
+        "Payroll Checking ··3355, last reconciled Jul 26, 2026 (31 days ago)",
+        "Operations Savings ··7821, last reconciled Jul 20, 2026 (37 days ago)",
+        "Missions Fund Checking ··4490, last reconciled Jul 14, 2026 (43 days ago)"
+      ]},
+    {id:"al2-cat-4",sev:"upd",action:false,title:"Budget Exceeded",sub:"3 funds have exceeded their annual budget allocation",
+      items:[
+        "Worship Arts, $67,800 actual vs $60,500 budget (112%)",
+        "Administrative, $143,200 actual vs $132,000 budget (108.5%)",
+        "Facilities, $89,400 actual vs $85,000 budget (105.2%)"
+      ]},
+    {id:"al2-cat-5",sev:"need",action:true,title:"Purchase Order Queue",sub:"3 items waiting beyond the 5-business-day threshold",
       items:[
         "INV-2024-4433 · $18,500 · 8 days waiting · Approver: Sarah J.",
-        "PO-2024-0891 · $6,200 · 6 days waiting · Approver: Michael R."
+        "PO-2024-0891 · $6,200 · 6 days waiting · Approver: Michael R.",
+        "PO-2024-0904 · $11,350 · 7 days waiting · Approver: Karen T."
       ]},
-    {id:"al2-cat-6",sev:"upd",action:true,title:"Receivable Invoices Outstanding",sub:"7 AR invoices unpaid: $18,450 total, oldest 45 days",
+    {id:"al2-cat-6",sev:"upd",action:true,title:"Receivable Invoices Outstanding",sub:"9 AR invoices unpaid: $23,150 total, oldest 52 days",
       items:[
-        "Riverside Community Group · INV-AR-2024-0112 · $3,800 · 45 days",
-        "Grace Preschool Program · INV-AR-2024-0098 · $6,500 · 38 days",
-        "Hillside Bible Fellowship · INV-AR-2024-0103 · $2,200 · 32 days",
-        "Westside Community Center · INV-AR-2024-0107 · $1,900 · 28 days",
-        "St. Andrew's Parish · INV-AR-2024-0109 · $1,450 · 22 days",
-        "Grace Community Ministries · INV-AR-2024-0115 · $1,300 · 18 days",
-        "Northgate Baptist Church · INV-AR-2024-0118 · $1,300 · 14 days"
+        "Riverside Community Group · INV-AR-2024-0112 · $3,800 · 52 days",
+        "Grace Preschool Program · INV-AR-2024-0098 · $6,500 · 45 days",
+        "Hillside Bible Fellowship · INV-AR-2024-0103 · $2,200 · 38 days",
+        "Westside Community Center · INV-AR-2024-0107 · $1,900 · 32 days",
+        "St. Andrew's Parish · INV-AR-2024-0109 · $1,450 · 28 days",
+        "Grace Community Ministries · INV-AR-2024-0115 · $1,300 · 22 days",
+        "Northgate Baptist Church · INV-AR-2024-0118 · $1,300 · 18 days",
+        "Faith Community Fellowship · INV-AR-2024-0121 · $2,900 · 14 days",
+        "Trinity Chapel · INV-AR-2024-0125 · $1,800 · 10 days"
       ]},
-    {id:"al2-cat-7",sev:"upd",action:true,title:"Unposted Journals",sub:"5 journal entries pending posting: $42,800 total, oldest 12 days",
+    {id:"al2-cat-7",sev:"upd",action:true,title:"Unposted Journals",sub:"8 journal entries pending posting: $65,100 total, oldest 14 days",
       items:[
-        "JE-2024-1041 · Payroll allocation · $18,400 · 12 days",
-        "JE-2024-1055 · Depreciation · $9,200 · 9 days",
-        "JE-2024-1062 · Accrued expenses · $7,600 · 7 days",
-        "JE-2024-1078 · Prepaid amortisation · $4,300 · 4 days",
-        "JE-2024-1084 · Intercompany transfer · $3,300 · 2 days"
+        "JE-2024-1041 · Payroll allocation · $18,400 · 14 days",
+        "JE-2024-1055 · Depreciation · $9,200 · 11 days",
+        "JE-2024-1062 · Accrued expenses · $7,600 · 9 days",
+        "JE-2024-1078 · Prepaid amortisation · $4,300 · 6 days",
+        "JE-2024-1084 · Intercompany transfer · $3,300 · 4 days",
+        "JE-2024-1091 · Gifts posting · $8,900 · 3 days",
+        "JE-2024-1097 · Fixed asset additions · $6,400 · 2 days",
+        "JE-2024-1103 · Bank charges · $7,000 · 1 day"
       ]}
   ];
 
@@ -12103,6 +12121,35 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       btnSec:{label:"Review Fund"},
       opensBudget:true
     },
+    /* ── Restricted Fund ── extra items */
+    "al2-cat-1:1":{
+      sevLabel:"Update: Review Required",
+      title:"Restricted Fund Compliance Breach: Youth Ministry Fund",
+      msg:"Expenditure against this restricted fund has exceeded restricted income. Review fund activity and consider a transfer request.",
+      rows:[
+        {lbl:"Fund",val:"Youth Ministry Restricted Fund",err:false},
+        {lbl:"YTD Expenditure",val:"$146,600",err:true},
+        {lbl:"Income Received",val:"$134,000",err:false},
+        {lbl:"Breach Amount",val:"$12,600 (108.4% of income)",err:true},
+        {lbl:"First Detected",val:"Today, Oct 12, 2026",err:false}
+      ],
+      btnSec:{label:"Review Fund"},
+      opensBudget:true
+    },
+    "al2-cat-1:2":{
+      sevLabel:"Update: Review Required",
+      title:"Restricted Fund Compliance Breach: Capital Improvement Fund",
+      msg:"Expenditure against this restricted fund has slightly exceeded restricted income. Monitor closely to avoid further breach.",
+      rows:[
+        {lbl:"Fund",val:"Capital Improvement Restricted Fund",err:false},
+        {lbl:"YTD Expenditure",val:"$222,900",err:true},
+        {lbl:"Income Received",val:"$214,000",err:false},
+        {lbl:"Breach Amount",val:"$8,900 (104.2% of income)",err:true},
+        {lbl:"First Detected",val:"Oct 10, 2026",err:false}
+      ],
+      btnSec:{label:"Review Fund"},
+      opensBudget:true
+    },
     /* ── Budget Exceeded ── */
     "al2-cat-4:0":{
       sevLabel:"Update: Budget Exceeded",
@@ -12118,18 +12165,46 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       btnSec:{label:"Review Budget"},
       opensBudget:true
     },
+    "al2-cat-4:1":{
+      sevLabel:"Update: Budget Exceeded",
+      title:"Budget Exceeded: Administrative",
+      msg:"Actual expenditure for the Administrative department has exceeded its annual budget allocation.",
+      rows:[
+        {lbl:"Department",val:"Administrative",err:false},
+        {lbl:"Actual YTD",val:"$143,200",err:true},
+        {lbl:"Annual Budget",val:"$132,000",err:false},
+        {lbl:"Overage Amount",val:"$11,200 (108.5% of budget)",err:true},
+        {lbl:"Period",val:"Period 3 – September",err:false}
+      ],
+      btnSec:{label:"Review Budget"},
+      opensBudget:true
+    },
+    "al2-cat-4:2":{
+      sevLabel:"Update: Budget Exceeded",
+      title:"Budget Exceeded: Facilities",
+      msg:"Actual expenditure for the Facilities department has exceeded its annual budget allocation.",
+      rows:[
+        {lbl:"Department",val:"Facilities",err:false},
+        {lbl:"Actual YTD",val:"$89,400",err:true},
+        {lbl:"Annual Budget",val:"$85,000",err:false},
+        {lbl:"Overage Amount",val:"$4,400 (105.2% of budget)",err:true},
+        {lbl:"Period",val:"Period 3 – September",err:false}
+      ],
+      btnSec:{label:"Review Budget"},
+      opensBudget:true
+    },
     /* ── Overdue Payables ── */
     "al2-cat-2:0":{
       sevLabel:"Need Action: Payment Overdue",
       title:"Overdue Payables: AVID Pay",
-      msg:"1 AP invoice processed via AVID Pay is past its due date. Review and initiate payment to clear the outstanding balance.",
+      msg:"3 AP invoices processed via AVID Pay are past their due date. Review and initiate payment to clear the outstanding balances.",
       rows:[
         {lbl:"Payment Type",val:"AVID Pay",err:false},
-        {lbl:"Invoices Overdue",val:"1 invoice",err:true},
-        {lbl:"Total Amount",val:"$12,400",err:true},
+        {lbl:"Invoices Overdue",val:"3 invoices",err:true},
+        {lbl:"Total Amount",val:"$31,800",err:true},
         {lbl:"Oldest Invoice",val:"INV-2024-4421 · 22 days overdue",err:true},
-        {lbl:"Vendor",val:"Acme Audio LLC",err:false},
-        {lbl:"Due Date",val:"Aug 4, 2026",err:false}
+        {lbl:"Vendors",val:"Acme Audio LLC, Riverside Sound, Grace AV",err:false},
+        {lbl:"Oldest Due Date",val:"Aug 4, 2026",err:false}
       ],
       btnPri:{icon:"arrow_forward",label:"Process Payment"},
       opensPayment:true
@@ -12137,14 +12212,14 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     "al2-cat-2:1":{
       sevLabel:"Need Action: Payment Overdue",
       title:"Overdue Payables: ACH",
-      msg:"1 AP invoice scheduled for ACH payment is past its due date.",
+      msg:"2 AP invoices scheduled for ACH payment are past their due date.",
       rows:[
         {lbl:"Payment Type",val:"ACH",err:false},
-        {lbl:"Invoices Overdue",val:"1 invoice",err:true},
-        {lbl:"Total Amount",val:"$8,750",err:true},
+        {lbl:"Invoices Overdue",val:"2 invoices",err:true},
+        {lbl:"Total Amount",val:"$16,050",err:true},
         {lbl:"Oldest Invoice",val:"INV-2024-4398 · 16 days overdue",err:true},
-        {lbl:"Vendor",val:"City Building Services",err:false},
-        {lbl:"Due Date",val:"Aug 10, 2026",err:false}
+        {lbl:"Vendors",val:"City Building Services, Northside Cleaning",err:false},
+        {lbl:"Oldest Due Date",val:"Aug 10, 2026",err:false}
       ],
       btnPri:{icon:"arrow_forward",label:"Process Payment"},
       opensPayment:true
@@ -12152,37 +12227,45 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     "al2-cat-2:2":{
       sevLabel:"Need Action: Payment Overdue",
       title:"Overdue Payables: EFT",
-      msg:"1 AP invoice scheduled for EFT payment is past its due date.",
+      msg:"2 AP invoices scheduled for EFT payment are past their due date.",
       rows:[
         {lbl:"Payment Type",val:"EFT",err:false},
-        {lbl:"Invoices Overdue",val:"1 invoice",err:true},
-        {lbl:"Total Amount",val:"$3,200",err:true},
+        {lbl:"Invoices Overdue",val:"2 invoices",err:true},
+        {lbl:"Total Amount",val:"$8,500",err:true},
         {lbl:"Oldest Invoice",val:"INV-2024-4410 · 9 days overdue",err:true},
-        {lbl:"Vendor",val:"Grace Print & Design",err:false},
-        {lbl:"Due Date",val:"Aug 17, 2026",err:false}
+        {lbl:"Vendors",val:"Grace Print & Design, Summit Copy Centre",err:false},
+        {lbl:"Oldest Due Date",val:"Aug 17, 2026",err:false}
       ],
       btnPri:{icon:"arrow_forward",label:"Process Payment"},
       opensPayment:true
     },
     /* ── Receivable Invoices Outstanding ── */
-    "al2-cat-6:0":{sevLabel:"Update: Receivable Outstanding",title:"Outstanding Invoice: Riverside Community Group",msg:"This AR invoice has been unpaid for 45 days.",rows:[{lbl:"Customer",val:"Riverside Community Group",err:false},{lbl:"Invoice",val:"INV-AR-2024-0112",err:false},{lbl:"Amount",val:"$3,800",err:true},{lbl:"Days Outstanding",val:"45 days",err:true},{lbl:"Due Date",val:"Jul 12, 2026",err:false}],btnPri:{icon:"arrow_forward",label:"View Invoice"},opensAR:true},
-    "al2-cat-6:1":{sevLabel:"Update: Receivable Outstanding",title:"Outstanding Invoice: Grace Preschool Program",msg:"This AR invoice has been unpaid for 38 days.",rows:[{lbl:"Customer",val:"Grace Preschool Program",err:false},{lbl:"Invoice",val:"INV-AR-2024-0098",err:false},{lbl:"Amount",val:"$6,500",err:true},{lbl:"Days Outstanding",val:"38 days",err:true},{lbl:"Due Date",val:"Jul 19, 2026",err:false}],btnPri:{icon:"arrow_forward",label:"View Invoice"},opensAR:true},
-    "al2-cat-6:2":{sevLabel:"Update: Receivable Outstanding",title:"Outstanding Invoice: Hillside Bible Fellowship",msg:"This AR invoice has been unpaid for 32 days.",rows:[{lbl:"Customer",val:"Hillside Bible Fellowship",err:false},{lbl:"Invoice",val:"INV-AR-2024-0103",err:false},{lbl:"Amount",val:"$2,200",err:true},{lbl:"Days Outstanding",val:"32 days",err:true},{lbl:"Due Date",val:"Jul 25, 2026",err:false}],btnPri:{icon:"arrow_forward",label:"View Invoice"},opensAR:true},
-    "al2-cat-6:3":{sevLabel:"Update: Receivable Outstanding",title:"Outstanding Invoice: Westside Community Center",msg:"This AR invoice has been unpaid for 28 days.",rows:[{lbl:"Customer",val:"Westside Community Center",err:false},{lbl:"Invoice",val:"INV-AR-2024-0107",err:false},{lbl:"Amount",val:"$1,900",err:true},{lbl:"Days Outstanding",val:"28 days",err:true},{lbl:"Due Date",val:"Jul 29, 2026",err:false}],btnPri:{icon:"arrow_forward",label:"View Invoice"},opensAR:true},
-    "al2-cat-6:4":{sevLabel:"Update: Receivable Outstanding",title:"Outstanding Invoice: St. Andrew's Parish",msg:"This AR invoice has been unpaid for 22 days.",rows:[{lbl:"Customer",val:"St. Andrew's Parish",err:false},{lbl:"Invoice",val:"INV-AR-2024-0109",err:false},{lbl:"Amount",val:"$1,450",err:true},{lbl:"Days Outstanding",val:"22 days",err:false},{lbl:"Due Date",val:"Aug 4, 2026",err:false}],btnPri:{icon:"arrow_forward",label:"View Invoice"},opensAR:true},
-    "al2-cat-6:5":{sevLabel:"Update: Receivable Outstanding",title:"Outstanding Invoice: Grace Community Ministries",msg:"This AR invoice has been unpaid for 18 days.",rows:[{lbl:"Customer",val:"Grace Community Ministries",err:false},{lbl:"Invoice",val:"INV-AR-2024-0115",err:false},{lbl:"Amount",val:"$1,300",err:false},{lbl:"Days Outstanding",val:"18 days",err:false},{lbl:"Due Date",val:"Aug 8, 2026",err:false}],btnPri:{icon:"arrow_forward",label:"View Invoice"},opensAR:true},
-    "al2-cat-6:6":{sevLabel:"Update: Receivable Outstanding",title:"Outstanding Invoice: Northgate Baptist Church",msg:"This AR invoice has been unpaid for 14 days.",rows:[{lbl:"Customer",val:"Northgate Baptist Church",err:false},{lbl:"Invoice",val:"INV-AR-2024-0118",err:false},{lbl:"Amount",val:"$1,300",err:false},{lbl:"Days Outstanding",val:"14 days",err:false},{lbl:"Due Date",val:"Aug 12, 2026",err:false}],btnPri:{icon:"arrow_forward",label:"View Invoice"},opensAR:true},
+    "al2-cat-6:0":{sevLabel:"Update: Receivable Outstanding",title:"Outstanding Invoice: Riverside Community Group",msg:"This AR invoice has been unpaid for 52 days.",rows:[{lbl:"Customer",val:"Riverside Community Group",err:false},{lbl:"Invoice",val:"INV-AR-2024-0112",err:false},{lbl:"Amount",val:"$3,800",err:true},{lbl:"Days Outstanding",val:"52 days",err:true},{lbl:"Due Date",val:"Aug 21, 2026",err:false}],btnPri:{icon:"arrow_forward",label:"View Invoice"},opensAR:true},
+    "al2-cat-6:1":{sevLabel:"Update: Receivable Outstanding",title:"Outstanding Invoice: Grace Preschool Program",msg:"This AR invoice has been unpaid for 45 days.",rows:[{lbl:"Customer",val:"Grace Preschool Program",err:false},{lbl:"Invoice",val:"INV-AR-2024-0098",err:false},{lbl:"Amount",val:"$6,500",err:true},{lbl:"Days Outstanding",val:"45 days",err:true},{lbl:"Due Date",val:"Aug 28, 2026",err:false}],btnPri:{icon:"arrow_forward",label:"View Invoice"},opensAR:true},
+    "al2-cat-6:2":{sevLabel:"Update: Receivable Outstanding",title:"Outstanding Invoice: Hillside Bible Fellowship",msg:"This AR invoice has been unpaid for 38 days.",rows:[{lbl:"Customer",val:"Hillside Bible Fellowship",err:false},{lbl:"Invoice",val:"INV-AR-2024-0103",err:false},{lbl:"Amount",val:"$2,200",err:true},{lbl:"Days Outstanding",val:"38 days",err:true},{lbl:"Due Date",val:"Sep 4, 2026",err:false}],btnPri:{icon:"arrow_forward",label:"View Invoice"},opensAR:true},
+    "al2-cat-6:3":{sevLabel:"Update: Receivable Outstanding",title:"Outstanding Invoice: Westside Community Center",msg:"This AR invoice has been unpaid for 32 days.",rows:[{lbl:"Customer",val:"Westside Community Center",err:false},{lbl:"Invoice",val:"INV-AR-2024-0107",err:false},{lbl:"Amount",val:"$1,900",err:true},{lbl:"Days Outstanding",val:"32 days",err:true},{lbl:"Due Date",val:"Sep 10, 2026",err:false}],btnPri:{icon:"arrow_forward",label:"View Invoice"},opensAR:true},
+    "al2-cat-6:4":{sevLabel:"Update: Receivable Outstanding",title:"Outstanding Invoice: St. Andrew's Parish",msg:"This AR invoice has been unpaid for 28 days.",rows:[{lbl:"Customer",val:"St. Andrew's Parish",err:false},{lbl:"Invoice",val:"INV-AR-2024-0109",err:false},{lbl:"Amount",val:"$1,450",err:true},{lbl:"Days Outstanding",val:"28 days",err:false},{lbl:"Due Date",val:"Sep 14, 2026",err:false}],btnPri:{icon:"arrow_forward",label:"View Invoice"},opensAR:true},
+    "al2-cat-6:5":{sevLabel:"Update: Receivable Outstanding",title:"Outstanding Invoice: Grace Community Ministries",msg:"This AR invoice has been unpaid for 22 days.",rows:[{lbl:"Customer",val:"Grace Community Ministries",err:false},{lbl:"Invoice",val:"INV-AR-2024-0115",err:false},{lbl:"Amount",val:"$1,300",err:false},{lbl:"Days Outstanding",val:"22 days",err:false},{lbl:"Due Date",val:"Sep 20, 2026",err:false}],btnPri:{icon:"arrow_forward",label:"View Invoice"},opensAR:true},
+    "al2-cat-6:6":{sevLabel:"Update: Receivable Outstanding",title:"Outstanding Invoice: Northgate Baptist Church",msg:"This AR invoice has been unpaid for 18 days.",rows:[{lbl:"Customer",val:"Northgate Baptist Church",err:false},{lbl:"Invoice",val:"INV-AR-2024-0118",err:false},{lbl:"Amount",val:"$1,300",err:false},{lbl:"Days Outstanding",val:"18 days",err:false},{lbl:"Due Date",val:"Sep 24, 2026",err:false}],btnPri:{icon:"arrow_forward",label:"View Invoice"},opensAR:true},
+    "al2-cat-6:7":{sevLabel:"Update: Receivable Outstanding",title:"Outstanding Invoice: Faith Community Fellowship",msg:"This AR invoice has been unpaid for 14 days.",rows:[{lbl:"Customer",val:"Faith Community Fellowship",err:false},{lbl:"Invoice",val:"INV-AR-2024-0121",err:false},{lbl:"Amount",val:"$2,900",err:true},{lbl:"Days Outstanding",val:"14 days",err:false},{lbl:"Due Date",val:"Sep 28, 2026",err:false}],btnPri:{icon:"arrow_forward",label:"View Invoice"},opensAR:true},
+    "al2-cat-6:8":{sevLabel:"Update: Receivable Outstanding",title:"Outstanding Invoice: Trinity Chapel",msg:"This AR invoice has been unpaid for 10 days.",rows:[{lbl:"Customer",val:"Trinity Chapel",err:false},{lbl:"Invoice",val:"INV-AR-2024-0125",err:false},{lbl:"Amount",val:"$1,800",err:false},{lbl:"Days Outstanding",val:"10 days",err:false},{lbl:"Due Date",val:"Oct 2, 2026",err:false}],btnPri:{icon:"arrow_forward",label:"View Invoice"},opensAR:true},
     /* ── Purchase Order Queue ── */
     "al2-cat-5:0":{btnSec:{label:"Review"},sevLabel:"Need Action: Approval Stalled",invoiceNo:"INV-2024-4433",badge:"Pending Approval",meta:[{lbl:"INVOICE NO.",val:"INV-2024-4433"},{lbl:"INVOICE DATE",val:"Aug 14, 2026"},{lbl:"VENDOR",val:"Riverside AV Solutions"},{lbl:"REQUESTED BY",val:"David Chen"},{lbl:"FUND",val:"General Fund, Worship"},{lbl:"TOTAL AMOUNT",val:"$18,500"}],lineItems:[{desc:"Audio System Upgrade, Main Sanctuary",qty:"1 unit",amt:"$12,500"},{desc:"Wireless Microphone Set (8-pack)",qty:"2 sets",amt:"$3,600"},{desc:"Installation & Configuration",qty:"1 service",amt:"$2,400"},{desc:"Total",qty:"",amt:"$18,500",total:true}],trail:[{name:"Submitted",sub:"David Chen · Aug 14, 2026",done:true},{name:"Finance Pre-check",sub:"Automated · Aug 15, 2026",done:true},{name:"Department Head Approval",sub:"Sarah J. · Waiting 8 business days",done:false}]},
     "al2-cat-5:1":{btnSec:{label:"Review"},sevLabel:"Need Action: Approval Stalled",invoiceNo:"PO-2024-0891",badge:"Pending Approval",meta:[{lbl:"PO NO.",val:"PO-2024-0891"},{lbl:"PO DATE",val:"Aug 20, 2026"},{lbl:"VENDOR",val:"Office Depot"},{lbl:"REQUESTED BY",val:"Lisa Park"},{lbl:"FUND",val:"General Fund, Admin"},{lbl:"TOTAL AMOUNT",val:"$6,200"}],lineItems:[{desc:"Office Furniture, Standing Desks (4×)",qty:"4 units",amt:"$3,800"},{desc:"Ergonomic Chair Set",qty:"4 units",amt:"$1,800"},{desc:"Delivery & Assembly",qty:"1 service",amt:"$600"},{desc:"Total",qty:"",amt:"$6,200",total:true}],trail:[{name:"Submitted",sub:"Lisa Park · Aug 20, 2026",done:true},{name:"Finance Pre-check",sub:"Automated · Aug 21, 2026",done:true},{name:"Department Head Approval",sub:"Michael R. · Waiting 6 business days",done:false}]},
+    "al2-cat-5:2":{btnSec:{label:"Review"},sevLabel:"Need Action: Approval Stalled",invoiceNo:"PO-2024-0904",badge:"Pending Approval",meta:[{lbl:"PO NO.",val:"PO-2024-0904"},{lbl:"PO DATE",val:"Aug 19, 2026"},{lbl:"VENDOR",val:"Beacon IT Services"},{lbl:"REQUESTED BY",val:"James Okonkwo"},{lbl:"FUND",val:"General Fund, IT"},{lbl:"TOTAL AMOUNT",val:"$11,350"}],lineItems:[{desc:"Annual Server Maintenance Contract",qty:"1 year",amt:"$8,200"},{desc:"On-site Support Hours (10×)",qty:"10 hrs",amt:"$2,500"},{desc:"Hardware Consumables",qty:"Misc",amt:"$650"},{desc:"Total",qty:"",amt:"$11,350",total:true}],trail:[{name:"Submitted",sub:"James Okonkwo · Aug 19, 2026",done:true},{name:"Finance Pre-check",sub:"Automated · Aug 20, 2026",done:true},{name:"Department Head Approval",sub:"Karen T. · Waiting 7 business days",done:false}]},
     /* ── Unreconciled Bank Account ── */
     "al2-cat-3:0":{sevLabel:"Update: Reconciliation Overdue",title:"Unreconciled Bank Account: Payroll Checking",rows:[{lbl:"Account",val:"Payroll Checking ··3355",err:false},{lbl:"Last Reconciled",val:"Jul 26, 2026",err:false},{lbl:"Days Unreconciled",val:"31 days",err:true},{lbl:"Threshold",val:"30 days",err:false}],opensRecon:true},
+    "al2-cat-3:1":{sevLabel:"Update: Reconciliation Overdue",title:"Unreconciled Bank Account: Operations Savings",rows:[{lbl:"Account",val:"Operations Savings ··7821",err:false},{lbl:"Last Reconciled",val:"Jul 20, 2026",err:false},{lbl:"Days Unreconciled",val:"37 days",err:true},{lbl:"Threshold",val:"30 days",err:false}],opensRecon:true},
+    "al2-cat-3:2":{sevLabel:"Update: Reconciliation Overdue",title:"Unreconciled Bank Account: Missions Fund Checking",rows:[{lbl:"Account",val:"Missions Fund Checking ··4490",err:false},{lbl:"Last Reconciled",val:"Jul 14, 2026",err:false},{lbl:"Days Unreconciled",val:"43 days",err:true},{lbl:"Threshold",val:"30 days",err:false}],opensRecon:true},
     /* ── Unposted Journals ── */
-    "al2-cat-7:0":{sevLabel:"Update: Journal Unposted",title:"Unposted Journal: JE-2024-1041",msg:"This payroll allocation journal entry has been pending posting for 12 days. Post or void to keep the ledger current.",rows:[{lbl:"Journal No.",val:"JE-2024-1041",err:false},{lbl:"Type",val:"Payroll Allocation",err:false},{lbl:"Amount",val:"$18,400",err:false},{lbl:"Days Pending",val:"12 days",err:true},{lbl:"Prepared By",val:"Finance Team",err:false}],btnPri:{icon:"arrow_forward",label:"View Journal"},opensAR:true},
-    "al2-cat-7:1":{sevLabel:"Update: Journal Unposted",title:"Unposted Journal: JE-2024-1055",msg:"This depreciation journal entry has been pending posting for 9 days.",rows:[{lbl:"Journal No.",val:"JE-2024-1055",err:false},{lbl:"Type",val:"Depreciation",err:false},{lbl:"Amount",val:"$9,200",err:false},{lbl:"Days Pending",val:"9 days",err:true},{lbl:"Prepared By",val:"Finance Team",err:false}],btnPri:{icon:"arrow_forward",label:"View Journal"},opensAR:true},
-    "al2-cat-7:2":{sevLabel:"Update: Journal Unposted",title:"Unposted Journal: JE-2024-1062",msg:"This accrued expenses journal entry has been pending posting for 7 days.",rows:[{lbl:"Journal No.",val:"JE-2024-1062",err:false},{lbl:"Type",val:"Accrued Expenses",err:false},{lbl:"Amount",val:"$7,600",err:false},{lbl:"Days Pending",val:"7 days",err:true},{lbl:"Prepared By",val:"Finance Team",err:false}],btnPri:{icon:"arrow_forward",label:"View Journal"},opensAR:true},
-    "al2-cat-7:3":{sevLabel:"Update: Journal Unposted",title:"Unposted Journal: JE-2024-1078",msg:"This prepaid amortisation journal entry has been pending posting for 4 days.",rows:[{lbl:"Journal No.",val:"JE-2024-1078",err:false},{lbl:"Type",val:"Prepaid Amortisation",err:false},{lbl:"Amount",val:"$4,300",err:false},{lbl:"Days Pending",val:"4 days",err:false},{lbl:"Prepared By",val:"Finance Team",err:false}],btnPri:{icon:"arrow_forward",label:"View Journal"},opensAR:true},
-    "al2-cat-7:4":{sevLabel:"Update: Journal Unposted",title:"Unposted Journal: JE-2024-1084",msg:"This intercompany transfer journal entry has been pending posting for 2 days.",rows:[{lbl:"Journal No.",val:"JE-2024-1084",err:false},{lbl:"Type",val:"Intercompany Transfer",err:false},{lbl:"Amount",val:"$3,300",err:false},{lbl:"Days Pending",val:"2 days",err:false},{lbl:"Prepared By",val:"Finance Team",err:false}],btnPri:{icon:"arrow_forward",label:"View Journal"},opensAR:true}
+    "al2-cat-7:0":{sevLabel:"Update: Journal Unposted",title:"Unposted Journal: JE-2024-1041",msg:"This payroll allocation journal entry has been pending posting for 14 days. Post or void to keep the ledger current.",rows:[{lbl:"Journal No.",val:"JE-2024-1041",err:false},{lbl:"Type",val:"Payroll Allocation",err:false},{lbl:"Amount",val:"$18,400",err:false},{lbl:"Days Pending",val:"14 days",err:true},{lbl:"Prepared By",val:"Finance Team",err:false}],btnSec:{label:"View Journal"},opensJournal:true},
+    "al2-cat-7:1":{sevLabel:"Update: Journal Unposted",title:"Unposted Journal: JE-2024-1055",msg:"This depreciation journal entry has been pending posting for 11 days.",rows:[{lbl:"Journal No.",val:"JE-2024-1055",err:false},{lbl:"Type",val:"Depreciation",err:false},{lbl:"Amount",val:"$9,200",err:false},{lbl:"Days Pending",val:"11 days",err:true},{lbl:"Prepared By",val:"Finance Team",err:false}],btnSec:{label:"View Journal"},opensJournal:true},
+    "al2-cat-7:2":{sevLabel:"Update: Journal Unposted",title:"Unposted Journal: JE-2024-1062",msg:"This accrued expenses journal entry has been pending posting for 9 days.",rows:[{lbl:"Journal No.",val:"JE-2024-1062",err:false},{lbl:"Type",val:"Accrued Expenses",err:false},{lbl:"Amount",val:"$7,600",err:false},{lbl:"Days Pending",val:"9 days",err:true},{lbl:"Prepared By",val:"Finance Team",err:false}],btnSec:{label:"View Journal"},opensJournal:true},
+    "al2-cat-7:3":{sevLabel:"Update: Journal Unposted",title:"Unposted Journal: JE-2024-1078",msg:"This prepaid amortisation journal entry has been pending posting for 6 days.",rows:[{lbl:"Journal No.",val:"JE-2024-1078",err:false},{lbl:"Type",val:"Prepaid Amortisation",err:false},{lbl:"Amount",val:"$4,300",err:false},{lbl:"Days Pending",val:"6 days",err:false},{lbl:"Prepared By",val:"Finance Team",err:false}],btnSec:{label:"View Journal"},opensJournal:true},
+    "al2-cat-7:4":{sevLabel:"Update: Journal Unposted",title:"Unposted Journal: JE-2024-1084",msg:"This intercompany transfer journal entry has been pending posting for 4 days.",rows:[{lbl:"Journal No.",val:"JE-2024-1084",err:false},{lbl:"Type",val:"Intercompany Transfer",err:false},{lbl:"Amount",val:"$3,300",err:false},{lbl:"Days Pending",val:"4 days",err:false},{lbl:"Prepared By",val:"Finance Team",err:false}],btnSec:{label:"View Journal"},opensJournal:true},
+    "al2-cat-7:5":{sevLabel:"Update: Journal Unposted",title:"Unposted Journal: JE-2024-1091",msg:"This gifts posting journal entry has been pending posting for 3 days.",rows:[{lbl:"Journal No.",val:"JE-2024-1091",err:false},{lbl:"Type",val:"Gifts Posting",err:false},{lbl:"Amount",val:"$8,900",err:false},{lbl:"Days Pending",val:"3 days",err:false},{lbl:"Prepared By",val:"Finance Team",err:false}],btnSec:{label:"View Journal"},opensJournal:true},
+    "al2-cat-7:6":{sevLabel:"Update: Journal Unposted",title:"Unposted Journal: JE-2024-1097",msg:"This fixed asset additions journal entry has been pending posting for 2 days.",rows:[{lbl:"Journal No.",val:"JE-2024-1097",err:false},{lbl:"Type",val:"Fixed Asset Additions",err:false},{lbl:"Amount",val:"$6,400",err:false},{lbl:"Days Pending",val:"2 days",err:false},{lbl:"Prepared By",val:"Finance Team",err:false}],btnSec:{label:"View Journal"},opensJournal:true},
+    "al2-cat-7:7":{sevLabel:"Update: Journal Unposted",title:"Unposted Journal: JE-2024-1103",msg:"This bank charges journal entry has been pending posting for 1 day.",rows:[{lbl:"Journal No.",val:"JE-2024-1103",err:false},{lbl:"Type",val:"Bank Charges",err:false},{lbl:"Amount",val:"$7,000",err:false},{lbl:"Days Pending",val:"1 day",err:false},{lbl:"Prepared By",val:"Finance Team",err:false}],btnSec:{label:"View Journal"},opensJournal:true}
   };
 
   var alo2Open={},alo2Tab={},alo2Sel={};
@@ -12214,19 +12297,22 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
   /* Item buttons: xwide → alO2-sel (populates detail pane); wide/kpi → overlay as before */
   function alo2ItemBtns(cat,idx,wid,xwide){
     var cfg=ALO2_ITEM_MODALS[cat.id+":"+idx]||null;
-    var sel=' data-action="alO2-sel" data-id="'+wid+'" data-cat="'+cat.id+'" data-idx="'+idx+'"';
     var a=' data-action="alO2-item" data-id="'+wid+'" data-cat="'+cat.id+'" data-idx="'+idx+'"';
     var ap=' data-action="alO2-payment" data-id="'+wid+'" data-cat="'+cat.id+'" data-idx="'+idx+'"';
     var ar=' data-action="alO2-recon" data-id="'+wid+'" data-cat="'+cat.id+'" data-idx="'+idx+'"';
     var aAR2=' data-action="alO2-ar" data-id="'+wid+'" data-cat="'+cat.id+'" data-idx="'+idx+'"';
     var aBudget2=' data-action="alO2-budget" data-id="'+wid+'" data-cat="'+cat.id+'" data-idx="'+idx+'"';
+    var aJournal=' data-action="alO2-journal" data-id="'+wid+'" data-cat="'+cat.id+'" data-idx="'+idx+'"';
     if(xwide){ return ""; }
+    /* Alerts tab (sev:upd) — all buttons are secondary */
     if(cfg&&cfg.type==="approval")return '<div class="al-item-actions"><button class="al-act-btn sec"'+a+'>'+ICON("visibility")+'Review</button><button class="al-act-btn pri"'+a+'>'+ICON("check_circle")+'Approve</button></div>';
-    if(cfg&&cfg.opensPayment)return '<div class="al-item-actions"><button class="al-act-btn pri"'+ap+'>'+cfg.btnPri.label+'</button></div>';
+    if(cfg&&cfg.opensPayment)return '<div class="al-item-actions"><button class="al-act-btn'+(cat.sev==="upd"?" sec":" pri")+'"'+ap+'>'+cfg.btnPri.label+'</button></div>';
     if(cfg&&cfg.opensRecon)return '<div class="al-item-actions"><button class="al-act-btn sec"'+ar+'>View Details</button></div>';
-    if(cfg&&cfg.opensAR)return '<div class="al-item-actions"><button class="al-act-btn pri"'+aAR2+'>'+cfg.btnPri.label+'</button></div>';
+    if(cfg&&cfg.opensAR)return '<div class="al-item-actions"><button class="al-act-btn sec"'+aAR2+'>'+(cfg.btnPri&&cfg.btnPri.label?cfg.btnPri.label:"View Invoice")+'</button></div>';
     if(cfg&&cfg.opensBudget)return '<div class="al-item-actions"><button class="al-act-btn sec"'+aBudget2+'>Review Budget</button></div>';
-    if(cfg&&cfg.btnPri)return '<div class="al-item-actions"><button class="al-act-btn pri"'+a+'>'+cfg.btnPri.label+'</button></div>';
+    if(cfg&&cfg.opensJournal)return '<div class="al-item-actions"><button class="al-act-btn sec"'+aJournal+'>'+(cfg.btnSec&&cfg.btnSec.label?cfg.btnSec.label:"View Journal")+'</button></div>';
+    if(cfg&&cfg.btnPri&&cat.sev!=="upd")return '<div class="al-item-actions"><button class="al-act-btn pri"'+a+'>'+cfg.btnPri.label+'</button></div>';
+    if(cfg&&cfg.btnSec)return '<div class="al-item-actions"><button class="al-act-btn sec"'+a+'>'+(cfg.btnSec.label||"View Details")+'</button></div>';
     return '<div class="al-item-actions"><button class="al-act-btn sec"'+a+'>View Details</button></div>';
   }
 
@@ -12306,6 +12392,9 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     } else if(cfg&&cfg.opensBudget){
       redirectNote='<p class="al2-dp-redirect-note">Opens the <strong>Budgeted Financial Statement</strong>: budget vs actual by fund and department.</p>';
       actBtns='<button class="btn primary sm" data-action="alO2-dp-budget"'+dp+'>'+'Review Budget'+ICON("arrow_forward")+'</button>';
+    } else if(cfg&&cfg.opensJournal){
+      redirectNote='<p class="al2-dp-redirect-note">Opens <strong>General Ledger &rsaquo; Unposted Journals</strong>: review and post outstanding journal entries.</p>';
+      actBtns='<button class="btn outlined sm" data-action="alO2-dp-journal"'+dp+'>'+'View Journal'+ICON("arrow_forward")+'</button>';
     }
     return '<div class="al2-dp">'+
       '<div class="al2-dp-hd"><div class="al2-dp-hd-text">'+
@@ -12382,7 +12471,124 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     if(a==="alO2-recon"){var rcid=t.getAttribute("data-cat"),ridx=parseInt(t.getAttribute("data-idx"),10)||0,rcfg=ALO2_ITEM_MODALS[rcid+":"+ridx]||null;aloOpenReconMerged(rcfg,"warn");return true;}
     if(a==="alO2-ar"){var arcid=t.getAttribute("data-cat"),aridx=parseInt(t.getAttribute("data-idx"),10)||0,arcfg=ALO2_ITEM_MODALS[arcid+":"+aridx]||null;aloOpenARMerged(arcfg,"warn");return true;}
     if(a==="alO2-budget"){var bcid=t.getAttribute("data-cat"),bidx=parseInt(t.getAttribute("data-idx"),10)||0,bcfg=ALO2_ITEM_MODALS[bcid+":"+bidx]||null;aloOpenBudgetMerged(bcfg,"warn");return true;}
+    if(a==="alO2-journal"){var jcid=t.getAttribute("data-cat"),jidx=parseInt(t.getAttribute("data-idx"),10)||0,jcfg=ALO2_ITEM_MODALS[jcid+":"+jidx]||null;alo2OpenJournalModal(jcfg,"warn");return true;}
+    if(a==="alO2-dp-journal"){aloOpenJournalScreen();return true;}
     return false;
+  }
+  function aloOpenJournalScreen(){
+    var GL_ROWS=[
+      {type:"AR",jn:"3", date:"7/2/2026", period:"July",user:"Josh Samuels",desc:"Accounts Receivable Invoices",amt:"$500.00"},
+      {type:"AR",jn:"4", date:"7/20/2026",period:"July",user:"Josh Samuels",desc:"Accounts Receivable Invoices",amt:"$500.00"},
+      {type:"CR",jn:"1", date:"7/2/2026", period:"July",user:"Josh Samuels",desc:"Account Receivable Payments",amt:"$12,484.00"},
+      {type:"CR",jn:"2", date:"7/1/2026", period:"July",user:"Josh Samuels",desc:"Account Receivable Payments",amt:"$2,420.00"},
+      {type:"CR",jn:"3", date:"7/21/2026",period:"July",user:"Josh Samuels",desc:"Account Receivable Voids",amt:"$926.50"},
+      {type:"GF",jn:"4", date:"10/5/2026",period:"July",user:"Josh Samuels",desc:"Gifts Posting",amt:"$775.00"},
+      {type:"JE",jn:"22",date:"7/31/2026",period:"July",user:"Tim Hintz",desc:"July Interest Income",amt:"$376.00"},
+      {type:"PR",jn:"2", date:"7/31/2026",period:"July",user:"Josh Samuels",desc:"Payroll Checks",amt:"$320,000.00"},
+      {type:"PR",jn:"3", date:"7/31/2026",period:"July",user:"Josh Samuels",desc:"Payroll Checks",amt:"$5,904.16"},
+      {type:"AR",jn:"5", date:"9/24/2026",period:"September",user:"Josh Samuels",desc:"Accounts Receivable Invoices",amt:"$1,000.00"},
+      {type:"AR",jn:"7", date:"9/30/2026",period:"September",user:"Josh Samuels",desc:"Accounts Receivable Invoices",amt:"$108.00"},
+      {type:"AR",jn:"6", date:"10/5/2026",period:"October",user:"Josh Samuels",desc:"Accounts Receivable Invoices",amt:"$108.25"},
+      {type:"CR",jn:"4", date:"10/2/2026",period:"October",user:"Josh Samuels",desc:"Account Receivable Payments",amt:"$967.00"},
+      {type:"CR",jn:"5", date:"10/2/2026",period:"October",user:"Josh Samuels",desc:"Account Receivable Payments",amt:"$511.00"},
+      {type:"DH",jn:"1", date:"10/2/2026",period:"October",user:"Josh Samuels",desc:"Deposits on Hand Transactions",amt:"$29,002.60"},
+      {type:"DH",jn:"2", date:"10/2/2026",period:"October",user:"Josh Samuels",desc:"Deposits on Hand Transactions",amt:"$2,541.50"},
+      {type:"DH",jn:"3", date:"10/2/2026",period:"October",user:"Josh Samuels",desc:"Deposits on Hand Transactions",amt:"$38.33"},
+      {type:"DH",jn:"4", date:"10/3/2026",period:"October",user:"Josh Samuels",desc:"Deposits on Hand Transactions",amt:"$20,105.00"},
+      {type:"FA",jn:"1", date:"10/2/2026",period:"October",user:"Josh Samuels",desc:"Fixed Assets Depreciation Thru 01/2018",amt:"$260.00"},
+      {type:"FA",jn:"2", date:"10/2/2026",period:"October",user:"Josh Samuels",desc:"Fixed Assets Depreciation Thru 12/2025",amt:"$130.00"},
+      {type:"FA",jn:"3", date:"10/2/2026",period:"October",user:"Josh Samuels",desc:"Fixed Assets Depreciation Thru 09/2026",amt:"$630.00"},
+      {type:"FA",jn:"4", date:"10/2/2026",period:"October",user:"Josh Samuels",desc:"Fixed Assets Depreciation Thru 10/2026",amt:"$130.00"},
+      {type:"GF",jn:"2", date:"10/5/2026",period:"October",user:"Josh Samuels",desc:"Gifts Posting",amt:"$890.00"},
+      {type:"GF",jn:"3", date:"10/5/2026",period:"October",user:"Josh Samuels",desc:"Gift Deletion",amt:"$40.00"}
+    ];
+    var rows=GL_ROWS.map(function(r){
+      return '<tr>'+
+        '<td><input type="checkbox" class="al-ar-chk"></td>'+
+        '<td>'+r.type+'</td><td>'+r.jn+'</td><td>'+r.date+'</td><td>'+r.period+'</td><td>'+r.user+'</td>'+
+        '<td class="al-gl-desc">'+r.desc+'</td><td class="al-gl-amt">'+r.amt+'</td>'+
+        '<td><span class="al-ar-icon-cell">'+ICON("info")+'</span></td>'+
+        '<td><button class="al-ar-row-btn" title="Edit">'+ICON("edit")+'</button></td>'+
+        '<td><button class="al-ar-row-btn" title="Delete">'+ICON("delete")+'</button></td>'+
+      '</tr>';
+    }).join("");
+    var html=
+      '<div class="al-ar-screen" id="alGLScreen">'+
+        '<div class="al-ar-topbar">'+
+          '<div class="al-ar-topbar-left">'+
+            '<span class="material-symbols-rounded" style="font-size:var(--type-size-20);margin-right:var(--padding-xtight);">grid_view</span>'+
+            '<span class="al-ar-topbar-appname">General Ledger</span>'+
+          '</div>'+
+          '<div class="al-ar-topbar-right">'+
+            '<div class="al-ar-topbar-meta"><span class="al-ar-meta-label">Company</span><span class="al-ar-meta-val">1 First Church</span></div>'+
+            '<div class="al-ar-topbar-meta"><span class="al-ar-meta-label">Fiscal Year</span><span class="al-ar-meta-val">26-27</span></div>'+
+            '<div class="al-ar-topbar-meta"><span class="al-ar-meta-label">Period</span><span class="al-ar-meta-val">1 July</span></div>'+
+            '<div class="al-ar-topbar-meta"><span class="al-ar-meta-label">Bank Account</span><span class="al-ar-meta-val">1-10110 ACB operating checking</span></div>'+
+            '<button class="al-ar-screen-close" id="alGLScreenClose" aria-label="Close">'+ICON("close")+'</button>'+
+          '</div>'+
+        '</div>'+
+        '<div class="al-ar-breadcrumb">'+ICON("home")+' / <span class="al-ar-bc-link">General Ledger</span> / <span>Unposted Journals</span></div>'+
+        '<div class="al-ar-body">'+
+          '<nav class="al-ar-sidebar">'+
+            '<div class="al-ar-nav-item">'+ICON("edit")+'<span>Enter</span><span class="al-ar-nav-chev">'+ICON("chevron_right")+'</span></div>'+
+            '<div class="al-ar-nav-item">'+ICON("tune")+'<span>Manage</span><span class="al-ar-nav-chev">'+ICON("chevron_right")+'</span></div>'+
+            '<div class="al-ar-nav-item al-ar-nav-active">'+ICON("visibility")+'<span>View</span><span class="al-ar-nav-chev">'+ICON("chevron_right")+'</span></div>'+
+            '<div class="al-ar-nav-item">'+ICON("bar_chart")+'<span>Reports</span><span class="al-ar-nav-chev">'+ICON("chevron_right")+'</span></div>'+
+            '<div class="al-ar-nav-item">'+ICON("settings")+'<span>Modify</span><span class="al-ar-nav-chev">'+ICON("chevron_right")+'</span></div>'+
+            '<div class="al-ar-nav-item">'+ICON("build")+'<span>Utilities</span><span class="al-ar-nav-chev">'+ICON("chevron_right")+'</span></div>'+
+            '<div class="al-ar-nav-item">'+ICON("help")+'<span>Help</span></div>'+
+          '</nav>'+
+          '<div class="al-ar-main">'+
+            '<div class="al-ar-filters-bar"><span class="al-ar-filters-lbl">Filters</span>'+ICON("expand_more")+'</div>'+
+            '<div class="al-ar-section-hd">'+
+              '<span class="al-ar-section-title">Add New Journal</span>'+
+              '<div class="al-ar-section-btns">'+
+                '<button class="al-ar-btn-outlined">Import Journals</button>'+
+                '<button class="al-ar-btn-primary">Add New Journal</button>'+
+              '</div>'+
+            '</div>'+
+            '<div class="al-ar-tbl-wrap">'+
+              '<table class="al-ar-tbl">'+
+                '<thead><tr>'+
+                  '<th><input type="checkbox" class="al-ar-chk"></th>'+
+                  '<th>Type</th><th>Journal #</th><th>Date</th><th>Period</th><th>User</th><th>Description</th><th>Amount</th><th>Note</th><th></th><th></th>'+
+                '</tr></thead>'+
+                '<tbody>'+rows+'</tbody>'+
+              '</table>'+
+            '</div>'+
+          '</div>'+
+        '</div>'+
+      '</div>';
+    var wrap=document.createElement("div");wrap.className="al-ar-backdrop";wrap.id="alGLBackdrop";
+    wrap.innerHTML=html;document.body.appendChild(wrap);
+    function closeScreen(){wrap.classList.add("al-pay-confirm-hiding");setTimeout(function(){if(wrap.parentNode)wrap.parentNode.removeChild(wrap);},160);}
+    document.getElementById("alGLScreenClose").addEventListener("click",closeScreen);
+  }
+  function alo2OpenJournalModal(cfg,sev){
+    var c=cfg||{sevLabel:"Update: Journal Unposted",title:"Unposted Journal",rows:[],msg:""};
+    var bd=document.createElement("div");bd.className="al-modal-backdrop";
+    var rows=(c.rows||[]).map(function(r){return '<div class="al-modal-row'+(r.err?" al-modal-row-err":"")+'"><span class="al-modal-lbl">'+r.lbl+'</span><span class="al-modal-val">'+r.val+'</span></div>';}).join("");
+    var msg=c.msg?'<p class="al-modal-msg">'+c.msg+'</p>':"";
+    bd.innerHTML=
+      '<div class="al-modal" role="dialog" aria-modal="true" aria-label="'+c.title+'">'+
+        '<div class="al-modal-hd"><span class="al-sev-badge al-sev-warn">'+c.sevLabel+'</span>'+
+          '<button class="al-modal-close" id="alJournalModalClose" aria-label="Close">'+ICON("close")+'</button>'+
+        '</div>'+
+        '<div class="al-modal-title">'+c.title+'</div>'+
+        msg+
+        '<div class="al-modal-rows">'+rows+'</div>'+
+        '<div class="al-modal-footer">'+
+          '<button class="al-modal-btn sec" id="alJournalModalCancel">Cancel</button>'+
+          '<button class="al-modal-btn pri" id="alJournalModalView">View Journal '+ICON("arrow_forward")+'</button>'+
+        '</div>'+
+      '</div>';
+    document.body.appendChild(bd);
+    function closeModal(){bd.classList.add("al-pay-confirm-hiding");setTimeout(function(){if(bd.parentNode)bd.parentNode.removeChild(bd);},160);}
+    bd.querySelector("#alJournalModalClose").addEventListener("click",closeModal);
+    bd.querySelector("#alJournalModalCancel").addEventListener("click",closeModal);
+    bd.querySelector("#alJournalModalView").addEventListener("click",function(){closeModal();setTimeout(function(){aloOpenJournalScreen();},160);});
+    bd.addEventListener("click",function(e){if(e.target===bd)closeModal();});
+    var ff=bd.querySelector("button");if(ff)ff.focus();
   }
   WIDGETS.register("alerts2",{content:alo2Content,about:function(w){return {h:w.title,b:ALO2_ABOUT};},click:function(a,id,t){return !!(a&&a.indexOf("alO2-")===0&&alo2Handle(a,id,t));}});
 /* ===== end W19-Copy Alerts & Actions V2 (alerts2) ===== */
