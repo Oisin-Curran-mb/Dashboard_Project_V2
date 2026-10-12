@@ -12239,10 +12239,9 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       var xwCls=xwide?" al2-xwide-item":"";
       return '<div class="al-item'+xwCls+(isSel?" al2-item-sel":"")+'"'+xwAttr+'><span class="al-item-lbl">'+lbl+'</span>'+alo2ItemBtns(cat,idx,wid,xwide)+'</div>';
     }).join("");
-    var icon=cat.sev==="need"?"error":"warning";
     return '<div class="al-cat sev-'+cat.sev+(isOpen?" al-open":"")+'">'+
       '<div class="al-hd" data-action="alO2-toggle" data-id="'+wid+'" data-cat="'+cat.id+'" role="button" tabindex="0" aria-expanded="'+isOpen+'">'+
-        '<div class="al-hd-l"><div class="al-hd-title-row"><span class="al-cat-title">'+cat.title+'</span><span class="al-count">'+ICON(icon)+cat.items.length+'</span></div>'+
+        '<div class="al-hd-l"><div class="al-hd-title-row"><span class="al-cat-title">'+cat.title+'</span><span class="al-count">'+cat.items.length+'</span></div>'+
         '<div class="al-cat-sub">'+cat.sub+'</div></div>'+
         '<div class="al-hd-r"><span class="material-symbols-rounded al-chev" aria-hidden="true">expand_more</span></div>'+
       '</div>'+
