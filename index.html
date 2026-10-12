@@ -12325,7 +12325,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     var updCats=ALO2_CATS.filter(function(c){return c.sev==="upd";});
     function n(cs){return cs.reduce(function(s,c){return s+c.items.length;},0);}
     function tb(v,lbl,cnt,cls){return '<button class="alb4-tab'+(tab===v?" on":"")+'" data-action="alO2-tab" data-id="'+w.id+'" data-tab="'+v+'" aria-pressed="'+(tab===v)+'">'+lbl+' <span class="alb4-badge'+(cls?" "+cls:"")+'">'+cnt+'</span></button>';}
-    var tabs='<div class="alb4-tabs" role="group" aria-label="Alert type">'+tb("need","Pending actions",n(needCats),"err")+tb("upd","Updates",n(updCats),"warn")+'</div>';
+    var tabs='<div class="alb4-tabs" role="group" aria-label="Alert type">'+tb("need","Pending actions",n(needCats),"err")+tb("upd","Alerts",n(updCats),"warn")+'</div>';
     var cats=(tab==="need")?needCats:updCats;
     var xwide=(w.size==="xwide");
     var listHTML='<div class="alb4-root">'+tabs+'<div class="alb4-panel scroll">'+cats.map(function(c){return alo2CatHTML(c,w.id,xwide);}).join("")+'</div></div>';
@@ -12353,7 +12353,8 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         if(fc&&fc.items.length>0){alo2Sel[id]={cat:fc,catId:fc.id,idx:0,cfg:ALO2_ITEM_MODALS[fc.id+":0"]||null};}
         else{alo2Sel[id]=null;}
       } else {
-        tabCats.forEach(function(c){alo2Open[id][c.id]=true;});
+        ALO2_CATS.forEach(function(c){alo2Open[id][c.id]=false;});
+        if(tabCats.length>0){alo2Open[id][tabCats[0].id]=true;}
       }
       render();return true;}
     if(a==="alO2-toggle"){var cat=t.getAttribute("data-cat"),will=!alo2Open[id][cat];
