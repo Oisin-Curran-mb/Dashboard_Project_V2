@@ -1143,7 +1143,7 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 <div class="pair"><h4><span class="num">01</span>KPI band</h4><div class="pair-grid"><figure class="shot missing"><figcaption>V1</figcaption><div class="ph">Not in V1<code>New in V2</code></div></figure><figure class="shot"><figcaption>V2</figcaption><button class="zoom" data-src="docs/Pics/Version%202/W18%20-%20Financial%20KPI/W18-V2-01%20KPI%20band.png" aria-label="Enlarge V2 KPI band"><img src="docs/Pics/Version%202/W18%20-%20Financial%20KPI/W18-V2-01%20KPI%20band.png" alt="V2 KPI band" loading="lazy"></button></figure></div></div>
 </details>
 <div class="prose"><h3>Overview</h3>
-<p><strong>Financial KPI is new in V2 and has no V1 counterpart.</strong> It is a fixed, full-width band pinned above the dashboard grid, not a widget card: it has one size and cannot be resized, moved or removed like the cards below it. It shows three year-to-date tiles, Total Income, Total Expenses and Net Income, each against the prior year with the percentage change.</p>
+<p><strong>Financial KPI is new in V2 and has no V1 counterpart.</strong> It is a fixed, full-width band pinned above the dashboard grid, not a widget card: it has one size and cannot be resized, moved or removed like the cards below it. It shows three year-to-date tiles — Total Income, Total Expenses and Net Income — each against the prior year with a variance arrow and percentage change.</p>
 <p>It started as a port of Aditya's <a href="docs/W18%20Financial%20KPI%20-%20Design%20Spec.html">Financial KPI Cards v5 design spec</a> and was reduced on 28 September 2026 to his latest layout (Variant A): three equal cards, no Cash Position tile and no prototype demo chip. Read the spec for the tile layout and the mock figures (sections 1 to 4a and 12). Its sections on the Cash Position runway, the reconciliation warning, the tooltip, the clickable account cards and the demo cycle (sections 4b to 11) describe a tile that no longer exists and must not be built.</p>
 <h3>What It Does</h3>
 <h4>Band</h4>
@@ -1151,10 +1151,14 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 <li><strong>KPI band:</strong> a full-width band above the widget grid with its own title row, "Financial KPI", and a Refresh button at the right. There is no resize control and no menu: the band is fixed by ruling, and offering either would imply an action that does not exist. It is an always-visible summary that does not depend on how the user arranges the dashboard.</li>
 <li><strong>KPI band:</strong> three equal tiles across, each its own card with its own border and surface; two across on a tablet-width window and one across on a phone-width one. The band sizes itself to its cards.</li>
 <li><strong>KPI band:</strong> obeys the widget switchboard like every other widget, so it can be hidden for a release without touching its code.</li>
+<li><strong>KPI band:</strong> has no multiple sizes — it always sticks to the top of the dashboard at a fixed, full-width height. It is not part of the resizable widget grid.</li>
 </ul>
-<h4>Tiles</h4>
+<h4>Tiles — layout and content</h4>
 <ul>
-<li><strong>KPI band:</strong> each tile shows its label (Total Income (YTD), Total Expenses (YTD), Net Income (YTD)), the dollar value, "Prev yr" with the prior-year value, then the percentage change with an up or down arrow. The arrow is green when the change is favourable and red when it is unfavourable. A rise in expenses shows red even though the arrow points up.</li>
+<li><strong>Each tile contains:</strong> (1) a label row with the tile name and a visible info icon (ⓘ); (2) the current year-to-date value in large type; (3) a "Prev yr" row showing the prior-year value; (4) a variance row showing the change as an arrow + dollar amount + percentage.</li>
+<li><strong>Info tooltip:</strong> the ⓘ icon is always visible (not hidden behind hover). Clicking or focusing it shows a short explanation of how the number is calculated — for example, "Total Income is the sum of all revenue and income accounts in the general ledger for the current fiscal year to date" — so users understand what they are reading without leaving the page.</li>
+<li><strong>Prev yr value:</strong> shown below the main figure as a reference point. The variance is computed from the prior-year value, not from the budget.</li>
+<li><strong>Variance arrow:</strong> the arrow points up when this year is higher than prior year and down when lower. Its colour reflects whether the change is favourable or unfavourable for that tile (see favourable rule below), not simply whether the number went up. The dollar amount and percentage of the change are shown beside the arrow.</li>
 <li><strong>KPI band:</strong> screen readers hear "favourable" or "unfavourable" as text after each percentage; the colour is never the only signal.</li>
 </ul>
 <h4>Refresh</h4>
@@ -1162,16 +1166,18 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 <li><strong>KPI band:</strong> Refresh replaces all three tiles with shimmering placeholder bars for about a second, then shows the figures again, resets the "updated" stamp to "just now" and writes "Financial KPI refreshed." to the status line. Its tooltip reads "Refresh · updated just now". The button stays available while loading. The timing and the shimmer are the same as the cards' refresh.</li>
 </ul>
 <h3>Developer Notes</h3>
-<p>Six figures are needed from the general ledger: income, expenses and net income for the current fiscal year to date, and the same three for the prior fiscal year to date. Everything else is presentation.</p>
-<h4>Data</h4>
+<p>Six figures are needed from the source: income, expenses and net income for the current fiscal year to date, and the same three for the prior fiscal year to date. Everything else is presentation.</p>
+<h4>Data source</h4>
 <ul>
-<li>The three values and their prior-year values. The demo's figures ($1,824,350 against $1,682,400; $1,681,550 against $1,598,200; $142,800 against $84,200) are fixtures copied verbatim from the spec, and so are its percentages.</li>
-<li>The percentage change is computed, not stored: (this year − prior year) ÷ prior year, shown to one decimal. Example: income $1,824,350 against $1,682,400 → +$141,950 ÷ $1,682,400 = 8.4%. Net income $142,800 against $84,200 → 69.6%.</li>
-<li>Net income is income minus expenses; it is shown as its own figure, so compute it once and show it rather than letting the tiles disagree.</li>
+<li><strong>Total Income</strong> and <strong>Total Expenses</strong> are sourced from the <strong>Budget Compared to Actual legacy widget (W01)</strong>. Pull the same totals that widget already fetches — do not introduce a separate API call if the data is already available from that feed.</li>
+<li><strong>Net Income</strong> is not fetched independently. It is always computed as: <code>Net Income = Total Income − Total Expenses</code>. Compute it once on the client from the two fetched values and render it; never let the three tiles derive their figures independently, or rounding differences will cause them to disagree.</li>
+<li>The demo's figures ($1,824,350 against $1,682,400 for income; $1,681,550 against $1,598,200 for expenses; $142,800 against $84,200 for net income) are fixtures copied verbatim from the spec. Percentages are also pre-computed in the spec and match the formula.</li>
+<li>The percentage change is computed, not stored: <code>(this year − prior year) ÷ prior year × 100</code>, shown to one decimal place. Example: income $1,824,350 vs $1,682,400 → +$141,950 ÷ $1,682,400 = +8.4%.</li>
 </ul>
 <h4>The favourable rule</h4>
 <ul>
-<li>Favourable or unfavourable is a rule per tile, not the sign of the change: income and net income are favourable when up, expenses are favourable when down. The arrow shows direction; the colour shows judgement. Example: expenses up 5.2% → arrow up, red.</li>
+<li>Favourable or unfavourable is a rule per tile, not the sign of the change: income and net income are favourable when up (green arrow), unfavourable when down (red arrow). Expenses are favourable when down (green arrow), unfavourable when up (red arrow even though the arrow points up).</li>
+<li>The arrow direction is independent of the colour: direction = sign of (this year − prior year); colour = per-tile favourable rule applied to that direction.</li>
 </ul>
 <h4>Band</h4>
 <ul>
@@ -1179,10 +1185,26 @@ main{padding:20px 16px 60px} .widget{padding:18px 16px} .pair-grid{grid-template
 <li>Colours, type, the Refresh button, its tooltip and the loading shimmer use the same Pathway tokens and patterns as the cards. Nothing new was introduced for the band.</li>
 <li>The Cash Position tile and its reconciliation warning were deleted, not hidden. Nothing in the build depends on them; the reasoning, and the exact text removed, is in the decision record for this widget under docs/decisions.</li>
 </ul>
+<h4>Edge cases</h4>
+<h4>Zero values (8.1)</h4>
+<ul>
+<li><strong>8.1.a — Zero Net Income:</strong> if <code>Total Income = Total Expenses</code>, Net Income is <code>$0</code>. The tile must render <code>$0</code> clearly — not a blank, not <code>NaN</code>, not an empty value field. A zero is real data.</li>
+<li><strong>8.1.b — Zero vs no-data:</strong> a <code>$0</code> Net Income tile is visually distinct from the no-data / error state. Zero is shown with the normal tile layout including the figure, the Prev yr row and the variance. The no-data state is a disabled tile with no figures (see 8.3 below).</li>
+</ul>
+<h4>Negative Net Income (8.2)</h4>
+<ul>
+<li><strong>8.2.a — Negative value display:</strong> if Total Expenses exceed Total Income, Net Income is negative. The value renders with a minus sign (e.g. <code>–$138,750</code>), not as a positive number. Never strip the sign.</li>
+<li><strong>8.2.b — Variance colour for negative Net Income worse than prior year:</strong> if Net Income is negative this year and was also negative last year but is now more negative (i.e. the situation deteriorated), the variance badge is red (unfavourable). The colour must not flip to green simply because the number "went up" in absolute terms from a less-negative prior-year value — apply the favourable rule: net income is favourable when up, so the colour follows whether the computed change is genuinely an improvement.</li>
+</ul>
+<h4>No-data, error and loading states (8.3)</h4>
+<ul>
+<li><strong>8.3.a — Loading state (before API call resolves):</strong> before the financial data API returns, each tile shows pulsing grey skeleton placeholder bars shaped like the content they will replace — one bar for the label row, one larger block for the value, one shorter bar for the Prev yr row. This is per-tile; all three tiles skeleton independently if they have separate calls, or together if they share one call. The skeleton must not show <code>$0</code> or any real-looking number.</li>
+<li><strong>8.3.b — Error state (API fails to return data):</strong> if the API call fails or returns unusable data, the three tiles are disabled — greyed out, non-interactive, showing no figures, no dash or hyphen as a substitute for a figure. The band title row gains a warning badge beside "Financial KPI" reading <strong>"Unable to load — please refresh"</strong>. This state must not silently show <code>$0</code> as if real data were present; the user must be able to see that something went wrong and know what to do.</li>
+<li><strong>Transition:</strong> loading skeleton → success (figures render) or loading skeleton → error (tiles disabled, warning badge appears). There is no intermediate state where some tiles show figures and others do not; all three update together.</li>
+</ul>
 <h4>Still open</h4>
 <ul>
 <li>Whether "Prev yr" means the prior fiscal year to the same date, or the whole prior fiscal year. The spec's figures do not settle it; the first reading is assumed above.</li>
-<li>What to show when the prior-year value is $0 (no percentage possible) or when net income is negative. The demo never shows either.</li>
 <li>Where the year-to-date window starts: it must follow the organisation's fiscal calendar, not the calendar year.</li>
 </ul>
 </div></section>
