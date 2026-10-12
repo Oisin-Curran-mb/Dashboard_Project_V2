@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Alerts &amp; Actions, Option C: a prioritised queue</title>
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:wght@400;500;600;700&family=Red+Hat+Display:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@helloimjolopez-pathway/pathway-tokens@10.0.4/dist/primitives.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@helloimjolopez-pathway/pathway-tokens@10.0.4/dist/themes/light.css">
+<link rel="stylesheet" href="_live.css"><link rel="stylesheet" href="mock.css">
+</head><body>
+<div class="mock-col"><div class="mock-h">Option C: complete redesign, a prioritised queue. Three tappable tiles filter one flat, sortable table of all twenty items; row tap opens the detail.</div>
+<div class="canvas" id="canvas"></div>
+<p class="mock-note">Explore (566 px), Detail (1148 px) and, as a question for the owner, a Glance (275 px) made of the three tiles. Default order: items you can act on first, then oldest. Tap a tile to filter, tap it again to clear. Tap a column heading to sort. Row tap: pop-up at Explore, right pane at Detail.</p></div>
+<div class="statusline" id="status" aria-live="polite"></div>
+<script src="mock-data.js"></script><script src="mock-shell.js"></script>
+<script>
+(function () {
+  var I = MOCK.ICON, E = MOCK.esc, filt = { wide: "", xwide: "" }, sort = { wide: ["urgency", 1], xwide: ["urgency", 1] }, sel = { xwide: "pay:0" };
+  var all = []; MOCK.groups.forEach(function (g) { g.items.forEach(function (it) { all.push(it); }); });
+  var pay = MOCK.half("act").filter(function (g) { return g.id === "pay"; });
+  function rows(size) {
+    var f = filt[size], r = all.filter(function (it) { return !f || (f === "act" && it.g.half === "act") || (f === "over" && it.g.id === "pay") || (f === "alert" && it.g.half === "alert"); });
+    var k = sort[size][0], d = sort[size][1];
+    r.sort(function (a, b) {
+      if (k === "urgency") { var ha = a.g.half === "act" ? 0 : 1, hb = b.g.half === "act" ? 0 : 1; return (ha - hb) || (b.age - a.age) || (b.amount - a.amount); }
+      if (k === "amount") return d * (b.amount - a.amount);
+      if (k === "age") return d * (b.age - a.age);
+      if (k === "module") return d * a.g.moduleName.localeCompare(b.g.moduleName);
+      return d * a.label.localeCompare(b.label);
+    });
+    return r;
+  }
+  function tiles(size, glance) {
+    var a = MOCK.half("act"), b = MOCK.half("alert"), f = filt[size];
+    function tile(id, cls, lbl, n, amt) { return '<button class="gtile ' + cls + (f === id ? " on" : "") + '" data-a="tile" data-size="' + size + '" data-f="' + id + '" aria-pressed="' + (f === id) + '" title="' + E(id === "act" ? "Payments to process, purchase requests to approve, journals to post" : id === "over" ? "AP invoices past their due date" : "Thresholds crossed: fund over income, over budget, reconciliation overdue, receivables ageing") + '"><span class="gtile-lbl">' + lbl + '</span><span class="gtile-num">' + n + '</span><span class="gtile-amt">' + amt + '</span></button>'; }
+    return '<div class="tiles">' + tile("act", "act", "Needs your action", MOCK.count(a), MOCK.money(MOCK.sum(a))) + tile("over", "over", "Overdue payables", MOCK.count(pay), MOCK.money(MOCK.sum(pay))) + tile("alert", "alerts", "Alerts to review", MOCK.count(b), b.length + " groups") + '</div>';
+  }
+  function head(size) {
+    var k = sort[size][0];
+    function h(key, lbl, cls) { return '<span class="' + cls + '"><button class="wt-sort' + (k === key ? " on" : "") + '" data-a="sort" data-size="' + size + '" data-k="' + key + '">' + lbl + I(k === key && sort[size][1] < 0 ? "arrow_upward" : "arrow_downward") + '</button></span>'; }
+    return '<div class="wt-row wt-head">' + h("label", "Item", "c-item") + h("module", "Module", "c-mod") + h("age", "Status", "c-st") + h("amount", "Amount", "c-amt") + '<span class="c-act">' + h("urgency", "Action", "") + '</span></div>';
+  }
+  function row(it, size) {
+    var g = it.g, x = size === "xwide", actBtn = g.act ? '<button class="btn primary xs' + (g.act === "Approve" ? " ok" : "") + '" data-a="act" data-v="' + E(g.act) + '" data-it="' + it.id + '">' + E(g.act) + '</button>' : '<button class="btn outlined xs" data-a="open" data-it="' + it.id + '">' + E(g.open) + '</button>';
+    return '<div class="wt-row q-row' + (x && sel.xwide === it.id ? " sel" : "") + '" data-a="row" data-size="' + size + '" data-it="' + it.id + '" role="button" tabindex="0"><span class="c-item"><span class="it-lbl">' + E(it.label) + '</span><span class="it-meta">' + E(it.meta) + '</span></span>' +
+      '<span class="c-mod"><span class="mct-badge" data-app="' + g.module + '">' + MOCK.MODULE_BADGE[g.module] + '</span></span>' +
+      '<span class="c-st">' + (it.chip2 && x ? '<span class="stchip stchip-brand">' + E(it.chip2) + '</span>' : "") + '<span class="stchip stchip-' + it.tone + '">' + E(it.chip) + '</span></span>' +
+      '<span class="c-amt">' + (it.amount ? MOCK.money(it.amount) : "") + '</span><span class="c-act">' + actBtn + '</span></div>';
+  }
+  function table(size) { var r = rows(size); return '<div class="q-wrap">' + head(size) + '<div class="q-scroll">' + r.map(function (it) { return row(it, size); }).join("") + '</div><div class="q-count">' + r.length + ' of ' + all.length + ' items' + (filt[size] ? ', filtered by tile' : "") + '</div></div>'; }
+  function content(size) {
+    if (size === "wide") return '<div class="alb4-root">' + tiles(size) + table(size) + '</div>';
+    return '<div class="alb4-xwide-wrap">' + tiles(size) + '<div class="alb4-detail-split"><div class="alb4-detail-left" style="flex-basis:58%">' + table(size) + '</div><div class="alb4-detail-right">' + SHELL.pane(SHELL.find(sel.xwide)) + '</div></div></div>';
+  }
+  function glance() {
+    var a = MOCK.half("act"), b = MOCK.half("alert");
+    return '<section class="widget mock glance" data-size="kpi"><div class="whead"><div class="wtitle-wrap"><h3 class="wtitle">Alerts &amp; Actions</h3></div><div class="wspace"></div></div><div class="wcontent"><div class="tiles">' +
+      '<div class="gtile act"><span class="gtile-lbl">Needs your action</span><span class="gtile-num">' + MOCK.count(a) + '</span></div><div class="gtile over"><span class="gtile-lbl">Overdue payables</span><span class="gtile-num">' + MOCK.money(MOCK.sum(pay)) + '</span></div><div class="gtile alerts"><span class="gtile-lbl">Alerts to review</span><span class="gtile-num">' + MOCK.count(b) + '</span></div></div></div></section>';
+  }
+  function render() { document.getElementById("canvas").innerHTML = SHELL.frame("wide", content("wide")) + SHELL.frame("xwide", content("xwide")) + '<div class="mock-col"><div class="mock-h">Glance, a question for the owner</div>' + glance() + '</div>'; }
+  document.addEventListener("click", function (ev) {
+    var t = ev.target.closest("[data-a]"); if (!t) return;
+    var a = t.getAttribute("data-a"), s = t.getAttribute("data-size"), it = SHELL.find(t.getAttribute("data-it"));
+    if (a === "tile") { var f = t.getAttribute("data-f"); filt[s] = filt[s] === f ? "" : f; render(); return; }
+    if (a === "sort") { var k = t.getAttribute("data-k"); sort[s] = sort[s][0] === k ? [k, -sort[s][1]] : [k, 1]; render(); return; }
+    if (a === "act") { ev.stopPropagation(); SHELL.act(it, t.getAttribute("data-v")); return; }
+    if (a === "open") { ev.stopPropagation(); SHELL.act(it, "open"); return; }
+    if (a === "row") { if (s === "xwide") { sel.xwide = it.id; render(); } else SHELL.popup(it); return; }
+  });
+  document.addEventListener("keydown", function (ev) { if ((ev.key === "Enter" || ev.key === " ") && ev.target.matches && ev.target.matches("[data-a][role=button]")) { ev.preventDefault(); ev.target.click(); } });
+  render();
+})();
+</script></body></html>

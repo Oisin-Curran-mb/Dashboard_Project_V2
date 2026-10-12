@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Alerts &amp; Actions, Option A: hierarchy and sub-headings</title>
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:wght@400;500;600;700&family=Red+Hat+Display:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@helloimjolopez-pathway/pathway-tokens@10.0.4/dist/primitives.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@helloimjolopez-pathway/pathway-tokens@10.0.4/dist/themes/light.css">
+<link rel="stylesheet" href="_live.css"><link rel="stylesheet" href="mock.css">
+</head><body>
+<div class="mock-col"><div class="mock-h">Option A: hierarchy and sub-headings. Two labelled sections replace the tabs; a header band states the counts; items split into label, meta and chip.</div>
+<div class="canvas" id="canvas"></div>
+<p class="mock-note">Explore (566 px) and Detail (1148 px). One group open at a time inside each section. At Detail, tap an item to load the right pane. Approve, Reject and Process payment ask first; Open buttons report the destination to the status line (bottom left).</p></div>
+<div class="statusline" id="status" aria-live="polite"></div>
+<script src="mock-data.js"></script><script src="mock-shell.js"></script>
+<script>
+(function () {
+  var I = MOCK.ICON, E = MOCK.esc, open = { wide: { pay: true, fund: true }, xwide: { pay: true, fund: true } }, sel = { xwide: null };
+  function itemHTML(it, size) {
+    var chips = (it.chip2 ? '<span class="stchip stchip-brand">' + E(it.chip2) + '</span>' : "") + '<span class="stchip stchip-' + it.tone + '">' + E(it.chip) + '</span>';
+    var x = size === "xwide", cls = "it" + (x ? " clickable" + (sel.xwide === it.id ? " sel" : "") : "");
+    return '<div class="' + cls + '"' + (x ? ' data-a="sel" data-it="' + it.id + '" role="button" tabindex="0"' : "") + '><div class="it-tx"><span class="it-lbl">' + E(it.label) + '</span><span class="it-meta">' + E(it.meta) + '</span></div><div class="it-chips">' + chips + '</div>' +
+      (x ? "" : '<div class="it-acts">' + SHELL.button1(it, "xs") + '</div>') + '</div>';
+  }
+  function groupHTML(g, size) {
+    var isOpen = !!open[size][g.id];
+    return '<div class="al-cat sev-' + g.half + (isOpen ? " al-open" : "") + '"><div class="al-hd" data-a="toggle" data-g="' + g.id + '" data-size="' + size + '" role="button" tabindex="0" aria-expanded="' + isOpen + '">' +
+      '<div class="al-hd-l"><div class="al-hd-title-row"><span class="al-cat-title big">' + E(g.title) + '</span><span class="al-count ' + g.half + '">' + g.items.length + '</span></div><div class="al-cat-sub todo">' + E(g.instruction) + '</div></div>' +
+      '<div class="al-hd-r"><span class="material-symbols-rounded al-chev" aria-hidden="true">expand_more</span></div></div>' +
+      (isOpen ? '<div class="al-body">' + g.items.map(function (it) { return itemHTML(it, size); }).join("") + '</div>' : "") + '</div>';
+  }
+  function section(half, title, size) {
+    var gs = MOCK.half(half), n = MOCK.count(gs);
+    return '<div class="sec"><div class="sec-head"><span class="sec-h">' + title + '</span><span class="sec-cnt">' + n + (half === "act" ? " items, " + MOCK.money(MOCK.sum(gs)) : " items") + '</span></div>' + gs.map(function (g) { return groupHTML(g, size); }).join("") + '</div>';
+  }
+  function band() {
+    var a = MOCK.half("act"), b = MOCK.half("alert");
+    return '<div class="hd-band"><div class="hd-row"><span class="metric-value">' + MOCK.count(a) + '</span><span class="bank-pill">need your action</span><span class="bank-pill warn">' + I("payments") + MOCK.money(MOCK.sum(a)) + ' to pay, approve or post</span></div>' +
+      '<div class="hd-ctx">' + MOCK.count(b) + ' alerts to review across ' + b.length + ' groups. Items leave the list when they are done.</div></div>';
+  }
+  function list(size) { return section("act", "Needs your action", size) + section("alert", "Alerts", size); }
+  function content(size) {
+    if (size === "wide") return '<div class="alb4-root">' + band() + '<div class="alb4-panel scroll" style="padding:0">' + list(size) + '</div></div>';
+    return '<div class="alb4-xwide-wrap">' + band() + '<div class="alb4-detail-split"><div class="alb4-detail-left"><div class="alb4-xw-left-panel scroll" style="padding:0">' + list(size) + '</div></div><div class="alb4-detail-right">' + SHELL.pane(SHELL.find(sel.xwide)) + '</div></div></div>';
+  }
+  function render() { document.getElementById("canvas").innerHTML = SHELL.frame("wide", content("wide")) + SHELL.frame("xwide", content("xwide")); }
+  document.addEventListener("click", function (ev) {
+    var t = ev.target.closest("[data-a]"); if (!t) return;
+    var a = t.getAttribute("data-a"), it = SHELL.find(t.getAttribute("data-it"));
+    if (a === "toggle") { var s = t.getAttribute("data-size"), g = t.getAttribute("data-g"), will = !open[s][g], half = MOCK.groups.filter(function (x) { return x.id === g; })[0].half;
+      if (will) MOCK.groups.forEach(function (x) { if (x.half === half) open[s][x.id] = false; }); open[s][g] = will; render(); return; }
+    if (a === "sel") { sel.xwide = it.id; render(); return; }
+    if (a === "act") { ev.stopPropagation(); SHELL.act(it, t.getAttribute("data-v")); return; }
+    if (a === "open") { ev.stopPropagation(); SHELL.act(it, "open"); return; }
+  });
+  document.addEventListener("keydown", function (ev) { if ((ev.key === "Enter" || ev.key === " ") && ev.target.matches && ev.target.matches("[data-a][role=button]")) { ev.preventDefault(); ev.target.click(); } });
+  render();
+})();
+</script></body></html>

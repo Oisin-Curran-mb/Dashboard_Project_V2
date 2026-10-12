@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Alerts &amp; Actions, Option B: the open group tells you the next step</title>
+<link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:wght@400;500;600;700&family=Red+Hat+Display:wght@600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@helloimjolopez-pathway/pathway-tokens@10.0.4/dist/primitives.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@helloimjolopez-pathway/pathway-tokens@10.0.4/dist/themes/light.css">
+<link rel="stylesheet" href="_live.css"><link rel="stylesheet" href="mock.css">
+</head><body>
+<div class="mock-col"><div class="mock-h">Option B: the open group tells you the next step. Tabs and accordion stay; the open group shows a fact strip, a Next step line and two buttons per item.</div>
+<div class="canvas" id="canvas"></div>
+<p class="mock-note">Explore (566 px) and Detail (1148 px). Tabs follow the rule: Needs your action = approve, pay, post; Alerts = review. At Detail the list is compact and the right pane carries the Next step and the same two buttons. Approve, Reject and Process payment ask first.</p></div>
+<div class="statusline" id="status" aria-live="polite"></div>
+<script src="mock-data.js"></script><script src="mock-shell.js"></script>
+<script>
+(function () {
+  var I = MOCK.ICON, E = MOCK.esc, tab = { wide: "act", xwide: "act" }, open = { wide: { pay: true }, xwide: { pay: true } }, sel = { xwide: "pay:0" };
+  function recHTML(it) {
+    var g = it.g, facts = it.facts.slice(0, 4).map(function (f) { return '<div class="rec-f"><span class="rec-fl">' + E(f[0]) + '</span><span class="rec-fv' + (f[2] ? " err" : "") + '">' + E(f[1]) + '</span></div>'; }).join("");
+    return '<div class="rec"><div class="rec-top"><span class="it-lbl" style="flex:1;min-width:0">' + E(it.label) + '</span>' + (it.chip2 ? '<span class="stchip stchip-brand">' + E(it.chip2) + '</span>' : "") + '<span class="stchip stchip-' + it.tone + '">' + E(it.chip) + '</span></div>' +
+      '<div class="rec-facts">' + facts + '</div><div class="rec-next">' + I("arrow_forward") + '<span>' + E(it.next) + '</span></div><div class="rec-acts">' + SHELL.buttons(it, "xs") + '</div></div>';
+  }
+  function compactHTML(it) {
+    return '<div class="it clickable' + (sel.xwide === it.id ? " sel" : "") + '" data-a="sel" data-it="' + it.id + '" role="button" tabindex="0"><div class="it-tx"><span class="it-lbl">' + E(it.label) + '</span><span class="it-meta">' + E(it.meta) + '</span></div><div class="it-chips"><span class="stchip stchip-' + it.tone + '">' + E(it.chip) + '</span></div></div>';
+  }
+  function groupHTML(g, size) {
+    var isOpen = !!open[size][g.id];
+    return '<div class="al-cat sev-' + g.half + (isOpen ? " al-open" : "") + '"><div class="al-hd" data-a="toggle" data-g="' + g.id + '" data-size="' + size + '" role="button" tabindex="0" aria-expanded="' + isOpen + '">' +
+      '<div class="al-hd-l"><div class="al-hd-title-row"><span class="al-cat-title">' + E(g.title) + '</span><span class="al-count ' + g.half + '">' + g.items.length + '</span></div><div class="al-cat-sub">' + E(g.summary) + '</div></div>' +
+      '<div class="al-hd-r"><span class="material-symbols-rounded al-chev" aria-hidden="true">expand_more</span></div></div>' +
+      (isOpen ? '<div class="al-body">' + g.items.map(size === "xwide" ? compactHTML : recHTML).join("") + '</div>' : "") + '</div>';
+  }
+  function tabs(size) {
+    var a = MOCK.half("act"), b = MOCK.half("alert"), t = tab[size];
+    function tb(v, lbl, n, cls) { return '<button class="alb4-tab' + (t === v ? " on" : "") + '" data-a="tab" data-size="' + size + '" data-tab="' + v + '" aria-pressed="' + (t === v) + '">' + lbl + ' <span class="alb4-badge ' + cls + '">' + n + '</span></button>'; }
+    return '<div class="alb4-tabs" role="group" aria-label="Alert type">' + tb("act", "Needs your action", MOCK.count(a), "err") + tb("alert", "Alerts", MOCK.count(b), "warn") + '</div>';
+  }
+  function list(size) { return MOCK.half(tab[size]).map(function (g) { return groupHTML(g, size); }).join(""); }
+  function content(size) {
+    if (size === "wide") return '<div class="alb4-root">' + tabs(size) + '<div class="alb4-panel scroll">' + list(size) + '</div></div>';
+    return '<div class="alb4-xwide-wrap">' + tabs(size) + '<div class="alb4-detail-split"><div class="alb4-detail-left"><div class="alb4-xw-left-panel scroll">' + list(size) + '</div></div><div class="alb4-detail-right">' + SHELL.pane(SHELL.find(sel.xwide), true) + '</div></div></div>';
+  }
+  function render() { document.getElementById("canvas").innerHTML = SHELL.frame("wide", content("wide")) + SHELL.frame("xwide", content("xwide")); }
+  document.addEventListener("click", function (ev) {
+    var t = ev.target.closest("[data-a]"); if (!t) return;
+    var a = t.getAttribute("data-a"), s = t.getAttribute("data-size"), it = SHELL.find(t.getAttribute("data-it"));
+    if (a === "tab") { tab[s] = t.getAttribute("data-tab"); var gs = MOCK.half(tab[s]); MOCK.groups.forEach(function (g) { open[s][g.id] = false; }); open[s][gs[0].id] = true; if (s === "xwide") sel.xwide = gs[0].items[0].id; render(); return; }
+    if (a === "toggle") { var g = t.getAttribute("data-g"), will = !open[s][g]; if (will) MOCK.groups.forEach(function (x) { open[s][x.id] = false; }); open[s][g] = will; render(); return; }
+    if (a === "sel") { sel.xwide = it.id; render(); return; }
+    if (a === "act") { ev.stopPropagation(); SHELL.act(it, t.getAttribute("data-v")); return; }
+    if (a === "open") { ev.stopPropagation(); SHELL.act(it, "open"); return; }
+  });
+  document.addEventListener("keydown", function (ev) { if ((ev.key === "Enter" || ev.key === " ") && ev.target.matches && ev.target.matches("[data-a][role=button]")) { ev.preventDefault(); ev.target.click(); } });
+  render();
+})();
+</script></body></html>
