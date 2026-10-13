@@ -1,0 +1,11 @@
+{
+  "tag": "div",
+  "primaryClass": ".fkp-root",
+  "classes": [
+    "fkp-root"
+  ],
+  "id": "",
+  "text": "Financial KPIrefreshinfoTotal Income (YTD)$1,824,350Prev yr $1,682,400·↑ 8.4%fav",
+  "selectorPath": "div#fkpBand > div.fkp-root",
+  "timestamp": 1791563373467
+}
