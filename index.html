@@ -2490,6 +2490,16 @@
   /* left accordion panel scrolls independently */
   .alb4-xw-left-panel{flex:1;overflow-y:auto;padding:var(--padding-tight) var(--padding-base);}
   .alb4-xw-left-panel .al-cat{margin-bottom:var(--padding-base);}
+  /* ── Pending Actions glance ── */
+  .pa3-glancewrap{display:flex;flex-direction:column;gap:var(--gap-tight);padding:var(--padding-tight) var(--padding-medium);height:100%;justify-content:center;}
+  .pa3-glancewrap .scope-chip{align-self:flex-start;}
+  .pa3-cards{display:grid;grid-template-columns:repeat(var(--pa3-cols,2),minmax(0,1fr));gap:var(--gap-tight);}
+  .pa3-card{display:flex;flex-direction:column;align-items:flex-start;gap:var(--gap-tight);padding:var(--padding-base) var(--padding-base);border:1px solid var(--stroke-widget);border-radius:var(--cornerradius-medium);background:var(--surface-widget);min-width:0;}
+  .pa3-card-top{display:inline-flex;align-items:center;gap:var(--gap-xxtight);white-space:nowrap;font-size:var(--type-size-10);font-weight:600;letter-spacing:0;text-transform:uppercase;color:var(--txt-subtle);}
+  .pa3-card-n-row{display:flex;align-items:baseline;gap:4px;}
+  .pa3-card-n{font-size:var(--type-size-20);font-weight:700;line-height:1;color:var(--txt-primary);font-variant-numeric:tabular-nums;}
+  .pa3-card-n-lbl{font-size:var(--type-size-10);font-weight:400;color:var(--txt-subtle);line-height:1;}
+  .pa3-card-sub{font-size:var(--type-size-10);color:var(--txt-subtle);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
   .alb4-xw-left-panel .al-cat:last-child{margin-bottom:0;}
   /* right panel: detail pane */
   .al2-dp{display:flex;flex-direction:column;flex:1;min-height:0;}
@@ -12606,7 +12616,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         "Youth Ministry Fund, $12,600 over restricted income (108.4%)",
         "Capital Improvement Fund, $8,900 over restricted income (104.2%)"
       ]},
-    {id:"pa3-cat-2",sev:"need",action:true,group:"ap",title:"Payment Processing",sub:"7 AP invoices past due: $56,350 total outstanding",
+    {id:"pa3-cat-2",sev:"need",action:true,group:"ap",title:"Payment Processing",sub:"7 AP invoices past due: $56,350 total outstanding",glance:{n:7,nLabel:"invoices due",sub:"$56,350 total outstanding"},
       items:[
         'AVID Pay · 3 invoices · $31,800',
         'ACH · 2 invoices · $16,050',
@@ -12630,7 +12640,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         "PO-2024-0891 · $6,200 · 6 days waiting · Approver: Michael R.",
         "PO-2024-0904 · $11,350 · 7 days waiting · Approver: Karen T."
       ]},
-    {id:"pa3-cat-6",sev:"need",action:true,group:"ar",title:"Receivable Invoices Outstanding",sub:"9 AR invoices unpaid: $23,150 total, oldest 52 days",
+    {id:"pa3-cat-6",sev:"need",action:true,group:"ar",title:"Unposted Invoices",sub:"9 AR invoices unpaid: $23,150 total, oldest 52 days",glance:{n:9,nLabel:"invoices unpaid",sub:"$23,150 total"},
       items:[
         "Riverside Community Group · INV-AR-2024-0112 · $3,800 · 52 days",
         "Grace Preschool Program · INV-AR-2024-0098 · $6,500 · 45 days",
@@ -12642,7 +12652,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         "Faith Community Fellowship · INV-AR-2024-0121 · $2,900 · 14 days",
         "Trinity Chapel · INV-AR-2024-0125 · $1,800 · 10 days"
       ]},
-    {id:"pa3-cat-7",sev:"need",action:true,group:"gl",title:"Unposted Journals",sub:"8 journal entries pending posting: $65,100 total, oldest 14 days",
+    {id:"pa3-cat-7",sev:"need",action:true,group:"gl",title:"Unposted Journals",sub:"8 journal entries pending posting: $65,100 total, oldest 14 days",glance:{n:8,nLabel:"journals entry pending",sub:"$65,100 total"},
       items:[
         "JE-2024-1041 · Payroll allocation · $18,400 · 14 days",
         "JE-2024-1055 · Depreciation · $9,200 · 11 days",
@@ -12653,7 +12663,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         "JE-2024-1097 · Fixed asset additions · $6,400 · 2 days",
         "JE-2024-1103 · Bank charges · $7,000 · 1 day"
       ]},
-    {id:"pa3-cat-8",sev:"need",action:true,group:"ap",title:"Unposted Transactions",sub:"6 transactions pending posting: $42,750 total, oldest 10 days",
+    {id:"pa3-cat-8",sev:"need",action:true,group:"ap",title:"Unposted Transactions",sub:"6 transactions pending posting: $42,750 total, oldest 10 days",glance:{n:6,nLabel:"transactions pending",sub:"$42,750 total"},
       items:[
         "TXN-2024-3301 · Payroll disbursement · $14,200 · 10 days",
         "TXN-2024-3318 · Vendor payment · $9,500 · 7 days",
@@ -12662,7 +12672,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         "TXN-2024-3347 · Petty cash reimbursement · $3,200 · 2 days",
         "TXN-2024-3356 · Utility payment · $2,400 · 1 day"
       ]},
-    {id:"pa3-cat-9",sev:"need",action:true,group:"ar",title:"Payment Processing",sub:"5 payments awaiting processing: $38,900 total, oldest 9 days",
+    {id:"pa3-cat-9",sev:"need",action:true,group:"ar",title:"Payment Processing",sub:"5 payments awaiting processing: $38,900 total, oldest 9 days",glance:{n:5,nLabel:"Payments awaiting",sub:"$38,900 total outstanding"},
       items:[
         "PAY-2024-0071 · ACH · $12,600 · 9 days · Awaiting bank confirmation",
         "PAY-2024-0085 · Wire Transfer · $11,300 · 6 days · Pending authorisation",
@@ -12854,7 +12864,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     {id:"gl",label:"General Ledger"}
   ];
 
-  var pa3Open={},pa3Sel={},pa3GrpTab={};
+  var pa3Open={},pa3Sel={},pa3GrpTab={},pa3GlanceF={};
   function pa3Ensure(w){
     /* Initialise active group tab (default: first group) */
     if(!pa3GrpTab[w.id])pa3GrpTab[w.id]=PA3_GROUPS[0].id;
@@ -13006,7 +13016,45 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     var cats=PA3_CATS.filter(function(c){return c.sev==="need"&&c.group===active;});
     return cats.map(function(c){return pa3CatHTML(c,wid,xwide);}).join("");
   }
+  function pa3GlancePopContent(){
+    var active=pa3GlanceF[pop.id]||PA3_GROUPS[0].id;
+    return PA3_GROUPS.map(function(grp){
+      var on=(active===grp.id);
+      return '<button class="mi'+(on?" check":"")+'" data-action="paO3-set-glancegrp" data-id="'+pop.id+'" data-grp="'+grp.id+'">'+(on?'<span class="material-symbols-rounded" style="font-size:16px;line-height:1;">check</span>':'<span class="mi-gap"></span>')+'<span class="mi-nm">'+grp.label+'</span></button>';
+    }).join("");
+  }
+  function pa3Glance(w){
+    /* kpi glance: filter dropdown (AP/AR/GL) + one card per category in the active group */
+    if(!pa3GlanceF[w.id])pa3GlanceF[w.id]=PA3_GROUPS[0].id;
+    var activeGrpId=pa3GlanceF[w.id];
+    var activeGrp=PA3_GROUPS.filter(function(g){return g.id===activeGrpId;})[0]||PA3_GROUPS[0];
+    var cats=PA3_CATS.filter(function(c){return c.sev==="need"&&c.group===activeGrpId;});
+    var cols=cats.length>1?cats.length:1;
+    var chipOpen=(pop&&pop.type==="paO3-glancegrp"&&pop.id===w.id);
+    var cards=cats.map(function(c){
+      var cnt=c.items.length;
+      var gv=c.glance||{};
+      var dispN=gv.n!=null?gv.n:cnt;
+      var dispSub=gv.sub||c.sub||cnt+' item'+(cnt===1?'':'s');
+      var nHtml=gv.nLabel
+        ?'<span class="pa3-card-n">'+dispN+'</span><span class="pa3-card-n-lbl">'+gv.nLabel+'</span>'
+        :'<span class="pa3-card-n">'+dispN+'</span>';
+      return '<div class="pa3-card" role="group" aria-label="'+c.title+', '+dispN+'">'+
+        '<span class="pa3-card-top">'+c.title+'</span>'+
+        '<span class="pa3-card-n-row">'+nHtml+'</span>'+
+        '<span class="pa3-card-sub">'+dispSub+'</span>'+
+      '</div>';
+    }).join("");
+    return '<div class="pa3-glancewrap">'+
+      '<button class="scope-chip" data-action="paO3-glancegrp" data-id="'+w.id+'"'+(chipOpen?' data-depo':'')+'>'+
+        '<span class="sc-nm">'+activeGrp.label+'</span>'+
+        '<span class="material-symbols-rounded" style="font-size:14px;line-height:1;flex:0 0 auto;">expand_more</span>'+
+      '</button>'+
+      '<div class="pa3-cards" style="--pa3-cols:'+cols+';">'+cards+'</div>'+
+    '</div>';
+  }
   function pa3Content(w){
+    if(w.size==="kpi")return pa3Glance(w);
     pa3Ensure(w);
     var xwide=(w.size==="xwide");
     var tabs=pa3TabBar(w.id);
@@ -13025,6 +13073,9 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
 
   function pa3Handle(a,id,t){
     var w=find(id);if(!w)return false;pa3Ensure(w);
+    /* Glance group filter dropdown */
+    if(a==="paO3-glancegrp"){pop=(pop&&pop.type==="paO3-glancegrp"&&pop.id===id)?null:{type:"paO3-glancegrp",id:id};render();return true;}
+    if(a==="paO3-set-glancegrp"){var ng=t.getAttribute("data-grp");if(ng)pa3GlanceF[id]=ng;pop=null;render();return true;}
     /* Group tab switch */
     if(a==="paO3-grptab"){
       var grp=t.getAttribute("data-grp");
@@ -13186,7 +13237,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     bd.addEventListener("click",function(e){if(e.target===bd)closeModal();});
     var ff=bd.querySelector("button");if(ff)ff.focus();
   }
-  WIDGETS.register("pendingactions",{content:pa3Content,about:function(w){return {h:w.title,b:PA3_ABOUT};},click:function(a,id,t){return !!(a&&a.indexOf("paO3-")===0&&pa3Handle(a,id,t));}});
+  WIDGETS.register("pendingactions",{content:pa3Content,about:function(w){return {h:w.title,b:PA3_ABOUT};},click:function(a,id,t){return !!(a&&a.indexOf("paO3-")===0&&pa3Handle(a,id,t));},pops:{"paO3-glancegrp":{content:pa3GlancePopContent,trigger:function(){return '[data-action="paO3-glancegrp"][data-id="'+pop.id+'"]';}}}});
 /* ===== end W19-PendingActions Pending Actions V2 (pendingactions) ===== */
 
 
@@ -13254,8 +13305,9 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       {id:"alB4_2",title:"Alerts & Actions Copy",kind:"alerts2",size:"wide",tiers:["wide","xwide"],updated:"just now"},
       {id:"alB4_2x",title:"Alerts & Actions Copy (Detail)",kind:"alerts2",size:"xwide",tiers:["wide","xwide"],updated:"just now"},
       /* W19-PendingActions Pending Actions (pendingactions variant) */
-      {id:"paB4",title:"Pending Actions",kind:"pendingactions",size:"wide",tiers:["wide","xwide"],updated:"just now"},
-      {id:"paB4_x",title:"Pending Actions (Detail)",kind:"pendingactions",size:"xwide",tiers:["wide","xwide"],updated:"just now"},
+      {id:"paB4_g",title:"Pending Actions",kind:"pendingactions",size:"kpi",tiers:["kpi","wide","xwide"],updated:"just now"},
+      {id:"paB4",title:"Pending Actions",kind:"pendingactions",size:"wide",tiers:["kpi","wide","xwide"],updated:"just now"},
+      {id:"paB4_x",title:"Pending Actions (Detail)",kind:"pendingactions",size:"xwide",tiers:["kpi","wide","xwide"],updated:"just now"},
       {id:"ap",title:"Accounts Payable By Due Date",kind:"payables",size:"wide",tiers:["kpi","wide","xwide"],apview:"table",apDue:"total",apsort:"due-asc",updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
       {id:"ap_k",title:"Accounts Payable By Due Date",kind:"payables",size:"kpi",tiers:["kpi","wide","xwide"],apview:"table",apDue:"total",apsort:"due-asc",updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
       {id:"ap_x",title:"Accounts Payable By Due Date",kind:"payables",size:"xwide",tiers:["kpi","wide","xwide"],apview:"table",apDue:"total",apsort:"due-asc",updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
