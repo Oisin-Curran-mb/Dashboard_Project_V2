@@ -2495,6 +2495,9 @@
   .pa3-glancewrap .scope-chip{align-self:flex-start;}
   .pa3-cards{display:grid;grid-template-columns:repeat(var(--pa3-cols,2),minmax(0,1fr));gap:var(--gap-tight);}
   .pa3-card{display:flex;flex-direction:column;align-items:flex-start;gap:var(--gap-tight);padding:var(--padding-base) var(--padding-base);border:1px solid var(--stroke-widget);border-radius:var(--cornerradius-medium);background:var(--surface-widget);min-width:0;}
+  .pa3-card-btn{cursor:pointer;text-align:left;transition:border-color 120ms,background 120ms,box-shadow 120ms;}
+  .pa3-card-btn:hover{border-color:var(--color-primary,#2563eb);background:var(--surface-widget-hover,#f0f4ff);box-shadow:0 0 0 2px rgba(37,99,235,.12);}
+  .pa3-card-btn:focus-visible{outline:2px solid var(--color-primary,#2563eb);outline-offset:2px;}
   .pa3-card-top{display:inline-flex;align-items:center;gap:var(--gap-xxtight);white-space:nowrap;font-size:var(--type-size-10);font-weight:600;letter-spacing:0;text-transform:uppercase;color:var(--txt-subtle);}
   .pa3-card-n-row{display:flex;align-items:baseline;gap:4px;}
   .pa3-card-n{font-size:var(--type-size-20);font-weight:700;line-height:1;color:var(--txt-primary);font-variant-numeric:tabular-nums;}
@@ -12616,7 +12619,12 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         "Youth Ministry Fund, $12,600 over restricted income (108.4%)",
         "Capital Improvement Fund, $8,900 over restricted income (104.2%)"
       ]},
-    {id:"pa3-cat-2",sev:"need",action:true,group:"ap",title:"Payment Processing",sub:"7 AP invoices past due: $56,350 total outstanding",glance:{n:7,nLabel:"invoices due",sub:"$56,350 total outstanding"},
+    {id:"pa3-cat-2",sev:"need",action:true,group:"ap",title:"Payment Processing",sub:"7 AP invoices past due: $56,350 total outstanding",
+      glance:{n:7,nLabel:"invoices due",sub:"$56,350 total outstanding",
+        modal:{sevLabel:"Need Action: Payment Processing",title:"AP Payment Processing",
+          rows:[{lbl:"AVID Pay",val:"3 invoices · $31,800",err:true},{lbl:"ACH",val:"2 invoices · $16,050",err:true},{lbl:"EFT",val:"2 invoices · $8,500",err:true}],
+          redirectNote:"Opens <strong>AP &rsaquo; Payment Processing</strong>: review and process overdue invoices.",
+          btnLabel:"Process Payments",btnAction:"payment"}},
       items:[
         'AVID Pay · 3 invoices · $31,800',
         'ACH · 2 invoices · $16,050',
@@ -12640,7 +12648,22 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         "PO-2024-0891 · $6,200 · 6 days waiting · Approver: Michael R.",
         "PO-2024-0904 · $11,350 · 7 days waiting · Approver: Karen T."
       ]},
-    {id:"pa3-cat-6",sev:"need",action:true,group:"ar",title:"Unposted Invoices",sub:"9 AR invoices unpaid: $23,150 total, oldest 52 days",glance:{n:9,nLabel:"invoices unpaid",sub:"$23,150 total"},
+    {id:"pa3-cat-6",sev:"need",action:true,group:"ar",title:"Unposted Invoices",sub:"9 AR invoices unpaid: $23,150 total, oldest 52 days",
+      glance:{n:9,nLabel:"invoices unpaid",sub:"$23,150 total",
+        modal:{sevLabel:"Need Action: Unposted Invoices",title:"AR Unposted Invoices",
+          rows:[
+            {lbl:"Riverside Community Group",val:"INV-AR-2024-0112 · $3,800 · 52 days",err:true},
+            {lbl:"Grace Preschool Program",val:"INV-AR-2024-0098 · $6,500 · 45 days",err:true},
+            {lbl:"Hillside Bible Fellowship",val:"INV-AR-2024-0103 · $2,200 · 38 days",err:false},
+            {lbl:"Westside Community Center",val:"INV-AR-2024-0107 · $1,900 · 32 days",err:false},
+            {lbl:"St. Andrew's Parish",val:"INV-AR-2024-0109 · $1,450 · 28 days",err:false},
+            {lbl:"Grace Community Ministries",val:"INV-AR-2024-0115 · $1,300 · 22 days",err:false},
+            {lbl:"Northgate Baptist Church",val:"INV-AR-2024-0118 · $1,300 · 18 days",err:false},
+            {lbl:"Faith Community Fellowship",val:"INV-AR-2024-0121 · $2,900 · 14 days",err:false},
+            {lbl:"Trinity Chapel",val:"INV-AR-2024-0125 · $1,800 · 10 days",err:false}
+          ],
+          redirectNote:"Opens <strong>AR &rsaquo; Unposted Invoices</strong>: review and post outstanding AR invoices.",
+          btnLabel:"View Invoices",btnAction:"ar"}},
       items:[
         "Riverside Community Group · INV-AR-2024-0112 · $3,800 · 52 days",
         "Grace Preschool Program · INV-AR-2024-0098 · $6,500 · 45 days",
@@ -12652,7 +12675,21 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         "Faith Community Fellowship · INV-AR-2024-0121 · $2,900 · 14 days",
         "Trinity Chapel · INV-AR-2024-0125 · $1,800 · 10 days"
       ]},
-    {id:"pa3-cat-7",sev:"need",action:true,group:"gl",title:"Unposted Journals",sub:"8 journal entries pending posting: $65,100 total, oldest 14 days",glance:{n:8,nLabel:"journals entry pending",sub:"$65,100 total"},
+    {id:"pa3-cat-7",sev:"need",action:true,group:"gl",title:"Unposted Journals",sub:"8 journal entries pending posting: $65,100 total, oldest 14 days",
+      glance:{n:8,nLabel:"journals entry pending",sub:"$65,100 total",
+        modal:{sevLabel:"Need Action: Unposted Journals",title:"GL Unposted Journals",
+          rows:[
+            {lbl:"JE-2024-1041",val:"Payroll allocation · $18,400 · 14 days",err:true},
+            {lbl:"JE-2024-1055",val:"Depreciation · $9,200 · 11 days",err:true},
+            {lbl:"JE-2024-1062",val:"Accrued expenses · $7,600 · 9 days",err:false},
+            {lbl:"JE-2024-1078",val:"Prepaid amortisation · $4,300 · 6 days",err:false},
+            {lbl:"JE-2024-1084",val:"Intercompany transfer · $3,300 · 4 days",err:false},
+            {lbl:"JE-2024-1091",val:"Gifts posting · $8,900 · 3 days",err:false},
+            {lbl:"JE-2024-1097",val:"Fixed asset additions · $6,400 · 2 days",err:false},
+            {lbl:"JE-2024-1103",val:"Bank charges · $7,000 · 1 day",err:false}
+          ],
+          redirectNote:"Opens <strong>GL &rsaquo; Unposted Journals</strong>: review and post pending journal entries.",
+          btnLabel:"View Journals",btnAction:"journal"}},
       items:[
         "JE-2024-1041 · Payroll allocation · $18,400 · 14 days",
         "JE-2024-1055 · Depreciation · $9,200 · 11 days",
@@ -12663,7 +12700,19 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         "JE-2024-1097 · Fixed asset additions · $6,400 · 2 days",
         "JE-2024-1103 · Bank charges · $7,000 · 1 day"
       ]},
-    {id:"pa3-cat-8",sev:"need",action:true,group:"ap",title:"Unposted Transactions",sub:"6 transactions pending posting: $42,750 total, oldest 10 days",glance:{n:6,nLabel:"transactions pending",sub:"$42,750 total"},
+    {id:"pa3-cat-8",sev:"need",action:true,group:"ap",title:"Unposted Transactions",sub:"6 transactions pending posting: $42,750 total, oldest 10 days",
+      glance:{n:6,nLabel:"transactions pending",sub:"$42,750 total",
+        modal:{sevLabel:"Need Action: Unposted Transactions",title:"AP Unposted Transactions",
+          rows:[
+            {lbl:"TXN-2024-3301",val:"Payroll disbursement · $14,200 · 10 days",err:true},
+            {lbl:"TXN-2024-3318",val:"Vendor payment · $9,500 · 7 days",err:true},
+            {lbl:"TXN-2024-3325",val:"Grant receipt · $8,050 · 5 days",err:false},
+            {lbl:"TXN-2024-3339",val:"Donation deposit · $5,400 · 3 days",err:false},
+            {lbl:"TXN-2024-3347",val:"Petty cash reimbursement · $3,200 · 2 days",err:false},
+            {lbl:"TXN-2024-3356",val:"Utility payment · $2,400 · 1 day",err:false}
+          ],
+          redirectNote:"Opens <strong>AP &rsaquo; Unposted Transactions</strong>: review and post pending AP transactions.",
+          btnLabel:"Process Payments",btnAction:"payment"}},
       items:[
         "TXN-2024-3301 · Payroll disbursement · $14,200 · 10 days",
         "TXN-2024-3318 · Vendor payment · $9,500 · 7 days",
@@ -12672,7 +12721,18 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         "TXN-2024-3347 · Petty cash reimbursement · $3,200 · 2 days",
         "TXN-2024-3356 · Utility payment · $2,400 · 1 day"
       ]},
-    {id:"pa3-cat-9",sev:"need",action:true,group:"ar",title:"Payment Processing",sub:"5 payments awaiting processing: $38,900 total, oldest 9 days",glance:{n:5,nLabel:"Payments awaiting",sub:"$38,900 total outstanding"},
+    {id:"pa3-cat-9",sev:"need",action:true,group:"ar",title:"Payment Processing",sub:"5 payments awaiting processing: $38,900 total, oldest 9 days",
+      glance:{n:5,nLabel:"Payments awaiting",sub:"$38,900 total outstanding",
+        modal:{sevLabel:"Need Action: Payment Processing",title:"AR Payment Processing",
+          rows:[
+            {lbl:"PAY-2024-0071",val:"ACH · $12,600 · 9 days · Awaiting bank confirmation",err:true},
+            {lbl:"PAY-2024-0085",val:"Wire Transfer · $11,300 · 6 days · Pending authorisation",err:true},
+            {lbl:"PAY-2024-0092",val:"Check · $7,800 · 4 days · Not yet mailed",err:false},
+            {lbl:"PAY-2024-0098",val:"EFT · $4,700 · 2 days · Awaiting approval",err:false},
+            {lbl:"PAY-2024-0104",val:"ACH · $2,500 · 1 day · Submitted",err:false}
+          ],
+          redirectNote:"Opens <strong>AR &rsaquo; Payment Processing</strong>: review and process pending AR payments.",
+          btnLabel:"Process Payments",btnAction:"ar"}},
       items:[
         "PAY-2024-0071 · ACH · $12,600 · 9 days · Awaiting bank confirmation",
         "PAY-2024-0085 · Wire Transfer · $11,300 · 6 days · Pending authorisation",
@@ -13036,14 +13096,17 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       var gv=c.glance||{};
       var dispN=gv.n!=null?gv.n:cnt;
       var dispSub=gv.sub||c.sub||cnt+' item'+(cnt===1?'':'s');
+      var hasModal=!!(gv.modal);
       var nHtml=gv.nLabel
         ?'<span class="pa3-card-n">'+dispN+'</span><span class="pa3-card-n-lbl">'+gv.nLabel+'</span>'
         :'<span class="pa3-card-n">'+dispN+'</span>';
-      return '<div class="pa3-card" role="group" aria-label="'+c.title+', '+dispN+'">'+
+      var tag=hasModal?'button':'div';
+      var attrs=hasModal?' data-action="paO3-glance-card" data-cat="'+c.id+'" data-id="'+w.id+'"':'';
+      return '<'+tag+' class="pa3-card'+(hasModal?' pa3-card-btn':'')+'" role="group" aria-label="'+c.title+', '+dispN+'"'+attrs+'>'+
         '<span class="pa3-card-top">'+c.title+'</span>'+
         '<span class="pa3-card-n-row">'+nHtml+'</span>'+
         '<span class="pa3-card-sub">'+dispSub+'</span>'+
-      '</div>';
+      '</'+tag+'>';
     }).join("");
     return '<div class="pa3-glancewrap">'+
       '<button class="scope-chip" data-action="paO3-glancegrp" data-id="'+w.id+'"'+(chipOpen?' data-depo':'')+'>'+
@@ -13071,11 +13134,56 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     '</div>';
   }
 
+  function pa3OpenGlanceCardModal(cat){
+    var m=cat.glance.modal;
+    var bd=document.createElement("div");bd.className="al-modal-backdrop";
+    var sevCls="sev-err";
+    var rows=(m.rows||[]).map(function(r){
+      return '<div class="al-modal-row"><span class="al-modal-lbl">'+r.lbl+'</span><span class="al-modal-val'+(r.err?" val-err":"")+'">'+r.val+'</span></div>';
+    }).join("");
+    var noteText=m.redirectNote||"";
+    bd.innerHTML=
+      '<div class="al-modal al-modal-md" role="dialog" aria-modal="true" aria-label="'+aloEsc(m.title||"")+'">'+
+        '<div class="al-modal-hd">'+
+          '<div class="al-modal-hd-text">'+
+            (m.sevLabel?'<div class="al-modal-sev '+sevCls+'">'+m.sevLabel+'</div>':'')+
+            '<div class="al-modal-title">'+(m.title||"")+'</div>'+
+          '</div>'+
+          '<button class="al-modal-close iconbtn" id="pa3GlanceClose" aria-label="Close">'+ICON("close")+'</button>'+
+        '</div>'+
+        '<div class="al-modal-body">'+
+          (rows?'<div class="al-modal-table">'+rows+'</div>':'')+
+          (noteText?'<div class="al-modal-redirect-note">'+ICON("open_in_new")+'<span>'+noteText+'</span></div>':'')+
+        '</div>'+
+        '<div class="al-modal-actions">'+
+          '<button class="btn outlined sm" id="pa3GlanceCancel">Cancel</button>'+
+          '<button class="btn primary sm" id="pa3GlanceProceed">'+m.btnLabel+'</button>'+
+        '</div>'+
+      '</div>';
+    document.body.appendChild(bd);
+    function close(){bd.classList.add("al-modal-hiding");setTimeout(function(){if(bd.parentNode)bd.parentNode.removeChild(bd);},160);document.removeEventListener("keydown",esc,true);}
+    function esc(ev){if(ev.key==="Escape"){ev.stopPropagation();close();}}
+    document.addEventListener("keydown",esc,true);
+    bd.addEventListener("click",function(ev){if(ev.target===bd)close();});
+    bd.querySelector("#pa3GlanceClose").addEventListener("click",function(){close();});
+    bd.querySelector("#pa3GlanceCancel").addEventListener("click",function(){close();});
+    bd.querySelector("#pa3GlanceProceed").addEventListener("click",function(){
+      close();
+      setTimeout(function(){
+        if(m.btnAction==="payment")aloOpenPaymentScreen();
+        else if(m.btnAction==="ar")aloOpenARScreen();
+        else if(m.btnAction==="journal")aloOpenJournalScreen();
+      },160);
+    });
+    var ff=bd.querySelector("button");if(ff)ff.focus();
+  }
   function pa3Handle(a,id,t){
     var w=find(id);if(!w)return false;pa3Ensure(w);
     /* Glance group filter dropdown */
     if(a==="paO3-glancegrp"){pop=(pop&&pop.type==="paO3-glancegrp"&&pop.id===id)?null:{type:"paO3-glancegrp",id:id};render();return true;}
     if(a==="paO3-set-glancegrp"){var ng=t.getAttribute("data-grp");if(ng)pa3GlanceF[id]=ng;pop=null;render();return true;}
+    /* Glance card click → category modal */
+    if(a==="paO3-glance-card"){var gcid=t.getAttribute("data-cat");var gcc=PA3_CATS.filter(function(c){return c.id===gcid;})[0];if(gcc&&gcc.glance&&gcc.glance.modal)pa3OpenGlanceCardModal(gcc);return true;}
     /* Group tab switch */
     if(a==="paO3-grptab"){
       var grp=t.getAttribute("data-grp");
