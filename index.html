@@ -2504,6 +2504,38 @@
   .pa3-card-n-lbl{font-size:var(--type-size-10);font-weight:400;color:var(--txt-subtle);line-height:1;}
   .pa3-card-sub{font-size:var(--type-size-10);color:var(--txt-subtle);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
   .alb4-xw-left-panel .al-cat:last-child{margin-bottom:0;}
+  /* ── Pending Actions glance variant 2 (queue list) ── */
+  .pa3g2-wrap{display:flex;flex-direction:column;height:100%;min-height:0;}
+  .pa3g2-summary{display:flex;flex-direction:column;gap:6px;padding:12px 14px 10px;}
+  .pa3g2-hero{display:flex;align-items:baseline;gap:6px;}
+  .pa3g2-n{font-size:32px;font-weight:700;line-height:1;color:var(--txt-primary);font-variant-numeric:tabular-nums;}
+  .pa3g2-nsub{font-size:var(--type-size-10);color:var(--txt-subtle);line-height:1.3;}
+  .pa3g2-badges{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px;}
+  .pa3g2-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px 2px 6px;border-radius:99px;font-size:11px;font-weight:500;line-height:1.4;white-space:nowrap;}
+  .pa3g2-badge-err{background:#fee2e2;color:#b91c1c;}
+  .pa3g2-badge-warn{background:#fef3c7;color:#92400e;}
+  .pa3g2-badge-dot{width:6px;height:6px;border-radius:50%;flex:0 0 auto;}
+  .pa3g2-badge-err .pa3g2-badge-dot{background:#dc2626;}
+  .pa3g2-badge-warn .pa3g2-badge-dot{background:#d97706;}
+  .pa3g2-queues-link{align-self:flex-end;margin-top:auto;padding:0 14px 8px;display:flex;justify-content:flex-end;}
+  .pa3g2-queues-btn{background:none;border:none;padding:0;font-size:var(--type-size-10);font-weight:600;color:var(--color-primary,#2563eb);cursor:pointer;display:inline-flex;align-items:center;gap:2px;line-height:1.4;}
+  .pa3g2-queues-btn:hover{text-decoration:underline;}
+  /* Queue panel (shown inside a pop overlay) */
+  .pa3g2-panel{width:320px;max-width:92vw;background:var(--surface-card,#fff);border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,.13);overflow:hidden;}
+  .pa3g2-panel-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 8px;border-bottom:1px solid var(--stroke-widget);}
+  .pa3g2-panel-title{font-size:var(--type-size-10);font-weight:700;color:var(--txt-primary);}
+  .pa3g2-panel-sub{font-size:11px;color:var(--txt-subtle);}
+  .pa3g2-panel-body{overflow-y:auto;max-height:300px;}
+  .pa3g2-grp-hd{display:flex;align-items:center;justify-content:space-between;padding:8px 14px 4px;background:var(--surface-subtle,#f8f9fb);}
+  .pa3g2-grp-lbl{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--txt-subtle);}
+  .pa3g2-grp-cnt{font-size:11px;font-weight:600;color:var(--txt-subtle);}
+  .pa3g2-queue-row{display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;transition:background 100ms;border-bottom:1px solid var(--stroke-widget);background:transparent;width:100%;text-align:left;border-left:none;border-right:none;border-top:none;-webkit-appearance:none;appearance:none;font-family:inherit;font-size:inherit;color:inherit;}
+  .pa3g2-queue-row:last-child{border-bottom:none;}
+  .pa3g2-queue-row:hover{background:var(--surface-widget-hover,#f0f4ff);}
+  .pa3g2-qnum{width:22px;height:22px;border-radius:50%;background:var(--surface-subtle,#f1f5f9);border:1px solid var(--stroke-widget);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--txt-primary);flex:0 0 auto;}
+  .pa3g2-qtitle{flex:1;font-size:var(--type-size-10);font-weight:600;color:var(--txt-primary);min-width:0;}
+  .pa3g2-qhint{font-size:10px;color:var(--txt-subtle);white-space:nowrap;}
+  .pa3g2-qcnt{font-size:var(--type-size-10);font-weight:700;color:var(--color-err,#dc2626);min-width:18px;text-align:right;}
   /* right panel: detail pane */
   .al2-dp{display:flex;flex-direction:column;flex:1;min-height:0;}
   .al2-dp-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:var(--gap-medium);color:var(--txt-subtle);padding:var(--padding-relaxed);}
@@ -12620,7 +12652,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         "Capital Improvement Fund, $8,900 over restricted income (104.2%)"
       ]},
     {id:"pa3-cat-2",sev:"need",action:true,group:"ap",title:"Payment Processing",sub:"7 AP invoices past due: $56,350 total outstanding",
-      glance:{n:7,nLabel:"invoices due",sub:"$56,350 total outstanding",
+      glance:{n:7,nLabel:"invoices due",sub:"$56,350 total outstanding",hint:"7 past due",queueN:12,queueIdx:2,
         modal:{sevLabel:"Need Action: Payment Processing",title:"AP Payment Processing",
           rows:[{lbl:"AVID Pay",val:"3 invoices · $31,800",err:true},{lbl:"ACH",val:"2 invoices · $16,050",err:true},{lbl:"EFT",val:"2 invoices · $8,500",err:true}],
           redirectNote:"Opens <strong>AP &rsaquo; Payment Processing</strong>: review and process overdue invoices.",
@@ -12649,7 +12681,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         "PO-2024-0904 · $11,350 · 7 days waiting · Approver: Karen T."
       ]},
     {id:"pa3-cat-6",sev:"need",action:true,group:"ar",title:"Unposted Invoices",sub:"9 AR invoices unpaid: $23,150 total, oldest 52 days",
-      glance:{n:9,nLabel:"invoices unpaid",sub:"$23,150 total",
+      glance:{n:9,nLabel:"invoices unpaid",sub:"$23,150 total",hint:"newest today",queueN:3,queueIdx:1,
         modal:{sevLabel:"Need Action: Unposted Invoices",title:"AR Unposted Invoices",
           rows:[
             {lbl:"Riverside Community Group",val:"INV-AR-2024-0112 · $3,800 · 52 days",err:true},
@@ -12676,7 +12708,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         "Trinity Chapel · INV-AR-2024-0125 · $1,800 · 10 days"
       ]},
     {id:"pa3-cat-7",sev:"need",action:true,group:"gl",title:"Unposted Journals",sub:"8 journal entries pending posting: $65,100 total, oldest 14 days",
-      glance:{n:8,nLabel:"journals entry pending",sub:"$65,100 total",
+      glance:{n:8,nLabel:"journals entry pending",sub:"$65,100 total",hint:"1 out of balance",queueN:8,queueIdx:1,
         modal:{sevLabel:"Need Action: Unposted Journals",title:"GL Unposted Journals",
           rows:[
             {lbl:"JE-2024-1041",val:"Payroll allocation · $18,400 · 14 days",err:true},
@@ -12701,7 +12733,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         "JE-2024-1103 · Bank charges · $7,000 · 1 day"
       ]},
     {id:"pa3-cat-8",sev:"need",action:true,group:"ap",title:"Unposted Transactions",sub:"6 transactions pending posting: $42,750 total, oldest 10 days",
-      glance:{n:6,nLabel:"transactions pending",sub:"$42,750 total",
+      glance:{n:6,nLabel:"transactions pending",sub:"$42,750 total",hint:"1 due this week",queueN:4,queueIdx:1,
         modal:{sevLabel:"Need Action: Unposted Transactions",title:"AP Unposted Transactions",
           rows:[
             {lbl:"TXN-2024-3301",val:"Payroll disbursement · $14,200 · 10 days",err:true},
@@ -12722,7 +12754,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         "TXN-2024-3356 · Utility payment · $2,400 · 1 day"
       ]},
     {id:"pa3-cat-9",sev:"need",action:true,group:"ar",title:"Payment Processing",sub:"5 payments awaiting processing: $38,900 total, oldest 9 days",
-      glance:{n:5,nLabel:"Payments awaiting",sub:"$38,900 total outstanding",
+      glance:{n:5,nLabel:"Payments awaiting",sub:"$38,900 total outstanding",hint:"$400 unapplied",queueN:5,queueIdx:2,
         modal:{sevLabel:"Need Action: Payment Processing",title:"AR Payment Processing",
           rows:[
             {lbl:"PAY-2024-0071",val:"ACH · $12,600 · 9 days · Awaiting bank confirmation",err:true},
@@ -13116,7 +13148,73 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       '<div class="pa3-cards" style="--pa3-cols:'+cols+';">'+cards+'</div>'+
     '</div>';
   }
+  /* ── Glance variant 2: summary hero + badge pills + Queues link → pop panel ── */
+  var pa3GlanceQ={};/* per-widget pop open state is handled via global pop; this is a no-op store */
+  function pa3QueuePanelHTML(wid){
+    /* Build grouped queue list for the pop panel */
+    var rows="";
+    PA3_GROUPS.forEach(function(grp){
+      var cats=PA3_CATS.filter(function(c){return c.sev==="need"&&c.group===grp.id;});
+      if(!cats.length)return;
+      var grpTotal=cats.reduce(function(s,c){return s+(c.glance&&c.glance.queueN!=null?c.glance.queueN:c.items.length);},0);
+      rows+='<div class="pa3g2-grp-hd"><span class="pa3g2-grp-lbl">'+grp.label+'</span><span class="pa3g2-grp-cnt">'+grpTotal+'</span></div>';
+      cats.forEach(function(c,i){
+        var gv=c.glance||{};
+        var qn=gv.queueN!=null?gv.queueN:c.items.length;
+        var hint=gv.hint||"";
+        var qidx=gv.queueIdx!=null?gv.queueIdx:i+1;
+        rows+='<button class="pa3g2-queue-row" data-action="paO3-glance-card" data-cat="'+c.id+'" data-id="'+wid+'">'+
+          '<span class="pa3g2-qnum">'+qidx+'</span>'+
+          '<span class="pa3g2-qtitle">'+c.title+'</span>'+
+          (hint?'<span class="pa3g2-qhint">'+hint+'</span>':'')+
+          '<span class="pa3g2-qcnt">'+qn+'</span>'+
+        '</button>';
+      });
+    });
+    var totalItems=PA3_CATS.filter(function(c){return c.sev==="need";}).reduce(function(s,c){return s+(c.glance&&c.glance.queueN!=null?c.glance.queueN:c.items.length);},0);
+    return '<div class="pa3g2-panel">'+
+      '<div class="pa3g2-panel-hd">'+
+        '<span class="pa3g2-panel-title">Pending Actions</span>'+
+        '<span class="pa3g2-panel-sub">'+totalItems+' items &middot; tap a queue to open it</span>'+
+      '</div>'+
+      '<div class="pa3g2-panel-body">'+rows+'</div>'+
+    '</div>';
+  }
+  function pa3Glance2(w){
+    /* Variant 2 glance: big hero number + badge pills + Queues link */
+    var needCats=PA3_CATS.filter(function(c){return c.sev==="need";});
+    var totalItems=needCats.reduce(function(s,c){return s+(c.glance&&c.glance.queueN!=null?c.glance.queueN:c.items.length);},0);
+    var totalQueues=needCats.length;
+    /* Badge pills: one per "notable" category (those with a hint and err-level sev) */
+    var badges=[];
+    /* Hard-coded highlights matching the reference design */
+    badges.push({type:"err",label:"7 AP invoices past due"});
+    badges.push({type:"err",label:"1 journal out of balance"});
+    badges.push({type:"warn",label:"$400 unapplied"});
+    var badgeHTML=badges.map(function(b){
+      return '<span class="pa3g2-badge pa3g2-badge-'+(b.type==="err"?"err":"warn")+'">'+
+        '<span class="pa3g2-badge-dot"></span>'+b.label+
+      '</span>';
+    }).join("");
+    var qOpen=(pop&&pop.type==="paO3-glance2-queues"&&pop.id===w.id);
+    return '<div class="pa3g2-wrap">'+
+      '<div class="pa3g2-summary">'+
+        '<div class="pa3g2-hero">'+
+          '<span class="pa3g2-n">'+totalItems+'</span>'+
+          '<span class="pa3g2-nsub">to post or process &middot; '+totalQueues+' queues</span>'+
+        '</div>'+
+        '<div class="pa3g2-badges">'+badgeHTML+'</div>'+
+      '</div>'+
+      '<div class="pa3g2-queues-link">'+
+        '<button class="pa3g2-queues-btn" data-action="paO3-glance2-queues" data-id="'+w.id+'"'+(qOpen?' data-depo':'')+'>'+
+          'Queues '+
+          '<span class="material-symbols-rounded" style="font-size:13px;line-height:1;">chevron_right</span>'+
+        '</button>'+
+      '</div>'+
+    '</div>';
+  }
   function pa3Content(w){
+    if(w.size==="kpi"&&w.id==="paB4_g2")return pa3Glance2(w);
     if(w.size==="kpi")return pa3Glance(w);
     pa3Ensure(w);
     var xwide=(w.size==="xwide");
@@ -13182,6 +13280,8 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     /* Glance group filter dropdown */
     if(a==="paO3-glancegrp"){pop=(pop&&pop.type==="paO3-glancegrp"&&pop.id===id)?null:{type:"paO3-glancegrp",id:id};render();return true;}
     if(a==="paO3-set-glancegrp"){var ng=t.getAttribute("data-grp");if(ng)pa3GlanceF[id]=ng;pop=null;render();return true;}
+    /* Glance2 queues panel toggle */
+    if(a==="paO3-glance2-queues"){pop=(pop&&pop.type==="paO3-glance2-queues"&&pop.id===id)?null:{type:"paO3-glance2-queues",id:id};render();return true;}
     /* Glance card click → category modal */
     if(a==="paO3-glance-card"){var gcid=t.getAttribute("data-cat");var gcc=PA3_CATS.filter(function(c){return c.id===gcid;})[0];if(gcc&&gcc.glance&&gcc.glance.modal)pa3OpenGlanceCardModal(gcc);return true;}
     /* Group tab switch */
@@ -13345,7 +13445,10 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     bd.addEventListener("click",function(e){if(e.target===bd)closeModal();});
     var ff=bd.querySelector("button");if(ff)ff.focus();
   }
-  WIDGETS.register("pendingactions",{content:pa3Content,about:function(w){return {h:w.title,b:PA3_ABOUT};},click:function(a,id,t){return !!(a&&a.indexOf("paO3-")===0&&pa3Handle(a,id,t));},pops:{"paO3-glancegrp":{content:pa3GlancePopContent,trigger:function(){return '[data-action="paO3-glancegrp"][data-id="'+pop.id+'"]';}}}});
+  WIDGETS.register("pendingactions",{content:pa3Content,about:function(w){return {h:w.title,b:PA3_ABOUT};},click:function(a,id,t){return !!(a&&a.indexOf("paO3-")===0&&pa3Handle(a,id,t));},pops:{
+    "paO3-glancegrp":{content:pa3GlancePopContent,trigger:function(){return '[data-action="paO3-glancegrp"][data-id="'+pop.id+'"]';}},
+    "paO3-glance2-queues":{content:function(){return pa3QueuePanelHTML(pop.id);},trigger:function(){return '[data-action="paO3-glance2-queues"][data-id="'+pop.id+'"]';}}
+  }});
 /* ===== end W19-PendingActions Pending Actions V2 (pendingactions) ===== */
 
 
@@ -13414,6 +13517,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       {id:"alB4_2x",title:"Alerts & Actions Copy (Detail)",kind:"alerts2",size:"xwide",tiers:["wide","xwide"],updated:"just now"},
       /* W19-PendingActions Pending Actions (pendingactions variant) */
       {id:"paB4_g",title:"Pending Actions",kind:"pendingactions",size:"kpi",tiers:["kpi","wide","xwide"],updated:"just now"},
+      {id:"paB4_g2",title:"Pending Actions",kind:"pendingactions",size:"kpi",tiers:["kpi","wide","xwide"],updated:"just now"},
       {id:"paB4",title:"Pending Actions",kind:"pendingactions",size:"wide",tiers:["kpi","wide","xwide"],updated:"just now"},
       {id:"paB4_x",title:"Pending Actions (Detail)",kind:"pendingactions",size:"xwide",tiers:["kpi","wide","xwide"],updated:"just now"},
       {id:"ap",title:"Accounts Payable By Due Date",kind:"payables",size:"wide",tiers:["kpi","wide","xwide"],apview:"table",apDue:"total",apsort:"due-asc",updated:"just now",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
