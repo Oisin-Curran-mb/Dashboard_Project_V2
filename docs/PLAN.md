@@ -71,6 +71,7 @@ Owner took **Variant A only**, at Aditya's own latest (`c0359df`, `c016583`, bot
 
 ### Release gate (before v2.0-rc1)
 - Remove the TEMPORARY review aid: the `viewOnly` filter, the `hashchange` listener, `viewOnlySelectHTML` and its `change` listener, and `viewOnly(` in `render()` (all in the "Shell: single-widget viewer" block). Lint rule T6 reports it while present.
+- Remove the second TEMPORARY review aid added 16 Oct 2026: the data-state selector (the "Shell: data states" block: `DATA_STATES`, `NOTCONF_COPY`, `dataState`, `DATA_STATE_MAP`, `DS_SHELL_EMPTY`, `dsApply`, `notConfiguredHTML`, `dataStateSelectHTML`, `devSelectorsHTML` and its `change` listener), the `dsApply(_ws)` call in `render()`, the two data-state lines at the top of `contentHTML()`, the `devSelectorsHTML()` call in the toolbar (back to `viewOnlySelectHTML()`), the `ds=` handling in the widget selector's listener, the `.devonly-row` CSS, and the `small` / `extreme` / `noactuals` branches in the widget data accessors and `fkpTiles()`. Lint T6 reports the block. Design and inventory: `docs/DATA-STATES.md`.
 - Remove the cmp tab, `CMP_ROWS`, `CMPNOTE_`, `cmpCards`, `cmpnote-mb`.
 
 ### Phase 4: collapse to release candidate
@@ -97,7 +98,7 @@ New GitHub repo (account, name, visibility confirmed with the owner first); opti
 
 Still open from Phase 4: eleven widgets carry review fixtures beyond three sizes on the non-primary dashboard tabs; the `.w01-*` versus `.bgt-*` duplication (89 identical rule bodies); 56 duplicate selectors, of which 9 are cross-block name collisions that change specificity for several widgets at once.
 
-**Release gate, still open.** The single-widget review viewer (`viewOnly`, `viewOnlySelectHTML`, the `hashchange` listener and the `viewOnly(` call in `render()`) is live code and lint T6 reports it. It stays until the owner has finished reviewing.
+**Release gate, still open.** The single-widget review viewer (`viewOnly`, `viewOnlySelectHTML`, the `hashchange` listener and the `viewOnly(` call in `render()`) is live code and lint T6 reports it, as it does the second review aid added 16 Oct 2026, the data-state selector (the "Shell: data states" block and its hooks, listed in the checklist above and in `docs/DATA-STATES.md`). Both stay until the owner has finished reviewing; both go before v2.0-rc1.
 
 **New since this plan was written.** A shared helper package in the shell and a shared test library in the harness, with per-widget tags so one widget's tests still run alone. Recorded in `docs/SHARED.md`.
 

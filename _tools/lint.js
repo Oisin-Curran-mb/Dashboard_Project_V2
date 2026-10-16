@@ -121,6 +121,7 @@ function add(rule, msg, items) {
 (function () {
   const marks = [];
   if (raw.indexOf("Shell: single-widget viewer") > -1) marks.push("single-widget viewer block (viewOnly / viewOnlySelectHTML / hashchange)");
+  if (raw.indexOf("Shell: data states") > -1) marks.push("data states selector block (dataState / dsApply / DATA_STATES, see docs/DATA-STATES.md)");
   if (raw.indexOf('id:"cmp",name:"Side by side') > -1) marks.push("Side by side (cmp) tab");
   if (marks.length) add("T6", "TEMPORARY review aids still in the file (remove before release)", marks);
 })();

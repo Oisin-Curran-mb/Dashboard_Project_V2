@@ -72,6 +72,8 @@ URL changes, both need the owner's hand.
 copying a switched-down build and a filtered handover into `Dashboard_V2_Handover` when told;
 never touch Jo's, Aditya's or the legacy repo.
 
+**Release recipe (12 Oct 2026, public commit 2fc1e17 from working b7f036c):** `python -I _tools/one-off/build-release-2026-10-12.py` writes the public folder: index.html with `W19:false` and Aditya's alerts2 copy cut out (its CSS run, the JS block between the W19-Copy banners, the two registry rows; the switchboard cannot hide that kind), handover.html without the w19 section and nav link and with the release intro and five-badge legend, docs/Pics for every section (no `_superseded`, no W19), the W18 spec page, and the README sentence. It parse-checks the script and asserts every handover src exists. Then review, commit and push in the public folder, only when told.
+
 ---
 
 ## 2. Editing V2 and the demo

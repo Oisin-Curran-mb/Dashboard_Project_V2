@@ -110,6 +110,7 @@ A.contains(css, "var(--type-size-32)", "and --type-size-32 is what it names");
 /* ---------- 3. host and registration ---------------------------------- */
 const TAIL = H.TAIL;
 const EXPORTS = "\r\n  __EX={WIDGETS:WIDGETS,contentHTML:contentHTML,aboutOf:aboutOf,dashboards:dashboards,cats:PA3_CATS,groups:PA3_GROUPS," +
+  "cfgs:PA3_ITEM_MODALS,modalHTML:aloModalHTML," +
   "stubRender:function(){render=function(){};renderModal=function(){};renderOverlay=function(){};showModal=function(){};setStatus=function(){};}};\r\n" +
   "  try{render();}catch(e){__EX.renderErr=String(e&&e.message);}\r\n})();\r\n";
 const env = H.runBlock(S.slice(0, -TAIL.length) + EXPORTS, { dataAttr: "data-action", globals: H.NODE_GLOBALS() });
@@ -152,6 +153,31 @@ A.contains(hx, "alb4-xwide-wrap", "Detail renders the split with the detail pane
 /* the card-grid glance is still reachable if its row is switched back on */
 A.contains(EX.contentHTML({ id: "paB4_g", title: "Pending Actions", kind: "pendingactions", size: "kpi", tiers: ["kpi", "wide", "xwide"] }),
   "pa3-cards", "the preserved card-grid glance still builds");
+
+/* ---------- 4b. no item pop-up prints the word "undefined" -----------
+   Owner, 16 Oct 2026, with a screenshot: the "Unposted Transaction:
+   TXN-2024-3356" button read "UNDEFINED Post Transaction". The shared ICON()
+   helper interpolated a missing icon name into a ligature span and the font
+   rendered the word. Ten of this widget's configs carry a label with no icon
+   and so all ten showed it; the builder is aloModalHTML, which lives in W20's
+   block, so this is pinned at both ends. */
+A.contains(raw, "var ICON=function(n){return n?", "the shared ICON() helper guards a falsy name");
+{
+  const keys = Object.keys(EX.cfgs || {});
+  A.ok(keys.length > 20, "the item-modal configs are reachable (" + keys.length + ")");
+  let noIcon = 0;
+  keys.forEach(function (k) {
+    const cfg = EX.cfgs[k];
+    const mh = EX.modalHTML("warn", "Cat", "Item", cfg);
+    A.absent(mh, "undefined", "no undefined in the pop-up for " + k);
+    if (cfg && cfg.btnPri && !cfg.btnPri.icon) {
+      noIcon++;
+      A.absent(mh, '<span class="material-symbols-rounded"></span>', k + " leaves no empty icon span");
+      A.contains(mh, cfg.btnPri.label, k + " still renders its label: " + cfg.btnPri.label);
+    }
+  });
+  A.eq(noIcon, 10, "the ten label-only buttons are still label-only (a rendering fix, not a data change)");
+}
 
 /* ---------- 5. the number, and the three maps that bind it ------------ */
 A.contains(raw, 'W19:"pendingactions"', "WIDGET_KIND maps W19 to this kind");

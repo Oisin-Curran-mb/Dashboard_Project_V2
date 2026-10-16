@@ -129,6 +129,30 @@ A.contains(js, "var w=find(id);if(!w)return false;", "and that guard is the reas
 let threw = 0;
 EX.cats.forEach(function (c) { c.items.forEach(function (lbl, i) { try { const mh = EX.modalHTML(c.sev, c.title, lbl, EX.cfgs[c.id + ":" + i] || null); if (!/al-modal/.test(mh)) threw++; } catch (e) { threw++; if (threw === 1) console.log("first error:", e && e.message); } }); });
 A.eq(threw, 0, "every item's pop-up builds (secondary-only and Purchase Order Queue configs included)");
+
+/* ---------- 5b. no pop-up ever prints the word "undefined" -----------
+   aloModalHTML lives in THIS block and is also what W19 Pending Actions
+   opens its item pop-ups with. On 16 Oct a button rendered as "UNDEFINED
+   Post Transaction": the shared ICON() helper interpolated a missing name
+   into a ligature span, and the icon font rendered the word. Both halves are
+   pinned, here and in w19-pendingactions.driver.js, because the fault needs
+   a builder in one block and a config in the other to show itself. */
+A.contains(S, "var ICON=function(n){return n?", "the shared ICON() helper guards a falsy name");
+A.absent(H.code(js), "ICON(b.icon)+b.label", "the modal button no longer passes a possibly-absent icon straight to ICON()");
+EX.cats.forEach(function (c) {
+  c.items.forEach(function (lbl, i) {
+    const mh = EX.modalHTML(c.sev, c.title, lbl, EX.cfgs[c.id + ":" + i] || null);
+    A.absent(mh, "undefined", "no undefined in the pop-up for " + c.id + ":" + i);
+    A.absent(mh, ">undefined<", "and none inside a ligature span for " + c.id + ":" + i);
+  });
+});
+/* a config with a label and NO icon is the exact shape that broke */
+{
+  const mh = EX.modalHTML("warn", "Cat", "Item", { sevLabel: "X", title: "T", msg: "M", rows: [], btnPri: { label: "Post Transaction" } });
+  A.absent(mh, "undefined", "a label-only btnPri renders no undefined");
+  A.contains(mh, "Post Transaction", "and still renders its label");
+  A.absent(mh, '<span class="material-symbols-rounded"></span>', "and leaves no empty icon span behind");
+}
 A.contains(EX.modalHTML("warn", "Purchase Order Queue", "x", EX.cfgs["al-cat-5:0"]), "Approval Trail", "Purchase Order Queue opens the approval pop-up");
 A.contains(EX.modalHTML("err", "Restricted Fund", "x", EX.cfgs["al-cat-1:0"]), "Review Fund", "a secondary-only config gets its own button label");
 A.eq(EX.WIDGETS.click("nope", w.id, T(), {}), false, "unknown action declined");

@@ -36,6 +36,7 @@
   .btn{display:inline-flex;align-items:center;gap:var(--button-gap);font-family:inherit;font-size:var(--type-size-16);line-height:22px;letter-spacing:var(--button-label-letterspacing);font-weight:500;border:0;border-radius:var(--button-radius);padding:var(--button-padding-medium-vertical) var(--button-padding-medium-horizontal);cursor:pointer;background:transparent;color:var(--text-action-secondary-base);white-space:nowrap;transition:background var(--dur),border-color var(--dur),box-shadow var(--dur);}
   .devonly-wrap{display:inline-flex;flex-direction:column;align-items:flex-start;gap:var(--gap-xxxtight);margin-right:var(--gap-tight);vertical-align:middle;}
   .devonly-lbl{font-size:var(--type-size-11);font-weight:700;color:var(--red-100);line-height:1;}
+  .devonly-row{display:inline-flex;align-items:center;gap:var(--gap-xtight);}
   .btn .material-symbols-rounded{font-size:18px;}
   .btn.primary{background:var(--fill-action-primary-base);color:var(--text-action-primaryinverse-base);}.btn.primary:hover{background:var(--fill-action-primary-hover);}.btn.primary:active{background:var(--fill-action-primary-pressed);}
   .btn.outlined{border:var(--button-border-width) solid var(--stroke-action-secondary-inverse-base);}.btn.outlined:hover{background:var(--fill-action-secondary-hover);border-color:var(--stroke-action-secondary-inverse-hover);color:var(--text-action-secondary-hover);}.btn.outlined:active{background:var(--fill-action-secondary-pressed);border-color:var(--stroke-action-secondary-inverse-pressed);}
@@ -3958,6 +3959,242 @@
   function widgetSwitchOn(wn){var h=location.hash||"",mo=/[#&]only=([A-Za-z0-9,]+)/.exec(h);if(mo)return mo[1].toUpperCase().split(",").indexOf(wn)>-1;return WIDGET_SWITCH[wn]!==false;}
   function widgetOn(kind){for(var wn in WIDGET_KIND){if(WIDGET_KIND[wn]===kind)return widgetSwitchOn(wn);}return true;}
   /* ===== end Shell: widget switchboard ===== */
+  /* ===== Shell: data states (TEMPORARY review aid, remove before release) ==========
+     The second "For developers only" selector (owner, 16 Oct 2026): No data, Not configured, Current
+     version as Default, Small data, Extreme high volume of data. The state rides in the address bar as
+     #ds=none|notconfigured|default|small|extreme; dsApply() maps it onto each widget's own dataset and
+     state flags and restores the registry row for "default". Design: docs/DATA-STATES.md. ===== */
+  /* =====================================================================
+     Data states for the "For developers only" selector (review aid, not product).
+     Prepared 16 Oct 2026, see docs/DATA-STATES.md. Standalone: no shell dependencies.
+
+     DATA_STATES.get(state, kind) -> the fixture for that state in the widget's own
+     record shape ("small" and "extreme"), memoised. NOTCONF_COPY -> the Not configured
+     block's copy per kind. Generators are seeded so every run is identical.
+     ===================================================================== */
+  var DATA_STATES = (function () {
+    /* ---- seeded random ------------------------------------------------- */
+    function rng(seed) { var s = seed >>> 0 || 1; return function () { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
+    function pick(r, arr) { return arr[Math.floor(r() * arr.length)]; }
+    function money(r, lo, hi, cents) { var v = lo + r() * (hi - lo); return cents === false ? Math.round(v) : Math.round(v * 100) / 100; }
+    function iso(d) { return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+    function addDays(d, n) { return new Date(d.getTime() + n * 86400000); }
+    function pad(n, w) { return String(n).padStart(w, "0"); }
+
+    /* ---- name pools ---------------------------------------------------- */
+    var FIRST = ["Dana", "Marcus", "Rosa", "Thomas", "Grace", "Patrick", "Elena", "Derek", "Maureen", "Anil", "Latoya", "Greg", "Carmen", "Susan", "Kwame", "Erik", "Beatriz", "Sean", "Cheryl", "Malcolm", "Wei", "Kathleen", "Wesley", "Fatima", "Janusz", "Miguel", "Gloria", "Aaron", "Rico", "Harriet"];
+    var LAST = ["Whitfield", "Bell", "Alvarez", "Nguyen", "Okafor", "Sullivan", "Ramirez", "Coleman", "Fitzgerald", "Patel", "Brooks", "Hoffman", "Delgado", "Whitaker", "Osei", "Lindqvist", "Montoya", "Callahan", "Freeman", "Barrett", "Zhang", "Donovan", "Pruitt", "Amara", "Kowalski", "Reyes", "Stanton", "Mercer", "Villanueva", "Boone"];
+    var VENDOR_A = ["Acme", "Grainger", "Summit", "Lakeside", "Guardian", "Cornerstone", "Harmony", "Faithful", "City", "Riverside", "Northstar", "Pinnacle", "Heritage", "Meridian", "Beacon", "Evergreen", "Granite", "Horizon", "Keystone", "Liberty"];
+    var VENDOR_B = ["Paper Supply", "Industrial", "HVAC Services", "Print & Mail", "Insurance", "Landscaping", "Music Licensing", "Cleaning Co.", "Water & Power", "Office Products", "Technology", "Facilities", "Catering", "Security", "Audio Visual", "Plumbing", "Electrical", "Roofing", "Transport", "Consulting"];
+    var CHURCH_A = ["Grace", "Hope", "St. Paul", "Riverside", "Northside", "Trinity", "Bethel", "Calvary", "Emmanuel", "Faith", "First", "Cornerstone", "New Life", "Redeemer", "Christ", "Good Shepherd", "Covenant", "Harvest", "Living Water", "Mount Zion"];
+    var CHURCH_B = ["Community Church", "UMC", "Fellowship", "Chapel", "Baptist Church", "Lutheran Church", "Presbyterian Church", "Methodist Church", "Bible Church", "Christian Center"];
+    var LONG_NAME = "Cleaning Services of Greater Springfield and Surrounding Counties Inc";
+    var DEPTS = ["Finance", "Admin", "Ministry", "Facilities", "IT", "Worship", "Youth", "Children", "Missions", "Office", "Communications", "Kitchen"];
+    function person(r) { return pick(r, LAST) + ", " + pick(r, FIRST); }
+    function personFirstLast(r) { return pick(r, FIRST) + " " + pick(r, LAST); }
+    function vendor(r, i) { return (i === 7) ? LONG_NAME : pick(r, VENDOR_A) + " " + pick(r, VENDOR_B); }
+    function church(r, i) { return (i === 5) ? "First United Methodist Church of Greater Springfield and Outlying Districts" : pick(r, CHURCH_A) + " " + pick(r, CHURCH_B); }
+
+    /* ---- generators, one per kind: small and extreme ------------------- */
+    var G = {};
+
+    /* Budget Compared to Actual: the budget report fixture shape. rows = 12 {period,budget,actual|null}, 7 actuals. */
+    var MON = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    function bgtRows(r, base, spread) { var out = []; for (var i = 0; i < 12; i++) { var b = Math.round(base * (1 + (r() - 0.5) * spread)); out.push({ period: MON[i], budget: b, actual: i < 7 ? Math.round(b * (0.8 + r() * 0.4)) : null }); } return out; }
+    G.budget = {
+      small: function () { var r = rng(101); return [{ id: "stmt-act", name: "Statement of Activities", lines: [
+        { id: "contrib", name: "Contributions & offerings", type: "income", rows: bgtRows(r, 42000, 0.1) },
+        { id: "salaries", name: "Salaries & wages", type: "expense", rows: bgtRows(r, 26000, 0.05) }] }]; },
+      extreme: function () { var r = rng(102), reps = []; for (var k = 0; k < 12; k++) { var lines = []; for (var i = 0; i < 60; i++) { var inc = i % 3 === 0; lines.push({ id: "l" + k + "-" + i, name: (inc ? "Income line " : "Expense line ") + (i + 1) + (i === 11 ? " with an unusually long account description that will not fit" : ""), type: inc ? "income" : (i % 7 === 0 ? "mixed" : "expense"), rows: bgtRows(r, inc ? 5000 + r() * 400000 : 2000 + r() * 250000, 0.3) }); } reps.push({ id: "rep" + k, name: "Report " + (k + 1) + (k === 0 ? ": Statement of Activities" : ""), lines: lines }); } return reps; }
+    };
+
+    /* Pension Plans: the appointee fixture {name, org, dist, plan, amt}. */
+    var PLANS = ["Employee Before Tax-UMPIP", "Employee After Tax-UMPIP", "Clergy Retirement Security Program", "Comprehensive Protection Plan", "Horizon 403(b)", "Pastor's Pension Supplement"];
+    G.pension = {
+      small: function () { return [{ name: "Rev. Jonathan Pierce", org: "St. Paul UMC", dist: "District 1", plan: PLANS[0], amt: 12000.00 }, { name: "Rev. Naomi Adler", org: "Hope UMC", dist: "District 1", plan: PLANS[2], amt: 6000.00 }]; },
+      extreme: function () { var r = rng(201), out = []; for (var i = 0; i < 3000; i++) out.push({ name: "Rev. " + personFirstLast(r), org: church(r, i % 400), dist: "District " + (1 + i % 24), plan: pick(r, PLANS), amt: money(r, 240, 48000) }); return out; }
+    };
+
+    /* Payroll Distributions: the distribution list {id,name} and the base amounts {distId: {payType: amount}} (the block's seeded run generator scales from these). */
+    var PAY_TYPES = ["reg", "ot", "hol", "vac", "sick", "housing", "ss", "med", "bonus", "stipend", "mileage", "retire", "hsa", "ltd"];
+    G.payroll = {
+      small: function () { return { dists: [{ id: "admin", name: "Administration Staff" }], base: { admin: { reg: 4200, vac: 400 } }, payTypes: [{ id: "reg", name: "Regular Pay" }, { id: "vac", name: "Vacation" }] }; },
+      extreme: function () { var r = rng(301), dists = [], base = {}; for (var i = 0; i < 60; i++) { var id = "d" + i; dists.push({ id: id, name: (i === 9 ? "Department of Community Outreach, Hospitality and Volunteer Coordination" : pick(r, DEPTS) + " " + (i + 1)) }); var b = {}; PAY_TYPES.forEach(function (p) { if (r() < 0.7) b[p] = money(r, 40, 9000, false); }); base[id] = b; } return { dists: dists, base: base, payTypes: PAY_TYPES.map(function (p) { return { id: p, name: p.charAt(0).toUpperCase() + p.slice(1) }; }) }; }
+    };
+
+    /* Remittance Pledges: the activity fixture {seq,name,ref,total,begin,end,freq,dur,payments[{date,ref,amount}]} and the church names (names). */
+    G.remittance = {
+      small: function () { return { activities: [{ seq: 1, name: "General Fund Apportionment", ref: "Conference remittance, monthly", total: 24000, begin: "2026-01-01", end: "2026-12-31", freq: 12, dur: 12, payments: [{ date: "2026-01-15", ref: "Check 4102", amount: 2400 }] }], churches: ["Whitfield, Dana", "Bell, Marcus"] }; },
+      extreme: function () { var r = rng(401), acts = [], ch = []; for (var i = 0; i < 240; i++) { var freq = pick(r, [1, 4, 12, 26, 52]), total = money(r, 500, 900000, false), pays = [], n = Math.floor(r() * 10); for (var k = 0; k < n; k++) pays.push({ date: iso(addDays(new Date(2026, 0, 1), Math.floor(r() * 220))), ref: pick(r, ["ACH", "Check " + (4000 + Math.floor(r() * 900)), "EFT"]), amount: money(r, 10, total / 4) }); acts.push({ seq: i + 1, name: "Activity " + (i + 1) + (i === 3 ? ": Conference-wide capital apportionment for the regional camp and retreat centre" : ""), ref: "Conference remittance", total: total, begin: "2026-01-01", end: "2026-12-31", freq: freq, dur: freq, payments: pays }); } for (var j = 0; j < 400; j++) ch.push(person(r)); return { activities: acts, churches: ch }; }
+    };
+
+    /* Receivable Invoices Outstanding: the invoice fixture {inv,customer,billTo,due,days,amount,rc,source,lines[],attachments[],note,payments[]}. */
+    G.receivables = {
+      small: function () { return [{ inv: "INV-3001", customer: "Northside Community Church", billTo: "Northside Community Church", due: "2026-07-18", days: 5, amount: 1250, rc: "Church", source: "", lines: [{ desc: "Facility use, June", qty: 1, unit: 1250 }], attachments: [], note: "", payments: [] }]; },
+      extreme: function () { var r = rng(501), out = [], today = new Date(2026, 6, 23); for (var i = 0; i < 4000; i++) { var days = Math.floor(r() * 400) - 200, due = addDays(today, -days), amt = money(r, 5, 250000), cust = church(r, i % 600); out.push({ inv: "INV-" + pad(100000 + i, 6), customer: cust, billTo: cust, due: iso(due), days: days, amount: amt, rc: pick(r, ["Church", "School", "Camp", "Individual", "Agency"]), source: "", lines: [{ desc: "Services", qty: 1, unit: amt }], attachments: i % 9 === 0 ? [{ name: "INV-" + pad(100000 + i, 6) + ".pdf", size: Math.floor(40 + r() * 300) + " KB" }] : [], note: "", payments: [] }); } return out; }
+    };
+
+    /* Insurance Billing Plans: the plan fixture {plan,type,enroll,rate}. */
+    var INS_TYPES = ["Medical", "Dental", "Vision", "Property", "Life", "Disability", "Liability", "Auto", "Workers Comp"];
+    G.insurance = {
+      small: function () { return [{ plan: "Medical Base", type: "Medical", enroll: 128, rate: 450 }]; },
+      extreme: function () { var r = rng(601), out = []; for (var i = 0; i < 80; i++) out.push({ plan: (i === 4 ? "Comprehensive Medical Buy-Up Plan for Clergy and Lay Employees" : pick(r, ["Base", "Buy Up", "Plus", "Standard", "Premier", "Family", "Single"]) + " " + (i + 1)), type: INS_TYPES[i % INS_TYPES.length], enroll: r() < 0.1 ? 0 : Math.floor(r() * 2500), rate: money(r, 0, 1800) }); return out; }
+    };
+
+    /* Deposits on Hand: the block has the large deposit set already (extreme). Small = two accounts in the the deposit set shape; copy the first two records of the deposit set when wiring. */
+    G.deposits = { small: null, extreme: null };
+
+    /* Payroll Scheduled Time Off: the pay-group fixture {pg, people[{name,dept,entries[{type,d,dEnd?,mo?,hours,st,appBy?,appDate?}]}]}. */
+    var LEAVE = ["Vacation", "Sick", "Personal", "Bereavement", "Jury duty"];
+    G.pto = {
+      small: function () { return [{ pg: "Weekly Staff", people: [{ name: "Dana Whitfield", dept: "Finance", entries: [{ type: "Vacation", d: 12, dEnd: 14, hours: 24, st: "Pending" }] }] }]; },
+      extreme: function () { var r = rng(701), out = []; for (var g = 0; g < 40; g++) { var people = []; for (var p = 0; p < 15; p++) { var entries = [], n = 1 + Math.floor(r() * 14); for (var e = 0; e < n; e++) { var approved = r() < 0.6, d = 1 + Math.floor(r() * 28), span = r() < 0.3 ? Math.floor(r() * 4) : 0, ent = { type: pick(r, LEAVE), d: d, hours: span ? 8 * (span + 1) : pick(r, [4, 8]), st: approved ? "Approved" : "Pending" }; if (span) ent.dEnd = Math.min(28, d + span); if (r() < 0.5) ent.mo = Math.floor(r() * 12); if (approved) { ent.appBy = "M. Reyes"; ent.appDate = MON[ent.mo || 7] + " " + d; } entries.push(ent); } people.push({ name: personFirstLast(r), dept: pick(r, DEPTS), entries: entries }); } out.push({ pg: (g === 2 ? "Hourly Part-Time Seasonal Staff and Contracted Musicians" : pick(r, ["Weekly", "Biweekly", "Semi-monthly", "Monthly"]) + " Staff " + (g + 1)), people: people }); } return out; }
+    };
+
+    /* Loans With Balance Due: the loan fixture {acct,name,type,orig,amount,days,lastPay,nextDue,payments[{date,method,amount}]}. */
+    var LOAN_TYPES = ["Church Expansion", "Parsonage", "Vehicle", "Equipment", "Renovation", "Land", "School", "Camp", "Refinance", "Emergency", "Technology", "Energy"];
+    G.loans = {
+      small: function () { return [{ acct: "LN-1042", name: "Grace Fellowship", type: "Church Expansion", orig: 150000, amount: 28450.00, days: -8, lastPay: "2026-07-08", nextDue: "2026-08-01", payments: [{ date: "2026-07-08", method: "ACH", amount: 2100.00 }] }]; },
+      extreme: function () { var r = rng(801), out = [], today = new Date(2026, 6, 24); for (var i = 0; i < 800; i++) { var days = Math.floor(r() * 300) - 60, orig = money(r, 2000, 5000000, false), pays = [], n = Math.floor(r() * 6); for (var k = 0; k < n; k++) pays.push({ date: iso(addDays(today, -30 * (k + 1))), method: pick(r, ["ACH", "Check", "EFT", "Cash"]), amount: money(r, 50, orig / 60) }); out.push({ acct: "LN-" + pad(1000 + i, 5), name: church(r, i % 400), type: LOAN_TYPES[i % LOAN_TYPES.length], orig: orig, amount: money(r, 1, orig / 3), days: days, lastPay: iso(addDays(today, -Math.floor(r() * 400))), nextDue: iso(addDays(today, Math.floor(r() * 60) - 30)), payments: pays }); } return out; }
+    };
+
+    /* Fixed Asset Values: the asset fixture {tag,nm,cls,bldg,room,cap,cost,salv,dep}. */
+    var ASSET_CLS = ["Audio Visual", "Buildings", "Land", "Vehicles", "Furniture", "Computers", "Kitchen", "Playground", "HVAC", "Musical Instruments"];
+    G.fixedassets = {
+      small: function () { return [{ tag: "FA-1001", nm: "Sanctuary Sound System", cls: "Audio Visual", bldg: "", room: "Media Room", cap: 111719, cost: 118850, salv: 4754, dep: 114096 }]; },
+      extreme: function () { var r = rng(901), out = []; for (var i = 0; i < 5000; i++) { var cost = money(r, 50, 12000000, false), salv = Math.round(cost * r() * 0.1), cap = cost - Math.round(cost * r() * 0.08); out.push({ tag: "FA-" + pad(10000 + i, 5), nm: (i === 20 ? "Replacement roof membrane, flashing and drainage for the fellowship hall and education wing" : pick(r, ["Projector", "Van", "Organ", "Chairs", "Server", "Oven", "Boiler", "Piano", "Sign", "Fence"]) + " " + (i + 1)), cls: ASSET_CLS[i % 40 % ASSET_CLS.length] + (i % 40 >= 10 ? " " + Math.floor(i % 40 / 10 + 1) : ""), bldg: i % 3 === 0 ? "" : "Building " + (1 + i % 30), room: i % 4 === 0 ? "" : "Room " + (1 + i % 90), cap: cap, cost: cost, salv: salv, dep: Math.min(cap - salv, Math.round((cap - salv) * r())) }); } return out; }
+    };
+
+    /* Purchasing Management: the request fixture {ref,vendor,dept,amt,issued,due,path,fy,stage,appr[],log[],att[]}. Paths are the four shipped in the shipped approval paths. */
+    var PATHS = ["Administration", "Education Ministry", "Everyone", "QA Path"];
+    G.purchasing = {
+      small: function () { return [{ ref: "PO-2893", vendor: "Acme Paper Supply", dept: "Finance", amt: 245, issued: "2026-07-02", due: "2026-08-01", path: "Administration", fy: "FY 2026", stage: "Pending", appr: [{ seq: 1, user: "Nitzi Wright", state: "approved", d: "2026-07-03" }], log: [], att: [] }]; },
+      extreme: function () { var r = rng(1001), out = [], today = new Date(2026, 7, 19); for (var i = 0; i < 2500; i++) { var issued = addDays(today, -Math.floor(r() * 365)), pending = r() < 0.55, appr = []; if (!pending || r() < 0.3) appr.push({ seq: 1, user: "Nitzi Wright", state: r() < 0.08 ? "hold" : "approved", d: iso(addDays(issued, 1)), reason: "Checking budget" }); if (!pending) appr.push({ seq: 2, user: "Oisin Curran", state: "approved", d: iso(addDays(issued, 2)) }); out.push({ ref: "PO-" + pad(10000 + i, 5), vendor: vendor(r, i % 300), dept: pick(r, DEPTS), amt: money(r, 0.5, 980000), issued: iso(issued), due: iso(addDays(issued, 30)), path: PATHS[i % PATHS.length], fy: "FY 2026", stage: pending ? "Pending" : "Approved", pay: pending ? undefined : "unpaid", appr: appr, log: [], att: i % 5 === 0 ? [{ name: "Invoice-" + pad(i, 5) + ".pdf", label: "Invoice", kind: "pdf", size: Math.floor(30 + r() * 400) + " KB", d: iso(issued), by: "Nitzi Wright" }] : [] }); } return out; }
+    };
+
+    /* Main Content Tasks: the task list {app,id,label,dest,icon,std,dflt,keywords[]}. */
+    var APPS = ["ap", "ar", "gl", "bank", "payroll", "pur", "gifts", "fa", "loans", "ins", "pen", "rem"];
+    G.tasks = {
+      small: function () { return [{ app: "ap", id: "ap-check", label: "Write AP Check", dest: "Accounts Payable, Checks, Write Check", icon: "payments", std: true, dflt: true, keywords: ["pay", "check"] }]; },
+      extreme: function () { var r = rng(1101), out = []; for (var i = 0; i < 240; i++) { var app = APPS[i % APPS.length]; out.push({ app: app, id: app + "-t" + i, label: (i === 13 ? "Reconcile the restricted fund balances against the general ledger control accounts" : pick(r, ["Enter", "Post", "Print", "Review", "Approve", "Void", "Export", "Reconcile"]) + " " + pick(r, ["invoices", "checks", "journals", "deposits", "pledges", "assets", "loans", "plans"]) + " " + (i + 1)), dest: app.toUpperCase() + ", Task " + (i + 1), icon: pick(r, ["payments", "receipt_long", "summarize", "storefront", "request_quote", "money_off"]), std: true, dflt: i % 17 === 0, keywords: ["task", app] }); } return out; }
+    };
+
+    /* My Status: the query list keeps its list; states change the counts. The getter returns a count overlay {id: count}. */
+    G.mystatus = {
+      small: function () { return { counts: function (i) { return i % 2; } }; },
+      extreme: function () { var r = rng(1201); return { counts: function (i) { return 1000 + Math.floor(r() * 24000) + i; } }; }
+    };
+
+    /* Bank Balances: the account fixture {id,name,type,acct,acctFull,a[6]} (a = the six monthly points the block reads). */
+    G.bank = {
+      small: function () { return [{ id: "bk-op", name: "Operating Checking", type: "Checking", acct: "••4021", acctFull: "0044174021", a: [380000, 210500, 1200, -142300, -21400, 39500] }]; },
+      extreme: function () { var r = rng(1301), out = []; for (var i = 0; i < 150; i++) { var a = []; for (var k = 0; k < 6; k++) a.push(money(r, -2500000, 9000000, false)); var last4 = pad(Math.floor(r() * 10000), 4); out.push({ id: "bk-" + i, name: (i === 6 ? "Capital Campaign Restricted Building Fund Money Market Account" : pick(r, ["Operating", "General Fund", "Payroll", "Missions", "Building", "Youth", "Benevolence", "Reserve"]) + " " + pick(r, ["Checking", "Savings", "Money Market", "CD"]) + " " + (i + 1)), type: pick(r, ["Checking", "Savings", "Money Market", "Certificate"]), acct: "••" + last4, acctFull: "00441" + pad(Math.floor(r() * 100000), 5) + last4.slice(0, 1), a: a }); } return out; }
+    };
+
+    /* Accounts Payable By Due Date: the invoice fixture {vendor,inv,due,amount}. */
+    G.payables = {
+      small: function () { return [{ vendor: "Staples", inv: "INV-0003", due: "2026-07-10", amount: 5555.00 }]; },
+      extreme: function () { var r = rng(1401), out = [], today = new Date(2026, 6, 23); for (var i = 0; i < 3000; i++) out.push({ vendor: vendor(r, i % 400), inv: "INV-" + pad(i, 6), due: iso(addDays(today, Math.floor(r() * 540) - 180)), amount: money(r, 0.25, 480000) }); return out; }
+    };
+
+    /* Gifts Pledges: the purpose fixture {code,name,allowPledges,pledgeTotal,pledgePaid,otherGifts,closed,allPast}; the block derives donors and gifts from these. */
+    G.gifts = {
+      small: function () { return [{ code: "BLDGFUND", name: "Building Fund", allowPledges: true, pledgeTotal: 250000, pledgePaid: 205000, otherGifts: 31500, closed: false, allPast: false }]; },
+      extreme: function () { var r = rng(1501), out = []; for (var i = 0; i < 300; i++) { var total = r() < 0.15 ? 0 : money(r, 500, 6000000, false); out.push({ code: "P" + pad(i, 4), name: (i === 8 ? "Capital Campaign for the New Family Life Centre, Phase Two Construction" : pick(r, ["Building", "Mission", "Youth", "Organ", "Memorial", "Scholarship", "Camp", "Relief", "Music", "Outreach"]) + " " + pick(r, ["Fund", "Trip", "Appeal", "Drive", "Gifts", "Project"]) + " " + (i + 1)), allowPledges: true, pledgeTotal: total, pledgePaid: total ? money(r, 0, total * 1.1, false) : 0, otherGifts: r() < 0.3 ? 0 : money(r, 20, 400000, false), closed: r() < 0.1, allPast: r() < 0.2 }); } return out; }
+    };
+
+    /* Financial KPI: the tile fixture {lbl,val,prev,chg,dir,fav}. */
+    function kpi(inc, exp, pInc, pExp) { function t(l, v, p, favUp) { var c = p ? Math.round((v - p) / Math.abs(p) * 1000) / 10 : 0, up = v >= p; return { lbl: l, val: v, prev: p, chg: Math.abs(c) + "%", dir: up ? "up" : "down", fav: favUp ? up : !up }; } return [t("Total Income (YTD)", inc, pInc, true), t("Total Expenses (YTD)", exp, pExp, false), t("Net Income (YTD)", inc - exp, pInc - pExp, true)]; }
+    G.finkpi = {
+      none: function () { return kpi(0, 0, 0, 0); },
+      small: function () { return kpi(1250, 980, 1100, 1010); },
+      extreme: function () { return kpi(4821937642.37, 5103882190.12, 4466120093.55, 4209433117.08); }  /* negative net income, nine-figure variance */
+    };
+
+    /* Pending Actions and Alerts & Actions: {id,sev,action,title,sub,items[]} per category. */
+    function cats(prefix, n, perItem, r) { var out = []; for (var i = 0; i < n; i++) { var items = []; for (var k = 0; k < perItem; k++) items.push(pick(r, ["Missions Fund", "Youth Fund", "Capital Fund", "General Fund", "Camp Fund"]) + ", $" + money(r, 100, 900000).toLocaleString("en-US", { minimumFractionDigits: 2 }) + " " + pick(r, ["over restricted income", "past due", "unposted", "awaiting approval", "out of balance"]) + " (" + Math.round(100 + r() * 60) + "%)"); out.push({ id: prefix + "-cat-" + (i + 1), sev: pick(r, ["err", "warn", "upd"]), action: r() < 0.5, title: pick(r, ["Restricted Fund Compliance", "Overdue Payables", "Unposted Transactions", "Payment Processing", "Journals Out of Balance", "Unapplied Receipts"]) + " " + (i + 1), sub: items.length + " items need attention", items: items }); } return out; }
+    G.pendingactions = { small: function () { return cats("pa3", 1, 1, rng(1601)); }, extreme: function () { return cats("pa3", 40, 50, rng(1602)); } };
+    G.alerts = { small: function () { return cats("al", 1, 1, rng(1701)); }, extreme: function () { return cats("al", 40, 50, rng(1702)); } };
+
+    /* ---- memoised getter ----------------------------------------------- */
+    var memo = {};
+    function get(state, kind) {
+      var key = state + ":" + kind;
+      if (memo[key] !== undefined) return memo[key];
+      var g = G[kind] && G[kind][state];
+      memo[key] = (typeof g === "function") ? g() : null;
+      return memo[key];
+    }
+    return { get: get, generators: G, kinds: Object.keys(G) };
+  })();
+
+  /* Not configured: the copy per kind (title, sub-line, the setup place to name). */
+  var NOTCONF_COPY = {
+    budget: { title: "No budget set up", sub: "There is no budget for this fiscal year yet.", setup: "General Ledger, Budgets" },
+    pension: { title: "No pension plans", sub: "No pension billing plans have been set up.", setup: "Pension Billing, Plans" },
+    payroll: { title: "Payroll is not set up", sub: "No pay types or compensation distributions exist yet.", setup: "Payroll, Setup" },
+    remittance: { title: "No remittance activities", sub: "No activities or pledges have been set up for this year.", setup: "Remittance, Activities" },
+    receivables: { title: "Accounts Receivable is not set up", sub: "No customers or invoice types exist yet.", setup: "Accounts Receivable, Setup" },
+    insurance: { title: "No insurance plans", sub: "No billing plans have been set up.", setup: "Insurance Billing, Plans" },
+    deposits: { title: "No deposit accounts", sub: "No deposit account types have been set up.", setup: "Deposits On Hand, Setup" },
+    mystatus: { title: "No queries selected", sub: "Choose the queries you want to follow.", setup: "Configure, on this widget" },
+    pto: { title: "No approval departments", sub: "Your employee record has no departments to approve time off for.", setup: "Payroll, Employee Information, Can Approve Home Depts" },
+    loans: { title: "Loan Processing is not set up", sub: "No loan types or loans exist yet.", setup: "Loan Processing, Setup" },
+    fixedassets: { title: "No asset classes", sub: "No fixed asset classes have been set up.", setup: "Fixed Assets, Setup" },
+    purchasing: { title: "No approval paths", sub: "Requests cannot be routed until an approval path exists.", setup: "Purchasing Management, Approval Paths" },
+    tasks: { title: "No tasks available", sub: "Your role has no tasks in this application.", setup: "Security Setup, Task Roles" },
+    bank: { title: "No bank accounts", sub: "No bank accounts have been set up.", setup: "Bank Account Management, Bank Account Information" },
+    payables: { title: "Accounts Payable is not set up", sub: "No vendors or bank account for payables exist yet.", setup: "Accounts Payable, Setup" },
+    gifts: { title: "No pledge purposes", sub: "No purpose allows pledges yet.", setup: "Donors and Gifts, Purposes" },
+    finkpi: { title: "No fiscal year", sub: "The general ledger has no fiscal year to report on.", setup: "General Ledger, Fiscal Years" },
+    pendingactions: { title: "No queues configured", sub: "No posting or approval queues are set up for this company.", setup: "each module's Setup" },
+    alerts: { title: "No queues configured", sub: "No posting or approval queues are set up for this company.", setup: "each module's Setup" }
+  };
+  var DATA_STATE_LABELS=[["default","Current version as Default"],["none","No data"],["notconfigured","Not configured"],["small","Small data"],["extreme","Extreme high volume of data"]];
+  function dataState(){var m=/[#&]ds=(none|notconfigured|default|small|extreme)/i.exec(location.hash||"");return m?m[1].toLowerCase():"default";}
+  /* Per kind: what each option means in the widget's own flags. A missing entry means the option is not wired for that widget and it shows its default. */
+  var DATA_STATE_MAP={
+    budget:{none:{dataset:"noactuals"},notconfigured:{state:"notconfigured"}},
+    pension:{none:{dataset:"none"},notconfigured:{state:"notconfigured"},small:{dataset:"small"},extreme:{dataset:"extreme"}},
+    payroll:{none:{state:"empty"},notconfigured:{state:"notconfigured"}},
+    remittance:{none:{state:"empty"},notconfigured:{state:"notconfigured"},small:{dataset:"small"},extreme:{dataset:"extreme"}},
+    receivables:{none:{state:"empty"},notconfigured:{state:"notconfigured"},small:{dataset:"single"},extreme:{dataset:"extreme"}},
+    insurance:{none:{dataset:"none"},notconfigured:{state:"notconfigured"},small:{dataset:"small"},extreme:{dataset:"extreme"}},
+    deposits:{none:{dataset:"empty"},notconfigured:{state:"notconfigured"},small:{dataset:"small"},extreme:{dataset:"extreme"}},
+    mystatus:{none:{state:"empty"},notconfigured:{state:"notconfigured"}},
+    pto:{none:{dataset:"none"},notconfigured:{state:"notconfigured"},small:{dataset:"small"},extreme:{dataset:"extreme"}},
+    loans:{none:{dataset:"none"},notconfigured:{state:"notconfigured"},small:{dataset:"single"},extreme:{dataset:"extreme"}},
+    fixedassets:{none:{dataset:"none"},notconfigured:{state:"notconfigured"},small:{dataset:"small"},extreme:{dataset:"extreme"}},
+    purchasing:{none:{dataset:"empty"},notconfigured:{state:"notconfigured"},small:{dataset:"single"},extreme:{dataset:"extreme"}},
+    tasks:{none:{state:"empty"},notconfigured:{state:"notconfigured"}},
+    bank:{none:{state:"empty"},notconfigured:{state:"notconfigured"},small:{dataset:"small"},extreme:{dataset:"extreme"}},
+    payables:{none:{state:"empty"},notconfigured:{state:"notconfigured"},small:{dataset:"single"},extreme:{dataset:"extreme"}},
+    gifts:{none:{dataset:"empty"},notconfigured:{state:"notconfigured"},small:{dataset:"single"},extreme:{dataset:"extreme"}},
+    pendingactions:{none:{state:"empty"},notconfigured:{state:"notconfigured"}},
+    alerts:{none:{state:"empty"},notconfigured:{state:"notconfigured"}},
+    alerts2:{none:{state:"empty"},notconfigured:{state:"notconfigured"}}
+  };
+  /* Widgets with no empty state of their own get the shell's, with their own words. */
+  var DS_SHELL_EMPTY={mystatus:{title:"Nothing to report",sub:"Every query you follow is at zero right now."},tasks:{title:"No tasks",sub:"There are no tasks to show for this application."},alerts:{title:"Nothing needs attention",sub:"No alerts or actions are open right now."},alerts2:{title:"Nothing needs attention",sub:"No alerts or actions are open right now."}};
+  function dsApply(ws){
+    var st=dataState();
+    ws.forEach(function(w){
+      if(!w._dsDefaults)w._dsDefaults={dataset:w.dataset,state:w.state};
+      var m=(DATA_STATE_MAP[w.kind]||{})[st];
+      if(st==="default"||!m){w.dataset=w._dsDefaults.dataset;w.state=w._dsDefaults.state;return;}
+      w.dataset=(m.dataset!==undefined)?m.dataset:w._dsDefaults.dataset;
+      w.state=(m.state!==undefined)?m.state:w._dsDefaults.state;
+    });
+  }
+  function notConfiguredHTML(kind,short){
+    var c=NOTCONF_COPY[kind]||{title:"Not set up",sub:"This module has not been set up yet.",setup:""};
+    return '<div class="state" data-kind="notconfigured">'+ICON("settings")+'<div class="state-title">'+c.title+'</div>'+(short?'':'<div class="state-sub">'+c.sub+(c.setup?' Set it up under '+c.setup+'.':'')+'</div>')+'</div>';
+  }
+  function dataStateSelectHTML(){var cur=dataState();return '<select id="dataStateSel" class="btn outlined sm" aria-label="Review aid: data state" aria-describedby="viewOnlyLbl" style="max-width:260px">'+DATA_STATE_LABELS.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===cur?" selected":"")+'>'+o[1]+'</option>';}).join("")+'</select>';}
+  /* Both selectors under the one label: the data state first, then the widget. */
+  function devSelectorsHTML(){var h=viewOnlySelectHTML();return h.replace('<select id="viewOnlySel"','<span class="devonly-row">'+dataStateSelectHTML()+'<select id="viewOnlySel"').replace('</select></span>','</select></span></span>');}
+  document.addEventListener("change",function(e){if(e.target&&e.target.id==="dataStateSel"){var v=e.target.value,parts=(location.hash||"").replace(/^#/,"").split("&").filter(function(p){return p&&!/^ds=/i.test(p);});if(v&&v!=="default")parts.push("ds="+v);var nh=parts.length?"#"+parts.join("&"):"";if(location.hash===nh)render();else location.hash=nh;}});
+  /* ===== end Shell: data states ===== */
   function viewOnly(ws){ws=ws.filter(function(x){return widgetOn(x.kind);});var h=location.hash||"";var mk=/[#&]k=([a-z0-9,-]+)/i.exec(h);
     if(mk){var ks=mk[1].toLowerCase().split(",");return ws.filter(function(x){return ks.indexOf(x.kind)>-1;});}
     return ws;}
@@ -3973,8 +4210,14 @@
     if(WIDGET_SWITCH.W18!==false)opts.push(["only=W18","W18 Financial KPI (KPI band)"]);
     opts=[opts[0]].concat(opts.slice(1).sort(function(x,y){return x[1].localeCompare(y[1]);}));
     return '<span class="devonly-wrap"><span class="devonly-lbl" id="viewOnlyLbl">For developers only</span><select id="viewOnlySel" class="btn outlined sm" aria-label="Review aid: show one widget" aria-describedby="viewOnlyLbl" style="max-width:320px">'+opts.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===cur_?" selected":"")+'>'+o[1]+'</option>';}).join("")+'</select></span>';}
-  document.addEventListener("change",function(e){if(e.target&&e.target.id==="viewOnlySel"){var v=e.target.value;if(!v){currentId="d1";}if(location.hash===(v?"#"+v:"")){render();}else{location.hash=v?"#"+v:"";}}});
-  var ICON=function(n){return '<span class="material-symbols-rounded">'+n+'</span>';};
+  document.addEventListener("change",function(e){if(e.target&&e.target.id==="viewOnlySel"){var v=e.target.value;if(!v){currentId="d1";}var ds=dataState(),nh=(v?"#"+v:"")+(ds!=="default"?((v?"&":"#")+"ds="+ds):"");if(location.hash===nh){render();}else{location.hash=nh;}}});
+  /* A missing name yields NOTHING, not the word "undefined". Without this
+     guard ICON(undefined) emits a ligature span holding the literal text,
+     which the icon font renders as the word itself: that is how a button came
+     to read "UNDEFINED Post Transaction" (owner, 16 Oct 2026), and how W17's
+     gift status column printed the same word on 28 Sep. 359 call sites share
+     this helper, so the guard belongs here rather than in each of them. */
+  var ICON=function(n){return n?'<span class="material-symbols-rounded">'+n+'</span>':"";};
   var SIZES=["kpi","wide","xwide"];
   var DEPTH_LABEL={kpi:"Glance",wide:"Explore",xwide:"Detail"};
 
@@ -4394,7 +4637,9 @@ function mysPopContent(){
   /* ---- data accessors & variance math (reuse Jo's data; renamed accessors so this block stays self-contained) ---- */
   function bgtOReport(w){var id=w.report||BGT_REPORTS[0].id;for(var i=0;i<BGT_REPORTS.length;i++)if(BGT_REPORTS[i].id===id)return BGT_REPORTS[i];return BGT_REPORTS[0];}
   function bgtOReportLine(w){var rep=bgtOReport(w),id=w.reportLine||rep.lines[0].id;for(var i=0;i<rep.lines.length;i++)if(rep.lines[i].id===id)return rep.lines[i];return rep.lines[0];}
-  function bgtOSet(w){if(w.acctview==="special")return bgtOReportLine(w).rows;var fy2=w.fy||BGT_CUR_FY,table=(w.acctview==="expense")?BUDGET_EXPENSE_BY_FY:BUDGET_INCOME_BY_FY;return table[fy2]||table[BGT_CUR_FY];}
+  function bgtOSet(w){if(w.acctview==="special")return bgtOReportLine(w).rows;var fy2=w.fy||BGT_CUR_FY,table=(w.acctview==="expense")?BUDGET_EXPENSE_BY_FY:BUDGET_INCOME_BY_FY;var rows=table[fy2]||table[BGT_CUR_FY];
+    if(w.dataset==="noactuals")return rows.map(function(r){return {period:r.period,budget:r.budget,actual:null};}); /* data state "No data": a budget with nothing posted yet */
+    return rows;}
   function bgtOBasis(w){var av=w.acctview||"income";if(av!=="special")return {type:av,neutral:false};var ln=bgtOReportLine(w);return {type:(ln.type==="expense"?"expense":"income"),neutral:(ln.type==="mixed")};}
   function bgtOHasBudget(rows){return rows.some(function(r){return r.budget>0;});}
   function bgtOVariance(type,b,a){if(a==null)return null;return type==="expense"?(b-a):(a-b);}
@@ -4791,7 +5036,7 @@ var PENO_APPTS_EMPTY=[];
 
 function penOEsc(s){return escAttr(s);}
 function penOMoney(n){return moneyFull(n);}
-function penODataset(w){return (w&&w.dataset==="none")?PENO_APPTS_EMPTY:PENO_APPTS;}
+function penODataset(w){if(w&&(w.dataset==="small"||w.dataset==="extreme"))return DATA_STATES.get(w.dataset,"pension");return (w&&w.dataset==="none")?PENO_APPTS_EMPTY:PENO_APPTS;}
 function penODist(w){return (w&&w.penDist)||"All Districts";}
 function penOFiltered(w){var d=penODist(w);return penODataset(w).filter(function(a){return d==="All Districts"||a.dist===d;});}
 function penODistLabel(w){return penODist(w);}
@@ -5420,7 +5665,8 @@ var REMO_ACTIVITIES=[
 
 // ===== RENDER ===================================================
 function remOEsc(s){return escAttr(s);}
-function remOData(w){if(w.state==="empty"||w.state==="noscope")return [];return REMO_ACTIVITIES;}
+var remOLive=null; /* the activity list last served, so seq look-ups follow the data state */
+function remOData(w){if(w.state==="empty"||w.state==="noscope")return [];var l=(w.dataset==="small"||w.dataset==="extreme")?DATA_STATES.get(w.dataset,"remittance").activities:REMO_ACTIVITIES;remOLive=l;return l;}
 /* ---- date helpers (leap-aware) ---------------------------------- */
 function remOParse(iso){return parseISO(iso);}
 function remOISO(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
@@ -5765,7 +6011,7 @@ var REMO_CHURCHES=["Whitfield, Dana","Bell, Marcus","Alvarez, Rosa","Nguyen, Tho
 function remORng(seed){var s=seed>>>0;return function(){s=s+0x6D2B79F5|0;var t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
 function remOMoney(n){return "$"+Math.round(n).toLocaleString("en-US");}
 function remOIcon(n){return '<span class="material-symbols-rounded" aria-hidden="true">'+n+'</span>';}
-function remOActBySeq(seq){for(var i=0;i<REMO_ACTIVITIES.length;i++)if(String(REMO_ACTIVITIES[i].seq)===String(seq))return REMO_ACTIVITIES[i];return null;}
+function remOActBySeq(seq){var l=remOLive||REMO_ACTIVITIES;for(var i=0;i<l.length;i++)if(String(l[i].seq)===String(seq))return l[i];return null;}
 
 function remOPledgeTerm(rng,isMulti){
   var b,months;
@@ -6321,7 +6567,7 @@ var ARO_INV_SINGLE=[
 /* (2) RENDER ----------------------------------------------------------- */
 function arOEsc(s){return escAttr(s);}
 function arOFmtDate(iso){return fmtDateLong(iso);}
-function arODataset(w){if(w.dataset==="current")return ARO_INV_CURRENT;if(w.dataset==="single")return ARO_INV_SINGLE;return ARO_INV;}
+function arODataset(w){if(w.dataset==="small"||w.dataset==="extreme")return DATA_STATES.get(w.dataset,"receivables");if(w.dataset==="current")return ARO_INV_CURRENT;if(w.dataset==="single")return ARO_INV_SINGLE;return ARO_INV;}
 function arOFiltered(w){var rc=w.arORc||"All",src=w.arOSource||"All";return arODataset(w).filter(function(x){return (rc==="All"||x.rc===rc)&&(src==="All"||x.source===src);});}
 function arOSevOf(days){for(var i=0;i<ARO_BUCKETS.length;i++){if(days<=ARO_BUCKETS[i].hi)return ARO_BUCKETS[i].sev;}return 5;} /* v2.1: 6 bands, worst sev is 5 */
 function arOBucketOf(days){for(var i=0;i<ARO_BUCKETS.length;i++){if(days<=ARO_BUCKETS[i].hi)return ARO_BUCKETS[i].key;}return "b4";}
@@ -6742,7 +6988,7 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
   function insOCost(p){return (p.enroll||0)*(p.rate||0);}
   function insOCostTotal(w){return insOFiltered(w).reduce(function(s,p){return s+insOCost(p);},0);}
   var INSO_NODENTAL=INSO_PLANS.filter(function(p){return p.type!=="Dental";});
-  function insODataset(w){if(w.dataset==="none")return INSO_PLANS_EMPTY;if(w.dataset==="nodental")return INSO_NODENTAL;return INSO_PLANS;}
+  function insODataset(w){if(w.dataset==="small"||w.dataset==="extreme")return DATA_STATES.get(w.dataset,"insurance");if(w.dataset==="none")return INSO_PLANS_EMPTY;if(w.dataset==="nodental")return INSO_NODENTAL;return INSO_PLANS;}
   function insOFiltered(w){var ty=w.insType||"All";return insODataset(w).filter(function(p){return ty==="All"||p.type===ty;});}
   function insOTotal(w){return insOFiltered(w).reduce(function(s,p){return s+p.enroll;},0);}
   function insOPlanCount(w){return insOFiltered(w).length;}
@@ -6972,7 +7218,11 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
     out.forEach(function(a){a.net=Math.max(1000,Math.round(a.net*scale));});
     var sum2=out.reduce(function(s,a){return s+a.net;},0),bi=0;for(var k=1;k<out.length;k++){if(out[k].net>out[bi].net)bi=k;}out[bi].net+=(DEPO_TARGET_TOTAL-sum2);
     return out;})();
-  function depOData(w){return (w&&w.dataset==="empty")?[]:DEPO_DEP;}
+  var depODsBig=null;
+  function depOData(w){
+    if(w&&w.dataset==="small")return DEPO_DEP.slice(0,2);
+    if(w&&w.dataset==="extreme"){if(!depODsBig){depODsBig=[];for(var k=0;k<8;k++)DEPO_DEP.forEach(function(a){var c={};for(var f in a)c[f]=a[f];c.name=a.name+(k?" "+(k+1):"");c.acct="\u2022\u2022"+String(1000+(k*977+parseInt(a.acctFull.slice(-4),10))%9000);c.acctFull=a.acctFull.slice(0,6)+c.acct.slice(2);c.net=Math.round(a.net*(0.3+(k*0.37)%1.4));depODsBig.push(c);});}return depODsBig;}
+    return (w&&w.dataset==="empty")?[]:DEPO_DEP;}
   /* Account types are configured records, not labels read off the accounts: a type with no accounts still lists, the way a newly set up one does before any account is opened against it. "Building Fund" is that case. Legacy orders them by name. */
   var DEPO_TYPES=["Building Fund","Certificate of Deposit","Checking","Endowment","Escrow","Grant Funds","Money Market","Operating Reserve","Restricted Funds","Savings","Trust Accounts"];
   function depOTypes(w){var net={};depOData(w).forEach(function(a){net[a.type]=(net[a.type]||0)+a.net;});return DEPO_TYPES.map(function(t){return {name:t,net:net[t]||0};});}
@@ -7292,7 +7542,7 @@ function ptoFStateClass(w,fe){return "ptof-mst-"+ptoFEffState(w,fe).toLowerCase(
    "Not Assigned", treated like any other group (heading, badge, filter option, sort), as the legacy screen does. */
 var PTOF_NOT_ASSIGNED="Not Assigned";
 function ptoFGroupName(v){v=(v==null)?"":String(v).trim();return v||PTOF_NOT_ASSIGNED;}
-function ptoFFlat(w){var ds=(w.dataset==="none"||w.state==="empty")?[]:PTOF_GROUPS,out=[];ds.forEach(function(g){var gpg=ptoFGroupName(g.pg);g.people.forEach(function(p){var pdept=ptoFGroupName(p.dept);p.entries.forEach(function(e,i){var mo=(e.mo==null?PTOF_WORK_M:e.mo),year=(e.year==null?PTOF_WORK_Y:e.year),dEnd=e.dEnd||e.d,span=(dEnd-e.d+1),hpd=(e.hours&&span>0)?Math.round(e.hours/span):e.hours;for(var dd=e.d;dd<=dEnd;dd++){out.push({pg:gpg,person:p.name,dept:pdept,personKey:gpg+"|"+p.name,_id:gpg+"#"+p.name+"#"+i+"#"+dd,type:e.type,mo:mo,year:year,d:dd,dEnd:dd,hours:hpd,st:e.st,appBy:e.appBy,appDate:e.appDate});}});});});return out;}
+function ptoFFlat(w){var ds=(w.dataset==="none"||w.state==="empty")?[]:((w.dataset==="small"||w.dataset==="extreme")?DATA_STATES.get(w.dataset,"pto"):PTOF_GROUPS),out=[];ds.forEach(function(g){var gpg=ptoFGroupName(g.pg);g.people.forEach(function(p){var pdept=ptoFGroupName(p.dept);p.entries.forEach(function(e,i){var mo=(e.mo==null?PTOF_WORK_M:e.mo),year=(e.year==null?PTOF_WORK_Y:e.year),dEnd=e.dEnd||e.d,span=(dEnd-e.d+1),hpd=(e.hours&&span>0)?Math.round(e.hours/span):e.hours;for(var dd=e.d;dd<=dEnd;dd++){out.push({pg:gpg,person:p.name,dept:pdept,personKey:gpg+"|"+p.name,_id:gpg+"#"+p.name+"#"+i+"#"+dd,type:e.type,mo:mo,year:year,d:dd,dEnd:dd,hours:hpd,st:e.st,appBy:e.appBy,appDate:e.appDate});}});});});return out;}
 /* Entries for a single calendar month (year + 0-based month). FOUR
    callers, two of which are the Approval Queue and the Glance figures,
    which is exactly why the department filter must not live here. See
@@ -7874,7 +8124,7 @@ function lonFFmtDate(iso){return fmtDateLong(iso);}
 function lonFParse(iso){return parseISO(iso);}
 function lonFDaysSincePay(iso){if(!iso)return null;var t=lonFParse(LONF_TODAY);return Math.round((t-lonFParse(iso))/86400000);}
 function lonFIsDormant(x){var d=lonFDaysSincePay(x.lastPay);return d!=null&&d>90;}
-function lonFDataset(w){if(w.dataset==="current")return LONF_LOANS_CURRENT;if(w.dataset==="single")return LONF_LOANS_SINGLE;if(w.dataset==="none")return [];return LONF_LOANS;}
+function lonFDataset(w){if(w.dataset==="small"||w.dataset==="extreme")return DATA_STATES.get(w.dataset,"loans");if(w.dataset==="current")return LONF_LOANS_CURRENT;if(w.dataset==="single")return LONF_LOANS_SINGLE;if(w.dataset==="none")return [];return LONF_LOANS;}
 function lonFFiltered(w){var ty=w.lonType||"All";return lonFDataset(w).filter(function(x){return ty==="All"||x.type===ty;});}
 function lonFBucketOf(days){for(var i=0;i<LONF_BUCKETS.length;i++){if(days<=LONF_BUCKETS[i].hi)return LONF_BUCKETS[i].key;}return "b3";}
 function lonFBucketLabel(key){for(var i=0;i<LONF_BUCKETS.length;i++)if(LONF_BUCKETS[i].key===key)return LONF_BUCKETS[i].label;return key;}
@@ -8395,7 +8645,7 @@ function faFMoneyShort(n){
 }
 function faFDimDef(k){for(var i=0;i<FAF_DIMS.length;i++){if(FAF_DIMS[i].k===k)return FAF_DIMS[i];}return FAF_DIMS[0];}
 function faFMeasDef(k){for(var i=0;i<FAF_MEASURES.length;i++){if(FAF_MEASURES[i].k===k)return FAF_MEASURES[i];}return FAF_MEASURES[FAF_MEASURES.length-1];}
-function faFDataset(w){return (w.dataset==='none'||w.dataset==='empty')?FAF_ASSETS_EMPTY:FAF_ASSETS;}
+function faFDataset(w){if(w.dataset==='small'||w.dataset==='extreme')return DATA_STATES.get(w.dataset,"fixedassets");return (w.dataset==='none'||w.dataset==='empty')?FAF_ASSETS_EMPTY:FAF_ASSETS;}
 /* The five measures. Depreciable Value and Net Value are DERIVED, not stored,
    and Net Value's base is Depreciable Value (Cost minus Salvage), NOT Cost. Step
    1 records that as a correction to its own earlier wording, so a build using
@@ -9058,7 +9308,7 @@ function purFAgeLabel(po){var a=purFAge(po);return (po.stage==="Pending")?("wait
 /* A request with a rejected approval row is hidden from the whole widget, as the legacy data panel does
    (PurchasingManagement.ascx.cs:86-87); it stays reachable from the Requests page (owner, 9 Oct). */
 function purFHidden(po){return (po.appr||[]).some(function(a){return a.state==="rejected";});}
-function purFDataset(w){return ((w&&(w.dataset==="empty"||w.state==="empty"))?PURF_POS_EMPTY:PURF_POS).filter(function(p){return !purFHidden(p);});}
+function purFDataset(w){var base=(w&&(w.dataset==="small"||w.dataset==="extreme"))?DATA_STATES.get(w.dataset,"purchasing"):((w&&(w.dataset==="empty"||w.state==="empty"))?PURF_POS_EMPTY:PURF_POS);return base.filter(function(p){return !purFHidden(p);});}
 function purFActive(po){return PURF_STAGES.indexOf(po.stage)>-1;}
 function purFPO(w,ref){var l=purFDataset(w);for(var i=0;i<l.length;i++)if(l[i].ref===ref)return l[i];return null;}
 function purFSum(list){return list.reduce(function(s,p){return s+p.amt;},0);}
@@ -10371,7 +10621,7 @@ function gpFDonorPace(pl,thru){
    and no highlight styling exists. */
 function gpFData(w){
   if(w.state==="empty"||w.dataset==="empty")return [];
-  var pool=(w.dataset==="single")?GPF_PURPOSES_SINGLE:GPF_PURPOSES;
+  var pool=gpFAllPurposes(w);
   var c=w.gpFCamp||'All purposes';
   return (c==='All purposes')?pool:pool.filter(function(x){return (x.code+": "+x.name)===c;});
 }
@@ -10427,7 +10677,7 @@ function gpFSumRows(rows){
 function gpFTotals(w){return gpFSumRows(gpFPurposeCompute(w));}
 
 
-function gpFAllPurposes(w){return (w&&w.dataset==="single")?GPF_PURPOSES_SINGLE:GPF_PURPOSES;}
+function gpFAllPurposes(w){if(w&&(w.dataset==="small"||w.dataset==="extreme"))return DATA_STATES.get(w.dataset,"gifts");return (w&&w.dataset==="single")?GPF_PURPOSES_SINGLE:GPF_PURPOSES;}
 function gpFCampByLabel(w,label){var pool=gpFAllPurposes(w);for(var i=0;i<pool.length;i++)if((pool[i].code+": "+pool[i].name)===label)return pool[i];return null;}
 
 // ===== RENDER ========================================================
@@ -11359,8 +11609,16 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       var b=cfg.btnPri||{icon:"visibility",label:(cfg.btnSec&&cfg.btnSec.label)||"Go to Page"};
       html='<div class="al-modal al-modal-md" role="dialog" aria-modal="true" aria-label="'+aloEsc(cfg.title)+'">'+
         '<div class="al-modal-hd"><div class="al-modal-hd-text"><div class="al-modal-sev '+sevCls+'">'+cfg.sevLabel+'</div><div class="al-modal-title">'+cfg.title+'</div></div><button class="al-modal-close iconbtn" data-alo="close" aria-label="Close">'+ICON("close")+'</button></div>'+
-        '<div class="al-modal-body"><p class="al-modal-msg">'+cfg.msg+'</p>'+(rows?'<div class="al-modal-table">'+rows+'</div>':'')+'</div>'+
-        '<div class="al-modal-actions"><button class="btn primary sm" data-alo="go">'+ICON(b.icon)+b.label+'</button></div></div>';
+        /* The paragraph is omitted when there is no msg, rather than left
+           empty: fifteen configs carry no msg field, and an unconditional
+           '+cfg.msg+' printed the literal word "undefined" in the body
+           (owner, 16 Oct 2026). This is the shape aloMergedModal already
+           uses. An empty <p> would also leave its bottom margin behind. */
+        '<div class="al-modal-body">'+(cfg.msg?'<p class="al-modal-msg">'+cfg.msg+'</p>':'')+(rows?'<div class="al-modal-table">'+rows+'</div>':'')+'</div>'+
+        /* b.icon is absent on the ten configs that carry a label only, so the
+           icon is emitted only when there is one. ICON() guards this too, but
+           reading this line should not require knowing that. */
+        '<div class="al-modal-actions"><button class="btn primary sm" data-alo="go">'+(b.icon?ICON(b.icon):"")+b.label+'</button></div></div>';
     }else{
       html='<div class="al-modal" role="dialog" aria-modal="true" aria-label="'+aloEsc(itemLbl)+'">'+
         '<div class="al-modal-hd"><div class="al-modal-hd-text"><div class="al-modal-cat">'+catTitle+'</div><div class="al-modal-title">'+itemLbl+'</div></div><button class="al-modal-close iconbtn" data-alo="close" aria-label="Close">'+ICON("close")+'</button></div>'+
@@ -13855,7 +14113,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     return head+(w.topMetric?signupsMetric(w):"")+signupsList();
   }
 
-  function bankAccounts(w){return BANK_ACCOUNTS;}
+  function bankAccounts(w){if(w&&(w.dataset==="small"||w.dataset==="extreme"))return DATA_STATES.get(w.dataset,"bank");return BANK_ACCOUNTS;}
   function bankEnding(a){return a.a[0]+a.a[1]+a.a[2]+a.a[3]+a.a[4]+a.a[5];}
   function bankSelected(w){if(!w.bkacct)return null;var list=bankAccounts(w);for(var i=0;i<list.length;i++)if(list[i].id===w.bkacct)return list[i];return null;}
   function bankMoney(n){return n<0?("−$"+Math.abs(n).toLocaleString()):("$"+n.toLocaleString());}
@@ -14126,7 +14384,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     {vendor:"Guardian Insurance",   inv:"INV-9001", due:"2026-08-05", amount:8400.00},
     {vendor:"Summit HVAC Services", inv:"INV-9002", due:"2026-08-05", amount:3250.00}
   ];
-  function apData(w){return (w&&w.dataset==="single")?AP_INVOICES_SINGLE:AP_INVOICES;}
+  function apData(w){if(w&&(w.dataset==="small"||w.dataset==="extreme"))return DATA_STATES.get(w.dataset,"payables");return (w&&w.dataset==="single")?AP_INVOICES_SINGLE:AP_INVOICES;}
 
   /* aging bands , plain language, earliest first */
   var AP_BANDS=[
@@ -14349,6 +14607,8 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
   function contentHTML(w){
     if(w.state==="loading")return '<div class="skeleton" aria-busy="true"><div class="sk" style="width:55%"></div><div class="sk" style="flex:1"></div></div>';
     if(w.state==="error"){var xc=ERROR_COPY[w.kind]||ERROR_COPY.deposits;return '<div class="state" data-kind="error">'+ICON("error")+'<div class="state-title">'+xc.title+'</div><div class="state-sub">'+xc.sub+'</div><button class="btn sm outlined" data-action="retry" data-id="'+w.id+'">Retry</button></div>';}
+    if(w.state==="notconfigured")return notConfiguredHTML(w.kind,w.size==="kpi"); /* data states review aid */
+    if(w.state==="empty"&&DS_SHELL_EMPTY[w.kind]){var dsc=DS_SHELL_EMPTY[w.kind];return '<div class="state" data-kind="empty">'+ICON("inbox")+'<div class="state-title">'+dsc.title+'</div>'+(w.size==="kpi"?'':'<div class="state-sub">'+dsc.sub+'</div>')+'</div>';}
     var wreg=WIDGETS.content(w);if(wreg!==null)return wreg;
     if(w.state==="empty"){var ec=EMPTY_COPY[w.kind]||EMPTY_COPY.deposits;return '<div class="state" data-kind="empty">'+ICON("inbox")+'<div class="state-title">'+ec.title+'</div><div class="state-sub">'+ec.sub+'</div>'+(ec.showZero?'<div class="dep-total" style="margin-top:var(--padding-xxtight)"><span>Total</span><span>'+money(0)+'</span></div>':'')+(ec.cta?'<button class="btn outlined" data-action="'+ec.action+'" data-id="'+w.id+'">'+ICON("add")+ec.cta+'</button>':'')+'</div>';}
     if(w.kind==="metric")return metricHTML(w);
@@ -14383,7 +14643,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     var fopen=!!(pop&&pop.type==="wfind");
     var wfindBtn='<button class="btn naked sm wfind-btn'+(fopen?" on":"")+'" data-action="wfind" aria-haspopup="dialog" aria-expanded="'+fopen+'" data-tip="Find a widget on this dashboard">'+ICON("search")+'<span class="wfind-lbl">Find a widget</span>'+ICON("expand_more")+'</button>';
     var refreshAll='<button class="btn naked sm" data-action="refresh-all" data-tip="Last updated '+cur().updated+'" aria-label="Refresh all widgets, last updated '+cur().updated+'">'+ICON("refresh")+'Refresh</button>';
-    return viewOnlySelectHTML()+wfindBtn+refreshAll+'<button class="btn outlined sm" data-action="manage">'+ICON("dashboard_customize")+'Edit Dashboard</button>';}
+    return devSelectorsHTML()+wfindBtn+refreshAll+'<button class="btn outlined sm" data-action="manage">'+ICON("dashboard_customize")+'Edit Dashboard</button>';}
 
   function popContent(){
     if(!pop)return "";
@@ -14447,7 +14707,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     var r=trig.getBoundingClientRect(),M=8,pw=el.offsetWidth,ph=el.offsetHeight;var left=r.left;if(left+pw>innerWidth-M)left=r.right-pw;if(left+pw>innerWidth-M)left=innerWidth-M-pw;if(left<M)left=M;var flipped=false;var top=r.bottom+7;if(top+ph>innerHeight-M){var up=r.top-ph-7;if(up>=M){top=up;flipped=true;}else{top=Math.max(M,innerHeight-M-ph);}}var cx=(r.left+r.width/2)-left;cx=Math.max(14,Math.min(pw-14,cx));var dir=flipped?"down":"up";
     pop._pos={left:left,top:top,cx:cx,dir:dir};
     el.style.setProperty("--caret-x",cx+"px");el.setAttribute("data-dir",dir);el.style.left=left+"px";el.style.top=top+"px";el.style.visibility="visible";}
-  function render(){hideTip();if(typeof hideLnTip==="function")hideLnTip();if(typeof dsHide==="function")dsHide();var _ws=viewOnly(cur().widgets),_grid=_ws.map(widgetHTML).join("");if(_ws.length<=1)_grid+=addWidgetPlaceholderHTML();document.getElementById("dashboard").innerHTML=_grid;document.getElementById("tbLeft").innerHTML=tbLeftHTML();document.getElementById("tbRight").innerHTML=tbRightHTML();if(renaming){var el=document.getElementById("rn-"+renaming);if(el){el.focus();el.select();}}if(focusDash){var di=document.getElementById("dashInput");if(di){di.focus();di.select();}focusDash=false;}renderOverlay();if(pop&&pop.type==="companydd"){var _ci=document.getElementById("coq");if(_ci&&document.activeElement!==_ci){_ci.focus();try{_ci.setSelectionRange(_ci.value.length,_ci.value.length);}catch(_e){}}}if(pop&&pop.type==="wfind"){var _wf=document.getElementById("wfindq");if(_wf&&document.activeElement!==_wf){_wf.focus();try{_wf.setSelectionRange(_wf.value.length,_wf.value.length);}catch(_e6){}}}if(pop&&pop.type==="depfilter"){var _fi=document.getElementById("fq");if(_fi&&document.activeElement!==_fi){_fi.focus();try{_fi.setSelectionRange(_fi.value.length,_fi.value.length);}catch(_e2){}}}if(pop&&pop.type==="bank-acct"){var _bi=document.getElementById("bankq");if(_bi&&document.activeElement!==_bi){_bi.focus();try{_bi.setSelectionRange(_bi.value.length,_bi.value.length);}catch(_e4){}}}if(pop&&pop.type==="ap-due"){var _ai=document.getElementById("apq");if(_ai&&document.activeElement!==_ai){_ai.focus();try{_ai.setSelectionRange(_ai.value.length,_ai.value.length);}catch(_e5){}}}if(prFocusId){var _pf=document.getElementById(prFocusId);if(_pf&&document.activeElement!==_pf){_pf.focus();try{var _vl=_pf.value.length;_pf.setSelectionRange(_vl,_vl);}catch(_e3){}}}renderModal();}
+  function render(){hideTip();if(typeof hideLnTip==="function")hideLnTip();if(typeof dsHide==="function")dsHide();var _ws=viewOnly(cur().widgets);dsApply(_ws);var _grid=_ws.map(widgetHTML).join("");if(_ws.length<=1)_grid+=addWidgetPlaceholderHTML();document.getElementById("dashboard").innerHTML=_grid;document.getElementById("tbLeft").innerHTML=tbLeftHTML();document.getElementById("tbRight").innerHTML=tbRightHTML();if(renaming){var el=document.getElementById("rn-"+renaming);if(el){el.focus();el.select();}}if(focusDash){var di=document.getElementById("dashInput");if(di){di.focus();di.select();}focusDash=false;}renderOverlay();if(pop&&pop.type==="companydd"){var _ci=document.getElementById("coq");if(_ci&&document.activeElement!==_ci){_ci.focus();try{_ci.setSelectionRange(_ci.value.length,_ci.value.length);}catch(_e){}}}if(pop&&pop.type==="wfind"){var _wf=document.getElementById("wfindq");if(_wf&&document.activeElement!==_wf){_wf.focus();try{_wf.setSelectionRange(_wf.value.length,_wf.value.length);}catch(_e6){}}}if(pop&&pop.type==="depfilter"){var _fi=document.getElementById("fq");if(_fi&&document.activeElement!==_fi){_fi.focus();try{_fi.setSelectionRange(_fi.value.length,_fi.value.length);}catch(_e2){}}}if(pop&&pop.type==="bank-acct"){var _bi=document.getElementById("bankq");if(_bi&&document.activeElement!==_bi){_bi.focus();try{_bi.setSelectionRange(_bi.value.length,_bi.value.length);}catch(_e4){}}}if(pop&&pop.type==="ap-due"){var _ai=document.getElementById("apq");if(_ai&&document.activeElement!==_ai){_ai.focus();try{_ai.setSelectionRange(_ai.value.length,_ai.value.length);}catch(_e5){}}}if(prFocusId){var _pf=document.getElementById(prFocusId);if(_pf&&document.activeElement!==_pf){_pf.focus();try{var _vl=_pf.value.length;_pf.setSelectionRange(_vl,_vl);}catch(_e3){}}}renderModal();}
   /* Smart scroll chaining: when the wheel is over a widget's internal scroller that is at its
      boundary (or does not overflow), scroll the whole dashboard instead of getting stuck. */
   document.addEventListener("wheel",function(e){
@@ -14691,11 +14951,13 @@ function fkpBandHTML(){
       refresh+
     '</div>'+
     '<div class="fkp-row">'+
-      FKP_TILES.map(fkpTileHTML).join("")+
+      ((typeof dataState==="function"&&dataState()==="notconfigured")?notConfiguredHTML("finkpi",false):fkpTiles().map(fkpTileHTML).join(""))+
     '</div>'+
   '</div>';
 }
 
+/* The band follows the data states review aid: zeros for No data, small or extreme figures, the shipped tiles otherwise. */
+function fkpTiles(){var st=(typeof dataState==="function")?dataState():"default";if(st==="none"||st==="small"||st==="extreme"){var t=DATA_STATES.get(st,"finkpi");if(t)return t;}return FKP_TILES;}
 function fkpRender(){
   var el=document.getElementById("fkpBand");
   if(!el)return;
@@ -14740,7 +15002,7 @@ function fkpRefresh(){
    position are the shell's and cannot drift. The band still registers no widget kind: it adds one popover
    type and one click handler to the registry, nothing else (owner, 7 Oct 2026). */
 function fkpInfoPopHTML(){
-  var i=parseInt(String(pop&&pop.id||"").slice(4),10),t=FKP_TILES[i];if(!t)return "";
+  var i=parseInt(String(pop&&pop.id||"").slice(4),10),t=fkpTiles()[i];if(!t)return "";
   /* Title and body only: no divider and no user-guide link on the KPI card (owner, 7 Oct 2026). */
   return '<div class="wtip-h">'+fkpEsc(t.lbl)+'</div><div class="wtip-b">'+fkpEsc(FKP_CALC[t.lbl]||"")+'</div>';
 }
