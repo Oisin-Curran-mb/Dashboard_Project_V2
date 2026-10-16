@@ -13046,10 +13046,15 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       '</div></div>';
     }
     var cfg=sel.cfg,cat=sel.cat,idx=sel.idx;
-    var sevCls=cat.sev==="need"?"sev-need":"sev-upd";
-    var sevLbl=cfg&&cfg.sevLabel?cfg.sevLabel:(cat.sev==="need"?"Need Action":"Update");
     var title=cfg&&cfg.title?cfg.title:cat.title;
     var dp=' data-id="'+wid+'"';
+    /* Group label for header hierarchy */
+    var grpMap={ap:"Accounts Payable",ar:"Accounts Receivable",gl:"General Ledger"};
+    var grpLabel=grpMap[cat.group]||"";
+    var dpHdr='<div class="al2-dp-hd"><div class="al2-dp-hd-text">'+
+      (grpLabel?'<div class="pa3gm-grplbl">'+grpLabel+'</div>':'')+
+      '<div class="al2-dp-title">'+cat.title+'</div>'+
+    '</div></div>';
 
     /* PO / Approval layout */
     if(cfg&&cfg.invoiceNo){
@@ -13057,9 +13062,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       var lines=(cfg.lineItems||[]).map(function(li){return '<div class="al2-dp-item-row'+(li.total?" total":"")+'"><span class="al2-dp-item-desc">'+li.desc+'</span><span class="al2-dp-item-qty">'+li.qty+'</span><span class="al2-dp-item-amt">'+li.amt+'</span></div>';}).join("");
       var trail=(cfg.trail||[]).map(function(s){return '<div class="al2-dp-step"><div class="al2-dp-step-icon '+(s.done?"done":"pending")+'"></div><div class="al2-dp-step-info"><div class="al2-dp-step-name">'+s.name+'</div><div class="al2-dp-step-sub">'+s.sub+'</div></div></div>';}).join("");
       return '<div class="al2-dp">'+
-        '<div class="al2-dp-hd"><div class="al2-dp-hd-text">'+
-          '<div class="al2-dp-title">'+cfg.invoiceNo+'<span class="al2-dp-badge">'+cfg.badge+'</span></div>'+
-        '</div></div>'+
+        dpHdr+
         '<div class="al2-dp-body">'+
           '<div class="al2-dp-section"><div class="al2-dp-section-lbl">Invoice Details</div><div class="al2-dp-grid">'+meta+'</div></div>'+
           '<div class="al2-dp-divider"></div>'+
@@ -13100,9 +13103,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       actBtns='<button class="btn outlined sm" data-action="paO3-dp-journal"'+dp+'>'+'View Journal'+ICON("arrow_forward")+'</button>';
     }
     return '<div class="al2-dp">'+
-      '<div class="al2-dp-hd"><div class="al2-dp-hd-text">'+
-        '<div class="al2-dp-title">'+title+'</div>'+
-      '</div></div>'+
+      dpHdr+
       '<div class="al2-dp-body">'+msg+rows+'</div>'+
       (actBtns?'<div class="al2-dp-actions">'+redirectNote+actBtns+'</div>':"")+
     '</div>';
@@ -13488,10 +13489,12 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     bd.innerHTML=
       '<div class="al-modal" role="dialog" aria-modal="true" aria-label="'+c.title+'">'+
         '<div class="al-modal-hd">'+
-          '<div class="pa3gm-grp" style="flex:1;">Accounts Receivable</div>'+
+          '<div class="al-modal-hd-text">'+
+            '<div class="pa3gm-grplbl">Accounts Receivable</div>'+
+            '<div class="al-modal-title" style="margin:0;">'+c.title+'</div>'+
+          '</div>'+
           '<button class="al-modal-close" id="alPPModalClose" aria-label="Close">'+ICON("close")+'</button>'+
         '</div>'+
-        '<div class="al-modal-title">'+c.title+'</div>'+
         msg+
         '<div class="al-modal-rows">'+rows+'</div>'+
         '<div class="al-modal-footer">'+
