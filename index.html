@@ -13006,6 +13006,8 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     if(cfg&&cfg.type==="approval")return '<div class="al-item-actions"><button class="al-act-btn sec"'+a+'>'+ICON("visibility")+'Review</button><button class="al-act-btn pri"'+a+'>'+ICON("check_circle")+'Approve</button></div>';
     if(cfg&&cfg.opensPayment)return '<div class="al-item-actions"><button class="al-act-btn'+(cat.sev==="upd"?" sec":" pri")+'"'+ap+'>'+cfg.btnPri.label+'</button></div>';
     if(cfg&&cfg.opensRecon)return '<div class="al-item-actions"><button class="al-act-btn sec"'+ar+'>View Details</button></div>';
+    /* pa3-cat-9 (AR Payment Processing): force uniform "Process Payment" label */
+    if(cat.id==="pa3-cat-9")return '<div class="al-item-actions"><button class="al-act-btn pri"'+a+'>Process Payment</button></div>';
     if(cfg&&cfg.opensAR)return '<div class="al-item-actions"><button class="al-act-btn sec"'+aAR2+'>'+(cfg.btnPri&&cfg.btnPri.label?cfg.btnPri.label:"View Invoice")+'</button></div>';
     if(cfg&&cfg.opensBudget)return '<div class="al-item-actions"><button class="al-act-btn sec"'+aBudget2+'>Review Budget</button></div>';
     if(cfg&&cfg.opensJournal)return '<div class="al-item-actions"><button class="al-act-btn sec"'+aJournal+'>'+(cfg.btnSec&&cfg.btnSec.label?cfg.btnSec.label:"View Journal")+'</button></div>';
@@ -13078,7 +13080,10 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     if(cfg&&cfg.rows){rows='<div class="al2-dp-table">'+(cfg.rows.map(function(r){return '<div class="al2-dp-row"><span class="al2-dp-lbl">'+r.lbl+'</span><span class="al2-dp-val'+(r.err?" val-err":"")+'">'+r.val+'</span></div>';})).join("")+'</div>';}
     var redirectNote="";
     var actBtns="";
-    if(cfg&&cfg.opensPayment){
+    /* pa3-cat-9 (AR Payment Processing): items have varied btnPri labels but no opens* — force Process Payment */
+    if(sel.catId==="pa3-cat-9"){
+      actBtns='<button class="btn primary sm" data-action="paO3-dp-ar"'+dp+'>'+'Process Payment'+ICON("arrow_forward")+'</button>';
+    } else if(cfg&&cfg.opensPayment){
       redirectNote='<p class="al2-dp-redirect-note">Opens <strong>AP Payment Processing</strong>: review and process the overdue invoice.</p>';
       actBtns='<button class="btn primary sm" data-action="paO3-dp-pay"'+dp+'>'+'Process Payment'+ICON("arrow_forward")+'</button>';
     } else if(cfg&&cfg.opensRecon){
@@ -13366,7 +13371,15 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     if(a==="paO3-dp-budget"){aloOpenBudgetModal();return true;}
     /* wide-mode overlay handlers (fallback) */
     if(a==="paO3-item"){var cid=t.getAttribute("data-cat"),idx=parseInt(t.getAttribute("data-idx"),10)||0,cd=PA3_CATS.filter(function(c){return c.id===cid;})[0];
-      if(cd)aloOpenModal(cd.sev==="need"?"err":"warn",cd.title,String(cd.items[idx]||"").replace(/<[^>]+>/g,""),PA3_ITEM_MODALS[cid+":"+idx]||null);return true;}
+      if(cd){
+        /* pa3-cat-9 (AR Payment Processing): custom modal with group/title hierarchy header */
+        if(cid==="pa3-cat-9"){
+          var pa3cat9cfg=PA3_ITEM_MODALS[cid+":"+idx]||null;
+          pa3OpenPaymentProcessingModal(pa3cat9cfg,idx);
+        } else {
+          aloOpenModal(cd.sev==="need"?"err":"warn",cd.title,String(cd.items[idx]||"").replace(/<[^>]+>/g,""),PA3_ITEM_MODALS[cid+":"+idx]||null);
+        }
+      }return true;}
     if(a==="paO3-payment"){var pcid=t.getAttribute("data-cat"),pidx=parseInt(t.getAttribute("data-idx"),10)||0,pcfg=PA3_ITEM_MODALS[pcid+":"+pidx]||null;aloOpenPaymentMerged(pcfg,"err");return true;}
     if(a==="paO3-recon"){var rcid=t.getAttribute("data-cat"),ridx=parseInt(t.getAttribute("data-idx"),10)||0,rcfg=PA3_ITEM_MODALS[rcid+":"+ridx]||null;aloOpenReconMerged(rcfg,"warn");return true;}
     if(a==="paO3-ar"){var arcid=t.getAttribute("data-cat"),aridx=parseInt(t.getAttribute("data-idx"),10)||0,arcfg=PA3_ITEM_MODALS[arcid+":"+aridx]||null;aloOpenARMerged(arcfg,"warn");return true;}
@@ -13463,6 +13476,36 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     wrap.innerHTML=html;document.body.appendChild(wrap);
     function closeScreen(){wrap.classList.add("al-pay-confirm-hiding");setTimeout(function(){if(wrap.parentNode)wrap.parentNode.removeChild(wrap);},160);}
     document.getElementById("alGLScreenClose").addEventListener("click",closeScreen);
+  }
+  /* Custom modal for pa3-cat-9 (AR Payment Processing): group/title hierarchy header, no sevLabel badge */
+  function pa3OpenPaymentProcessingModal(cfg,idx){
+    var c=cfg||{title:"Pending Payment",rows:[],msg:""};
+    var bd=document.createElement("div");bd.className="al-modal-backdrop";
+    var rows=(c.rows||[]).map(function(r){return '<div class="al-modal-row'+(r.err?" al-modal-row-err":"")+'"><span class="al-modal-lbl">'+r.lbl+'</span><span class="al-modal-val">'+r.val+'</span></div>';}).join("");
+    var msg=c.msg?'<p class="al-modal-msg">'+c.msg+'</p>':"";
+    var hasPri=!!(c.btnPri&&c.btnPri.label);
+    var hasSec=!!(c.btnSec&&c.btnSec.label);
+    bd.innerHTML=
+      '<div class="al-modal" role="dialog" aria-modal="true" aria-label="'+c.title+'">'+
+        '<div class="al-modal-hd">'+
+          '<div class="pa3gm-grp" style="flex:1;">Accounts Receivable</div>'+
+          '<button class="al-modal-close" id="alPPModalClose" aria-label="Close">'+ICON("close")+'</button>'+
+        '</div>'+
+        '<div class="al-modal-title">'+c.title+'</div>'+
+        msg+
+        '<div class="al-modal-rows">'+rows+'</div>'+
+        '<div class="al-modal-footer">'+
+          (hasSec?'<button class="al-modal-btn sec" id="alPPModalSec">'+c.btnSec.label+'</button>':'')+
+          (hasPri?'<button class="al-modal-btn pri" id="alPPModalPri">Process Payment '+ICON("arrow_forward")+'</button>':'')+
+        '</div>'+
+      '</div>';
+    document.body.appendChild(bd);
+    function closeModal(){bd.classList.add("al-pay-confirm-hiding");setTimeout(function(){if(bd.parentNode)bd.parentNode.removeChild(bd);},160);}
+    bd.querySelector("#alPPModalClose").addEventListener("click",closeModal);
+    if(hasSec)bd.querySelector("#alPPModalSec").addEventListener("click",closeModal);
+    if(hasPri)bd.querySelector("#alPPModalPri").addEventListener("click",function(){closeModal();setTimeout(function(){aloOpenARScreen();},160);});
+    bd.addEventListener("click",function(e){if(e.target===bd)closeModal();});
+    var ff=bd.querySelector("button");if(ff)ff.focus();
   }
   function pa3OpenJournalModal(cfg,sev){
     var c=cfg||{sevLabel:"Update: Journal Unposted",title:"Unposted Journal",rows:[],msg:""};
