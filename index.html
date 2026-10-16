@@ -13478,35 +13478,37 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     function closeScreen(){wrap.classList.add("al-pay-confirm-hiding");setTimeout(function(){if(wrap.parentNode)wrap.parentNode.removeChild(wrap);},160);}
     document.getElementById("alGLScreenClose").addEventListener("click",closeScreen);
   }
-  /* Custom modal for pa3-cat-9 (AR Payment Processing): group/title hierarchy header, no sevLabel badge */
+  /* Custom modal for pa3-cat-9 (AR Payment Processing): group/title hierarchy header, no sevLabel badge.
+     Uses the same established CSS classes as aloMergedModal for correct rendering. */
   function pa3OpenPaymentProcessingModal(cfg,idx){
     var c=cfg||{title:"Pending Payment",rows:[],msg:""};
     var bd=document.createElement("div");bd.className="al-modal-backdrop";
     var rows=(c.rows||[]).map(function(r){return '<div class="al-modal-row'+(r.err?" al-modal-row-err":"")+'"><span class="al-modal-lbl">'+r.lbl+'</span><span class="al-modal-val">'+r.val+'</span></div>';}).join("");
     var msg=c.msg?'<p class="al-modal-msg">'+c.msg+'</p>':"";
-    var hasPri=!!(c.btnPri&&c.btnPri.label);
     var hasSec=!!(c.btnSec&&c.btnSec.label);
     bd.innerHTML=
       '<div class="al-modal" role="dialog" aria-modal="true" aria-label="'+c.title+'">'+
         '<div class="al-modal-hd">'+
           '<div class="al-modal-hd-text">'+
             '<div class="pa3gm-grplbl">Accounts Receivable</div>'+
-            '<div class="al-modal-title" style="margin:0;">'+c.title+'</div>'+
+            '<div class="al-modal-title">'+c.title+'</div>'+
           '</div>'+
-          '<button class="al-modal-close" id="alPPModalClose" aria-label="Close">'+ICON("close")+'</button>'+
+          '<button class="al-modal-close iconbtn" id="alPPModalClose" aria-label="Close">'+ICON("close")+'</button>'+
         '</div>'+
-        msg+
-        '<div class="al-modal-rows">'+rows+'</div>'+
-        '<div class="al-modal-footer">'+
-          (hasSec?'<button class="al-modal-btn sec" id="alPPModalSec">'+c.btnSec.label+'</button>':'')+
-          (hasPri?'<button class="al-modal-btn pri" id="alPPModalPri">Process Payment '+ICON("arrow_forward")+'</button>':'')+
+        '<div class="al-modal-body">'+
+          msg+
+          (rows?'<div class="al-modal-table">'+rows+'</div>':'')+
+        '</div>'+
+        '<div class="al-modal-actions">'+
+          (hasSec?'<button class="btn outlined sm" id="alPPModalSec">'+c.btnSec.label+'</button>':'')+
+          '<button class="btn primary sm" id="alPPModalPri">Process Payment '+ICON("arrow_forward")+'</button>'+
         '</div>'+
       '</div>';
     document.body.appendChild(bd);
-    function closeModal(){bd.classList.add("al-pay-confirm-hiding");setTimeout(function(){if(bd.parentNode)bd.parentNode.removeChild(bd);},160);}
+    function closeModal(){bd.classList.add("al-modal-hiding");setTimeout(function(){if(bd.parentNode)bd.parentNode.removeChild(bd);},160);}
     bd.querySelector("#alPPModalClose").addEventListener("click",closeModal);
     if(hasSec)bd.querySelector("#alPPModalSec").addEventListener("click",closeModal);
-    if(hasPri)bd.querySelector("#alPPModalPri").addEventListener("click",function(){closeModal();setTimeout(function(){aloOpenARScreen();},160);});
+    bd.querySelector("#alPPModalPri").addEventListener("click",function(){closeModal();setTimeout(function(){aloOpenARScreen();},160);});
     bd.addEventListener("click",function(e){if(e.target===bd)closeModal();});
     var ff=bd.querySelector("button");if(ff)ff.focus();
   }
