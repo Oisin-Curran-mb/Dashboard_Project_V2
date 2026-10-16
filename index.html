@@ -2536,6 +2536,18 @@
   .pa3g2-qtitle{flex:1;font-size:var(--type-size-10);font-weight:600;color:var(--txt-primary);min-width:0;}
   .pa3g2-qhint{font-size:10px;color:var(--txt-subtle);white-space:nowrap;}
   .pa3g2-qcnt{font-size:var(--type-size-10);font-weight:700;color:var(--color-err,#dc2626);min-width:18px;text-align:right;}
+  /* Glance card modal — per-item list */
+  .pa3gm-modal .al-modal-hd{flex-direction:row;align-items:flex-start;justify-content:space-between;gap:8px;}
+  .pa3gm-modal .al-modal-hd-text{flex:1;min-width:0;}
+  .pa3gm-grplbl{font-size:11px;font-weight:600;color:var(--txt-subtle);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px;}
+  .pa3gm-subtitle{font-size:11px;color:var(--txt-subtle);margin-top:2px;}
+  .pa3gm-body{padding:0!important;overflow-y:auto;max-height:340px;}
+  .pa3gm-list{display:flex;flex-direction:column;padding-bottom:12px;}
+  .pa3gm-item-row{display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:1px solid var(--stroke-widget);transition:background 80ms;}
+  .pa3gm-item-row:last-child{border-bottom:none;}
+  .pa3gm-item-row:hover{background:var(--surface-subtle,#f8fafc);}
+  .pa3gm-item-lbl{flex:1;font-size:var(--type-size-10);color:var(--txt-primary);min-width:0;line-height:1.4;}
+  .pa3gm-item-btn{flex-shrink:0;white-space:nowrap;font-size:11px!important;padding:3px 10px!important;height:auto!important;}
   /* right panel: detail pane */
   .al2-dp{display:flex;flex-direction:column;flex:1;min-height:0;}
   .al2-dp-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:var(--gap-medium);color:var(--txt-subtle);padding:var(--padding-relaxed);}
@@ -13232,47 +13244,80 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     '</div>';
   }
 
+  function pa3GlanceItemBtn(cfg,catSev,catId){
+    /* Returns {label, cls, action} — always one primary action button.
+       catId is used to force uniform label for categories where items have varied btnPri labels. */
+    if(!cfg)return {label:"Process Payment",cls:"primary",action:"view"};
+    if(cfg.opensPayment)return {label:"Process Payment",cls:"primary",action:"payment"};
+    if(cfg.opensAR)return {label:"Process Payment",cls:"primary",action:"ar"};
+    if(cfg.opensJournal)return {label:cfg.btnSec?cfg.btnSec.label:"View Journal",cls:"primary",action:"journal"};
+    if(cfg.opensRecon)return {label:"View Details",cls:"primary",action:"recon"};
+    if(cfg.opensBudget)return {label:cfg.btnSec?cfg.btnSec.label:"Review Budget",cls:"primary",action:"budget"};
+    if(cfg.invoiceNo)return {label:"Review",cls:"primary",action:"approval"};
+    /* pa3-cat-9 (AR Payment Processing): items have varied btnPri labels — always show "Process Payment" */
+    if(catId==="pa3-cat-9")return {label:"Process Payment",cls:"primary",action:"ar"};
+    if(cfg.btnPri)return {label:cfg.btnPri.label,cls:"primary",action:"generic"};
+    if(cfg.btnSec)return {label:cfg.btnSec.label||"View Details",cls:"primary",action:"generic"};
+    return {label:"Process Payment",cls:"primary",action:"view"};
+  }
+
   function pa3OpenGlanceCardModal(cat){
     var m=cat.glance.modal;
-    var bd=document.createElement("div");bd.className="al-modal-backdrop";
     var sevCls="sev-err";
-    var rows=(m.rows||[]).map(function(r){
-      return '<div class="al-modal-row"><span class="al-modal-lbl">'+r.lbl+'</span><span class="al-modal-val'+(r.err?" val-err":"")+'">'+r.val+'</span></div>';
+    var bd=document.createElement("div");bd.className="al-modal-backdrop";
+
+    /* Build per-item rows from cat.items + PA3_ITEM_MODALS */
+    var itemRows=cat.items.map(function(lbl,idx){
+      var cfg=PA3_ITEM_MODALS[cat.id+":"+idx]||null;
+      var btn=pa3GlanceItemBtn(cfg,cat.sev,cat.id);
+      return '<div class="pa3gm-item-row">'+
+        '<span class="pa3gm-item-lbl">'+String(lbl).replace(/<[^>]+>/g,"")+'</span>'+
+        '<button class="pa3gm-item-btn btn '+btn.cls+' sm" data-idx="'+idx+'" data-action-type="'+btn.action+'">'+btn.label+'</button>'+
+      '</div>';
     }).join("");
-    var noteText=m.redirectNote||"";
+
+    var grpObj=PA3_GROUPS.filter(function(g){return g.id===cat.group;})[0];
+    var grpLabel=grpObj?grpObj.label:"";
     bd.innerHTML=
-      '<div class="al-modal al-modal-md" role="dialog" aria-modal="true" aria-label="'+aloEsc(m.title||"")+'">'+
+      '<div class="al-modal al-modal-md pa3gm-modal" role="dialog" aria-modal="true" aria-label="'+aloEsc(cat.title||"")+'">'+
         '<div class="al-modal-hd">'+
           '<div class="al-modal-hd-text">'+
-            (m.sevLabel?'<div class="al-modal-sev '+sevCls+'">'+m.sevLabel+'</div>':'')+
-            '<div class="al-modal-title">'+(m.title||"")+'</div>'+
+            (grpLabel?'<div class="pa3gm-grplbl">'+grpLabel+'</div>':'')+
+            '<div class="al-modal-title">'+cat.title+'</div>'+
+            '<div class="pa3gm-subtitle">'+cat.items.length+' item'+(cat.items.length!==1?"s":"")+(cat.sub?" · "+cat.sub:"")+'</div>'+
           '</div>'+
           '<button class="al-modal-close iconbtn" id="pa3GlanceClose" aria-label="Close">'+ICON("close")+'</button>'+
         '</div>'+
-        '<div class="al-modal-body">'+
-          (rows?'<div class="al-modal-table">'+rows+'</div>':'')+
-          (noteText?'<div class="al-modal-redirect-note">'+ICON("open_in_new")+'<span>'+noteText+'</span></div>':'')+
-        '</div>'+
-        '<div class="al-modal-actions">'+
-          '<button class="btn outlined sm" id="pa3GlanceCancel">Cancel</button>'+
-          '<button class="btn primary sm" id="pa3GlanceProceed">'+m.btnLabel+'</button>'+
+        '<div class="al-modal-body pa3gm-body">'+
+          '<div class="pa3gm-list">'+itemRows+'</div>'+
         '</div>'+
       '</div>';
     document.body.appendChild(bd);
+
     function close(){bd.classList.add("al-modal-hiding");setTimeout(function(){if(bd.parentNode)bd.parentNode.removeChild(bd);},160);document.removeEventListener("keydown",esc,true);}
     function esc(ev){if(ev.key==="Escape"){ev.stopPropagation();close();}}
     document.addEventListener("keydown",esc,true);
     bd.addEventListener("click",function(ev){if(ev.target===bd)close();});
-    bd.querySelector("#pa3GlanceClose").addEventListener("click",function(){close();});
-    bd.querySelector("#pa3GlanceCancel").addEventListener("click",function(){close();});
-    bd.querySelector("#pa3GlanceProceed").addEventListener("click",function(){
-      close();
-      setTimeout(function(){
-        if(m.btnAction==="payment")aloOpenPaymentScreen();
-        else if(m.btnAction==="ar")aloOpenARScreen();
-        else if(m.btnAction==="journal")aloOpenJournalScreen();
-      },160);
+    bd.querySelector("#pa3GlanceClose").addEventListener("click",close);
+
+    /* Per-item button handlers */
+    bd.querySelectorAll(".pa3gm-item-btn").forEach(function(btn){
+      btn.addEventListener("click",function(){
+        var idx=parseInt(btn.getAttribute("data-idx"),10)||0;
+        var atype=btn.getAttribute("data-action-type");
+        var cfg=PA3_ITEM_MODALS[cat.id+":"+idx]||null;
+        close();
+        setTimeout(function(){
+          if(atype==="payment")aloOpenPaymentMerged(cfg,"err");
+          else if(atype==="ar")aloOpenARMerged(cfg,"warn");
+          else if(atype==="journal")pa3OpenJournalModal(cfg,"warn");
+          else if(atype==="recon")aloOpenReconMerged(cfg,"warn");
+          else if(atype==="budget")aloOpenBudgetMerged(cfg,"warn");
+          else if(cfg)aloOpenModal(cat.sev==="need"?"err":"warn",cfg.title||cat.title,cfg.msg||"",cfg);
+        },160);
+      });
     });
+
     var ff=bd.querySelector("button");if(ff)ff.focus();
   }
   function pa3Handle(a,id,t){
