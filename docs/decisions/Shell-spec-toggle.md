@@ -36,13 +36,13 @@ Each section was checked against `index.html` and rewritten:
 |---|---|
 | 1 Tokens | pathway-tokens 10.0.4 via CDN (primitives + light theme); the `:root` alias groups actually declared (`--txt-*`, `--wn-*`, `--cn-*`, `--brand-*`, `--am-*`, `--chart*`, `--pos/--red`, `--stroke-*`, `--surface-*`, `--gap-*`, `--padding-*`, `--cornerradius-*`, `--dur/--dur2/--ease/--dec`, `--focusring-base`); Pathway button border rule |
 | 2 Grid | viewport media queries 768 / 1024 for 4 / 8 / 12 columns; 48px rows, 16px gap, `row dense`; sidenav hidden at 900px |
-| 3 Sizes | spans 4/4/3, 4/8/6, 4/8/12; rows 3/8/9 (176 / 496 / 560px); W18 band above the grid; W08 and W19 Explore + Detail only (`tiers`) |
+| 3 Sizes | spans 4/4/3, 4/8/6, 4/8/12; rows 3/8/9 (176 / 496 / 560px); W18 band above the grid; W08 and W20 Explore + Detail only (`tiers`). W20 was W19 until the 16 Oct renumber; W19 is now Pending Actions, which offers all three sizes. |
 | 4 Resizing | header menu `wsize` then `pick-size`, tiers-limited, status line confirms; no automatic clamp, spans do the clamping |
 | 5 Toolbar | switcher actions, Find a widget (scroll + flash), Refresh, Edit Dashboard mode and its toolbar, Add widget placeholder, in-grid Add tile, status line; the developer-only selector flagged as a review aid |
 | 6 Overlays | `.pop` anchored panels; `.modal` 390 compact, `.modal-wide` 1080 / 94vw / 84vh, widget-specific sizes; D12 table header rule; no full-screen variant |
 | 7 States | skeleton, `.state` empty / error with actions, same data at all sizes |
 | 8 Accessibility | focus ring 2px / 2px offset, Pathway button ring, roles and aria on toggles / menus / rows, reduced motion, copy rules |
-| 9 Inventory | W01-W19 by registered kind and tiers (driver checks it against `WIDGETS.register` and the registry) |
+| 9 Inventory | W01-W20 by registered kind and tiers (driver checks it against `WIDGETS.register` and the registry). 19 rows: one per registered kind, plus the W18 band. The kind regex is letters-only, so `alerts2` collapses onto `alerts`. |
 | 10 Build | one IIFE, `WIDGETS.register`, namespaced CSS, shared helper package, static data shaped like the API, drivers |
 
 The two `.spec-link` anchors stay as her placeholders (`href="#"`) until the

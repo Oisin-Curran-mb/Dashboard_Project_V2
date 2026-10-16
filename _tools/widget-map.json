@@ -699,19 +699,48 @@
    ]
   },
   "W19": {
+   "name": "Pending Actions",
+   "driver": "w19-pendingactions.driver.js",
+   "decided": "2026-10-16 OC (replaces the scrapped Alerts & Actions, which moved to W20; styling moved onto the build's own tokens, behaviour untouched)",
+   "final": {
+    "kind": "pendingactions",
+    "prefix": "pa3",
+    "css": {
+     "start": "/* ===== W19 Pending Actions V2 CSS , prefix pa3 , kind \"pendingactions\" ===== */",
+     "end": "/* ===== end W19 Pending Actions V2 CSS ===== */"
+    },
+    "js": {
+     "start": "/* ===== W19 Pending Actions V2 JS , prefix pa3 , kind \"pendingactions\" ===== */",
+     "end": "/* ===== end W19 Pending Actions V2 ===== */"
+    },
+    "registry": {
+     "grep": [
+      "kind:\"pendingactions\""
+     ]
+    }
+   },
+   "note": "Renders inside W20's .al- / .alb4- / .al2-dp- class families and declares none of them. Those names are load bearing: renaming them to pa3- was tried on 2026-10-13 and broke the detail pane. W20 cannot be deleted until this widget declares its own copies.",
+   "tags": [
+    "uses:escAttr",
+    "modal",
+    "popover",
+    "filter"
+   ]
+  },
+  "W20": {
    "name": "Alerts & Actions",
-   "driver": "w19-alerts.driver.js",
-   "decided": "2026-10-02",
+   "driver": "w20-alerts.driver.js",
+   "decided": "2026-10-02; SCRAPPED 2026-10-16, replaced by W19 Pending Actions. Registry rows commented out. The block is NOT deleted: W19 renders inside its .al- / .alb4- / .al2-dp- classes and declares none of them itself.",
    "final": {
     "kind": "alerts",
     "prefix": "alo",
     "css": {
-     "start": "/* ===== W19 Alerts & Actions V2 CSS ===== */",
-     "end": "/* ===== end W19 Alerts & Actions V2 CSS ===== */"
+     "start": "/* ===== W20 Alerts & Actions V2 CSS ===== */",
+     "end": "/* ===== end W20 Alerts & Actions V2 CSS ===== */"
     },
     "js": {
-     "start": "/* ===== W19 Alerts & Actions V2 ===== */",
-     "end": "/* ===== end W19 Alerts & Actions V2 ===== */"
+     "start": "/* ===== W20 Alerts & Actions V2 ===== */",
+     "end": "/* ===== end W20 Alerts & Actions V2 ===== */"
     },
     "registry": {
      "grep": [

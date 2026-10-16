@@ -2168,7 +2168,7 @@
        there, and only on the tiers that have a last line to pin. */
     .gpf-root[data-tier="wide"],.gpf-root[data-tier="xwide"]{margin-bottom:calc(var(--padding-tight) * -1);}
   /* ===== end W17 Gifts Pledges V2 CSS ===== */
-/* ===== W19 Alerts & Actions V2 CSS ===== */
+/* ===== W20 Alerts & Actions V2 CSS ===== */
   /* Ported from Aditya's Variation B4 (Demo V2.html "Alerts and Action Items Updated" block): the B4 tab bar, the accordion cards and the item pop-up only; the other variants (B1, B2, B3, B5) are not carried over. Colours on Pathway v10 tokens. */
   .widget[data-size] .wcontent:has(.alb4-root){display:flex;flex-direction:column;overflow:hidden;padding-bottom:0;}
   .widget[data-size] .wcontent:has(.alb4-xwide-wrap){display:flex;flex-direction:column;overflow:hidden;padding-bottom:0;}
@@ -2490,64 +2490,7 @@
   /* left accordion panel scrolls independently */
   .alb4-xw-left-panel{flex:1;overflow-y:auto;padding:var(--padding-tight) var(--padding-base);}
   .alb4-xw-left-panel .al-cat{margin-bottom:var(--padding-base);}
-  /* ── Pending Actions glance ── */
-  .pa3-glancewrap{display:flex;flex-direction:column;gap:var(--gap-tight);padding:var(--padding-tight) var(--padding-medium);height:100%;justify-content:center;}
-  .pa3-glancewrap .scope-chip{align-self:flex-start;}
-  .pa3-cards{display:grid;grid-template-columns:repeat(var(--pa3-cols,2),minmax(0,1fr));gap:var(--gap-tight);}
-  .pa3-card{display:flex;flex-direction:column;align-items:flex-start;gap:var(--gap-tight);padding:var(--padding-base) var(--padding-base);border:1px solid var(--stroke-widget);border-radius:var(--cornerradius-medium);background:var(--surface-widget);min-width:0;}
-  .pa3-card-btn{cursor:pointer;text-align:left;transition:border-color 120ms,background 120ms,box-shadow 120ms;}
-  .pa3-card-btn:hover{border-color:var(--color-primary,#2563eb);background:var(--surface-widget-hover,#f0f4ff);box-shadow:0 0 0 2px rgba(37,99,235,.12);}
-  .pa3-card-btn:focus-visible{outline:2px solid var(--color-primary,#2563eb);outline-offset:2px;}
-  .pa3-card-top{display:inline-flex;align-items:center;gap:var(--gap-xxtight);white-space:nowrap;font-size:var(--type-size-10);font-weight:600;letter-spacing:0;text-transform:uppercase;color:var(--txt-subtle);}
-  .pa3-card-n-row{display:flex;align-items:baseline;gap:4px;}
-  .pa3-card-n{font-size:var(--type-size-20);font-weight:700;line-height:1;color:var(--txt-primary);font-variant-numeric:tabular-nums;}
-  .pa3-card-n-lbl{font-size:var(--type-size-10);font-weight:400;color:var(--txt-subtle);line-height:1;}
-  .pa3-card-sub{font-size:var(--type-size-10);color:var(--txt-subtle);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
   .alb4-xw-left-panel .al-cat:last-child{margin-bottom:0;}
-  /* ── Pending Actions glance variant 2 (queue list) ── */
-  .pa3g2-wrap{display:flex;flex-direction:column;height:100%;min-height:0;}
-  .pa3g2-summary{display:flex;flex-direction:column;gap:6px;padding:12px 14px 10px;}
-  .pa3g2-hero{display:flex;align-items:baseline;gap:6px;}
-  .pa3g2-n{font-size:32px;font-weight:700;line-height:1;color:var(--txt-primary);font-variant-numeric:tabular-nums;}
-  .pa3g2-nsub{font-size:var(--type-size-10);color:var(--txt-subtle);line-height:1.3;}
-  .pa3g2-badges{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px;}
-  .pa3g2-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px 2px 6px;border-radius:99px;font-size:11px;font-weight:500;line-height:1.4;white-space:nowrap;}
-  .pa3g2-badge-err{background:#fee2e2;color:#b91c1c;}
-  .pa3g2-badge-warn{background:#fef3c7;color:#92400e;}
-  .pa3g2-badge-dot{width:6px;height:6px;border-radius:50%;flex:0 0 auto;}
-  .pa3g2-badge-err .pa3g2-badge-dot{background:#dc2626;}
-  .pa3g2-badge-warn .pa3g2-badge-dot{background:#d97706;}
-  .pa3g2-queues-link{align-self:flex-end;margin-top:auto;padding:0 14px 8px;display:flex;justify-content:flex-end;}
-  .pa3g2-queues-btn{background:none;border:none;padding:0;font-size:var(--type-size-10);font-weight:600;color:var(--color-primary,#2563eb);cursor:pointer;display:inline-flex;align-items:center;gap:2px;line-height:1.4;}
-  .pa3g2-queues-btn:hover{text-decoration:underline;}
-  /* Queue panel (shown inside a pop overlay) */
-  .pa3g2-panel{width:320px;max-width:92vw;background:var(--surface-card,#fff);border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,.13);overflow:hidden;}
-  .pa3g2-panel-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 8px;border-bottom:1px solid var(--stroke-widget);}
-  .pa3g2-panel-title{font-size:var(--type-size-10);font-weight:700;color:var(--txt-primary);}
-  .pa3g2-panel-sub{font-size:11px;color:var(--txt-subtle);}
-  .pa3g2-panel-body{overflow-y:auto;max-height:300px;}
-  .pa3g2-grp-hd{display:flex;align-items:center;justify-content:space-between;padding:8px 14px 4px;background:var(--surface-subtle,#f8f9fb);}
-  .pa3g2-grp-lbl{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--txt-subtle);}
-  .pa3g2-grp-cnt{font-size:11px;font-weight:600;color:var(--txt-subtle);}
-  .pa3g2-queue-row{display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;transition:background 100ms;border-bottom:1px solid var(--stroke-widget);background:transparent;width:100%;text-align:left;border-left:none;border-right:none;border-top:none;-webkit-appearance:none;appearance:none;font-family:inherit;font-size:inherit;color:inherit;}
-  .pa3g2-queue-row:last-child{border-bottom:none;}
-  .pa3g2-queue-row:hover{background:var(--surface-widget-hover,#f0f4ff);}
-  .pa3g2-qnum{width:22px;height:22px;border-radius:50%;background:var(--surface-subtle,#f1f5f9);border:1px solid var(--stroke-widget);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--txt-primary);flex:0 0 auto;}
-  .pa3g2-qtitle{flex:1;font-size:var(--type-size-10);font-weight:600;color:var(--txt-primary);min-width:0;}
-  .pa3g2-qhint{font-size:10px;color:var(--txt-subtle);white-space:nowrap;}
-  .pa3g2-qcnt{font-size:var(--type-size-10);font-weight:700;color:var(--color-err,#dc2626);min-width:18px;text-align:right;}
-  /* Glance card modal — per-item list */
-  .pa3gm-modal .al-modal-hd{flex-direction:row;align-items:flex-start;justify-content:space-between;gap:8px;}
-  .pa3gm-modal .al-modal-hd-text{flex:1;min-width:0;}
-  .pa3gm-grplbl{font-size:11px;font-weight:600;color:var(--txt-subtle);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px;}
-  .pa3gm-subtitle{font-size:11px;color:var(--txt-subtle);margin-top:2px;}
-  .pa3gm-body{padding:0!important;overflow-y:auto;max-height:340px;}
-  .pa3gm-list{display:flex;flex-direction:column;padding-bottom:12px;}
-  .pa3gm-item-row{display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:1px solid var(--stroke-widget);transition:background 80ms;}
-  .pa3gm-item-row:last-child{border-bottom:none;}
-  .pa3gm-item-row:hover{background:var(--surface-subtle,#f8fafc);}
-  .pa3gm-item-lbl{flex:1;font-size:var(--type-size-10);color:var(--txt-primary);min-width:0;line-height:1.4;}
-  .pa3gm-item-btn{flex-shrink:0;white-space:nowrap;font-size:11px!important;padding:3px 10px!important;height:auto!important;}
   /* right panel: detail pane */
   .al2-dp{display:flex;flex-direction:column;flex:1;min-height:0;}
   .al2-dp-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:var(--gap-medium);color:var(--txt-subtle);padding:var(--padding-relaxed);}
@@ -2607,7 +2550,75 @@
   .al2-xwide-item{cursor:pointer;}
   .al2-xwide-item:hover{background:var(--surface-sheet);}
   .al2-xwide-item:focus-visible{outline:2px solid var(--focusring-base);outline-offset:-2px;}
-/* ===== end W19 Alerts & Actions V2 CSS ===== */
+/* ===== end W20 Alerts & Actions V2 CSS ===== */
+
+/* ===== W19 Pending Actions V2 CSS , prefix pa3 , kind "pendingactions" ===== */
+  /* Lifted out of the Alerts & Actions region (now W20) on 16 Oct 2026 so this
+     widget owns what it declares. Its colours are the build's own tokens as
+     of the same date; it previously painted itself from hex fallbacks to
+     five token names this build does not declare. The pill, hover-surface
+     and focus-ring patterns below are the ones the Alerts CSS uses, because
+     this widget still renders inside .al-* / .alb4-* / .al2-dp- markup. */
+  /* ── Pending Actions glance ── */
+  .pa3-glancewrap{display:flex;flex-direction:column;gap:var(--gap-tight);padding:var(--padding-tight) var(--padding-medium);height:100%;justify-content:center;}
+  .pa3-glancewrap .scope-chip{align-self:flex-start;}
+  .pa3-cards{display:grid;grid-template-columns:repeat(var(--pa3-cols,2),minmax(0,1fr));gap:var(--gap-tight);}
+  .pa3-card{display:flex;flex-direction:column;align-items:flex-start;gap:var(--gap-tight);padding:var(--padding-base) var(--padding-base);border:1px solid var(--stroke-widget);border-radius:var(--cornerradius-medium);background:var(--surface-widget);min-width:0;}
+  .pa3-card-btn{cursor:pointer;text-align:left;transition:border-color 120ms,background 120ms;}
+  .pa3-card-btn:hover{border-color:var(--brand-300);background:var(--wn-200);}
+  .pa3-card-btn:focus-visible{outline:2px solid var(--focusring-base);outline-offset:2px;}
+  .pa3-card-top{display:inline-flex;align-items:center;gap:var(--gap-xxtight);white-space:nowrap;font-size:var(--type-size-10);font-weight:600;letter-spacing:0;text-transform:uppercase;color:var(--txt-subtle);}
+  .pa3-card-n-row{display:flex;align-items:baseline;gap:var(--gap-xxtight);}
+  .pa3-card-n{font-size:var(--type-size-20);font-weight:700;line-height:1;color:var(--txt-primary);font-variant-numeric:tabular-nums;}
+  .pa3-card-n-lbl{font-size:var(--type-size-10);font-weight:400;color:var(--txt-subtle);line-height:1;}
+  .pa3-card-sub{font-size:var(--type-size-10);color:var(--txt-subtle);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;}
+  /* ── Pending Actions glance variant 2 (queue list) ── */
+  .pa3g2-wrap{display:flex;flex-direction:column;height:100%;min-height:0;}
+  .pa3g2-summary{display:flex;flex-direction:column;gap:var(--gap-xtight);padding:12px 14px 10px;}
+  .pa3g2-hero{display:flex;align-items:baseline;gap:var(--gap-xtight);}
+  .pa3g2-n{font-size:var(--type-size-32);font-weight:700;line-height:1;color:var(--txt-primary);font-variant-numeric:tabular-nums;}
+  .pa3g2-nsub{font-size:var(--type-size-10);color:var(--txt-subtle);line-height:1.3;}
+  .pa3g2-badges{display:flex;flex-wrap:wrap;gap:var(--gap-xxtight);margin-top:2px;}
+  .pa3g2-badge{display:inline-flex;align-items:center;gap:var(--gap-xxtight);padding:2px 8px 2px 6px;border-radius:99px;font-size:var(--type-size-11);font-weight:500;line-height:1.4;white-space:nowrap;}
+  /* the two pills take the Alerts severity palette: .al-cat.sev-err .al-count
+     and .sev-warn .al-count, so a count means the same colour everywhere */
+  .pa3g2-badge-err{background:var(--red-10);color:var(--red-100);}
+  .pa3g2-badge-warn{background:var(--primitive-color-saffron-25);color:var(--primitive-color-saffron-500);}
+  .pa3g2-badge-dot{width:6px;height:6px;border-radius:50%;flex:0 0 auto;}
+  .pa3g2-badge-err .pa3g2-badge-dot{background:var(--red-100);}
+  .pa3g2-badge-warn .pa3g2-badge-dot{background:var(--primitive-color-saffron-300);}
+  .pa3g2-queues-link{align-self:flex-end;margin-top:auto;padding:0 14px 8px;display:flex;justify-content:flex-end;}
+  .pa3g2-queues-btn{background:none;border:none;padding:0;font-size:var(--type-size-10);font-weight:600;color:var(--brand-300);cursor:pointer;display:inline-flex;align-items:center;gap:var(--gap-xxxtight);line-height:1.4;}
+  .pa3g2-queues-btn:hover{text-decoration:underline;}
+  /* Queue panel (shown inside a pop overlay) */
+  .pa3g2-panel{width:320px;max-width:92vw;background:var(--surface-sheet);border-radius:var(--r);box-shadow:var(--elevation-overlay);overflow:hidden;}
+  .pa3g2-panel-hd{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 8px;border-bottom:1px solid var(--stroke-widget);}
+  .pa3g2-panel-title{font-size:var(--type-size-10);font-weight:700;color:var(--txt-primary);}
+  .pa3g2-panel-sub{font-size:var(--type-size-11);color:var(--txt-subtle);}
+  .pa3g2-panel-body{overflow-y:auto;max-height:300px;}
+  .pa3g2-grp-hd{display:flex;align-items:center;justify-content:space-between;padding:8px 14px 4px;background:var(--wn-200);}
+  .pa3g2-grp-lbl{font-size:var(--type-size-10);font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--txt-subtle);}
+  .pa3g2-grp-cnt{font-size:var(--type-size-11);font-weight:600;color:var(--txt-subtle);}
+  .pa3g2-queue-row{display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;transition:background 100ms;border-bottom:1px solid var(--stroke-widget);background:transparent;width:100%;text-align:left;border-left:none;border-right:none;border-top:none;-webkit-appearance:none;appearance:none;font-family:inherit;font-size:inherit;color:inherit;}
+  .pa3g2-queue-row:last-child{border-bottom:none;}
+  .pa3g2-queue-row:hover{background:var(--wn-200);}
+  .pa3g2-qnum{width:22px;height:22px;border-radius:50%;background:var(--wn-200);border:1px solid var(--stroke-widget);display:flex;align-items:center;justify-content:center;font-size:var(--type-size-11);font-weight:700;color:var(--txt-primary);flex:0 0 auto;}
+  .pa3g2-qtitle{flex:1;font-size:var(--type-size-10);font-weight:600;color:var(--txt-primary);min-width:0;}
+  .pa3g2-qhint{font-size:var(--type-size-10);color:var(--txt-subtle);white-space:nowrap;}
+  .pa3g2-qcnt{font-size:var(--type-size-10);font-weight:700;color:var(--red-100);min-width:18px;text-align:right;}
+  /* Glance card modal — per-item list */
+  .pa3gm-modal .al-modal-hd{flex-direction:row;align-items:flex-start;justify-content:space-between;gap:var(--gap-tight);}
+  .pa3gm-modal .al-modal-hd-text{flex:1;min-width:0;}
+  .pa3gm-grplbl{font-size:var(--type-size-11);font-weight:600;color:var(--txt-subtle);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px;}
+  .pa3gm-subtitle{font-size:var(--type-size-11);color:var(--txt-subtle);margin-top:2px;}
+  .pa3gm-body{padding:0!important;overflow-y:auto;max-height:340px;}
+  .pa3gm-list{display:flex;flex-direction:column;padding-bottom:var(--padding-medium);}
+  .pa3gm-item-row{display:flex;align-items:center;gap:10px;padding:9px 16px;border-bottom:1px solid var(--stroke-widget);transition:background 80ms;}
+  .pa3gm-item-row:last-child{border-bottom:none;}
+  .pa3gm-item-row:hover{background:var(--wn-200);}
+  .pa3gm-item-lbl{flex:1;font-size:var(--type-size-10);color:var(--txt-primary);min-width:0;line-height:1.4;}
+  .pa3gm-item-btn{flex-shrink:0;white-space:nowrap;font-size:var(--type-size-11)!important;padding:3px 10px!important;height:auto!important;}
+/* ===== end W19 Pending Actions V2 CSS ===== */
 
 /* ===== W01 Budget Compared to Actual V2 CSS ===== */
   /* Stand-alone copies of the shared .bgt-* shell rules this widget uses (w01- prefix). Shared originals stay for the other widgets. Classes: bgt-bar-actual2 bgt-bar-budget2 bgt-bar2 bgt-barpair2 bgt-canvas2 bgt-caption bgt-chart-wrap2 bgt-col-h bgt-col2 bgt-cols2 bgt-ctlrow bgt-dd-field bgt-dd-lbl bgt-dd-menu bgt-dd-meta bgt-dd-trigger bgt-dd-val bgt-explore bgt-explore-col bgt-gl2 bgt-gl2-base bgt-inner2 bgt-kpi-iv bgt-legend bgt-legend-under bgt-lg bgt-lg-items bgt-notrend bgt-notrend-s bgt-notrend-t bgt-numwrap bgt-panel-hd bgt-plotrow2 bgt-pop bgt-pop- bgt-pop-div bgt-pop-fav bgt-pop-h bgt-pop-lbl bgt-pop-note bgt-pop-r bgt-pop-sw bgt-pop-v bgt-pop-var bgt-repctx bgt-rm- bgt-rm-b bgt-rm-fields bgt-rm-modal bgt-rm-preview bgt-rm-tag bgt-scope-chip bgt-scrollx bgt-sk-bar bgt-sk-col bgt-skel bgt-skel-cap bgt-skel-plot bgt-slicer bgt-special-edit bgt-special-lbl bgt-special-mi bgt-special-nm bgt-special-sub bgt-spin bgt-sw bgt-sw-actual bgt-sw-budget-line bgt-tbar bgt-tscroll bgt-varcol bgt-vartot bgt-viewbar-l bgt-viewbar-r bgt-vv bgt-xaxrow2 bgt-xcol2 bgt-xcols2 bgt-xlbl2 bgt-xvar2 bgt-yax2 bgt-yax2sp bgt-ytd-wrap */
@@ -3806,7 +3817,7 @@
 
           <div class="spec-sec" id="spec-widgets">
             <h2>9. Widget inventory</h2>
-            <p>Nineteen widgets ship in Version 2. The kind is the registration key in the build; sizes are the tiers the widget offers.</p>
+            <p>Nineteen widgets ship in Version 2. The kind is the registration key in the build; sizes are the tiers the widget offers. W20 Alerts &amp; Actions is listed because its code is still in the build, but it is switched off and does not ship: Pending Actions replaced it.</p>
             <table class="spec-tbl"><thead><tr><th>No.</th><th>Widget</th><th>Kind</th><th>Sizes</th></tr></thead><tbody>
               <tr><td>W01</td><td>Budget Compared to Actual</td><td><code>budget</code></td><td>Glance, Explore, Detail</td></tr>
               <tr><td>W02</td><td>Pension Plans</td><td><code>pension</code></td><td>Glance, Explore, Detail</td></tr>
@@ -3825,7 +3836,8 @@
               <tr><td>W16</td><td>Accounts Payable By Due Date</td><td><code>payables</code></td><td>Glance, Explore, Detail</td></tr>
               <tr><td>W17</td><td>Gifts Pledges</td><td><code>gifts</code></td><td>Glance, Explore, Detail</td></tr>
               <tr><td>W18</td><td>Financial KPI</td><td>band</td><td>Band (above the grid)</td></tr>
-              <tr><td>W19</td><td>Alerts &amp; Actions</td><td><code>alerts</code></td><td>Explore, Detail</td></tr>
+              <tr><td>W19</td><td>Pending Actions</td><td><code>pendingactions</code></td><td>Glance, Explore, Detail</td></tr>
+              <tr><td>W20</td><td>Alerts &amp; Actions</td><td><code>alerts</code></td><td>Explore, Detail</td></tr>
             </tbody></table>
           </div>
 
@@ -3939,9 +3951,10 @@
     W16:true,   /* Accounts Payable By Due Date */
     W17:true,   /* Gifts Pledges */
     W18:true,   /* Financial KPI */
-    W19:true    /* Alerts & Actions (Aditya B4) */
+    W19:true,   /* Pending Actions */
+    W20:false   /* Alerts & Actions (Aditya B4) - scrapped 16 Oct 2026, replaced by W19 Pending Actions. The code stays because W19 renders inside its .al- / .alb4- / .al2-dp- classes. */
   };
-  var WIDGET_KIND={W01:"budget",W02:"pension",W03:"payroll",W04:"remittance",W05:"receivables",W06:"insurance",W07:"deposits",W08:"mystatus",W09:"pto",W10:"loans",W11:"fixedassets",W13:"purchasing",W14:"tasks",W15:"bank",W16:"payables",W17:"gifts",W18:null,W19:"alerts"}; /* W number -> widget kind (W18 is the KPI band, not a grid widget) */
+  var WIDGET_KIND={W01:"budget",W02:"pension",W03:"payroll",W04:"remittance",W05:"receivables",W06:"insurance",W07:"deposits",W08:"mystatus",W09:"pto",W10:"loans",W11:"fixedassets",W13:"purchasing",W14:"tasks",W15:"bank",W16:"payables",W17:"gifts",W18:null,W19:"pendingactions",W20:"alerts"}; /* W number -> widget kind (W18 is the KPI band, not a grid widget) */
   function widgetSwitchOn(wn){var h=location.hash||"",mo=/[#&]only=([A-Za-z0-9,]+)/.exec(h);if(mo)return mo[1].toUpperCase().split(",").indexOf(wn)>-1;return WIDGET_SWITCH[wn]!==false;}
   function widgetOn(kind){for(var wn in WIDGET_KIND){if(WIDGET_KIND[wn]===kind)return widgetSwitchOn(wn);}return true;}
   /* ===== end Shell: widget switchboard ===== */
@@ -3952,7 +3965,7 @@
   /* TEMPORARY review aid, remove before release: a toolbar dropdown that drives the #w= / #k= filter above. */
   function viewOnlySelectHTML(){var h=location.hash||"",cur_=(/[#&]((?:k|only)=[a-z0-9,-]+)/i.exec(h)||["",""])[1];
     var opts=[["","Review: all widgets"]];
-    var VIEW_WNUM={budget:"W01",pension:"W02",payroll:"W03",remittance:"W04",receivables:"W05",insurance:"W06",deposits:"W07",mystatus:"W08",pto:"W09",loans:"W10",fixedassets:"W11",purchasing:"W13",bank:"W15",payables:"W16",gifts:"W17",tasks:"W14",alerts:"W19"}; /* finished widgets: kind -> W number, so they sort with the rest */
+    var VIEW_WNUM={budget:"W01",pension:"W02",payroll:"W03",remittance:"W04",receivables:"W05",insurance:"W06",deposits:"W07",mystatus:"W08",pto:"W09",loans:"W10",fixedassets:"W11",purchasing:"W13",bank:"W15",payables:"W16",gifts:"W17",tasks:"W14",pendingactions:"W19",alerts:"W20"}; /* finished widgets: kind -> W number, so they sort with the rest */
     /* list by the switchboard alone, not the address bar, so picking one widget (#k= / #only=) never empties the list */
     function listed(k){for(var wn in WIDGET_KIND){if(WIDGET_KIND[wn]===k)return WIDGET_SWITCH[wn]!==false;}return true;}
     Object.keys(WIDGETS.kinds).forEach(function(k){if(!listed(k))return;var row=dashboards[0].widgets.filter(function(x){return x.kind===k;})[0];if(!row)return;var wn=VIEW_WNUM[k]||"W??";var nT=(row.tiers||[]).length||3;opts.push(["k="+k,wn+" "+(row.title||k).replace(/\s*\([^)]*\)\s*$/,"")+" (final, "+nT+" size"+(nT===1?"":"s")+")"]);});
@@ -11004,7 +11017,7 @@ var GPF_WIRED=false;
 })();
 WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.title,b:GPF_ABOUT};},click:function(a,id,t){return !!(a&&a.indexOf("gpF-")===0&&gpFHandleClick(a,id,t));},pops:{"gpF-thru":{content:gpFPopContent,trigger:function(){return '[data-action="gpF-thru"][data-id="'+pop.id+'"]';}},"gpF-camp":{content:gpFPopContent,trigger:function(){return '[data-action="gpF-camp"][data-id="'+pop.id+'"]';}}}});
 /* ===== end W17 Gifts Pledges V2 ===== */
-/* ===== W19 Alerts & Actions V2 ===== */
+/* ===== W20 Alerts & Actions V2 ===== */
   /* Alerts & Actions: ported 1:1 from Aditya's client-approved Variation B4 (Aditya KPI branch, Dashboard_Project/Aditya_Widget_Design/Demo V2.html, kind "alerts-b4").
      Tabs All | Critical | Warning with a count each; under them, one card per alert category (severity edge, title, count with icon, one-line summary), opening to its items, each item with its action button. Clicking an item's button opens its detail pop-up.
      Explore and Detail only (no Glance), as in the source. Changes from the source, kept to the minimum:
@@ -12099,8 +12112,8 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     document.getElementById("alARScreenClose").addEventListener("click",closeScreen);
   }
   WIDGETS.register("alerts",{content:aloContent,about:function(w){return {h:w.title,b:ALO_ABOUT};},click:function(a,id,t){return !!(a&&a.indexOf("alO-")===0&&aloHandle(a,id,t));}});
-/* ===== end W19 Alerts & Actions V2 ===== */
-/* ===== W19-Copy Alerts & Actions V2 (alerts2) ===== */
+/* ===== end W20 Alerts & Actions V2 ===== */
+/* ===== W20-Copy Alerts & Actions V2 (alerts2) ===== */
   /* Variant of W19 with renamed tabs (Need Actions / Updates, no All),
      a 7th category (Unposted Journals, like Receivable Invoices Outstanding),
      Need Actions tab = Overdue Payables + PO Queue (red border),
@@ -12648,9 +12661,9 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     var ff=bd.querySelector("button");if(ff)ff.focus();
   }
   WIDGETS.register("alerts2",{content:alo2Content,about:function(w){return {h:w.title,b:ALO2_ABOUT};},click:function(a,id,t){return !!(a&&a.indexOf("alO2-")===0&&alo2Handle(a,id,t));}});
-/* ===== end W19-Copy Alerts & Actions V2 (alerts2) ===== */
+/* ===== end W20-Copy Alerts & Actions V2 (alerts2) ===== */
 
-/* ===== W19-PendingActions Pending Actions V2 (pendingactions) ===== */
+/* ===== W19 Pending Actions V2 JS , prefix pa3 , kind "pendingactions" ===== */
   /* Variant of W19 with renamed tabs (Need Actions / Updates, no All),
      a 7th category (Unposted Journals, like Receivable Invoices Outstanding),
      Need Actions tab = Overdue Payables + PO Queue (red border),
@@ -13127,7 +13140,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     var active=pa3GlanceF[pop.id]||PA3_GROUPS[0].id;
     return PA3_GROUPS.map(function(grp){
       var on=(active===grp.id);
-      return '<button class="mi'+(on?" check":"")+'" data-action="paO3-set-glancegrp" data-id="'+pop.id+'" data-grp="'+grp.id+'">'+(on?'<span class="material-symbols-rounded" style="font-size:16px;line-height:1;">check</span>':'<span class="mi-gap"></span>')+'<span class="mi-nm">'+grp.label+'</span></button>';
+      return '<button class="mi'+(on?" check":"")+'" data-action="paO3-set-glancegrp" data-id="'+pop.id+'" data-grp="'+grp.id+'">'+(on?'<span class="material-symbols-rounded" style="font-size:var(--type-size-16);line-height:1;">check</span>':'<span class="mi-gap"></span>')+'<span class="mi-nm">'+grp.label+'</span></button>';
     }).join("");
   }
   function pa3Glance(w){
@@ -13158,7 +13171,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     return '<div class="pa3-glancewrap">'+
       '<button class="scope-chip" data-action="paO3-glancegrp" data-id="'+w.id+'"'+(chipOpen?' data-depo':'')+'>'+
         '<span class="sc-nm">'+activeGrp.label+'</span>'+
-        '<span class="material-symbols-rounded" style="font-size:14px;line-height:1;flex:0 0 auto;">expand_more</span>'+
+        '<span class="material-symbols-rounded" style="font-size:var(--type-size-14);line-height:1;flex:0 0 auto;">expand_more</span>'+
       '</button>'+
       '<div class="pa3-cards" style="--pa3-cols:'+cols+';">'+cards+'</div>'+
     '</div>';
@@ -13489,7 +13502,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     "paO3-glancegrp":{content:pa3GlancePopContent,trigger:function(){return '[data-action="paO3-glancegrp"][data-id="'+pop.id+'"]';}},
     "paO3-glance2-queues":{content:function(){return pa3QueuePanelHTML(pop.id);},trigger:function(){return '[data-action="paO3-glance2-queues"][data-id="'+pop.id+'"]';}}
   }});
-/* ===== end W19-PendingActions Pending Actions V2 (pendingactions) ===== */
+/* ===== end W19 Pending Actions V2 ===== */
 
 
 
@@ -13549,13 +13562,13 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       /* W08 My Status */
       {id:"mys",title:"My Status",kind:"mystatus",size:"wide",tiers:["wide","xwide"],selected:MYS_DEFAULT.slice(),mode:"urgency",hideZero:false,goto:false},
       {id:"mys_x",title:"My Status (Detail)",kind:"mystatus",size:"xwide",tiers:["wide","xwide"],selected:MYS_DEFAULT.slice(),mode:"urgency",hideZero:false,goto:false},
-      /* W19 Alerts & Actions — hidden for now, preserved for future use */
+      /* W20 Alerts & Actions, scrapped 16 Oct 2026 and replaced by W19 Pending Actions. The rows stay commented out; the CSS stays because W19 renders inside it. */
       /* {id:"alB4",title:"Alerts & Actions",kind:"alerts",size:"wide",tiers:["wide","xwide"],updated:"just now"}, */
       /* {id:"alB4_x",title:"Alerts & Actions (Detail)",kind:"alerts",size:"xwide",tiers:["wide","xwide"],updated:"just now"}, */
-      /* W19 Alerts & Actions — Copy (alerts2 variant) — hidden for now, preserved for future use */
+      /* W20 Alerts & Actions, Copy (alerts2 variant), scrapped with it */
       /* {id:"alB4_2",title:"Alerts & Actions Copy",kind:"alerts2",size:"wide",tiers:["wide","xwide"],updated:"just now"}, */
       /* {id:"alB4_2x",title:"Alerts & Actions Copy (Detail)",kind:"alerts2",size:"xwide",tiers:["wide","xwide"],updated:"just now"}, */
-      /* W19-PendingActions Pending Actions (pendingactions variant) */
+      /* W19 Pending Actions */
       /* paB4_g (card-grid variant) hidden for now — preserved for future use */
       /* {id:"paB4_g",title:"Pending Actions",kind:"pendingactions",size:"kpi",tiers:["kpi","wide","xwide"],updated:"just now"}, */
       {id:"paB4_g2",title:"Pending Actions",kind:"pendingactions",size:"kpi",tiers:["kpi","wide","xwide"],updated:"just now"},
