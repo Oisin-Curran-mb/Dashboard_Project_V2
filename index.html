@@ -13485,7 +13485,6 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     var bd=document.createElement("div");bd.className="al-modal-backdrop";
     var rows=(c.rows||[]).map(function(r){return '<div class="al-modal-row'+(r.err?" al-modal-row-err":"")+'"><span class="al-modal-lbl">'+r.lbl+'</span><span class="al-modal-val">'+r.val+'</span></div>';}).join("");
     var msg=c.msg?'<p class="al-modal-msg">'+c.msg+'</p>':"";
-    var hasSec=!!(c.btnSec&&c.btnSec.label);
     bd.innerHTML=
       '<div class="al-modal" role="dialog" aria-modal="true" aria-label="'+c.title+'">'+
         '<div class="al-modal-hd">'+
@@ -13500,14 +13499,14 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
           (rows?'<div class="al-modal-table">'+rows+'</div>':'')+
         '</div>'+
         '<div class="al-modal-actions">'+
-          (hasSec?'<button class="btn outlined sm" id="alPPModalSec">'+c.btnSec.label+'</button>':'')+
+          '<button class="btn outlined sm" id="alPPModalCancel">Cancel</button>'+
           '<button class="btn primary sm" id="alPPModalPri">Process Payment '+ICON("arrow_forward")+'</button>'+
         '</div>'+
       '</div>';
     document.body.appendChild(bd);
     function closeModal(){bd.classList.add("al-modal-hiding");setTimeout(function(){if(bd.parentNode)bd.parentNode.removeChild(bd);},160);}
     bd.querySelector("#alPPModalClose").addEventListener("click",closeModal);
-    if(hasSec)bd.querySelector("#alPPModalSec").addEventListener("click",closeModal);
+    bd.querySelector("#alPPModalCancel").addEventListener("click",closeModal);
     bd.querySelector("#alPPModalPri").addEventListener("click",function(){closeModal();setTimeout(function(){aloOpenARScreen();},160);});
     bd.addEventListener("click",function(e){if(e.target===bd)closeModal();});
     var ff=bd.querySelector("button");if(ff)ff.focus();
