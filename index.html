@@ -12225,7 +12225,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
   function aloOpenPaymentMerged(cfg,sev){
     var c=cfg||{sevLabel:"Critical: Payment Overdue",title:"Overdue Payables",rows:[],redirectNote:""};
     c.redirectNote=c.redirectNote||"Opens <strong>AP Payment Processing</strong>: review and process the overdue invoice.";
-    aloMergedModal(c,sev,"Process Payment",function(){aloOpenPaymentScreen();});
+    aloMergedModal(c,sev,c.btnPri&&c.btnPri.label?c.btnPri.label:"Process Payment",function(){aloOpenPaymentScreen();});
   }
   function aloOpenReconMerged(cfg,sev){
     var c=cfg||{sevLabel:"Warning: Reconciliation Overdue",title:"Unreconciled Bank Account",rows:[],redirectNote:""};
@@ -13219,12 +13219,12 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     "pa3-cat-7:6":{sevLabel:"General Ledger",title:"Unposted Journal: JE-2024-1097",msg:"This fixed asset additions journal entry has been pending posting for 2 days.",rows:[{lbl:"Journal No.",val:"JE-2024-1097",err:false},{lbl:"Type",val:"Fixed Asset Additions",err:false},{lbl:"Amount",val:"$6,400",err:false},{lbl:"Days Pending",val:"2 days",err:false},{lbl:"Prepared By",val:"Finance Team",err:false}],btnSec:{label:"View Journal"},opensJournal:true},
     "pa3-cat-7:7":{sevLabel:"General Ledger",title:"Unposted Journal: JE-2024-1103",msg:"This bank charges journal entry has been pending posting for 1 day.",rows:[{lbl:"Journal No.",val:"JE-2024-1103",err:false},{lbl:"Type",val:"Bank Charges",err:false},{lbl:"Amount",val:"$7,000",err:false},{lbl:"Days Pending",val:"1 day",err:false},{lbl:"Prepared By",val:"Finance Team",err:false}],btnSec:{label:"View Journal"},opensJournal:true},
     /* ── Unposted Transactions ── */
-    "pa3-cat-8:0":{sevLabel:"Accounts Payable",title:"Unposted Transaction: TXN-2024-3301",msg:"This payroll disbursement transaction has been pending posting for 10 days. Post or void to keep the ledger current.",rows:[{lbl:"Transaction No.",val:"TXN-2024-3301",err:false},{lbl:"Type",val:"Payroll Disbursement",err:false},{lbl:"Amount",val:"$14,200",err:false},{lbl:"Days Pending",val:"10 days",err:true},{lbl:"Prepared By",val:"Finance Team",err:false}],btnPri:{label:"Post Transaction"},btnSec:{label:"View Transaction"}},
-    "pa3-cat-8:1":{sevLabel:"Accounts Payable",title:"Unposted Transaction: TXN-2024-3318",msg:"This vendor payment transaction has been pending posting for 7 days.",rows:[{lbl:"Transaction No.",val:"TXN-2024-3318",err:false},{lbl:"Type",val:"Vendor Payment",err:false},{lbl:"Amount",val:"$9,500",err:false},{lbl:"Days Pending",val:"7 days",err:true},{lbl:"Prepared By",val:"Finance Team",err:false}],btnPri:{label:"Post Transaction"},btnSec:{label:"View Transaction"}},
-    "pa3-cat-8:2":{sevLabel:"Accounts Payable",title:"Unposted Transaction: TXN-2024-3325",msg:"This grant receipt transaction has been pending posting for 5 days.",rows:[{lbl:"Transaction No.",val:"TXN-2024-3325",err:false},{lbl:"Type",val:"Grant Receipt",err:false},{lbl:"Amount",val:"$8,050",err:false},{lbl:"Days Pending",val:"5 days",err:false},{lbl:"Prepared By",val:"Finance Team",err:false}],btnPri:{label:"Post Transaction"},btnSec:{label:"View Transaction"}},
-    "pa3-cat-8:3":{sevLabel:"Accounts Payable",title:"Unposted Transaction: TXN-2024-3339",msg:"This donation deposit transaction has been pending posting for 3 days.",rows:[{lbl:"Transaction No.",val:"TXN-2024-3339",err:false},{lbl:"Type",val:"Donation Deposit",err:false},{lbl:"Amount",val:"$5,400",err:false},{lbl:"Days Pending",val:"3 days",err:false},{lbl:"Prepared By",val:"Finance Team",err:false}],btnPri:{label:"Post Transaction"},btnSec:{label:"View Transaction"}},
-    "pa3-cat-8:4":{sevLabel:"Accounts Payable",title:"Unposted Transaction: TXN-2024-3347",msg:"This petty cash reimbursement transaction has been pending posting for 2 days.",rows:[{lbl:"Transaction No.",val:"TXN-2024-3347",err:false},{lbl:"Type",val:"Petty Cash Reimbursement",err:false},{lbl:"Amount",val:"$3,200",err:false},{lbl:"Days Pending",val:"2 days",err:false},{lbl:"Prepared By",val:"Finance Team",err:false}],btnPri:{label:"Post Transaction"},btnSec:{label:"View Transaction"}},
-    "pa3-cat-8:5":{sevLabel:"Accounts Payable",title:"Unposted Transaction: TXN-2024-3356",msg:"This utility payment transaction has been pending posting for 1 day.",rows:[{lbl:"Transaction No.",val:"TXN-2024-3356",err:false},{lbl:"Type",val:"Utility Payment",err:false},{lbl:"Amount",val:"$2,400",err:false},{lbl:"Days Pending",val:"1 day",err:false},{lbl:"Prepared By",val:"Finance Team",err:false}],btnPri:{label:"Post Transaction"},btnSec:{label:"View Transaction"}},
+    "pa3-cat-8:0":{sevLabel:"Accounts Payable",opensPayment:true,title:"Unposted Transaction: TXN-2024-3301",msg:"This payroll disbursement transaction has been pending posting for 10 days. Post or void to keep the ledger current.",rows:[{lbl:"Transaction No.",val:"TXN-2024-3301",err:false},{lbl:"Type",val:"Payroll Disbursement",err:false},{lbl:"Amount",val:"$14,200",err:false},{lbl:"Days Pending",val:"10 days",err:true},{lbl:"Prepared By",val:"Finance Team",err:false}],btnPri:{label:"Post Transaction"},btnSec:{label:"View Transaction"}},
+    "pa3-cat-8:1":{sevLabel:"Accounts Payable",opensPayment:true,title:"Unposted Transaction: TXN-2024-3318",msg:"This vendor payment transaction has been pending posting for 7 days.",rows:[{lbl:"Transaction No.",val:"TXN-2024-3318",err:false},{lbl:"Type",val:"Vendor Payment",err:false},{lbl:"Amount",val:"$9,500",err:false},{lbl:"Days Pending",val:"7 days",err:true},{lbl:"Prepared By",val:"Finance Team",err:false}],btnPri:{label:"Post Transaction"},btnSec:{label:"View Transaction"}},
+    "pa3-cat-8:2":{sevLabel:"Accounts Payable",opensPayment:true,title:"Unposted Transaction: TXN-2024-3325",msg:"This grant receipt transaction has been pending posting for 5 days.",rows:[{lbl:"Transaction No.",val:"TXN-2024-3325",err:false},{lbl:"Type",val:"Grant Receipt",err:false},{lbl:"Amount",val:"$8,050",err:false},{lbl:"Days Pending",val:"5 days",err:false},{lbl:"Prepared By",val:"Finance Team",err:false}],btnPri:{label:"Post Transaction"},btnSec:{label:"View Transaction"}},
+    "pa3-cat-8:3":{sevLabel:"Accounts Payable",opensPayment:true,title:"Unposted Transaction: TXN-2024-3339",msg:"This donation deposit transaction has been pending posting for 3 days.",rows:[{lbl:"Transaction No.",val:"TXN-2024-3339",err:false},{lbl:"Type",val:"Donation Deposit",err:false},{lbl:"Amount",val:"$5,400",err:false},{lbl:"Days Pending",val:"3 days",err:false},{lbl:"Prepared By",val:"Finance Team",err:false}],btnPri:{label:"Post Transaction"},btnSec:{label:"View Transaction"}},
+    "pa3-cat-8:4":{sevLabel:"Accounts Payable",opensPayment:true,title:"Unposted Transaction: TXN-2024-3347",msg:"This petty cash reimbursement transaction has been pending posting for 2 days.",rows:[{lbl:"Transaction No.",val:"TXN-2024-3347",err:false},{lbl:"Type",val:"Petty Cash Reimbursement",err:false},{lbl:"Amount",val:"$3,200",err:false},{lbl:"Days Pending",val:"2 days",err:false},{lbl:"Prepared By",val:"Finance Team",err:false}],btnPri:{label:"Post Transaction"},btnSec:{label:"View Transaction"}},
+    "pa3-cat-8:5":{sevLabel:"Accounts Payable",opensPayment:true,title:"Unposted Transaction: TXN-2024-3356",msg:"This utility payment transaction has been pending posting for 1 day.",rows:[{lbl:"Transaction No.",val:"TXN-2024-3356",err:false},{lbl:"Type",val:"Utility Payment",err:false},{lbl:"Amount",val:"$2,400",err:false},{lbl:"Days Pending",val:"1 day",err:false},{lbl:"Prepared By",val:"Finance Team",err:false}],btnPri:{label:"Post Transaction"},btnSec:{label:"View Transaction"}},
     /* ── Payment Processing ── */
     "pa3-cat-9:0":{sevLabel:"Accounts Receivable",title:"Pending Payment: PAY-2024-0071",msg:"This ACH payment has been awaiting bank confirmation for 9 days. Review and resubmit if necessary.",rows:[{lbl:"Payment No.",val:"PAY-2024-0071",err:false},{lbl:"Method",val:"ACH",err:false},{lbl:"Amount",val:"$12,600",err:false},{lbl:"Days Pending",val:"9 days",err:true},{lbl:"Status",val:"Awaiting bank confirmation",err:true}],opensAR:true,btnPri:{label:"Resubmit Payment"},btnSec:{label:"View Payment"}},
     "pa3-cat-9:1":{sevLabel:"Accounts Receivable",title:"Pending Payment: PAY-2024-0085",msg:"This wire transfer has been pending authorisation for 6 days.",rows:[{lbl:"Payment No.",val:"PAY-2024-0085",err:false},{lbl:"Method",val:"Wire Transfer",err:false},{lbl:"Amount",val:"$11,300",err:false},{lbl:"Days Pending",val:"6 days",err:true},{lbl:"Status",val:"Pending authorisation",err:true}],opensAR:true,btnPri:{label:"Authorise Payment"},btnSec:{label:"View Payment"}},
@@ -13356,7 +13356,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     var actBtns="";
     if(cfg&&cfg.opensPayment){
       redirectNote='<p class="al2-dp-redirect-note">Opens <strong>AP Payment Processing</strong>: review and process the overdue invoice.</p>';
-      actBtns='<button class="btn primary sm" data-action="paO3-dp-pay"'+dp+'>'+'Process Payment'+ICON("arrow_forward")+'</button>';
+      actBtns='<button class="btn primary sm" data-action="paO3-dp-pay"'+dp+'>'+(cfg.btnPri&&cfg.btnPri.label?cfg.btnPri.label:"Process Payment")+ICON("arrow_forward")+'</button>';
     } else if(cfg&&cfg.opensRecon){
       redirectNote='<p class="al2-dp-redirect-note">Opens the <strong>Bank Reconciliation</strong> report for the selected account.</p>';
       actBtns='<button class="btn primary sm" data-action="paO3-dp-recon"'+dp+'>'+'Start Reconciliation'+ICON("arrow_forward")+'</button>';
@@ -13638,16 +13638,18 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     if(a==="paO3-dp-recon"){var dpreconSel=pa3Sel[id];aloOpenReconMerged(dpreconSel?dpreconSel.cfg:null,"warn");return true;}
     if(a==="paO3-dp-ar"){var dpARSel=pa3Sel[id];aloOpenARMerged(dpARSel?dpARSel.cfg:null,"warn");return true;}
     if(a==="paO3-dp-budget"){var dpBudSel=pa3Sel[id];aloOpenBudgetMerged(dpBudSel?dpBudSel.cfg:null,"warn");return true;}
-    /* wide-mode overlay handlers (fallback) */
+    /* wide-mode overlay handlers — use aloMergedModal spec for all categories */
     if(a==="paO3-item"){var cid=t.getAttribute("data-cat"),idx=parseInt(t.getAttribute("data-idx"),10)||0,cd=PA3_CATS.filter(function(c){return c.id===cid;})[0];
       if(cd){
-        /* pa3-cat-9 (AR Payment Processing): custom modal with group/title hierarchy header */
-        if(cid==="pa3-cat-9"){
-          var pa3cat9cfg=PA3_ITEM_MODALS[cid+":"+idx]||null;
-          pa3OpenPaymentProcessingModal(pa3cat9cfg,idx);
-        } else {
-          aloOpenModal(cd.sev==="need"?"err":"warn",cd.title,String(cd.items[idx]||"").replace(/<[^>]+>/g,""),PA3_ITEM_MODALS[cid+":"+idx]||null);
-        }
+        var icfg=PA3_ITEM_MODALS[cid+":"+idx]||null;
+        var isev=cd.sev==="need"?"err":"warn";
+        if(icfg&&icfg.opensPayment){aloOpenPaymentMerged(icfg,isev);}
+        else if(icfg&&icfg.opensRecon){aloOpenReconMerged(icfg,isev);}
+        else if(icfg&&icfg.opensAR){aloOpenARMerged(icfg,isev);}
+        else if(icfg&&icfg.opensBudget){aloOpenBudgetMerged(icfg,isev);}
+        else if(icfg&&icfg.opensJournal){pa3OpenJournalModal(icfg,isev);}
+        else if(icfg&&icfg.invoiceNo){aloOpenModal(isev,cd.title,String(cd.items[idx]||"").replace(/<[^>]+>/g,""),icfg);}
+        else{aloMergedModal(icfg,isev,icfg&&icfg.btnPri&&icfg.btnPri.label?icfg.btnPri.label:"View",function(){});}
       }return true;}
     if(a==="paO3-payment"){var pcid=t.getAttribute("data-cat"),pidx=parseInt(t.getAttribute("data-idx"),10)||0,pcfg=PA3_ITEM_MODALS[pcid+":"+pidx]||null;aloOpenPaymentMerged(pcfg,"err");return true;}
     if(a==="paO3-recon"){var rcid=t.getAttribute("data-cat"),ridx=parseInt(t.getAttribute("data-idx"),10)||0,rcfg=PA3_ITEM_MODALS[rcid+":"+ridx]||null;aloOpenReconMerged(rcfg,"warn");return true;}
