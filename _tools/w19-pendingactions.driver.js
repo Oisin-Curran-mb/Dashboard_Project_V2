@@ -96,7 +96,9 @@ A.contains(js, "style=\"--pa3-cols:", "which the JS still sets inline");
 
 /* the house patterns it was pointed at */
 A.contains(css, "background:var(--red-10);color:var(--red-100);", "the error pill takes the Alerts error palette");
-A.contains(css, "var(--primitive-color-saffron-25)", "the warning pill takes the saffron palette");
+/* the token audit of 19 Oct (a73cf63) moved the warning pill from the saffron primitives to the semantic attention tokens */
+A.contains(css, "background:var(--semantic-color-fill-static-attention-subtle);color:var(--semantic-color-foreground-static-attention-on-subtle);", "the warning pill takes the semantic attention palette");
+A.eq((css.match(/primitive-color-saffron/g) || []).length, 0, "no saffron primitives remain in the region");
 A.contains(css, "box-shadow:var(--elevation-overlay)", "the queue panel uses the elevation token, not a raw shadow");
 A.contains(css, "outline:2px solid var(--focusring-base)", "focus uses the shared focus ring");
 A.absent(css, "0 0 0 2px", "the hover ring in the invented blue is gone");
