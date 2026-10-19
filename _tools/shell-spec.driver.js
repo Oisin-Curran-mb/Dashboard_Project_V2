@@ -19,8 +19,8 @@ const shell = H.loadShell();
 const S = shell.script, raw = shell.html, css = shell.css;
 
 /* ---------- 1. the toggle in the top nav ------------------------------- */
-const TOGGLE_RE = /<div class="viewtab" role="tablist" aria-label="View mode">\s*<button class="vtb on" data-action="view-demo" role="tab" aria-selected="true">Demo<\/button>\s*<button class="vtb" data-action="view-spec" role="tab" aria-selected="false">Spec<\/button>\s*<button class="vtb" data-action="view-perm" role="tab" aria-selected="false">Permissions<\/button>\s*<\/div>/g;
-A.eq((raw.match(TOGGLE_RE) || []).length, 1, "exactly one Demo / Spec / Permissions toggle");
+const TOGGLE_RE = /<div class="viewtab" role="tablist" aria-label="View mode">\s*<button class="vtb on" data-action="view-demo" role="tab" aria-selected="true">Demo<\/button>\s*<button class="vtb" data-action="view-spec" role="tab" aria-selected="false">Spec<\/button>\s*<button class="vtb" data-action="view-perm" role="tab" aria-selected="false">Permissions<\/button>\s*<button class="vtb" data-action="view-dash" role="tab" aria-selected="false">Dashboards<\/button>\s*<\/div>/g;
+A.eq((raw.match(TOGGLE_RE) || []).length, 1, "exactly one Demo / Spec / Permissions / Dashboards toggle");
 const nav = raw.slice(raw.indexOf('<header class="topnav">'), raw.indexOf("</header>"));
 A.contains(nav, 'class="viewtab"', "the toggle sits inside the top nav");
 A.ok(nav.indexOf('class="viewtab"') > nav.indexOf('class="tn-spacer"') && nav.indexOf('class="viewtab"') < nav.indexOf('aria-label="Search"'), "placed after the spacer and before the Search icon (Jo's placement)");
@@ -108,7 +108,16 @@ PICS.forEach(function (n) {
   A.contains(perm, 'src="docs/Pics/Permissions/' + n + '.png"', "picture referenced: " + n);
   A.ok(fs.existsSync(path.join(__dirname, "..", "docs", "Pics", "Permissions", n + ".png")), "picture file present: " + n + ".png");
 });
-A.eq((perm.match(/<figure class="spec-fig">/g) || []).length, PICS.length, "one figure per picture");
+/* the Task Role screenshots, plus the decided no-permission pop-up in item 2.10 (19 Oct) */
+const MOCKS = ["noaccess"];
+MOCKS.forEach(function (n) {
+  A.contains(perm, 'src="docs/Pics/Permissions/' + n + '.png"', "mock-up referenced: " + n);
+  A.ok(fs.existsSync(path.join(__dirname, "..", "docs", "Pics", "Permissions", n + ".png")), "mock-up file present: " + n + ".png");
+});
+A.eq((perm.match(/<figure class="spec-fig">/g) || []).length, PICS.length + MOCKS.length, "one figure per picture and per mock-up");
+A.contains(perm, "Contact your administrator for more information.", "the pop-up's last line is the owner's wording");
+A.contains(perm, "Module / Section / Page", "the pop-up template names the page as Module / Section / Page");
+A.contains(perm, "<b>always show it</b>", "the rule for outbound links is always-show");
 A.eq((perm.match(/<img /g) || []).length, (perm.match(/ alt="/g) || []).length, "every picture has alt text");
 A.contains(perm, 'href="docs/handover/Widget%20permissions', "links to the full review document");
 A.contains(perm, "<code>/PurchasingManagement/Requests/Update</code>", "Purchasing: Open request names its page right");
@@ -118,8 +127,8 @@ A.contains(css, ".spec-fig img{display:block;max-width:100%;", "figures scale to
 
 /* ---------- 6. the click handler, driven -------------------------------- */
 const code = H.code(S);
-const hm = /    if\(a==="view-spec"\|\|a==="view-demo"\|\|a==="view-perm"\)\{[\s\S]*?window\.scrollTo\(0,0\);return;\}/.exec(code);
-A.ok(!!hm, "dispatcher has the view-spec / view-demo / view-perm branch");
+const hm = /    if\(a==="view-spec"\|\|a==="view-demo"\|\|a==="view-perm"\|\|a==="view-dash"\)\{[\s\S]*?window\.scrollTo\(0,0\);return;\}/.exec(code);
+A.ok(!!hm, "dispatcher has the view-spec / view-demo / view-perm / view-dash branch");
 const disp = code.indexOf('document.addEventListener("click",function(e){\r\n    var t=e.target.closest("[data-action]");');
 A.ok(disp > -1 && hm && hm.index > disp, "the branch lives in the shell's delegated click dispatcher");
 if (hm) {
@@ -131,10 +140,10 @@ if (hm) {
       n.setAttribute = function (k, v) { n.attrs[k] = String(v); };
       return n;
     }
-    const body = node(""), sv = node(""), pv = node(""), demo = node("view-demo"), specBtn = node("view-spec"), permBtn = node("view-perm"), main = { scrollTop: 300 };
-    demo.cls.on = true; sv.hidden = true; pv.hidden = true;
-    return { body: body, sv: sv, pv: pv, demo: demo, specBtn: specBtn, permBtn: permBtn, main: main, scrolled: 0,
-      document: { body: body, getElementById: function (id) { return id === "specView" ? sv : (id === "permView" ? pv : null); }, querySelectorAll: function (q) { return q === ".viewtab .vtb" ? [demo, specBtn, permBtn] : []; }, querySelector: function (q) { return q === ".appmain" ? main : null; } } };
+    const body = node(""), sv = node(""), pv = node(""), dv = node(""), demo = node("view-demo"), specBtn = node("view-spec"), permBtn = node("view-perm"), dashBtn = node("view-dash"), main = { scrollTop: 300 };
+    demo.cls.on = true; sv.hidden = true; pv.hidden = true; dv.hidden = true;
+    return { body: body, sv: sv, pv: pv, dv: dv, demo: demo, specBtn: specBtn, permBtn: permBtn, dashBtn: dashBtn, main: main, scrolled: 0,
+      document: { body: body, getElementById: function (id) { return id === "specView" ? sv : (id === "permView" ? pv : (id === "dashView" ? dv : null)); }, querySelectorAll: function (q) { return q === ".viewtab .vtb" ? [demo, specBtn, permBtn, dashBtn] : []; }, querySelector: function (q) { return q === ".appmain" ? main : null; } } };
   }
   function drive(action) {
     const f = fakeDoc();
@@ -153,18 +162,91 @@ if (hm) {
   A.eq(on.scrolled, 1, "Spec: window scrolled to the top");
   A.eq(on.pop, null, "Spec: any open pop-over is closed");
   A.eq(on.pv.hidden, true, "Spec: the permissions section stays hidden");
+  A.eq(on.dv.hidden, true, "Spec: the dashboards section stays hidden");
   const pm = drive("view-perm");
   A.ok(pm.body.classList.contains("spec-mode"), "Permissions: body gets .spec-mode (the dashboard hides)");
   A.eq(pm.pv.hidden, false, "Permissions: the permissions section is shown");
   A.eq(pm.sv.hidden, true, "Permissions: the spec section is hidden");
   A.ok(pm.permBtn.classList.contains("on") && !pm.specBtn.classList.contains("on") && !pm.demo.classList.contains("on"), "Permissions: only the Permissions tab is on");
   A.eq(pm.permBtn.getAttribute("aria-selected"), "true", "Permissions: aria-selected moves to Permissions");
+  A.eq(pm.dv.hidden, true, "Permissions: the dashboards section stays hidden");
+  const dm = drive("view-dash");
+  A.ok(dm.body.classList.contains("spec-mode"), "Dashboards: body gets .spec-mode (the dashboard hides)");
+  A.eq(dm.dv.hidden, false, "Dashboards: the dashboards section is shown");
+  A.eq(dm.sv.hidden, true, "Dashboards: the spec section is hidden");
+  A.eq(dm.pv.hidden, true, "Dashboards: the permissions section is hidden");
+  A.ok(dm.dashBtn.classList.contains("on") && !dm.permBtn.classList.contains("on") && !dm.specBtn.classList.contains("on") && !dm.demo.classList.contains("on"), "Dashboards: only the Dashboards tab is on");
+  A.eq(dm.dashBtn.getAttribute("aria-selected"), "true", "Dashboards: aria-selected moves to Dashboards");
+  A.eq(dm.main.scrollTop, 0, "Dashboards: content scrolled to the top");
+  A.eq(dm.pop, null, "Dashboards: any open pop-over is closed");
   const off = drive("view-demo");
   A.ok(!off.body.classList.contains("spec-mode"), "Demo: .spec-mode removed");
   A.eq(off.sv.hidden, true, "Demo: the spec section is hidden again");
   A.eq(off.pv.hidden, true, "Demo: the permissions section is hidden again");
-  A.ok(off.demo.classList.contains("on") && !off.specBtn.classList.contains("on") && !off.permBtn.classList.contains("on"), "Demo: the Demo tab is on, Spec and Permissions are off");
+  A.eq(off.dv.hidden, true, "Demo: the dashboards section is hidden again");
+  A.ok(off.demo.classList.contains("on") && !off.specBtn.classList.contains("on") && !off.permBtn.classList.contains("on") && !off.dashBtn.classList.contains("on"), "Demo: the Demo tab is on, Spec, Permissions and Dashboards are off");
 }
+/* ---------- 7. the Dashboards view ------------------------------------- */
+/* Added 2026-10-19 on the owner's instruction, so the module-dashboards work
+   is a view in the build rather than only a markdown file. Built by
+   _tools/one-off/build-dashboards-view-2026-10-19.js from a module table, so
+   the sections cannot drift from one another. */
+{
+  const d0 = raw.indexOf('<section class="spec" id="dashView"'), d1 = raw.indexOf("</section>", d0);
+  A.ok(d0 > -1 && d1 > d0, "the Dashboards section exists");
+  const dash = raw.slice(d0, d1);
+  A.ok(d0 > raw.indexOf('id="permView"'), "it sits after the Permissions section");
+  A.contains(dash, 'hidden', "it starts hidden");
+  A.contains(dash, 'aria-label="Default dashboards"', "it is labelled for a screen reader");
+  A.contains(dash, '<h1 class="spec-title">', "it has the house heading");
+  /* the three rulings of 19 Oct, each pinned so a later edit cannot quietly drop one */
+  A.contains(dash, "must persist", "the saved-selection requirement leads the view");
+  A.contains(dash, "Detail size", "it states that every default is the Detail size");
+  A.contains(dash, "Quick Links is retired", "it records that Quick Links is retired");
+  A.contains(dash, "Main Content Tasks", "Records' two widgets are named");
+  A.contains(dash, "My Status", "both of them");
+  /* one section per module, fifteen of them plus the four preamble sections */
+  const secs = (dash.match(/<div class="spec-sec"/g) || []).length;
+  A.eq(secs, 21, "four preamble sections, the Home page, fifteen modules and the open-questions list");
+  /* 19 Oct: each module names its URL in the owner's [env] form, and the
+     owner's own capture of the renamed header is shown as the target */
+  A.contains(dash, "https://[env]myamplify.io/AccountsPayable", "each module page names its URL in the owner's [env] form");
+  A.contains(dash, "https://[env]myamplify.io/</code>", "the home page is the root URL");
+  A.contains(dash, "_header/", "the owner's target header screenshot is shown");
+  A.contains(dash, "reads <b>Accounts Payable</b>", "the naming section records that the dashboard is now named for its module");
+  /* every module named */
+  ["Home", "Accounts Payable", "Accounts Receivable", "Bank Account Management", "Deposits On Hand",
+   "Donors And Gifts", "Fixed Assets", "General Ledger", "Insurance Billing", "Loan Processing",
+   "Payroll", "Pension Billing", "Purchasing Management", "Records", "Remittance", "Statistics"
+  /* the headings are numbered ("5. Accounts Payable"), so the name is matched
+     against its closing tag rather than an opening angle bracket */
+  ].forEach(function (m) { A.contains(dash, m + "</h2>", "the view has a section for " + m); });
+  /* the screenshots: two per module that has a widget, every one on disk, and
+     all lazily loaded so four views' worth of images do not load at once */
+  const imgs = (dash.match(/<img src="([^"]+)"/g) || []).map(function (s) { return decodeURIComponent(/src="([^"]+)"/.exec(s)[1]); });
+  /* The V2 set is fourteen and always present; the old-system set arrives
+     module by module from the test1 capture, so the count is a floor. */
+  A.ok(imgs.length >= 14, "at least the fourteen V2 full-page screenshots are present (" + imgs.length + " in all)");
+  A.eq((dash.match(/loading="lazy"/g) || []).length, imgs.length, "every screenshot is lazily loaded");
+  const REPO = path.join(__dirname, "..");
+  let missing = imgs.filter(function (p) { return !fs.existsSync(path.join(REPO, p)); });
+  A.eq(missing.length, 0, "every screenshot it names exists on disk: " + missing.join(", "));
+  A.ok(imgs.every(function (p) { return p.indexOf("docs/Pics/Modules/") === 0; }), "they all come from docs/Pics/Modules");
+  /* Statistics is the one module with no screenshot, and says why. The slice
+     start is asserted first: indexOf returning -1 would make slice(-1) one
+     character long and the absent() below pass for the wrong reason. */
+  const statAt = dash.indexOf("Statistics</h2>");
+  A.ok(statAt > 0, "the Statistics section was located");
+  A.absent(dash.slice(statAt), "<img", "Statistics has no screenshot, having no widget in either version");
+  A.contains(dash.slice(statAt), "STATS", "and it says why: the legacy panel rendered the literal word");
+  /* it introduces no new classes */
+  const used = [...new Set((dash.match(/class="([^"]+)"/g) || []).flatMap(function (s) { return /class="([^"]+)"/.exec(s)[1].split(/\s+/); }))];
+  used.forEach(function (c) {
+    if (/^material-symbols/.test(c)) return;
+    A.contains(css, "." + c, "the view's class is declared: " + c);
+  });
+}
+
 /* the shell must not render on a view switch (nothing in the dashboard changed) */
 A.absent(hm ? hm[0] : "", "render()", "the view switch does not re-render the dashboard");
 

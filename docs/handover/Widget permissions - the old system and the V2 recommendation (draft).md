@@ -170,11 +170,30 @@ needs `/PurchasingManagement/Requests/Update`.
 - **Old panel**: `/BankAccountManagement` at Inquiry (`BankBalances.ascx.cs:16`). Inside, the account list is
   filtered by the user's **GL account roles** (include or omit by company, region, fund, department and
   account range, `BRBankAccountRepository.cs:92-130`); with no accounts the dropdown is hidden (`:77-78`).
-- **V2 adds**: bars, twelve-month line, drill, "Open in Bank". Bank page
-  `/BankAccountManagement/BankAccountInformation/Update` (tabs by `...BankAccountInformation/*Tab`).
-- **Recommendation**: show on the Bank Account Management Dashboard right; **the account-role filter must
-  be kept in the API** (it is data access, not a widget right). "Open in Bank" needs
-  `/BankAccountManagement/BankAccountInformation` at Inquiry.
+- **V2 adds**: bars, twelve-month line, drill, "Open in Bank". **The old panel never linked anywhere**
+  (`BankBalances.ascx` and its code-behind contain no hyperlink or redirect), so the question of what
+  right the link needs is new to V2.
+- **Is the Dashboard right enough to open the bank page? No** (owner's question, 19 Oct). Every page
+  load is gated on the page's own URI at Inquiry (`ShelbyPage.cs:487`, `NotAllowedRedirect()` on
+  failure), and `Allowed()` is an **exact, case-insensitive match** on the task's page URI with only the
+  root and `/portal` exempt (`ShelbyContext.cs:761-775`). There is no prefix match and nothing is
+  inherited from the module row. Holding `/BankAccountManagement` grants that page and nothing else.
+- **What "Open in Bank" needs**: the drill opens
+  `/BankAccountManagement/BankAccountInformation/Update`, so the user must hold that page's row at
+  Inquiry. The row sits under **Modify** in the Task Role editor's Bank Account Management tree (see
+  the Permissions view's screenshot). Whether `Default` and `Update` under `BankAccountInformation` are
+  one task row or two is in the seed table, not the repository.
+- **Inside the page, more rights again**: `Update.aspx.cs:1013-1022` (`SetSecurity`) hides the account
+  number field and seven tabs (Company Info, MICR, Images, MICR Password, ACH, AP Checks, PR Checks)
+  unless the user holds `/BankAccountManagement/BankAccountInformation/Secure<Name>` at **Update**
+  (Full Rights, not Inquiry). A user who can open the page may still see most of it missing.
+- **Recommendation**: show the widget on the Bank Account Management Dashboard right; **the
+  account-role filter must be kept in the API** (it is data access, not a widget right). "Open in
+  Bank" is **always shown**; a click by a user without
+  `/BankAccountManagement/BankAccountInformation/Update` at Inquiry opens the no-permission pop-up
+  naming **Bank Account Management / Bank Account Information / Update** (owner's rule, 19 Oct, see
+  5.2). The Dashboard right does not confer that page. V2 need not model the `Secure*` rights: the
+  destination page applies them itself.
 
 ### 2.15 Accounts Payable By Due Date
 - **Module / row**: Accounts Payable, "Dashboard" (`/AccountsPayable`).
@@ -320,10 +339,29 @@ Status's jump rely on the destination page refusing the user.
 
 ### 5.2 The V2 widgets, and where to be careful
 
-Rule proposed for every outbound control: **show it only when the user holds the destination page's URI at
-Inquiry; otherwise it is absent**, as Main Content Tasks does today. Never rely on the destination page
-refusing the user after the click. The API that serves the widget should return, per record, whether the
-current user may open it, so the widget does not need the rights table.
+Rule for every outbound control (owner, 19 October, replacing the earlier proposal to hide the
+control): **always show it.** If the user does not hold the destination page's right, the click
+opens a pop-up that says so and **names the page as Module / Section / Page**, so they know exactly
+what to ask for. The widget is still shown only on its module's Dashboard right, and the destination
+page still enforces its own right on arrival (`ShelbyPage.cs:487`), so nothing becomes reachable that
+was not; the user is told why instead of finding the control missing. The API that serves the widget
+should still return, per record, whether the current user may open it, so the pop-up can be shown
+without a round trip.
+
+#### The no-permission pop-up (decided 19 October)
+
+Three options were mocked up; the owner chose the second, with two changes: **Close is the only
+control**, and the last line reads **Contact your administrator for more information.** The pop-up
+is the shell's own `.modal`, title icon, close control and `.btn` family on Pathway tokens, so it needs
+no new styling. Mock-up: `_tools/one-off/shoot-noaccess-mocks-2026-10-19.js`.
+
+![The no-permission pop-up](../Pics/Permissions/noaccess.png)
+*Title: No access to this page. Body: Opening Module / Section / Page needs a right you don't hold.*
+*Then: Contact your administrator for more information. One button, Close.*
+
+The page is named as **Module / Section / Page**, the path the Task Role editor uses, so the user and
+their administrator read the same words. Example: **Bank Account Management / Bank Account
+Information / Update**.
 
 | V2 widget | Outbound control in the build today | Destination and right to test | Care point |
 |---|---|---|---|
@@ -407,8 +445,11 @@ current user may open it, so the widget does not need the rights table.
    Reject follow the request page's rule. Section 3.
 4. Payroll Scheduled Time Off keeps the original panel's behaviour: a user with no employee record sees every
    department, and Approve and Undo need the widget's right only, with no separate Update check. Section 4.
-5. Links out of a widget: a link from a widget in one module to a page in another module the user does not
-   hold is not shown, as Main Content Tasks does today (section 5.2). Confirmed.
+5. Links out of a widget: **always shown**; a click by a user who does not hold the destination page's
+   right opens the no-permission pop-up naming the page as Module / Section / Page (section 5.2).
+   Revised 19 October from the earlier decision to hide such links. The pop-up is decided: title
+   "No access to this page", the page named, "Contact your administrator for more information.",
+   Close as the only control.
 6. Payroll Distributions is all or nothing: a user who holds the Payroll Dashboard right sees the widget,
    the Employee Break Down pop-up and the Excel export in full; Secure employees are not excluded and nothing
    inside the widget needs a further right. Whether the pop-up should ever be hidden for some users waits on

@@ -1,0 +1,152 @@
+{
+ "Home": {
+  "slots": [
+   "Payroll Scheduled Time Off",
+   "Payroll Scheduled Time Off"
+  ],
+  "company": "1 Test Company 92",
+  "host": "95301.accounting.test1.myamplify.io",
+  "size": "1920x1080",
+  "taken": "2026-10-19"
+ },
+ "Accounts Payable": {
+  "slots": [
+   "Accounts Payable By Due Date",
+   "Main Content Tasks"
+  ],
+  "company": "1 Test Company 92",
+  "host": "95301.accounting.test1.myamplify.io",
+  "size": "1920x1080",
+  "taken": "2026-10-19"
+ },
+ "Accounts Receivable": {
+  "slots": [
+   "Receivable Invoices Outstanding",
+   "Main Content Tasks"
+  ],
+  "company": "1 Test Company 92",
+  "host": "95301.accounting.test1.myamplify.io",
+  "size": "1920x1080",
+  "taken": "2026-10-19"
+ },
+ "Bank Account Management": {
+  "slots": [
+   "Bank Balances",
+   "Main Content Tasks"
+  ],
+  "company": "1 Test Company 92",
+  "host": "95301.accounting.test1.myamplify.io",
+  "size": "1920x1080",
+  "taken": "2026-10-19"
+ },
+ "Deposits On Hand": {
+  "slots": [
+   "Deposit Accounts",
+   "Main Content Tasks"
+  ],
+  "company": "1 Test Company 92",
+  "host": "95301.accounting.test1.myamplify.io",
+  "size": "1920x1080",
+  "taken": "2026-10-19"
+ },
+ "Donors And Gifts": {
+  "slots": [
+   "Gifts Pledges",
+   "Main Content Tasks"
+  ],
+  "company": "1 Test Company 92",
+  "host": "95301.accounting.test1.myamplify.io",
+  "size": "1920x1080",
+  "taken": "2026-10-19"
+ },
+ "Fixed Assets": {
+  "slots": [
+   "Fixed Asset Values",
+   "Main Content Tasks"
+  ],
+  "company": "1 Test Company 92",
+  "host": "95301.accounting.test1.myamplify.io",
+  "size": "1920x1080",
+  "taken": "2026-10-19"
+ },
+ "General Ledger": {
+  "slots": [
+   "Budget Comparison for all Income Accounts",
+   "Main Content Tasks"
+  ],
+  "company": "1 Test Company 92",
+  "host": "95301.accounting.test1.myamplify.io",
+  "size": "1920x1080",
+  "taken": "2026-10-19"
+ },
+ "Insurance Billing": {
+  "slots": [
+   "Insurance Billing Plans",
+   "Main Content Tasks"
+  ],
+  "company": "1 Test Company 92",
+  "host": "95301.accounting.test1.myamplify.io",
+  "size": "1920x1080",
+  "taken": "2026-10-19"
+ },
+ "Loan Processing": {
+  "slots": [
+   "Loans With Balance Due",
+   "Main Content Tasks"
+  ],
+  "company": "1 Test Company 92",
+  "host": "95301.accounting.test1.myamplify.io",
+  "size": "1920x1080",
+  "taken": "2026-10-19"
+ },
+ "Payroll": {
+  "slots": [
+   "Payroll Distributions",
+   "Main Content Tasks"
+  ],
+  "company": "1 Test Company 92",
+  "host": "95301.accounting.test1.myamplify.io",
+  "size": "1920x1080",
+  "taken": "2026-10-19"
+ },
+ "Pension Billing": {
+  "slots": [
+   "Pension Plans",
+   "Main Content Tasks"
+  ],
+  "company": "1 Test Company 92",
+  "host": "95301.accounting.test1.myamplify.io",
+  "size": "1920x1080",
+  "taken": "2026-10-19"
+ },
+ "Purchasing Management": {
+  "slots": [
+   "Purchasing Management",
+   "Main Content Tasks"
+  ],
+  "company": "1 Test Company 92",
+  "host": "95301.accounting.test1.myamplify.io",
+  "size": "1920x1080",
+  "taken": "2026-10-19"
+ },
+ "Records": {
+  "slots": [
+   "(empty slot)",
+   "(empty slot)"
+  ],
+  "company": "1 Test Company 92",
+  "host": "95301.accounting.test1.myamplify.io",
+  "size": "1920x1080",
+  "taken": "2026-10-19"
+ },
+ "Remittance": {
+  "slots": [
+   "Remittance Pledges",
+   "Main Content Tasks"
+  ],
+  "company": "1 Test Company 92",
+  "host": "95301.accounting.test1.myamplify.io",
+  "size": "1920x1080",
+  "taken": "2026-10-19"
+ }
+}

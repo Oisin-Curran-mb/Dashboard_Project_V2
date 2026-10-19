@@ -3683,6 +3683,7 @@
       <button class="vtb on" data-action="view-demo" role="tab" aria-selected="true">Demo</button>
       <button class="vtb" data-action="view-spec" role="tab" aria-selected="false">Spec</button>
       <button class="vtb" data-action="view-perm" role="tab" aria-selected="false">Permissions</button>
+      <button class="vtb" data-action="view-dash" role="tab" aria-selected="false">Dashboards</button>
     </div>
     <button class="tn-ic" aria-label="Search"><span class="material-symbols-rounded">search</span></button>
     <button class="tn-ic" aria-label="Help"><span class="material-symbols-rounded">help</span></button>
@@ -3878,7 +3879,7 @@
 
           <div class="spec-sec" id="perm-care">
             <h2>2. Where more care is needed: links and actions</h2>
-            <p>The rule for every control below that leads to another page: <b>show it only when the user holds the destination page's right</b>; otherwise the control is absent, as Main Content Tasks does today. A link from a widget in one module to a page in another module the user does not hold is never shown. Do not rely on the destination page refusing the user after the click, which is what the old Purchasing pencil and My Status jump did. The API serving the widget returns, per record, whether the current user may open or act on it, so the widget never reads the rights table.</p>
+            <p>The rule for every control below that leads to another page (owner, 19 October): <b>always show it</b>. If the user does not hold the destination page's right, the click opens a pop-up that says so and <b>names the page as Module / Section / Page</b>, so they know exactly what to ask for. The widget itself is still shown only on its module's Dashboard right, and the destination page still enforces its own right on arrival, so nothing is reachable that was not reachable before; the user is simply told why instead of finding the control missing. This replaces the earlier rule of hiding the control, and the pop-up itself is in 2.10 below.</p>
 
             <h3>2.1 Purchasing Management</h3>
             <figure class="spec-fig"><img src="docs/Pics/Permissions/purchasing-popup.png" alt="The request pop-up: Approve, Hold and Reject are actions; Open request and each attachment leave the widget." loading="lazy"><figcaption>The request pop-up: Approve, Hold and Reject are actions; Open request and each attachment leave the widget.</figcaption></figure>
@@ -3901,7 +3902,8 @@
             <h3>2.3 Bank Balances</h3>
             <figure class="spec-fig"><img src="docs/Pics/Permissions/bank-drill.png" alt="The account drill: Open in Bank leaves the widget." loading="lazy"><figcaption>The account drill: Open in Bank leaves the widget.</figcaption></figure>
             <ul class="spec-ul">
-              <li><b>Open in Bank</b>: <code>/BankAccountManagement/BankAccountInformation</code> at Inquiry.</li>
+              <li><b>Open in Bank</b> opens <code>/BankAccountManagement/BankAccountInformation/Update</code>, so it needs that page's own row (under Modify in the Task Role tree) at Inquiry. <b>The Dashboard right does not confer it</b>: a page right is an exact match on the page's URI, with nothing inherited from the module row, so <code>/BankAccountManagement</code> grants the Dashboard and nothing else.</li>
+              <li>Inside that page the account number and seven tabs (Company Info, MICR, Images, MICR Password, ACH, AP Checks, PR Checks) each need <code>/BankAccountManagement/BankAccountInformation/Secure&hellip;</code> at Full Rights; the page applies those itself, so V2 need not model them. The old Bank Balances panel never linked anywhere, so this is new to V2.</li>
               <li>Plus the General Ledger <b>account roles</b>: a user may hold the page right and still be refused an account they may not see. The API applies the account filter to the list and to the link.</li>
             </ul>
             <figure class="spec-fig"><img src="docs/Pics/Permissions/taskrole-bank.png" alt="Old Task Role editor, Bank Account Management: the Dashboard row, Transactions, Bank Statements and View; Bank Account Information sits under Modify further down the same tree." loading="lazy"><figcaption>Old Task Role editor, Bank Account Management: the Dashboard row, Transactions, Bank Statements and View; Bank Account Information sits under Modify further down the same tree.</figcaption></figure>
@@ -3949,6 +3951,9 @@
 
             <h3>2.9 No link or action</h3>
             <p>Pension Plans, Insurance Billing Plans, Deposits on Hand, Receivable Invoices Outstanding, Fixed Asset Values and the Financial KPI band have no control that leaves the widget today. Where one is added later (open account, open invoice, open asset), it follows the same rule with the destination page's right.</p>
+            <h3>2.10 When a link leads to a page the user may not open</h3>
+            <p>Decided (owner, 19 October). The pop-up is the shell's own, the same <code>.modal</code>, title icon, close control and <code>.btn</code> family every other V2 pop-up uses, on Pathway tokens, so it needs no new styling. Its only control is <b>Close</b> (and the close icon in the header). The text names the page as <b>Module / Section / Page</b>, the path the Task Role editor uses, so the user and their administrator are reading the same words; the example is the page from 2.3.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Permissions/noaccess.png" target="_blank" rel="noopener" title="Open at full size"><img src="docs/Pics/Permissions/noaccess.png" alt="The no-permission pop-up: No access to this page. Opening Bank Account Management / Bank Account Information / Update needs a right you don't hold. Contact your administrator for more information. Close." loading="lazy"></a><figcaption>The template. Title: <b>No access to this page</b>. Body: <b>Opening Module / Section / Page needs a right you don't hold.</b> Then: <b>Contact your administrator for more information.</b> One button, Close.</figcaption></figure>
           </div>
 
           <div class="spec-sec" id="perm-points">
@@ -3975,6 +3980,210 @@
               <li><b>Payroll Distributions</b> is all or nothing: the Payroll Dashboard right shows the widget, its Employee Break Down pop-up and its export in full; Secure employees are not excluded. Whether the pop-up should ever be hidden waits on feedback.</li>
             </ul>
             <p>Nothing is open. Every widget works from the one simple right, its module's Dashboard row; the only further checks are the links and actions in section 2.</p>
+          </div>
+        </section>
+
+        <section class="spec" id="dashView" hidden aria-label="Default dashboards">
+          <header class="spec-hd">
+            <h1 class="spec-title">Accounting Dashboard, Default Dashboards by Module (Version 2)</h1>
+            <p class="spec-lead">For each module page: its URL, what the old system shows on it today, which widgets belong to it in V2, and what it should open with. Every proposed default is the Detail size. The screenshots are full pages, not widget crops.</p>
+            <div class="spec-links">
+              <a class="spec-link" href="docs/handover/Module%20dashboards%20-%20the%20original%20default%20and%20the%20V2%20equivalent%20(draft).md" target="_blank" rel="noopener"><span class="material-symbols-rounded">description</span>Full review document (Markdown)</a>
+            </div>
+          </header>
+
+          <div class="spec-sec" id="dash-saved">
+            <h2>1. Required: the user's choice has to be saved</h2>
+            <div class="spec-rule">Whatever a user selects on their dashboard must persist. If they change the dashboard option, that choice is saved against the user and is what they see next time they open the module. Without it the dashboard resets on every visit and the defaults below are the only thing anyone ever sees.</div>
+            <p>It is also how the old system behaves: a user's panel choice is written to their own row, keyed to the user and the page, and that row wins over the system default on every later load. The first time a user changes a slot, the system row is cloned into a personal row and then edited. So this is a port, not a new feature.</p>
+            <p>What has to be saved, at minimum:</p>
+            <ul class="spec-ul"><li>which dashboard the user selected, per module</li><li>which widgets are on it, and in what order</li><li>each widget's size</li><li>each widget's own view, filter, range and sort, which the registry row already tracks but only in memory</li></ul>
+            <p>This build saves none of it. Every selection is lost on reload.</p>
+          </div>
+
+          <div class="spec-sec" id="dash-naming">
+            <h2>2. The dashboard carries the module's name</h2>
+            <div class="spec-rule">In Accounts Payable the dashboard selector reads <b>Accounts Payable</b>, not <b>Dashboard</b>. Done in this build on 19 October. It matches the old system, where every module home page is titled with the module's name: the URL <code>https://[env]myamplify.io/AccountsPayable</code> is titled Accounts Payable, <code>https://[env]myamplify.io/Payroll</code> is titled Payroll, and so on for all of them.</div>
+            <p>The owner's own capture of the target, taken on the live Pages site with the rename control:</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/_header/Dashboard%20header%20named%20for%20the%20module%20-%20target.png" target="_blank" rel="noopener" title="Open at full size"><img src="docs/Pics/Modules/_header/Dashboard%20header%20named%20for%20the%20module%20-%20target.png" alt="The owner's screenshot of the live Pages site with the dashboard renamed to Accounts Payable: the selector reads Accounts Payable with its chevron, above the Financial KPI band and the Pending Actions widgets." loading="lazy"></a></figure>
+            <p>The build has one dashboard and its sidebar shows one module, Accounts Payable, so that is the name it takes. When the per-module split happens (still to be decided below) each dashboard takes its own module's name the same way, and the page title (&ldquo;Accounting Home&rdquo; today) and the browser title should follow it.</p>
+            <p>The Phase 1 demo named its dashboard &ldquo;Dashboard&rdquo; too, so this was inherited rather than introduced; nothing in the old system ever used that word as a page name.</p>
+          </div>
+
+          <div class="spec-sec" id="dash-before">
+            <h2>3. What the old system actually has</h2>
+            <div class="spec-rule">There is no per-module dashboard page. One generic home page serves every module, and it shows exactly <b>two stacked panels</b> chosen from one global list of eighteen.</div>
+            <p>Which panel sits in each slot is a database row, not code, and any panel can go on any module's page: the chooser is built from every panel class and filtered only by the user's rights. You can put Bank Balances on the Payroll home page, and on some tenants someone has. So &ldquo;the default for this module&rdquo; is a weaker idea than it sounds, a seed row the user can change in two clicks.</p>
+            <p>Two things are therefore shown for each module below. <b>What it shows today</b> is read from the page on test1 at the time of capture, and reflects that tenant and that user's own choices. <b>Provable from source</b> is what the migration history in the repository sets, which is the only place the shipped default is written down; only five modules have one there. The pattern in all five is the same: slot 1 the module's own panel, slot 2 Main Content Tasks.</p>
+            <p><b>Quick Links is retired</b> (owner, 19 October). It was the densest per-module content in the old system, hard-coded per module, with twenty links for Accounts Receivable and none at all for five modules. Nothing replaces it.</p>
+          </div>
+
+          <div class="spec-sec" id="dash-sizes">
+            <h2>4. Every default is the Detail size</h2>
+            <div class="spec-rule">Each module's proposed default below is the Detail size, and its V2 screenshot shows Detail. Glance and Explore stay available to the user; they are not what a module dashboard opens with. <b>The one exception is the home page</b>, which gathers four modules' widgets and so opens at Explore (owner, 19 October).</div>
+            <p><b>Main Content Tasks closes every module's dashboard</b> (owner, 19 October). On the old system it is slot 2 on every module page that has panels, the grid of up to eight task shortcuts for that module; putting it last on every V2 module dashboard keeps that shape. The V2 screenshots below show each proposal as it would render: the dashboard titled for its module, its own widgets first, Main Content Tasks last.</p>
+          </div>
+
+          <div class="spec-sec" id="dash-home">
+            <h2>5. Home</h2>
+            <table class="spec-tbl"><tbody><tr><td>URL</td><td><code>https://[env]myamplify.io/</code></td></tr><tr><td>What it shows today</td><td>Slot 1 <b>Payroll Scheduled Time Off</b>, slot 2 <b>Payroll Scheduled Time Off</b>. Captured 2026-10-19 on 95301.accounting.test1.myamplify.io, company 1 Test Company 92.</td></tr><tr><td>Provable from source</td><td>Not set by any migration in the repo.</td></tr><tr><td>V2 widgets</td><td><b>Accounts Payable By Due Date</b>, <b>Receivable Invoices Outstanding</b>, <b>Budget Compared to Actual</b>, <b>Financial KPI</b>, <b>Bank Balances</b>, <b>Pending Actions</b>, <b>Main Content Tasks</b></td></tr><tr><td>Proposed default</td><td><b>What Accounts Payable, Accounts Receivable, General Ledger and Bank Account Management show, all at Explore: Accounts Payable By Due Date, Receivable Invoices Outstanding, Budget Compared to Actual with the Financial KPI band, and Bank Balances; Pending Actions once; then Main Content Tasks last. Owner's ruling, 19 October.</b></td></tr></tbody></table>
+            <p>The root URL is the page a user lands on before choosing a module. The old system's seed for it is not in the repository and the two live tenants disagree (test1 shows Payroll Scheduled Time Off in both slots, the owner's beta1 account Gifts Pledges and Main Content Tasks), so at least one is a user's override. This is the one page whose default is Explore rather than Detail, so that four modules' widgets fit one screen. A new user on the old system also gets an empty My Status, an empty right-hand task pad, and no Quick Links on this page.</p>
+            <p><b>The old system</b>, https://[env]myamplify.io/ on test1.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Home/Home%20-%20V1.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Home/Home%20-%20V1.png" alt="Home, the old system on test1: a full-page screenshot of https://[env]myamplify.io/." loading="lazy"></a></figure>
+            <p><b>V2</b>, this build, with only this page's widgets, at Explore.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Home/Home%20-%20V2.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Home/Home%20-%20V2.png" alt="Home, Version 2: a full-page screenshot of the dashboard with only this page's widgets, at Explore size." loading="lazy"></a></figure>
+          </div>
+
+          <div class="spec-sec" id="dash-accounts-payable">
+            <h2>6. Accounts Payable</h2>
+            <table class="spec-tbl"><tbody><tr><td>URL</td><td><code>https://[env]myamplify.io/AccountsPayable</code></td></tr><tr><td>What it shows today</td><td>Slot 1 <b>Accounts Payable By Due Date</b>, slot 2 <b>Main Content Tasks</b>. Captured 2026-10-19 on 95301.accounting.test1.myamplify.io, company 1 Test Company 92.</td></tr><tr><td>Provable from source</td><td>Not set by any migration in the repo.</td></tr><tr><td>V2 widgets</td><td><b>Accounts Payable By Due Date</b>, <b>Pending Actions</b>, <b>Main Content Tasks</b></td></tr><tr><td>Proposed default</td><td><b>Accounts Payable By Due Date at Detail and Pending Actions at Detail, then Main Content Tasks at Detail as the last item.</b></td></tr></tbody></table>
+            <p>Pending Actions belongs here: its group tabs are Accounts Payable, Accounts Receivable and General Ledger, and Accounts Payable opens first.</p>
+            <p><b>The old system</b>, https://[env]myamplify.io/AccountsPayable on test1.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Accounts%20Payable/Accounts%20Payable%20-%20V1.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Accounts%20Payable/Accounts%20Payable%20-%20V1.png" alt="Accounts Payable, the old system on test1: a full-page screenshot of https://[env]myamplify.io/AccountsPayable." loading="lazy"></a></figure>
+            <p><b>V2</b>, this build, with only this page's widgets, at Detail.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Accounts%20Payable/Accounts%20Payable%20-%20V2.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Accounts%20Payable/Accounts%20Payable%20-%20V2.png" alt="Accounts Payable, Version 2: a full-page screenshot of the dashboard with only this page's widgets, at Detail size." loading="lazy"></a></figure>
+          </div>
+
+          <div class="spec-sec" id="dash-accounts-receivable">
+            <h2>7. Accounts Receivable</h2>
+            <table class="spec-tbl"><tbody><tr><td>URL</td><td><code>https://[env]myamplify.io/AccountsReceivable</code></td></tr><tr><td>What it shows today</td><td>Slot 1 <b>Receivable Invoices Outstanding</b>, slot 2 <b>Main Content Tasks</b>. Captured 2026-10-19 on 95301.accounting.test1.myamplify.io, company 1 Test Company 92.</td></tr><tr><td>Provable from source</td><td>Not set by any migration in the repo.</td></tr><tr><td>V2 widgets</td><td><b>Receivable Invoices Outstanding</b>, <b>Pending Actions</b>, <b>Main Content Tasks</b></td></tr><tr><td>Proposed default</td><td><b>Receivable Invoices Outstanding at Detail and Pending Actions at Detail, then Main Content Tasks at Detail as the last item.</b></td></tr></tbody></table>
+            <p><b>The old system</b>, https://[env]myamplify.io/AccountsReceivable on test1.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Accounts%20Receivable/Accounts%20Receivable%20-%20V1.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Accounts%20Receivable/Accounts%20Receivable%20-%20V1.png" alt="Accounts Receivable, the old system on test1: a full-page screenshot of https://[env]myamplify.io/AccountsReceivable." loading="lazy"></a></figure>
+            <p><b>V2</b>, this build, with only this page's widgets, at Detail.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Accounts%20Receivable/Accounts%20Receivable%20-%20V2.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Accounts%20Receivable/Accounts%20Receivable%20-%20V2.png" alt="Accounts Receivable, Version 2: a full-page screenshot of the dashboard with only this page's widgets, at Detail size." loading="lazy"></a></figure>
+          </div>
+
+          <div class="spec-sec" id="dash-bank-account-management">
+            <h2>8. Bank Account Management</h2>
+            <table class="spec-tbl"><tbody><tr><td>URL</td><td><code>https://[env]myamplify.io/BankAccountManagement</code></td></tr><tr><td>What it shows today</td><td>Slot 1 <b>Bank Balances</b>, slot 2 <b>Main Content Tasks</b>. Captured 2026-10-19 on 95301.accounting.test1.myamplify.io, company 1 Test Company 92.</td></tr><tr><td>Provable from source</td><td>Not set by any migration in the repo.</td></tr><tr><td>V2 widgets</td><td><b>Bank Balances</b>, <b>Main Content Tasks</b></td></tr><tr><td>Proposed default</td><td><b>Bank Balances at Detail, then Main Content Tasks at Detail as the last item.</b></td></tr></tbody></table>
+            <p>There is no Bank Reconciliation module; it is a page inside this one.</p>
+            <p><b>The old system</b>, https://[env]myamplify.io/BankAccountManagement on test1.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Bank%20Account%20Management/Bank%20Account%20Management%20-%20V1.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Bank%20Account%20Management/Bank%20Account%20Management%20-%20V1.png" alt="Bank Account Management, the old system on test1: a full-page screenshot of https://[env]myamplify.io/BankAccountManagement." loading="lazy"></a></figure>
+            <p><b>V2</b>, this build, with only this page's widgets, at Detail.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Bank%20Account%20Management/Bank%20Account%20Management%20-%20V2.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Bank%20Account%20Management/Bank%20Account%20Management%20-%20V2.png" alt="Bank Account Management, Version 2: a full-page screenshot of the dashboard with only this page's widgets, at Detail size." loading="lazy"></a></figure>
+          </div>
+
+          <div class="spec-sec" id="dash-deposits-on-hand">
+            <h2>9. Deposits On Hand</h2>
+            <table class="spec-tbl"><tbody><tr><td>URL</td><td><code>https://[env]myamplify.io/DepositsOnHand</code></td></tr><tr><td>What it shows today</td><td>Slot 1 <b>Deposit Accounts</b>, slot 2 <b>Main Content Tasks</b>. Captured 2026-10-19 on 95301.accounting.test1.myamplify.io, company 1 Test Company 92.</td></tr><tr><td>Provable from source</td><td>Slot 1 the Deposit Accounts panel, slot 2 Main Content Tasks. Slot 1 was Main Content Tasks first and was changed to the module's own panel.</td></tr><tr><td>V2 widgets</td><td><b>Deposits on Hand</b>, <b>Main Content Tasks</b></td></tr><tr><td>Proposed default</td><td><b>Deposits on Hand at Detail, then Main Content Tasks at Detail as the last item.</b></td></tr></tbody></table>
+            <p><b>The old system</b>, https://[env]myamplify.io/DepositsOnHand on test1.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Deposits%20On%20Hand/Deposits%20On%20Hand%20-%20V1.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Deposits%20On%20Hand/Deposits%20On%20Hand%20-%20V1.png" alt="Deposits On Hand, the old system on test1: a full-page screenshot of https://[env]myamplify.io/DepositsOnHand." loading="lazy"></a></figure>
+            <p><b>V2</b>, this build, with only this page's widgets, at Detail.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Deposits%20On%20Hand/Deposits%20On%20Hand%20-%20V2.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Deposits%20On%20Hand/Deposits%20On%20Hand%20-%20V2.png" alt="Deposits On Hand, Version 2: a full-page screenshot of the dashboard with only this page's widgets, at Detail size." loading="lazy"></a></figure>
+          </div>
+
+          <div class="spec-sec" id="dash-donors-and-gifts">
+            <h2>10. Donors And Gifts</h2>
+            <table class="spec-tbl"><tbody><tr><td>URL</td><td><code>https://[env]myamplify.io/DonorsAndGifts</code></td></tr><tr><td>What it shows today</td><td>Slot 1 <b>Gifts Pledges</b>, slot 2 <b>Main Content Tasks</b>. Captured 2026-10-19 on 95301.accounting.test1.myamplify.io, company 1 Test Company 92.</td></tr><tr><td>Provable from source</td><td>Slot 1 the Gifts Pledges panel, slot 2 Main Content Tasks.</td></tr><tr><td>V2 widgets</td><td><b>Gifts Pledges</b>, <b>Main Content Tasks</b></td></tr><tr><td>Proposed default</td><td><b>Gifts Pledges at Detail, then Main Content Tasks at Detail as the last item.</b></td></tr></tbody></table>
+            <p>The public URL is /DonorsAndGifts while the folder is Gifts, so the module's display name is Donors And Gifts. That is the string the dashboard should carry, not “Gifts”.</p>
+            <p><b>The old system</b>, https://[env]myamplify.io/DonorsAndGifts on test1.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Donors%20And%20Gifts/Donors%20And%20Gifts%20-%20V1.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Donors%20And%20Gifts/Donors%20And%20Gifts%20-%20V1.png" alt="Donors And Gifts, the old system on test1: a full-page screenshot of https://[env]myamplify.io/DonorsAndGifts." loading="lazy"></a></figure>
+            <p><b>V2</b>, this build, with only this page's widgets, at Detail.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Donors%20And%20Gifts/Donors%20And%20Gifts%20-%20V2.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Donors%20And%20Gifts/Donors%20And%20Gifts%20-%20V2.png" alt="Donors And Gifts, Version 2: a full-page screenshot of the dashboard with only this page's widgets, at Detail size." loading="lazy"></a></figure>
+          </div>
+
+          <div class="spec-sec" id="dash-fixed-assets">
+            <h2>11. Fixed Assets</h2>
+            <table class="spec-tbl"><tbody><tr><td>URL</td><td><code>https://[env]myamplify.io/FixedAssets</code></td></tr><tr><td>What it shows today</td><td>Slot 1 <b>Fixed Asset Values</b>, slot 2 <b>Main Content Tasks</b>. Captured 2026-10-19 on 95301.accounting.test1.myamplify.io, company 1 Test Company 92.</td></tr><tr><td>Provable from source</td><td>Slot 1 the Fixed Assets panel. It was My Status before that and was changed to the module's own panel. Slot 2 is not set by any migration in the repo.</td></tr><tr><td>V2 widgets</td><td><b>Fixed Asset Values</b>, <b>Main Content Tasks</b></td></tr><tr><td>Proposed default</td><td><b>Fixed Asset Values at Detail, then Main Content Tasks at Detail as the last item.</b></td></tr></tbody></table>
+            <p><b>The old system</b>, https://[env]myamplify.io/FixedAssets on test1.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Fixed%20Assets/Fixed%20Assets%20-%20V1.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Fixed%20Assets/Fixed%20Assets%20-%20V1.png" alt="Fixed Assets, the old system on test1: a full-page screenshot of https://[env]myamplify.io/FixedAssets." loading="lazy"></a></figure>
+            <p><b>V2</b>, this build, with only this page's widgets, at Detail.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Fixed%20Assets/Fixed%20Assets%20-%20V2.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Fixed%20Assets/Fixed%20Assets%20-%20V2.png" alt="Fixed Assets, Version 2: a full-page screenshot of the dashboard with only this page's widgets, at Detail size." loading="lazy"></a></figure>
+          </div>
+
+          <div class="spec-sec" id="dash-general-ledger">
+            <h2>12. General Ledger</h2>
+            <table class="spec-tbl"><tbody><tr><td>URL</td><td><code>https://[env]myamplify.io/GeneralLedger</code></td></tr><tr><td>What it shows today</td><td>Slot 1 <b>Budget Comparison for all Income Accounts</b>, slot 2 <b>Main Content Tasks</b>. Captured 2026-10-19 on 95301.accounting.test1.myamplify.io, company 1 Test Company 92.</td></tr><tr><td>Provable from source</td><td>Not set by any migration in the repo.</td></tr><tr><td>V2 widgets</td><td><b>Budget Compared to Actual</b>, <b>Financial KPI</b>, <b>Pending Actions</b>, <b>Main Content Tasks</b></td></tr><tr><td>Proposed default</td><td><b>The Financial KPI band, Budget Compared to Actual at Detail and Pending Actions at Detail, then Main Content Tasks at Detail as the last item.</b></td></tr></tbody></table>
+            <p>The busiest module in V2, and the case that argues for more than the old system's two panels.</p>
+            <p><b>The old system</b>, https://[env]myamplify.io/GeneralLedger on test1.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/General%20Ledger/General%20Ledger%20-%20V1.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/General%20Ledger/General%20Ledger%20-%20V1.png" alt="General Ledger, the old system on test1: a full-page screenshot of https://[env]myamplify.io/GeneralLedger." loading="lazy"></a></figure>
+            <p><b>V2</b>, this build, with only this page's widgets, at Detail.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/General%20Ledger/General%20Ledger%20-%20V2.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/General%20Ledger/General%20Ledger%20-%20V2.png" alt="General Ledger, Version 2: a full-page screenshot of the dashboard with only this page's widgets, at Detail size." loading="lazy"></a></figure>
+          </div>
+
+          <div class="spec-sec" id="dash-insurance-billing">
+            <h2>13. Insurance Billing</h2>
+            <table class="spec-tbl"><tbody><tr><td>URL</td><td><code>https://[env]myamplify.io/InsuranceBilling</code></td></tr><tr><td>What it shows today</td><td>Slot 1 <b>Insurance Billing Plans</b>, slot 2 <b>Main Content Tasks</b>. Captured 2026-10-19 on 95301.accounting.test1.myamplify.io, company 1 Test Company 92.</td></tr><tr><td>Provable from source</td><td>Not set by any migration in the repo.</td></tr><tr><td>V2 widgets</td><td><b>Insurance Billing Plans</b>, <b>Main Content Tasks</b></td></tr><tr><td>Proposed default</td><td><b>Insurance Billing Plans at Detail, then Main Content Tasks at Detail as the last item.</b></td></tr></tbody></table>
+            <p><b>The old system</b>, https://[env]myamplify.io/InsuranceBilling on test1.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Insurance%20Billing/Insurance%20Billing%20-%20V1.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Insurance%20Billing/Insurance%20Billing%20-%20V1.png" alt="Insurance Billing, the old system on test1: a full-page screenshot of https://[env]myamplify.io/InsuranceBilling." loading="lazy"></a></figure>
+            <p><b>V2</b>, this build, with only this page's widgets, at Detail.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Insurance%20Billing/Insurance%20Billing%20-%20V2.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Insurance%20Billing/Insurance%20Billing%20-%20V2.png" alt="Insurance Billing, Version 2: a full-page screenshot of the dashboard with only this page's widgets, at Detail size." loading="lazy"></a></figure>
+          </div>
+
+          <div class="spec-sec" id="dash-loan-processing">
+            <h2>14. Loan Processing</h2>
+            <table class="spec-tbl"><tbody><tr><td>URL</td><td><code>https://[env]myamplify.io/LoanProcessing</code></td></tr><tr><td>What it shows today</td><td>Slot 1 <b>Loans With Balance Due</b>, slot 2 <b>Main Content Tasks</b>. Captured 2026-10-19 on 95301.accounting.test1.myamplify.io, company 1 Test Company 92.</td></tr><tr><td>Provable from source</td><td>Slot 1 the Loans With Balance Due panel, slot 2 Main Content Tasks.</td></tr><tr><td>V2 widgets</td><td><b>Loans With Balance Due</b>, <b>Main Content Tasks</b></td></tr><tr><td>Proposed default</td><td><b>Loans With Balance Due at Detail, then Main Content Tasks at Detail as the last item.</b></td></tr></tbody></table>
+            <p><b>The old system</b>, https://[env]myamplify.io/LoanProcessing on test1.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Loan%20Processing/Loan%20Processing%20-%20V1.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Loan%20Processing/Loan%20Processing%20-%20V1.png" alt="Loan Processing, the old system on test1: a full-page screenshot of https://[env]myamplify.io/LoanProcessing." loading="lazy"></a></figure>
+            <p><b>V2</b>, this build, with only this page's widgets, at Detail.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Loan%20Processing/Loan%20Processing%20-%20V2.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Loan%20Processing/Loan%20Processing%20-%20V2.png" alt="Loan Processing, Version 2: a full-page screenshot of the dashboard with only this page's widgets, at Detail size." loading="lazy"></a></figure>
+          </div>
+
+          <div class="spec-sec" id="dash-payroll">
+            <h2>15. Payroll</h2>
+            <table class="spec-tbl"><tbody><tr><td>URL</td><td><code>https://[env]myamplify.io/Payroll</code></td></tr><tr><td>What it shows today</td><td>Slot 1 <b>Payroll Distributions</b>, slot 2 <b>Main Content Tasks</b>. Captured 2026-10-19 on 95301.accounting.test1.myamplify.io, company 1 Test Company 92.</td></tr><tr><td>Provable from source</td><td>Not set by any migration in the repo.</td></tr><tr><td>V2 widgets</td><td><b>Payroll Distributions</b>, <b>Payroll Scheduled Time Off</b>, <b>Main Content Tasks</b></td></tr><tr><td>Proposed default</td><td><b>Payroll Distributions at Detail. Payroll Scheduled Time Off is available but not the default, then Main Content Tasks at Detail as the last item.</b></td></tr></tbody></table>
+            <p>Payroll Scheduled Time Off is gated on a deeper right than the module root, the secure time-off hours tab, so it is absent for some users who can see Payroll Distributions. That makes it the wrong choice for a default.</p>
+            <p><b>The old system</b>, https://[env]myamplify.io/Payroll on test1.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Payroll/Payroll%20-%20V1.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Payroll/Payroll%20-%20V1.png" alt="Payroll, the old system on test1: a full-page screenshot of https://[env]myamplify.io/Payroll." loading="lazy"></a></figure>
+            <p><b>V2</b>, this build, with only this page's widgets, at Detail.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Payroll/Payroll%20-%20V2.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Payroll/Payroll%20-%20V2.png" alt="Payroll, Version 2: a full-page screenshot of the dashboard with only this page's widgets, at Detail size." loading="lazy"></a></figure>
+          </div>
+
+          <div class="spec-sec" id="dash-pension-billing">
+            <h2>16. Pension Billing</h2>
+            <table class="spec-tbl"><tbody><tr><td>URL</td><td><code>https://[env]myamplify.io/PensionBilling</code></td></tr><tr><td>What it shows today</td><td>Slot 1 <b>Pension Plans</b>, slot 2 <b>Main Content Tasks</b>. Captured 2026-10-19 on 95301.accounting.test1.myamplify.io, company 1 Test Company 92.</td></tr><tr><td>Provable from source</td><td>Not set by any migration in the repo.</td></tr><tr><td>V2 widgets</td><td><b>Pension Plans</b>, <b>Main Content Tasks</b></td></tr><tr><td>Proposed default</td><td><b>Pension Plans at Detail, then Main Content Tasks at Detail as the last item.</b></td></tr></tbody></table>
+            <p><b>The old system</b>, https://[env]myamplify.io/PensionBilling on test1.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Pension%20Billing/Pension%20Billing%20-%20V1.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Pension%20Billing/Pension%20Billing%20-%20V1.png" alt="Pension Billing, the old system on test1: a full-page screenshot of https://[env]myamplify.io/PensionBilling." loading="lazy"></a></figure>
+            <p><b>V2</b>, this build, with only this page's widgets, at Detail.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Pension%20Billing/Pension%20Billing%20-%20V2.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Pension%20Billing/Pension%20Billing%20-%20V2.png" alt="Pension Billing, Version 2: a full-page screenshot of the dashboard with only this page's widgets, at Detail size." loading="lazy"></a></figure>
+          </div>
+
+          <div class="spec-sec" id="dash-purchasing-management">
+            <h2>17. Purchasing Management</h2>
+            <table class="spec-tbl"><tbody><tr><td>URL</td><td><code>https://[env]myamplify.io/PurchasingManagement</code></td></tr><tr><td>What it shows today</td><td>Slot 1 <b>Purchasing Management</b>, slot 2 <b>Main Content Tasks</b>. Captured 2026-10-19 on 95301.accounting.test1.myamplify.io, company 1 Test Company 92.</td></tr><tr><td>Provable from source</td><td>Slot 1 the Purchasing Management panel, named “Data Panel Info”; slot 2 Main Content Tasks, named “Main Content Links”. The clearest case in the repo.</td></tr><tr><td>V2 widgets</td><td><b>Purchasing Management</b>, <b>Main Content Tasks</b></td></tr><tr><td>Proposed default</td><td><b>Purchasing Management at Detail, Table view, then Main Content Tasks at Detail as the last item.</b></td></tr></tbody></table>
+            <p>The legacy panel opened on “Awaiting my approval next”, the first option in its status dropdown. V2 keeps that vocabulary in its scope chip, so the default carries over.</p>
+            <p><b>The old system</b>, https://[env]myamplify.io/PurchasingManagement on test1.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Purchasing%20Management/Purchasing%20Management%20-%20V1.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Purchasing%20Management/Purchasing%20Management%20-%20V1.png" alt="Purchasing Management, the old system on test1: a full-page screenshot of https://[env]myamplify.io/PurchasingManagement." loading="lazy"></a></figure>
+            <p><b>V2</b>, this build, with only this page's widgets, at Detail.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Purchasing%20Management/Purchasing%20Management%20-%20V2.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Purchasing%20Management/Purchasing%20Management%20-%20V2.png" alt="Purchasing Management, Version 2: a full-page screenshot of the dashboard with only this page's widgets, at Detail size." loading="lazy"></a></figure>
+          </div>
+
+          <div class="spec-sec" id="dash-records">
+            <h2>18. Records</h2>
+            <table class="spec-tbl"><tbody><tr><td>URL</td><td><code>https://[env]myamplify.io/Records</code></td></tr><tr><td>What it shows today</td><td>Slot 1 <b>(empty slot)</b>, slot 2 <b>(empty slot)</b>. Captured 2026-10-19 on 95301.accounting.test1.myamplify.io, company 1 Test Company 92.</td></tr><tr><td>Provable from source</td><td>Not set by any migration in the repo.</td></tr><tr><td>V2 widgets</td><td><b>My Status</b>, <b>Main Content Tasks</b></td></tr><tr><td>Proposed default</td><td><b>My Status at Detail and Main Content Tasks at Detail</b></td></tr></tbody></table>
+            <p>Records has no widget of its own, so it takes the two cross-module widgets. Both adapt to whichever module they sit on, which is what makes them the answer here rather than a placeholder. Owner's ruling, 19 October. In the old system this page can have two empty slots, and when a slot has no seed row the picker silently refuses to fill it, so this replaces a page a user cannot fix.</p>
+            <p><b>The old system</b>, https://[env]myamplify.io/Records on test1.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Records/Records%20-%20V1.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Records/Records%20-%20V1.png" alt="Records, the old system on test1: a full-page screenshot of https://[env]myamplify.io/Records." loading="lazy"></a></figure>
+            <p><b>V2</b>, this build, with only this page's widgets, at Detail.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Records/Records%20-%20V2.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Records/Records%20-%20V2.png" alt="Records, Version 2: a full-page screenshot of the dashboard with only this page's widgets, at Detail size." loading="lazy"></a></figure>
+          </div>
+
+          <div class="spec-sec" id="dash-remittance">
+            <h2>19. Remittance</h2>
+            <table class="spec-tbl"><tbody><tr><td>URL</td><td><code>https://[env]myamplify.io/Remittance</code></td></tr><tr><td>What it shows today</td><td>Slot 1 <b>Remittance Pledges</b>, slot 2 <b>Main Content Tasks</b>. Captured 2026-10-19 on 95301.accounting.test1.myamplify.io, company 1 Test Company 92.</td></tr><tr><td>Provable from source</td><td>Not set by any migration in the repo.</td></tr><tr><td>V2 widgets</td><td><b>Remittance Pledges</b>, <b>Main Content Tasks</b></td></tr><tr><td>Proposed default</td><td><b>Remittance Pledges at Detail, then Main Content Tasks at Detail as the last item.</b></td></tr></tbody></table>
+            <p>Remittance is also a licence flag, not only a module: other modules test for it before showing certain links and tiles.</p>
+            <p><b>The old system</b>, https://[env]myamplify.io/Remittance on test1.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Remittance/Remittance%20-%20V1.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Remittance/Remittance%20-%20V1.png" alt="Remittance, the old system on test1: a full-page screenshot of https://[env]myamplify.io/Remittance." loading="lazy"></a></figure>
+            <p><b>V2</b>, this build, with only this page's widgets, at Detail.</p>
+            <figure class="spec-fig"><a href="docs/Pics/Modules/Remittance/Remittance%20-%20V2.png" target="_blank" rel="noopener" title="Open this screenshot at full size"><img src="docs/Pics/Modules/Remittance/Remittance%20-%20V2.png" alt="Remittance, Version 2: a full-page screenshot of the dashboard with only this page's widgets, at Detail size." loading="lazy"></a></figure>
+          </div>
+
+          <div class="spec-sec" id="dash-statistics">
+            <h2>20. Statistics</h2>
+            <table class="spec-tbl"><tbody><tr><td>URL</td><td><code>https://[env]myamplify.io/Statistics</code></td></tr><tr><td>What it shows today</td><td>Nothing to capture.</td></tr><tr><td>Provable from source</td><td>Not set by any migration in the repo.</td></tr><tr><td>V2 widgets</td><td><b>None.</b></td></tr><tr><td>Proposed default</td><td><b>Nothing to propose.</b></td></tr></tbody></table>
+            <p>No widget in either version, so there is nothing to show; on test1 the URL redirects to the home page. The legacy panel rendered the literal word STATS: its grid and chart are commented out and it still references the Accounts Payable record type it was copied from. Needs a ruling: does Statistics get a dashboard at all?</p>
+          </div>
+
+          <div class="spec-sec" id="dash-open">
+            <h2>21. What still needs a decision</h2>
+            <ul class="spec-ul">
+              <li><b>One dashboard per module, or one that follows the module in the navigation?</b> Everything else depends on this. The single dashboard is already named Accounts Payable to match the navigation.</li>
+              <li><b>What the home page (the root URL) opens with</b> when no module is chosen.</li>
+              <li><b>Does Statistics get a dashboard?</b> Records is settled; Statistics is not.</li>
+              <li><b>Pending Actions needs a row in the Permissions view's widget table.</b> It is the only widget without one.</li>
+              <li><b>The shipped defaults for the eleven modules not set by any migration</b> can be settled with one query against a live database. The query is in the review document.</li>
+            </ul>
+            <p>Settled on 19 October: Quick Links is retired, Records shows Main Content Tasks and My Status, every default is the Detail size, the dashboard is named for its module, and the user's selection must be saved.</p>
           </div>
         </section>
       </div>
@@ -14227,7 +14436,10 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
 
 
   var dashboards=[
-    {id:"d1",name:"Dashboard",custom:true,widgets:[
+    /* Named for the module the sidebar shows, as the old system names every
+       module home page (owner, 16 and 19 Oct 2026). A per-module split would
+       give each dashboard its own module's name the same way. */
+    {id:"d1",name:"Accounts Payable",custom:true,widgets:[
       {id:"bank",title:"Bank Balances",kind:"bank",size:"wide",tiers:["kpi","wide","xwide"],bkacct:null,bkview:"table",bksort:"bal-desc",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
       {id:"bank_k",title:"Bank Balances",kind:"bank",size:"kpi",tiers:["kpi","wide","xwide"],bkacct:null,bkview:"table",bksort:"bal-desc",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
       {id:"bank_x",title:"Bank Balances",kind:"bank",size:"xwide",tiers:["kpi","wide","xwide"],bkacct:null,bkview:"table",bksort:"bal-desc",actions:[{icon:"table_view",label:"Export as CSV",fmt:"CSV"},{icon:"description",label:"Export as Excel",fmt:"Excel"},{icon:"picture_as_pdf",label:"Export as PDF",fmt:"PDF"}]},
@@ -15237,7 +15449,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(a==="noop"){pop=null;render();return;}
     if(a==="stop"){return;}
     if(a==="modal-close"){modal=null;pop=null;render();return;}
-    if(a==="view-spec"||a==="view-demo"||a==="view-perm"){var _spec=(a!=="view-demo");document.body.classList.toggle("spec-mode",_spec);var _sv=document.getElementById("specView");if(_sv)_sv.hidden=(a!=="view-spec");var _pv=document.getElementById("permView");if(_pv)_pv.hidden=(a!=="view-perm");Array.prototype.forEach.call(document.querySelectorAll(".viewtab .vtb"),function(b){var on=b.getAttribute("data-action")===a;b.classList.toggle("on",on);b.setAttribute("aria-selected",on?"true":"false");});pop=null;try{document.querySelector(".appmain").scrollTop=0;}catch(_e){}window.scrollTo(0,0);return;}
+    if(a==="view-spec"||a==="view-demo"||a==="view-perm"||a==="view-dash"){var _spec=(a!=="view-demo");document.body.classList.toggle("spec-mode",_spec);var _sv=document.getElementById("specView");if(_sv)_sv.hidden=(a!=="view-spec");var _pv=document.getElementById("permView");if(_pv)_pv.hidden=(a!=="view-perm");var _dv=document.getElementById("dashView");if(_dv)_dv.hidden=(a!=="view-dash");Array.prototype.forEach.call(document.querySelectorAll(".viewtab .vtb"),function(b){var on=b.getAttribute("data-action")===a;b.classList.toggle("on",on);b.setAttribute("aria-selected",on?"true":"false");});pop=null;try{document.querySelector(".appmain").scrollTop=0;}catch(_e){}window.scrollTo(0,0);return;}
     if(a&&a.indexOf("ap-")===0&&apHandleClick(a,id,t))return;
     if(a==="bank-acct"){bankQuery="";pop=(pop&&pop.type==="bank-acct"&&pop.id===id)?null:{type:"bank-acct",id:id};render();return;}
     if(a==="bank-set-acct"){var wba=find(id);if(wba){var na=t.getAttribute("data-acct");var nv=(na==="all"||!na)?null:na;if(wba.bkacct!==nv){wba.bkacct=nv;bankLoad(wba);}}pop=null;render();return;}
