@@ -252,9 +252,11 @@ page; Encumbrances follows the same filters.
 | Attachments, Open a file | the widget's right; the file itself is served by the request page's right | Open absent |
 | Note, Save note | `/PurchasingManagement/Requests/Update` at Update | note read-only |
 
-**Two decisions for the owner**: (1) drop the panel's **Admin** shortcut from the list rule (the request page
-never uses it), or keep it for parity; (2) whether Approval Override should also unlock Approve and Reject in
-the pop-up (as the page) or only widen the list (as the panel). Recommendation: follow the page on both.
+**Kept the same as the original panel.** The list rule is the panel's,
+Admin shortcut included (a request whose path has no users, or the user is a path user, or the user is an
+Admin, or holds Approval Override at Update). Approve, Hold and Reject follow the request page's rule, the only
+rule the old system has for acting: on the path at the acting level, or Approval Override at Update, for
+Approve and Reject; on the path for Hold.
 
 **API note**: enforce the path test exactly as `ApproveRejectOrder` does, and apply the account-role check,
 server-side; the widget only hides buttons.
@@ -285,8 +287,8 @@ Approve with a confirmation and Undo, person info and day pop-ups.
 |---|---|---|
 | The widget itself | `/Payroll/EmployeeInformation/SecureTimeOffHoursTab` at Inquiry | not offered; "You do not have access to Time Off" if already placed |
 | Departments listed | the signed-in employee's "Can Approve Home Depts" list | an employee with none sees the empty state "No departments to approve" |
-| A user who is not an employee | decisions page Q21: option A keeps the old behaviour (every department); option B shows the empty state. **Owner's ruling to be written in here.** | per the ruling |
-| Approve, Undo | the same URI at **Update** (the old panel did not check this; V2 should) | buttons absent, queue read-only |
+| A user who is not an employee | every department is listed, as the panel does (kept as the original) | n/a |
+| Approve, Undo | the widget's right only, no separate Update check (kept as the original) | n/a |
 | Person info, day pop-up | the widget's right | n/a |
 
 **API note**: the departments filter and the Update check both belong in the API; a non-employee's access
@@ -334,7 +336,7 @@ current user may open it, so the widget does not need the rights table.
 | Fixed Asset Values | Export to Excel (placeholder); opening an asset was asked about in Q28 | `/FixedAssets/AssetInformation` at Inquiry if the row opens the asset | Only if Q28 is answered yes. |
 | Receivable Invoices Outstanding | "Open invoice" (decisions page Q16; not in the build yet); Export to Excel | `/AccountsReceivable/TransactionInquiry` at Inquiry | Build the link only with the right; the contact details shown on an expanded invoice stay under the widget's right. |
 | Deposits on Hand | "Open account" (Q20; not in the build yet) | the deposit account page at Inquiry (route to confirm) | As above. |
-| Payroll Distributions | Export to Excel | no page; a data permission | The employee rows in the file follow the Payroll Dashboard right exactly as the Employee Break Down does (Q7); a user without it gets the file without those rows. |
+| Payroll Distributions | Export to Excel | no page; a data permission | All or nothing: the Payroll Dashboard right shows the widget, the Employee Break Down and the export in full; nothing further is checked. |
 | Pension Plans | Export as CSV, PDF, Excel | no page | Data the user already sees; no extra right. |
 | My Status | Query rows navigate to the module page (as the old "Jump To Url") | each query's destination page, as in 5.1 | Keep the old two-step guard, but test the **destination page** right before showing the jump, not only the module root. |
 | Main Content Tasks | Tiles to pages across every module | the tile's own task | Already the right model; keep it. My Tasks may list only tasks the user holds. |
@@ -360,10 +362,11 @@ current user may open it, so the widget does not need the rights table.
 
 ## 6. Where the old system is wrong, and V2 should not copy it
 
-1. Time-off approvals saved with no Update check (section 4).
-2. A non-employee with the time-off right sees the whole company (section 4; ruled by Q21).
+1. Time-off approvals saved with no Update check (section 4). **Kept as the original; no Update check in V2 either.**
+2. A non-employee with the time-off right sees the whole company (section 4). **Kept as the original.**
 3. A placed panel whose right is removed shows a blank body with no message (section 1); V2 shows a line.
-4. Payroll Distributions includes Secure employees' pay in its totals with no check (section 2.3).
+4. Payroll Distributions includes Secure employees' pay in its totals with no check (section 2.3). **All or nothing: the Payroll Dashboard right shows the widget, the Employee Break Down pop-up and the
+   export in full. Whether the pop-up should ever be hidden waits on feedback.**
 
 ---
 
@@ -373,7 +376,7 @@ current user may open it, so the widget does not need the rights table.
 |---|---|---|---|---|
 | Budget Compared to Actual | General Ledger | `/GeneralLedger` | Special report lines: `/GeneralLedger/Reports/SpecialReports` | none |
 | Pension Plans | Pension Billing | `/PensionBilling` | none | none |
-| Payroll Distributions | Payroll | `/Payroll` | Employee Break Down and export: same right (Q7) | Secure employees: open |
+| Payroll Distributions | Payroll | `/Payroll` | Employee Break Down and export: the same right, nothing further | none; Secure employees included |
 | Remittance Pledges | Remittance | `/Remittance` | none | none |
 | Receivable Invoices Outstanding | Accounts Receivable | `/AccountsReceivable` | Open invoice: `/AccountsReceivable/TransactionInquiry` | none |
 | Insurance Billing Plans | Insurance Billing | `/InsuranceBilling` | none | none |
@@ -387,18 +390,29 @@ current user may open it, so the widget does not need the rights table.
 | Bank Balances | Bank Account Management | `/BankAccountManagement` | Open in Bank: `/BankAccountManagement/BankAccountInformation` | GL account roles |
 | Accounts Payable By Due Date | Accounts Payable | `/AccountsPayable` | Open invoice: `/AccountsPayable/TransactionInquiry`; Schedule payment: AvidPay feature on and `/AccountsPayable/PaymentProcessing` at Update | none |
 | Gifts Pledges | Donors And Gifts | `/DonorsAndGifts` | Open in Gifts and Pledges: `/DonorsAndGifts/Pledges` | none |
-| Financial KPI | General Ledger (proposed) | `/GeneralLedger` | none | none |
+| Financial KPI | General Ledger | `/GeneralLedger` | none | none |
 
 ---
 
-## 8. Decisions for the owner
+## 8. Decisions
 
-1. Financial KPI: General Ledger Dashboard right (recommended) or a new "Financial KPI" task.
-2. Purchasing Management: drop the Admin shortcut and follow the request page (recommended), or keep parity
-   with the panel's list rule.
-3. Payroll Scheduled Time Off: the non-employee rule (Q21) and the new Update check on Approve and Undo.
-4. Payroll Distributions: whether Secure employees are excluded from the Employee Break Down for users without
-   `/Payroll/Secure/Employee`.
-5. My Status and Main Content Tasks: carried as today, per query and per tile. Confirm.
-6. Links out of a widget: shown only with the destination page's right (section 5.2), as Main Content Tasks does
-   today, rather than letting the destination refuse the user as the old Purchasing pencil did. Confirm.
+**Note**
+
+1. Financial KPI is shown with the General Ledger Dashboard right (`/GeneralLedger` at Inquiry), like Budget
+   Compared to Actual. No task of its own.
+2. My Status and Main Content Tasks are carried as today: My Status offers a query only when the user holds
+   that query's module right (`MyStatus.ascx.cs:58`), and Main Content Tasks shows a tile only when the user
+   holds the tile's task (`MainContentTasks.ascx.cs:31`). Neither widget has a module right of its own.
+3. Purchasing Management keeps the original panel's list rule, Admin shortcut included; Approve, Hold and
+   Reject follow the request page's rule. Section 3.
+4. Payroll Scheduled Time Off keeps the original panel's behaviour: a user with no employee record sees every
+   department, and Approve and Undo need the widget's right only, with no separate Update check. Section 4.
+5. Links out of a widget: a link from a widget in one module to a page in another module the user does not
+   hold is not shown, as Main Content Tasks does today (section 5.2). Confirmed.
+6. Payroll Distributions is all or nothing: a user who holds the Payroll Dashboard right sees the widget,
+   the Employee Break Down pop-up and the Excel export in full; Secure employees are not excluded and nothing
+   inside the widget needs a further right. Whether the pop-up should ever be hidden for some users waits on
+   feedback.
+
+Nothing is open. Every widget works from the one simple right, its module's Dashboard row; the only further
+checks are the links and actions in section 5.
