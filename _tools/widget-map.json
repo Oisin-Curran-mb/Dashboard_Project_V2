@@ -519,7 +519,7 @@
      "end": "/* ===== Payroll Distributions (pr): scope dropdown + distribution badges ===== */"
     },
     "js": {
-     "start": "  function bankAccounts(w){return BANK_ACCOUNTS;}",
+     "start": "  function bankPackage(w){",
      "end": "   Accounts Payable By Due Date  (ap, kind:\"payables\")"
     },
     "registry": {

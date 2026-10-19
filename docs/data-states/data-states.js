@@ -3,8 +3,9 @@
    Prepared 16 Oct 2026, see docs/DATA-STATES.md. Standalone: no shell dependencies.
 
    DATA_STATES.get(state, kind) -> the fixture for that state in the widget's own
-   record shape ("small" and "extreme"), memoised. NOTCONF_COPY -> the Not configured
-   block's copy per kind. Generators are seeded so every run is identical.
+   record shape ("small" and "extreme"), memoised. NOTCONF_COPY -> suggested Not configured
+   copy per kind, for the widgets' own empty states; the shell does not draw it (owner, 16 Oct 2026:
+   the selector changes only the data a widget receives). Generators are seeded so every run is identical.
    ===================================================================== */
 "use strict";
 var DATA_STATES = (function () {
@@ -51,7 +52,7 @@ var DATA_STATES = (function () {
   };
 
   /* Payroll Distributions: PRO_DISTS {id,name} and PRO_BASE {distId: {payType: amount}} (the block's seeded run generator scales from these). */
-  var PAY_TYPES = ["reg", "ot", "hol", "vac", "sick", "housing", "ss", "med", "bonus", "stipend", "mileage", "retire", "hsa", "ltd"];
+  var PAY_TYPES = ["reg", "ot", "hol", "vac", "sick", "housing", "ss", "med"];
   G.payroll = {
     small: function () { return { dists: [{ id: "admin", name: "Administration Staff" }], base: { admin: { reg: 4200, vac: 400 } }, payTypes: [{ id: "reg", name: "Regular Pay" }, { id: "vac", name: "Vacation" }] }; },
     extreme: function () { var r = rng(301), dists = [], base = {}; for (var i = 0; i < 60; i++) { var id = "d" + i; dists.push({ id: id, name: (i === 9 ? "Department of Community Outreach, Hospitality and Volunteer Coordination" : pick(r, DEPTS) + " " + (i + 1)) }); var b = {}; PAY_TYPES.forEach(function (p) { if (r() < 0.7) b[p] = money(r, 40, 9000, false); }); base[id] = b; } return { dists: dists, base: base, payTypes: PAY_TYPES.map(function (p) { return { id: p, name: p.charAt(0).toUpperCase() + p.slice(1) }; }) }; }
@@ -100,15 +101,15 @@ var DATA_STATES = (function () {
     extreme: function () { var r = rng(901), out = []; for (var i = 0; i < 5000; i++) { var cost = money(r, 50, 12000000, false), salv = Math.round(cost * r() * 0.1), cap = cost - Math.round(cost * r() * 0.08); out.push({ tag: "FA-" + pad(10000 + i, 5), nm: (i === 20 ? "Replacement roof membrane, flashing and drainage for the fellowship hall and education wing" : pick(r, ["Projector", "Van", "Organ", "Chairs", "Server", "Oven", "Boiler", "Piano", "Sign", "Fence"]) + " " + (i + 1)), cls: ASSET_CLS[i % 40 % ASSET_CLS.length] + (i % 40 >= 10 ? " " + Math.floor(i % 40 / 10 + 1) : ""), bldg: i % 3 === 0 ? "" : "Building " + (1 + i % 30), room: i % 4 === 0 ? "" : "Room " + (1 + i % 90), cap: cap, cost: cost, salv: salv, dep: Math.min(cap - salv, Math.round((cap - salv) * r())) }); } return out; }
   };
 
-  /* Purchasing Management: PURF_POS {ref,vendor,dept,amt,issued,due,path,fy,stage,appr[],log[],att[]}. Paths must exist in PURF_PATHS; the extreme set uses the four shipped names and expects two more ("Facilities", "Missions") to be added to PURF_PATHS when wired. */
-  var PATHS = ["Administration", "Education Ministry", "Everyone", "QA Path", "Facilities", "Missions"];
+  /* Purchasing Management: PURF_POS {ref,vendor,dept,amt,issued,due,path,fy,stage,appr[],log[],att[]}. Paths are the four shipped in PURF_PATHS. */
+  var PATHS = ["Administration", "Education Ministry", "Everyone", "QA Path"];
   G.purchasing = {
     small: function () { return [{ ref: "PO-2893", vendor: "Acme Paper Supply", dept: "Finance", amt: 245, issued: "2026-07-02", due: "2026-08-01", path: "Administration", fy: "FY 2026", stage: "Pending", appr: [{ seq: 1, user: "Nitzi Wright", state: "approved", d: "2026-07-03" }], log: [], att: [] }]; },
     extreme: function () { var r = rng(1001), out = [], today = new Date(2026, 7, 19); for (var i = 0; i < 2500; i++) { var issued = addDays(today, -Math.floor(r() * 365)), pending = r() < 0.55, appr = []; if (!pending || r() < 0.3) appr.push({ seq: 1, user: "Nitzi Wright", state: r() < 0.08 ? "hold" : "approved", d: iso(addDays(issued, 1)), reason: "Checking budget" }); if (!pending) appr.push({ seq: 2, user: "Oisin Curran", state: "approved", d: iso(addDays(issued, 2)) }); out.push({ ref: "PO-" + pad(10000 + i, 5), vendor: vendor(r, i % 300), dept: pick(r, DEPTS), amt: money(r, 0.5, 980000), issued: iso(issued), due: iso(addDays(issued, 30)), path: PATHS[i % PATHS.length], fy: "FY 2026", stage: pending ? "Pending" : "Approved", pay: pending ? undefined : "unpaid", appr: appr, log: [], att: i % 5 === 0 ? [{ name: "Invoice-" + pad(i, 5) + ".pdf", label: "Invoice", kind: "pdf", size: Math.floor(30 + r() * 400) + " KB", d: iso(issued), by: "Nitzi Wright" }] : [] }); } return out; }
   };
 
   /* Main Content Tasks: MCT_TASKS {app,id,label,dest,icon,std,dflt,keywords[]}. */
-  var APPS = ["ap", "ar", "gl", "bank", "payroll", "pur", "gifts", "fa", "loans", "ins", "pen", "rem"];
+  var APPS = ["ap", "ar", "gl", "payroll", "purchasing", "bank", "contributions", "assets"];
   G.tasks = {
     small: function () { return [{ app: "ap", id: "ap-check", label: "Write AP Check", dest: "Accounts Payable, Checks, Write Check", icon: "payments", std: true, dflt: true, keywords: ["pay", "check"] }]; },
     extreme: function () { var r = rng(1101), out = []; for (var i = 0; i < 240; i++) { var app = APPS[i % APPS.length]; out.push({ app: app, id: app + "-t" + i, label: (i === 13 ? "Reconcile the restricted fund balances against the general ledger control accounts" : pick(r, ["Enter", "Post", "Print", "Review", "Approve", "Void", "Export", "Reconcile"]) + " " + pick(r, ["invoices", "checks", "journals", "deposits", "pledges", "assets", "loans", "plans"]) + " " + (i + 1)), dest: app.toUpperCase() + ", Task " + (i + 1), icon: pick(r, ["payments", "receipt_long", "summarize", "storefront", "request_quote", "money_off"]), std: true, dflt: i % 17 === 0, keywords: ["task", app] }); } return out; }
@@ -148,7 +149,9 @@ var DATA_STATES = (function () {
 
   /* Pending Actions and Alerts & Actions: {id,sev,action,title,sub,items[]} per category. */
   function cats(prefix, n, perItem, r) { var out = []; for (var i = 0; i < n; i++) { var items = []; for (var k = 0; k < perItem; k++) items.push(pick(r, ["Missions Fund", "Youth Fund", "Capital Fund", "General Fund", "Camp Fund"]) + ", $" + money(r, 100, 900000).toLocaleString("en-US", { minimumFractionDigits: 2 }) + " " + pick(r, ["over restricted income", "past due", "unposted", "awaiting approval", "out of balance"]) + " (" + Math.round(100 + r() * 60) + "%)"); out.push({ id: prefix + "-cat-" + (i + 1), sev: pick(r, ["err", "warn", "upd"]), action: r() < 0.5, title: pick(r, ["Restricted Fund Compliance", "Overdue Payables", "Unposted Transactions", "Payment Processing", "Journals Out of Balance", "Unapplied Receipts"]) + " " + (i + 1), sub: items.length + " items need attention", items: items }); } return out; }
-  G.pendingactions = { small: function () { return cats("pa3", 1, 1, rng(1601)); }, extreme: function () { return cats("pa3", 40, 50, rng(1602)); } };
+  /* Pending Actions reads "need" categories grouped by module (ap, ar, gl); each item is a queue line. */
+  function needCats(n, perItem, r) { var out = cats("pa3", n, perItem, r), groups = ["ap", "ar", "gl"]; out.forEach(function (c, i) { c.sev = "need"; c.action = true; c.group = groups[i % 3]; }); return out; }
+  G.pendingactions = { small: function () { return needCats(1, 1, rng(1601)); }, extreme: function () { return needCats(40, 50, rng(1602)); } };
   G.alerts = { small: function () { return cats("al", 1, 1, rng(1701)); }, extreme: function () { return cats("al", 40, 50, rng(1702)); } };
 
   /* ---- memoised getter ----------------------------------------------- */
@@ -163,7 +166,8 @@ var DATA_STATES = (function () {
   return { get: get, generators: G, kinds: Object.keys(G) };
 })();
 
-/* Not configured: the copy per kind (title, sub-line, the setup place to name). */
+/* Not configured: suggested copy per kind (title, sub-line, the setup place to name). Not used by the shell;
+   kept as the wording to offer when a widget gains its own "not set up" state. */
 var NOTCONF_COPY = {
   budget: { title: "No budget set up", sub: "There is no budget for this fiscal year yet.", setup: "General Ledger, Budgets" },
   pension: { title: "No pension plans", sub: "No pension billing plans have been set up.", setup: "Pension Billing, Plans" },

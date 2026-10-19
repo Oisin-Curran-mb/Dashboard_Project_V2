@@ -89,6 +89,11 @@
   .spec-tbl th{text-align:left;padding:7px 10px;border-bottom:1px solid var(--stroke-widget);vertical-align:top;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.03em;color:var(--txt-subtle);}
   .spec-tbl td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--stroke-widget);vertical-align:top;color:var(--txt-secondary);}
   .spec-tbl td b{color:var(--txt-primary);}
+  /* Permissions view (16 Oct 2026): a picture of each link or action that needs more care than the module right */
+  .spec-fig{margin:10px 0 14px;border:1px solid var(--stroke-widget);border-radius:10px;overflow:hidden;background:var(--wn-100);}
+  .spec-fig img{display:block;max-width:100%;height:auto;}
+  .spec-fig figcaption{font-size:12px;line-height:1.5;color:var(--txt-subtle);padding:8px 12px;border-top:1px solid var(--stroke-widget);}
+  .spec-rule{font-size:13.5px;line-height:1.6;color:var(--txt-primary);background:var(--brand-10);border:1px solid var(--brand-100);border-radius:10px;padding:12px 14px;margin:10px 0 14px;max-width:76ch;}
   /* ===== end Shell: Demo / Spec view toggle + spec document ===== */
   .appbody{flex:1;display:flex;min-height:0;}
   .sidenav{flex:0 0 216px;width:216px;background:var(--wn-100);border-right:1px solid var(--stroke-widget);padding:10px 12px 20px;display:flex;flex-direction:column;gap:1px;overflow:auto;}
@@ -3677,6 +3682,7 @@
     <div class="viewtab" role="tablist" aria-label="View mode">
       <button class="vtb on" data-action="view-demo" role="tab" aria-selected="true">Demo</button>
       <button class="vtb" data-action="view-spec" role="tab" aria-selected="false">Spec</button>
+      <button class="vtb" data-action="view-perm" role="tab" aria-selected="false">Permissions</button>
     </div>
     <button class="tn-ic" aria-label="Search"><span class="material-symbols-rounded">search</span></button>
     <button class="tn-ic" aria-label="Help"><span class="material-symbols-rounded">help</span></button>
@@ -3852,6 +3858,122 @@
             </ul>
           </div>
         </section>
+        <section class="spec" id="permView" hidden aria-label="Widget permissions">
+          <header class="spec-hd">
+            <h1 class="spec-title">Accounting Dashboard, Widget Permissions (Version 2)</h1>
+            <p class="spec-lead">Which Task Role right shows each widget, and where a link or an action inside a widget needs a further check. Condensed from the review document; the full text, with the legacy code references, is linked below.</p>
+            <div class="spec-links">
+              <a class="spec-link" href="docs/handover/Widget%20permissions%20-%20the%20old%20system%20and%20the%20V2%20recommendation%20(draft).md" target="_blank" rel="noopener"><span class="material-symbols-rounded">description</span>Full review document (Markdown)</a>
+            </div>
+          </header>
+
+          <div class="spec-sec" id="perm-rule">
+            <h2>1. The rule: the module's Dashboard right shows the widget</h2>
+            <div class="spec-rule">Every widget is offered when the user holds its module's <b>Dashboard</b> row in the Task Role editor, which is the module's root task (the bare module URI, such as <code>/Payroll</code>) at Inquiry. That is exactly how the old dashboard decided which panels a user could add. No widget needs a right of its own. Further checks exist only for the <b>links and actions</b> in section 2.</div>
+            <figure class="spec-fig"><img src="docs/Pics/Permissions/taskrole-dashboard-row.png" alt="The old system's Task Role editor: Security Setup, Task Roles, Update; the module list on the left and, first in the task tree for Accounts Payable, the Dashboard row with a Full Rights box only" loading="lazy"><figcaption>Where the right lives in the old system: Security Setup, Task Roles, Update. Pick a module on the left; the first row of its task tree is <b>Dashboard</b>, with a Full Rights box only. That box is the module's root task and is what shows the module's widgets.</figcaption></figure>
+            <p>Rights are an exact match on a page URI: holding <code>/Payroll</code> grants the Payroll Dashboard and nothing else. A user without the module right is not offered the widget, so no "no access" face is needed. The API enforces the same test; what the dashboard hides is presentation.</p>
+            <table class="spec-tbl"><thead><tr><th>Widget</th><th>Module</th><th>Right to show it (Inquiry)</th></tr></thead><tbody><tr><td><b>Budget Compared to Actual</b></td><td>General Ledger</td><td><code>/GeneralLedger</code></td></tr><tr><td><b>Pension Plans</b></td><td>Pension Billing</td><td><code>/PensionBilling</code></td></tr><tr><td><b>Payroll Distributions</b></td><td>Payroll</td><td><code>/Payroll</code></td></tr><tr><td><b>Remittance Pledges</b></td><td>Remittance</td><td><code>/Remittance</code></td></tr><tr><td><b>Receivable Invoices Outstanding</b></td><td>Accounts Receivable</td><td><code>/AccountsReceivable</code></td></tr><tr><td><b>Insurance Billing Plans</b></td><td>Insurance Billing</td><td><code>/InsuranceBilling</code></td></tr><tr><td><b>Deposits on Hand</b></td><td>Deposits On Hand</td><td><code>/DepositsOnHand</code></td></tr><tr><td><b>My Status</b></td><td>none: each query carries its own module right</td><td><code>always offered</code></td></tr><tr><td><b>Payroll Scheduled Time Off</b></td><td>Payroll</td><td><code>/Payroll</code></td></tr><tr><td><b>Loans With Balance Due</b></td><td>Loan Processing</td><td><code>/LoanProcessing</code></td></tr><tr><td><b>Fixed Asset Values</b></td><td>Fixed Assets</td><td><code>/FixedAssets</code></td></tr><tr><td><b>Purchasing Management</b></td><td>Purchasing Management</td><td><code>/PurchasingManagement</code></td></tr><tr><td><b>Main Content Tasks</b></td><td>none: each tile carries its own task</td><td><code>always offered</code></td></tr><tr><td><b>Bank Balances</b></td><td>Bank Account Management</td><td><code>/BankAccountManagement</code></td></tr><tr><td><b>Accounts Payable By Due Date</b></td><td>Accounts Payable</td><td><code>/AccountsPayable</code></td></tr><tr><td><b>Gifts Pledges</b></td><td>Donors And Gifts</td><td><code>/DonorsAndGifts</code></td></tr><tr><td><b>Financial KPI</b></td><td>General Ledger (new in V2; proposed)</td><td><code>/GeneralLedger</code></td></tr></tbody></table>
+            <p>One departure from the old system, by this rule: the old Payroll Scheduled Time Off panel tested a separate task (<code>/Payroll/EmployeeInformation/SecureTimeOffHoursTab</code>); here it follows the Payroll Dashboard right like every other widget, and its Approve and Undo actions carry the extra check (2.5).</p>
+          </div>
+
+          <div class="spec-sec" id="perm-care">
+            <h2>2. Where more care is needed: links and actions</h2>
+            <p>The standing rule for every control below: <b>show it only when the user holds the destination page's right</b> (or the action's right); otherwise the control is absent. Never rely on the destination page refusing the user after the click, which is what the old Purchasing pencil and My Status jump did. The API serving the widget returns, per record, whether the current user may open or act on it, so the widget never reads the rights table.</p>
+
+            <h3>2.1 Purchasing Management</h3>
+            <figure class="spec-fig"><img src="docs/Pics/Permissions/purchasing-popup.png" alt="The request pop-up: Approve, Hold and Reject are actions; Open request and each attachment leave the widget." loading="lazy"><figcaption>The request pop-up: Approve, Hold and Reject are actions; Open request and each attachment leave the widget.</figcaption></figure>
+            <ul class="spec-ul">
+              <li><b>Approve, Reject</b>: the user is on the request's approval path at the level now acting, or holds <code>/PurchasingManagement/Requests/ApprovalOverride</code> at Update. <b>Hold</b>: the user is on the path. These are API actions; the API refuses, hiding the button is presentation.</li>
+              <li><b>Open request</b> and <b>attachments</b>: <code>/PurchasingManagement/Requests/Update</code> at Inquiry. The widget's own right does not include this page.</li>
+              <li>Account roles can refuse an order the page right would allow; the API marks each request openable or not.</li>
+            </ul>
+            <figure class="spec-fig"><img src="docs/Pics/Permissions/taskrole-purchasing.png" alt="Old Task Role editor, Purchasing Management: the Dashboard row, then Request Information with Enter &amp; Manage (the request page) and Approval Override, and Modify with Approval Paths." loading="lazy"><figcaption>Old Task Role editor, Purchasing Management: the Dashboard row, then Request Information with Enter &amp; Manage (the request page) and Approval Override, and Modify with Approval Paths.</figcaption></figure>
+
+            <h3>2.2 Accounts Payable By Due Date</h3>
+            <figure class="spec-fig"><img src="docs/Pics/Permissions/payables-invoice.png" alt="The invoice pop-up: Open in Accounts Payable leaves the widget. Schedule payment (Jo's version, not yet built) would sit beside it." loading="lazy"><figcaption>The invoice pop-up: Open in Accounts Payable leaves the widget. Schedule payment (Jo's version, not yet built) would sit beside it.</figcaption></figure>
+            <ul class="spec-ul">
+              <li><b>Open in Accounts Payable</b>: <code>/AccountsPayable/TransactionInquiry</code> at Inquiry.</li>
+              <li><b>Schedule payment</b>, when built: two gates, the AvidPay feature flag on the tenant <b>and</b> <code>/AccountsPayable/PaymentProcessing</code> at Update. Show a note for the flag, hide for the right.</li>
+            </ul>
+            <figure class="spec-fig"><img src="docs/Pics/Permissions/taskrole-payables.png" alt="Old Task Role editor, Accounts Payable: the Dashboard row; Payment Processing with Enter &amp; Manage and Process; View with Transaction Inquiry and its sub-rows." loading="lazy"><figcaption>Old Task Role editor, Accounts Payable: the Dashboard row; Payment Processing with Enter &amp; Manage and Process; View with Transaction Inquiry and its sub-rows.</figcaption></figure>
+
+            <h3>2.3 Bank Balances</h3>
+            <figure class="spec-fig"><img src="docs/Pics/Permissions/bank-drill.png" alt="The account drill: Open in Bank leaves the widget." loading="lazy"><figcaption>The account drill: Open in Bank leaves the widget.</figcaption></figure>
+            <ul class="spec-ul">
+              <li><b>Open in Bank</b>: <code>/BankAccountManagement/BankAccountInformation</code> at Inquiry.</li>
+              <li>Plus the General Ledger <b>account roles</b>: a user may hold the page right and still be refused an account they may not see. The API applies the account filter to the list and to the link.</li>
+            </ul>
+            <figure class="spec-fig"><img src="docs/Pics/Permissions/taskrole-bank.png" alt="Old Task Role editor, Bank Account Management: the Dashboard row, Transactions, Bank Statements and View; Bank Account Information sits under Modify further down the same tree." loading="lazy"><figcaption>Old Task Role editor, Bank Account Management: the Dashboard row, Transactions, Bank Statements and View; Bank Account Information sits under Modify further down the same tree.</figcaption></figure>
+
+            <h3>2.4 Gifts Pledges, Remittance Pledges, Loans With Balance Due</h3>
+            <figure class="spec-fig"><img src="docs/Pics/Permissions/gifts-ledger.png" alt="Gifts Pledges, the purpose ledger: Open in Gifts and Pledges leaves the widget; the Excel file is built from data already on screen." loading="lazy"><figcaption>Gifts Pledges, the purpose ledger: Open in Gifts and Pledges leaves the widget; the Excel file is built from data already on screen.</figcaption></figure>
+            <figure class="spec-fig"><img src="docs/Pics/Permissions/remittance-drill.png" alt="Remittance Pledges, the member-church drill: Open in Remittance leaves the widget." loading="lazy"><figcaption>Remittance Pledges, the member-church drill: Open in Remittance leaves the widget.</figcaption></figure>
+            <figure class="spec-fig"><img src="docs/Pics/Permissions/loans-popup.png" alt="Loans With Balance Due, the loan detail: Open loan leaves the widget (destination route still to confirm)." loading="lazy"><figcaption>Loans With Balance Due, the loan detail: Open loan leaves the widget (destination route still to confirm).</figcaption></figure>
+            <ul class="spec-ul">
+              <li><b>Open in Gifts and Pledges</b>: <code>/DonorsAndGifts/Pledges</code> at Inquiry. <b>Open in Remittance</b>: the Remittance pledge page at Inquiry (route to confirm). <b>Open loan</b>: <code>/LoanProcessing/LoanInformation</code> at Inquiry (route to confirm).</li>
+              <li><b>Exports</b> are data, not pages: they follow the widget's own right.</li>
+            </ul>
+            <figure class="spec-fig"><img src="docs/Pics/Permissions/taskrole-gifts.png" alt="Old Task Role editor, Donors And Gifts: the root row carries the module's name instead of Dashboard; Manage holds Pledges with both boxes." loading="lazy"><figcaption>Old Task Role editor, Donors And Gifts: the root row carries the module's name instead of Dashboard; Manage holds Pledges with both boxes.</figcaption></figure>
+            <figure class="spec-fig"><img src="docs/Pics/Permissions/taskrole-remittance.png" alt="Old Task Role editor, Remittance: the Dashboard row; Manage holds Enter &amp; Manage Pledges, the page behind Open in Remittance." loading="lazy"><figcaption>Old Task Role editor, Remittance: the Dashboard row; Manage holds Enter &amp; Manage Pledges, the page behind Open in Remittance.</figcaption></figure>
+            <figure class="spec-fig"><img src="docs/Pics/Permissions/taskrole-loans.png" alt="Old Task Role editor, Loan Processing: the Dashboard row; Modify holds Loan Information, the page behind Open loan." loading="lazy"><figcaption>Old Task Role editor, Loan Processing: the Dashboard row; Modify holds Loan Information, the page behind Open loan.</figcaption></figure>
+
+            <h3>2.5 Payroll Scheduled Time Off</h3>
+            <figure class="spec-fig"><img src="docs/Pics/Permissions/pto-approve.png" alt="The approval queue with a person expanded: Approve, and Undo on an approved day, are actions." loading="lazy"><figcaption>The approval queue with a person expanded: Approve, and Undo on an approved day, are actions.</figcaption></figure>
+            <ul class="spec-ul">
+              <li><b>Approve</b>, <b>Undo</b>: the Payroll Dashboard right at <b>Update</b>. The old panel saved an approval with no update check; V2 closes that.</li>
+              <li>The rows a user sees are the employees whose home department is in the user's approval departments. The old panel showed every department to a user with no employee record; V2 must not.</li>
+            </ul>
+            <figure class="spec-fig"><img src="docs/Pics/Permissions/taskrole-payroll.png" alt="Old Task Role editor, Payroll: Modify, Employee Information, with Secured Employees and Time Off Hours as separate rows. Time Off Hours is the task the old panel tested; by the rule above, V2 uses the Payroll Dashboard row and keeps the Update check on Approve and Undo." loading="lazy"><figcaption>Old Task Role editor, Payroll: Modify, Employee Information, with Secured Employees and Time Off Hours as separate rows. Time Off Hours is the task the old panel tested; by the rule above, V2 uses the Payroll Dashboard row and keeps the Update check on Approve and Undo.</figcaption></figure>
+
+            <h3>2.6 Payroll Distributions</h3>
+            <figure class="spec-fig"><img src="docs/Pics/Permissions/payroll-drill.png" alt="The distribution drill with its Excel export: the only export that carries personal data." loading="lazy"><figcaption>The distribution drill with its Excel export: the only export that carries personal data.</figcaption></figure>
+            <ul class="spec-ul">
+              <li><b>Export to Excel</b>: the employee rows follow the Payroll Dashboard right exactly as the Employee Break Down does; a user without it gets the file without those rows. Whether Secure employees are excluded is an open decision.</li>
+            </ul>
+
+            <h3>2.7 Budget Compared to Actual</h3>
+            <figure class="spec-fig"><img src="docs/Pics/Permissions/budget-scope.png" alt="The account scope menu: the Special report option needs a further right." loading="lazy"><figcaption>The account scope menu: the Special report option needs a further right.</figcaption></figure>
+            <ul class="spec-ul">
+              <li><b>Special report</b> lines: <code>/GeneralLedger/Reports/SpecialReports</code> at Inquiry, as the old panel required. Income and expense accounts need only the module right.</li>
+            </ul>
+            <figure class="spec-fig"><img src="docs/Pics/Permissions/taskrole-generalledger.png" alt="Old Task Role editor, General Ledger: Reports holds Special Reports, the right the Special report option needs." loading="lazy"><figcaption>Old Task Role editor, General Ledger: Reports holds Special Reports, the right the Special report option needs.</figcaption></figure>
+
+            <h3>2.8 My Status and Main Content Tasks</h3>
+            <figure class="spec-fig"><img src="docs/Pics/Permissions/mystatus-detail.png" alt="My Status, a query opened: the row leads to the query's own module page." loading="lazy"><figcaption>My Status, a query opened: the row leads to the query's own module page.</figcaption></figure>
+            <figure class="spec-fig"><img src="docs/Pics/Permissions/tasks-tiles.png" alt="Main Content Tasks: every tile is a link to its task's page, and only tasks the user holds are shown. The right model, kept." loading="lazy"><figcaption>Main Content Tasks: every tile is a link to its task's page, and only tasks the user holds are shown. The right model, kept.</figcaption></figure>
+            <ul class="spec-ul">
+              <li><b>My Status</b>: a query is offered only with its module right, as today; the jump to its page must test the <b>destination page</b> right before the row offers it, not only the module root.</li>
+              <li><b>Main Content Tasks</b>: tiles are the tasks the user holds, so the destination right is checked before the tile shows. My Tasks may list only tasks the user holds.</li>
+            </ul>
+
+            <h3>2.9 No link or action</h3>
+            <p>Pension Plans, Insurance Billing Plans, Deposits on Hand, Receivable Invoices Outstanding, Fixed Asset Values and the Financial KPI band have no control that leaves the widget today. Where one is added later (open account, open invoice, open asset), it follows the same rule with the destination page's right.</p>
+          </div>
+
+          <div class="spec-sec" id="perm-points">
+            <h2>3. Six things V2 must be careful with</h2>
+            <ul class="spec-ul">
+              <li><b>Dashboard right is not page right.</b> Every "Open ..." control needs the destination page's URI tested at Inquiry, server-side, before it is shown.</li>
+              <li><b>Record-level filters travel with the link.</b> Bank account roles and Purchasing account roles can refuse a record the page right alone would allow; the API marks each record openable or not.</li>
+              <li><b>Two-gate buttons.</b> Schedule payment needs the tenant feature flag and a right; show the note for the flag, hide for the right.</li>
+              <li><b>Exports are data, not pages.</b> They follow the widget's right, with the one personal-data exception in Payroll Distributions.</li>
+              <li><b>Approve, Hold, Reject, Undo are not links.</b> They are API actions with their own tests; hiding the button is presentation, the API refuses.</li>
+              <li><b>Routes to confirm with Value Labs</b>: the Remittance pledge page, the deposit account page, the loan page and the AR invoice page, so the right tested is the one the page really checks.</li>
+            </ul>
+          </div>
+
+          <div class="spec-sec" id="perm-open">
+            <h2>4. Open decisions</h2>
+            <ul class="spec-ul">
+              <li>Financial KPI: the General Ledger Dashboard right (recommended) or a new task of its own.</li>
+              <li>Purchasing Management: drop the old panel's Admin shortcut and follow the request page's rule (recommended), or keep parity with the panel.</li>
+              <li>Payroll Scheduled Time Off: the rule for a user with no employee record, and the new Update check on Approve and Undo.</li>
+              <li>Payroll Distributions: whether Secure employees are excluded from the Employee Break Down and the export for users without <code>/Payroll/Secure/Employee</code>.</li>
+              <li>My Status and Main Content Tasks: carried as today, per query and per tile. Confirm.</li>
+              <li>Links out of a widget: shown only with the destination page's right, as Main Content Tasks does. Confirm.</li>
+            </ul>
+          </div>
+        </section>
       </div>
     </main>
   </div>
@@ -3925,6 +4047,28 @@
   /* pace band from days ahead of, or behind, schedule. Shared by W04
      Remittance Pledges and W17 Gifts Pledges, which pace on the same rule. */
   function bandFromDays(d){if(d>=30)return "ahead";if(d>=-30)return "onpace";if(d>=-60)return "behind";return "farbehind";}
+  /* ---- data package (16 Oct 2026) ------------------------------------
+     The envelope every widget renders from, shaped like the API response the
+     widget will one day receive:  { state, reason, data }
+       state  : "ok" | "no-data" | "not-configured" | "error"
+       reason : a short code from docs/handover/Widget data states - API responses ... .md
+       data   : the widget's own payload (null for error)
+     Each widget block has its own <prefix>Package(w) builder. Today the builder
+     reads the review selector (pkgOption) and hands back its fixtures: the SAME
+     objects by reference for "default", so the default face is byte-identical.
+     A stored response on the row (w.pkg) always wins; that is the API seam.
+     These four helpers depend on nothing but ICON, so the isolated drivers that
+     run one block alone still have them. */
+  function pkg(state,reason,data){return {state:state||"ok",reason:reason||"",data:(data===undefined)?null:data};}
+  /* the selector's option; "default" when the data-states region is absent (isolated drivers, release build) */
+  function pkgOption(){return (typeof dataState==="function")?dataState():"default";}
+  /* a generated set from the data-states region, or null when that region is absent */
+  function pkgGen(option,kind){return (typeof DATA_STATES==="object"&&DATA_STATES&&DATA_STATES.get)?DATA_STATES.get(option,kind):null;}
+  /* the shell's state block: icon, title, optional sub-line, optional call-to-action button. Same markup
+     contentHTML's generic empty block emits; Glance hides the sub-line through the existing kpi .state-sub rule. */
+  function pkgStateHTML(w,o){return '<div class="state" data-kind="'+(o.kind||"empty")+'">'+ICON(o.icon||"inbox")+'<div class="state-title">'+o.title+'</div>'+(o.sub?'<div class="state-sub">'+o.sub+'</div>':'')+(o.cta?'<button class="btn outlined" data-action="'+o.action+'" data-id="'+w.id+'">'+ICON("add")+o.cta+'</button>':'')+'</div>';}
+  /* owner's rule (16 Oct 2026): where Jo Phase 2 has no design for a package state, say so; invent nothing. */
+  function pkgPlaceholderHTML(w,p){return pkgStateHTML(w,{icon:"design_services",title:"Not designed yet",sub:(w.title||"").replace(/\s*\([^)]*\)\s*$/,"")+": "+p.state+" / "+p.reason+". No Jo Phase 2 design for this state; placeholder for the owner to review."});}
   /* ===== end Shell: shared widget helpers ===== */
   /* ===== Shell: single-widget viewer (review aid) =====
      index.html#k=mystatus,tasks   the current tab filtered to these kinds
@@ -3962,15 +4106,16 @@
   /* ===== Shell: data states (TEMPORARY review aid, remove before release) ==========
      The second "For developers only" selector (owner, 16 Oct 2026): No data, Not configured, Current
      version as Default, Small data, Extreme high volume of data. The state rides in the address bar as
-     #ds=none|notconfigured|default|small|extreme; dsApply() maps it onto each widget's own dataset and
-     state flags and restores the registry row for "default". Design: docs/DATA-STATES.md. ===== */
+     #ds=none|notconfigured|default|small|extreme. Each widget's <prefix>Package(w) builder reads it through
+     pkgOption() (shared helpers) and hands the widget an API-shaped envelope {state, reason, data}; the shell
+     draws nothing itself and never touches a row's state (owner, 16 Oct 2026: "just the data going to the
+     widgets"; "mimic how it arrived through API payload"). Design: docs/DATA-STATES.md. ===== */
   /* =====================================================================
      Data states for the "For developers only" selector (review aid, not product).
      Prepared 16 Oct 2026, see docs/DATA-STATES.md. Standalone: no shell dependencies.
 
      DATA_STATES.get(state, kind) -> the fixture for that state in the widget's own
-     record shape ("small" and "extreme"), memoised. NOTCONF_COPY -> the Not configured
-     block's copy per kind. Generators are seeded so every run is identical.
+     record shape ("small" and "extreme"), memoised. Generators are seeded so every run is identical.
      ===================================================================== */
   var DATA_STATES = (function () {
     /* ---- seeded random ------------------------------------------------- */
@@ -4016,7 +4161,7 @@
     };
 
     /* Payroll Distributions: the distribution list {id,name} and the base amounts {distId: {payType: amount}} (the block's seeded run generator scales from these). */
-    var PAY_TYPES = ["reg", "ot", "hol", "vac", "sick", "housing", "ss", "med", "bonus", "stipend", "mileage", "retire", "hsa", "ltd"];
+    var PAY_TYPES = ["reg", "ot", "hol", "vac", "sick", "housing", "ss", "med"];
     G.payroll = {
       small: function () { return { dists: [{ id: "admin", name: "Administration Staff" }], base: { admin: { reg: 4200, vac: 400 } }, payTypes: [{ id: "reg", name: "Regular Pay" }, { id: "vac", name: "Vacation" }] }; },
       extreme: function () { var r = rng(301), dists = [], base = {}; for (var i = 0; i < 60; i++) { var id = "d" + i; dists.push({ id: id, name: (i === 9 ? "Department of Community Outreach, Hospitality and Volunteer Coordination" : pick(r, DEPTS) + " " + (i + 1)) }); var b = {}; PAY_TYPES.forEach(function (p) { if (r() < 0.7) b[p] = money(r, 40, 9000, false); }); base[id] = b; } return { dists: dists, base: base, payTypes: PAY_TYPES.map(function (p) { return { id: p, name: p.charAt(0).toUpperCase() + p.slice(1) }; }) }; }
@@ -4073,7 +4218,7 @@
     };
 
     /* Main Content Tasks: the task list {app,id,label,dest,icon,std,dflt,keywords[]}. */
-    var APPS = ["ap", "ar", "gl", "bank", "payroll", "pur", "gifts", "fa", "loans", "ins", "pen", "rem"];
+    var APPS = ["ap", "ar", "gl", "payroll", "purchasing", "bank", "contributions", "assets"];
     G.tasks = {
       small: function () { return [{ app: "ap", id: "ap-check", label: "Write AP Check", dest: "Accounts Payable, Checks, Write Check", icon: "payments", std: true, dflt: true, keywords: ["pay", "check"] }]; },
       extreme: function () { var r = rng(1101), out = []; for (var i = 0; i < 240; i++) { var app = APPS[i % APPS.length]; out.push({ app: app, id: app + "-t" + i, label: (i === 13 ? "Reconcile the restricted fund balances against the general ledger control accounts" : pick(r, ["Enter", "Post", "Print", "Review", "Approve", "Void", "Export", "Reconcile"]) + " " + pick(r, ["invoices", "checks", "journals", "deposits", "pledges", "assets", "loans", "plans"]) + " " + (i + 1)), dest: app.toUpperCase() + ", Task " + (i + 1), icon: pick(r, ["payments", "receipt_long", "summarize", "storefront", "request_quote", "money_off"]), std: true, dflt: i % 17 === 0, keywords: ["task", app] }); } return out; }
@@ -4113,7 +4258,9 @@
 
     /* Pending Actions and Alerts & Actions: {id,sev,action,title,sub,items[]} per category. */
     function cats(prefix, n, perItem, r) { var out = []; for (var i = 0; i < n; i++) { var items = []; for (var k = 0; k < perItem; k++) items.push(pick(r, ["Missions Fund", "Youth Fund", "Capital Fund", "General Fund", "Camp Fund"]) + ", $" + money(r, 100, 900000).toLocaleString("en-US", { minimumFractionDigits: 2 }) + " " + pick(r, ["over restricted income", "past due", "unposted", "awaiting approval", "out of balance"]) + " (" + Math.round(100 + r() * 60) + "%)"); out.push({ id: prefix + "-cat-" + (i + 1), sev: pick(r, ["err", "warn", "upd"]), action: r() < 0.5, title: pick(r, ["Restricted Fund Compliance", "Overdue Payables", "Unposted Transactions", "Payment Processing", "Journals Out of Balance", "Unapplied Receipts"]) + " " + (i + 1), sub: items.length + " items need attention", items: items }); } return out; }
-    G.pendingactions = { small: function () { return cats("pa3", 1, 1, rng(1601)); }, extreme: function () { return cats("pa3", 40, 50, rng(1602)); } };
+    /* Pending Actions reads "need" categories grouped by module (ap, ar, gl); each item is a queue line. */
+  function needCats(n, perItem, r) { var out = cats("pa3", n, perItem, r), groups = ["ap", "ar", "gl"]; out.forEach(function (c, i) { c.sev = "need"; c.action = true; c.group = groups[i % 3]; }); return out; }
+  G.pendingactions = { small: function () { return needCats(1, 1, rng(1601)); }, extreme: function () { return needCats(40, 50, rng(1602)); } };
     G.alerts = { small: function () { return cats("al", 1, 1, rng(1701)); }, extreme: function () { return cats("al", 40, 50, rng(1702)); } };
 
     /* ---- memoised getter ----------------------------------------------- */
@@ -4128,68 +4275,8 @@
     return { get: get, generators: G, kinds: Object.keys(G) };
   })();
 
-  /* Not configured: the copy per kind (title, sub-line, the setup place to name). */
-  var NOTCONF_COPY = {
-    budget: { title: "No budget set up", sub: "There is no budget for this fiscal year yet.", setup: "General Ledger, Budgets" },
-    pension: { title: "No pension plans", sub: "No pension billing plans have been set up.", setup: "Pension Billing, Plans" },
-    payroll: { title: "Payroll is not set up", sub: "No pay types or compensation distributions exist yet.", setup: "Payroll, Setup" },
-    remittance: { title: "No remittance activities", sub: "No activities or pledges have been set up for this year.", setup: "Remittance, Activities" },
-    receivables: { title: "Accounts Receivable is not set up", sub: "No customers or invoice types exist yet.", setup: "Accounts Receivable, Setup" },
-    insurance: { title: "No insurance plans", sub: "No billing plans have been set up.", setup: "Insurance Billing, Plans" },
-    deposits: { title: "No deposit accounts", sub: "No deposit account types have been set up.", setup: "Deposits On Hand, Setup" },
-    mystatus: { title: "No queries selected", sub: "Choose the queries you want to follow.", setup: "Configure, on this widget" },
-    pto: { title: "No approval departments", sub: "Your employee record has no departments to approve time off for.", setup: "Payroll, Employee Information, Can Approve Home Depts" },
-    loans: { title: "Loan Processing is not set up", sub: "No loan types or loans exist yet.", setup: "Loan Processing, Setup" },
-    fixedassets: { title: "No asset classes", sub: "No fixed asset classes have been set up.", setup: "Fixed Assets, Setup" },
-    purchasing: { title: "No approval paths", sub: "Requests cannot be routed until an approval path exists.", setup: "Purchasing Management, Approval Paths" },
-    tasks: { title: "No tasks available", sub: "Your role has no tasks in this application.", setup: "Security Setup, Task Roles" },
-    bank: { title: "No bank accounts", sub: "No bank accounts have been set up.", setup: "Bank Account Management, Bank Account Information" },
-    payables: { title: "Accounts Payable is not set up", sub: "No vendors or bank account for payables exist yet.", setup: "Accounts Payable, Setup" },
-    gifts: { title: "No pledge purposes", sub: "No purpose allows pledges yet.", setup: "Donors and Gifts, Purposes" },
-    finkpi: { title: "No fiscal year", sub: "The general ledger has no fiscal year to report on.", setup: "General Ledger, Fiscal Years" },
-    pendingactions: { title: "No queues configured", sub: "No posting or approval queues are set up for this company.", setup: "each module's Setup" },
-    alerts: { title: "No queues configured", sub: "No posting or approval queues are set up for this company.", setup: "each module's Setup" }
-  };
-  var DATA_STATE_LABELS=[["default","Current version as Default"],["none","No data"],["notconfigured","Not configured"],["small","Small data"],["extreme","Extreme high volume of data"]];
+  var DATA_STATE_LABELS=[["default","Default"],["none","No data"],["notconfigured","Not configured"],["small","Small data"],["extreme","Extreme high volume of data"]];
   function dataState(){var m=/[#&]ds=(none|notconfigured|default|small|extreme)/i.exec(location.hash||"");return m?m[1].toLowerCase():"default";}
-  /* Per kind: what each option means in the widget's own flags. A missing entry means the option is not wired for that widget and it shows its default. */
-  var DATA_STATE_MAP={
-    budget:{none:{dataset:"noactuals"},notconfigured:{state:"notconfigured"}},
-    pension:{none:{dataset:"none"},notconfigured:{state:"notconfigured"},small:{dataset:"small"},extreme:{dataset:"extreme"}},
-    payroll:{none:{state:"empty"},notconfigured:{state:"notconfigured"}},
-    remittance:{none:{state:"empty"},notconfigured:{state:"notconfigured"},small:{dataset:"small"},extreme:{dataset:"extreme"}},
-    receivables:{none:{state:"empty"},notconfigured:{state:"notconfigured"},small:{dataset:"single"},extreme:{dataset:"extreme"}},
-    insurance:{none:{dataset:"none"},notconfigured:{state:"notconfigured"},small:{dataset:"small"},extreme:{dataset:"extreme"}},
-    deposits:{none:{dataset:"empty"},notconfigured:{state:"notconfigured"},small:{dataset:"small"},extreme:{dataset:"extreme"}},
-    mystatus:{none:{state:"empty"},notconfigured:{state:"notconfigured"}},
-    pto:{none:{dataset:"none"},notconfigured:{state:"notconfigured"},small:{dataset:"small"},extreme:{dataset:"extreme"}},
-    loans:{none:{dataset:"none"},notconfigured:{state:"notconfigured"},small:{dataset:"single"},extreme:{dataset:"extreme"}},
-    fixedassets:{none:{dataset:"none"},notconfigured:{state:"notconfigured"},small:{dataset:"small"},extreme:{dataset:"extreme"}},
-    purchasing:{none:{dataset:"empty"},notconfigured:{state:"notconfigured"},small:{dataset:"single"},extreme:{dataset:"extreme"}},
-    tasks:{none:{state:"empty"},notconfigured:{state:"notconfigured"}},
-    bank:{none:{state:"empty"},notconfigured:{state:"notconfigured"},small:{dataset:"small"},extreme:{dataset:"extreme"}},
-    payables:{none:{state:"empty"},notconfigured:{state:"notconfigured"},small:{dataset:"single"},extreme:{dataset:"extreme"}},
-    gifts:{none:{dataset:"empty"},notconfigured:{state:"notconfigured"},small:{dataset:"single"},extreme:{dataset:"extreme"}},
-    pendingactions:{none:{state:"empty"},notconfigured:{state:"notconfigured"}},
-    alerts:{none:{state:"empty"},notconfigured:{state:"notconfigured"}},
-    alerts2:{none:{state:"empty"},notconfigured:{state:"notconfigured"}}
-  };
-  /* Widgets with no empty state of their own get the shell's, with their own words. */
-  var DS_SHELL_EMPTY={mystatus:{title:"Nothing to report",sub:"Every query you follow is at zero right now."},tasks:{title:"No tasks",sub:"There are no tasks to show for this application."},alerts:{title:"Nothing needs attention",sub:"No alerts or actions are open right now."},alerts2:{title:"Nothing needs attention",sub:"No alerts or actions are open right now."}};
-  function dsApply(ws){
-    var st=dataState();
-    ws.forEach(function(w){
-      if(!w._dsDefaults)w._dsDefaults={dataset:w.dataset,state:w.state};
-      var m=(DATA_STATE_MAP[w.kind]||{})[st];
-      if(st==="default"||!m){w.dataset=w._dsDefaults.dataset;w.state=w._dsDefaults.state;return;}
-      w.dataset=(m.dataset!==undefined)?m.dataset:w._dsDefaults.dataset;
-      w.state=(m.state!==undefined)?m.state:w._dsDefaults.state;
-    });
-  }
-  function notConfiguredHTML(kind,short){
-    var c=NOTCONF_COPY[kind]||{title:"Not set up",sub:"This module has not been set up yet.",setup:""};
-    return '<div class="state" data-kind="notconfigured">'+ICON("settings")+'<div class="state-title">'+c.title+'</div>'+(short?'':'<div class="state-sub">'+c.sub+(c.setup?' Set it up under '+c.setup+'.':'')+'</div>')+'</div>';
-  }
   function dataStateSelectHTML(){var cur=dataState();return '<select id="dataStateSel" class="btn outlined sm" aria-label="Review aid: data state" aria-describedby="viewOnlyLbl" style="max-width:260px">'+DATA_STATE_LABELS.map(function(o){return '<option value="'+o[0]+'"'+(o[0]===cur?" selected":"")+'>'+o[1]+'</option>';}).join("")+'</select>';}
   /* Both selectors under the one label: the data state first, then the widget. */
   function devSelectorsHTML(){var h=viewOnlySelectHTML();return h.replace('<select id="viewOnlySel"','<span class="devonly-row">'+dataStateSelectHTML()+'<select id="viewOnlySel"').replace('</select></span>','</select></span></span>');}
@@ -4294,7 +4381,26 @@
         {Employee:"Sam Ortiz", "Birthday":"29 Jul"}]}
   ];
   var MYS_DEFAULT = ["q_muje","q_prapp","q_apdue","q_crs","q_revnow","q_mubank","q_bdmo"];
-  function mysFind(id){for(var i=0;i<MYS_QUERIES.length;i++)if(MYS_QUERIES[i].id===id)return MYS_QUERIES[i];return null;}
+  /* data states: small and extreme keep the query list and change the counts */
+  var mysLive=null;
+  /* the shipped queries with every count replaced: 0 for "no data", generated for small / extreme */
+  function mysWithCounts(fn){return MYS_QUERIES.map(function(q,i){var c={};for(var k in q)c[k]=q[k];c.count=fn(i);return c;});}
+  /* data package: the envelope this widget renders from (API shape; see the shared pkg helpers).
+     reasons: every-query-zero (no-data), no-queries-chosen (not-configured) */
+  function mysPackage(w){
+    if(w&&w.pkg)return w.pkg;
+    var o=pkgOption();
+    if(o==="default"){
+      if(w&&w.dataset==="noqueries")return pkg("not-configured","no-queries-chosen",{queries:[]});
+      if(w&&w.dataset==="none")return pkg("no-data","every-query-zero",{queries:mysWithCounts(function(){return 0;})});
+      return pkg("ok","",{queries:MYS_QUERIES});
+    }
+    if(o==="none")return pkg("no-data","every-query-zero",{queries:mysWithCounts(function(){return 0;})});
+    if(o==="notconfigured")return pkg("not-configured","no-queries-chosen",{queries:[]});
+    var g=pkgGen(o,"mystatus");return pkg("ok",o,{queries:g?mysWithCounts(g.counts):MYS_QUERIES});
+  }
+  function mysQueries(w){var l=mysPackage(w).data.queries||[];mysLive=l;return l;}
+  function mysFind(id){var l=mysLive||MYS_QUERIES;for(var i=0;i<l.length;i++)if(l[i].id===id)return l[i];return null;}
 function mysConfigBtn(w){return '<button class="btn outlined sm mys-cfg-btn" data-action="mys-config" data-id="'+w.id+'" aria-haspopup="dialog">'+ICON("checklist")+'Configure</button>';}
 function mysActive(sel){return sel.filter(function(q){return q.count>0;}).slice().sort(function(a,b){return b.count-a.count;});}
 function mysClearList(sel){return sel.filter(function(q){return q.count<=0;});}
@@ -4312,7 +4418,7 @@ function mysRowHTML(w,q){
   var attrs=clickable?' data-action="mys-row" data-id="'+w.id+'" data-q="'+q.id+'" tabindex="0" role="button" aria-label="'+q.name+', '+q.count+' records'+srClick+'"':' aria-disabled="true"';
   return '<div class="wt-row mys-row'+(zero?" mys-zero":"")+(clickable?" mys-clickable":"")+'"'+attrs+'>'+nm+aff+count+'</div>';
 }
-function mysContent(w){
+function mysContent(w){mysQueries(w);
   var sel=(w.selected||[]).map(mysFind).filter(Boolean);
   if(!sel.length)return '<div class="state mys-empty" data-kind="empty">'+ICON("checklist")+'<div class="state-title">No records to display</div><div class="state-sub">Choose the queries you want to keep an eye on. Their live counts show up here.</div><button class="btn outlined" data-action="mys-config" data-id="'+w.id+'">'+ICON("checklist")+'Configure</button></div>';
   var active=mysActive(sel),clear=mysClearList(sel);
@@ -4327,7 +4433,7 @@ function mysContent(w){
 function mysConfigModalHTML(){
   var w=find(modal.id);if(!w)return "";
   var draft=modal.draft||[],q=(modal.q||"").toLowerCase();
-  var avail=MYS_QUERIES.filter(function(x){return draft.indexOf(x.id)<0;});
+  var avail=(mysLive||MYS_QUERIES).filter(function(x){return draft.indexOf(x.id)<0;});
   var availM=avail.filter(function(x){return !q||x.name.toLowerCase().indexOf(q)>-1||x.sys.toLowerCase().indexOf(q)>-1||MYS_AREA[x.area].toLowerCase().indexOf(q)>-1;});
   var availHTML="";
   ["GL","AP","PUR","HR"].forEach(function(ar){var items=availM.filter(function(x){return x.area===ar;});if(!items.length)return;
@@ -4439,20 +4545,42 @@ function mysPopContent(){
   var MCT_STOP={a:1,an:1,the:1,to:1,my:1,of:1,for:1,in:1,on:1,and:1,or:1,me:1};
   var MCT_SYN={send:["pay","payment","remit","submit","transfer","issue","process","cut"],pay:["pay","payment","check","disburse","remit","send","cut"],create:["create","new","add","enter","start","make"],"new":["new","create","add","start"],add:["add","new","create","enter"],enter:["enter","record","add","input","post"],record:["record","enter","post"],receive:["receive","collect","take","deposit"],deposit:["deposit","lodge","bank"],reconcile:["reconcile","match","clear","balance"],invoice:["invoice","bill","payable"],bill:["bill","invoice","payable"],report:["report","statement","summary","register"],giving:["giving","contribution","donation","gift","tithe","offering"],donation:["donation","contribution","giving","gift"],check:["check","cheque","payment","pay"],transfer:["transfer","move","send"],run:["run","process","start"],vendor:["vendor","supplier","payee"],customer:["customer","client","member"],journal:["journal","entry","je","ledger"]};
   function mctApp(id){for(var i=0;i<MCT_APPS.length;i++)if(MCT_APPS[i].id===id)return MCT_APPS[i];return null;}
-  function mctTask(id){for(var i=0;i<MCT_TASKS.length;i++)if(MCT_TASKS[i].id===id)return MCT_TASKS[i];return null;}
-  function mctAppHasTasks(id){for(var i=0;i<MCT_TASKS.length;i++)if(MCT_TASKS[i].app===id)return true;return false;}
+  /* data states: small and extreme swap the task list; mctT() is what every helper reads */
+  var mctLive=null;
+  /* data package: the envelope this widget renders from (API shape; see the shared pkg helpers).
+     reasons: nothing-recent (no-data), role-has-no-tasks (not-configured) */
+  function mctPackage(w){
+    if(w&&w.pkg)return w.pkg;
+    var o=pkgOption();
+    if(o==="default"){
+      if(w&&(w.state==="empty"||w.dataset==="none"))return pkg("not-configured","role-has-no-tasks",{tasks:[]});
+      return pkg("ok","",{tasks:MCT_TASKS});
+    }
+    if(o==="none")return pkg("no-data","nothing-recent",{tasks:[]});
+    if(o==="notconfigured")return pkg("not-configured","role-has-no-tasks",{tasks:[]});
+    var g=pkgGen(o,"tasks");return pkg("ok",o,{tasks:g||MCT_TASKS});
+  }
+  function mctTasks(w){var l=mctPackage(w).data.tasks||[];mctLive=l;return l;}
+  /* what a non-ok package shows. Phase A: nothing of its own yet (null falls through to the normal face). */
+  function mctStateHTML(w,p){
+    if(p.state==="no-data"&&w.size==="kpi")return null;
+    /* PLACEHOLDER: no Jo Phase 2 design for not-configured/role-has-no-tasks, nor for no-data beyond the Glance line; owner to review */
+    return pkgPlaceholderHTML(w,p);}
+  function mctT(){return mctLive||MCT_TASKS;}
+  function mctTask(id){for(var i=0;i<mctT().length;i++)if(mctT()[i].id===id)return mctT()[i];return null;}
+  function mctAppHasTasks(id){for(var i=0;i<mctT().length;i++)if(mctT()[i].app===id)return true;return false;}
   function mctCtx(w){return w.appContext||"home";}
   function mctInCtx(t,ctx){return ctx==="home"?true:t.app===ctx;}
   function mctFilter(w){return w.mctFilter||"all";}
-  function mctDefaultSaved(w){var ctx=mctCtx(w),out=[];MCT_TASKS.forEach(function(t){if(!mctInCtx(t,ctx))return;if(t.dflt||t.saved)out.push(t.id);});return out;}
+  function mctDefaultSaved(w){var ctx=mctCtx(w),out=[];mctT().forEach(function(t){if(!mctInCtx(t,ctx))return;if(t.dflt||t.saved)out.push(t.id);});return out;}
   function mctSavedIds(w){if(!w.mctSaved)w.mctSaved=mctDefaultSaved(w);return w.mctSaved;}
   function mctIsSaved(w,t){return mctSavedIds(w).indexOf(t.id)>-1;}
   function mctMyTasks(w){var ids=mctSavedIds(w),ctx=mctCtx(w);
-    var list=MCT_TASKS.filter(function(t){return mctInCtx(t,ctx)&&ids.indexOf(t.id)>-1&&mctPassFilter(w,t);});
-    list.sort(function(a,b){var ad=a.dflt?0:1,bd=b.dflt?0:1;if(ad!==bd)return ad-bd;return MCT_TASKS.indexOf(a)-MCT_TASKS.indexOf(b);});
+    var list=mctT().filter(function(t){return mctInCtx(t,ctx)&&ids.indexOf(t.id)>-1&&mctPassFilter(w,t);});
+    list.sort(function(a,b){var ad=a.dflt?0:1,bd=b.dflt?0:1;if(ad!==bd)return ad-bd;return mctT().indexOf(a)-mctT().indexOf(b);});
     return list;}
   function mctStandardTasks(w){var ids=mctSavedIds(w),ctx=mctCtx(w),isHome=ctx==="home",f=mctFilter(w);
-    return MCT_TASKS.filter(function(t){
+    return mctT().filter(function(t){
       if(!t.std)return false;
       if(ids.indexOf(t.id)>-1)return false;
       if(isHome){if(f!=="all"&&t.app!==f)return false;}else{if(t.app!==ctx)return false;}
@@ -4464,7 +4592,7 @@ function mysPopContent(){
   function mctSearchList(w){
     var toks=mctTokens((w.mctQ||"").trim());if(!toks.length)return [];
     var ctx=mctCtx(w),f=mctFilter(w),out=[];
-    MCT_TASKS.forEach(function(t){
+    mctT().forEach(function(t){
       if(!mctInCtx(t,ctx))return;
       if(f!=="all"&&t.app!==f)return;
       var a=mctApp(t.app),lbl=t.label.toLowerCase(),kw=(t.keywords||[]).join(" ").toLowerCase(),an=a.name.toLowerCase(),ac=a.code.toLowerCase();
@@ -4490,7 +4618,7 @@ function mysPopContent(){
   function mctStandardSection(w){var list=mctStandardTasks(w);if(!list.length){var msg=(mctCtx(w)==="home"&&mctFilter(w)!=="all")?("No more "+mctApp(mctFilter(w)).name+" content tasks to add."):"All content tasks are already in My Tasks.";return '<div class="mct-sec mct-sec-content"><div class="mct-sec-h">Content Tasks</div><div class="mct-sec-empty">'+msg+'</div></div>';}return '<div class="mct-sec mct-sec-content"><div class="mct-sec-h">Content Tasks</div><div class="mct-list">'+list.map(function(t){return mctRow(w,t);}).join("")+'</div></div>';}
   function mctResults(w){var res=mctSearchList(w),q=(w.mctQ||"").trim();if(!res.length)return '<div class="mct-sec"><div class="mct-noresult">No tasks match "'+q.replace(/"/g,"&quot;")+'". Try another word, like "check" or "deposit".</div></div>';return '<div class="mct-sec"><div class="mct-sec-h">'+res.length+' result'+(res.length>1?"s":"")+' across all applications</div><div class="mct-list">'+res.map(function(r){return mctRow(w,r.t,true);}).join("")+'</div></div>';}
   function mctGlance(w){var q=(w.mctQ||"").trim(),body;if(q){var res=mctSearchList(w);body=res.length?('<div class="mct-carousel"><div class="mct-irow"><div class="mct-gsec mct-gsec-results" role="group" aria-label="Matching tasks">'+res.slice(0,12).map(function(r){return mctItile(w,r.t);}).join("")+'</div></div></div>'):'<div class="mct-glance-empty">No matches</div>';}else{/* two bubbles in the one row: Recent Tasks, then My Tasks not already shown (owner, 27 Sep); order and tiles unchanged */var rec=mctRecentTasks(w),seenG={};rec.forEach(function(t){seenG[t.id]=1;});var mine=mctMyTasks(w).filter(function(t){return !seenG[t.id];});var grp=function(cls,lbl,l){return l.length?('<div class="mct-gsec '+cls+'" role="group" aria-label="'+lbl+'">'+l.map(function(t){return mctItile(w,t);}).join("")+'</div>'):"";};body=(rec.length||mine.length)?('<div class="mct-carousel"><div class="mct-irow">'+grp("mct-gsec-recent","Recent Tasks",rec)+grp("mct-gsec-my","My Tasks",mine)+'</div></div>'):'<div class="mct-glance-empty">No recent or saved tasks yet</div>';}return '<div class="mct-glance">'+mctSearch(w)+body+'</div>';}
-  function mctContent(w){if(w.size==="kpi")return mctGlance(w);var q=(w.mctQ||"").trim();var head='<div class="mct-head">'+(mctCtx(w)==="home"?('<div class="mct-filterrow">'+mctFilterChip(w)+'</div>'):"")+mctSearch(w)+'</div>';var body=q?mctResults(w):(mctRecentSection(w)+mctMySection(w)+mctStandardSection(w));return head+'<div class="mct-scroll">'+body+'</div>';}
+  function mctContent(w){mctTasks(w);var p=mctPackage(w);if(p.state!=="ok"){var sh=mctStateHTML(w,p);if(sh)return sh;}if(w.size==="kpi")return mctGlance(w);var q=(w.mctQ||"").trim();var head='<div class="mct-head">'+(mctCtx(w)==="home"?('<div class="mct-filterrow">'+mctFilterChip(w)+'</div>'):"")+mctSearch(w)+'</div>';var body=q?mctResults(w):(mctRecentSection(w)+mctMySection(w)+mctStandardSection(w));return head+'<div class="mct-scroll">'+body+'</div>';}
 
   /* Popover content for the application filter (pop.type "mct-appfilter") */
   function mctPopContent(){var wf=find(pop.id),cf=mctFilter(wf);
@@ -4635,11 +4763,43 @@ function mysPopContent(){
   /* Compact axis/variance formatter, finer than Jo's fmtAxis so the new sub-period (Day/Week) grains keep readable sub-10k labels. Full-dollar figures still use Jo's money(). */
   function bgtOAxis(v){var n=Math.abs(v),s=v<0?"−":"";if(n>=1e6)return s+"$"+(Math.round(n/1e5)/10)+"M";if(n>=1e4)return s+"$"+Math.round(n/1e3)+"k";if(n>=1e3)return s+"$"+(Math.round(n/100)/10)+"k";return s+"$"+Math.round(n);}
   /* ---- data accessors & variance math (reuse Jo's data; renamed accessors so this block stays self-contained) ---- */
-  function bgtOReport(w){var id=w.report||BGT_REPORTS[0].id;for(var i=0;i<BGT_REPORTS.length;i++)if(BGT_REPORTS[i].id===id)return BGT_REPORTS[i];return BGT_REPORTS[0];}
-  function bgtOReportLine(w){var rep=bgtOReport(w),id=w.reportLine||rep.lines[0].id;for(var i=0;i<rep.lines.length;i++)if(rep.lines[i].id===id)return rep.lines[i];return rep.lines[0];}
-  function bgtOSet(w){if(w.acctview==="special")return bgtOReportLine(w).rows;var fy2=w.fy||BGT_CUR_FY,table=(w.acctview==="expense")?BUDGET_EXPENSE_BY_FY:BUDGET_INCOME_BY_FY;var rows=table[fy2]||table[BGT_CUR_FY];
-    if(w.dataset==="noactuals")return rows.map(function(r){return {period:r.period,budget:r.budget,actual:null};}); /* data state "No data": a budget with nothing posted yet */
+  /* data states: the report list and the figures follow the selector (small = tiny amounts and one posted month; extreme = thousands of times larger with every month posted) */
+  /* data package: the envelope this widget renders from (API shape; see the shared pkg helpers).
+     reasons: no-actuals (no-data: a budget with nothing posted yet), no-budget (not-configured: nothing entered
+     for the year). The fiscal-year tables and the special-report list travel in data; bgtODsRows applies the
+     reason to the rows it is handed. */
+  function bgtOPackage(w){
+    if(w&&w.pkg)return w.pkg;
+    var o=pkgOption(),base={reports:BGT_REPORTS,income:BUDGET_INCOME_BY_FY,expense:BUDGET_EXPENSE_BY_FY};
+    if(o==="default"){
+      if(w&&w.dataset==="noactuals")return pkg("no-data","no-actuals",base);
+      if(w&&w.dataset==="nobudget")return pkg("not-configured","no-budget",base);
+      return pkg("ok","",base);
+    }
+    if(o==="none")return pkg("no-data","no-actuals",base);
+    if(o==="notconfigured")return pkg("not-configured","no-budget",base);
+    var g=pkgGen(o,"budget");return pkg("ok",o,{reports:g||BGT_REPORTS,income:BUDGET_INCOME_BY_FY,expense:BUDGET_EXPENSE_BY_FY});
+  }
+  function bgtOReports(w){return bgtOPackage(w).data.reports||BGT_REPORTS;}
+  /* what a non-ok package shows. Phase A: nothing of its own; the rows carry the state (no budget -> the
+     widget's own "No budget set up"; no actuals -> the year face with nothing posted). */
+  function bgtOStateHTML(w,p){
+    /* PLACEHOLDER: no Jo Phase 2 design for not-configured/no-fiscal-year (reachable only from an API response); owner to review */
+    if(p.state==="not-configured"&&p.reason!=="no-budget")return pkgPlaceholderHTML(w,p);
+    return null;}
+  function bgtODsRows(w,rows,isReport){
+    if(!w||!rows)return rows;
+    var r=bgtOPackage(w).reason;
+    if(r==="no-actuals")return rows.map(function(x){return {period:x.period,budget:x.budget,actual:null};});
+    if(r==="no-budget")return rows.map(function(x){return {period:x.period,budget:null,actual:null};});
+    if(isReport&&(r==="small"||r==="extreme"))return rows; /* a generated report is already at the state's scale */
+    if(r==="small")return rows.map(function(x,i){return {period:x.period,budget:Math.max(1,Math.round(x.budget/1000)),actual:(i===0&&x.actual!=null)?Math.max(1,Math.round(x.actual/1000)):null};});
+    if(r==="extreme")return rows.map(function(x,i){var b=Math.round(x.budget*4000*100)/100;return {period:x.period,budget:b,actual:Math.round(b*(0.78+((i*37)%41)/100)*100)/100};});
     return rows;}
+  function bgtOReport(w){var list=bgtOReports(w),id=w.report||list[0].id;for(var i=0;i<list.length;i++)if(list[i].id===id)return list[i];return list[0];}
+  function bgtOReportLine(w){var rep=bgtOReport(w),id=w.reportLine||rep.lines[0].id;for(var i=0;i<rep.lines.length;i++)if(rep.lines[i].id===id)return rep.lines[i];return rep.lines[0];}
+  function bgtOSet(w){var rows,d=bgtOPackage(w).data;if(w.acctview==="special")rows=bgtOReportLine(w).rows;else{var fy2=w.fy||BGT_CUR_FY,table=(w.acctview==="expense")?d.expense:d.income;rows=table[fy2]||table[BGT_CUR_FY];}
+    return bgtODsRows(w,rows,w.acctview==="special");}
   function bgtOBasis(w){var av=w.acctview||"income";if(av!=="special")return {type:av,neutral:false};var ln=bgtOReportLine(w);return {type:(ln.type==="expense"?"expense":"income"),neutral:(ln.type==="mixed")};}
   function bgtOHasBudget(rows){return rows.some(function(r){return r.budget>0;});}
   function bgtOVariance(type,b,a){if(a==null)return null;return type==="expense"?(b-a):(a-b);}
@@ -4674,7 +4834,7 @@ function mysPopContent(){
   /* special-report lines only carry current-FY rows, but the rolling 12-month window reaches into the prior FY, so derive a deterministic prior-FY series (budget 95% of current, actuals a seeded wobble, fully posted). The real API's budget lookup simply spans both FYs. */
   function bgtONoise(seed){var x=Math.sin(seed*12.9898)*43758.5453;return x-Math.floor(x);}
   function bgtOBackfillRows(ln){return ln.rows.map(function(r,i){var b=Math.round(r.budget*0.95),a=Math.round(b*(0.96+0.08*bgtONoise(i+ln.id.length*7)));return {period:r.period,budget:b,actual:a};});}
-  function bgtOSeriesFor(w,fy){if(w.acctview==="special"){var ln=bgtOReportLine(w);return (fy===BGT_CUR_FY)?ln.rows:bgtOBackfillRows(ln);}var t=(w.acctview==="expense")?BUDGET_EXPENSE_BY_FY:BUDGET_INCOME_BY_FY;return t[fy]||null;}
+  function bgtOSeriesFor(w,fy){var s,d=bgtOPackage(w).data;if(w.acctview==="special"){var ln=bgtOReportLine(w);s=(fy===BGT_CUR_FY)?ln.rows:bgtOBackfillRows(ln);}else{var t=(w.acctview==="expense")?d.expense:d.income;s=t[fy]||null;}return bgtODsRows(w,s,w.acctview==="special");}
   /* Flat monthly rows for the selected window. Month/Period = the current month; the two rolling windows walk back n calendar months from the as-of anchor (crossing the FY boundary, so budgets come from two FYs); This fiscal year = fiscal year to date. */
   function bgtOSpanMonthly(w,span){
     var out=[];
@@ -4864,7 +5024,7 @@ function mysPopContent(){
     return '<div class="kpi-row w01-gl"><div class="kpi-num">'+chip+'<div class="metric-value bgtO-hl'+hv.cls+'">'+hv.html+hv.pct+'</div></div>'+_spark+'<div class="gl-sub w01-gl-sub">'+bgtOFavPill(v,neutral)+'<button class="w01-caption bgtO-cap-btn" data-action="bgtO-span" data-id="'+w.id+'" aria-haspopup="listbox" aria-label="Comparison window, tap to change">'+bgtOSpanLabel(w.bspan||"year")+ICON("expand_more")+'</button></div></div>';}
   /* One Explore panel: its own interval + shape, so the two panels show different cuts of the SAME window (window + scope stay global up in the header). State per side as iA/fA, iB/fB. */
   /* Glance = headline only. Wide = header + the chosen view. Explore (largest) = header + two independent panels. Loading only on data-fetch changes (scope, report, window): header controls stay usable while the content area shimmers. */
-  function bgtOContent(w){
+  function bgtOContent(w){var p=bgtOPackage(w);if(p.state!=="ok"){var sh=bgtOStateHTML(w,p);if(sh)return sh;}
     if(w.size==="kpi")return bgtOGlance(w);
     var av=w.acctview||"income";
     if(!bgtOHasBudget(bgtOSet(w))&&!w.bloading)return bgtOHeaderBlock(w,true)+bgtONoBudgetState(w,av);
@@ -4880,7 +5040,7 @@ function mysPopContent(){
   function bgtOReportModalInner(){
     var w=find(modal.id);if(!w)return "";
     var dr=modal.dr,dl=modal.dl,open=modal.open||null;
-    var curRep=null;for(var i=0;i<BGT_REPORTS.length;i++)if(BGT_REPORTS[i].id===dr)curRep=BGT_REPORTS[i];
+    var repList=bgtOReports(w),curRep=null;for(var i=0;i<repList.length;i++)if(repList[i].id===dr)curRep=repList[i];
     var curLine=null;if(curRep&&dl)for(var j=0;j<curRep.lines.length;j++)if(curRep.lines[j].id===dl)curLine=curRep.lines[j];
     var preview=(curRep&&curLine)?'<div class="w01-rm-preview">'+ICON("check_circle")+'<span>Comparing <b>'+curLine.name+'</b> from <b>'+curRep.name+'</b> against budget. This line is treated as <b>'+curLine.type+'</b> for favourability.</span></div>':'<div class="w01-rm-preview">'+ICON("info")+'<span>Choose a report, then a line within it. That line is what gets compared against its budget.</span></div>';
     var repVal=curRep?curRep.name:"Select a report";
@@ -5036,7 +5196,22 @@ var PENO_APPTS_EMPTY=[];
 
 function penOEsc(s){return escAttr(s);}
 function penOMoney(n){return moneyFull(n);}
-function penODataset(w){if(w&&(w.dataset==="small"||w.dataset==="extreme"))return DATA_STATES.get(w.dataset,"pension");return (w&&w.dataset==="none")?PENO_APPTS_EMPTY:PENO_APPTS;}
+/* data package: the envelope this widget renders from (API shape; see the shared pkg helpers).
+   reasons: no-active-appointments (no-data), no-plans (not-configured) */
+function penOPackage(w){
+  if(w&&w.pkg)return w.pkg;
+  var o=pkgOption();
+  if(o==="default"){
+    if(w&&(w.state==="empty"||w.dataset==="none"))return pkg("no-data","no-active-appointments",{appts:PENO_APPTS_EMPTY});
+    return pkg("ok","",{appts:PENO_APPTS});
+  }
+  if(o==="none")return pkg("no-data","no-active-appointments",{appts:PENO_APPTS_EMPTY});
+  if(o==="notconfigured")return pkg("not-configured","no-plans",{appts:PENO_APPTS_EMPTY});
+  var g=pkgGen(o,"pension");return pkg("ok",o,{appts:g||PENO_APPTS});
+}
+function penODataset(w){return penOPackage(w).data.appts||[];}
+/* what a non-ok package shows. Phase A: the widget's own empty block for every non-ok state. */
+function penOStateHTML(w,p){return penOEmpty(w);}
 function penODist(w){return (w&&w.penDist)||"All Districts";}
 function penOFiltered(w){var d=penODist(w);return penODataset(w).filter(function(a){return d==="All Districts"||a.dist===d;});}
 function penODistLabel(w){return penODist(w);}
@@ -5236,7 +5411,7 @@ function penOSkeleton(){var rows="";[92,70,54,40,30].forEach(function(wd){rows+=
 /* ---- entry point (single penOContent) ----
    Glance (kpi) = KPI card; Explore (wide) = header + ONE view via the 3-way
    toggle (Table default); Detail (xwide) = header + her synced two panels. */
-function penOContent(w){
+function penOContent(w){var p=penOPackage(w);if(p.state!=="ok")return penOStateHTML(w,p);
   if(w.state==="empty")return penOEmpty(w);
   if(w.size==="kpi")return penOGlance(w);
   if(!penOFiltered(w).length&&w.dataset==="none")return penOEmpty(w);
@@ -5366,14 +5541,35 @@ function penOPopContent(){
      Jul 29 2026 (one extra biweekly run) with the as-of anchor at Jul 31 2026,
      matching our built Final, so the new preset set shows distinct totals
      (This month = 3 runs, This quarter = 7). Amounts only; no personal data. */
-  var PRO_RUNS=(function(){
-    var runs=[],seed=17;function r(){seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;}
+  function prOGenRuns(dists,base,seed){
+    var runs=[];function r(){seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;}
     var end=new Date(2026,6,29);
     for(var i=12;i>=0;i--){var d=new Date(end.getTime());d.setDate(d.getDate()-i*14);
-      var cells={};PRO_DISTS.forEach(function(ds){var b=PRO_BASE[ds.id]||{},row={};Object.keys(b).forEach(function(pt){var drift=1+(12-i)*0.006,noise=0.9+r()*0.2;row[pt]=Math.round(b[pt]*drift*noise);});cells[ds.id]=row;});
+      var cells={};dists.forEach(function(ds){var b=base[ds.id]||{},row={};Object.keys(b).forEach(function(pt){var drift=1+(12-i)*0.006,noise=0.9+r()*0.2;row[pt]=Math.round(b[pt]*drift*noise);});cells[ds.id]=row;});
       runs.push({date:d,cells:cells});}
     return runs;
-  })();
+  }
+  var PRO_RUNS=prOGenRuns(PRO_DISTS,PRO_BASE,17);
+  /* data states: small and extreme bring their own distribution list and base amounts; the runs are generated once per state */
+  var prODsRuns={},prOLiveDists=PRO_DISTS;
+  /* data package: the envelope this widget renders from (API shape; see the shared pkg helpers).
+     reasons: no-checks-in-window (no-data), no-distributions (not-configured). data = {dists, runs}. */
+  function prOPackage(w){
+    if(w&&w.pkg)return w.pkg;
+    var o=pkgOption();
+    if(o==="default"){
+      if(w&&w.state==="empty")return pkg("no-data","no-checks-in-window",{dists:PRO_DISTS,runs:[]});
+      if(w&&w.dataset==="nodists")return pkg("not-configured","no-distributions",{dists:[],runs:PRO_RUNS});
+      return pkg("ok","",{dists:PRO_DISTS,runs:PRO_RUNS});
+    }
+    if(o==="none")return pkg("no-data","no-checks-in-window",{dists:PRO_DISTS,runs:[]});
+    if(o==="notconfigured")return pkg("not-configured","no-distributions",{dists:[],runs:PRO_RUNS});
+    var g=pkgGen(o,"payroll");if(!g)return pkg("ok","",{dists:PRO_DISTS,runs:PRO_RUNS});
+    if(!prODsRuns[o])prODsRuns[o]=prOGenRuns(g.dists,g.base,o==="small"?19:23);
+    return pkg("ok",o,{dists:g.dists,runs:prODsRuns[o]});
+  }
+  function prODists(w){var l=prOPackage(w).data.dists||[];prOLiveDists=l;return l;}
+  function prORuns(w){return prOPackage(w).data.runs||[];}
   var PRO_TODAY=new Date(2026,6,31);
   function prOISO(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
   /* OWNER DELTA: preset order and set. This month default, smallest first. */
@@ -5384,7 +5580,7 @@ function penOPopContent(){
     if(r==="TP")return {begin:prOISO(new Date(t.getFullYear(),t.getMonth(),1)),end:prOISO(t)};
     if(r==="TQ")return {begin:prOISO(new Date(t.getFullYear(),t.getMonth()-2,1)),end:prOISO(t)};
     if(r==="TY")return {begin:prOISO(new Date(t.getFullYear(),t.getMonth()-11,1)),end:prOISO(t)};
-    if(r==="ALL")return {begin:prOISO(PRO_RUNS[0].date),end:prOISO(t)};
+    if(r==="ALL")return {begin:prOISO(prORuns(w)[0].date),end:prOISO(t)};
     return {begin:w.begin||prOISO(t),end:w.end||prOISO(t)};
   }
   /* Local-midnight ISO parse (carried from our built Final; Jo's verbatim new Date(iso)
@@ -5392,14 +5588,14 @@ function penOPopContent(){
      losing the 1st-of-month run under IST/UTC+1). Namespaced, prO-only. */
   function prOParseISO(s){return parseISO(s);}
   function prOPeriodBounds(w){var b=prORangeBoundsFor(w.range||"TM",w);return {start:prOParseISO(b.begin),end:prOParseISO(b.end)};}
-  function prORunsInRange(w){var b=prOPeriodBounds(w);return PRO_RUNS.filter(function(x){return x.date>=b.start&&x.date<=b.end;});}
+  function prORunsInRange(w){var b=prOPeriodBounds(w);return prORuns(w).filter(function(x){return x.date>=b.start&&x.date<=b.end;});}
   function prOPeriodLabel(w){var r=w.range||"TM";if(r==="CUSTOM")return "Custom";var m=PRO_PRESETS.filter(function(o){return o[0]===r;})[0];return m?m[1]:"This month";}
   function prOPeriodChip(w){var lb=prOPeriodLabel(w);return '<button class="scope-chip" data-action="prO-period" data-id="'+w.id+'" aria-haspopup="listbox" aria-label="Period, tap to change" title="'+lb+'"><span class="sc-nm">'+lb+'</span>'+ICON("expand_more")+'</button>';}
-  function prOAgg(w){var runs=prORunsInRange(w),agg={};PRO_DISTS.forEach(function(ds){agg[ds.id]={};});
-    runs.forEach(function(run){PRO_DISTS.forEach(function(ds){var rc=run.cells[ds.id]||{};Object.keys(rc).forEach(function(pt){agg[ds.id][pt]=(agg[ds.id][pt]||0)+rc[pt];});});});return agg;}
-  function prODistName(id){for(var i=0;i<PRO_DISTS.length;i++)if(PRO_DISTS[i].id===id)return PRO_DISTS[i].name;return id;}
+  function prOAgg(w){var runs=prORunsInRange(w),agg={},dl=prODists(w);dl.forEach(function(ds){agg[ds.id]={};});
+    runs.forEach(function(run){dl.forEach(function(ds){var rc=run.cells[ds.id]||{};Object.keys(rc).forEach(function(pt){agg[ds.id][pt]=(agg[ds.id][pt]||0)+rc[pt];});});});return agg;}
+  function prODistName(id){for(var i=0;i<prOLiveDists.length;i++)if(prOLiveDists[i].id===id)return prOLiveDists[i].name;return id;}
   function prOPTName(id){for(var i=0;i<PRO_PT.length;i++)if(PRO_PT[i].id===id)return PRO_PT[i].name;return id;}
-  function prODistTotals(w){var agg=prOAgg(w),keep=prOPTList(w);return PRO_DISTS.map(function(ds){var t=0,c=agg[ds.id]||{};keep.forEach(function(p){if(c[p.id]>0)t+=c[p.id];});return {id:ds.id,name:ds.name,net:t};}).filter(function(x){return x.net>0;});}
+  function prODistTotals(w){var agg=prOAgg(w),keep=prOPTList(w);return prODists(w).map(function(ds){var t=0,c=agg[ds.id]||{};keep.forEach(function(p){if(c[p.id]>0)t+=c[p.id];});return {id:ds.id,name:ds.name,net:t};}).filter(function(x){return x.net>0;});}
   function prODrillRows(w,distId){var agg=prOAgg(w),c=agg[distId]||{};return prOPTList(w).filter(function(p){return c[p.id]>0;}).map(function(p){return {id:p.id,name:p.name,net:c[p.id]};});}
   function prOScopeLabel(w){var sc=w.prScope||"all";if(sc==="all")return "All distributions";if(sc==="pt")return "By pay type";return prODistName(sc);}
   function prOScopeMeta(w){var d=w.prDist||"all",f=prOPTFilter(w),sfx=f?(", "+prOPTName(f)):"";if(d==="all")return {kind:"all",legend:"Distributions"+sfx};return {kind:"distpt",legend:prODistName(d)+": pay types"+sfx,dist:d};}
@@ -5451,9 +5647,16 @@ function penOPopContent(){
     var rows=prOTableRows(w),tot=rows.reduce(function(s,a){return s+a.net;},0),meta=prOScopeMeta(w);
     var ctx='';
     return '<div class="dep-hd">'+top+'<div class="dep-hd-num"><span class="metric-value">'+money(tot)+'</span>'+ctx+'</div></div>';}
-  function prOContent(w){
-    if(w.state==="empty"){var ec=EMPTY_COPY.payroll,body='<div class="state" data-kind="empty">'+ICON("inbox")+'<div class="state-title">'+ec.title+'</div><div class="state-sub">'+ec.sub+'</div>'+(ec.cta?'<button class="btn outlined" data-action="'+ec.action+'" data-id="'+w.id+'">'+ICON("add")+ec.cta+'</button>':'')+'</div>';
-      return prOHeaderBlock(w,(w.size==="xwide"||w.size==="kpi"),true)+body;}
+  /* the widget's own empty block (EMPTY_COPY.payroll wording); the header stays so the period chip is the recovery */
+  function prOEmptyHTML(w){var ec=EMPTY_COPY.payroll,body='<div class="state" data-kind="empty">'+ICON("inbox")+'<div class="state-title">'+ec.title+'</div><div class="state-sub">'+ec.sub+'</div>'+(ec.cta?'<button class="btn outlined" data-action="'+ec.action+'" data-id="'+w.id+'">'+ICON("add")+ec.cta+'</button>':'')+'</div>';
+    return prOHeaderBlock(w,(w.size==="xwide"||w.size==="kpi"),true)+body;}
+  /* what a non-ok package shows. Phase A: the widget's own empty block for every non-ok state. */
+  function prOStateHTML(w,p){
+    /* PLACEHOLDER: no Jo Phase 2 design for not-configured/no-distributions; owner to review */
+    if(p.state==="not-configured")return prOHeaderBlock(w,(w.size==="xwide"||w.size==="kpi"),true)+pkgPlaceholderHTML(w,p);
+    return prOEmptyHTML(w);}
+  function prOContent(w){var p=prOPackage(w);if(p.state!=="ok")return prOStateHTML(w,p);
+    if(w.state==="empty")return prOEmptyHTML(w);
     if(w.size==="kpi")return prOGlance(w);
     /* Zero-in-range (e.g. a custom range with no pay runs): show the state, not a
        degenerate $0 donut. Header stays so the period chip is the recovery. */
@@ -5488,11 +5691,11 @@ function penOPopContent(){
     if(pop.type==="prO-scope"){var wsc=find(pop.id)||((modal&&modal.mw&&modal.mw.id===pop.id)?modal.mw:null),curD=(wsc&&wsc.prDist)||"all";
       /* inside the distribution pop-up there is no "All distributions": the pop-up, its title and its Employee Break Down are about one distribution */
       var outD=(wsc&&wsc.prODrill)?'<div class="cap">Distribution</div>':('<button class="mi'+(curD==="all"?" check":"")+'" role="option" aria-selected="'+(curD==="all")+'" data-action="prO-set-dist" data-id="'+wsc.id+'" data-s="all">'+(curD==="all"?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm">All distributions</span></button>'+'<div class="sep"></div><div class="cap">A specific distribution</div>');
-      outD+=PRO_DISTS.map(function(ds){var on=curD===ds.id;return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-action="prO-set-dist" data-id="'+wsc.id+'" data-s="'+ds.id+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+'<span class="w03-dot" style="background:'+(PRO_DIST_COLORS[ds.id]||"var(--primitive-color-cool-neutral-250)")+'"></span><span class="mi-nm">'+ds.name+'</span></button>';}).join("");
+      outD+=prOLiveDists.map(function(ds){var on=curD===ds.id;return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-action="prO-set-dist" data-id="'+wsc.id+'" data-s="'+ds.id+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+'<span class="w03-dot" style="background:'+(PRO_DIST_COLORS[ds.id]||"var(--primitive-color-cool-neutral-250)")+'"></span><span class="mi-nm">'+ds.name+'</span></button>';}).join("");
       return outD;}
     if(pop.type==="prO-pt"){var wpt=find(pop.id)||((modal&&modal.mw&&modal.mw.id===pop.id)?modal.mw:null),curP=(wpt&&wpt.prPT)||"all";
       var live=prOAgg(wpt),paid={};
-      PRO_DISTS.forEach(function(ds){var c=live[ds.id]||{};Object.keys(c).forEach(function(pt){if(c[pt]>0)paid[pt]=true;});});
+      prOLiveDists.forEach(function(ds){var c=live[ds.id]||{};Object.keys(c).forEach(function(pt){if(c[pt]>0)paid[pt]=true;});});
       var outP='<button class="mi'+(curP==="all"?" check":"")+'" role="option" aria-selected="'+(curP==="all")+'" data-action="prO-set-pt" data-id="'+wpt.id+'" data-s="all">'+(curP==="all"?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm">All pay types</span></button>'+'<div class="sep"></div><div class="cap">A specific pay type</div>';
       outP+=PRO_PT.filter(function(p){return paid[p.id];}).map(function(p){var on=curP===p.id;return '<button class="mi'+(on?" check":"")+'" role="option" aria-selected="'+on+'" data-action="prO-set-pt" data-id="'+wpt.id+'" data-s="'+p.id+'">'+(on?ICON("check"):'<span class="mi-gap"></span>')+'<span class="mi-nm">'+p.name+'</span></button>';}).join("");
       return outP;}
@@ -5666,7 +5869,23 @@ var REMO_ACTIVITIES=[
 // ===== RENDER ===================================================
 function remOEsc(s){return escAttr(s);}
 var remOLive=null; /* the activity list last served, so seq look-ups follow the data state */
-function remOData(w){if(w.state==="empty"||w.state==="noscope")return [];var l=(w.dataset==="small"||w.dataset==="extreme")?DATA_STATES.get(w.dataset,"remittance").activities:REMO_ACTIVITIES;remOLive=l;return l;}
+/* data package: the envelope this widget renders from (API shape; see the shared pkg helpers).
+   reasons: no-term-covers-date (no-data), no-activities (not-configured) */
+function remOPackage(w){
+  if(w&&w.pkg)return w.pkg;
+  var o=pkgOption();
+  if(o==="default"){
+    if(w&&w.state==="noscope")return pkg("no-data","no-term-covers-date",{activities:[]});
+    if(w&&w.state==="empty")return pkg("not-configured","no-activities",{activities:[]});
+    return pkg("ok","",{activities:REMO_ACTIVITIES});
+  }
+  if(o==="none")return pkg("no-data","no-term-covers-date",{activities:[]});
+  if(o==="notconfigured")return pkg("not-configured","no-activities",{activities:[]});
+  var g=pkgGen(o,"remittance");return pkg("ok",o,{activities:g?g.activities:REMO_ACTIVITIES});
+}
+function remOData(w){var l=remOPackage(w).data.activities||[];remOLive=l;return l;}
+/* what a non-ok package shows. Phase A: the widget's own empty block; the date-range case is its noscope branch. */
+function remOStateHTML(w,p){if(p.state==="no-data"&&p.reason==="no-term-covers-date"&&w.state!=="noscope"){var c={};for(var k in w)c[k]=w[k];c.state="noscope";return remOEmpty(c);}return remOEmpty(w);}
 /* ---- date helpers (leap-aware) ---------------------------------- */
 function remOParse(iso){return parseISO(iso);}
 function remOISO(d){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");}
@@ -5945,7 +6164,7 @@ function remOEmpty(w){
 function remOSkeleton(){var rows="";[72,58,80,50,66].forEach(function(wd){rows+='<div class="w04-sk-row"><span class="sk" style="flex:1;height:12px;border-radius:var(--cornerradius-small)"></span><span class="sk" style="width:'+wd+'%;height:8px;border-radius:var(--cornerradius-small)"></span><span class="sk" style="width:44px;height:12px;border-radius:var(--cornerradius-small)"></span></div>';});return '<div class="w04-skel" aria-busy="true">'+rows+'<div class="bgt-skel-cap"><span class="bgt-spin"></span>Loading</div></div>';}
 
 // ===== entry point ==============================================
-function remOContent(w){
+function remOContent(w){var p=remOPackage(w);if(p.state!=="ok")return remOStateHTML(w,p);
   if(w.state==="empty"||w.state==="noscope")return remOEmpty(w);
   if(w.size==="kpi")return remOGlance(w);
   if(w.remLoading)return remOHeaderBlock(w,"loading")+remOSkeleton();
@@ -6567,7 +6786,25 @@ var ARO_INV_SINGLE=[
 /* (2) RENDER ----------------------------------------------------------- */
 function arOEsc(s){return escAttr(s);}
 function arOFmtDate(iso){return fmtDateLong(iso);}
-function arODataset(w){if(w.dataset==="small"||w.dataset==="extreme")return DATA_STATES.get(w.dataset,"receivables");if(w.dataset==="current")return ARO_INV_CURRENT;if(w.dataset==="single")return ARO_INV_SINGLE;return ARO_INV;}
+/* data package: the envelope this widget renders from (API shape; see the shared pkg helpers).
+   reasons: all-settled (no-data), no-revenue-centres (not-configured) */
+function arOPackage(w){
+  if(w&&w.pkg)return w.pkg;
+  var o=pkgOption();
+  if(o==="default"){
+    if(w&&(w.state==="empty"||w.dataset==="none"))return pkg("no-data","all-settled",{invoices:[]});
+    return pkg("ok","",{invoices:(w&&w.dataset==="current")?ARO_INV_CURRENT:(w&&w.dataset==="single")?ARO_INV_SINGLE:ARO_INV});
+  }
+  if(o==="none")return pkg("no-data","all-settled",{invoices:[]});
+  if(o==="notconfigured")return pkg("not-configured","no-revenue-centres",{invoices:[]});
+  var g=pkgGen(o,"receivables");return pkg("ok",o,{invoices:g||ARO_INV});
+}
+function arODataset(w){return arOPackage(w).data.invoices||[];}
+/* what a non-ok package shows. Phase A: the widget's own empty block for every non-ok state. */
+function arOStateHTML(w,p){
+  /* PLACEHOLDER: no Jo Phase 2 design for not-configured/no-revenue-centres; owner to review */
+  if(p.state==="not-configured")return pkgPlaceholderHTML(w,p);
+  return arOEmpty(w);}
 function arOFiltered(w){var rc=w.arORc||"All",src=w.arOSource||"All";return arODataset(w).filter(function(x){return (rc==="All"||x.rc===rc)&&(src==="All"||x.source===src);});}
 function arOSevOf(days){for(var i=0;i<ARO_BUCKETS.length;i++){if(days<=ARO_BUCKETS[i].hi)return ARO_BUCKETS[i].sev;}return 5;} /* v2.1: 6 bands, worst sev is 5 */
 function arOBucketOf(days){for(var i=0;i<ARO_BUCKETS.length;i++){if(days<=ARO_BUCKETS[i].hi)return ARO_BUCKETS[i].key;}return "b4";}
@@ -6784,7 +7021,7 @@ function arOInlineList(w){
 
 function arOSkeleton(){var bars="";[90,64,48,34,22].forEach(function(wd){bars+='<div class="arO-sk-row"><span class="sk" style="width:70px;height:12px;border-radius:var(--cornerradius-small)"></span><span class="sk arO-sk-bar" style="width:'+wd+'%"></span></div>';});return '<div class="arO-skel"><div class="arO-skel-bars">'+bars+'</div><div class="bgt-skel-cap"><span class="bgt-spin"></span>Loading</div></div>';}
 
-function arOContent(w){
+function arOContent(w){var p=arOPackage(w);if(p.state!=="ok")return arOStateHTML(w,p);
   if(w.state==="empty")return arOEmpty(w);
   if(w.size==="kpi")return arOGlance(w);
   if(w.arOloading)return arOHeaderBlock(w,"loading")+arOSkeleton();
@@ -6988,7 +7225,26 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
   function insOCost(p){return (p.enroll||0)*(p.rate||0);}
   function insOCostTotal(w){return insOFiltered(w).reduce(function(s,p){return s+insOCost(p);},0);}
   var INSO_NODENTAL=INSO_PLANS.filter(function(p){return p.type!=="Dental";});
-  function insODataset(w){if(w.dataset==="small"||w.dataset==="extreme")return DATA_STATES.get(w.dataset,"insurance");if(w.dataset==="none")return INSO_PLANS_EMPTY;if(w.dataset==="nodental")return INSO_NODENTAL;return INSO_PLANS;}
+  /* data package: the envelope this widget renders from (API shape; see the shared pkg helpers).
+     reasons: no-enrolments (no-data), no-plans (not-configured). A type filter with no plans stays client-side (insOScopedEmpty). */
+  function insOPackage(w){
+    if(w&&w.pkg)return w.pkg;
+    var o=pkgOption();
+    if(o==="default"){
+      if(w&&(w.state==="empty"||w.dataset==="none"))return pkg("not-configured","no-plans",{plans:INSO_PLANS_EMPTY});
+      return pkg("ok","",{plans:(w&&w.dataset==="nodental")?INSO_NODENTAL:INSO_PLANS});
+    }
+    if(o==="none")return pkg("no-data","no-enrolments",{plans:insOZeroSet()});
+    if(o==="notconfigured")return pkg("not-configured","no-plans",{plans:INSO_PLANS_EMPTY});
+    var g=pkgGen(o,"insurance");return pkg("ok",o,{plans:g||INSO_PLANS});
+  }
+  function insODataset(w){return insOPackage(w).data.plans||[];}
+  /* the shipped plans with every enrolment at zero: the "no data" face, built once */
+  var insOZero=null;
+  function insOZeroSet(){if(!insOZero)insOZero=INSO_PLANS.map(function(p){var c={};for(var k in p)c[k]=p[k];c.enroll=0;return c;});return insOZero;}
+  /* what a non-ok package shows: not-configured -> Jo's "No insurance plans yet"; no-data falls through to
+     the normal face, which lists the plans at zero. */
+  function insOStateHTML(w,p){if(p.state==="no-data")return null;return insOEmpty(w);}
   function insOFiltered(w){var ty=w.insType||"All";return insODataset(w).filter(function(p){return ty==="All"||p.type===ty;});}
   function insOTotal(w){return insOFiltered(w).reduce(function(s,p){return s+p.enroll;},0);}
   function insOPlanCount(w){return insOFiltered(w).length;}
@@ -7157,8 +7413,9 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
      (Table default). Detail restores the ORIGINAL side-by-side reading,
      table left and pie right, both reflecting the same filtered data. */
   function insOContent(w){
-    var inner;
-    if(w.state==="empty")inner=insOEmpty(w);
+    var inner,p=insOPackage(w),sh=(p.state!=="ok")?insOStateHTML(w,p):null;
+    if(sh)inner=sh;
+    else if(w.state==="empty")inner=insOEmpty(w);
     else if(w.size==="kpi")inner=insOGlance(w);
     else if(w.insloading)inner=insOHeader(w,"loading")+insOSkeleton();
     else if(!insOFiltered(w).length)inner=insOHeader(w)+'<div class="w06-body">'+insOScopedEmpty(w)+'</div>';
@@ -7219,10 +7476,26 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
     var sum2=out.reduce(function(s,a){return s+a.net;},0),bi=0;for(var k=1;k<out.length;k++){if(out[k].net>out[bi].net)bi=k;}out[bi].net+=(DEPO_TARGET_TOTAL-sum2);
     return out;})();
   var depODsBig=null;
-  function depOData(w){
-    if(w&&w.dataset==="small")return DEPO_DEP.slice(0,2);
-    if(w&&w.dataset==="extreme"){if(!depODsBig){depODsBig=[];for(var k=0;k<8;k++)DEPO_DEP.forEach(function(a){var c={};for(var f in a)c[f]=a[f];c.name=a.name+(k?" "+(k+1):"");c.acct="\u2022\u2022"+String(1000+(k*977+parseInt(a.acctFull.slice(-4),10))%9000);c.acctFull=a.acctFull.slice(0,6)+c.acct.slice(2);c.net=Math.round(a.net*(0.3+(k*0.37)%1.4));depODsBig.push(c);});}return depODsBig;}
-    return (w&&w.dataset==="empty")?[]:DEPO_DEP;}
+  /* the extreme set: eight renamed copies of the shipped accounts, built once */
+  function depOBigSet(){if(!depODsBig){depODsBig=[];for(var k=0;k<8;k++)DEPO_DEP.forEach(function(a){var c={};for(var f in a)c[f]=a[f];c.name=a.name+(k?" "+(k+1):"");c.acct="\u2022\u2022"+String(1000+(k*977+parseInt(a.acctFull.slice(-4),10))%9000);c.acctFull=a.acctFull.slice(0,6)+c.acct.slice(2);c.net=Math.round(a.net*(0.3+(k*0.37)%1.4));depODsBig.push(c);});}return depODsBig;}
+  /* data package: the envelope this widget renders from (API shape; see the shared pkg helpers).
+     reasons: no-active-accounts (no-data), no-account-types (not-configured) */
+  function depOPackage(w){
+    if(w&&w.pkg)return w.pkg;
+    var o=pkgOption();
+    if(o==="default"){
+      if(w&&(w.state==="empty"||w.dataset==="empty"))return pkg("not-configured","no-account-types",{accounts:[]});
+      return pkg("ok","",{accounts:DEPO_DEP});
+    }
+    if(o==="none")return pkg("no-data","no-active-accounts",{accounts:[]});
+    if(o==="notconfigured")return pkg("not-configured","no-account-types",{accounts:[]});
+    if(o==="small")return pkg("ok","small",{accounts:DEPO_DEP.slice(0,2)});
+    if(o==="extreme")return pkg("ok","extreme",{accounts:depOBigSet()});
+    return pkg("ok","",{accounts:DEPO_DEP});
+  }
+  function depOData(w){return depOPackage(w).data.accounts||[];}
+  /* what a non-ok package shows. Phase A: the widget's own empty block for every non-ok state. */
+  function depOStateHTML(w,p){return depOEmptyState(w);}
   /* Account types are configured records, not labels read off the accounts: a type with no accounts still lists, the way a newly set up one does before any account is opened against it. "Building Fund" is that case. Legacy orders them by name. */
   var DEPO_TYPES=["Building Fund","Certificate of Deposit","Checking","Endowment","Escrow","Grant Funds","Money Market","Operating Reserve","Restricted Funds","Savings","Trust Accounts"];
   function depOTypes(w){var net={};depOData(w).forEach(function(a){net[a.type]=(net[a.type]||0)+a.net;});return DEPO_TYPES.map(function(t){return {name:t,net:net[t]||0};});}
@@ -7361,6 +7634,7 @@ document.addEventListener("mousemove",function(e){var row=e.target.closest&&e.ta
   function depOContent(w){
     if(w.state==="loading")return depOSkeleton();
     if(w.state==="error")return depOErrorState(w);
+    var p=depOPackage(w);if(p.state!=="ok")return depOStateHTML(w,p);
     if(w.state==="empty"||!depOData(w).length)return depOEmptyState(w);
     if(w.size==="kpi")return depOGlance(w);
     var v=w.view||"table";if((w.acct||w.leaf)&&v==="dist")v="trend";
@@ -7542,7 +7816,23 @@ function ptoFStateClass(w,fe){return "ptof-mst-"+ptoFEffState(w,fe).toLowerCase(
    "Not Assigned", treated like any other group (heading, badge, filter option, sort), as the legacy screen does. */
 var PTOF_NOT_ASSIGNED="Not Assigned";
 function ptoFGroupName(v){v=(v==null)?"":String(v).trim();return v||PTOF_NOT_ASSIGNED;}
-function ptoFFlat(w){var ds=(w.dataset==="none"||w.state==="empty")?[]:((w.dataset==="small"||w.dataset==="extreme")?DATA_STATES.get(w.dataset,"pto"):PTOF_GROUPS),out=[];ds.forEach(function(g){var gpg=ptoFGroupName(g.pg);g.people.forEach(function(p){var pdept=ptoFGroupName(p.dept);p.entries.forEach(function(e,i){var mo=(e.mo==null?PTOF_WORK_M:e.mo),year=(e.year==null?PTOF_WORK_Y:e.year),dEnd=e.dEnd||e.d,span=(dEnd-e.d+1),hpd=(e.hours&&span>0)?Math.round(e.hours/span):e.hours;for(var dd=e.d;dd<=dEnd;dd++){out.push({pg:gpg,person:p.name,dept:pdept,personKey:gpg+"|"+p.name,_id:gpg+"#"+p.name+"#"+i+"#"+dd,type:e.type,mo:mo,year:year,d:dd,dEnd:dd,hours:hpd,st:e.st,appBy:e.appBy,appDate:e.appDate});}});});});return out;}
+/* data package: the envelope this widget renders from (API shape; see the shared pkg helpers).
+   reasons: nothing-pending (no-data), nothing-ever-scheduled (not-configured). Owner (16 Oct 2026): no
+   permissions version; a user without the right does not have the widget at all. */
+function ptoFPackage(w){
+  if(w&&w.pkg)return w.pkg;
+  var o=pkgOption();
+  if(o==="default"){
+    if(w&&(w.state==="empty"||w.dataset==="none"))return pkg("no-data","nothing-pending",{groups:[]});
+    return pkg("ok","",{groups:PTOF_GROUPS});
+  }
+  if(o==="none")return pkg("no-data","nothing-pending",{groups:[]});
+  if(o==="notconfigured")return pkg("not-configured","nothing-ever-scheduled",{groups:[]});
+  var g=pkgGen(o,"pto");return pkg("ok",o,{groups:g||PTOF_GROUPS});
+}
+/* what a non-ok package shows. Phase A: the widget's own empty block for every non-ok state. */
+function ptoFStateHTML(w,p){return ptoFEmpty(w);}
+function ptoFFlat(w){var ds=ptoFPackage(w).data.groups||[],out=[];ds.forEach(function(g){var gpg=ptoFGroupName(g.pg);g.people.forEach(function(p){var pdept=ptoFGroupName(p.dept);p.entries.forEach(function(e,i){var mo=(e.mo==null?PTOF_WORK_M:e.mo),year=(e.year==null?PTOF_WORK_Y:e.year),dEnd=e.dEnd||e.d,span=(dEnd-e.d+1),hpd=(e.hours&&span>0)?Math.round(e.hours/span):e.hours;for(var dd=e.d;dd<=dEnd;dd++){out.push({pg:gpg,person:p.name,dept:pdept,personKey:gpg+"|"+p.name,_id:gpg+"#"+p.name+"#"+i+"#"+dd,type:e.type,mo:mo,year:year,d:dd,dEnd:dd,hours:hpd,st:e.st,appBy:e.appBy,appDate:e.appDate});}});});});return out;}
 /* Entries for a single calendar month (year + 0-based month). FOUR
    callers, two of which are the Approval Queue and the Glance figures,
    which is exactly why the department filter must not live here. See
@@ -7908,7 +8198,7 @@ function ptoFEmpty(w){
     '<div class="kpi-num ptof-fig"'+ptoFTip(PTOF_TIP_OUT)+'><div class="metric-value ptof-num-zero">0</div><div class="gl-sub"><span class="w09-caption">Outstanding</span></div></div></div>';
   return '<div class="state" data-kind="empty">'+ICON("event_available")+'<div class="state-title">No time off scheduled</div><div class="state-sub">Once employees request time off, their requests will appear here grouped by department for review and approval.</div></div>';
 }
-function ptoFContent(w){
+function ptoFContent(w){var p=ptoFPackage(w);if(p.state!=="ok")return ptoFStateHTML(w,p);
   if(w.state==="empty"||w.dataset==="none"||!ptoFFlat(w).length)return ptoFEmpty(w);
   if(ptoFTier(w)==="glance")return ptoFGlance(w);
   var head=ptoFHeaderBlock(w);
@@ -8124,7 +8414,25 @@ function lonFFmtDate(iso){return fmtDateLong(iso);}
 function lonFParse(iso){return parseISO(iso);}
 function lonFDaysSincePay(iso){if(!iso)return null;var t=lonFParse(LONF_TODAY);return Math.round((t-lonFParse(iso))/86400000);}
 function lonFIsDormant(x){var d=lonFDaysSincePay(x.lastPay);return d!=null&&d>90;}
-function lonFDataset(w){if(w.dataset==="small"||w.dataset==="extreme")return DATA_STATES.get(w.dataset,"loans");if(w.dataset==="current")return LONF_LOANS_CURRENT;if(w.dataset==="single")return LONF_LOANS_SINGLE;if(w.dataset==="none")return [];return LONF_LOANS;}
+/* data package: the envelope this widget renders from (API shape; see the shared pkg helpers).
+   reasons: none-with-balance (no-data), no-loan-types-or-loans (not-configured) */
+function lonFPackage(w){
+  if(w&&w.pkg)return w.pkg;
+  var o=pkgOption();
+  if(o==="default"){
+    if(w&&(w.state==="empty"||w.dataset==="none"))return pkg("no-data","none-with-balance",{loans:[]});
+    return pkg("ok","",{loans:(w&&w.dataset==="current")?LONF_LOANS_CURRENT:(w&&w.dataset==="single")?LONF_LOANS_SINGLE:LONF_LOANS});
+  }
+  if(o==="none")return pkg("no-data","none-with-balance",{loans:[]});
+  if(o==="notconfigured")return pkg("not-configured","no-loan-types-or-loans",{loans:[]});
+  var g=pkgGen(o,"loans");return pkg("ok",o,{loans:g||LONF_LOANS});
+}
+function lonFDataset(w){return lonFPackage(w).data.loans||[];}
+/* what a non-ok package shows. Phase A: the widget's own empty block for every non-ok state. */
+function lonFStateHTML(w,p){
+  /* PLACEHOLDER: no Jo Phase 2 design for not-configured/no-loan-types-or-loans; owner to review */
+  if(p.state==="not-configured")return pkgPlaceholderHTML(w,p);
+  return lonFEmpty(w);}
 function lonFFiltered(w){var ty=w.lonType||"All";return lonFDataset(w).filter(function(x){return ty==="All"||x.type===ty;});}
 function lonFBucketOf(days){for(var i=0;i<LONF_BUCKETS.length;i++){if(days<=LONF_BUCKETS[i].hi)return LONF_BUCKETS[i].key;}return "b3";}
 function lonFBucketLabel(key){for(var i=0;i<LONF_BUCKETS.length;i++)if(LONF_BUCKETS[i].key===key)return LONF_BUCKETS[i].label;return key;}
@@ -8372,7 +8680,7 @@ function lonFFull(w){
 }
 function lonFSkeleton(){var rows="";[82,58,70,48,64].forEach(function(wd){rows+='<div class="lon-sk-row"><span class="sk" style="width:70px;height:12px;border-radius:var(--cornerradius-small)"></span><span class="sk" style="flex:1;height:12px;border-radius:var(--cornerradius-small)"></span><span class="sk" style="width:'+wd+'px;height:12px;border-radius:var(--cornerradius-small)"></span></div>';});return '<div class="lon-skel" aria-busy="true">'+rows+'<div class="bgt-skel-cap"><span class="bgt-spin"></span>Loading</div></div>';}
 /* Single entry point, dispatched by w.kind==="loans". */
-function lonFContent(w){
+function lonFContent(w){var p=lonFPackage(w);if(p.state!=="ok")return lonFStateHTML(w,p);
   if(w.state==="empty"||!lonFDataset(w).length)return lonFEmpty(w);
   if(w.size==="kpi")return lonFGlance(w);
   if(w.lonLoading)return lonFHeaderBlock(w,"loading")+lonFSkeleton();
@@ -8645,7 +8953,22 @@ function faFMoneyShort(n){
 }
 function faFDimDef(k){for(var i=0;i<FAF_DIMS.length;i++){if(FAF_DIMS[i].k===k)return FAF_DIMS[i];}return FAF_DIMS[0];}
 function faFMeasDef(k){for(var i=0;i<FAF_MEASURES.length;i++){if(FAF_MEASURES[i].k===k)return FAF_MEASURES[i];}return FAF_MEASURES[FAF_MEASURES.length-1];}
-function faFDataset(w){if(w.dataset==='small'||w.dataset==='extreme')return DATA_STATES.get(w.dataset,"fixedassets");return (w.dataset==='none'||w.dataset==='empty')?FAF_ASSETS_EMPTY:FAF_ASSETS;}
+/* data package: the envelope this widget renders from (API shape; see the shared pkg helpers).
+   reasons: nothing-to-chart-for-measure (no-data), no-assets (not-configured) */
+function faFPackage(w){
+  if(w&&w.pkg)return w.pkg;
+  var o=pkgOption();
+  if(o==="default"){
+    if(w&&(w.state==='empty'||w.dataset==='none'||w.dataset==='empty'))return pkg("not-configured","no-assets",{assets:FAF_ASSETS_EMPTY});
+    return pkg("ok","",{assets:FAF_ASSETS});
+  }
+  if(o==="none")return pkg("no-data","nothing-to-chart-for-measure",{assets:FAF_ASSETS_EMPTY});
+  if(o==="notconfigured")return pkg("not-configured","no-assets",{assets:FAF_ASSETS_EMPTY});
+  var g=pkgGen(o,"fixedassets");return pkg("ok",o,{assets:g||FAF_ASSETS});
+}
+function faFDataset(w){return faFPackage(w).data.assets||[];}
+/* what a non-ok package shows. Phase A: the widget's own empty block for every non-ok state. */
+function faFStateHTML(w,p){return faFNoAssets(w);}
 /* The five measures. Depreciable Value and Net Value are DERIVED, not stored,
    and Net Value's base is Depreciable Value (Cost minus Salvage), NOT Cost. Step
    1 records that as a correction to its own earlier wording, so a build using
@@ -8966,8 +9289,8 @@ function faFNoAssets(w){
     '</div></div>';
   }
   return '<div class="state" data-kind="empty">'+faFIcon('inventory_2')+
-    '<div class="state-title">No fixed assets</div>'+
-    '<div class="state-sub">There are no fixed asset records for this organisation. This wording is build-invented: no empty-state copy has been decided (Step 4 Sign-off Readiness row 8).</div>'+
+    '<div class="state-title">No fixed assets yet</div>'+
+    '<div class="state-sub">When assets are added to the Fixed Assets module they will show here, grouped and valued.</div>'+
   '</div>';
 }
 /* No module rights, loading, error or API failure, stale data and a "data as of"
@@ -9037,6 +9360,7 @@ function faFTableModalHTML(){
 function faFBody(w){
   /* The real empty-data guard keys off the DATASET being empty, not only off an
      explicitly set state flag, so both routes land on the same state. */
+  var p=faFPackage(w);if(p.state!=="ok") return faFStateHTML(w,p);
   if(w.state==='empty'||!faFDataset(w).length) return faFNoAssets(w);
   if(w.state==='unspecified') return faFUnbuilt(w);
   if(faFTier(w)==='kpi') return faFGlance(w);
@@ -9308,7 +9632,26 @@ function purFAgeLabel(po){var a=purFAge(po);return (po.stage==="Pending")?("wait
 /* A request with a rejected approval row is hidden from the whole widget, as the legacy data panel does
    (PurchasingManagement.ascx.cs:86-87); it stays reachable from the Requests page (owner, 9 Oct). */
 function purFHidden(po){return (po.appr||[]).some(function(a){return a.state==="rejected";});}
-function purFDataset(w){var base=(w&&(w.dataset==="small"||w.dataset==="extreme"))?DATA_STATES.get(w.dataset,"purchasing"):((w&&(w.dataset==="empty"||w.state==="empty"))?PURF_POS_EMPTY:PURF_POS);return base.filter(function(p){return !purFHidden(p);});}
+/* data package: the envelope this widget renders from (API shape; see the shared pkg helpers).
+   reasons: nothing-matches-status (no-data), not-on-any-path (not-configured). data.pos is PURF_POS itself
+   in the default package: approvals mutate the orders in place and the driver reaches the same array. */
+function purFPackage(w){
+  if(w&&w.pkg)return w.pkg;
+  var o=pkgOption();
+  if(o==="default"){
+    if(w&&(w.dataset==="empty"||w.state==="empty"))return pkg("no-data","nothing-matches-status",{pos:PURF_POS_EMPTY});
+    return pkg("ok","",{pos:PURF_POS});
+  }
+  if(o==="none")return pkg("no-data","nothing-matches-status",{pos:PURF_POS_EMPTY});
+  if(o==="notconfigured")return pkg("not-configured","not-on-any-path",{pos:PURF_POS_EMPTY});
+  var g=pkgGen(o,"purchasing");return pkg("ok",o,{pos:g||PURF_POS});
+}
+function purFDataset(w){return (purFPackage(w).data.pos||[]).filter(function(p){return !purFHidden(p);});}
+/* what a non-ok package shows. Phase A: the widget's own empty block for every non-ok state. */
+function purFNotOnPath(w){return '<div class="state" data-kind="empty">'+purFIcon("inbox")+
+    '<div class="state-title">Nothing needs your approval</div>'+
+    '<div class="state-sub">You are not on an approval path yet, so there are no purchase requests to review here. When you are added to a path, anything that needs you shows up.</div></div>';}
+function purFStateHTML(w,p){if(p.state==="not-configured")return purFNotOnPath(w);return purFEmpty(w,false);}
 function purFActive(po){return PURF_STAGES.indexOf(po.stage)>-1;}
 function purFPO(w,ref){var l=purFDataset(w);for(var i=0;i<l.length;i++)if(l[i].ref===ref)return l[i];return null;}
 function purFSum(list){return list.reduce(function(s,p){return s+p.amt;},0);}
@@ -9699,7 +10042,7 @@ function purFEncPopHTML(w){
   var rows=purFOldestFirst(per.orders).map(function(p){return '<button class="mi purf-enc-mi" data-purf="open" data-purf-ref="'+purFEsc(p.ref)+'" data-id="'+w.id+'"><span class="purf-enc-mi-l"><span class="mi-nm">'+purFEsc(p.ref)+' '+purFEsc(p.vendor)+'</span><span class="purf-enc-mi-s" style="color:'+(PURF_STAGE_TONE[purFLane(p)]||"inherit")+'">'+purFLane(p)+(p.hold?", on hold":"")+'</span></span><span class="purf-enc-mi-a">'+purFMoney(p.amt)+'</span></button>';}).join("");
   return '<div class="cap">'+per.label+': '+purFMoney(per.amt)+' encumbered</div>'+rows+'<div class="mi-note purf-popnote">'+per.n+(per.n===1?" open order":" open orders")+' issued in '+per.label+'. Open one to see its record.</div>';
 }
-function purFBody(w){
+function purFBody(w){var p=purFPackage(w);if(p.state!=="ok")return purFStateHTML(w,p);
   if(w.state==="empty"||!purFDataset(w).length)return purFEmpty(w,false);
   if(purFTier(w)==="kpi")return purFGlance(w);
   if(w.purfLoading)return purFHeaderBlock(w)+purFSkeleton();
@@ -10677,7 +11020,23 @@ function gpFSumRows(rows){
 function gpFTotals(w){return gpFSumRows(gpFPurposeCompute(w));}
 
 
-function gpFAllPurposes(w){if(w&&(w.dataset==="small"||w.dataset==="extreme"))return DATA_STATES.get(w.dataset,"gifts");return (w&&w.dataset==="single")?GPF_PURPOSES_SINGLE:GPF_PURPOSES;}
+/* data package: the envelope this widget renders from (API shape; see the shared pkg helpers).
+   reasons: no-active-pledges (no-data), no-purposes (not-configured) */
+function gpFPackage(w){
+  if(w&&w.pkg)return w.pkg;
+  var o=pkgOption();
+  if(o==="default"){
+    if(w&&w.dataset==="nopurposes")return pkg("not-configured","no-purposes",{purposes:[]});
+    if(w&&(w.state==="empty"||w.dataset==="empty"))return pkg("no-data","no-active-pledges",{purposes:[]});
+    return pkg("ok","",{purposes:(w&&w.dataset==="single")?GPF_PURPOSES_SINGLE:GPF_PURPOSES});
+  }
+  if(o==="none")return pkg("no-data","no-active-pledges",{purposes:[]});
+  if(o==="notconfigured")return pkg("not-configured","no-purposes",{purposes:[]});
+  var g=pkgGen(o,"gifts");return pkg("ok",o,{purposes:g||GPF_PURPOSES});
+}
+function gpFAllPurposes(w){return gpFPackage(w).data.purposes||[];}
+/* what a non-ok package shows. Phase A: the widget's own empty block for every non-ok state. */
+function gpFStateHTML(w,p){return gpFEmpty(w);}
 function gpFCampByLabel(w,label){var pool=gpFAllPurposes(w);for(var i=0;i<pool.length;i++)if((pool[i].code+": "+pool[i].name)===label)return pool[i];return null;}
 
 // ===== RENDER ========================================================
@@ -11038,7 +11397,7 @@ function gpFSkeleton(){
   var rows="";[92,70,54,38,64].forEach(function(wd){rows+='<div class="gpf-sk-row"><span class="sk" style="width:120px;height:12px;border-radius:var(--cornerradius-small)"></span><span class="sk gpf-sk-bar" style="width:'+wd+'%"></span></div>';});
   return '<div class="gpf-skel" aria-busy="true"><div class="gpf-skel-rows">'+rows+'</div><div class="bgt-skel-cap"><span class="bgt-spin"></span>Loading purpose giving...</div></div>';
 }
-function gpFContent(w){
+function gpFContent(w){var p=gpFPackage(w);if(p.state!=="ok")return gpFStateHTML(w,p);
   if(w.state==="empty"||!gpFData(w).length)return gpFEmpty(w);
   if(w.size==="kpi")return gpFGlance(w);
   if(w.gpFLoading)return gpFHeaderBlock(w,"loading")+gpFSkeleton();
@@ -11302,6 +11661,11 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       "Northgate Baptist Church · INV-AR-2024-0118 · $1,300 · 14 days"
     ]}
 ];
+  /* data states: small and extreme swap the category list; aloC() is what every helper reads */
+  var aloLive=null;
+  function aloats(w){var l=(w&&w.dataset==="none")?[]:(w&&(w.dataset==="small"||w.dataset==="extreme"))?DATA_STATES.get(w.dataset,"alerts"):ALO_CATS;aloLive=l;return l;}
+  function aloC(){return aloLive||ALO_CATS;}
+
 
 
   var ALO_ITEM_MODALS={
@@ -11552,7 +11916,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
   var aloOpen={},aloTab={};
   function aloEsc(s){return escAttr(s);}
   function aloIsApproval(cfg){return !!(cfg&&(cfg.type==="approval"||(cfg.meta&&cfg.lineItems)));}
-  function aloEnsure(w){if(!aloOpen[w.id]){aloOpen[w.id]={};ALO_CATS.forEach(function(c){aloOpen[w.id][c.id]=true;});}}
+  function aloEnsure(w){if(!aloOpen[w.id]){aloOpen[w.id]={};aloC().forEach(function(c){aloOpen[w.id][c.id]=true;});}}
   function aloItemBtns(cat,idx,wid){
     var cfg=ALO_ITEM_MODALS[cat.id+":"+idx]||null,a=' data-action="alO-item" data-id="'+wid+'" data-cat="'+cat.id+'" data-idx="'+idx+'"';
     var ap=' data-action="alO-payment" data-id="'+wid+'" data-cat="'+cat.id+'" data-idx="'+idx+'"';
@@ -11579,14 +11943,14 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       (isOpen?'<div class="al-body">'+items+'</div>':'')+
     '</div>';
   }
-  function aloContent(w){
+  function aloContent(w){aloats(w);
     aloEnsure(w);
     var tab=aloTab[w.id]||"all";
-    var errCats=ALO_CATS.filter(function(c){return c.sev==="err";}),warnCats=ALO_CATS.filter(function(c){return c.sev==="warn";});
+    var errCats=aloC().filter(function(c){return c.sev==="err";}),warnCats=aloC().filter(function(c){return c.sev==="warn";});
     function n(cs){return cs.reduce(function(s,c){return s+c.items.length;},0);}
     function tb(v,lbl,cnt,cls){return '<button class="alb4-tab'+(tab===v?" on":"")+'" data-action="alO-tab" data-id="'+w.id+'" data-tab="'+v+'" aria-pressed="'+(tab===v)+'">'+lbl+' <span class="alb4-badge'+(cls?" "+cls:"")+'">'+cnt+'</span></button>';}
-    var tabs='<div class="alb4-tabs" role="group" aria-label="Severity">'+tb("all","All",n(ALO_CATS),tab==="all"?"all":"")+tb("err","Critical",n(errCats),"err")+tb("warn","Warning",n(warnCats),"warn")+'</div>';
-    var cats=(tab==="err")?errCats:(tab==="warn")?warnCats:ALO_CATS;
+    var tabs='<div class="alb4-tabs" role="group" aria-label="Severity">'+tb("all","All",n(aloC()),tab==="all"?"all":"")+tb("err","Critical",n(errCats),"err")+tb("warn","Warning",n(warnCats),"warn")+'</div>';
+    var cats=(tab==="err")?errCats:(tab==="warn")?warnCats:aloC();
     return '<div class="alb4-root">'+tabs+'<div class="alb4-panel scroll">'+cats.map(function(c){return aloCatHTML(c,w.id);}).join("")+'</div></div>';
   }
   /* item detail pop-up (Aditya's own dialog, kept as built) */
@@ -12166,23 +12530,23 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
   }
   function aloHandle(a,id,t){
     var w=find(id);if(!w)return false;aloEnsure(w);
-    if(a==="alO-tab"){var tab=t.getAttribute("data-tab");aloTab[id]=tab;(tab==="all"?ALO_CATS:ALO_CATS.filter(function(c){return c.sev===tab;})).forEach(function(c){aloOpen[id][c.id]=true;});render();return true;}
+    if(a==="alO-tab"){var tab=t.getAttribute("data-tab");aloTab[id]=tab;(tab==="all"?aloC():aloC().filter(function(c){return c.sev===tab;})).forEach(function(c){aloOpen[id][c.id]=true;});render();return true;}
     if(a==="alO-toggle"){var cat=t.getAttribute("data-cat"),will=!aloOpen[id][cat];
       /* single-open, as in the source: opening one closes the others */
-      if(will)ALO_CATS.forEach(function(c){if(c.id!==cat)aloOpen[id][c.id]=false;});
+      if(will)aloC().forEach(function(c){if(c.id!==cat)aloOpen[id][c.id]=false;});
       aloOpen[id][cat]=will;render();return true;}
-    if(a==="alO-item"){var cid=t.getAttribute("data-cat"),idx=parseInt(t.getAttribute("data-idx"),10)||0,cd=ALO_CATS.filter(function(c){return c.id===cid;})[0];
+    if(a==="alO-item"){var cid=t.getAttribute("data-cat"),idx=parseInt(t.getAttribute("data-idx"),10)||0,cd=aloC().filter(function(c){return c.id===cid;})[0];
       if(cd)aloOpenModal(cd.sev,cd.title,String(cd.items[idx]||"").replace(/<[^>]+>/g,""),ALO_ITEM_MODALS[cid+":"+idx]||null);return true;}
-    if(a==="alO-payment"){var pcid=t.getAttribute("data-cat"),pidx=parseInt(t.getAttribute("data-idx"),10)||0,pcfg=ALO_ITEM_MODALS[pcid+":"+pidx]||null,pcd=ALO_CATS.filter(function(c){return c.id===pcid;})[0];
+    if(a==="alO-payment"){var pcid=t.getAttribute("data-cat"),pidx=parseInt(t.getAttribute("data-idx"),10)||0,pcfg=ALO_ITEM_MODALS[pcid+":"+pidx]||null,pcd=aloC().filter(function(c){return c.id===pcid;})[0];
       aloOpenPaymentMerged(pcfg,pcd?pcd.sev:"err");return true;}
-    if(a==="alO-recon"){var rcid=t.getAttribute("data-cat"),ridx=parseInt(t.getAttribute("data-idx"),10)||0,rcfg=ALO_ITEM_MODALS[rcid+":"+ridx]||null,rcd=ALO_CATS.filter(function(c){return c.id===rcid;})[0];
+    if(a==="alO-recon"){var rcid=t.getAttribute("data-cat"),ridx=parseInt(t.getAttribute("data-idx"),10)||0,rcfg=ALO_ITEM_MODALS[rcid+":"+ridx]||null,rcd=aloC().filter(function(c){return c.id===rcid;})[0];
       aloOpenReconMerged(rcfg,rcd?rcd.sev:"warn");return true;}
-    if(a==="alO-ar"){var arcid=t.getAttribute("data-cat"),aridx=parseInt(t.getAttribute("data-idx"),10)||0,arcfg=ALO_ITEM_MODALS[arcid+":"+aridx]||null,arcd=ALO_CATS.filter(function(c){return c.id===arcid;})[0];
+    if(a==="alO-ar"){var arcid=t.getAttribute("data-cat"),aridx=parseInt(t.getAttribute("data-idx"),10)||0,arcfg=ALO_ITEM_MODALS[arcid+":"+aridx]||null,arcd=aloC().filter(function(c){return c.id===arcid;})[0];
       aloOpenARMerged(arcfg,arcd?arcd.sev:"warn");return true;}
     if(a==="alO-budget"){
       var bcid=t.getAttribute("data-cat"),bidx=parseInt(t.getAttribute("data-idx"),10)||0;
       var bcfg=ALO_ITEM_MODALS[bcid+":"+bidx]||null;
-      var bcd=ALO_CATS.filter(function(c){return c.id===bcid;})[0];
+      var bcd=aloC().filter(function(c){return c.id===bcid;})[0];
       aloOpenBudgetMerged(bcfg,bcd?bcd.sev:"warn");return true;}
     return false;
   }
@@ -13056,6 +13420,11 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         "PAY-2024-0104 · ACH · $2,500 · 1 day · Submitted"
       ]}
   ];
+  /* data states: small and extreme swap the category list; pa3C() is what every helper reads */
+  var pa3Live=null;
+  function pa3ats(w){var l=(w&&w.dataset==="none")?[]:(w&&(w.dataset==="small"||w.dataset==="extreme"))?DATA_STATES.get(w.dataset,"pendingactions"):PA3_CATS;pa3Live=l;return l;}
+  function pa3C(){return pa3Live||PA3_CATS;}
+
 
   var PA3_ITEM_MODALS={
     /* ── Restricted Fund Compliance Breach ── */
@@ -13247,7 +13616,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       pa3Open[w.id]={};
       /* Only open the first cat in the active group tab (both wide and xwide) */
       var grp=pa3GrpTab[w.id];
-      var needCats=PA3_CATS.filter(function(c){return c.sev==="need"&&c.group===grp;});
+      var needCats=pa3C().filter(function(c){return c.sev==="need"&&c.group===grp;});
       var firstNeed=needCats[0];
       needCats.forEach(function(c){
         pa3Open[w.id][c.id]=(c===firstNeed);
@@ -13255,7 +13624,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     }
     /* xwide: auto-select first item of first need cat if none selected */
     if(w.size==="xwide"&&!pa3Sel[w.id]){
-      var needCats=PA3_CATS.filter(function(c){return c.sev==="need";});
+      var needCats=pa3C().filter(function(c){return c.sev==="need";});
       var firstCat=needCats[0];
       if(firstCat&&firstCat.items.length>0){
         pa3Sel[w.id]={cat:firstCat,catId:firstCat.id,idx:0,cfg:PA3_ITEM_MODALS[firstCat.id+":0"]||null};
@@ -13383,7 +13752,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     var active=pa3GrpTab[wid]||PA3_GROUPS[0].id;
     return '<div class="alb4-tabs" role="group" aria-label="Category group">'+
       PA3_GROUPS.map(function(grp){
-        var cnt=PA3_CATS.filter(function(c){return c.sev==="need"&&c.group===grp.id;}).reduce(function(s,c){return s+c.items.length;},0);
+        var cnt=pa3C().filter(function(c){return c.sev==="need"&&c.group===grp.id;}).reduce(function(s,c){return s+c.items.length;},0);
         var on=(active===grp.id);
         return '<button class="alb4-tab'+(on?" on":"")+'" data-action="paO3-grptab" data-id="'+wid+'" data-grp="'+grp.id+'" aria-pressed="'+on+'">'+grp.label+' <span class="alb4-badge'+(on?" all":"")+'">'+cnt+'</span></button>';
       }).join("")+
@@ -13391,7 +13760,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
   }
   function pa3ActiveCatsHTML(wid,xwide){
     var active=pa3GrpTab[wid]||PA3_GROUPS[0].id;
-    var cats=PA3_CATS.filter(function(c){return c.sev==="need"&&c.group===active;});
+    var cats=pa3C().filter(function(c){return c.sev==="need"&&c.group===active;});
     return cats.map(function(c){return pa3CatHTML(c,wid,xwide);}).join("");
   }
   function pa3GlancePopContent(){
@@ -13406,7 +13775,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     if(!pa3GlanceF[w.id])pa3GlanceF[w.id]=PA3_GROUPS[0].id;
     var activeGrpId=pa3GlanceF[w.id];
     var activeGrp=PA3_GROUPS.filter(function(g){return g.id===activeGrpId;})[0]||PA3_GROUPS[0];
-    var cats=PA3_CATS.filter(function(c){return c.sev==="need"&&c.group===activeGrpId;});
+    var cats=pa3C().filter(function(c){return c.sev==="need"&&c.group===activeGrpId;});
     var cols=cats.length>1?cats.length:1;
     var chipOpen=(pop&&pop.type==="paO3-glancegrp"&&pop.id===w.id);
     var cards=cats.map(function(c){
@@ -13440,7 +13809,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     /* Build grouped queue list for the pop panel */
     var rows="";
     PA3_GROUPS.forEach(function(grp){
-      var cats=PA3_CATS.filter(function(c){return c.sev==="need"&&c.group===grp.id;});
+      var cats=pa3C().filter(function(c){return c.sev==="need"&&c.group===grp.id;});
       if(!cats.length)return;
       var grpTotal=cats.reduce(function(s,c){return s+(c.glance&&c.glance.queueN!=null?c.glance.queueN:c.items.length);},0);
       rows+='<div class="pa3g2-grp-hd"><span class="pa3g2-grp-lbl">'+grp.label+'</span><span class="pa3g2-grp-cnt">'+grpTotal+'</span></div>';
@@ -13457,7 +13826,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
         '</button>';
       });
     });
-    var totalItems=PA3_CATS.filter(function(c){return c.sev==="need";}).reduce(function(s,c){return s+(c.glance&&c.glance.queueN!=null?c.glance.queueN:c.items.length);},0);
+    var totalItems=pa3C().filter(function(c){return c.sev==="need";}).reduce(function(s,c){return s+(c.glance&&c.glance.queueN!=null?c.glance.queueN:c.items.length);},0);
     return '<div class="pa3g2-panel">'+
       '<div class="pa3g2-panel-hd">'+
         '<span class="pa3g2-panel-title">Pending Actions</span>'+
@@ -13468,7 +13837,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
   }
   function pa3Glance2(w){
     /* Variant 2 glance: big hero number + badge pills + Queues link */
-    var needCats=PA3_CATS.filter(function(c){return c.sev==="need";});
+    var needCats=pa3C().filter(function(c){return c.sev==="need";});
     var totalItems=needCats.reduce(function(s,c){return s+(c.glance&&c.glance.queueN!=null?c.glance.queueN:c.items.length);},0);
     var totalQueues=needCats.length;
     /* Badge pills: one per "notable" category (those with a hint and err-level sev) */
@@ -13499,7 +13868,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       '</div>'+
     '</div>';
   }
-  function pa3Content(w){
+  function pa3Content(w){pa3ats(w);
     if(w.size==="kpi"&&w.id==="paB4_g2")return pa3Glance2(w);
     if(w.size==="kpi")return pa3Glance(w);
     pa3Ensure(w);
@@ -13602,14 +13971,14 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     /* Glance2 queues panel toggle */
     if(a==="paO3-glance2-queues"){pop=(pop&&pop.type==="paO3-glance2-queues"&&pop.id===id)?null:{type:"paO3-glance2-queues",id:id};render();return true;}
     /* Glance card click → category modal */
-    if(a==="paO3-glance-card"){var gcid=t.getAttribute("data-cat");var gcc=PA3_CATS.filter(function(c){return c.id===gcid;})[0];if(gcc&&gcc.glance&&gcc.glance.modal)pa3OpenGlanceCardModal(gcc);return true;}
+    if(a==="paO3-glance-card"){var gcid=t.getAttribute("data-cat");var gcc=pa3C().filter(function(c){return c.id===gcid;})[0];if(gcc&&gcc.glance&&gcc.glance.modal)pa3OpenGlanceCardModal(gcc);return true;}
     /* Group tab switch */
     if(a==="paO3-grptab"){
       var grp=t.getAttribute("data-grp");
       if(grp&&grp!==pa3GrpTab[id]){
         pa3GrpTab[id]=grp;
         /* Reset open state for new group's cats */
-        var cats=PA3_CATS.filter(function(c){return c.sev==="need"&&c.group===grp;});
+        var cats=pa3C().filter(function(c){return c.sev==="need"&&c.group===grp;});
         var firstCat=cats[0];
         cats.forEach(function(c){pa3Open[id][c.id]=(w.size==="xwide")?(c===firstCat):true;});
         /* Reset detail selection when switching tabs */
@@ -13620,12 +13989,12 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       }
       render();return true;}
     if(a==="paO3-toggle"){var cat=t.getAttribute("data-cat"),will=!pa3Open[id][cat];
-      if(will)PA3_CATS.forEach(function(c){if(c.id!==cat)pa3Open[id][c.id]=false;});
+      if(will)pa3C().forEach(function(c){if(c.id!==cat)pa3Open[id][c.id]=false;});
       pa3Open[id][cat]=will;render();return true;}
     /* xwide: load item into right pane */
     if(a==="paO3-sel"){
       var scid=t.getAttribute("data-cat"),sidx=parseInt(t.getAttribute("data-idx"),10)||0;
-      var scat=PA3_CATS.filter(function(c){return c.id===scid;})[0];
+      var scat=pa3C().filter(function(c){return c.id===scid;})[0];
       if(scat)pa3Sel[id]={cat:scat,catId:scid,idx:sidx,cfg:PA3_ITEM_MODALS[scid+":"+sidx]||null};
       render();return true;}
     /* detail pane close */
@@ -13639,7 +14008,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     if(a==="paO3-dp-ar"){var dpARSel=pa3Sel[id];aloOpenARMerged(dpARSel?dpARSel.cfg:null,"warn");return true;}
     if(a==="paO3-dp-budget"){var dpBudSel=pa3Sel[id];aloOpenBudgetMerged(dpBudSel?dpBudSel.cfg:null,"warn");return true;}
     /* wide-mode overlay handlers (fallback) */
-    if(a==="paO3-item"){var cid=t.getAttribute("data-cat"),idx=parseInt(t.getAttribute("data-idx"),10)||0,cd=PA3_CATS.filter(function(c){return c.id===cid;})[0];
+    if(a==="paO3-item"){var cid=t.getAttribute("data-cat"),idx=parseInt(t.getAttribute("data-idx"),10)||0,cd=pa3C().filter(function(c){return c.id===cid;})[0];
       if(cd){
         /* pa3-cat-9 (AR Payment Processing): custom modal with group/title hierarchy header */
         if(cid==="pa3-cat-9"){
@@ -14113,7 +14482,22 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     return head+(w.topMetric?signupsMetric(w):"")+signupsList();
   }
 
-  function bankAccounts(w){if(w&&(w.dataset==="small"||w.dataset==="extreme"))return DATA_STATES.get(w.dataset,"bank");return BANK_ACCOUNTS;}
+  /* data package: the envelope this widget renders from (API shape; see the shared pkg helpers).
+     reasons: all-zero-balances (no-data), no-active-bank-accounts (not-configured) */
+  function bankPackage(w){
+    if(w&&w.pkg)return w.pkg;
+    var o=pkgOption();
+    if(o==="default"){
+      if(w&&(w.state==="empty"||w.dataset==="none"))return pkg("not-configured","no-active-bank-accounts",{accounts:[]});
+      return pkg("ok","",{accounts:BANK_ACCOUNTS});
+    }
+    if(o==="none")return pkg("no-data","all-zero-balances",{accounts:[]});
+    if(o==="notconfigured")return pkg("not-configured","no-active-bank-accounts",{accounts:[]});
+    var g=pkgGen(o,"bank");return pkg("ok",o,{accounts:g||BANK_ACCOUNTS});
+  }
+  function bankAccounts(w){return bankPackage(w).data.accounts||[];}
+  /* what a non-ok package shows. Phase A: nothing of its own yet (null falls through to the normal face). */
+  function bankStateHTML(w,p){var ec=EMPTY_COPY.bank;return pkgStateHTML(w,{icon:"inbox",title:ec.title,sub:ec.sub,cta:ec.cta,action:ec.action});}
   function bankEnding(a){return a.a[0]+a.a[1]+a.a[2]+a.a[3]+a.a[4]+a.a[5];}
   function bankSelected(w){if(!w.bkacct)return null;var list=bankAccounts(w);for(var i=0;i<list.length;i++)if(list[i].id===w.bkacct)return list[i];return null;}
   function bankMoney(n){return n<0?("−$"+Math.abs(n).toLocaleString()):("$"+n.toLocaleString());}
@@ -14294,7 +14678,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
      actually overdrawn. Count only, no amount. */
   function bankOdChip(w){var over=bankNegCount(w);if(over<1)return "";var on=!!w.bkOver;
     return '<button class="bank-odchip'+(on?" on":"")+'" data-action="bank-overdrawn" data-id="'+w.id+'" aria-pressed="'+on+'" aria-label="'+over+' account'+(over>1?"s":"")+' overdrawn, tap to '+(on?"show all accounts":"show only these")+'">'+ICON("error")+'<span>'+over+' overdrawn</span></button>';}
-  function bankContent(w){
+  function bankContent(w){var p=bankPackage(w);if(p.state!=="ok"){var sh=bankStateHTML(w,p);if(sh)return sh;}
     if(w.size==="kpi")return bankGlance(w);
     if(w.bkloading)return bankHeaderBlock(w,"loading")+bankSkeleton();
     var mh=bankHeaderBlock(w),sel=bankSelected(w),v=w.bkview||"table";
@@ -14384,7 +14768,25 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     {vendor:"Guardian Insurance",   inv:"INV-9001", due:"2026-08-05", amount:8400.00},
     {vendor:"Summit HVAC Services", inv:"INV-9002", due:"2026-08-05", amount:3250.00}
   ];
-  function apData(w){if(w&&(w.dataset==="small"||w.dataset==="extreme"))return DATA_STATES.get(w.dataset,"payables");return (w&&w.dataset==="single")?AP_INVOICES_SINGLE:AP_INVOICES;}
+  /* data package: the envelope this widget renders from (API shape; see the shared pkg helpers).
+     reasons: nothing-unpaid (no-data), no-payables-bank-account (not-configured) */
+  function apPackage(w){
+    if(w&&w.pkg)return w.pkg;
+    var o=pkgOption();
+    if(o==="default"){
+      if(w&&(w.state==="empty"||w.dataset==="none"))return pkg("no-data","nothing-unpaid",{invoices:[]});
+      return pkg("ok","",{invoices:(w&&w.dataset==="single")?AP_INVOICES_SINGLE:AP_INVOICES});
+    }
+    if(o==="none")return pkg("no-data","nothing-unpaid",{invoices:[]});
+    if(o==="notconfigured")return pkg("not-configured","no-payables-bank-account",{invoices:[]});
+    var g=pkgGen(o,"payables");return pkg("ok",o,{invoices:g||AP_INVOICES});
+  }
+  function apData(w){return apPackage(w).data.invoices||[];}
+  /* what a non-ok package shows. Phase A: the widget's own empty block for every non-ok state. */
+  function apStateHTML(w,p){
+    /* PLACEHOLDER: no Jo Phase 2 design for not-configured/no-payables-bank-account; owner to review */
+    if(p.state==="not-configured")return pkgPlaceholderHTML(w,p);
+    var ec=EMPTY_COPY.payables;return '<div class="state" data-kind="empty">'+ICON("task_alt")+'<div class="state-title">'+ec.title+'</div>'+(w.size==="kpi"?'':'<div class="state-sub">'+ec.sub+'</div>')+'</div>';}
 
   /* aging bands , plain language, earliest first */
   var AP_BANDS=[
@@ -14519,7 +14921,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
       '</div>';}
 
   /* ---- Glance ------------------------------------------------------- */
-  function apGlance(w){
+  function apGlance(w){var p=apPackage(w);if(p.state!=="ok")return apStateHTML(w,p);
     if(w.state==="empty"||!apData(w).length){var ec=EMPTY_COPY.payables;return '<div class="state" data-kind="empty">'+ICON("task_alt")+'<div class="state-title">'+ec.title+'</div></div>';}
     var tot=apTotalDue(w);
     return '<div class="kpi-row"><div class="kpi-num">'+
@@ -14550,7 +14952,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
       tile("month","Due this month","calendar_month","neutral",bd.month.total,bd.month.count);
     return '<div class="ap-tiles" role="group" aria-label="Filter by due date">'+cards+'</div>';
   }
-  function apContent(w){
+  function apContent(w){var p=apPackage(w);if(p.state!=="ok")return apStateHTML(w,p);
     if(w.size==="kpi")return apGlance(w);
     if(w.state==="empty"||!apData(w).length){var ec=EMPTY_COPY.payables;return '<div class="state" data-kind="empty">'+ICON("task_alt")+'<div class="state-title">'+ec.title+'</div><div class="state-sub">'+ec.sub+'</div></div>';}
     if(w.aploading)return apHeaderBlock(w,"loading")+apSkeleton();
@@ -14607,8 +15009,6 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
   function contentHTML(w){
     if(w.state==="loading")return '<div class="skeleton" aria-busy="true"><div class="sk" style="width:55%"></div><div class="sk" style="flex:1"></div></div>';
     if(w.state==="error"){var xc=ERROR_COPY[w.kind]||ERROR_COPY.deposits;return '<div class="state" data-kind="error">'+ICON("error")+'<div class="state-title">'+xc.title+'</div><div class="state-sub">'+xc.sub+'</div><button class="btn sm outlined" data-action="retry" data-id="'+w.id+'">Retry</button></div>';}
-    if(w.state==="notconfigured")return notConfiguredHTML(w.kind,w.size==="kpi"); /* data states review aid */
-    if(w.state==="empty"&&DS_SHELL_EMPTY[w.kind]){var dsc=DS_SHELL_EMPTY[w.kind];return '<div class="state" data-kind="empty">'+ICON("inbox")+'<div class="state-title">'+dsc.title+'</div>'+(w.size==="kpi"?'':'<div class="state-sub">'+dsc.sub+'</div>')+'</div>';}
     var wreg=WIDGETS.content(w);if(wreg!==null)return wreg;
     if(w.state==="empty"){var ec=EMPTY_COPY[w.kind]||EMPTY_COPY.deposits;return '<div class="state" data-kind="empty">'+ICON("inbox")+'<div class="state-title">'+ec.title+'</div><div class="state-sub">'+ec.sub+'</div>'+(ec.showZero?'<div class="dep-total" style="margin-top:var(--padding-xxtight)"><span>Total</span><span>'+money(0)+'</span></div>':'')+(ec.cta?'<button class="btn outlined" data-action="'+ec.action+'" data-id="'+w.id+'">'+ICON("add")+ec.cta+'</button>':'')+'</div>';}
     if(w.kind==="metric")return metricHTML(w);
@@ -14707,7 +15107,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     var r=trig.getBoundingClientRect(),M=8,pw=el.offsetWidth,ph=el.offsetHeight;var left=r.left;if(left+pw>innerWidth-M)left=r.right-pw;if(left+pw>innerWidth-M)left=innerWidth-M-pw;if(left<M)left=M;var flipped=false;var top=r.bottom+7;if(top+ph>innerHeight-M){var up=r.top-ph-7;if(up>=M){top=up;flipped=true;}else{top=Math.max(M,innerHeight-M-ph);}}var cx=(r.left+r.width/2)-left;cx=Math.max(14,Math.min(pw-14,cx));var dir=flipped?"down":"up";
     pop._pos={left:left,top:top,cx:cx,dir:dir};
     el.style.setProperty("--caret-x",cx+"px");el.setAttribute("data-dir",dir);el.style.left=left+"px";el.style.top=top+"px";el.style.visibility="visible";}
-  function render(){hideTip();if(typeof hideLnTip==="function")hideLnTip();if(typeof dsHide==="function")dsHide();var _ws=viewOnly(cur().widgets);dsApply(_ws);var _grid=_ws.map(widgetHTML).join("");if(_ws.length<=1)_grid+=addWidgetPlaceholderHTML();document.getElementById("dashboard").innerHTML=_grid;document.getElementById("tbLeft").innerHTML=tbLeftHTML();document.getElementById("tbRight").innerHTML=tbRightHTML();if(renaming){var el=document.getElementById("rn-"+renaming);if(el){el.focus();el.select();}}if(focusDash){var di=document.getElementById("dashInput");if(di){di.focus();di.select();}focusDash=false;}renderOverlay();if(pop&&pop.type==="companydd"){var _ci=document.getElementById("coq");if(_ci&&document.activeElement!==_ci){_ci.focus();try{_ci.setSelectionRange(_ci.value.length,_ci.value.length);}catch(_e){}}}if(pop&&pop.type==="wfind"){var _wf=document.getElementById("wfindq");if(_wf&&document.activeElement!==_wf){_wf.focus();try{_wf.setSelectionRange(_wf.value.length,_wf.value.length);}catch(_e6){}}}if(pop&&pop.type==="depfilter"){var _fi=document.getElementById("fq");if(_fi&&document.activeElement!==_fi){_fi.focus();try{_fi.setSelectionRange(_fi.value.length,_fi.value.length);}catch(_e2){}}}if(pop&&pop.type==="bank-acct"){var _bi=document.getElementById("bankq");if(_bi&&document.activeElement!==_bi){_bi.focus();try{_bi.setSelectionRange(_bi.value.length,_bi.value.length);}catch(_e4){}}}if(pop&&pop.type==="ap-due"){var _ai=document.getElementById("apq");if(_ai&&document.activeElement!==_ai){_ai.focus();try{_ai.setSelectionRange(_ai.value.length,_ai.value.length);}catch(_e5){}}}if(prFocusId){var _pf=document.getElementById(prFocusId);if(_pf&&document.activeElement!==_pf){_pf.focus();try{var _vl=_pf.value.length;_pf.setSelectionRange(_vl,_vl);}catch(_e3){}}}renderModal();}
+  function render(){hideTip();if(typeof hideLnTip==="function")hideLnTip();if(typeof dsHide==="function")dsHide();var _ws=viewOnly(cur().widgets);var _grid=_ws.map(widgetHTML).join("");if(_ws.length<=1)_grid+=addWidgetPlaceholderHTML();document.getElementById("dashboard").innerHTML=_grid;document.getElementById("tbLeft").innerHTML=tbLeftHTML();document.getElementById("tbRight").innerHTML=tbRightHTML();if(renaming){var el=document.getElementById("rn-"+renaming);if(el){el.focus();el.select();}}if(focusDash){var di=document.getElementById("dashInput");if(di){di.focus();di.select();}focusDash=false;}renderOverlay();if(pop&&pop.type==="companydd"){var _ci=document.getElementById("coq");if(_ci&&document.activeElement!==_ci){_ci.focus();try{_ci.setSelectionRange(_ci.value.length,_ci.value.length);}catch(_e){}}}if(pop&&pop.type==="wfind"){var _wf=document.getElementById("wfindq");if(_wf&&document.activeElement!==_wf){_wf.focus();try{_wf.setSelectionRange(_wf.value.length,_wf.value.length);}catch(_e6){}}}if(pop&&pop.type==="depfilter"){var _fi=document.getElementById("fq");if(_fi&&document.activeElement!==_fi){_fi.focus();try{_fi.setSelectionRange(_fi.value.length,_fi.value.length);}catch(_e2){}}}if(pop&&pop.type==="bank-acct"){var _bi=document.getElementById("bankq");if(_bi&&document.activeElement!==_bi){_bi.focus();try{_bi.setSelectionRange(_bi.value.length,_bi.value.length);}catch(_e4){}}}if(pop&&pop.type==="ap-due"){var _ai=document.getElementById("apq");if(_ai&&document.activeElement!==_ai){_ai.focus();try{_ai.setSelectionRange(_ai.value.length,_ai.value.length);}catch(_e5){}}}if(prFocusId){var _pf=document.getElementById(prFocusId);if(_pf&&document.activeElement!==_pf){_pf.focus();try{var _vl=_pf.value.length;_pf.setSelectionRange(_vl,_vl);}catch(_e3){}}}renderModal();}
   /* Smart scroll chaining: when the wheel is over a widget's internal scroller that is at its
      boundary (or does not overflow), scroll the whole dashboard instead of getting stuck. */
   document.addEventListener("wheel",function(e){
@@ -14745,7 +15145,7 @@ function apBadge(w){var od=apOverdueTotal(w);if(od>0){var n=apOverdueCount(w);re
     if(a==="noop"){pop=null;render();return;}
     if(a==="stop"){return;}
     if(a==="modal-close"){modal=null;pop=null;render();return;}
-    if(a==="view-spec"||a==="view-demo"){var _spec=(a==="view-spec");document.body.classList.toggle("spec-mode",_spec);var _sv=document.getElementById("specView");if(_sv)_sv.hidden=!_spec;Array.prototype.forEach.call(document.querySelectorAll(".viewtab .vtb"),function(b){var on=b.getAttribute("data-action")===a;b.classList.toggle("on",on);b.setAttribute("aria-selected",on?"true":"false");});pop=null;try{document.querySelector(".appmain").scrollTop=0;}catch(_e){}window.scrollTo(0,0);return;}
+    if(a==="view-spec"||a==="view-demo"||a==="view-perm"){var _spec=(a!=="view-demo");document.body.classList.toggle("spec-mode",_spec);var _sv=document.getElementById("specView");if(_sv)_sv.hidden=(a!=="view-spec");var _pv=document.getElementById("permView");if(_pv)_pv.hidden=(a!=="view-perm");Array.prototype.forEach.call(document.querySelectorAll(".viewtab .vtb"),function(b){var on=b.getAttribute("data-action")===a;b.classList.toggle("on",on);b.setAttribute("aria-selected",on?"true":"false");});pop=null;try{document.querySelector(".appmain").scrollTop=0;}catch(_e){}window.scrollTo(0,0);return;}
     if(a&&a.indexOf("ap-")===0&&apHandleClick(a,id,t))return;
     if(a==="bank-acct"){bankQuery="";pop=(pop&&pop.type==="bank-acct"&&pop.id===id)?null:{type:"bank-acct",id:id};render();return;}
     if(a==="bank-set-acct"){var wba=find(id);if(wba){var na=t.getAttribute("data-acct");var nv=(na==="all"||!na)?null:na;if(wba.bkacct!==nv){wba.bkacct=nv;bankLoad(wba);}}pop=null;render();return;}
@@ -14951,13 +15351,22 @@ function fkpBandHTML(){
       refresh+
     '</div>'+
     '<div class="fkp-row">'+
-      ((typeof dataState==="function"&&dataState()==="notconfigured")?notConfiguredHTML("finkpi",false):fkpTiles().map(fkpTileHTML).join(""))+
+      fkpRowHTML()+
     '</div>'+
   '</div>';
 }
 
 /* The band follows the data states review aid: zeros for No data, small or extreme figures, the shipped tiles otherwise. */
-function fkpTiles(){var st=(typeof dataState==="function")?dataState():"default";if(st==="none"||st==="small"||st==="extreme"){var t=DATA_STATES.get(st,"finkpi");if(t)return t;}return FKP_TILES;}
+/* data package: the envelope the band renders from (API shape; see the shared pkg helpers).
+   reasons: nothing-posted (no-data: every tile at zero), no-fiscal-year (not-configured: no tiles). */
+function fkpPackage(){var o=pkgOption();
+  if(o==="none")return pkg("no-data","nothing-posted",{tiles:pkgGen(o,"finkpi")||FKP_TILES});
+  if(o==="notconfigured")return pkg("not-configured","no-fiscal-year",{tiles:[]});
+  if(o==="small"||o==="extreme"){var g=pkgGen(o,"finkpi");return pkg("ok",o,{tiles:g||FKP_TILES});}
+  return pkg("ok","",{tiles:FKP_TILES});}
+function fkpTiles(){return fkpPackage().data.tiles||[];}
+/* PLACEHOLDER: no Jo Phase 2 design for not-configured/no-fiscal-year; owner to review. Every other package renders the tiles. */
+function fkpRowHTML(){var fp=fkpPackage();if(fp.state==="not-configured")return pkgPlaceholderHTML({id:"fkp",title:"Financial KPI"},fp);return fkpTiles().map(fkpTileHTML).join("");}
 function fkpRender(){
   var el=document.getElementById("fkpBand");
   if(!el)return;

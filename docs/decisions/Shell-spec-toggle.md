@@ -67,3 +67,38 @@ dashboard re-render).
 - Real Figma and SharePoint links for the two spec-link buttons.
 - Whether the spec should also carry per-widget API notes (the Step 5 specs) or
   keep pointing at the SharePoint docs.
+
+## Addendum, 16 October 2026: the third view, Permissions
+
+Owner instruction: add another document to the toggle, called Permissions, carrying the permissions
+review (`docs/handover/Widget permissions - the old system and the V2 recommendation (draft).md`) with
+pictures where links and actions need more care. Rule stated by the owner: every widget uses its
+module's Dashboard right by default; the only further permission checks are for links and actions.
+
+- Toggle: Demo | Spec | Permissions (`data-action="view-perm"`). The click branch now switches three
+  ways: `.spec-mode` on for either document, `#specView` shown for Spec, `#permView` for Permissions.
+- `<section class="spec" id="permView" hidden>` after the spec section, same classes, four numbered
+  sections: the rule and the right-to-show table (17 widgets); links and actions with a picture per
+  widget (11 figures under `docs/Pics/Permissions/`, captured from this build in headless Chrome);
+  the six care points; the open decisions. A link to the full Markdown.
+- One departure from the review document, by the owner's rule: Payroll Scheduled Time Off follows the
+  Payroll Dashboard right like every other widget (the old panel used a separate task); its Approve
+  and Undo carry the Update check.
+- New CSS in the spec region: `.spec-fig`, `.spec-fig img`, `.spec-fig figcaption`, `.spec-rule`.
+- Driver: `shell-spec.driver.js` extended (toggle regex with the third tab, section 5b for the
+  permissions document, the click branch driven three ways). Suite 4,573 across 21 drivers. Default
+  card dump unchanged.
+
+### 17 October 2026: pictures of the old system's Task Role editor
+
+Owner's screenshot of Security Setup, Task Roles, Update on the test1 host (Accounts Payable selected,
+the Dashboard row first in the tree) placed under the rule in section 1 as `taskrole-dashboard-row.png`.
+Then, from the in-app browser signed in to the same host, the task tree for each module a link or action
+names, placed under its section 2 block: Purchasing Management (Request Information, Enter &amp; Manage;
+Approval Override; Approval Paths), Accounts Payable (Payment Processing; View, Transaction Inquiry),
+Bank Account Management, Donors And Gifts (its root row carries the module's name, not "Dashboard";
+Manage, Pledges), Remittance (Manage, Enter &amp; Manage Pledges), Loan Processing (Modify, Loan
+Information), Payroll (Modify, Employee Information, Time Off Hours and Secured Employees), General
+Ledger (Reports, Special Reports). Eight pictures, `docs/Pics/Permissions/taskrole-*.png`, cropped to the
+page card. The driver's picture list covers all twenty. Suite 4,591 across 21 drivers; Default dump
+unchanged.

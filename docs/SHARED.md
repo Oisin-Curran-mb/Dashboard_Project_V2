@@ -27,6 +27,11 @@ widget can take its own body back at any time if it needs to diverge.
 | `MONTHS` | W04, W13, W16, W17 | four identical twelve-element month tables, now private copies of one literal |
 | `moneyFull` | W02, W10, W13, W16 | four identical two-decimal money formatters; the shared one keeps W13's null tolerance |
 | `bandFromDays` | W04, W17 | two byte-identical pace-band ladders |
+| `pkg` | every widget block, W18 | the data package envelope `{state, reason, data}` every widget renders from (added 16 Oct 2026; nothing replaced, this is the API seam) |
+| `pkgOption` | every widget block, W18 | the review selector's option, "default" when the data-states region is absent (`typeof` guard, so the isolated drivers and the release build see Default) |
+| `pkgGen` | every widget block, W18 | the data-states generators behind the same guard, null when absent |
+| `pkgStateHTML` | W15 (Bank Balances), the placeholders | the shell's `.state` block: icon, title, sub-line, optional call-to-action button |
+| `pkgPlaceholderHTML` | W03, W05, W10, W14, W16, W18 and Budget's no-fiscal-year | the owner's "Not designed yet" card for a package state Jo Phase 2 has no design for |
 
 Thirty-three per-widget helpers now resolve to seven implementations.
 
