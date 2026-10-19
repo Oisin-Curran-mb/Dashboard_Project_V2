@@ -4262,8 +4262,71 @@
     /* Pending Actions and Alerts & Actions: {id,sev,action,title,sub,items[]} per category. */
     function cats(prefix, n, perItem, r) { var out = []; for (var i = 0; i < n; i++) { var items = []; for (var k = 0; k < perItem; k++) items.push(pick(r, ["Missions Fund", "Youth Fund", "Capital Fund", "General Fund", "Camp Fund"]) + ", $" + money(r, 100, 900000).toLocaleString("en-US", { minimumFractionDigits: 2 }) + " " + pick(r, ["over restricted income", "past due", "unposted", "awaiting approval", "out of balance"]) + " (" + Math.round(100 + r() * 60) + "%)"); out.push({ id: prefix + "-cat-" + (i + 1), sev: pick(r, ["err", "warn", "upd"]), action: r() < 0.5, title: pick(r, ["Restricted Fund Compliance", "Overdue Payables", "Unposted Transactions", "Payment Processing", "Journals Out of Balance", "Unapplied Receipts"]) + " " + (i + 1), sub: items.length + " items need attention", items: items }); } return out; }
     /* Pending Actions reads "need" categories grouped by module (ap, ar, gl); each item is a queue line. */
-  function needCats(n, perItem, r) { var out = cats("pa3", n, perItem, r), groups = ["ap", "ar", "gl"]; out.forEach(function (c, i) { c.sev = "need"; c.action = true; c.group = groups[i % 3]; }); return out; }
-  G.pendingactions = { small: function () { return needCats(1, 1, rng(1601)); }, extreme: function () { return needCats(40, 50, rng(1602)); } };
+  /* Pending Actions: realistic small and extreme fixtures mirroring the real category/item structure.
+     Small = minimal viable data (1 item per payment mode, 1 txn, 1 invoice, 1 journal, 1 AR payment).
+     Extreme = high-volume stress test (many items per payment mode, many transactions/invoices/journals). */
+  G.pendingactions = {
+    small: function () {
+      return [
+        {id:"pa3-cat-2",sev:"need",action:true,group:"ap",title:"Payment Processing",sub:"1 AP invoice past due: $8,400 total outstanding",
+          glance:{n:1,nLabel:"invoice due",sub:"$8,400 total outstanding",hint:"1 past due",queueN:3,queueIdx:0},
+          items:["AVID Pay · 1 invoice · $8,400"]},
+        {id:"pa3-cat-8",sev:"need",action:true,group:"ap",title:"Unposted Transactions",sub:"1 transaction pending posting: $6,200 total, oldest 3 days",
+          glance:{n:1,nLabel:"transaction pending",sub:"$6,200 total",hint:"1 due today",queueN:1,queueIdx:0},
+          items:["TXN-2024-9001 · Vendor payment · $6,200 · 3 days"]},
+        {id:"pa3-cat-6",sev:"need",action:true,group:"ar",title:"Unposted Invoices",sub:"1 AR invoice unpaid: $2,800 total, oldest 15 days",
+          glance:{n:1,nLabel:"invoice unpaid",sub:"$2,800 total",hint:"oldest today",queueN:1,queueIdx:0},
+          items:["Riverside Community Group · INV-AR-2024-0200 · $2,800 · 15 days"]},
+        {id:"pa3-cat-9",sev:"need",action:true,group:"ar",title:"Payment Processing",sub:"1 payment awaiting processing: $4,500 total, oldest 2 days",
+          glance:{n:1,nLabel:"payment awaiting",sub:"$4,500 total",hint:"$0 unapplied",queueN:1,queueIdx:0},
+          items:["PAY-2024-0200 · ACH · $4,500 · 2 days · Awaiting bank confirmation"]},
+        {id:"pa3-cat-7",sev:"need",action:true,group:"gl",title:"Unposted Journals",sub:"1 journal entry pending posting: $7,800 total, oldest 3 days",
+          glance:{n:1,nLabel:"journal entry pending",sub:"$7,800 total",hint:"0 out of balance",queueN:1,queueIdx:0},
+          items:["JE-2024-2001 · Payroll allocation · $7,800 · 3 days"]}
+      ];
+    },
+    extreme: function () {
+      /* AP Payment Processing: 25 AVID, 18 ACH, 12 EFT invoices */
+      var apPayItems=[];
+      for(var i=0;i<25;i++)apPayItems.push("AVID Pay · INV-X-"+(4000+i)+" · $"+(9000+i*450).toLocaleString()+" · "+(22+i)+" days");
+      for(var j=0;j<18;j++)apPayItems.push("ACH · INV-X-"+(5000+j)+" · $"+(6500+j*380).toLocaleString()+" · "+(18+j)+" days");
+      for(var k=0;k<12;k++)apPayItems.push("EFT · INV-X-"+(6000+k)+" · $"+(3200+k*290).toLocaleString()+" · "+(10+k)+" days");
+      /* AP Unposted Transactions: 40 transactions */
+      var apTxnItems=[];
+      var txnTypes=["Payroll disbursement","Vendor payment","Grant receipt","Donation deposit","Petty cash","Utility payment","ACH transfer","Wire transfer","Payroll tax","Insurance premium"];
+      for(var t=0;t<40;t++)apTxnItems.push("TXN-X-"+(3000+t)+" · "+txnTypes[t%txnTypes.length]+" · $"+(1200+t*340).toLocaleString()+" · "+(1+t%15)+" days");
+      /* AR Unposted Invoices: 80 invoices */
+      var arInvItems=[];
+      var arOrgs=["Grace Fellowship","Northside Church","Riverside Community","St Paul UMC","Hope Fellowship","Trinity Chapel","Faith Community","Hillside Baptist","Westside Center","Eastgate Church"];
+      for(var v=0;v<80;v++)arInvItems.push(arOrgs[v%arOrgs.length]+" · INV-AR-X-"+(1000+v)+" · $"+(800+v*120).toLocaleString()+" · "+(1+v%90)+" days");
+      /* AR Payment Processing: 30 payments */
+      var arPayItems=[];
+      var payMethods=["ACH","Wire Transfer","Check","EFT","Credit Card"];
+      var payStatuses=["Awaiting bank confirmation","Pending authorisation","Not yet mailed","Awaiting approval","Processing","Submitted"];
+      for(var p=0;p<30;p++)arPayItems.push("PAY-X-"+(7000+p)+" · "+payMethods[p%payMethods.length]+" · $"+(2500+p*850).toLocaleString()+" · "+(1+p%12)+" days · "+payStatuses[p%payStatuses.length]);
+      /* GL Unposted Journals: 50 entries */
+      var glJnlItems=[];
+      var jnlTypes=["Payroll allocation","Depreciation","Accrued expenses","Prepaid amortisation","Intercompany transfer","Gifts posting","Fixed asset additions","Bank charges","Interest income","Fund transfer"];
+      for(var jn=0;jn<50;jn++)glJnlItems.push("JE-X-"+(8000+jn)+" · "+jnlTypes[jn%jnlTypes.length]+" · $"+(1500+jn*380).toLocaleString()+" · "+(1+jn%20)+" days");
+      return [
+        {id:"pa3-cat-2",sev:"need",action:true,group:"ap",title:"Payment Processing",sub:"55 AP invoices past due: $1,284,600 total outstanding",
+          glance:{n:55,nLabel:"invoices due",sub:"$1,284,600 total outstanding",hint:"55 past due",queueN:55,queueIdx:2},
+          items:apPayItems},
+        {id:"pa3-cat-8",sev:"need",action:true,group:"ap",title:"Unposted Transactions",sub:"40 transactions pending posting: $283,600 total, oldest 15 days",
+          glance:{n:40,nLabel:"transactions pending",sub:"$283,600 total",hint:"8 due today",queueN:40,queueIdx:1},
+          items:apTxnItems},
+        {id:"pa3-cat-6",sev:"need",action:true,group:"ar",title:"Unposted Invoices",sub:"80 AR invoices unpaid: $382,400 total, oldest 90 days",
+          glance:{n:80,nLabel:"invoices unpaid",sub:"$382,400 total",hint:"newest today",queueN:80,queueIdx:1},
+          items:arInvItems},
+        {id:"pa3-cat-9",sev:"need",action:true,group:"ar",title:"Payment Processing",sub:"30 payments awaiting processing: $374,500 total, oldest 12 days",
+          glance:{n:30,nLabel:"payments awaiting",sub:"$374,500 total",hint:"$4,200 unapplied",queueN:30,queueIdx:2},
+          items:arPayItems},
+        {id:"pa3-cat-7",sev:"need",action:true,group:"gl",title:"Unposted Journals",sub:"50 journal entries pending posting: $988,000 total, oldest 20 days",
+          glance:{n:50,nLabel:"journal entries pending",sub:"$988,000 total",hint:"3 out of balance",queueN:50,queueIdx:1},
+          items:glJnlItems}
+      ];
+    }
+  };
     G.alerts = { small: function () { return cats("al", 1, 1, rng(1701)); }, extreme: function () { return cats("al", 40, 50, rng(1702)); } };
 
     /* ---- memoised getter ----------------------------------------------- */
@@ -13425,7 +13488,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
   ];
   /* data states: small and extreme swap the category list; pa3C() is what every helper reads */
   var pa3Live=null;
-  function pa3ats(w){var l=(w&&w.dataset==="none")?[]:(w&&(w.dataset==="small"||w.dataset==="extreme"))?DATA_STATES.get(w.dataset,"pendingactions"):PA3_CATS;pa3Live=l;return l;}
+  function pa3ats(w){var ds=pkgOption();var l=(ds==="none")?[]:(ds==="small"||ds==="extreme")?DATA_STATES.get(ds,"pendingactions"):(w&&w.dataset==="none")?[]:(w&&(w.dataset==="small"||w.dataset==="extreme"))?DATA_STATES.get(w.dataset,"pendingactions"):PA3_CATS;pa3Live=l;return l;}
   function pa3C(){return pa3Live||PA3_CATS;}
 
 
@@ -13871,9 +13934,32 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
       '</div>'+
     '</div>';
   }
-  function pa3Content(w){pa3ats(w);
-    if(w.size==="kpi"&&w.id==="paB4_g2")return pa3Glance2(w);
-    if(w.size==="kpi")return pa3Glance(w);
+  /* data package: the envelope this widget renders from (API shape; see the shared pkg helpers).
+     reasons: no-pending-actions (no-data), no-action-queues (not-configured) */
+  function pa3Package(w){
+    var o=pkgOption();
+    if(o==="default"){
+      if(w&&(w.state==="empty"||w.dataset==="none"))return pkg("no-data","no-pending-actions",{cats:[]});
+      return pkg("ok","",{cats:PA3_CATS});
+    }
+    if(o==="none")return pkg("no-data","no-pending-actions",{cats:[]});
+    if(o==="notconfigured")return pkg("not-configured","no-action-queues",{cats:[]});
+    var g=pkgGen(o,"pendingactions");return pkg("ok",o,{cats:g||PA3_CATS});
+  }
+  function pa3StateHTML(w,p){
+    if(p.state==="no-data")return pkgStateHTML(w,{icon:"task_alt",title:"No pending actions",sub:"All queues are clear. There is nothing that requires your attention right now."});
+    if(p.state==="not-configured")return pkgStateHTML(w,{icon:"pending_actions",title:"Not configured",sub:"Pending Actions has not been set up for your role. Contact your system administrator to enable this widget."});
+    return null;
+  }
+  function pa3Content(w){
+    var p=pa3Package(w);
+    /* load live cats for the correct state */
+    if(p.state==="ok"){pa3ats(w);}else{pa3Live=[];}
+    /* glance sizes */
+    if(w.size==="kpi"&&w.id==="paB4_g2"){var sh=pa3StateHTML(w,p);if(sh)return sh;return pa3Glance2(w);}
+    if(w.size==="kpi"){var sh2=pa3StateHTML(w,p);if(sh2)return sh2;return pa3Glance(w);}
+    /* explore / detail */
+    var sh3=pa3StateHTML(w,p);if(sh3)return sh3;
     pa3Ensure(w);
     var xwide=(w.size==="xwide");
     var tabs=pa3TabBar(w.id);
