@@ -2243,6 +2243,7 @@
   .al-modal-sev{font-size:var(--type-size-11);font-weight:700;text-transform:uppercase;letter-spacing:.07em;margin-bottom:var(--padding-xtight);}
   .al-modal-sev.sev-err{color:var(--red-100);}
   .al-modal-sev.sev-warn{color:var(--primitive-color-saffron-500);}
+  .al-modal-sev.sev-neutral{color:#606060;}
   .al-modal-msg{font-size:var(--type-size-14);color:var(--txt-secondary);line-height:1.6;margin:0 0 var(--padding-base);}
   .al-modal-table{background:var(--surface-header);border:1px solid var(--stroke-widget);border-radius:var(--cornerradius-medium);padding:var(--padding-xxtight) 0;margin-bottom:var(--padding-base);}
   .al-modal-row{display:flex;align-items:baseline;padding:var(--padding-tight) var(--padding-base);gap:var(--gap-base);}
@@ -12827,7 +12828,7 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
   }
   function aloMergedModal(cfg,sev,proceedLabel,proceedFn){
     if(!cfg)return;
-    var sevCls=sev==="err"?"sev-err":"sev-warn";
+    var sevCls=sev==="err"?"sev-err":sev==="neutral"?"sev-neutral":"sev-warn";
     var rows=(cfg.rows||[]).map(function(r){
       return '<div class="al-modal-row"><span class="al-modal-lbl">'+r.lbl+'</span><span class="al-modal-val'+(r.err?" val-err":"")+'">'+r.val+'</span></div>';
     }).join("");
@@ -14301,29 +14302,28 @@ WIDGETS.register("gifts",{content:gpFContentRoot,about:function(w){return {h:w.t
     if(a==="paO3-dp-approve"){var apsel=pa3Sel[id];if(apsel){setStatus("Approved: "+(apsel.cfg&&apsel.cfg.invoiceNo?apsel.cfg.invoiceNo:apsel.cat.title));}pa3Sel[id]=null;render();return true;}
     if(a==="paO3-dp-reject"){var rjsel=pa3Sel[id];if(rjsel){setStatus("Rejected: "+(rjsel.cfg&&rjsel.cfg.invoiceNo?rjsel.cfg.invoiceNo:rjsel.cat.title));}pa3Sel[id]=null;render();return true;}
     /* detail pane action buttons — open aloMergedModal with the selected item cfg (same spec as explore view) */
-    if(a==="paO3-dp-pay"){var dppaySel=pa3Sel[id];aloOpenPaymentMerged(dppaySel?dppaySel.cfg:null,"err");return true;}
-    if(a==="paO3-dp-recon"){var dpreconSel=pa3Sel[id];aloOpenReconMerged(dpreconSel?dpreconSel.cfg:null,"err");return true;}
-    if(a==="paO3-dp-ar"){var dpARSel=pa3Sel[id];aloOpenARMerged(dpARSel?dpARSel.cfg:null,"err");return true;}
-    if(a==="paO3-dp-budget"){var dpBudSel=pa3Sel[id];aloOpenBudgetMerged(dpBudSel?dpBudSel.cfg:null,"err");return true;}
+    if(a==="paO3-dp-pay"){var dppaySel=pa3Sel[id];aloOpenPaymentMerged(dppaySel?dppaySel.cfg:null,"neutral");return true;}
+    if(a==="paO3-dp-recon"){var dpreconSel=pa3Sel[id];aloOpenReconMerged(dpreconSel?dpreconSel.cfg:null,"neutral");return true;}
+    if(a==="paO3-dp-ar"){var dpARSel=pa3Sel[id];aloOpenARMerged(dpARSel?dpARSel.cfg:null,"neutral");return true;}
+    if(a==="paO3-dp-budget"){var dpBudSel=pa3Sel[id];aloOpenBudgetMerged(dpBudSel?dpBudSel.cfg:null,"neutral");return true;}
     /* wide-mode overlay handlers — use aloMergedModal spec for all categories */
     if(a==="paO3-item"){var cid=t.getAttribute("data-cat"),idx=parseInt(t.getAttribute("data-idx"),10)||0,cd=pa3C().filter(function(c){return c.id===cid;})[0];
       if(cd){
         var icfg=PA3_ITEM_MODALS[cid+":"+idx]||null;
-        var isev=cd.sev==="need"?"err":"warn";
-        if(icfg&&icfg.opensPayment){aloOpenPaymentMerged(icfg,isev);}
-        else if(icfg&&icfg.opensRecon){aloOpenReconMerged(icfg,isev);}
-        else if(icfg&&icfg.opensAR){aloOpenARMerged(icfg,isev);}
-        else if(icfg&&icfg.opensBudget){aloOpenBudgetMerged(icfg,isev);}
-        else if(icfg&&icfg.opensJournal){pa3OpenJournalModal(icfg,isev);}
-        else if(icfg&&icfg.invoiceNo){aloOpenModal(isev,cd.title,String(cd.items[idx]||"").replace(/<[^>]+>/g,""),icfg);}
-        else{aloMergedModal(icfg,isev,icfg&&icfg.btnPri&&icfg.btnPri.label?icfg.btnPri.label:"View",function(){});}
+        if(icfg&&icfg.opensPayment){aloOpenPaymentMerged(icfg,"neutral");}
+        else if(icfg&&icfg.opensRecon){aloOpenReconMerged(icfg,"neutral");}
+        else if(icfg&&icfg.opensAR){aloOpenARMerged(icfg,"neutral");}
+        else if(icfg&&icfg.opensBudget){aloOpenBudgetMerged(icfg,"neutral");}
+        else if(icfg&&icfg.opensJournal){pa3OpenJournalModal(icfg,"neutral");}
+        else if(icfg&&icfg.invoiceNo){aloOpenModal("neutral",cd.title,String(cd.items[idx]||"").replace(/<[^>]+>/g,""),icfg);}
+        else{aloMergedModal(icfg,"neutral",icfg&&icfg.btnPri&&icfg.btnPri.label?icfg.btnPri.label:"View",function(){});}
       }return true;}
-    if(a==="paO3-payment"){var pcid=t.getAttribute("data-cat"),pidx=parseInt(t.getAttribute("data-idx"),10)||0,pcfg=PA3_ITEM_MODALS[pcid+":"+pidx]||null;aloOpenPaymentMerged(pcfg,"err");return true;}
-    if(a==="paO3-recon"){var rcid=t.getAttribute("data-cat"),ridx=parseInt(t.getAttribute("data-idx"),10)||0,rcfg=PA3_ITEM_MODALS[rcid+":"+ridx]||null;aloOpenReconMerged(rcfg,"err");return true;}
-    if(a==="paO3-ar"){var arcid=t.getAttribute("data-cat"),aridx=parseInt(t.getAttribute("data-idx"),10)||0,arcfg=PA3_ITEM_MODALS[arcid+":"+aridx]||null;aloOpenARMerged(arcfg,"err");return true;}
-    if(a==="paO3-budget"){var bcid=t.getAttribute("data-cat"),bidx=parseInt(t.getAttribute("data-idx"),10)||0,bcfg=PA3_ITEM_MODALS[bcid+":"+bidx]||null;aloOpenBudgetMerged(bcfg,"err");return true;}
-    if(a==="paO3-journal"){var jcid=t.getAttribute("data-cat"),jidx=parseInt(t.getAttribute("data-idx"),10)||0,jcfg=PA3_ITEM_MODALS[jcid+":"+jidx]||null;pa3OpenJournalModal(jcfg,"err");return true;}
-    if(a==="paO3-dp-journal"){var dpJnlSel=pa3Sel[id];pa3OpenJournalModal(dpJnlSel?dpJnlSel.cfg:null,"err");return true;}
+    if(a==="paO3-payment"){var pcid=t.getAttribute("data-cat"),pidx=parseInt(t.getAttribute("data-idx"),10)||0,pcfg=PA3_ITEM_MODALS[pcid+":"+pidx]||null;aloOpenPaymentMerged(pcfg,"neutral");return true;}
+    if(a==="paO3-recon"){var rcid=t.getAttribute("data-cat"),ridx=parseInt(t.getAttribute("data-idx"),10)||0,rcfg=PA3_ITEM_MODALS[rcid+":"+ridx]||null;aloOpenReconMerged(rcfg,"neutral");return true;}
+    if(a==="paO3-ar"){var arcid=t.getAttribute("data-cat"),aridx=parseInt(t.getAttribute("data-idx"),10)||0,arcfg=PA3_ITEM_MODALS[arcid+":"+aridx]||null;aloOpenARMerged(arcfg,"neutral");return true;}
+    if(a==="paO3-budget"){var bcid=t.getAttribute("data-cat"),bidx=parseInt(t.getAttribute("data-idx"),10)||0,bcfg=PA3_ITEM_MODALS[bcid+":"+bidx]||null;aloOpenBudgetMerged(bcfg,"neutral");return true;}
+    if(a==="paO3-journal"){var jcid=t.getAttribute("data-cat"),jidx=parseInt(t.getAttribute("data-idx"),10)||0,jcfg=PA3_ITEM_MODALS[jcid+":"+jidx]||null;pa3OpenJournalModal(jcfg,"neutral");return true;}
+    if(a==="paO3-dp-journal"){var dpJnlSel=pa3Sel[id];pa3OpenJournalModal(dpJnlSel?dpJnlSel.cfg:null,"neutral");return true;}
     return false;
   }
   function aloOpenJournalScreen(){
