@@ -4,6 +4,13 @@ Draft, 19 October 2026. For the owner's review. The same material is the
 **Dashboards** view in the build, beside Demo, Spec and Permissions; this file
 carries the source citations and research notes that do not belong on screen.
 
+**Updated 22 October 2026** with the owner's answers to the open points (Q50,
+Q51, A26, A29, A30, and Q49, Q57 and Q58 where they touch this document). The
+lines they settle are corrected in place and marked *(owner, 22 Oct)*; the
+answers themselves are kept as notes at the end. The Dashboards view in the
+build still shows the 19 October proposals for Payroll and Statistics and is to
+be brought into line separately.
+
 One section per module page: its URL, what the old system shows on it today,
 what the source proves, which V2 widgets belong to the module, and the proposed
 V2 default. Every proposed default is the Detail size. Widgets are named, never
@@ -170,7 +177,7 @@ build showing only that module's widgets at Detail.
 | What it shows today | Slot 1 **Payroll Scheduled Time Off**, slot 2 **Payroll Scheduled Time Off**. Titled "Accounting Home". |
 | Provable from source | Not set by any migration in the repo. |
 | V2 widgets | **Accounts Payable By Due Date**, **Receivable Invoices Outstanding**, **Budget Compared to Actual** with the **Financial KPI** band, **Bank Balances**, **Pending Actions**, **Main Content Tasks** |
-| **Proposed default** | **What Accounts Payable, Accounts Receivable, General Ledger and Bank Account Management show, all at Explore; Pending Actions once; Main Content Tasks last.** Owner's ruling, 19 October. |
+| **Proposed default** | **What Accounts Payable, Accounts Receivable, General Ledger and Bank Account Management show, all at Explore; Pending Actions once; Main Content Tasks last.** Owner's ruling, 19 October; confirmed 22 October (A30). |
 
 The root is the page a user lands on before choosing a module. **This is the one
 page whose default is Explore rather than Detail**, so that four modules'
@@ -357,7 +364,7 @@ system's two panels.
 | What it shows today | Slot 1 **Payroll Distributions**, slot 2 **Main Content Tasks**. |
 | Provable from source | Not set by any migration in the repo. |
 | V2 widgets | **Payroll Distributions**, **Payroll Scheduled Time Off** |
-| **Proposed default** | **Payroll Distributions at Detail.** Payroll Scheduled Time Off is available but not the default. |
+| **Proposed default** | **Payroll Distributions at Detail, then Main Content Tasks at Detail as the last item** *(owner, 22 Oct, A26: "yes both")*. Payroll Scheduled Time Off is available but not the default. |
 
 Payroll Scheduled Time Off is gated on a deeper right than the module root, the
 secure time-off hours tab, so it is absent for some users who can see Payroll
@@ -448,10 +455,12 @@ it before showing certain links and tiles.
 | URL | `https://[env]myamplify.io/Statistics` |
 | What it shows today | Redirects to the root; no page of its own on test1. |
 | Provable from source | Not set by any migration in the repo. |
-| V2 widgets | **None.** |
-| **Proposed default** | Nothing to propose. Needs a ruling: does Statistics get a dashboard at all? |
+| V2 widgets | **None of its own.** It takes the two shared widgets, **My Status** and **Main Content Tasks** *(owner, 22 Oct, Q51)*. |
+| **Proposed default** | **My Status at Detail and Main Content Tasks at Detail, like Records** *(owner's ruling, 22 Oct, Q51)*. |
 
-No screenshot in either version. The old panel was never finished.
+No screenshot in either version. The old panel was never finished. On test1 the
+URL still redirects to the root, so the default applies once V2 serves a
+Statistics page.
 
 ---
 
@@ -463,8 +472,10 @@ holds that row's own module right. They can appear on any module's dashboard,
 and they are Records' entire dashboard.
 
 - **My Status opens empty for a new user** in the old system. Its selected
-  queries are a user preference with no seed (`MyStatus.ascx.cs:140-151`). V2
-  ships a default selection of seven queries, a deliberate improvement.
+  queries are a user preference with no seed (`MyStatus.ascx.cs:140-151`). **V2
+  does the same** *(owner, 22 Oct, A29: "whatever was in the original widget")*:
+  no seeded queries; the user picks them with Configure. The seven queries the
+  demo shows are sample data, not a shipped default.
 - **Main Content Tasks shows at most eight tiles**, driven per page from the
   database, so it adapts to whichever module it sits on. V2 keeps that shape.
 
@@ -475,12 +486,16 @@ and they are Records' entire dashboard.
 
 ## What still needs a decision
 
-1. **One dashboard per module, or one that follows the module in the
-   sidebar?** The single dashboard is already named Accounts Payable to match
-   the sidebar.
-2. **What the home page (the root URL) opens with** when no module is chosen.
-3. **Does Statistics get a dashboard?**
-4. **Pending Actions needs a row in the Widget Permissions table.**
+1. ~~One dashboard per module, or one that follows the module in the
+   sidebar?~~ **Settled 22 October (Q50): one per module**, each with its own
+   saved preference (owner: "each will have it only saved preference").
+2. ~~What the home page (the root URL) opens with.~~ **Settled 19 October,
+   confirmed 22 October (A30)**: see Home above.
+3. ~~Does Statistics get a dashboard?~~ **Settled 22 October (Q51)**: My
+   Status and Main Content Tasks, like Records.
+4. **Pending Actions needs a row in the Widget Permissions table.** Still
+   open: the owner settles it with Aditya Bhaskarrao Lakhmapure, whose widget
+   it is (22 Oct, Q49).
 5. **Run the SQL above** to settle the shipped defaults for the eleven modules
    no migration sets. test1 strongly suggests the answer is the same pattern as
    the other five.
@@ -488,6 +503,13 @@ and they are Records' entire dashboard.
 Settled on 19 October: Quick Links is retired, Records shows Main Content Tasks
 and My Status, every default is the Detail size, the dashboard is named for its
 module, and the user's selection must be saved.
+
+Settled on 22 October: one dashboard per module with its own saved preference
+(Q50); Statistics takes My Status and Main Content Tasks (Q51); Payroll's
+dashboard ends with Main Content Tasks (A26); a new user's My Status opens
+empty, as the old system (A29); Home as ruled on 19 October (A30); the widget
+list offers only the handover's widgets, Alerts & Actions having become Pending
+Actions (Q58).
 
 ---
 
@@ -520,3 +542,35 @@ owner's beta1 account.
 Not checked: **no database was queried.** The shipped default for eleven
 modules is inferred from test1 and the five-module pattern, not read from the
 seed table.
+
+---
+
+## The owner's answers (notes, 22 October 2026)
+
+Copied from the owner's answer sheet of 22 October 2026 (the decisions page,
+exported as text). Only the answers that touch this document are listed; the
+full sheet is on the decisions page and in the SharePoint project folder. Where
+an answer changes a line above, the line is already corrected and marked
+*(owner, 22 Oct)*. Comments are quoted as written.
+
+- **Q49 (Pending Actions, which right shows it): not answered.** Comment:
+  "Pending Actions is also Aditya widget, Disuses with him."
+- **Q50 (one dashboard per module, or one that follows the sidebar): A) One per
+  module.** Comment: "correct. each will have it only saved preference"
+- **Q51 (does Statistics get a dashboard): B) My Status and Main Content Tasks,
+  like Records.**
+- **Q57 (widget data states, build now or wait): A) Wait until the data-states
+  document is released.** The envelope shape in the build (`ok | no-data |
+  not-configured | error`, `docs/decisions/Shell-data-package.md`) is settled;
+  the reason list and Jo's designs follow with the released document.
+- **Q58 (two prototype widgets in the widget list): A) Remove both.** Comment:
+  "Alerts & Actions changed to pending action. Budget Compared to Actual is
+  still there if that what you mean." (The two to remove are the first
+  prototype's "Budget vs Actual Summary" and "Actionable Alerts"; Budget
+  Compared to Actual itself stays.)
+- **A26 (Payroll's dashboard ends with Main Content Tasks): Agree.** Comment:
+  "yes both"
+- **A29 (a new user's My Status starts with the seven demo queries): Disagree.**
+  Comment: "What ever was in the original widget" (which opens empty).
+- **A30 (Home opens with Accounts Payable, Accounts Receivable, General Ledger
+  and Bank, at Explore): Agree.**

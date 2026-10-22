@@ -5,6 +5,11 @@ Draft for review, 16 October 2026. Written from the legacy code in `C:\Users\ocu
 old system first, then the V2 recommendation. After review, the summary table in section 7 becomes the
 permissions list for Value Labs.
 
+**Updated 22 October 2026.** The owner answered the open points of 22 October (Q44 to Q58 and A17 to A30 on the
+decisions page). The lines they settle are corrected in place and marked *(owner, 22 Oct)*; the answers themselves,
+with the owner's comments, are kept as notes in section 9. The Permissions view in `index.html` still carries the
+earlier reading of Payroll Scheduled Time Off and is to be brought into line separately.
+
 The question for each widget is the same: **which Task Role right shows the widget, which right lets a
 user act inside it, and what does a user without the right see.**
 
@@ -51,7 +56,9 @@ Tasks (no module right; each query or tile carries its own) and Financial KPI (n
 **The V2 rule proposed throughout.** A widget is offered when the user holds its module's Dashboard right
 (the bare module URI at Inquiry), exactly as today. Actions inside a widget need the right the real page
 checks for that action. A user without the widget's right is not offered it; if the widget is already placed
-and the right is removed, the card shows "You do not have access to {module}" instead of the old blank body.
+and the right is later removed, the card is dropped from the dashboard the next time it loads, as if the user
+never had it *(owner, 22 Oct, Q47)*. The old system kept a blank body, and the 16 October draft proposed a "You do
+not have access to {module}" line; both are superseded.
 The API enforces the same checks; the widget's hiding is presentation only.
 
 ---
@@ -69,6 +76,11 @@ anything open.
 - **V2 adds**: interval buttons, sparkline, compare menu, a drill pop-up; no write actions.
 - **Recommendation**: show on the General Ledger Dashboard right. Keep the Special Reports sub-right for
   the special-report lines in the pop-up and the compare menu. No other right.
+- **Account roles** *(owner, 22 Oct, Q45)*: the totals, chart and tiles cover only the GL accounts the user may see,
+  as the old panel. `GLAccountRepository.GetAll()` applies the user's Account Rights Roles (include and omit by
+  company, region, fund, department and account range, `:84-130`), `GetAllByCurrentContext()` builds on it
+  (`:132-135`), and the panel reads its accounts through that method (`BudgetComparedToActual.ascx.cs:371, 374, 381`).
+  The API must keep the filter, so two users can see different totals on the same day.
 
 ### 2.2 Pension Plans
 - **Module / row**: Pension Billing, "Dashboard" (`/PensionBilling`).
@@ -105,8 +117,10 @@ anything open.
 - **V2 adds**: aging bands, customer drill, "Open invoice". The invoice page is
   `/AccountsReceivable/TransactionInquiry/Invoice/{id}` (route in `FinancialsAreaRegistration.cs:211`).
 - **Recommendation**: show on the Accounts Receivable Dashboard right. "Open invoice" needs
-  `/AccountsReceivable/TransactionInquiry` at Inquiry; hide the link without it. Contact details on an
-  expanded invoice follow the same right.
+  `/AccountsReceivable/TransactionInquiry` at Inquiry; the link is always shown and opens the no-permission pop-up
+  without it (5.2). Contact details on an expanded invoice follow the widget's right. Confirmed *(owner, 22 Oct,
+  Q46)*: the posted invoice opens read-only in Transaction Inquiry. "Same logic as V1" (Q16) meant keep the one
+  link; V1 never fixed a page, and the old panel had no link at all.
 
 ### 2.6 Insurance Billing Plans
 - **Module / row**: Insurance Billing, "Dashboard" (`/InsuranceBilling`).
@@ -132,7 +146,7 @@ anything open.
 ### 2.9 Payroll Scheduled Time Off
 Treated in full in section 4. In short: show on `/Payroll/EmployeeInformation/SecureTimeOffHoursTab` at
 Inquiry, not the Payroll Dashboard row; rows narrowed to the signed-in employee's approval departments;
-Approve and Undo on the same right at Update, which the old panel did not check.
+Approve and Undo on the same right, with no separate Update check, as the old panel *(owner, 22 Oct, Q44)*.
 
 ### 2.10 Loans With Balance Due
 - **Module / row**: Loan Processing, "Dashboard" (`/LoanProcessing`).
@@ -187,6 +201,12 @@ needs `/PurchasingManagement/Requests/Update`.
   number field and seven tabs (Company Info, MICR, Images, MICR Password, ACH, AP Checks, PR Checks)
   unless the user holds `/BankAccountManagement/BankAccountInformation/Secure<Name>` at **Update**
   (Full Rights, not Inquiry). A user who can open the page may still see most of it missing.
+- **Account numbers** *(owner, 22 Oct, Q56)*: the row tooltip shows the masked number (••4021), as the row does,
+  never the full number. Shelby stores `BankAccountNumber` encrypted
+  (`Shelby.Data\EntityClassExtensions\BRBankAccount.cs:311-326`) and the bank page shows it only with the Secure
+  Bank Account Number right at Update (`Update.aspx.cs:1015`); the dashboard shows no more than that page does.
+  The demo's tooltip still prints the full number (`acctFull`) and is to be corrected. If a question remains,
+  confirm with Feargal (owner).
 - **Recommendation**: show the widget on the Bank Account Management Dashboard right; **the
   account-role filter must be kept in the API** (it is data access, not a widget right). "Open in
   Bank" is **always shown**; a click by a user without
@@ -214,8 +234,11 @@ needs `/PurchasingManagement/Requests/Update`.
 - **Old panel**: `/DonorsAndGifts` at Inquiry (`GiftsPledges.ascx.cs:11`); no other check.
 - **V2 adds**: gifts outside a pledge, the ledger pop-up, "Open in Gifts and Pledges". Pledges page
   `/DonorsAndGifts/Pledges`; editing a pledge needs `/DonorsAndGifts/Pledges/Update` (`AddPledge.aspx.cs:21`).
-- **Recommendation**: show on the Donors And Gifts Dashboard right. "Open in Gifts and Pledges" needs
-  `/DonorsAndGifts/Pledges` at Inquiry; hide without it.
+- **Recommendation**: show on the Donors And Gifts Dashboard right. "Open in Gifts and Pledges" opens the
+  purpose's own record (Q39, 15 Oct: Donors And Gifts › Purposes › Update for that purpose; the Pledges page filters
+  by a stored preference and cannot be deep-linked), so it needs `/DonorsAndGifts/Purposes` at Inquiry, the page
+  that opens *(owner, 22 Oct, A23)*. Always shown; the no-permission pop-up without the right (5.2). The Purposes
+  page is editable for a user who holds it at Update.
 
 ### 2.17 Financial KPI
 - **Module / row**: none; new in V2, no old panel.
@@ -226,7 +249,8 @@ needs `/PurchasingManagement/Requests/Update`.
   figure is a ledger total and nobody who may not see the ledger should see net income; (b) a new task under
   General Ledger, "Financial KPI", so a Task Role can give leadership the band without the rest of the ledger.
 - **Recommendation**: (a) for the first release; (b) is a seed-table addition that can follow if a customer
-  asks. **Open for the owner.**
+  asks. Settled: (a), section 8 decision 1. The band's totals follow the user's GL account roles, as Budget
+  Compared to Actual *(owner, 22 Oct, Q45)*.
 
 ---
 
@@ -249,7 +273,10 @@ user, or the user is Admin, or the user holds `/PurchasingManagement/Requests/Ap
 - in the Approvals grid (`Content\scripts\Controls\POApprovalsGrid.js:65-93`) Approved and Rejected can be
   ticked only on the user's own row at the current level, or anywhere with Approval Override; Hold has no
   such lock;
-- Admin is **not** a shortcut on this page (only the panel's list uses it).
+- Admin is **not** a shortcut on this page (only the panel's list uses it): the page tests the Approval Override
+  right, not the Admin flag (`Update.aspx.cs:221`). An Admin user holds every task at Update
+  (`ShelbyContext.cs:871-884`), so an Admin passes that test and may approve or reject any level, exactly as on
+  the Requests page *(owner, 22 Oct, Q48: "needs to work like the original widget did it")*.
 
 **The email approve page** (`Requests\ApproveReject.aspx.cs`, `/PurchasingManagement/Requests/Approve|Reject/{id}`):
 the user must be on the path ("You are not required to approve this order.", `:112`); the account-role check
@@ -263,19 +290,23 @@ page; Encumbrances follows the same filters.
 **Recommendation**
 | Part of the widget | Right | Without it |
 |---|---|---|
-| The widget itself, table, Encumbrances, pop-up (read) | `/PurchasingManagement` at Inquiry (the module's Dashboard row) | not offered; "You do not have access to Purchasing Management" if already placed |
+| The widget itself, table, Encumbrances, pop-up (read) | `/PurchasingManagement` at Inquiry (the module's Dashboard row) | not offered; a placed card is dropped (Q47) |
 | Rows the user may see | as the panel: own level or own requests for the two Awaiting options; for All, Unapproved and Approved a request whose path has no users, or the user is a path user, or holds Approval Override at Update | the request is not listed |
 | Approve, Reject | the user is on the request's path at the level that acts now, or holds `/PurchasingManagement/Requests/ApprovalOverride` at Update; the request's accounts are inside the user's account roles | buttons absent; the footer says whose turn it is |
 | Hold, Remove hold | the user is on the request's path (any level, as the page) | button absent |
 | Open request | `/PurchasingManagement/Requests/Update` at Inquiry (Update to edit there) | link absent |
 | Attachments, Open a file | the widget's right; the file itself is served by the request page's right | Open absent |
 | Note, Save note | `/PurchasingManagement/Requests/Update` at Update | note read-only |
+| Emails on Approve, Hold, Reject *(owner, 22 Oct, Q52)* | the same emails as the Requests screen, each behind its company setting (`PO_Company.EmailNextApproval`, `EmailApproved`, `EmailOnCreated`, `EmailOrder`); the vendor email only on final approval of a purchase order | a setting that is off sends nothing, as today; nothing new is invented |
+| Activity log in the pop-up *(owner, 22 Oct, Q53)* | the acted approval rows: date, approver, Approved / On hold / Rejected, reason. Shelby keeps each approver's latest action only (`PO_OrderApproval`), so a hold that is later approved shows as Approved | n/a |
 
 **Kept the same as the original panel.** The list rule is the panel's,
 Admin shortcut included (a request whose path has no users, or the user is a path user, or the user is an
 Admin, or holds Approval Override at Update). Approve, Hold and Reject follow the request page's rule, the only
 rule the old system has for acting: on the path at the acting level, or Approval Override at Update, for
-Approve and Reject; on the path for Hold.
+Approve and Reject; on the path for Hold. Approval Override, and so an Admin, acts on the level whose turn it is,
+one level per click, and cannot Hold when not on the path (A24); Hold is open to anyone on the path while their
+own row is still open (A25); both agreed 22 October.
 
 **API note**: enforce the path test exactly as `ApproveRejectOrder` does, and apply the account-role check,
 server-side; the widget only hides buttons.
@@ -304,14 +335,23 @@ Approve with a confirmation and Undo, person info and day pop-ups.
 **Recommendation**
 | Part of the widget | Right | Without it |
 |---|---|---|
-| The widget itself | `/Payroll/EmployeeInformation/SecureTimeOffHoursTab` at Inquiry | not offered; "You do not have access to Time Off" if already placed |
+| The widget itself | `/Payroll/EmployeeInformation/SecureTimeOffHoursTab` at Inquiry | not offered; a placed card is dropped (Q47) |
 | Departments listed | the signed-in employee's "Can Approve Home Depts" list | an employee with none sees the empty state "No departments to approve" |
-| A user who is not an employee | every department is listed, as the panel does (kept as the original) | n/a |
-| Approve, Undo | the widget's right only, no separate Update check (kept as the original) | n/a |
+| A user who is not an employee | every department is listed, as the panel does (kept as the original; Q21, answered A) | n/a |
+| Approve, Undo | the widget's right only, no separate Update check (kept as the original) *(owner, 22 Oct, Q44)* | n/a |
 | Person info, day pop-up | the widget's right | n/a |
 
-**API note**: the departments filter and the Update check both belong in the API; a non-employee's access
-should follow the Q21 ruling, not the old panel's accident.
+**API note**: the departments filter belongs in the API; there is no Update check (Q44). A non-employee sees
+every department (Q21, answered A: as the original widget).
+
+**Settled 22 October (Q44)**: the widget is shown on the Time Off Hours task
+(`/Payroll/EmployeeInformation/SecureTimeOffHoursTab`), not the Payroll Dashboard row, and Approve and Undo need
+that right only. The Permissions view in `index.html` says otherwise and is to be corrected.
+
+**Empty messages (Q55, owner, 22 Oct)**: two messages, not one. A user with the right but no approval departments
+and a user with departments but nothing scheduled are different situations reached by different routes ("No
+access and not having data is not the same thing"). The owner writes both messages; until then the demo's "No
+time off scheduled" stands for the second and this section's "No departments to approve" for the first.
 
 ---
 
@@ -366,14 +406,15 @@ Information / Update**.
 | V2 widget | Outbound control in the build today | Destination and right to test | Care point |
 |---|---|---|---|
 | Purchasing Management | "Open request" (pop-up header); "Open" on each attachment; Export to Excel | `/PurchasingManagement/Requests/Update` at Inquiry; attachments are served by that page's right | The widget's own right (`/PurchasingManagement`) does **not** include the Requests page. Approve, Hold and Reject are not links; they are API actions with the path test (section 3). |
-| Gifts Pledges | "Open in Gifts and Pledges" (ledger footer); the ledger's Excel file | `/DonorsAndGifts/Pledges` at Inquiry | Different page from the module root. The Excel file is built in the browser from data the user already sees; no extra right. |
-| Remittance Pledges | "Open in Remittance" (member-church drill); Export to Excel | the Remittance pledge page at Inquiry (`/Remittance/...`, to name exactly when the route is confirmed) | Same pattern as Gifts. |
-| Bank Balances | "Open in Bank" (account drill) | `/BankAccountManagement/BankAccountInformation` at Inquiry | Plus the GL **account roles**: a user may hold the page right and still be refused an account they may not see; the API must apply the account filter to the link as well as the list. |
-| Accounts Payable By Due Date | "Open in Accounts Payable" (invoice pop-up); "Schedule payment" when AvidPay is on (Jo's version, not yet in the build) | `/AccountsPayable/TransactionInquiry` at Inquiry; Schedule payment: AvidPay feature flag on the tenant **and** `/AccountsPayable/PaymentProcessing` at Update | Two gates on one button; show the note "not enabled for this organization" when the feature is off, hide the button when the right is missing. |
-| Loans With Balance Due | "Open loan" (pop-up; placeholder today); Export to Excel (placeholder) | `/LoanProcessing/LoanInformation` at Inquiry | Destination route still to confirm (decisions page). |
+| Gifts Pledges | "Open in Gifts and Pledges" (ledger footer); the ledger's Excel file | `/DonorsAndGifts/Purposes` at Inquiry: the purpose's own record (Q39; A23 agreed 22 Oct) | Different page from the module root. The Excel file is built in the browser from data the user already sees; no extra right. |
+| Remittance Pledges | "Open in Remittance" (member-church drill); Export to Excel | Remittance › Pledges, the pledge list, at Inquiry (A21 agreed 22 Oct; the old page cannot open filtered to one church) | Same pattern as Gifts. |
+| Bank Balances | "Open in Bank" (account drill) | `/BankAccountManagement/BankAccountInformation` at Inquiry (Bank Account Information for that account, Q33) | Plus the GL **account roles**: a user may hold the page right and still be refused an account they may not see; the API must apply the account filter to the link as well as the list. |
+| Accounts Payable By Due Date | "Open in Accounts Payable" (invoice pop-up); "Schedule payment" when AvidPay is on (Jo's version, not yet in the build) | `/AccountsPayable/TransactionInquiry` at Inquiry (Transaction Inquiry › Details for the posted bill; Q38, A22 agreed 22 Oct. The widget carries only the InvoiceID, so link via Transactions › Update/{InvoiceID}, which redirects: owner's Q38 comment); Schedule payment: AvidPay feature flag on the tenant **and** `/AccountsPayable/PaymentProcessing` at Update | Two gates on one button; show the note "not enabled for this organization" when the feature is off, hide the button when the right is missing. |
+| Loans With Balance Due | "Open loan" (pop-up; placeholder today); Export to Excel (placeholder) | `/LoanProcessing/LoanInformation` at Inquiry | Loan Processing › Loan Information › Update for that loan (A9; A20 agreed 22 Oct). |
 | Fixed Asset Values | Export to Excel (placeholder); opening an asset was asked about in Q28 | `/FixedAssets/AssetInformation` at Inquiry if the row opens the asset | Only if Q28 is answered yes. |
-| Receivable Invoices Outstanding | "Open invoice" (decisions page Q16; not in the build yet); Export to Excel | `/AccountsReceivable/TransactionInquiry` at Inquiry | Build the link only with the right; the contact details shown on an expanded invoice stay under the widget's right. |
-| Deposits on Hand | "Open account" (Q20; not in the build yet) | the deposit account page at Inquiry (route to confirm) | As above. |
+| Receivable Invoices Outstanding | "Open invoice" (Q16, settled as Q46 on 22 Oct: Transaction Inquiry › Invoice, read-only); Export to Excel | `/AccountsReceivable/TransactionInquiry` at Inquiry | Always shown, the pop-up without the right; the contact details shown on an expanded invoice stay under the widget's right. |
+| Deposits on Hand | "Open account" (Q20; not in the build yet) | Deposits On Hand › Account Information › Update for that account, at Inquiry (Q20; A21 agreed 22 Oct) | As above. |
+| Bank Balances and Deposits on Hand empty states | "Add bank account", "Add account" | Bank Account Information (a new account); Account Information | **Open**: A27 is unanswered (owner, 22 Oct: "I am working on that"). |
 | Payroll Distributions | Export to Excel | no page; a data permission | All or nothing: the Payroll Dashboard right shows the widget, the Employee Break Down and the export in full; nothing further is checked. |
 | Pension Plans | Export as CSV, PDF, Excel | no page | Data the user already sees; no extra right. |
 | My Status | Query rows navigate to the module page (as the old "Jump To Url") | each query's destination page, as in 5.1 | Keep the old two-step guard, but test the **destination page** right before showing the jump, not only the module root. |
@@ -393,8 +434,10 @@ Information / Update**.
    Payroll Distributions.
 5. **Approve, Hold, Reject, Undo are not links.** They are API actions with their own tests (sections 3
    and 4); hiding the button is presentation, the API refuses.
-6. **Routes to confirm with Value Labs**: Remittance pledge page, deposit account page, loan page, the AR
-   invoice page, so the right tested is the one the page really checks.
+6. **Routes confirmed 22 October** (A20 to A23, Q46): Remittance › Pledges; Deposits On Hand › Account
+   Information › Update; Loan Processing › Loan Information › Update; Accounts Receivable › Transaction Inquiry ›
+   Invoice; Accounts Payable › Transaction Inquiry › Details; Donors And Gifts › Purposes › Update. Each tests the
+   right of the exact page it opens.
 
 ---
 
@@ -402,7 +445,8 @@ Information / Update**.
 
 1. Time-off approvals saved with no Update check (section 4). **Kept as the original; no Update check in V2 either.**
 2. A non-employee with the time-off right sees the whole company (section 4). **Kept as the original.**
-3. A placed panel whose right is removed shows a blank body with no message (section 1); V2 shows a line.
+3. A placed panel whose right is removed shows a blank body with no message (section 1); V2 drops the card
+   *(owner, 22 Oct, Q47)*.
 4. Payroll Distributions includes Secure employees' pay in its totals with no check (section 2.3). **All or nothing: the Payroll Dashboard right shows the widget, the Employee Break Down pop-up and the
    export in full. Whether the pop-up should ever be hidden waits on feedback.**
 
@@ -412,7 +456,7 @@ Information / Update**.
 
 | Widget | Module | Right to show the widget (Inquiry) | Rights inside | Data filters inside |
 |---|---|---|---|---|
-| Budget Compared to Actual | General Ledger | `/GeneralLedger` | Special report lines: `/GeneralLedger/Reports/SpecialReports` | none |
+| Budget Compared to Actual | General Ledger | `/GeneralLedger` | Special report lines: `/GeneralLedger/Reports/SpecialReports` | GL account roles (Q45) |
 | Pension Plans | Pension Billing | `/PensionBilling` | none | none |
 | Payroll Distributions | Payroll | `/Payroll` | Employee Break Down and export: the same right, nothing further | none; Secure employees included |
 | Remittance Pledges | Remittance | `/Remittance` | none | none |
@@ -420,15 +464,16 @@ Information / Update**.
 | Insurance Billing Plans | Insurance Billing | `/InsuranceBilling` | none | none |
 | Deposits on Hand | Deposits On Hand | `/DepositsOnHand` | Open account: the account page | none |
 | My Status | none | always | each query: its module root | none |
-| Payroll Scheduled Time Off | Payroll | `/Payroll/EmployeeInformation/SecureTimeOffHoursTab` | Approve, Undo: same at Update | employee's approval departments; Q21 for non-employees |
+| Payroll Scheduled Time Off | Payroll | `/Payroll/EmployeeInformation/SecureTimeOffHoursTab` | Approve, Undo: the same right, no Update check (Q44) | employee's approval departments; a non-employee sees every department (Q21) |
 | Loans With Balance Due | Loan Processing | `/LoanProcessing` | Open loan: `/LoanProcessing/LoanInformation` | none |
 | Fixed Asset Values | Fixed Assets | `/FixedAssets` | Open asset: `/FixedAssets/AssetInformation` | none |
-| Purchasing Management | Purchasing Management | `/PurchasingManagement` | Approve, Reject: on the path at the acting level or `.../Requests/ApprovalOverride` at Update; Hold: on the path; Open request and Save note: `.../Requests/Update` | list rule as the panel; account roles |
+| Purchasing Management | Purchasing Management | `/PurchasingManagement` | Approve, Reject: on the path at the acting level or `.../Requests/ApprovalOverride` at Update; Hold: on the path; Open request and Save note: `.../Requests/Update`; emails as the Requests screen (Q52) | list rule as the panel; account roles |
 | Main Content Tasks | none | always | each tile: its own task | none |
-| Bank Balances | Bank Account Management | `/BankAccountManagement` | Open in Bank: `/BankAccountManagement/BankAccountInformation` | GL account roles |
+| Bank Balances | Bank Account Management | `/BankAccountManagement` | Open in Bank: `/BankAccountManagement/BankAccountInformation`; tooltips show the masked number (Q56) | GL account roles |
 | Accounts Payable By Due Date | Accounts Payable | `/AccountsPayable` | Open invoice: `/AccountsPayable/TransactionInquiry`; Schedule payment: AvidPay feature on and `/AccountsPayable/PaymentProcessing` at Update | none |
-| Gifts Pledges | Donors And Gifts | `/DonorsAndGifts` | Open in Gifts and Pledges: `/DonorsAndGifts/Pledges` | none |
-| Financial KPI | General Ledger | `/GeneralLedger` | none | none |
+| Gifts Pledges | Donors And Gifts | `/DonorsAndGifts` | Open in Gifts and Pledges: `/DonorsAndGifts/Purposes` (A23) | none |
+| Financial KPI | General Ledger | `/GeneralLedger` | none | GL account roles (Q45) |
+| Pending Actions | Accounts Payable, Accounts Receivable, General Ledger | **open**: to be settled with Aditya Bhaskarrao Lakhmapure, whose widget it is (owner, 22 Oct, Q49); proposed tab by tab on each module's Dashboard right | each action button: the right of the page it opens | none |
 
 ---
 
@@ -455,5 +500,83 @@ Information / Update**.
    inside the widget needs a further right. Whether the pop-up should ever be hidden for some users waits on
    feedback.
 
-Nothing is open. Every widget works from the one simple right, its module's Dashboard row; the only further
-checks are the links and actions in section 5.
+7. Budget Compared to Actual and Financial KPI follow the user's GL account roles, as the old panel (22 Oct, Q45).
+8. A placed widget whose right is removed is dropped from the dashboard; no "no access" card (22 Oct, Q47).
+9. Purchasing: Admins act as holders of Approval Override, as on the Requests page (Q48); the dashboard sends the
+   Requests screen's emails under the company's settings (Q52, which supersedes the Q30 tick: "if it was there
+   before use it"); the pop-up's activity log shows the acted approval rows (Q53); override acts on the current
+   level (A24); Hold is open to anyone on the path with an open row (A25).
+10. Payroll Scheduled Time Off: the Time Off Hours task shows it and approves in it (Q44); two empty messages,
+    wording to follow (Q55).
+11. Bank Balances tooltips show the masked account number (Q56).
+12. Links: Transaction Inquiry › Invoice (Q46), Loan Information › Update (A20), Remittance › Pledges and Account
+    Information › Update (A21), Transaction Inquiry › Details (A22), Purposes › Update (A23); every link always
+    shown, the no-permission pop-up without the right (decision 5).
+
+**Open after 22 October**: the right that shows Pending Actions (Q49, with Aditya Bhaskarrao Lakhmapure); the two
+Time Off messages (Q55 wording); where the empty-state "Add" buttons go (A27). Everything else works from the one
+simple right, its module's Dashboard row, with the links and actions in section 5.
+
+---
+
+## 9. The owner's answers (notes, 22 October 2026)
+
+Copied from the owner's answer sheet of 22 October 2026 (the decisions page, exported as text). Only the answers this
+document depends on are listed; the full sheet, Q1 to Q58 and A1 to A30, is on the decisions page and in the
+SharePoint project folder. Where an answer changes a line above, the line is already corrected and marked
+*(owner, 22 Oct)*. The owner's comments are quoted as written.
+
+### Open points of 22 October
+
+- **Q44 (widget right): A) The Time Off Hours task, as the old panel.**
+- **Q44 (approve right): A) The same right, no extra check.**
+- **Q45: A) Apply the account restrictions, as the old panel.**
+- **Q46: A) The posted invoice in Transaction Inquiry, as your review document.**
+- **Q47: B) Drop the card from the dashboard.** Comment: "yeah it disappear like they don't see if they never had it."
+- **Q48: A) Yes, as the Requests page (Admins hold Approval Override).** Comment: "I think that the original way it
+  works and needs to work like original widget did it."
+- **Q49: not answered.** Comment: "Pending Actions is also Aditya widget, Disuses with him."
+- **Q52: A) Send the same emails as the Requests screen.** Comment: "Is that what was there before. if it was there
+  before use it and if not. don't make it." (They were there before: the Requests screen sends them from
+  `POOrderRepository.ApproveRejectOrder` under the company's settings, so they are sent.)
+- **Q53: A) The current approval actions.**
+- **Q54: A) Show us in the call; we build that starter set.** (Main Content Tasks; recorded here because it touches
+  what a new user is given.)
+- **Q55: B) New wording. I write both messages in the comment.** Comment: "No access and not having data is not the
+  same thing. there different ways of hitting them." The two messages are still to come.
+- **Q56: A) Masked in the tooltip too (••4021).** Comment: "Matches the legacy protection (code); Please follow how
+  the old code handle this but if there still a question. Please confirm with Feargal."
+- **A20: Agree.** "Open loan" opens that loan's own record.
+- **A21: Agree.** Open in Remittance, Open account, Open loan and the right each one tests.
+- **A22: Agree.** "Open in Accounts Payable" opens the posted bill in Transaction Inquiry › Details.
+- **A23: Agree.** "Open in Gifts and Pledges" tests the Purposes page right.
+- **A24: Agree.** Approval Override acts on the level that acts now, one level per click.
+- **A25: Agree.** Hold is open to anyone on the path while their own row is still open.
+- **A27: not answered.** Comment: "I am working on that." (The empty states' "Add" buttons.)
+
+### Earlier answers this document relies on
+
+- **Q7 (who may see the Employee Break Down): A) Users whose role has the Payroll › Dashboard permission.** Comment:
+  "we can fine tune this later but this currently is going to be the general rule. there going to be no half seeing
+  of the content on a widget but this possible change but very low chance."
+- **Q7 (user without that permission): X) Hide the Employee Break Down section.** Comment: "with option above they
+  can either see or not see the widget as a whole and this is the plan currently until further notice."
+- **Q16: not answered.** Comment: "Same logic as V1." Settled by Q46.
+- **Q20: A) The account's own record in Deposits on Hand › Account Information, in a new tab.**
+- **Q21: A) As the original widget: every department.**
+- **Q28: A) Open the asset in Fixed Assets › Asset Information, in a new tab.** Comment:
+  "FixedAssets\AssetInformation\Update.aspx. The legacy rows have no link, so this is new."
+- **Q30: B) No emails from the dashboard.** Comment: "The emails are sent inside POOrderRepository.ApproveRejectOrder,
+  not from the page. A dashboard write path must reuse that code, or the emails are lost. All of them depend on the
+  company's settings. The vendor email goes out only on final approval of a purchase order, not on every action. This
+  dashboard does not do anything new. keep the old code working." Superseded by Q52 (send them).
+- **Q33: A) Bank Account Management › Bank Account Information for that account, in a new tab.**
+- **Q38: A) The posted bill, read-only, in Accounts Payable › Transaction Inquiry, in a new tab.** Comment: "Legacy
+  redirects a posted invoice to TransactionInquiry/Details/{InvoiceDetailID} (Transactions/Update.aspx.cs L199-208).
+  The widget carries only InvoiceID, so link via Transactions/Update/{InvoiceID}, which redirects correctly."
+- **Q39: A) The purpose's own record in Gifts › Purposes, in a new tab.** Comment: "The Purposes page takes an id.
+  The Pledges page filters by a stored user preference, not a URL id, so B can't be deep-linked. Note that A opens an
+  editable page."
+- **A9: Agree.** "Open loan" and "Export to Excel" stay as in V1.
+- **A11: Agree.** "Open request" opens Requests › Update; a rejected request leaves the widget; delegation,
+  out-of-office and path editing stay out of scope.
