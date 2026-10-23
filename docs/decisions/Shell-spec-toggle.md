@@ -102,3 +102,25 @@ Information), Payroll (Modify, Employee Information, Time Off Hours and Secured 
 Ledger (Reports, Special Reports). Eight pictures, `docs/Pics/Permissions/taskrole-*.png`, cropped to the
 page card. The driver's picture list covers all twenty. Suite 4,591 across 21 drivers; Default dump
 unchanged.
+
+### 23 October 2026: the owner's answers of 22 October in the Permissions and Dashboards views
+
+The owner answered the open points Q44 to Q58 and A17 to A30 on 22 October (recorded in the two review
+documents, section 9 and the notes section, commit `78cf1f7`). `_tools/one-off/build-views-2026-10-23.py`
+writes them into the two views; plain "Settled 22 October" wording (owner's choice over strike-through).
+
+Permissions view: the Payroll Scheduled Time Off departure is reversed, the widget is shown on the Time Off
+Hours task and Approve and Undo need that right only (Q44; the table row, the paragraph under it and the
+Payroll task-role caption); a placed widget whose right is removed is dropped from the dashboard (Q47);
+Purchasing gains the Admin ruling and the emails and activity-log rulings (Q48, Q52, Q53); Bank gains the
+masked-number rule (Q56); Budget and the Financial KPI band follow the user's Account Rights Roles (Q45);
+the three links in 2.9 and the six routes in section 3 are confirmed (Q20, Q28, Q46, A20 to A23); decision 5
+now states the 19 October always-show rule instead of hiding links; "Nothing is open" becomes a settled list
+and an open list (Pending Actions Q49, the Time Off messages Q55, the Add buttons A27). The table keeps 17
+rows: Pending Actions waits for Aditya Bhaskarrao Lakhmapure.
+
+Dashboards view: Payroll ends with Main Content Tasks (A26); Statistics takes My Status and Main Content
+Tasks, like Records, with a V2 capture shot by `shoot-modules-2026-10-19.js "Statistics" v2` (Q51); one
+dashboard per module with its own saved preference (Q50); Home confirmed (A30); the decision list closes
+items 1 to 3 and leaves Pending Actions open. Driver: `shell-spec.driver.js` now expects one V2 screenshot
+for Statistics and at least fifteen in all. Deposits on Hand's full account numbers are left as they are.

@@ -55,9 +55,12 @@ const MODULES = {
   "Pension Billing": { titles: ["Pension Plans"] },
   "Purchasing Management": { titles: ["Purchasing Management"] },
   "Records": { titles: ["My Status", "Main Content Tasks"] },
-  "Remittance": { titles: ["Remittance Pledges"] }
-  /* Statistics has no widget in either build, so there is nothing to shoot.
-     Its original panel rendered the literal word STATS. */
+  "Remittance": { titles: ["Remittance Pledges"] },
+  /* Statistics has no widget of its own in either build; its original panel rendered the
+     literal word STATS. Owner, 22 Oct 2026 (Q51): it takes the two shared widgets, like
+     Records. V2 only: on test1 the URL redirects to the root, so there is no V1 capture
+     (run with "Statistics" v2). */
+  "Statistics": { titles: ["My Status", "Main Content Tasks"] }
 };
 /* Owner, 19 Oct: Main Content Tasks closes every module's dashboard, as the
    old system's slot 2 does on every module page with panels. Appended last,

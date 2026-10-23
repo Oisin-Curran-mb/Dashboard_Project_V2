@@ -68,4 +68,20 @@ const e = EX.contentHTML(wide), d = EX.contentHTML(xw);
 A.contains(e, 'data-action="bank-view"', "Explore Table / Bars toggle"); A.absent(d, 'data-action="bank-view"', "Detail shows both views, no toggle");
 ["bank-acct", "bank-overdrawn", "bank-sort", "bank-more"].forEach(function (a) { A.contains(d, 'data-action="' + a + '"', "Detail control " + a); });
 
+/* ---------- 6. account numbers are masked everywhere (owner, 22 Oct 2026, Q56) --------
+   Shelby encrypts the bank account number and shows it only behind a secure right; the
+   dashboard shows the masked form (last four digits) in the rows, the row tooltips and
+   the account picker, and the fixtures carry no full number at all. */
+[g, e, d].forEach(function (h, i) { A.absent(h, "Account 0044", ["Glance", "Explore", "Detail"][i] + ": no full account number anywhere"); });
+A.ok(/, Account \u2022\u2022\d{4}, tap to open"/.test(e), "Explore row tooltip carries the masked number");
+A.ok(/, Account \u2022\u2022\d{4}, tap to open"/.test(d), "Detail row tooltip carries the masked number");
+EX.setPop({ type: "bank-acct", id: wide.id }); const pk = EX.popContent(); EX.setPop(null);
+A.contains(pk, 'data-action="bank-set-acct"', "account picker renders");
+A.absent(pk, "Account 0044", "picker: no full account number"); A.absent(pk, "0044174021", "picker: Operating Checking shows its masked number only");
+A.contains(pk, '<span class="mi-acctno">\u2022\u20224021</span>', "picker number line is the masked form");
+const bankFixtures = raw.slice(raw.indexOf('{id:"bk-op"'), raw.indexOf("\r\n", raw.indexOf('{id:"bk-spe"')));   /* the 26 fixture rows only; the shell's old deposits helpers below them are not Bank Balances */
+A.ok(bankFixtures.length > 1000 && bankFixtures.indexOf('{id:"bk-spe"') > 0, "bank fixture region located (bk-op to bk-spe)");
+A.absent(bankFixtures, "acctFull", "bank fixtures carry no full account number");
+A.absent(raw, 'acctFull: "0044174021"', "the small data-state fixture carries no full number either");
+
 process.exit(A.report());

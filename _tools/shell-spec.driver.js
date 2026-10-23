@@ -226,18 +226,22 @@ if (hm) {
   const imgs = (dash.match(/<img src="([^"]+)"/g) || []).map(function (s) { return decodeURIComponent(/src="([^"]+)"/.exec(s)[1]); });
   /* The V2 set is fourteen and always present; the old-system set arrives
      module by module from the test1 capture, so the count is a floor. */
-  A.ok(imgs.length >= 14, "at least the fourteen V2 full-page screenshots are present (" + imgs.length + " in all)");
+  A.ok(imgs.length >= 15, "at least the fifteen V2 full-page screenshots are present, Statistics included (" + imgs.length + " in all)");
   A.eq((dash.match(/loading="lazy"/g) || []).length, imgs.length, "every screenshot is lazily loaded");
   const REPO = path.join(__dirname, "..");
   let missing = imgs.filter(function (p) { return !fs.existsSync(path.join(REPO, p)); });
   A.eq(missing.length, 0, "every screenshot it names exists on disk: " + missing.join(", "));
   A.ok(imgs.every(function (p) { return p.indexOf("docs/Pics/Modules/") === 0; }), "they all come from docs/Pics/Modules");
-  /* Statistics is the one module with no screenshot, and says why. The slice
-     start is asserted first: indexOf returning -1 would make slice(-1) one
-     character long and the absent() below pass for the wrong reason. */
+  /* Statistics has no old-system screenshot (the URL redirects to the root) and,
+     since the owner's ruling of 22 Oct 2026 (Q51), one V2 screenshot like Records.
+     The slice start is asserted first: indexOf returning -1 would make slice(-1)
+     one character long and the checks below pass for the wrong reason. */
   const statAt = dash.indexOf("Statistics</h2>");
   A.ok(statAt > 0, "the Statistics section was located");
-  A.absent(dash.slice(statAt), "<img", "Statistics has no screenshot, having no widget in either version");
+  A.eq((dash.slice(statAt).match(/<img /g) || []).length, 1, "Statistics has exactly one screenshot, the V2 capture");
+  A.contains(dash.slice(statAt), "Statistics%20-%20V2.png", "and it is the V2 capture");
+  A.absent(dash.slice(statAt), "Statistics%20-%20V1.png", "no old-system screenshot: the URL redirects");
+  A.contains(dash.slice(statAt), "Settled 22 October (Q51)", "the ruling is stated");
   A.contains(dash.slice(statAt), "STATS", "and it says why: the legacy panel rendered the literal word");
   /* it introduces no new classes */
   const used = [...new Set((dash.match(/class="([^"]+)"/g) || []).flatMap(function (s) { return /class="([^"]+)"/.exec(s)[1].split(/\s+/); }))];
